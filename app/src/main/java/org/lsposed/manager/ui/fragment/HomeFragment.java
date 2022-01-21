@@ -39,16 +39,13 @@ import org.lsposed.manager.ConfigManager;
 import org.lsposed.manager.R;
 import org.lsposed.manager.databinding.DialogAboutBinding;
 import org.lsposed.manager.databinding.FragmentHomeBinding;
-import org.lsposed.manager.repo.RepoLoader;
 import org.lsposed.manager.ui.dialog.BlurBehindDialogBuilder;
 import org.lsposed.manager.ui.dialog.FlashDialogBuilder;
 import org.lsposed.manager.ui.dialog.ShortcutDialog;
-import org.lsposed.manager.util.ModuleUtil;
 import org.lsposed.manager.util.NavUtil;
 import org.lsposed.manager.util.UpdateUtil;
 import org.lsposed.manager.util.chrome.LinkTransformationMethod;
 
-import java.util.HashSet;
 import java.util.Locale;
 
 import rikka.core.util.ClipboardUtils;
@@ -138,7 +135,7 @@ public class HomeFragment extends BaseFragment {
                     if (UpdateUtil.canInstall()) {
                         new FlashDialogBuilder(activity, null).show();
                     } else {
-                        NavUtil.startURL(activity, getString(R.string.about_source));
+                        NavUtil.startURL(activity, getString(R.string.install_url));
                     }
                 });
                 binding.updateCard.setVisibility(View.VISIBLE);
@@ -148,7 +145,6 @@ public class HomeFragment extends BaseFragment {
             binding.warningCard.setVisibility(View.GONE);
             binding.statusTitle.setText(R.string.not_installed);
             binding.statusSummary.setText(R.string.not_install_summary);
-            showHint(R.string.lsposed_not_active, false);
         }
 
         if (ConfigManager.isBinderAlive()) {
@@ -238,5 +234,17 @@ public class HomeFragment extends BaseFragment {
     public void onDestroyView() {
         super.onDestroyView();
         binding = null;
+    }
+
+    @Override
+    public void onResume() {
+        super.onResume();
+        if (!ConfigManager.isBinderAlive())
+            if (ConfigManager.isMagiskInstalled()) {
+                showHint(R.string.lsposed_not_active, false, R.string.install,
+                        v -> NavUtil.startURL(requireActivity(), getString(R.string.install_url)));
+            } else {
+                showHint(R.string.lsposed_not_active, false);
+            }
     }
 }

@@ -48,7 +48,6 @@ import org.lsposed.manager.util.UpdateUtil;
 
 import java.util.HashSet;
 
-import rikka.core.res.ResourcesKt;
 import rikka.core.util.ResourceUtils;
 
 public class MainActivity extends BaseActivity implements RepoLoader.RepoListener, ModuleUtil.ModuleListener {
@@ -248,10 +247,20 @@ public class MainActivity extends BaseActivity implements RepoLoader.RepoListene
         if (ConfigManager.isBinderAlive()) {
             setModulesSummary(moduleUtil.getEnabledModulesCount());
         } else setModulesSummary(0);
-        if (UpdateUtil.needUpdate() && binding != null) {
+        if (binding != null) {
             var nav = (NavigationBarView) binding.nav;
-            var badge = nav.getOrCreateBadge(R.id.main_fragment);
-            badge.setVisible(true);
+            if (UpdateUtil.needUpdate()) {
+                var badge = nav.getOrCreateBadge(R.id.main_fragment);
+                badge.setVisible(true);
+            }
+
+            if (!ConfigManager.isBinderAlive()) {
+                nav.getMenu().removeItem(R.id.logs_fragment);
+                nav.getMenu().removeItem(R.id.modules_fragment);
+                if (!ConfigManager.isMagiskInstalled()) {
+                    nav.getMenu().removeItem(R.id.repo_fragment);
+                }
+            }
         }
     }
 
