@@ -204,6 +204,7 @@
     <string name="manager_crashed_info">report this to </string>
     <string name="send_crash_info">Send crash info</string>
     <string name="crash_info_copied">Crash info copied to clipboard</string>
+    <string name="info_copied">copied to clipboard</string>
 
     <!-- Colors -->
     <string name="color_pixel_blue">Pixel blue</string>
@@ -229,4 +230,5 @@
     <string name="color_blue_grey">Blue grey</string>
     <string name="feedback_or_suggestion">Feedback or suggestion</string>
     <string name="sort_upgradable_first">Upgradable first</string>
+    <string name="overview">Overview</string>
 </resources>

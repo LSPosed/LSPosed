@@ -81,7 +81,6 @@
 
     <style name="HomeCard" parent="Widget.Material3.CardView.Elevated">
         <item name="android:stateListAnimator">@null</item>
-        <item name="android:layout_marginHorizontal">16dp</item>
         <item name="android:layout_marginBottom">8dp</item>
         <item name="android:clickable">true</item>
         <item name="android:focusable">true</item>

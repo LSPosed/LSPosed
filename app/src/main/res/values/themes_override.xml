@@ -53,6 +53,13 @@
         <item name="android:letterSpacing">0.0178571429</item>
     </style>
 
+    <style name="Preference.Category.Material" tools:override="true">
+        <item name="android:layout">@layout/preference_category_material</item>
+        <item name="iconSpaceReserved">@bool/config_materialPreferenceIconSpaceReserved</item>
+        <item name="allowDividerAbove">false</item>
+        <item name="allowDividerBelow">false</item>
+    </style>
+
     <style name="PreferenceCategoryTitleTextStyle" tools:override="true">
         <item name="android:fontFamily">sans-serif-medium</item>
         <item name="android:textAllCaps">true</item>

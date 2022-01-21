@@ -21,10 +21,11 @@
 
     <style name="ThemeOverlay.color_primary">
         <item name="colorPrimary">@color/color_primary</item>
+        <item name="colorSecondary">@color/color_primary</item>
     </style>
 
     <style name="ThemeOverlay.material_red">
-        <item name="colorPrimary">@color/material_red</item>
+        <item name="colorPrimary">@color/material_red_600</item>
     </style>
 
     <style name="ThemeOverlay.material_pink">

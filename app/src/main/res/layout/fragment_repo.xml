@@ -22,9 +22,9 @@
     xmlns:app="http://schemas.android.com/apk/res-auto"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    app:consumeSystemWindowsInsets="start|end"
+    app:consumeSystemWindowsInsets="start"
     app:edgeToEdge="true"
-    app:fitsSystemWindowsInsets="start|end">
+    app:fitsSystemWindowsInsets="start">
 
     <com.google.android.material.appbar.AppBarLayout
         android:id="@+id/app_bar"
