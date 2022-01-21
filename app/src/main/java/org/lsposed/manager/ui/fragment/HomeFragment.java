@@ -75,8 +75,9 @@ public class HomeFragment extends BaseFragment {
     @Override
     public View onCreateView(@NonNull LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
         binding = FragmentHomeBinding.inflate(inflater, container, false);
-        setupToolbar(binding.toolbar, binding.clickView, getString(R.string.app_name), R.menu.menu_home, view -> showAbout());
+        setupToolbar(binding.toolbar, binding.clickView, R.string.app_name, R.menu.menu_home);
         binding.toolbar.setNavigationIcon(null);
+        binding.toolbar.setOnClickListener(v -> showAbout());
         binding.clickView.setOnClickListener(v -> showAbout());
         binding.appBar.setLiftable(true);
         binding.nestedScrollView.getBorderViewDelegate().setBorderVisibilityChangedListener((top, oldTop, bottom, oldBottom) -> binding.appBar.setLifted(!top));
