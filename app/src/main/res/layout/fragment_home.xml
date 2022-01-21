@@ -50,6 +50,7 @@
                 android:layout_width="match_parent"
                 android:layout_height="?actionBarSize"
                 android:elevation="0dp"
+                app:logo="@drawable/ic_launcher"
                 app:layout_collapseMode="pin" />
         </com.google.android.material.appbar.CollapsingToolbarLayout>
 
@@ -73,7 +74,8 @@
             <LinearLayout
                 android:layout_width="match_parent"
                 android:layout_height="match_parent"
-                android:layout_margin="?dialogPreferredPadding"
+                android:layout_marginVertical="?dialogPreferredPadding"
+                android:layout_marginHorizontal="@dimen/m3_appbar_expanded_title_margin_horizontal"
                 android:animateLayoutChanges="true"
                 android:orientation="vertical"
                 tools:context=".ui.activity.MainActivity">
