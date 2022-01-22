@@ -22,7 +22,7 @@ import org.lsposed.manager.App;
 import org.lsposed.manager.ConfigManager;
 import org.lsposed.manager.R;
 import org.lsposed.manager.databinding.DialogTitleBinding;
-import org.lsposed.manager.databinding.ScrollableDialogBinding;
+import org.lsposed.manager.databinding.DialogWarningBinding;
 
 import java.io.BufferedReader;
 import java.io.IOException;
@@ -52,8 +52,8 @@ public class FlashDialogBuilder extends BlurBehindDialogBuilder {
         textView.setMovementMethod(LinkMovementMethod.getInstance());
         textView.setTextIsSelectable(true);
 
-        var binding = ScrollableDialogBinding.inflate(inflater, null, false);
-        binding.dialogContainer.addView(textView);
+        DialogWarningBinding binding = DialogWarningBinding.inflate(inflater, null, false);
+        binding.container.addView(textView);
         rootView = binding.getRoot();
         setView(rootView);
         title.setOnClickListener(v -> rootView.smoothScrollTo(0, 0));

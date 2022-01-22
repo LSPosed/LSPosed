@@ -13,7 +13,7 @@
   ~
   ~ You should have received a copy of the GNU General Public License
   ~ along with LSPosed.  If not, see <https://www.gnu.org/licenses/>.
-  ~
+  ~     
   ~ Copyright (C) 2020 EdXposed Contributors
   ~ Copyright (C) 2021 LSPosed Contributors
   -->
@@ -23,9 +23,9 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    app:consumeSystemWindowsInsets="@integer/internal_fragment_insets"
+    app:consumeSystemWindowsInsets="start|end"
     app:edgeToEdge="true"
-    app:fitsSystemWindowsInsets="@integer/internal_fragment_insets">
+    app:fitsSystemWindowsInsets="start|end">
 
 
     <com.google.android.material.appbar.AppBarLayout
@@ -33,7 +33,7 @@
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:fitsSystemWindows="false"
-        app:fitsSystemWindowsInsets="@integer/internal_fragment_top_insets">
+        app:fitsSystemWindowsInsets="top">
 
         <com.google.android.material.appbar.SubtitleCollapsingToolbarLayout
             style="?attr/collapsingToolbarLayoutLargeStyle"
@@ -60,9 +60,13 @@
             android:id="@+id/master_switch"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
+            android:layout_gravity="bottom"
+            app:layout_collapseMode="parallax"
+            app:layout_collapseParallaxMultiplier="1"
+            app:layout_scrollEffect="compress"
+            app:layout_scrollFlags="scroll|exitUntilCollapsed"
             app:switchOffText="@string/enable_module"
             app:switchOnText="@string/enable_module" />
-
     </com.google.android.material.appbar.AppBarLayout>
 
     <com.google.android.material.floatingactionbutton.FloatingActionButton
@@ -76,9 +80,9 @@
         android:tooltipText="@string/module_settings"
         android:visibility="gone"
         app:backgroundTint="?attr/colorPrimary"
-        app:layout_fitsSystemWindowsInsets="@integer/internal_fragment_bottom_insets"
         app:layout_behavior="@string/hide_bottom_view_on_scroll_behavior"
-        app:tint="?attr/colorOnPrimary" />
+        app:layout_fitsSystemWindowsInsets="bottom"
+        app:tint="?attr/colorSurface" />
 
     <LinearLayout
         android:layout_width="match_parent"
@@ -103,7 +107,7 @@
                 app:borderBottomVisibility="never"
                 app:borderTopDrawable="@null"
                 app:borderTopVisibility="whenTop"
-                app:fitsSystemWindowsInsets="@integer/internal_fragment_bottom_insets" />
+                app:fitsSystemWindowsInsets="bottom" />
         </androidx.swiperefreshlayout.widget.SwipeRefreshLayout>
     </LinearLayout>
 </androidx.coordinatorlayout.widget.CoordinatorLayout>

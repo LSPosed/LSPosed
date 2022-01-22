@@ -23,6 +23,5 @@
     android:layout_height="wrap_content"
     android:clipToPadding="false"
     android:fontFamily="monospace"
-    android:paddingHorizontal="@dimen/m3_appbar_expanded_title_margin_horizontal"
     android:textColor="?attr/colorOnSurface"
     android:textSize="12sp" />

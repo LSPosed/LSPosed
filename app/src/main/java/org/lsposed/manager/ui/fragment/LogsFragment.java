@@ -106,7 +106,6 @@ public class LogsFragment extends BaseFragment {
         binding = FragmentPagerBinding.inflate(inflater, container, false);
         binding.appBar.setLiftable(true);
         setupToolbar(binding.toolbar, binding.clickView, R.string.Logs, R.menu.menu_logs);
-        binding.toolbar.setNavigationIcon(null);
         binding.toolbar.setSubtitle(ConfigManager.isVerboseLogEnabled() ? R.string.enabled_verbose_log : R.string.disabled_verbose_log);
         adapter = new LogPageAdapter(this);
         binding.viewPager.setAdapter(adapter);
@@ -390,14 +389,7 @@ public class LogsFragment extends BaseFragment {
                 @Override
                 public void onBindViewHolder(@NonNull ViewHolder holder, int position) {
                     super.onBindViewHolder(holder, position);
-                    var view = holder.item;
-                    view.measure(0, 0);
-                    int desiredWidth = view.getMeasuredWidth();
-                    ViewGroup.LayoutParams layoutParams = view.getLayoutParams();
-                    layoutParams.width = desiredWidth;
-                    if (binding.recyclerView.getWidth() < desiredWidth) {
-                        binding.recyclerView.requestLayout();
-                    }
+                    holder.item.measure(0, 0);
                 }
             };
         }

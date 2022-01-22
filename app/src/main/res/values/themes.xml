@@ -79,6 +79,27 @@
         <item name="android:paddingBottom">24dp</item>
     </style>
 
+    <style name="HomeCard" parent="Widget.Material3.CardView.Elevated">
+        <item name="android:stateListAnimator">@null</item>
+        <item name="android:layout_marginHorizontal">16dp</item>
+        <item name="android:layout_marginBottom">8dp</item>
+        <item name="android:clickable">true</item>
+        <item name="android:focusable">true</item>
+        <item name="cardPreventCornerOverlap">false</item>
+    </style>
+
+    <style name="HomeCard.Primary">
+        <item name="android:layout_marginTop">16dp</item>
+        <item name="cardElevation">@dimen/home_primary_elevation</item>
+    </style>
+
+    <style name="HomeCard.Secondary" />
+
+    <style name="HomeCard.Tertiary">
+        <item name="cardBackgroundColor">@android:color/transparent</item>
+        <item name="cardElevation">0dp</item>
+    </style>
+
     <style name="Widget.App.Button.OutlinedButton.IconOnly" parent="Widget.Material3.Button.OutlinedButton">
         <item name="iconPadding">0dp</item>
         <item name="android:paddingLeft">@dimen/mtrl_btn_icon_btn_padding_left</item>

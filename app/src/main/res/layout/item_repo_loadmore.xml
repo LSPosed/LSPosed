@@ -36,7 +36,7 @@
         app:showAnimationBehavior="outward"
         app:hideAnimationBehavior="inward" />
 
-    <com.google.android.material.textview.MaterialTextView
+    <TextView
         android:id="@+id/title"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"

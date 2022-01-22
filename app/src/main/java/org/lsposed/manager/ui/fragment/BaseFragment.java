@@ -30,8 +30,6 @@ import androidx.fragment.app.Fragment;
 import androidx.navigation.NavController;
 import androidx.navigation.fragment.NavHostFragment;
 
-import com.google.android.material.bottomnavigation.BottomNavigationView;
-import com.google.android.material.floatingactionbutton.FloatingActionButton;
 import com.google.android.material.snackbar.Snackbar;
 
 import org.lsposed.manager.App;
@@ -112,8 +110,6 @@ public class BaseFragment extends Fragment {
             var container = requireActivity().findViewById(R.id.container);
             if (container != null) {
                 var snackbar = Snackbar.make(container, str, lengthShort ? Snackbar.LENGTH_SHORT : Snackbar.LENGTH_LONG);
-                if (container.findViewById(R.id.nav) instanceof BottomNavigationView) snackbar.setAnchorView(R.id.nav);
-                if (container.findViewById(R.id.fab) instanceof FloatingActionButton) snackbar.setAnchorView(R.id.fab);
                 if (actionStr != null && action != null) snackbar.setAction(actionStr, action);
                 snackbar.show();
                 return;

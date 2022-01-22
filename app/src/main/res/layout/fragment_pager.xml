@@ -22,9 +22,9 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:animateLayoutChanges="true"
-    app:consumeSystemWindowsInsets="@integer/internal_fragment_insets"
+    app:consumeSystemWindowsInsets="start|end"
     app:edgeToEdge="true"
-    app:fitsSystemWindowsInsets="@integer/internal_fragment_insets">
+    app:fitsSystemWindowsInsets="start|end">
 
 
     <com.google.android.material.appbar.AppBarLayout
@@ -32,7 +32,7 @@
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:fitsSystemWindows="false"
-        app:fitsSystemWindowsInsets="@integer/internal_fragment_top_insets">
+        app:fitsSystemWindowsInsets="top">
 
         <com.google.android.material.appbar.SubtitleCollapsingToolbarLayout
             android:id="@+id/toolbar_layout"
@@ -91,7 +91,7 @@
         android:tooltipText="@string/add_module_to_user"
         android:visibility="gone"
         app:backgroundTint="?attr/colorPrimary"
-        app:layout_fitsSystemWindowsInsets="@integer/internal_fragment_bottom_insets"
         app:layout_behavior="@string/hide_bottom_view_on_scroll_behavior"
-        app:tint="?attr/colorOnPrimary" />
+        app:layout_fitsSystemWindowsInsets="bottom"
+        app:tint="?attr/colorSurface" />
 </androidx.coordinatorlayout.widget.CoordinatorLayout>

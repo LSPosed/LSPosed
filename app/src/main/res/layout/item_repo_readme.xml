@@ -22,23 +22,23 @@
     xmlns:app="http://schemas.android.com/apk/res-auto"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:clipChildren="false"
     android:clipToPadding="false"
-    app:fitsSystemWindowsInsets="@integer/internal_fragment_bottom_insets">
+    android:clipChildren="false"
+    app:fitsSystemWindowsInsets="bottom">
 
     <rikka.widget.borderview.BorderNestedScrollView
         android:id="@+id/scrollView"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        app:borderBottomVisibility="never"
+        app:borderTopVisibility="whenTop"
         app:borderTopDrawable="@null"
-        app:borderTopVisibility="whenTop">
+        app:borderBottomVisibility="never">
 
         <org.lsposed.manager.ui.widget.ScrollWebView
             android:id="@+id/readme"
+            android:padding="16dp"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:padding="16dp"
             android:scrollbars="none" />
     </rikka.widget.borderview.BorderNestedScrollView>
 </FrameLayout>

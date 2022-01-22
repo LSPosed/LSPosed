@@ -45,6 +45,7 @@ public class ThemeUtil {
 
     static {
         preferences = App.getPreferences();
+        colorThemeMap.put("COLOR_PRIMARY", R.style.ThemeOverlay_color_primary);
         colorThemeMap.put("SAKURA", R.style.ThemeOverlay_sakura);
         colorThemeMap.put("MATERIAL_RED", R.style.ThemeOverlay_material_red);
         colorThemeMap.put("MATERIAL_PINK", R.style.ThemeOverlay_material_pink);
@@ -63,6 +64,7 @@ public class ThemeUtil {
         colorThemeMap.put("MATERIAL_ORANGE", R.style.ThemeOverlay_material_orange);
         colorThemeMap.put("MATERIAL_DEEP_ORANGE", R.style.ThemeOverlay_material_deep_orange);
         colorThemeMap.put("MATERIAL_BROWN", R.style.ThemeOverlay_material_brown);
+        colorThemeMap.put("MATERIAL_GREY", R.style.ThemeOverlay_material_grey);
         colorThemeMap.put("MATERIAL_BLUE_GREY", R.style.ThemeOverlay_material_blue_grey);
     }
 
@@ -100,14 +102,14 @@ public class ThemeUtil {
         if (isSystemAccent()) {
             return "SYSTEM";
         }
-        return preferences.getString("theme_color", "COLOR_BLUE");
+        return preferences.getString("theme_color", "COLOR_PRIMARY");
     }
 
     @StyleRes
     public static int getColorThemeStyleRes() {
         Integer theme = colorThemeMap.get(getColorTheme());
         if (theme == null) {
-            return R.style.ThemeOverlay_material_blue;
+            return R.style.ThemeOverlay_color_primary;
         }
         return theme;
     }

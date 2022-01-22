@@ -1,6 +1,0 @@
-<?xml version="1.0" encoding="utf-8"?>
-<resources>
-    <integer name="internal_fragment_insets">0x00800007</integer> <!-- start|end -->
-    <integer name="internal_fragment_top_insets">0x30</integer> <!-- top -->
-    <integer name="internal_fragment_bottom_insets">0</integer> <!-- null -->
-</resources>

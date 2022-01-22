@@ -57,7 +57,7 @@
             android:title="@string/theme_color_system"
             app:isPreferenceVisible="false" />
         <rikka.preference.SimpleMenuPreference
-            android:defaultValue="COLOR_BLUE"
+            android:defaultValue="COLOR_PRIMARY"
             android:entries="@array/color_texts"
             android:entryValues="@array/color_values"
             android:icon="@drawable/ic_outline_palette_24"

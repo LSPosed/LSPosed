@@ -38,7 +38,7 @@
         android:layout_height="wrap_content"
         tools:ignore="RtlSymmetry">
 
-        <com.google.android.material.textview.MaterialTextView
+        <TextView
             android:id="@+id/title"
             android:layout_width="0dp"
             android:layout_height="wrap_content"
