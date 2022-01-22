@@ -83,6 +83,11 @@ public class HomeFragment extends BaseFragment {
         binding.nestedScrollView.getBorderViewDelegate().setBorderVisibilityChangedListener((top, oldTop, bottom, oldBottom) -> binding.appBar.setLifted(!top));
 
         updateStates(requireActivity(), ConfigManager.isBinderAlive(), UpdateUtil.needUpdate());
+
+        if (Build.VERSION.SDK_INT < Build.VERSION_CODES.S) {
+            binding.nestedScrollView.setOverScrollMode(View.OVER_SCROLL_NEVER);
+        }
+
         return binding.getRoot();
     }
 
