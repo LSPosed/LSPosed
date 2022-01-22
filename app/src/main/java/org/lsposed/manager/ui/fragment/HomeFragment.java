@@ -237,16 +237,4 @@ public class HomeFragment extends BaseFragment {
         super.onDestroyView();
         binding = null;
     }
-
-    @Override
-    public void onResume() {
-        super.onResume();
-        if (!ConfigManager.isBinderAlive())
-            if (ConfigManager.isMagiskInstalled()) {
-                showHint(R.string.lsposed_not_active, false, R.string.install,
-                        v -> NavUtil.startURL(requireActivity(), getString(R.string.install_url)));
-            } else {
-                showHint(R.string.lsposed_not_active, false);
-            }
-    }
 }
