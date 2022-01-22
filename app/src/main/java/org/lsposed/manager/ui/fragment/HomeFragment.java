@@ -84,10 +84,6 @@ public class HomeFragment extends BaseFragment {
 
         updateStates(requireActivity(), ConfigManager.isBinderAlive(), UpdateUtil.needUpdate());
 
-        if (Build.VERSION.SDK_INT < Build.VERSION_CODES.S) {
-            binding.nestedScrollView.setOverScrollMode(View.OVER_SCROLL_NEVER);
-        }
-
         return binding.getRoot();
     }
 

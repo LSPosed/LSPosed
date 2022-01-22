@@ -67,6 +67,7 @@
             android:id="@+id/nestedScrollView"
             android:layout_width="match_parent"
             android:layout_height="match_parent"
+            android:scrollbars="none"
             app:borderBottomVisibility="never"
             app:borderTopDrawable="@null"
             app:borderTopVisibility="whenTop">
