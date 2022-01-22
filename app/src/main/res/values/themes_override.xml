@@ -83,7 +83,7 @@
         <item name="colorWarning">@color/material_orange_700</item>
         <item name="colorInactive" tools:ignore="PrivateResource">@color/material_grey_600</item>
 
-        <item name="navigationBarDividerColor">@color/navigation_bar_divider_light</item>
+        <item name="navigationBarDividerColor">@android:color/transparent</item>
 
         <!-- SwitchBar -->
         <item name="switchBarStyle">@style/Widget.SwitchBar.Light</item>
@@ -106,7 +106,7 @@
         <item name="colorWarning">@color/material_orange_A100</item>
         <item name="colorInactive">@color/material_grey_500</item>
 
-        <item name="navigationBarDividerColor">@color/navigation_bar_divider_dark</item>
+        <item name="navigationBarDividerColor">@android:color/transparent</item>
 
         <!-- SwitchBar -->
         <item name="switchBarStyle">@style/Widget.SwitchBar</item>
