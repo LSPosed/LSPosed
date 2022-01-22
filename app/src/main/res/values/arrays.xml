@@ -37,7 +37,6 @@
     </string-array>
 
     <string-array name="color_values" translatable="false">
-        <item>COLOR_PRIMARY</item>
         <item>SAKURA</item>
         <item>MATERIAL_RED</item>
         <item>MATERIAL_PINK</item>
@@ -56,12 +55,10 @@
         <item>MATERIAL_ORANGE</item>
         <item>MATERIAL_DEEP_ORANGE</item>
         <item>MATERIAL_BROWN</item>
-        <item>MATERIAL_GREY</item>
         <item>MATERIAL_BLUE_GREY</item>
     </string-array>
 
     <string-array name="color_texts" translatable="false">
-        <item>@string/color_pixel_blue</item>
         <item>@string/color_sakura</item>
         <item>@string/color_red</item>
         <item>@string/color_pink</item>
@@ -80,7 +77,6 @@
         <item>@string/color_orange</item>
         <item>@string/color_deep_orange</item>
         <item>@string/color_brown</item>
-        <item>@string/color_grey</item>
         <item>@string/color_blue_grey</item>
     </string-array>
 

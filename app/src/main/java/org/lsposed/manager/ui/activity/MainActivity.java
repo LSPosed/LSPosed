@@ -26,24 +26,37 @@ import android.os.Bundle;
 import android.text.TextUtils;
 import android.view.KeyEvent;
 import android.view.MotionEvent;
-import android.view.View;
 
 import androidx.annotation.NonNull;
 import androidx.core.os.BuildCompat;
 import androidx.navigation.NavController;
 import androidx.navigation.Navigation;
 import androidx.navigation.fragment.NavHostFragment;
+import androidx.navigation.ui.NavigationUI;
+
+import com.google.android.material.navigation.NavigationBarView;
 
 import org.lsposed.manager.App;
 import org.lsposed.manager.ConfigManager;
 import org.lsposed.manager.NavGraphDirections;
 import org.lsposed.manager.R;
 import org.lsposed.manager.databinding.ActivityMainBinding;
+import org.lsposed.manager.repo.RepoLoader;
 import org.lsposed.manager.ui.activity.base.BaseActivity;
+import org.lsposed.manager.util.ModuleUtil;
+import org.lsposed.manager.util.UpdateUtil;
 
-public class MainActivity extends BaseActivity {
+import java.util.HashSet;
+
+import rikka.core.util.ResourceUtils;
+
+public class MainActivity extends BaseActivity implements RepoLoader.RepoListener, ModuleUtil.ModuleListener {
     private static final String KEY_PREFIX = MainActivity.class.getName() + '.';
     private static final String EXTRA_SAVED_INSTANCE_STATE = KEY_PREFIX + "SAVED_INSTANCE_STATE";
+
+    private static final RepoLoader repoLoader = RepoLoader.getInstance();
+    private static final ModuleUtil moduleUtil = ModuleUtil.getInstance();
+
     private boolean restarting;
     private ActivityMainBinding binding;
 
@@ -65,8 +78,24 @@ public class MainActivity extends BaseActivity {
         }
         super.onCreate(savedInstanceState);
 
+
         binding = ActivityMainBinding.inflate(getLayoutInflater());
         setContentView(binding.getRoot());
+
+        repoLoader.addListener(this);
+        moduleUtil.addListener(this);
+
+        onModulesReloaded();
+
+        NavHostFragment navHostFragment = (NavHostFragment) getSupportFragmentManager().findFragmentById(R.id.nav_host_fragment);
+        if (navHostFragment == null) {
+            return;
+        }
+
+        NavController navController = navHostFragment.getNavController();
+        var nav = (NavigationBarView) binding.nav;
+        NavigationUI.setupWithNavController(nav, navController);
+        nav.findViewById(R.id.modules_fragment);
 
         handleIntent(getIntent());
     }
@@ -86,29 +115,20 @@ public class MainActivity extends BaseActivity {
             return;
         }
         NavController navController = navHostFragment.getNavController();
-        if (binding.homeFragment != null) {
-            navController.addOnDestinationChangedListener((controller, destination, arguments) -> {
-                if (destination.getId() == R.id.main_fragment) {
-                    binding.navHostFragment.setVisibility(View.GONE);
-                } else {
-                    binding.navHostFragment.setVisibility(View.VISIBLE);
-                }
-            });
-        }
         if (intent.getAction() != null && intent.getAction().equals("android.intent.action.APPLICATION_PREFERENCES")) {
-            navController.navigate(R.id.action_settings_fragment);
+            navController.navigate(R.id.settings_fragment);
         } else if (ConfigManager.isBinderAlive()) {
             if (!TextUtils.isEmpty(intent.getDataString())) {
                 switch (intent.getDataString()) {
                     case "modules":
-                        navController.navigate(R.id.action_modules_fragment);
+                        navController.navigate(R.id.modules_fragment);
                         break;
                     case "logs":
-                        navController.navigate(R.id.action_logs_fragment);
+                        navController.navigate(R.id.logs_fragment);
                         break;
                     case "repo":
                         if (ConfigManager.isMagiskInstalled()) {
-                            navController.navigate(R.id.action_repo_fragment);
+                            navController.navigate(R.id.repo_fragment);
                         }
                         break;
                     default:
@@ -173,5 +193,98 @@ public class MainActivity extends BaseActivity {
     @Override
     public boolean dispatchGenericMotionEvent(@NonNull MotionEvent event) {
         return restarting || super.dispatchGenericMotionEvent(event);
+    }
+
+
+    @Override
+    public void onRepoLoaded() {
+        final int[] count = new int[]{0};
+        HashSet<String> processedModules = new HashSet<>();
+        var modules = moduleUtil.getModules();
+        if (modules == null) return;
+        modules.forEach((k, v) -> {
+                    if (!processedModules.contains(k.first)) {
+                        var ver = repoLoader.getModuleLatestVersion(k.first);
+                        if (ver != null && ver.upgradable(v.versionCode, v.versionName)) {
+                            ++count[0];
+                        }
+                        processedModules.add(k.first);
+                    }
+                }
+        );
+        runOnUiThread(() -> {
+            if (count[0] > 0 && binding != null) {
+                var nav = (NavigationBarView) binding.nav;
+                var badge = nav.getOrCreateBadge(R.id.repo_fragment);
+                badge.setVisible(true);
+                badge.setNumber(count[0]);
+            } else {
+                onThrowable(null);
+            }
+        });
+    }
+
+    @Override
+    public void onThrowable(Throwable t) {
+        runOnUiThread(() -> {
+            if (binding != null) {
+                var nav = (NavigationBarView) binding.nav;
+                var badge = nav.getOrCreateBadge(R.id.repo_fragment);
+                badge.setVisible(false);
+            }
+        });
+    }
+
+    @Override
+    public void onModulesReloaded() {
+        onRepoLoaded();
+        setModulesSummary(moduleUtil.getEnabledModulesCount());
+    }
+
+    @Override
+    public void onResume() {
+        super.onResume();
+        if (ConfigManager.isBinderAlive()) {
+            setModulesSummary(moduleUtil.getEnabledModulesCount());
+        } else setModulesSummary(0);
+        if (binding != null) {
+            var nav = (NavigationBarView) binding.nav;
+            if (UpdateUtil.needUpdate()) {
+                var badge = nav.getOrCreateBadge(R.id.main_fragment);
+                badge.setVisible(true);
+            }
+
+            if (!ConfigManager.isBinderAlive()) {
+                nav.getMenu().removeItem(R.id.logs_fragment);
+                nav.getMenu().removeItem(R.id.modules_fragment);
+                if (!ConfigManager.isMagiskInstalled()) {
+                    nav.getMenu().removeItem(R.id.repo_fragment);
+                }
+            }
+        }
+    }
+
+    private void setModulesSummary(int moduleCount) {
+        runOnUiThread(() -> {
+            if (binding != null) {
+                var nav = (NavigationBarView) binding.nav;
+                var badge = nav.getOrCreateBadge(R.id.modules_fragment);
+                badge.setBackgroundColor(ResourceUtils.resolveColor(getTheme(), com.google.android.material.R.attr.colorPrimary));
+                badge.setBadgeTextColor(ResourceUtils.resolveColor(getTheme(), com.google.android.material.R.attr.colorOnPrimary));
+                if (moduleCount > 0) {
+                    badge.setVisible(true);
+                    badge.setNumber(moduleCount);
+                } else {
+                    badge.setVisible(false);
+                }
+            }
+        });
+    }
+
+    @Override
+    protected void onDestroy() {
+        super.onDestroy();
+        repoLoader.removeListener(this);
+        moduleUtil.removeListener(this);
     }
 }

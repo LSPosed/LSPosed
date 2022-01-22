@@ -47,7 +47,7 @@
             tools:ignore="ContentDescription"
             tools:srcCompat="@tools:sample/backgrounds/scenic" />
 
-        <TextView
+        <com.google.android.material.textview.MaterialTextView
             android:id="@+id/app_name"
             android:layout_width="0dp"
             android:layout_height="wrap_content"
@@ -78,7 +78,7 @@
             app:layout_constraintTop_toBottomOf="@id/app_name"
             tools:text="@tools:sample/lorem" />
 
-        <TextView
+        <com.google.android.material.textview.MaterialTextView
             android:id="@+id/hint"
             android:layout_width="0dp"
             android:layout_height="wrap_content"
@@ -92,7 +92,7 @@
             app:layout_constraintTop_toBottomOf="@id/description"
             tools:text="@tools:sample/lorem" />
 
-        <TextView
+        <com.google.android.material.textview.MaterialTextView
             android:id="@+id/version_name"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"

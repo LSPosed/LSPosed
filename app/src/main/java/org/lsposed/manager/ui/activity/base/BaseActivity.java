@@ -43,7 +43,6 @@ import org.lsposed.manager.util.NavUtil;
 import org.lsposed.manager.util.ThemeUtil;
 import org.lsposed.manager.util.UpdateUtil;
 
-import rikka.core.util.ResourceUtils;
 import rikka.material.app.MaterialActivity;
 
 public class BaseActivity extends MaterialActivity {
@@ -113,15 +112,6 @@ public class BaseActivity extends MaterialActivity {
         super.onApplyTranslucentSystemBars();
         Window window = getWindow();
         window.setStatusBarColor(Color.TRANSPARENT);
-
-        window.getDecorView().post(() -> {
-            var rootWindowInsets = window.getDecorView().getRootWindowInsets();
-            if (rootWindowInsets != null &&
-                    rootWindowInsets.getSystemWindowInsetBottom() >= Resources.getSystem().getDisplayMetrics().density * 40) {
-                window.setNavigationBarColor(ResourceUtils.resolveColor(getTheme(), android.R.attr.navigationBarColor) & 0x00ffffff | -0x20000000);
-            } else {
-                window.setNavigationBarColor(Color.TRANSPARENT);
-            }
-        });
+        window.setNavigationBarColor(Color.TRANSPARENT);
     }
 }

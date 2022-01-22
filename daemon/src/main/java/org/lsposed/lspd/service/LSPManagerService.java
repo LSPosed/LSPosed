@@ -42,6 +42,7 @@ import android.content.pm.ShortcutInfo;
 import android.content.pm.ShortcutManager;
 import android.content.pm.VersionedPackage;
 import android.graphics.BitmapFactory;
+import android.graphics.Color;
 import android.graphics.drawable.Icon;
 import android.net.Uri;
 import android.os.Build;
@@ -236,7 +237,7 @@ public class LSPManagerService extends ILSPManagerService.Stub {
                     .setContentTitle(title)
                     .setContentText(content)
                     .setSmallIcon(android.R.drawable.ic_dialog_info)
-                    .setColor(context.getResources().getColor(R.color.color_primary))
+                    .setColor(Color.BLUE)
                     .setContentIntent(getNotificationIntent(modulePackageName, moduleUserId))
                     .setAutoCancel(true)
                     .setStyle(style)

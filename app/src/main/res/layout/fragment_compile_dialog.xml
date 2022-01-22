@@ -36,7 +36,7 @@
         android:layout_marginEnd="?attr/dialogPreferredPadding"
         android:max="10000" />
 
-    <TextView
+    <com.google.android.material.textview.MaterialTextView
         android:id="@+id/message"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"

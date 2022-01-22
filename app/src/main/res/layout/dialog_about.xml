@@ -36,20 +36,20 @@
         android:layout_height="wrap_content"
         android:layout_marginStart="16dp">
 
-        <TextView
+        <com.google.android.material.textview.MaterialTextView
             android:id="@+id/design_about_title"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:textSize="18sp"
             android:textAppearance="@android:style/TextAppearance.Material.Body1" />
 
-        <TextView
+        <com.google.android.material.textview.MaterialTextView
             android:id="@+id/design_about_version"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:textSize="14sp" />
 
-        <TextView
+        <com.google.android.material.textview.MaterialTextView
             android:id="@+id/design_about_info"
             android:layout_marginTop="24dp"
             android:layout_width="wrap_content"

@@ -24,36 +24,7 @@
     <fragment
         android:id="@+id/main_fragment"
         android:name="org.lsposed.manager.ui.fragment.HomeFragment"
-        android:label="MainFragment">
-        <action
-            android:id="@+id/action_main_fragment_to_settings_fragment"
-            app:destination="@id/settings_fragment"
-            app:enterAnim="@anim/fragment_enter"
-            app:exitAnim="@anim/fragment_exit"
-            app:popEnterAnim="@anim/fragment_enter_pop"
-            app:popExitAnim="@anim/fragment_exit_pop" />
-        <action
-            android:id="@+id/action_main_fragment_to_logs_fragment"
-            app:destination="@id/logs_fragment"
-            app:enterAnim="@anim/fragment_enter"
-            app:exitAnim="@anim/fragment_exit"
-            app:popEnterAnim="@anim/fragment_enter_pop"
-            app:popExitAnim="@anim/fragment_exit_pop" />
-        <action
-            android:id="@+id/action_main_fragment_to_repo_fragment"
-            app:destination="@id/repo_fragment"
-            app:enterAnim="@anim/fragment_enter"
-            app:exitAnim="@anim/fragment_exit"
-            app:popEnterAnim="@anim/fragment_enter_pop"
-            app:popExitAnim="@anim/fragment_exit_pop" />
-        <action
-            android:id="@+id/action_main_fragment_to_modules_fragment"
-            app:destination="@id/modules_fragment"
-            app:enterAnim="@anim/fragment_enter"
-            app:exitAnim="@anim/fragment_exit"
-            app:popEnterAnim="@anim/fragment_enter_pop"
-            app:popExitAnim="@anim/fragment_exit_pop" />
-    </fragment>
+        android:label="main"/>
     <fragment
         android:id="@+id/logs_fragment"
         android:name="org.lsposed.manager.ui.fragment.LogsFragment"
@@ -136,42 +107,6 @@
             app:popUpTo="@id/main_fragment"
             app:popUpToInclusive="true" />
     </fragment>
-    <action
-        android:id="@+id/action_settings_fragment"
-        app:destination="@id/settings_fragment"
-        app:enterAnim="@anim/fragment_enter"
-        app:exitAnim="@anim/fragment_exit"
-        app:popEnterAnim="@anim/fragment_enter_pop"
-        app:popExitAnim="@anim/fragment_exit_pop"
-        app:popUpTo="@id/settings_fragment"
-        app:popUpToInclusive="true" />
-    <action
-        android:id="@+id/action_logs_fragment"
-        app:destination="@id/logs_fragment"
-        app:enterAnim="@anim/fragment_enter"
-        app:exitAnim="@anim/fragment_exit"
-        app:popEnterAnim="@anim/fragment_enter_pop"
-        app:popExitAnim="@anim/fragment_exit_pop"
-        app:popUpTo="@id/logs_fragment"
-        app:popUpToInclusive="true" />
-    <action
-        android:id="@+id/action_repo_fragment"
-        app:destination="@id/repo_fragment"
-        app:enterAnim="@anim/fragment_enter"
-        app:exitAnim="@anim/fragment_exit"
-        app:popEnterAnim="@anim/fragment_enter_pop"
-        app:popExitAnim="@anim/fragment_exit_pop"
-        app:popUpTo="@id/repo_fragment"
-        app:popUpToInclusive="true" />
-    <action
-        android:id="@+id/action_modules_fragment"
-        app:destination="@id/modules_fragment"
-        app:enterAnim="@anim/fragment_enter"
-        app:exitAnim="@anim/fragment_exit"
-        app:popEnterAnim="@anim/fragment_enter_pop"
-        app:popExitAnim="@anim/fragment_exit_pop"
-        app:popUpTo="@id/modules_fragment"
-        app:popUpToInclusive="true" />
     <action
         android:id="@+id/action_app_list_fragment"
         app:destination="@id/app_list_fragment"

@@ -20,5 +20,6 @@
 <resources>
     <string name="app_name" translatable="false">LSPosed</string>
     <string name="about_source" translatable="false">https://github.com/LSPosed/LSPosed/</string>
+    <string name="install_url" translatable="false">https://github.com/LSPosed/LSPosed#install</string>
     <string name="settings_group_repo" translatable="false">@string/module_repo</string>
 </resources>
