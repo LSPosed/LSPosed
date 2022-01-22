@@ -31,14 +31,14 @@
         android:id="@+id/app_bar"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:fitsSystemWindows="true">
+        android:fitsSystemWindows="false"
+        app:fitsSystemWindowsInsets="@integer/internal_fragment_top_insets">
 
         <com.google.android.material.appbar.CollapsingToolbarLayout
             style="?collapsingToolbarLayoutLargeStyle"
             android:layout_width="match_parent"
             android:layout_height="?collapsingToolbarLayoutLargeSize"
             android:fitsSystemWindows="false"
-            app:fitsSystemWindowsInsets="@integer/internal_fragment_top_insets"
             app:layout_scrollFlags="scroll|exitUntilCollapsed"
             app:titleCollapseMode="scale">
 
@@ -62,8 +62,8 @@
     <FrameLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        app:layout_behavior="@string/appbar_scrolling_view_behavior"
         app:fitsSystemWindowsInsets="@integer/internal_fragment_bottom_insets"
+        app:layout_behavior="@string/appbar_scrolling_view_behavior"
         tools:ignore="MissingPrefix">
 
         <rikka.widget.borderview.BorderNestedScrollView
