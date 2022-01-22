@@ -30,7 +30,6 @@
         android:layout_height="match_parent"
         android:background="?android:colorBackground"
         app:defaultNavHost="true"
-        app:fitsSystemWindowsInsets="bottom"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintLeft_toRightOf="@id/nav"
         app:layout_constraintRight_toRightOf="parent"

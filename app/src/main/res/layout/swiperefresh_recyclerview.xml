@@ -33,5 +33,6 @@
         android:scrollbars="vertical"
         app:borderBottomVisibility="never"
         app:borderTopDrawable="@null"
-        app:borderTopVisibility="whenTop" />
+        app:borderTopVisibility="whenTop"
+        app:fitsSystemWindowsInsets="@integer/internal_fragment_bottom_insets" />
 </androidx.swiperefreshlayout.widget.SwipeRefreshLayout>

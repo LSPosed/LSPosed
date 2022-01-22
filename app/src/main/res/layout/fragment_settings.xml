@@ -22,15 +22,16 @@
     xmlns:app="http://schemas.android.com/apk/res-auto"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    app:consumeSystemWindowsInsets="start"
-    app:edgeToEdge="true">
+    app:consumeSystemWindowsInsets="@integer/internal_fragment_insets"
+    app:edgeToEdge="true"
+    app:fitsSystemWindowsInsets="@integer/internal_fragment_insets">
 
     <com.google.android.material.appbar.AppBarLayout
         android:id="@+id/app_bar"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:fitsSystemWindows="false"
-        app:fitsSystemWindowsInsets="top">
+        app:fitsSystemWindowsInsets="@integer/internal_fragment_top_insets">
 
         <com.google.android.material.appbar.SubtitleCollapsingToolbarLayout
             style="?attr/collapsingToolbarLayoutLargeStyle"

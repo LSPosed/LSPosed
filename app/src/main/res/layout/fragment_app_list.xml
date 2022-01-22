@@ -23,9 +23,9 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    app:consumeSystemWindowsInsets="start"
+    app:consumeSystemWindowsInsets="@integer/internal_fragment_insets"
     app:edgeToEdge="true"
-    app:fitsSystemWindowsInsets="start">
+    app:fitsSystemWindowsInsets="@integer/internal_fragment_insets">
 
 
     <com.google.android.material.appbar.AppBarLayout
@@ -33,7 +33,7 @@
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:fitsSystemWindows="false"
-        app:fitsSystemWindowsInsets="top">
+        app:fitsSystemWindowsInsets="@integer/internal_fragment_top_insets">
 
         <com.google.android.material.appbar.SubtitleCollapsingToolbarLayout
             style="?attr/collapsingToolbarLayoutLargeStyle"
@@ -76,6 +76,7 @@
         android:tooltipText="@string/module_settings"
         android:visibility="gone"
         app:backgroundTint="?attr/colorPrimary"
+        app:layout_fitsSystemWindowsInsets="@integer/internal_fragment_bottom_insets"
         app:layout_behavior="@string/hide_bottom_view_on_scroll_behavior"
         app:tint="?attr/colorSurface" />
 
@@ -101,7 +102,8 @@
                 android:scrollbars="vertical"
                 app:borderBottomVisibility="never"
                 app:borderTopDrawable="@null"
-                app:borderTopVisibility="whenTop" />
+                app:borderTopVisibility="whenTop"
+                app:fitsSystemWindowsInsets="@integer/internal_fragment_bottom_insets" />
         </androidx.swiperefreshlayout.widget.SwipeRefreshLayout>
     </LinearLayout>
 </androidx.coordinatorlayout.widget.CoordinatorLayout>

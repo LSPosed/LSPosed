@@ -22,16 +22,16 @@
     xmlns:app="http://schemas.android.com/apk/res-auto"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    app:consumeSystemWindowsInsets="start"
+    app:consumeSystemWindowsInsets="@integer/internal_fragment_insets"
     app:edgeToEdge="true"
-    app:fitsSystemWindowsInsets="start">
+    app:fitsSystemWindowsInsets="@integer/internal_fragment_insets">
 
     <com.google.android.material.appbar.AppBarLayout
         android:id="@+id/app_bar"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:fitsSystemWindows="false"
-        app:fitsSystemWindowsInsets="top">
+        app:fitsSystemWindowsInsets="@integer/internal_fragment_top_insets">
 
         <com.google.android.material.appbar.SubtitleCollapsingToolbarLayout
             android:id="@+id/toolbar_layout"
@@ -78,7 +78,8 @@
                 android:scrollbars="vertical"
                 app:borderBottomVisibility="never"
                 app:borderTopDrawable="@null"
-                app:borderTopVisibility="whenTop" />
+                app:borderTopVisibility="whenTop"
+                app:fitsSystemWindowsInsets="@integer/internal_fragment_bottom_insets" />
         </androidx.swiperefreshlayout.widget.SwipeRefreshLayout>
     </FrameLayout>
 </androidx.coordinatorlayout.widget.CoordinatorLayout>
