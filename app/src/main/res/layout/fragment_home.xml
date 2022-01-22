@@ -113,7 +113,7 @@
                             app:srcCompat="@drawable/ic_round_check_circle_24"
                             tools:ignore="ContentDescription" />
 
-                        <TextView
+                        <com.google.android.material.textview.MaterialTextView
                             android:id="@+id/status_title"
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
@@ -124,7 +124,7 @@
                             android:textColor="?colorOnPrimary"
                             android:textSize="16sp" />
 
-                        <TextView
+                        <com.google.android.material.textview.MaterialTextView
                             android:id="@+id/status_summary"
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
@@ -149,14 +149,14 @@
                         android:orientation="vertical"
                         android:padding="?dialogPreferredPadding">
 
-                        <TextView
+                        <com.google.android.material.textview.MaterialTextView
                             android:id="@+id/warning_title"
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
                             android:textAppearance="?textAppearanceTitleMedium"
                             android:textColor="?colorOnErrorContainer" />
 
-                        <TextView
+                        <com.google.android.material.textview.MaterialTextView
                             android:id="@+id/warning_summary"
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
@@ -180,14 +180,14 @@
                         android:orientation="vertical"
                         android:padding="?dialogPreferredPadding">
 
-                        <TextView
+                        <com.google.android.material.textview.MaterialTextView
                             android:id="@+id/update_title"
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
                             android:textAppearance="?textAppearanceTitleMedium"
                             android:textColor="?colorOnSecondaryContainer" />
 
-                        <TextView
+                        <com.google.android.material.textview.MaterialTextView
                             android:id="@+id/update_summary"
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
@@ -222,89 +222,89 @@
                         android:orientation="vertical"
                         android:padding="?dialogPreferredPadding">
 
-                        <TextView
+                        <com.google.android.material.textview.MaterialTextView
                             style="@style/DeviceInfoDialogLabel"
                             android:layout_width="match_parent"
                             android:layout_height="wrap_content"
                             android:text="@string/info_api_version" />
 
-                        <TextView
+                        <com.google.android.material.textview.MaterialTextView
                             android:id="@+id/api_version"
                             style="@style/DeviceInfoDialogValue"
                             android:layout_width="match_parent"
                             android:layout_height="wrap_content"
                             android:text="@string/not_installed" />
 
-                        <TextView
+                        <com.google.android.material.textview.MaterialTextView
                             style="@style/DeviceInfoDialogLabel"
                             android:layout_width="match_parent"
                             android:layout_height="wrap_content"
                             android:text="@string/info_api" />
 
-                        <TextView
+                        <com.google.android.material.textview.MaterialTextView
                             android:id="@+id/api"
                             style="@style/DeviceInfoDialogValue"
                             android:layout_width="match_parent"
                             android:layout_height="wrap_content"
                             android:text="@string/not_installed" />
 
-                        <TextView
+                        <com.google.android.material.textview.MaterialTextView
                             style="@style/DeviceInfoDialogLabel"
                             android:layout_width="match_parent"
                             android:layout_height="wrap_content"
                             android:text="@string/info_framework_version" />
 
-                        <TextView
+                        <com.google.android.material.textview.MaterialTextView
                             android:id="@+id/framework_version"
                             style="@style/DeviceInfoDialogValue"
                             android:layout_width="match_parent"
                             android:layout_height="wrap_content"
                             android:text="@string/not_installed" />
 
-                        <TextView
+                        <com.google.android.material.textview.MaterialTextView
                             style="@style/DeviceInfoDialogLabel"
                             android:layout_width="match_parent"
                             android:layout_height="wrap_content"
                             android:text="@string/info_manager_version" />
 
-                        <TextView
+                        <com.google.android.material.textview.MaterialTextView
                             android:id="@+id/manager_version"
                             style="@style/DeviceInfoDialogValue"
                             android:layout_width="match_parent"
                             android:layout_height="wrap_content"
                             android:gravity="center_vertical" />
 
-                        <TextView
+                        <com.google.android.material.textview.MaterialTextView
                             style="@style/DeviceInfoDialogLabel"
                             android:layout_width="match_parent"
                             android:layout_height="wrap_content"
                             android:text="@string/info_system_version" />
 
-                        <TextView
+                        <com.google.android.material.textview.MaterialTextView
                             android:id="@+id/system_version"
                             style="@style/DeviceInfoDialogValue"
                             android:layout_width="match_parent"
                             android:layout_height="wrap_content" />
 
-                        <TextView
+                        <com.google.android.material.textview.MaterialTextView
                             style="@style/DeviceInfoDialogLabel"
                             android:layout_width="match_parent"
                             android:layout_height="wrap_content"
                             android:text="@string/info_device" />
 
-                        <TextView
+                        <com.google.android.material.textview.MaterialTextView
                             android:id="@+id/device"
                             style="@style/DeviceInfoDialogValue"
                             android:layout_width="match_parent"
                             android:layout_height="wrap_content" />
 
-                        <TextView
+                        <com.google.android.material.textview.MaterialTextView
                             style="@style/DeviceInfoDialogLabel"
                             android:layout_width="match_parent"
                             android:layout_height="wrap_content"
                             android:text="@string/info_system_abi" />
 
-                        <TextView
+                        <com.google.android.material.textview.MaterialTextView
                             android:id="@+id/system_abi"
                             style="@style/DeviceInfoDialogValue"
                             android:layout_width="match_parent"
