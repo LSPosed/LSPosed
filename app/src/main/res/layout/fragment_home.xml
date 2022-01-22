@@ -78,10 +78,12 @@
             <LinearLayout
                 android:layout_width="match_parent"
                 android:layout_height="match_parent"
-                android:layout_marginHorizontal="@dimen/m3_appbar_expanded_title_margin_horizontal"
-                android:layout_marginVertical="?dialogPreferredPadding"
                 android:animateLayoutChanges="true"
+                android:clipChildren="false"
+                android:clipToPadding="false"
                 android:orientation="vertical"
+                android:paddingHorizontal="@dimen/m3_appbar_expanded_title_margin_horizontal"
+                android:paddingVertical="?dialogPreferredPadding"
                 tools:context=".ui.activity.MainActivity">
 
                 <com.google.android.material.card.MaterialCardView
@@ -89,9 +91,13 @@
                     style="@style/Widget.Material3.CardView.Elevated"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
+                    android:outlineAmbientShadowColor="?colorPrimary"
+                    android:outlineSpotShadowColor="?colorPrimary"
                     android:stateListAnimator="@null"
                     app:cardBackgroundColor="?colorPrimary"
-                    app:cardPreventCornerOverlap="false">
+                    app:cardElevation="@dimen/home_primary_elevation"
+                    app:cardPreventCornerOverlap="false"
+                    tools:targetApi="p">
 
                     <RelativeLayout
                         android:layout_width="match_parent"
