@@ -13,7 +13,7 @@
   ~
   ~ You should have received a copy of the GNU General Public License
   ~ along with LSPosed.  If not, see <https://www.gnu.org/licenses/>.
-  ~     
+  ~
   ~ Copyright (C) 2020 EdXposed Contributors
   ~ Copyright (C) 2021 LSPosed Contributors
   -->
@@ -60,13 +60,9 @@
             android:id="@+id/master_switch"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:layout_gravity="bottom"
-            app:layout_collapseMode="parallax"
-            app:layout_collapseParallaxMultiplier="1"
-            app:layout_scrollEffect="compress"
-            app:layout_scrollFlags="scroll|exitUntilCollapsed"
             app:switchOffText="@string/enable_module"
             app:switchOnText="@string/enable_module" />
+
     </com.google.android.material.appbar.AppBarLayout>
 
     <com.google.android.material.floatingactionbutton.FloatingActionButton
@@ -105,8 +101,7 @@
                 android:scrollbars="vertical"
                 app:borderBottomVisibility="never"
                 app:borderTopDrawable="@null"
-                app:borderTopVisibility="whenTop"
-                app:fitsSystemWindowsInsets="bottom" />
+                app:borderTopVisibility="whenTop" />
         </androidx.swiperefreshlayout.widget.SwipeRefreshLayout>
     </LinearLayout>
 </androidx.coordinatorlayout.widget.CoordinatorLayout>

@@ -30,6 +30,7 @@
         android:layout_height="match_parent"
         android:background="?android:colorBackground"
         app:defaultNavHost="true"
+        app:fitsSystemWindowsInsets="bottom"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintLeft_toRightOf="@id/nav"
         app:layout_constraintRight_toRightOf="parent"
@@ -43,6 +44,6 @@
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintLeft_toLeftOf="parent"
         app:layout_constraintTop_toTopOf="parent"
-        app:layout_fitsSystemWindowsInsets="bottom"
-        app:menu="@menu/navigation_menu" />
+        app:menu="@menu/navigation_menu"
+        app:menuGravity="center" />
 </androidx.constraintlayout.widget.ConstraintLayout>
