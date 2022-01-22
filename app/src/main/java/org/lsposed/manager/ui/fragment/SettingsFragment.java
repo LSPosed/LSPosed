@@ -75,7 +75,7 @@ public class SettingsFragment extends BaseFragment {
         binding.toolbar.setNavigationIcon(null);
         if (savedInstanceState == null) {
             getChildFragmentManager().beginTransaction()
-                    .add(R.id.container, new PreferenceFragment()).commitNow();
+                    .add(R.id.setting_container, new PreferenceFragment()).commitNow();
         }
         if (ConfigManager.isBinderAlive()) {
             binding.toolbar.setSubtitle(String.format(Locale.ROOT, "%s (%d) - %s",

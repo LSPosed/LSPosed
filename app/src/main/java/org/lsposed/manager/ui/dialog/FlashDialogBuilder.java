@@ -53,7 +53,7 @@ public class FlashDialogBuilder extends BlurBehindDialogBuilder {
         textView.setTextIsSelectable(true);
 
         var binding = ScrollableDialogBinding.inflate(inflater, null, false);
-        binding.container.addView(textView);
+        binding.dialogContainer.addView(textView);
         rootView = binding.getRoot();
         setView(rootView);
         title.setOnClickListener(v -> rootView.smoothScrollTo(0, 0));
