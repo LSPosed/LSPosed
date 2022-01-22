@@ -207,7 +207,6 @@
     <string name="info_copied">copied to clipboard</string>
 
     <!-- Colors -->
-    <string name="color_pixel_blue">Pixel blue</string>
     <string name="color_sakura">Sakura</string>
     <string name="color_red">Red</string>
     <string name="color_pink">Pink</string>
@@ -226,7 +225,6 @@
     <string name="color_orange">Orange</string>
     <string name="color_deep_orange">Deep orange</string>
     <string name="color_brown">Brown</string>
-    <string name="color_grey">Grey</string>
     <string name="color_blue_grey">Blue grey</string>
     <string name="feedback_or_suggestion">Feedback or suggestion</string>
     <string name="sort_upgradable_first">Upgradable first</string>
