@@ -93,5 +93,5 @@
         app:backgroundTint="?attr/colorPrimary"
         app:layout_fitsSystemWindowsInsets="@integer/internal_fragment_bottom_insets"
         app:layout_behavior="@string/hide_bottom_view_on_scroll_behavior"
-        app:tint="?attr/colorSurface" />
+        app:tint="?attr/colorOnPrimary" />
 </androidx.coordinatorlayout.widget.CoordinatorLayout>
