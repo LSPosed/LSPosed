@@ -134,7 +134,6 @@ public class MainActivity extends BaseActivity implements RepoLoader.RepoListene
                     default:
                         var data = intent.getData();
                         if (data.getScheme().equals("module")) {
-                            navController.setGraph();
                             navController.navigate(new Uri.Builder().scheme("lsposed").authority("module").appendQueryParameter("modulePackageName", data.getHost()).appendQueryParameter("moduleUserId", String.valueOf(data.getPort())).build(),
                                     new NavOptions.Builder().setEnterAnim(R.anim.fragment_enter).setExitAnim(R.anim.fragment_exit).setPopEnterAnim(R.anim.fragment_enter_pop).setPopExitAnim(R.anim.fragment_exit_pop).build());
                         }
