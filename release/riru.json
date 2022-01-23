@@ -1,5 +1,6 @@
 {
 	"version": "v1.6.5 (6272)",
 	"versionCode": 6272,
-	"zipUrl": "https://github.com/LSPosed/LSPosed/releases/download/v1.6.5/LSPosed-v1.6.5-6272-riru-release.zip"
+	"zipUrl": "https://github.com/LSPosed/LSPosed/releases/download/v1.6.5/LSPosed-v1.6.5-6272-riru-release.zip",
+	"changelog": "### Changelog\r\n- Fix bootloop on some OPPO devices\r\n- Enable the resources hook when calling `SystemWideReplace`\r\n- Retain parasitic manager in recent tasks \r\n- More MD3 style design\r\n- Fix denylist warning\r\n- Fix module update broadcast in Android 12\r\n- Support Lenovo (Motorola) app clones\r\n- Fix system properties export on some devices\r\n- Fix modules not working on some weird devices (Lenovo pad)\r\n\r\n### 更新日志\r\n- 修复部分 OPPO 设备上的 bootloop\r\n- 调用 `SystemWideReplace` 时候自动开启资源钩子\r\n- 在最近任务中显示寄生管理器\r\n- 更多 MD3 风格设计\r\n- 修复拒绝列表警告\r\n- 修复 Android 12 下模块更新广播\r\n- 支持联想（摩托罗拉）应用多开\r\n- 修复部分设备下系统属性导出\r\n- 修复在奇怪设备下（联想平板）模块不生效的问题\r\n- 更新 QQ 频道链接"
 }
