@@ -312,7 +312,7 @@ public class RepoFragment extends BaseFragment implements RepoLoader.RepoListene
 
             holder.itemView.setOnClickListener(v -> {
                 searchView.clearFocus();
-                getNavController().navigate(RepoFragmentDirections.actionRepoFragmentToRepoItemFragment(module.getName(), module.getDescription()));
+                getNavController().navigate(RepoFragmentDirections.actionRepoFragmentToRepoItemFragment(module.getName()));
             });
             holder.itemView.setTooltipText(module.getDescription());
         }

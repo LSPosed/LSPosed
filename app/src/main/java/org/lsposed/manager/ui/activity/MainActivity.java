@@ -38,7 +38,6 @@ import com.google.android.material.navigation.NavigationBarView;
 
 import org.lsposed.manager.App;
 import org.lsposed.manager.ConfigManager;
-import org.lsposed.manager.NavGraphDirections;
 import org.lsposed.manager.R;
 import org.lsposed.manager.databinding.ActivityMainBinding;
 import org.lsposed.manager.repo.RepoLoader;
@@ -78,6 +77,7 @@ public class MainActivity extends BaseActivity implements RepoLoader.RepoListene
         }
         super.onCreate(savedInstanceState);
 
+        getIntent().addFlags(Intent.FLAG_ACTIVITY_CLEAR_TASK);
 
         binding = ActivityMainBinding.inflate(getLayoutInflater());
         setContentView(binding.getRoot());
@@ -131,15 +131,6 @@ public class MainActivity extends BaseActivity implements RepoLoader.RepoListene
                             navController.navigate(R.id.repo_fragment);
                         }
                         break;
-                    default:
-                        var data = intent.getData();
-                        if (data.getScheme().equals("module")) {
-                            navController.navigate(
-                                    NavGraphDirections.actionAppListFragment(
-                                            data.getHost(),
-                                            data.getPort())
-                            );
-                        }
                 }
             }
         }
