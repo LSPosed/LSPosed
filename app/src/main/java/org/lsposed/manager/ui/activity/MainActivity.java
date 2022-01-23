@@ -22,6 +22,7 @@ package org.lsposed.manager.ui.activity;
 import android.annotation.SuppressLint;
 import android.content.Context;
 import android.content.Intent;
+import android.net.Uri;
 import android.os.Bundle;
 import android.text.TextUtils;
 import android.view.KeyEvent;
@@ -30,6 +31,7 @@ import android.view.MotionEvent;
 import androidx.annotation.NonNull;
 import androidx.core.os.BuildCompat;
 import androidx.navigation.NavController;
+import androidx.navigation.NavOptions;
 import androidx.navigation.Navigation;
 import androidx.navigation.fragment.NavHostFragment;
 import androidx.navigation.ui.NavigationUI;
@@ -76,8 +78,6 @@ public class MainActivity extends BaseActivity implements RepoLoader.RepoListene
             savedInstanceState = getIntent().getBundleExtra(EXTRA_SAVED_INSTANCE_STATE);
         }
         super.onCreate(savedInstanceState);
-
-        getIntent().addFlags(Intent.FLAG_ACTIVITY_CLEAR_TASK);
 
         binding = ActivityMainBinding.inflate(getLayoutInflater());
         setContentView(binding.getRoot());
@@ -131,6 +131,13 @@ public class MainActivity extends BaseActivity implements RepoLoader.RepoListene
                             navController.navigate(R.id.repo_fragment);
                         }
                         break;
+                    default:
+                        var data = intent.getData();
+                        if (data.getScheme().equals("module")) {
+                            navController.setGraph();
+                            navController.navigate(new Uri.Builder().scheme("lsposed").authority("module").appendQueryParameter("modulePackageName", data.getHost()).appendQueryParameter("moduleUserId", String.valueOf(data.getPort())).build(),
+                                    new NavOptions.Builder().setEnterAnim(R.anim.fragment_enter).setExitAnim(R.anim.fragment_exit).setPopEnterAnim(R.anim.fragment_enter_pop).setPopExitAnim(R.anim.fragment_exit_pop).build());
+                        }
                 }
             }
         }

@@ -121,7 +121,7 @@ public class AppListFragment extends BaseFragment {
     public void onViewCreated(@NonNull View view, @Nullable Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
         if (module == null) {
-            getNavController().navigate(R.id.action_app_list_fragment_to_modules_fragment);
+            getNavController().navigate(AppListFragmentDirections.actionAppListFragmentToModulesFragment());
         }
     }
 
@@ -178,7 +178,7 @@ public class AppListFragment extends BaseFragment {
     @Override
     public void onDestroyView() {
         super.onDestroyView();
-        scopeAdapter.unregisterAdapterDataObserver(observer);
+        if (scopeAdapter != null) scopeAdapter.unregisterAdapterDataObserver(observer);
         binding = null;
     }
 

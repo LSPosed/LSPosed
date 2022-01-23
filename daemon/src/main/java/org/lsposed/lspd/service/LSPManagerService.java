@@ -207,7 +207,7 @@ public class LSPManagerService extends ILSPManagerService.Stub {
     public static PendingIntent getNotificationIntent(String modulePackageName, int moduleUserId) {
         try {
             var intent = (Intent) getManagerIntent().clone();
-            intent.setData(new Uri.Builder().scheme("lsposed").authority("module").appendQueryParameter("modulePackageName", modulePackageName).appendQueryParameter("moduleUserId", String.valueOf(moduleUserId)).build());
+            intent.setData(new Uri.Builder().scheme("module").encodedAuthority(modulePackageName + ":" + moduleUserId).build());
             return PendingIntent.getActivity(new FakeContext(), 0, intent, PendingIntent.FLAG_UPDATE_CURRENT | PendingIntent.FLAG_IMMUTABLE);
         } catch (Throwable e) {
             Log.e(TAG, "get notification intent", e);
