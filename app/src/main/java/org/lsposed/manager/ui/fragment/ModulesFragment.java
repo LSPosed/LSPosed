@@ -54,6 +54,7 @@ import androidx.constraintlayout.widget.ConstraintLayout;
 import androidx.coordinatorlayout.widget.CoordinatorLayout;
 import androidx.core.content.ContextCompat;
 import androidx.fragment.app.Fragment;
+import androidx.navigation.NavOptions;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 import androidx.viewpager2.adapter.FragmentStateAdapter;
@@ -321,7 +322,9 @@ public class ModulesFragment extends BaseFragment implements ModuleUtil.ModuleLi
                     .show();
             return true;
         } else if (itemId == R.id.menu_repo) {
-            getNavController().navigate(new Uri.Builder().scheme("lsposed").authority("repo").appendQueryParameter("modulePackageName", selectedModule.packageName).build());
+            getNavController().navigate(
+                    new Uri.Builder().scheme("lsposed").authority("repo").appendQueryParameter("modulePackageName", selectedModule.packageName).build(),
+                    new NavOptions.Builder().setEnterAnim(R.anim.fragment_enter).setExitAnim(R.anim.fragment_exit).setPopEnterAnim(R.anim.fragment_enter_pop).setPopExitAnim(R.anim.fragment_exit_pop).build());
             return true;
         } else if (itemId == R.id.menu_compile_speed) {
             CompileDialogFragment.speed(getChildFragmentManager(), selectedModule.pkg.applicationInfo);
