@@ -197,7 +197,6 @@
     <string name="send_crash_info">Stuur crash informatie</string>
     <string name="crash_info_copied">Crash informatie naar klembord gekopieerd</string>
     <!-- Colors -->
-    <string name="color_pixel_blue">Pixel blauw</string>
     <string name="color_sakura">Sakura</string>
     <string name="color_red">Rood</string>
     <string name="color_pink">Roze</string>
@@ -216,7 +215,6 @@
     <string name="color_orange">Oranje</string>
     <string name="color_deep_orange">Diep oranje</string>
     <string name="color_brown">Bruin</string>
-    <string name="color_grey">Grijs</string>
     <string name="color_blue_grey">Blauw grijs</string>
     <string name="feedback_or_suggestion">Feedback en suggestie</string>
 </resources>
