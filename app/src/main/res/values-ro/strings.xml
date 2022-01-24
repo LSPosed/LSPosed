@@ -196,7 +196,6 @@
     <string name="send_crash_info">Trimite informații despre prabusire</string>
     <string name="crash_info_copied">Informații prabusire copiate în clipboard</string>
     <!-- Colors -->
-    <string name="color_pixel_blue">Pixel albastru</string>
     <string name="color_sakura">Sakura</string>
     <string name="color_red">Roșu</string>
     <string name="color_pink">Roz</string>
@@ -215,6 +214,5 @@
     <string name="color_orange">Portocaliu</string>
     <string name="color_deep_orange">Portocaliu închis</string>
     <string name="color_brown">Maro</string>
-    <string name="color_grey">Gri</string>
     <string name="color_blue_grey">Albastru gri</string>
 </resources>
