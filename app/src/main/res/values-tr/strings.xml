@@ -29,7 +29,7 @@
     <string name="Settings">Ayarlar</string>
     <string name="About">Hakkında</string>
     <string name="report_issue">Hata raporla</string>
-    <string name="module_repo">Repo</string>
+    <string name="module_repo">Modül deposu</string>
     <string name="module_repo_loading">Yükleniyor…</string>
     <string name="module_repo_up_to_date">Bütün modüller güncel</string>
     <plurals name="module_repo_upgradable">
@@ -37,7 +37,7 @@
         <item quantity="other">%d modül güncellenebilir</item>
     </plurals>
     <string name="about_view_source_code"><![CDATA[%1$s adresindeki kaynak kodunu görüntüle<br/>%2$s kanalımıza katılın]]></string>
-    <string name="translators" comment="Dear translators, please add your home page here following the format. There can be more than one translator. So feel free to append yourself.">Bedircan AYAYDIN, Furkan KARCIOĞLU</string>
+    <string name="translators" comment="Dear translators, please add your home page here following the format. There can be more than one translator. So feel free to append yourself.">Bedircan AYAYDIN, Furkan KARCIOĞLU, Ahmet AÇIKGÖZ</string>
     <string name="install">Yükle</string>
     <string name="install_summary">LSPosed\'i yüklemek için dokunun</string>
     <string name="not_installed">Yüklenmedi</string>
@@ -68,7 +68,8 @@
     <string name="update_lsposed">LSPosed\'ı güncelle</string>
     <string name="update_lsposed_msg">LSPosed\'ı güncellemek istediğinize emin misiniz? Bu cihaz güncelleme tamamlandıktan sonra yeniden başlatılacak</string>
     <!-- LogsActivity -->
-    <string name="menuSaveToSd">Kaydetme</string>
+    <string name="menuSaveToSd">Kaydet</string>
+    <string name="nav_item_logs_verbose">Ayrıntılı Günlükler</string>
     <string name="nav_item_logs_module">Modül Günlükleri</string>
     <string name="logs_save_failed2">Kaydedilemedi:\n%s</string>
     <string name="menuClearLog">Günlüğü şimdi temizle</string>
@@ -80,6 +81,8 @@
     <string name="menuReload">Tekrar yükle</string>
     <string name="logs_clear_failed_2">Günlük temizlenemedi</string>
     <string name="menu_enable_word_wrap">Yeni Satıra Geç</string>
+    <string name="enabled_verbose_log">Ayrıntılı Günlükler Aktif</string>
+    <string name="disabled_verbose_log">Ayrıntılı Günlükler Deaktif</string>
     <!-- ModulesActivity -->
     <string name="module_empty_description">(açıklama yapılmadı)</string>
     <string name="warning_xposed_min_version">Bu modül daha yeni bir Xposed sürümü gerektiriyor (%d) ve bu nedenle etkinleştirilemez</string>
@@ -90,7 +93,7 @@
     <string name="module_settings">Modül ayarları</string>
     <string name="view_in_repo">Repo\'da görüntüle</string>
     <string name="module_uninstall_message">Bu modülü kaldırmak istiyor musunuz?</string>
-    <string name="module_uninstalled">Kaldırıldı %1$s</string>
+    <string name="module_uninstalled">%1$s kaldırıldı</string>
     <string name="module_uninstall_failed">Kaldırma başarısız</string>
     <string name="add_module_to_user">Kullanıcıya modül ekle</string>
     <string name="module_installed">Kullanıcıya %1$s eklendi %2$s</string>
@@ -193,8 +196,8 @@
     <string name="manager_crashed_info">bunu şuraya rapor et </string>
     <string name="send_crash_info">Çökme bilgisi gönder</string>
     <string name="crash_info_copied">Çökme bilgisi panoya kopyalandı</string>
+    <string name="info_copied">Panoya kopyalandı</string>
     <!-- Colors -->
-    <string name="color_pixel_blue">Pixel mavisi</string>
     <string name="color_sakura">Kiraz çiçeği</string>
     <string name="color_red">Kırmızı</string>
     <string name="color_pink">Pembe</string>
@@ -213,6 +216,8 @@
     <string name="color_orange">Turuncu</string>
     <string name="color_deep_orange">Koyu turuncu</string>
     <string name="color_brown">Kahverengi</string>
-    <string name="color_grey">Gri</string>
     <string name="color_blue_grey">Mavi gri</string>
+    <string name="feedback_or_suggestion">Geri bildirim veya öneri</string>
+    <string name="sort_upgradable_first">Önce yükseltilebilir</string>
+    <string name="overview">Genel bakış</string>
 </resources>
