@@ -197,7 +197,6 @@
     <string name="send_crash_info">Skicka kraschinformation</string>
     <string name="crash_info_copied">Kraschinformation kopierad till urklipp</string>
     <!-- Colors -->
-    <string name="color_pixel_blue">Pixel blå</string>
     <string name="color_sakura">Sakura</string>
     <string name="color_red">Röd</string>
     <string name="color_pink">Rosa</string>
@@ -216,7 +215,6 @@
     <string name="color_orange">Orange</string>
     <string name="color_deep_orange">Djup orange</string>
     <string name="color_brown">Brun</string>
-    <string name="color_grey">Grå</string>
     <string name="color_blue_grey">Blå grå</string>
     <string name="feedback_or_suggestion">Feedback eller förslag</string>
     <string name="sort_upgradable_first">Uppgraderingsbar först</string>
