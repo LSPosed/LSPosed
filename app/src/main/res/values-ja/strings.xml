@@ -57,6 +57,7 @@
     <string name="info_system_version">System バージョン</string>
     <string name="info_device">デバイス</string>
     <string name="info_system_abi">システム ABI</string>
+    <string name="info_api">インジェクションインターフェイス</string>
     <string name="parasitic_recommend">寄生マネージャーの推奨</string>
     <string name="create_shortcut">ショートカットを作成</string>
     <string name="never_show">表示しない</string>
@@ -116,6 +117,7 @@
     <string name="no_scope_selected">アプリが未選択です。継続しますか?</string>
     <string name="menu_show_games">ゲーム</string>
     <string name="menu_show_modules">モジュール</string>
+    <string name="menu_show_denylist">拒否リスト</string>
     <string name="failed_to_save_scope_list">スコープリストの保存に失敗</string>
     <string name="app_description">%1$s\nバージョン %2$s</string>
     <string name="use_recommended">お勧め</string>
@@ -135,6 +137,7 @@
     <string name="reboot_required">本変更適用後に再起動が必要です</string>
     <string name="reboot">再起動</string>
     <string name="menu_hide">隠す…</string>
+    <string name="deny_list_info">拒否リストにあります</string>
     <!-- ModulesActivity and AppListActivity -->
     <string name="modules_other_app">他のアプリで表示</string>
     <string name="module_app_info">アプリの情報</string>
@@ -186,7 +189,6 @@
     <string name="send_crash_info">クラッシュ情報をコピーする</string>
     <string name="crash_info_copied">クラッシュ情報をクリップボードにコピーしました</string>
     <!-- Colors -->
-    <string name="color_pixel_blue">Pixel 青</string>
     <string name="color_sakura">桜色</string>
     <string name="color_red">赤</string>
     <string name="color_pink">ピンク</string>
@@ -204,5 +206,5 @@
     <string name="color_orange">オレンジ</string>
     <string name="color_deep_orange">深いオレンジ</string>
     <string name="color_brown">茶色</string>
-    <string name="color_grey">灰色</string>
+    <string name="overview">概要</string>
 </resources>
