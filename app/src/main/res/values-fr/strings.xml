@@ -196,8 +196,8 @@
     <string name="manager_crashed_info">rapporter celà à </string>
     <string name="send_crash_info">Envoyer les infos de plantage</string>
     <string name="crash_info_copied">Infos de plantage copiées dans le presse papier</string>
+    <string name="info_copied">Copié dans le presse-papier</string>
     <!-- Colors -->
-    <string name="color_pixel_blue">Bleu Pixel</string>
     <string name="color_sakura">Sakura</string>
     <string name="color_red">Rouge</string>
     <string name="color_pink">Rose</string>
@@ -216,8 +216,8 @@
     <string name="color_orange">Orange</string>
     <string name="color_deep_orange">Orange foncé</string>
     <string name="color_brown">Marron</string>
-    <string name="color_grey">Gris</string>
     <string name="color_blue_grey">Bleu grisatre</string>
     <string name="feedback_or_suggestion">Réaction ou suggestion</string>
     <string name="sort_upgradable_first">Evolutif d\'abord</string>
+    <string name="overview">Aperçu</string>
 </resources>
