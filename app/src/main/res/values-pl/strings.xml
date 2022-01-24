@@ -192,7 +192,6 @@
     <string name="send_crash_info">Wyślij informacje o awarii</string>
     <string name="crash_info_copied">Informacje o awarii skopiowane do schowka</string>
     <!-- Colors -->
-    <string name="color_pixel_blue">Pikselowy niebieski</string>
     <string name="color_sakura">Sakura</string>
     <string name="color_red">Czerwony</string>
     <string name="color_pink">Różowy</string>
@@ -211,7 +210,6 @@
     <string name="color_orange">Pomarańczowy</string>
     <string name="color_deep_orange">Ciemny pomarańczowy</string>
     <string name="color_brown">Brązowy</string>
-    <string name="color_grey">Szary</string>
     <string name="color_blue_grey">Niebiesko szary</string>
     <string name="feedback_or_suggestion">Opinie lub sugestie</string>
 </resources>

@@ -200,8 +200,8 @@
     <string name="manager_crashed_info">nahlásit to </string>
     <string name="send_crash_info">Odeslat informace o pádu</string>
     <string name="crash_info_copied">Informace o pádu zkopírovány do schránky</string>
+    <string name="info_copied">Zkopírováno do schránky</string>
     <!-- Colors -->
-    <string name="color_pixel_blue">Pixelově modrá</string>
     <string name="color_sakura">Sakura</string>
     <string name="color_red">Červená</string>
     <string name="color_pink">Růžová</string>
@@ -220,8 +220,8 @@
     <string name="color_orange">Oranžová</string>
     <string name="color_deep_orange">Tmavě oranžová</string>
     <string name="color_brown">Hnědá</string>
-    <string name="color_grey">Šedá</string>
     <string name="color_blue_grey">Modro-šedivá</string>
     <string name="feedback_or_suggestion">Zpětná vazba nebo návrh</string>
     <string name="sort_upgradable_first">Nejprve aktualizovatelný</string>
+    <string name="overview">Přehled</string>
 </resources>

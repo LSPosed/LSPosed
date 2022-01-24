@@ -194,8 +194,8 @@
     <string name="manager_crashed_info">反馈该问题到 </string>
     <string name="send_crash_info">发送崩溃信息</string>
     <string name="crash_info_copied">已将崩溃信息复制到剪贴板</string>
+    <string name="info_copied">已复制到剪贴板</string>
     <!-- Colors -->
-    <string name="color_pixel_blue">Pixel 蓝</string>
     <string name="color_sakura">樱花</string>
     <string name="color_red">红色</string>
     <string name="color_pink">粉色</string>
@@ -214,8 +214,8 @@
     <string name="color_orange">橙色</string>
     <string name="color_deep_orange">深橙</string>
     <string name="color_brown">棕色</string>
-    <string name="color_grey">灰色</string>
     <string name="color_blue_grey">灰蓝</string>
     <string name="feedback_or_suggestion">反馈或建议</string>
     <string name="sort_upgradable_first">可更新优先</string>
+    <string name="overview">概览</string>
 </resources>

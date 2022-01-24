@@ -197,7 +197,6 @@
     <string name="send_crash_info">發送崩潰訊息</string>
     <string name="crash_info_copied">崩潰訊息已複製到剪貼板</string>
     <!-- Colors -->
-    <string name="color_pixel_blue">Pixel 藍</string>
     <string name="color_sakura">櫻花色</string>
     <string name="color_red">紅色</string>
     <string name="color_pink">粉紅色</string>
@@ -216,7 +215,6 @@
     <string name="color_orange">橙色</string>
     <string name="color_deep_orange">深橙色</string>
     <string name="color_brown">啡色</string>
-    <string name="color_grey">灰色</string>
     <string name="color_blue_grey">藍灰色</string>
     <string name="feedback_or_suggestion">反饋或建議</string>
     <string name="sort_upgradable_first">可更新優先</string>

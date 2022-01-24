@@ -197,7 +197,6 @@
     <string name="send_crash_info">Αποστολή πληροφοριών κατάρρευσης</string>
     <string name="crash_info_copied">Οι πληροφορίες κατάρρευσης αντιγράφηκαν στο πρόχειρο</string>
     <!-- Colors -->
-    <string name="color_pixel_blue">Μπλε εικονοστοιχείων</string>
     <string name="color_sakura">Sakura</string>
     <string name="color_red">Κόκκινο</string>
     <string name="color_pink">Ροζ</string>
@@ -216,7 +215,6 @@
     <string name="color_orange">Πορτοκαλί</string>
     <string name="color_deep_orange">Βαθύ πορτοκαλί</string>
     <string name="color_brown">Καφέ</string>
-    <string name="color_grey">Γκρι</string>
     <string name="color_blue_grey">Μπλε γκρι</string>
     <string name="feedback_or_suggestion">Σχόλια ή πρόταση</string>
     <string name="sort_upgradable_first">Αναβαθμίσιμο πρώτα</string>

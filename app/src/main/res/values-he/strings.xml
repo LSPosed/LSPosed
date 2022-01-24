@@ -201,8 +201,8 @@
     <string name="manager_crashed_info">דווח על כך </string>
     <string name="send_crash_info">שלח מידע על הקריסה</string>
     <string name="crash_info_copied">מידע קריסה הועתק ללוח</string>
+    <string name="info_copied">הועתק ללוח</string>
     <!-- Colors -->
-    <string name="color_pixel_blue">כחול פיקסל</string>
     <string name="color_sakura">סאקורה</string>
     <string name="color_red">אדום</string>
     <string name="color_pink">ורוד</string>
@@ -221,8 +221,8 @@
     <string name="color_orange">כתום</string>
     <string name="color_deep_orange">כתום עמוק</string>
     <string name="color_brown">חום</string>
-    <string name="color_grey">אפור</string>
     <string name="color_blue_grey">כחול אפור</string>
     <string name="feedback_or_suggestion">משוב או הצעה</string>
     <string name="sort_upgradable_first">ניתן לשדרוג תחילה</string>
+    <string name="overview">סקירה כללית</string>
 </resources>

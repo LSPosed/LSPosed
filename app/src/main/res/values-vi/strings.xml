@@ -194,8 +194,8 @@
     <string name="manager_crashed_info">báo cáo đến </string>
     <string name="send_crash_info">Gửi thông tin sự cố</string>
     <string name="crash_info_copied">Đã sao chép thông tin sự cố vào bộ nhớ tạm</string>
+    <string name="info_copied">Đã sao chép vào bảng nhớ tạm</string>
     <!-- Colors -->
-    <string name="color_pixel_blue">Xanh Pixel</string>
     <string name="color_sakura">Hoa anh đào</string>
     <string name="color_red">Đỏ</string>
     <string name="color_pink">Hồng</string>
@@ -214,8 +214,8 @@
     <string name="color_orange">Cam</string>
     <string name="color_deep_orange">Cam sâu</string>
     <string name="color_brown">Nâu</string>
-    <string name="color_grey">Xám</string>
     <string name="color_blue_grey">Xanh xám</string>
     <string name="feedback_or_suggestion">Phản hồi hoặc góp ý</string>
     <string name="sort_upgradable_first">Có thể nâng cấp trước</string>
+    <string name="overview">Tổng quát</string>
 </resources>

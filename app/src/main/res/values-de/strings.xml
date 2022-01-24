@@ -196,7 +196,6 @@ Gerät wird nach dem Update neu gestartet</string>
     <string name="send_crash_info">Absturzinfo senden</string>
     <string name="crash_info_copied">Absturzinfo in die Zwischenablage kopiert</string>
     <!-- Colors -->
-    <string name="color_pixel_blue">Pixelblau</string>
     <string name="color_sakura">Sakura</string>
     <string name="color_red">Rot</string>
     <string name="color_pink">Pink</string>
@@ -215,7 +214,6 @@ Gerät wird nach dem Update neu gestartet</string>
     <string name="color_orange">Orange</string>
     <string name="color_deep_orange">Tieforange</string>
     <string name="color_brown">Braun</string>
-    <string name="color_grey">Grau</string>
     <string name="color_blue_grey">Blaugrau</string>
     <string name="feedback_or_suggestion">Feedback oder Vorschläge</string>
     <string name="sort_upgradable_first">Zuerst aktualisierbar</string>

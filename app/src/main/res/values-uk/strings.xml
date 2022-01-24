@@ -193,7 +193,6 @@
     <string name="send_crash_info">Надіслати інформацію про помилку</string>
     <string name="crash_info_copied">Інформація про помилку скопійована до буферу обміну</string>
     <!-- Colors -->
-    <string name="color_pixel_blue">Голубий</string>
     <string name="color_sakura">Вишневий</string>
     <string name="color_red">Червоний</string>
     <string name="color_pink">Рожевий</string>
@@ -212,6 +211,5 @@
     <string name="color_orange">Помаранчевий</string>
     <string name="color_deep_orange">Жовтогарячий</string>
     <string name="color_brown">Коричневий</string>
-    <string name="color_grey">Сірий</string>
     <string name="color_blue_grey">Блакитно-сірий</string>
 </resources>

@@ -194,8 +194,8 @@
     <string name="manager_crashed_info">laporkan ini kepada </string>
     <string name="send_crash_info">Kirim info kerusakan</string>
     <string name="crash_info_copied">Info kerusakan disalin ke papan klip</string>
+    <string name="info_copied">Sudah Tersalin ke Papan Clip</string>
     <!-- Colors -->
-    <string name="color_pixel_blue">Biru Piksel</string>
     <string name="color_sakura">Sakura</string>
     <string name="color_red">Merah</string>
     <string name="color_pink">Merah muda</string>
@@ -214,8 +214,8 @@
     <string name="color_orange">Oranye</string>
     <string name="color_deep_orange">Oranye gelap</string>
     <string name="color_brown">Coklat</string>
-    <string name="color_grey">Abu-abu</string>
     <string name="color_blue_grey">Abu-abu kebiruan</string>
     <string name="feedback_or_suggestion">Umpan balik atau saran</string>
     <string name="sort_upgradable_first">Dapat diupgrade terlebih dahulu</string>
+    <string name="overview">Gambar Luas</string>
 </resources>
