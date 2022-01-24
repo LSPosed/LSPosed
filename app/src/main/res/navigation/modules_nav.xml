@@ -1,0 +1,59 @@
+<?xml version="1.0" encoding="utf-8"?><!--
+  ~ This file is part of LSPosed.
+  ~
+  ~ LSPosed is free software: you can redistribute it and/or modify
+  ~ it under the terms of the GNU General Public License as published by
+  ~ the Free Software Foundation, either version 3 of the License, or
+  ~ (at your option) any later version.
+  ~
+  ~ LSPosed is distributed in the hope that it will be useful,
+  ~ but WITHOUT ANY WARRANTY; without even the implied warranty of
+  ~ MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+  ~ GNU General Public License for more details.
+  ~
+  ~ You should have received a copy of the GNU General Public License
+  ~ along with LSPosed.  If not, see <https://www.gnu.org/licenses/>.
+  ~
+  ~ Copyright (C) 2021 LSPosed Contributors
+  -->
+<navigation xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:id="@+id/modules_nav"
+    app:startDestination="@id/modules_fragment">
+    <fragment
+        android:id="@+id/modules_fragment"
+        android:name="org.lsposed.manager.ui.fragment.ModulesFragment"
+        android:label="modules">
+        <action
+            android:id="@+id/action_modules_fragment_to_app_list_fragment"
+            app:destination="@id/app_list_fragment"
+            app:enterAnim="@anim/fragment_enter"
+            app:exitAnim="@anim/fragment_exit"
+            app:popEnterAnim="@anim/fragment_enter_pop"
+            app:popExitAnim="@anim/fragment_exit_pop" />
+    </fragment>
+    <fragment
+        android:id="@+id/app_list_fragment"
+        android:name="org.lsposed.manager.ui.fragment.AppListFragment"
+        android:label="app_list">
+        <argument
+            android:name="modulePackageName"
+            app:argType="string" />
+
+        <argument
+            android:name="moduleUserId"
+            app:argType="integer" />
+        <deepLink
+            android:id="@+id/repo_item_deeplink"
+            app:uri="lsposed://module?modulePackageName={modulePackageName}&amp;moduleUserId={moduleUserId}" />
+    </fragment>
+    <action
+        android:id="@+id/action_app_list_fragment_to_modules_fragment"
+        app:destination="@id/modules_fragment"
+        app:enterAnim="@anim/fragment_enter"
+        app:exitAnim="@anim/fragment_exit"
+        app:popEnterAnim="@anim/fragment_enter_pop"
+        app:popExitAnim="@anim/fragment_exit_pop"
+        app:popUpTo="@id/main_fragment"
+        app:popUpToInclusive="true" />
+</navigation>

@@ -14,8 +14,7 @@
   ~ You should have received a copy of the GNU General Public License
   ~ along with LSPosed.  If not, see <https://www.gnu.org/licenses/>.
   ~
-  ~ Copyright (C) 2020 EdXposed Contributors
-  ~ Copyright (C) 2021 LSPosed Contributors
+  ~ Copyright (C) 2022 LSPosed Contributors
   -->
 
 <adaptive-icon xmlns:android="http://schemas.android.com/apk/res/android">
@@ -23,7 +22,7 @@
     <foreground>
         <!-- 44dp icon scaled to 52dp in 72dp, padding = (1-52/44*24/72)/2 -->
         <inset
-            android:drawable="@drawable/ic_baseline_assignment_24"
+            android:drawable="@drawable/ic_baseline_settings_24"
             android:inset="30.303%" />
     </foreground>
 </adaptive-icon>

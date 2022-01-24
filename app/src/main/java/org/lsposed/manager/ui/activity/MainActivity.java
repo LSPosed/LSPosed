@@ -22,6 +22,7 @@ package org.lsposed.manager.ui.activity;
 import android.annotation.SuppressLint;
 import android.content.Context;
 import android.content.Intent;
+import android.net.Uri;
 import android.os.Bundle;
 import android.text.TextUtils;
 import android.view.KeyEvent;
@@ -30,6 +31,7 @@ import android.view.MotionEvent;
 import androidx.annotation.NonNull;
 import androidx.core.os.BuildCompat;
 import androidx.navigation.NavController;
+import androidx.navigation.NavOptions;
 import androidx.navigation.Navigation;
 import androidx.navigation.fragment.NavHostFragment;
 import androidx.navigation.ui.NavigationUI;
@@ -38,7 +40,6 @@ import com.google.android.material.navigation.NavigationBarView;
 
 import org.lsposed.manager.App;
 import org.lsposed.manager.ConfigManager;
-import org.lsposed.manager.NavGraphDirections;
 import org.lsposed.manager.R;
 import org.lsposed.manager.databinding.ActivityMainBinding;
 import org.lsposed.manager.repo.RepoLoader;
@@ -78,7 +79,6 @@ public class MainActivity extends BaseActivity implements RepoLoader.RepoListene
         }
         super.onCreate(savedInstanceState);
 
-
         binding = ActivityMainBinding.inflate(getLayoutInflater());
         setContentView(binding.getRoot());
 
@@ -95,7 +95,6 @@ public class MainActivity extends BaseActivity implements RepoLoader.RepoListene
         NavController navController = navHostFragment.getNavController();
         var nav = (NavigationBarView) binding.nav;
         NavigationUI.setupWithNavController(nav, navController);
-        nav.findViewById(R.id.modules_fragment);
 
         handleIntent(getIntent());
     }
@@ -115,35 +114,36 @@ public class MainActivity extends BaseActivity implements RepoLoader.RepoListene
             return;
         }
         NavController navController = navHostFragment.getNavController();
+        var nav = (NavigationBarView) binding.nav;
         if (intent.getAction() != null && intent.getAction().equals("android.intent.action.APPLICATION_PREFERENCES")) {
-            navController.navigate(R.id.settings_fragment);
+            nav.setSelectedItemId(R.id.settings_fragment);
         } else if (ConfigManager.isBinderAlive()) {
             if (!TextUtils.isEmpty(intent.getDataString())) {
                 switch (intent.getDataString()) {
                     case "modules":
-                        navController.navigate(R.id.modules_fragment);
+                        nav.setSelectedItemId(R.id.modules_nav);
                         break;
                     case "logs":
-                        navController.navigate(R.id.logs_fragment);
+                        nav.setSelectedItemId(R.id.logs_fragment);
                         break;
                     case "repo":
                         if (ConfigManager.isMagiskInstalled()) {
-                            navController.navigate(R.id.repo_fragment);
+                            nav.setSelectedItemId(R.id.repo_nav);
                         }
+                        break;
+                    case "settings":
+                        nav.setSelectedItemId(R.id.settings_fragment);
                         break;
                     default:
                         var data = intent.getData();
-                        if (data.getScheme().equals("module")) {
+                        if (data != null && data.getScheme().equals("module")) {
                             navController.navigate(
-                                    NavGraphDirections.actionAppListFragment(
-                                            data.getHost(),
-                                            data.getPort())
-                            );
+                                    new Uri.Builder().scheme("lsposed").authority("module").appendQueryParameter("modulePackageName", data.getHost()).appendQueryParameter("moduleUserId", String.valueOf(data.getPort())).build(),
+                                    new NavOptions.Builder().setEnterAnim(R.anim.fragment_enter).setExitAnim(R.anim.fragment_exit).setPopEnterAnim(R.anim.fragment_enter_pop).setPopExitAnim(R.anim.fragment_exit_pop).setLaunchSingleTop(true).setPopUpTo(navController.getGraph().getStartDestinationId(), false, true).build());
                         }
                 }
             }
         }
-
     }
 
     @Override

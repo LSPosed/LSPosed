@@ -28,8 +28,8 @@
         android:shortcutShortLabel="@string/Modules">
         <intent
             android:action="android.intent.action.MAIN"
-            android:targetClass="org.lsposed.manager.ui.activity.MainActivity"
             android:data="modules"
+            android:targetClass="org.lsposed.manager.ui.activity.MainActivity"
             android:targetPackage="org.lsposed.manager" />
     </shortcut>
     <shortcut
@@ -40,8 +40,8 @@
         android:shortcutShortLabel="@string/Logs">
         <intent
             android:action="android.intent.action.MAIN"
-            android:targetClass="org.lsposed.manager.ui.activity.MainActivity"
             android:data="logs"
+            android:targetClass="org.lsposed.manager.ui.activity.MainActivity"
             android:targetPackage="org.lsposed.manager" />
     </shortcut>
     <shortcut
@@ -52,8 +52,20 @@
         android:shortcutShortLabel="@string/module_repo">
         <intent
             android:action="android.intent.action.MAIN"
-            android:targetClass="org.lsposed.manager.ui.activity.MainActivity"
             android:data="repo"
+            android:targetClass="org.lsposed.manager.ui.activity.MainActivity"
+            android:targetPackage="org.lsposed.manager" />
+    </shortcut>
+    <shortcut
+        android:enabled="true"
+        android:icon="@drawable/shortcut_ic_settings"
+        android:shortcutId="settings"
+        android:shortcutLongLabel="@string/Settings"
+        android:shortcutShortLabel="@string/Settings">
+        <intent
+            android:action="android.intent.action.MAIN"
+            android:data="settings"
+            android:targetClass="org.lsposed.manager.ui.activity.MainActivity"
             android:targetPackage="org.lsposed.manager" />
     </shortcut>
 </shortcuts>

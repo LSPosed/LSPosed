@@ -207,7 +207,7 @@ public class LSPManagerService extends ILSPManagerService.Stub {
     public static PendingIntent getNotificationIntent(String modulePackageName, int moduleUserId) {
         try {
             var intent = (Intent) getManagerIntent().clone();
-            intent.setData(Uri.parse("module://" + modulePackageName + ":" + moduleUserId));
+            intent.setData(new Uri.Builder().scheme("module").encodedAuthority(modulePackageName + ":" + moduleUserId).build());
             return PendingIntent.getActivity(new FakeContext(), 0, intent, PendingIntent.FLAG_UPDATE_CURRENT | PendingIntent.FLAG_IMMUTABLE);
         } catch (Throwable e) {
             Log.e(TAG, "get notification intent", e);
@@ -311,7 +311,7 @@ public class LSPManagerService extends ILSPManagerService.Stub {
             for (var shortcutInfo : sm.getPinnedShortcuts()) {
                 if (SHORTCUT_ID.equals(shortcutInfo.getId()) && shortcutInfo.isPinned()) {
                     var shortcutIntent = sm.createShortcutResultIntent(shortcutInfo);
-                    var request = (LauncherApps.PinItemRequest)shortcutIntent.getParcelableExtra(LauncherApps.EXTRA_PIN_ITEM_REQUEST);
+                    var request = (LauncherApps.PinItemRequest) shortcutIntent.getParcelableExtra(LauncherApps.EXTRA_PIN_ITEM_REQUEST);
                     var requestInfo = request.getShortcutInfo();
                     // https://cs.android.com/android/platform/superproject/+/android-8.1.0_r1:frameworks/base/services/core/java/com/android/server/pm/ShortcutRequestPinProcessor.java;drc=4ad6b57700bef4c484021f49e018117046562e6b;l=337
                     if (requestInfo.isPinned()) {
