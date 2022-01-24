@@ -194,8 +194,8 @@
     <string name="manager_crashed_info">回報給 </string>
     <string name="send_crash_info">傳送錯誤日誌</string>
     <string name="crash_info_copied">錯誤日誌已複製到剪貼簿</string>
+    <string name="info_copied">複製到剪貼簿</string>
     <!-- Colors -->
-    <string name="color_pixel_blue">Pixel 藍</string>
     <string name="color_sakura">櫻花</string>
     <string name="color_red">紅色</string>
     <string name="color_pink">粉色</string>
@@ -214,8 +214,8 @@
     <string name="color_orange">橙色</string>
     <string name="color_deep_orange">深橙</string>
     <string name="color_brown">棕色</string>
-    <string name="color_grey">灰色</string>
     <string name="color_blue_grey">藍灰</string>
     <string name="feedback_or_suggestion">回饋或建議</string>
     <string name="sort_upgradable_first">可更新的優先</string>
+    <string name="overview">概觀</string>
 </resources>
