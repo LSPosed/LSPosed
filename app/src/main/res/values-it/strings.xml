@@ -196,8 +196,8 @@
     <string name="manager_crashed_info">segnalalo a </string>
     <string name="send_crash_info">Invia informazioni sul crash</string>
     <string name="crash_info_copied">Informazioni sul crash copiate negli appunti</string>
+    <string name="info_copied">Copiato negli appunti</string>
     <!-- Colors -->
-    <string name="color_pixel_blue">Blu pixel</string>
     <string name="color_sakura">Sakura</string>
     <string name="color_red">Rosso</string>
     <string name="color_pink">Rosa</string>
@@ -216,8 +216,8 @@
     <string name="color_orange">Arancione</string>
     <string name="color_deep_orange">Arancione scuro</string>
     <string name="color_brown">Marrone</string>
-    <string name="color_grey">Grigio</string>
     <string name="color_blue_grey">Blu grigio</string>
     <string name="feedback_or_suggestion">Feedback o suggerimenti</string>
     <string name="sort_upgradable_first">Aggiornabili prima</string>
+    <string name="overview">Panoramica</string>
 </resources>
