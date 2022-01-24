@@ -114,11 +114,11 @@ public class MainActivity extends BaseActivity implements RepoLoader.RepoListene
             return;
         }
         NavController navController = navHostFragment.getNavController();
+        var nav = (NavigationBarView) binding.nav;
         if (intent.getAction() != null && intent.getAction().equals("android.intent.action.APPLICATION_PREFERENCES")) {
-            navController.navigate(R.id.settings_fragment);
+            nav.setSelectedItemId(R.id.settings_fragment);
         } else if (ConfigManager.isBinderAlive()) {
             if (!TextUtils.isEmpty(intent.getDataString())) {
-                var nav = (NavigationBarView) binding.nav;
                 switch (intent.getDataString()) {
                     case "modules":
                         nav.setSelectedItemId(R.id.modules_nav);
@@ -131,9 +131,12 @@ public class MainActivity extends BaseActivity implements RepoLoader.RepoListene
                             nav.setSelectedItemId(R.id.repo_nav);
                         }
                         break;
+                    case "settings":
+                        nav.setSelectedItemId(R.id.settings_fragment);
+                        break;
                     default:
                         var data = intent.getData();
-                        if (data.getScheme().equals("module")) {
+                        if (data != null && data.getScheme().equals("module")) {
                             navController.navigate(
                                     new Uri.Builder().scheme("lsposed").authority("module").appendQueryParameter("modulePackageName", data.getHost()).appendQueryParameter("moduleUserId", String.valueOf(data.getPort())).build(),
                                     new NavOptions.Builder().setEnterAnim(R.anim.fragment_enter).setExitAnim(R.anim.fragment_exit).setPopEnterAnim(R.anim.fragment_enter_pop).setPopExitAnim(R.anim.fragment_exit_pop).setLaunchSingleTop(true).setPopUpTo(navController.getGraph().getStartDestinationId(), false, true).build());
