@@ -36,6 +36,14 @@
     <string name="module_repo">المُستودع</string>
     <string name="module_repo_loading">جارٍ التحميل…</string>
     <string name="module_repo_up_to_date">جميع الوحدات محدثة</string>
+    <plurals name="module_repo_upgradable">
+        <item quantity="zero">%d وحدة قابلة للترقية</item>
+        <item quantity="one">توجد وحدة بحاجة إلي التحديث</item>
+        <item quantity="two">يوجد وحدتان بحاجة إلي التحديث</item>
+        <item quantity="few">%d وحدات قابلة للترقية</item>
+        <item quantity="many">يوجد %d وحدات بحاجة إلي التحديث</item>
+        <item quantity="other">%d وحدات قابلة للترقية</item>
+    </plurals>
     <string name="about_view_source_code"><![CDATA[عرض كود المصدر في %1$s<br/>انضم إلى قناتنا %2$s]]></string>
     <string name="translators" comment="Dear translators, please add your home page here following the format. There can be more than one translator. So feel free to append yourself.">Mahmoud Abd El-Hamed (7TM)</string>
     <string name="install">تـثبيت</string>
@@ -196,8 +204,8 @@
     <string name="manager_crashed_info">أبلغ عن هذا إلى </string>
     <string name="send_crash_info">إرسال معلومات الأعطال</string>
     <string name="crash_info_copied">تم نسخ معلومات الأعطال إلى الحافظة</string>
+    <string name="info_copied">تم النسخ إلى الحافظة</string>
     <!-- Colors -->
-    <string name="color_pixel_blue">أزرق بكسل</string>
     <string name="color_sakura">ساكورا</string>
     <string name="color_red">أحمر</string>
     <string name="color_pink">وردي</string>
@@ -216,8 +224,8 @@
     <string name="color_orange">برتقالي</string>
     <string name="color_deep_orange">برتقالي عميق</string>
     <string name="color_brown">بني</string>
-    <string name="color_grey">رمادي</string>
     <string name="color_blue_grey">أزرق رمادي</string>
     <string name="feedback_or_suggestion">ملاحظات أو اقتراحات</string>
     <string name="sort_upgradable_first">قابل للترقية أولاً</string>
+    <string name="overview">نظرة عامة</string>
 </resources>
