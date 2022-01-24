@@ -215,7 +215,7 @@ public class MainActivity extends BaseActivity implements RepoLoader.RepoListene
         runOnUiThread(() -> {
             if (count[0] > 0 && binding != null) {
                 var nav = (NavigationBarView) binding.nav;
-                var badge = nav.getOrCreateBadge(R.id.repo_fragment);
+                var badge = nav.getOrCreateBadge(R.id.repo_nav);
                 badge.setVisible(true);
                 badge.setNumber(count[0]);
             } else {
@@ -229,7 +229,7 @@ public class MainActivity extends BaseActivity implements RepoLoader.RepoListene
         runOnUiThread(() -> {
             if (binding != null) {
                 var nav = (NavigationBarView) binding.nav;
-                var badge = nav.getOrCreateBadge(R.id.repo_fragment);
+                var badge = nav.getOrCreateBadge(R.id.repo_nav);
                 badge.setVisible(false);
             }
         });
@@ -258,7 +258,7 @@ public class MainActivity extends BaseActivity implements RepoLoader.RepoListene
                 nav.getMenu().removeItem(R.id.logs_fragment);
                 nav.getMenu().removeItem(R.id.modules_fragment);
                 if (!ConfigManager.isMagiskInstalled()) {
-                    nav.getMenu().removeItem(R.id.repo_fragment);
+                    nav.getMenu().removeItem(R.id.repo_nav);
                 }
             }
         }
@@ -268,7 +268,7 @@ public class MainActivity extends BaseActivity implements RepoLoader.RepoListene
         runOnUiThread(() -> {
             if (binding != null) {
                 var nav = (NavigationBarView) binding.nav;
-                var badge = nav.getOrCreateBadge(R.id.modules_fragment);
+                var badge = nav.getOrCreateBadge(R.id.modules_nav);
                 badge.setBackgroundColor(ResourceUtils.resolveColor(getTheme(), com.google.android.material.R.attr.colorPrimary));
                 badge.setBadgeTextColor(ResourceUtils.resolveColor(getTheme(), com.google.android.material.R.attr.colorOnPrimary));
                 if (moduleCount > 0) {
