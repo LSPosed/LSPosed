@@ -197,7 +197,6 @@
     <string name="send_crash_info">Enviar as informações de erro</string>
     <string name="crash_info_copied">Informação do erro copiada para a área de transferência</string>
     <!-- Colors -->
-    <string name="color_pixel_blue">Pixel azul</string>
     <string name="color_sakura">Sakura</string>
     <string name="color_red">Vermelho</string>
     <string name="color_pink">Rosa</string>
@@ -216,7 +215,6 @@
     <string name="color_orange">Laranja</string>
     <string name="color_deep_orange">Laranja escuro</string>
     <string name="color_brown">Marrom</string>
-    <string name="color_grey">Cinza</string>
     <string name="color_blue_grey">Azul acizentado</string>
     <string name="feedback_or_suggestion">Comentários ou sugestões</string>
 </resources>
