@@ -118,7 +118,7 @@
     <string name="sort_by_install_time">По времени установки</string>
     <string name="sort_by_update_time">По времени обновления</string>
     <string name="sort_reverse">Обратная сортировка</string>
-    <string name="menu_show_system_apps">Системные приложения</string>
+    <string name="menu_show_system_apps">Системные</string>
     <string name="menu_sort">Сортировать</string>
     <string name="enable_module">Включить модуль</string>
     <string name="no_scope_selected">Вы не выбрали ни одного приложения. Продолжить?</string>
@@ -200,8 +200,8 @@
     <string name="manager_crashed_info">сообщить об этом </string>
     <string name="send_crash_info">Отправить информацию о сбое</string>
     <string name="crash_info_copied">Информация о сбое скопирована в буфер обмена</string>
+    <string name="info_copied">Скопировано в буфер обмена</string>
     <!-- Colors -->
-    <string name="color_pixel_blue">Небесно-голубой</string>
     <string name="color_sakura">Сакура</string>
     <string name="color_red">Красный</string>
     <string name="color_pink">Розовый</string>
@@ -220,8 +220,8 @@
     <string name="color_orange">Оранжевый</string>
     <string name="color_deep_orange">Насыщенный оранжевый</string>
     <string name="color_brown">Коричневый</string>
-    <string name="color_grey">Серый</string>
     <string name="color_blue_grey">Серо-голубой</string>
     <string name="feedback_or_suggestion">Обратная связь</string>
     <string name="sort_upgradable_first">Сначала обновляемые</string>
+    <string name="overview">LSPosed</string>
 </resources>
