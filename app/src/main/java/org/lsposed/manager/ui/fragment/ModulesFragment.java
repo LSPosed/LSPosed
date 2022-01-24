@@ -322,9 +322,10 @@ public class ModulesFragment extends BaseFragment implements ModuleUtil.ModuleLi
                     .show();
             return true;
         } else if (itemId == R.id.menu_repo) {
-            getNavController().navigate(
+            var navController = getNavController();
+            navController.navigate(
                     new Uri.Builder().scheme("lsposed").authority("repo").appendQueryParameter("modulePackageName", selectedModule.packageName).build(),
-                    new NavOptions.Builder().setEnterAnim(R.anim.fragment_enter).setExitAnim(R.anim.fragment_exit).setPopEnterAnim(R.anim.fragment_enter_pop).setPopExitAnim(R.anim.fragment_exit_pop).build());
+                    new NavOptions.Builder().setEnterAnim(R.anim.fragment_enter).setExitAnim(R.anim.fragment_exit).setPopEnterAnim(R.anim.fragment_enter_pop).setPopExitAnim(R.anim.fragment_exit_pop).setLaunchSingleTop(true).setPopUpTo(getNavController().getGraph().getStartDestinationId(), false, true).build());
             return true;
         } else if (itemId == R.id.menu_compile_speed) {
             CompileDialogFragment.speed(getChildFragmentManager(), selectedModule.pkg.applicationInfo);

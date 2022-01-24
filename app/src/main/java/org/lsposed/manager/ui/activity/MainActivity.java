@@ -95,7 +95,6 @@ public class MainActivity extends BaseActivity implements RepoLoader.RepoListene
         NavController navController = navHostFragment.getNavController();
         var nav = (NavigationBarView) binding.nav;
         NavigationUI.setupWithNavController(nav, navController);
-        nav.findViewById(R.id.modules_fragment);
 
         handleIntent(getIntent());
     }
@@ -119,28 +118,29 @@ public class MainActivity extends BaseActivity implements RepoLoader.RepoListene
             navController.navigate(R.id.settings_fragment);
         } else if (ConfigManager.isBinderAlive()) {
             if (!TextUtils.isEmpty(intent.getDataString())) {
+                var nav = (NavigationBarView) binding.nav;
                 switch (intent.getDataString()) {
                     case "modules":
-                        navController.navigate(R.id.modules_fragment);
+                        nav.setSelectedItemId(R.id.modules_nav);
                         break;
                     case "logs":
-                        navController.navigate(R.id.logs_fragment);
+                        nav.setSelectedItemId(R.id.logs_fragment);
                         break;
                     case "repo":
                         if (ConfigManager.isMagiskInstalled()) {
-                            navController.navigate(R.id.repo_fragment);
+                            nav.setSelectedItemId(R.id.repo_nav);
                         }
                         break;
                     default:
                         var data = intent.getData();
                         if (data.getScheme().equals("module")) {
-                            navController.navigate(new Uri.Builder().scheme("lsposed").authority("module").appendQueryParameter("modulePackageName", data.getHost()).appendQueryParameter("moduleUserId", String.valueOf(data.getPort())).build(),
-                                    new NavOptions.Builder().setEnterAnim(R.anim.fragment_enter).setExitAnim(R.anim.fragment_exit).setPopEnterAnim(R.anim.fragment_enter_pop).setPopExitAnim(R.anim.fragment_exit_pop).build());
+                            navController.navigate(
+                                    new Uri.Builder().scheme("lsposed").authority("module").appendQueryParameter("modulePackageName", data.getHost()).appendQueryParameter("moduleUserId", String.valueOf(data.getPort())).build(),
+                                    new NavOptions.Builder().setEnterAnim(R.anim.fragment_enter).setExitAnim(R.anim.fragment_exit).setPopEnterAnim(R.anim.fragment_enter_pop).setPopExitAnim(R.anim.fragment_exit_pop).setLaunchSingleTop(true).setPopUpTo(navController.getGraph().getStartDestinationId(), false, true).build());
                         }
                 }
             }
         }
-
     }
 
     @Override
