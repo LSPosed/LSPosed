@@ -197,7 +197,6 @@
     <string name="send_crash_info">Lähetä kaatumistiedot</string>
     <string name="crash_info_copied">Kaatumistiedot kopioitu leikepöydälle</string>
     <!-- Colors -->
-    <string name="color_pixel_blue">Pikselin sininen</string>
     <string name="color_sakura">Sakura</string>
     <string name="color_red">Punainen</string>
     <string name="color_pink">Pinkki</string>
@@ -216,7 +215,6 @@
     <string name="color_orange">Oranssi</string>
     <string name="color_deep_orange">Syvä oranssi</string>
     <string name="color_brown">Ruskea</string>
-    <string name="color_grey">Harmaa</string>
     <string name="color_blue_grey">Sininen harmaa</string>
     <string name="feedback_or_suggestion">Palaute tai ehdotus</string>
     <string name="sort_upgradable_first">Päivitettävissä ensin</string>
