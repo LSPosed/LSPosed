@@ -197,7 +197,6 @@
     <string name="send_crash_info">Send krasjinformasjon</string>
     <string name="crash_info_copied">Krasj info kopiert til utklippstavlen</string>
     <!-- Colors -->
-    <string name="color_pixel_blue">Piksel blå</string>
     <string name="color_sakura">Sakura</string>
     <string name="color_red">Rød</string>
     <string name="color_pink">Rosa</string>
@@ -216,7 +215,6 @@
     <string name="color_orange">Oransje</string>
     <string name="color_deep_orange">Dyp oransje</string>
     <string name="color_brown">Brun</string>
-    <string name="color_grey">Grå</string>
     <string name="color_blue_grey">Blå grå</string>
     <string name="feedback_or_suggestion">Tilbakemelding eller forslag</string>
     <string name="sort_upgradable_first">Oppgraderbar først</string>
