@@ -256,7 +256,7 @@ public class MainActivity extends BaseActivity implements RepoLoader.RepoListene
 
             if (!ConfigManager.isBinderAlive()) {
                 nav.getMenu().removeItem(R.id.logs_fragment);
-                nav.getMenu().removeItem(R.id.modules_fragment);
+                nav.getMenu().removeItem(R.id.modules_nav);
                 if (!ConfigManager.isMagiskInstalled()) {
                     nav.getMenu().removeItem(R.id.repo_nav);
                 }
