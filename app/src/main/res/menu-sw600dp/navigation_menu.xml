@@ -23,13 +23,13 @@
         android:menuCategory="container"
         android:title="@string/overview" />
     <item
-        android:id="@+id/modules_fragment"
+        android:id="@+id/modules_nav"
         android:icon="@drawable/ic_extension_checkable"
         android:menuCategory="container"
         android:title="@string/Modules" />
 
     <item
-        android:id="@+id/repo_fragment"
+        android:id="@+id/repo_nav"
         android:icon="@drawable/ic_get_app_checkable"
         android:menuCategory="container"
         android:title="@string/module_repo" />
