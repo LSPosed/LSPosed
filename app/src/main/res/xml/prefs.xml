@@ -34,7 +34,6 @@
 
         <rikka.preference.SimpleMenuPreference
             android:defaultValue="SYSTEM"
-            android:entries="@array/language"
             android:icon="@drawable/ic_outline_language_24"
             android:key="language"
             android:summary="%s"

@@ -20,8 +20,6 @@
 package org.lsposed.manager.ui.fragment;
 
 import android.content.Context;
-import android.content.res.Configuration;
-import android.content.res.Resources.NotFoundException;
 import android.os.Build;
 import android.os.Bundle;
 import android.provider.Settings;
@@ -49,6 +47,7 @@ import org.lsposed.manager.R;
 import org.lsposed.manager.databinding.FragmentSettingsBinding;
 import org.lsposed.manager.ui.activity.MainActivity;
 import org.lsposed.manager.util.BackupUtils;
+import org.lsposed.manager.util.LangList;
 import org.lsposed.manager.util.NavUtil;
 import org.lsposed.manager.util.ThemeUtil;
 
@@ -255,18 +254,17 @@ public class SettingsFragment extends BaseFragment {
                 var tag = language.getValue();
                 var userLocale = App.getLocale();
                 var entries = new ArrayList<CharSequence>();
-                entries.add(language.getEntries()[0]);
-                var lstLang = getAppLanguages(requireContext(), R.string.Settings);
+                var lstLang = LangList.LANG_LIST;
                 for (var lang : lstLang) {
+                    if (lang.equals(SYSTEM)) {
+                        entries.add(getString(rikka.core.R.string.follow_system));
+                        continue;
+                    }
                     var locale = Locale.forLanguageTag(lang);
-                    entries.add(HtmlCompat.fromHtml(String.format("%s - %s",
-                            !TextUtils.isEmpty(locale.getScript()) ? locale.getDisplayScript(locale) : locale.getDisplayName(locale),
-                            !TextUtils.isEmpty(locale.getScript()) ? locale.getDisplayScript(userLocale) : locale.getDisplayName(userLocale)
-                    ), HtmlCompat.FROM_HTML_MODE_LEGACY));
+                    entries.add(HtmlCompat.fromHtml(locale.getDisplayName(locale), HtmlCompat.FROM_HTML_MODE_LEGACY));
                 }
                 language.setEntries(entries.toArray(new CharSequence[0]));
-                lstLang.add(0, SYSTEM);
-                language.setEntryValues(lstLang.toArray(new CharSequence[0]));
+                language.setEntryValues(lstLang);
                 if (TextUtils.isEmpty(tag) || SYSTEM.equals(tag)) {
                     language.setSummary(getString(rikka.material.R.string.follow_system));
                 } else {
@@ -311,35 +309,6 @@ public class SettingsFragment extends BaseFragment {
                 settingsFragment.binding.clickView.setOnClickListener(l);
             }
             return recyclerView;
-        }
-
-        private ArrayList<String> getAppLanguages(Context ctx, int id) {
-            Configuration conf = ctx.getResources().getConfiguration();
-            Locale originalLocale = conf.getLocales().get(0);
-            conf.setLocale(Locale.ENGLISH);
-
-            var lstLang = new ArrayList<String>();
-            lstLang.add(Locale.ENGLISH.getLanguage());
-
-            final String reference;
-            try {
-                reference = ctx.createConfigurationContext(conf).getString(id);
-            } catch (NotFoundException nfe) {
-                return lstLang; // return only english
-            }
-
-            for (String loc : ctx.getAssets().getLocales()) {
-                if (loc.isEmpty()) {
-                    continue;
-                }
-                Locale locale = Locale.forLanguageTag(loc);
-                conf.setLocale(locale);
-                if (!lstLang.contains(loc) && !reference.equals(ctx.createConfigurationContext(conf).getString(id))) {
-                    lstLang.add(loc);
-                }
-            }
-            conf.setLocale(originalLocale);
-            return lstLang;
         }
     }
 }
