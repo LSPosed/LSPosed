@@ -36,6 +36,7 @@
             android:defaultValue="SYSTEM"
             android:icon="@drawable/ic_outline_language_24"
             android:key="language"
+            android:popupTheme="@style/language_menu_style"
             android:summary="%s"
             android:title="@string/settings_language" />
 
