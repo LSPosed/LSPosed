@@ -85,6 +85,7 @@ public final class SubtitleCollapsingTextHelper {
     @Nullable
     private CharSequence titleToDraw, subtitleToDraw;
     private boolean isRtl;
+    private boolean isRtlTextDirectionHeuristicsEnabled = true;
 
     private boolean useTexture;
     @Nullable
@@ -615,6 +616,14 @@ public final class SubtitleCollapsingTextHelper {
         return expandedSubtitleTextSize;
     }
 
+    public void setRtlTextDirectionHeuristicsEnabled(boolean rtlTextDirectionHeuristicsEnabled) {
+        isRtlTextDirectionHeuristicsEnabled = rtlTextDirectionHeuristicsEnabled;
+    }
+
+    public boolean isRtlTextDirectionHeuristicsEnabled() {
+        return isRtlTextDirectionHeuristicsEnabled;
+    }
+
     private void calculateCurrentOffsets() {
         calculateOffsets(expandedFraction);
     }
@@ -889,10 +898,21 @@ public final class SubtitleCollapsingTextHelper {
     }
 
     private boolean calculateIsRtl(@NonNull CharSequence text) {
-        final boolean defaultIsRtl = ViewCompat.getLayoutDirection(view) == ViewCompat.LAYOUT_DIRECTION_RTL;
+        final boolean defaultIsRtl = isDefaultIsRtl();
+        return isRtlTextDirectionHeuristicsEnabled
+                ? isTextDirectionHeuristicsIsRtl(text, defaultIsRtl)
+                : defaultIsRtl;
+    }
+
+    private boolean isDefaultIsRtl() {
+        return ViewCompat.getLayoutDirection(view) == ViewCompat.LAYOUT_DIRECTION_RTL;
+    }
+
+    private boolean isTextDirectionHeuristicsIsRtl(@NonNull CharSequence text, boolean defaultIsRtl) {
         return (defaultIsRtl
                 ? TextDirectionHeuristicsCompat.FIRSTSTRONG_RTL
-                : TextDirectionHeuristicsCompat.FIRSTSTRONG_LTR).isRtl(text, 0, text.length());
+                : TextDirectionHeuristicsCompat.FIRSTSTRONG_LTR)
+                .isRtl(text, 0, text.length());
     }
 
     private void setInterpolatedTitleTextSize(float textSize) {

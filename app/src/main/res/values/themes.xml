@@ -32,6 +32,7 @@
         <item name="android:colorAccent">?colorPrimary</item>
         <!-- Preference switch -->
         <item name="android:colorControlActivated">?colorPrimary</item>
+        <item name="android:textAlignment">viewStart</item>
     </style>
 
     <style name="Theme.Light" parent="Base.AppTheme.Light" />
@@ -48,6 +49,7 @@
         <item name="android:colorAccent">?colorPrimary</item>
         <!-- Preference switch -->
         <item name="android:colorControlActivated">?colorPrimary</item>
+        <item name="android:textAlignment">viewStart</item>
     </style>
 
     <style name="Theme" parent="Base.AppTheme" />

@@ -90,6 +90,7 @@ import java.util.function.Consumer;
 import java.util.stream.IntStream;
 
 import rikka.core.util.ResourceUtils;
+import rikka.material.app.LocaleDelegate;
 import rikka.recyclerview.RecyclerViewKt;
 
 public class ModulesFragment extends BaseFragment implements ModuleUtil.ModuleListener, RepoLoader.RepoListener {
@@ -515,7 +516,7 @@ public class ModulesFragment extends BaseFragment implements ModuleUtil.ModuleLi
             ModuleUtil.InstalledModule item = showList.get(position);
             String appName;
             if (item.userId != 0) {
-                appName = String.format("%s (%s)", item.getAppName(), item.userId);
+                appName = String.format(LocaleDelegate.getDefaultLocale(), "%s (%d)", item.getAppName(), item.userId);
             } else {
                 appName = item.getAppName();
             }

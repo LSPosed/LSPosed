@@ -16,13 +16,13 @@ import java.io.File;
 import java.io.IOException;
 import java.time.Instant;
 import java.time.ZoneOffset;
-import java.util.Locale;
 
 import okhttp3.Call;
 import okhttp3.Callback;
 import okhttp3.Request;
 import okhttp3.Response;
 import okio.Okio;
+import rikka.material.app.LocaleDelegate;
 
 public class UpdateUtil {
     public static void loadRemoteVersion() {
@@ -42,7 +42,7 @@ public class UpdateUtil {
                     var notes = info.get("body").getAsString();
                     var assetsArray = info.getAsJsonArray("assets");
                     for (var assets : assetsArray) {
-                        checkAssets(assets.getAsJsonObject(), notes, api.toLowerCase(Locale.ROOT));
+                        checkAssets(assets.getAsJsonObject(), notes, api.toLowerCase(LocaleDelegate.getDefaultLocale()));
                     }
                 } catch (Throwable t) {
                     Log.e(App.TAG, t.getMessage(), t);

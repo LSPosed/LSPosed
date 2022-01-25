@@ -78,7 +78,7 @@ public class App extends Application {
             return result.toString(StandardCharsets.UTF_8.name());
         } catch (IOException e) {
             Log.e(App.TAG, "read webview HTML", e);
-            return "<html><body>@body@</body></html>";
+            return "<html dir\"@dir@\"><body>@body@</body></html>";
         }
     }
 

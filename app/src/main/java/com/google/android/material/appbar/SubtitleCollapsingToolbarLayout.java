@@ -95,6 +95,7 @@ public class SubtitleCollapsingToolbarLayout extends FrameLayout {
 
         collapsingTextHelper = new SubtitleCollapsingTextHelper(this);
         collapsingTextHelper.setTextSizeInterpolator(AnimationUtils.DECELERATE_INTERPOLATOR);
+        collapsingTextHelper.setRtlTextDirectionHeuristicsEnabled(false);
 
         TypedArray a = ThemeEnforcement.obtainStyledAttributes(
                 context,
@@ -1071,6 +1072,22 @@ public class SubtitleCollapsingToolbarLayout extends FrameLayout {
     public void setExpandedTitleMarginBottom(int margin) {
         expandedMarginBottom = margin;
         requestLayout();
+    }
+
+    /**
+     * Sets whether {@code TextDirectionHeuristics} should be used to determine whether the title text
+     * is RTL. Experimental Feature.
+     */
+    public void setRtlTextDirectionHeuristicsEnabled(boolean rtlTextDirectionHeuristicsEnabled) {
+        collapsingTextHelper.setRtlTextDirectionHeuristicsEnabled(rtlTextDirectionHeuristicsEnabled);
+    }
+
+    /**
+     * Gets whether {@code TextDirectionHeuristics} should be used to determine whether the title text
+     * is RTL. Experimental Feature.
+     */
+    public boolean isRtlTextDirectionHeuristicsEnabled() {
+        return collapsingTextHelper.isRtlTextDirectionHeuristicsEnabled();
     }
 
     /**

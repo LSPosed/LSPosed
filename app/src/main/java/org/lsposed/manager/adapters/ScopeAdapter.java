@@ -78,12 +78,12 @@ import java.util.ArrayList;
 import java.util.Comparator;
 import java.util.HashSet;
 import java.util.List;
-import java.util.Locale;
 import java.util.Objects;
 import java.util.Set;
 import java.util.stream.Collectors;
 
 import rikka.core.util.ResourceUtils;
+import rikka.material.app.LocaleDelegate;
 import rikka.widget.switchbar.SwitchBar;
 
 @SuppressLint("NotifyDataSetChanged")
@@ -253,7 +253,7 @@ public class ScopeAdapter extends EmptyStateRecyclerView.EmptyStateAdapter<Scope
             preferences.edit().putBoolean("filter_denylist", item.isChecked()).apply();
         } else if (itemId == R.id.backup) {
             LocalDateTime now = LocalDateTime.now();
-            fragment.backupLauncher.launch(String.format(Locale.ROOT,
+            fragment.backupLauncher.launch(String.format(LocaleDelegate.getDefaultLocale(),
                     "%s_%s.lsp", module.getAppName(), now.toString()));
             return true;
         } else if (itemId == R.id.restore) {

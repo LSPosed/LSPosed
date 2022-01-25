@@ -38,6 +38,8 @@ import org.lsposed.manager.util.NavUtil;
 
 import java.time.LocalDateTime;
 
+import rikka.material.app.LocaleDelegate;
+
 public class CrashReportActivity extends AppCompatActivity {
     ActivityCrashReportBinding binding;
 
@@ -67,7 +69,7 @@ public class CrashReportActivity extends AppCompatActivity {
     }
 
     public String getAllErrorDetailsFromIntent(@NonNull Intent intent) {
-        String versionName = String.format("%s (%s)", BuildConfig.VERSION_NAME, BuildConfig.VERSION_CODE);
+        String versionName = String.format(LocaleDelegate.getDefaultLocale(), "%s (%d)", BuildConfig.VERSION_NAME, BuildConfig.VERSION_CODE);
 
         return "Build version: " + versionName + " \n" +
                 "Current date: " + LocalDateTime.now() + " \n" +
