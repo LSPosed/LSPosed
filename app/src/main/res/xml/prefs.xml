@@ -115,4 +115,17 @@
             android:summary="@string/settings_restore_summery"
             android:title="@string/settings_restore" />
     </PreferenceCategory>
+
+    <PreferenceCategory
+        android:key="settings_group_system"
+        android:title="@string/settings_group_system"
+        app:isPreferenceVisible="@bool/show_system_settings">
+        <SwitchPreference
+            android:defaultValue="true"
+            android:enabled="false"
+            android:key="show_hidden_icon_apps_enabled"
+            android:persistent="false"
+            android:summary="@string/settings_show_hidden_icon_apps_enabled_summary"
+            android:title="@string/settings_show_hidden_icon_apps_enabled" />
+    </PreferenceCategory>
 </PreferenceScreen>
