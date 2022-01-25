@@ -21,18 +21,6 @@
 
     <style name="Base.AppTheme.Light" parent="Theme.Material.Light.LightStatusBar">
         <item name="android:statusBarColor">?android:colorBackground</item>
-
-        <item name="colorPrimary">@color/material_blue_700</item>
-        <item name="colorPrimaryVariant">?colorPrimary</item>
-        <item name="colorSecondary">?colorPrimary</item>
-        <item name="colorSecondaryVariant">?colorPrimary</item>
-        <item name="colorOnSecondary">@android:color/white</item>
-        <item name="colorTertiary">?colorPrimary</item>
-        <item name="colorOnTertiary">@android:color/white</item>
-        <item name="colorError">@color/material_red_500</item>
-        <item name="colorNormal">@color/material_green_500</item>
-        <item name="colorInstall">@color/material_blue_500</item>
-
         <item name="android:windowActionBar">false</item>
         <item name="android:windowNoTitle">true</item>
         <item name="windowActionBar">false</item>
@@ -40,22 +28,15 @@
 
         <!-- Preference title -->
         <item name="android:textAppearanceListItem">?textAppearanceSubtitle1</item>
+        <!-- Preference category title -->
+        <item name="android:colorAccent">?colorPrimary</item>
+        <!-- Preference switch -->
+        <item name="android:colorControlActivated">?colorPrimary</item>
     </style>
 
     <style name="Theme.Light" parent="Base.AppTheme.Light" />
 
     <style name="Base.AppTheme" parent="Theme.Material">
-        <item name="colorPrimary">@color/material_blue_700</item>
-        <item name="colorPrimaryVariant">?colorPrimary</item>
-        <item name="colorSecondary">?colorPrimary</item>
-        <item name="colorSecondaryVariant">?colorPrimary</item>
-        <item name="colorOnSecondary">@android:color/black</item>
-        <item name="colorTertiary">?colorPrimary</item>
-        <item name="colorOnTertiary">@android:color/black</item>
-        <item name="colorError">@color/material_red_200</item>
-        <item name="colorNormal">@color/material_green_200</item>
-        <item name="colorInstall">@color/material_blue_200</item>
-
         <item name="android:windowActionBar">false</item>
         <item name="android:windowNoTitle">true</item>
         <item name="windowActionBar">false</item>
@@ -63,6 +44,10 @@
 
         <!-- Preference title -->
         <item name="android:textAppearanceListItem">?textAppearanceSubtitle1</item>
+        <!-- Preference category title -->
+        <item name="android:colorAccent">?colorPrimary</item>
+        <!-- Preference switch -->
+        <item name="android:colorControlActivated">?colorPrimary</item>
     </style>
 
     <style name="Theme" parent="Base.AppTheme" />
