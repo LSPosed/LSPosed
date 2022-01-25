@@ -18,8 +18,10 @@
  */
 
 import com.android.build.gradle.internal.dsl.BuildType
+import java.io.PrintStream
 import java.nio.file.Paths
 import java.time.Instant
+import java.util.*
 
 plugins {
     id("org.gradle.idea")
@@ -158,6 +160,38 @@ val optimizeReleaseRes = task("optimizeReleaseRes").doLast {
 tasks.whenTaskAdded {
     if (name == "optimizeReleaseResources") {
         finalizedBy(optimizeReleaseRes)
+    }
+}
+
+afterEvaluate {
+    android.applicationVariants.forEach { variant ->
+        val outSrcDir = file("$buildDir/generated/source/langList/${variant.name}")
+        val outSrc = file("$outSrcDir/org/lsposed/manager/util/LangList.java")
+        val genLangList =
+            tasks.register("generate${variant.name.capitalize(Locale.ROOT)}LangList") {
+                inputs.files("src/main/res")
+                outputs.file(outSrc)
+                doLast {
+                    val langList = File(projectDir, "src/main/res").listFiles { dir ->
+                        dir.name.startsWith("values-") && File(dir, "strings.xml").exists()
+                    }.orEmpty().map {
+                        it.name.substring(7).split("-", limit = 2)
+                    }.map {
+                        if (it.size == 1) Locale(it[0])
+                        else Locale(it[0], it[1].substring(1))
+                    }.map { it.toLanguageTag() }
+                    PrintStream(outSrc).print(
+                        """
+                        |package org.lsposed.manager.util;
+                        |public final class LangList {
+                        |    public static final String[] LANG_LIST = {"SYSTEM", ${
+                            langList.joinToString(", ") { """"$it"""" }
+                        }};
+                        |}""".trimMargin()
+                    )
+                }
+            }
+        variant.registerJavaGeneratingTask(genLangList, outSrcDir)
     }
 }
 

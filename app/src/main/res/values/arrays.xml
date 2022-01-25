@@ -32,10 +32,6 @@
         <item>MODE_NIGHT_FOLLOW_SYSTEM</item>
     </string-array>
 
-    <string-array name="language" translatable="false">
-        <item>@string/follow_system</item>
-    </string-array>
-
     <string-array name="color_values" translatable="false">
         <item>SAKURA</item>
         <item>MATERIAL_RED</item>
