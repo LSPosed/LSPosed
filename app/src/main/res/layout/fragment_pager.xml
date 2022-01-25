@@ -19,6 +19,7 @@
   -->
 <androidx.coordinatorlayout.widget.CoordinatorLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:id="@+id/fragment_container"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:animateLayoutChanges="true"
@@ -91,7 +92,7 @@
         android:tooltipText="@string/add_module_to_user"
         android:visibility="gone"
         app:backgroundTint="?attr/colorPrimary"
-        app:layout_fitsSystemWindowsInsets="@integer/internal_fragment_bottom_insets"
         app:layout_behavior="@string/hide_bottom_view_on_scroll_behavior"
+        app:layout_fitsSystemWindowsInsets="@integer/internal_fragment_bottom_insets"
         app:tint="?attr/colorOnPrimary" />
 </androidx.coordinatorlayout.widget.CoordinatorLayout>
