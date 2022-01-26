@@ -380,6 +380,7 @@ public class LogsFragment extends BaseFragment {
             HorizontalScrollView horizontalScrollView = new HorizontalScrollView(getContext());
             horizontalScrollView.setFillViewport(true);
             horizontalScrollView.setHorizontalScrollBarEnabled(false);
+            horizontalScrollView.setLayoutDirection(View.LAYOUT_DIRECTION_LTR);
             binding.swipeRefreshLayout.addView(horizontalScrollView);
             horizontalScrollView.addView(binding.recyclerView);
             binding.recyclerView.getLayoutParams().width = ViewGroup.LayoutParams.WRAP_CONTENT;
