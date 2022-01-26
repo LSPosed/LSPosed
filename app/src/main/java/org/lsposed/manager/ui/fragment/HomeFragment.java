@@ -46,9 +46,8 @@ import org.lsposed.manager.util.NavUtil;
 import org.lsposed.manager.util.UpdateUtil;
 import org.lsposed.manager.util.chrome.LinkTransformationMethod;
 
-import java.util.Locale;
-
 import rikka.core.util.ClipboardUtils;
+import rikka.material.app.LocaleDelegate;
 
 public class HomeFragment extends BaseFragment {
 
@@ -125,7 +124,7 @@ public class HomeFragment extends BaseFragment {
                 binding.statusTitle.setText(R.string.activated);
                 binding.statusIcon.setImageResource(R.drawable.ic_round_check_circle_24);
             }
-            binding.statusSummary.setText(String.format(Locale.ROOT, "%s (%d) - %s",
+            binding.statusSummary.setText(String.format(LocaleDelegate.getDefaultLocale(), "%s (%d) - %s",
                     ConfigManager.getXposedVersionName(), ConfigManager.getXposedVersionCode(), ConfigManager.getApi()));
         } else {
             boolean isMagiskInstalled = ConfigManager.isMagiskInstalled();
@@ -152,18 +151,18 @@ public class HomeFragment extends BaseFragment {
         if (ConfigManager.isBinderAlive()) {
             binding.apiVersion.setText(String.valueOf(ConfigManager.getXposedApiVersion()));
             binding.api.setText(ConfigManager.getApi());
-            binding.frameworkVersion.setText(String.format(Locale.ROOT, "%s (%s)", ConfigManager.getXposedVersionName(), ConfigManager.getXposedVersionCode()));
+            binding.frameworkVersion.setText(String.format(LocaleDelegate.getDefaultLocale(), "%1$s (%2$d)", ConfigManager.getXposedVersionName(), ConfigManager.getXposedVersionCode()));
         } else {
             binding.apiVersion.setText(R.string.not_installed);
             binding.api.setText(R.string.not_installed);
             binding.frameworkVersion.setText(R.string.not_installed);
         }
-        binding.managerVersion.setText(String.format(Locale.ROOT, "%s (%s)", BuildConfig.VERSION_NAME, BuildConfig.VERSION_CODE));
+        binding.managerVersion.setText(String.format(LocaleDelegate.getDefaultLocale(), "%1$s (%2$d)", BuildConfig.VERSION_NAME, BuildConfig.VERSION_CODE));
 
         if (Build.VERSION.PREVIEW_SDK_INT != 0) {
-            binding.systemVersion.setText(String.format(Locale.ROOT, "%1$s Preview (API %2$d)", Build.VERSION.CODENAME, Build.VERSION.SDK_INT));
+            binding.systemVersion.setText(String.format(LocaleDelegate.getDefaultLocale(), "%1$s Preview (API %2$d)", Build.VERSION.CODENAME, Build.VERSION.SDK_INT));
         } else {
-            binding.systemVersion.setText(String.format(Locale.ROOT, "%1$s (API %2$d)", Build.VERSION.RELEASE, Build.VERSION.SDK_INT));
+            binding.systemVersion.setText(String.format(LocaleDelegate.getDefaultLocale(), "%1$s (API %2$d)", Build.VERSION.RELEASE, Build.VERSION.SDK_INT));
         }
 
         binding.device.setText(getDevice());
@@ -222,7 +221,7 @@ public class HomeFragment extends BaseFragment {
                     R.string.about_view_source_code,
                     "<b><a href=\"https://github.com/LSPosed/LSPosed\">GitHub</a></b>",
                     "<b><a href=\"https://t.me/LSPosed\">Telegram</a></b>"), HtmlCompat.FROM_HTML_MODE_LEGACY));
-            binding.designAboutVersion.setText(String.format(Locale.ROOT, "%s (%s)", BuildConfig.VERSION_NAME, BuildConfig.VERSION_CODE));
+            binding.designAboutVersion.setText(String.format(LocaleDelegate.getDefaultLocale(), "%s (%d)", BuildConfig.VERSION_NAME, BuildConfig.VERSION_CODE));
             return new BlurBehindDialogBuilder(requireContext())
                     .setView(binding.getRoot()).create();
         }

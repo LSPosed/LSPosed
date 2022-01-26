@@ -79,7 +79,6 @@ import java.nio.charset.StandardCharsets;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.ListIterator;
-import java.util.Locale;
 import java.util.stream.Collectors;
 import java.util.stream.IntStream;
 
@@ -87,6 +86,7 @@ import okhttp3.Headers;
 import okhttp3.Request;
 import okhttp3.Response;
 import rikka.core.util.ResourceUtils;
+import rikka.material.app.LocaleDelegate;
 import rikka.recyclerview.RecyclerViewKt;
 import rikka.widget.borderview.BorderView;
 
@@ -152,10 +152,16 @@ public class RepoItemFragment extends BaseFragment implements RepoLoader.RepoLis
             setting.setCacheMode(WebSettings.LOAD_CACHE_ELSE_NETWORK);
             setting.setTextZoom(80);
             String body;
-            if (ResourceUtils.isNightMode(getResources().getConfiguration())) {
-                body = App.HTML_TEMPLATE_DARK.get().replace("@body@", text);
+            String direction;
+            if (getResources().getConfiguration().getLayoutDirection() == View.LAYOUT_DIRECTION_RTL) {
+                direction = "rtl";
             } else {
-                body = App.HTML_TEMPLATE.get().replace("@body@", text);
+                direction = "ltr";
+            }
+            if (ResourceUtils.isNightMode(getResources().getConfiguration())) {
+                body = App.HTML_TEMPLATE_DARK.get().replace("@dir@", direction).replace("@body@", text);
+            } else {
+                body = App.HTML_TEMPLATE.get().replace("@dir@", direction).replace("@body@", text);
             }
             view.setWebViewClient(new WebViewClient() {
                 @Override
@@ -353,12 +359,12 @@ public class RepoItemFragment extends BaseFragment implements RepoLoader.RepoLis
             if (channel.equals(channels[0])) {
                 this.items = releases.parallelStream().filter(t -> {
                     if (t.getIsPrerelease()) return false;
-                    var name = t.getName().toLowerCase(Locale.ROOT);
+                    var name = t.getName().toLowerCase(LocaleDelegate.getDefaultLocale());
                     return !name.startsWith("snapshot") && !name.startsWith("nightly");
                 }).collect(Collectors.toList());
             } else if (channel.equals(channels[1])) {
                 this.items = releases.parallelStream().filter(t -> {
-                    var name = t.getName().toLowerCase(Locale.ROOT);
+                    var name = t.getName().toLowerCase(LocaleDelegate.getDefaultLocale());
                     return !name.startsWith("snapshot") && !name.startsWith("nightly");
                 }).collect(Collectors.toList());
             } else this.items = releases;

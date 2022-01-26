@@ -183,6 +183,7 @@ public class RepoFragment extends BaseFragment implements RepoLoader.RepoListene
                 binding.recyclerView.setNestedScrollingEnabled(true);
             }
         });
+        searchView.findViewById(androidx.appcompat.R.id.search_edit_frame).setLayoutDirection(View.LAYOUT_DIRECTION_INHERIT);
         int sort = App.getPreferences().getInt("repo_sort", 0);
         if (sort == 0) {
             menu.findItem(R.id.item_sort_by_name).setChecked(true);

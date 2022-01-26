@@ -52,6 +52,7 @@
                 android:layout_width="match_parent"
                 android:layout_height="?attr/actionBarSize"
                 android:elevation="0dp"
+                android:theme="@style/ThemeOverlay.MaterialComponents.ActionBar"
                 app:layout_collapseMode="pin" />
         </com.google.android.material.appbar.SubtitleCollapsingToolbarLayout>
 

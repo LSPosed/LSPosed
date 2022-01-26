@@ -31,4 +31,8 @@
         <item name="android:textColor">?android:attr/textColorSecondary</item>
     </style>
 
+    <style name="language_menu_style" parent="ThemeOverlay.Preference.SimpleMenuPreference.PopupMenu">
+        <item name="android:textAlignment">textStart</item>
+    </style>
+
 </resources>

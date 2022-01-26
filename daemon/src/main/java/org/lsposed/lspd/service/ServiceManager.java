@@ -81,7 +81,7 @@ public class ServiceManager {
             }
         }
         Log.i(TAG, "starting server...");
-        Log.i(TAG, String.format("version %s (%s)", BuildConfig.VERSION_NAME, BuildConfig.VERSION_CODE));
+        Log.i(TAG, String.format("version %s (%d)", BuildConfig.VERSION_NAME, BuildConfig.VERSION_CODE));
 
         Thread.setDefaultUncaughtExceptionHandler((t, e) -> {
             Log.e(TAG, "Uncaught exception", e);

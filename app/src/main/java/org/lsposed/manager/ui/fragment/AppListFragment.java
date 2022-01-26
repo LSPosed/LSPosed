@@ -45,8 +45,7 @@ import org.lsposed.manager.databinding.FragmentAppListBinding;
 import org.lsposed.manager.util.BackupUtils;
 import org.lsposed.manager.util.ModuleUtil;
 
-import java.util.Locale;
-
+import rikka.material.app.LocaleDelegate;
 import rikka.recyclerview.RecyclerViewKt;
 
 public class AppListFragment extends BaseFragment {
@@ -79,7 +78,7 @@ public class AppListFragment extends BaseFragment {
         binding.appBar.setLiftable(true);
         String title;
         if (module.userId != 0) {
-            title = String.format(Locale.ROOT, "%s (%d)", module.getAppName(), module.userId);
+            title = String.format(LocaleDelegate.getDefaultLocale(), "%s (%d)", module.getAppName(), module.userId);
         } else {
             title = module.getAppName();
         }
@@ -207,6 +206,7 @@ public class AppListFragment extends BaseFragment {
                 binding.recyclerView.setNestedScrollingEnabled(true);
             }
         });
+        searchView.findViewById(androidx.appcompat.R.id.search_edit_frame).setLayoutDirection(View.LAYOUT_DIRECTION_INHERIT);
         scopeAdapter.onPrepareOptionsMenu(menu);
     }
 

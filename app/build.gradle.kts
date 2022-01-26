@@ -174,7 +174,7 @@ afterEvaluate {
                 doLast {
                     val langList = File(projectDir, "src/main/res").listFiles { dir ->
                         dir.name.startsWith("values-") && File(dir, "strings.xml").exists()
-                    }.orEmpty().map {
+                    }.orEmpty().sorted().map {
                         it.name.substring(7).split("-", limit = 2)
                     }.map {
                         if (it.size == 1) Locale(it[0])

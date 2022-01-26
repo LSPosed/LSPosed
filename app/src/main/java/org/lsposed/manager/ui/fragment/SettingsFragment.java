@@ -77,10 +77,10 @@ public class SettingsFragment extends BaseFragment {
                     .add(R.id.setting_container, new PreferenceFragment()).commitNow();
         }
         if (ConfigManager.isBinderAlive()) {
-            binding.toolbar.setSubtitle(String.format(Locale.ROOT, "%s (%d) - %s",
+            binding.toolbar.setSubtitle(String.format(LocaleDelegate.getDefaultLocale(), "%s (%d) - %s",
                     ConfigManager.getXposedVersionName(), ConfigManager.getXposedVersionCode(), ConfigManager.getApi()));
         } else {
-            binding.toolbar.setSubtitle(String.format(Locale.ROOT, "%s (%d) - %s",
+            binding.toolbar.setSubtitle(String.format(LocaleDelegate.getDefaultLocale(), "%s (%d) - %s",
                     BuildConfig.VERSION_NAME, BuildConfig.VERSION_CODE, getString(R.string.not_installed)));
         }
         return binding.getRoot();
@@ -163,7 +163,7 @@ public class SettingsFragment extends BaseFragment {
                 backup.setEnabled(installed);
                 backup.setOnPreferenceClickListener(preference -> {
                     LocalDateTime now = LocalDateTime.now();
-                    backupLauncher.launch(String.format(Locale.ROOT,
+                    backupLauncher.launch(String.format(LocaleDelegate.getDefaultLocale(),
                             "LSPosed_%s.lsp", now.toString()));
                     return true;
                 });
