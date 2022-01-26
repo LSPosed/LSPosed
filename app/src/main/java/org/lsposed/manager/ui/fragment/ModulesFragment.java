@@ -204,6 +204,7 @@ public class ModulesFragment extends BaseFragment implements ModuleUtil.ModuleLi
             public void onViewDetachedFromWindow(View v) {
             }
         });
+        searchView.findViewById(androidx.appcompat.R.id.search_edit_frame).setLayoutDirection(View.LAYOUT_DIRECTION_INHERIT);
     }
 
     @Override
