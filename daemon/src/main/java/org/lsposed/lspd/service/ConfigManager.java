@@ -980,6 +980,11 @@ public class ConfigManager {
         if (!getApi().equals("Zygisk")) return result;
         try (final SQLiteDatabase magiskDb =
                      SQLiteDatabase.openDatabase(ConfigFileManager.magiskDbPath, new SQLiteDatabase.OpenParams.Builder().addOpenFlags(SQLiteDatabase.OPEN_READONLY).build())) {
+            try (Cursor cursor = magiskDb.query("settings", new String[]{"value"}, "`key`=?", new String[]{"denylist"}, null, null, null)) {
+                if (!cursor.moveToNext()) return result;
+                int valueIndex = cursor.getColumnIndex("value");
+                if (valueIndex >= 0 && cursor.getInt(valueIndex) == 0) return result;
+            }
             try (Cursor cursor = magiskDb.query(true, "denylist", new String[]{"package_name"}, null, null, null, null, null, null, null)) {
                 if (cursor == null) return result;
                 int packageNameIdx = cursor.getColumnIndex("package_name");
