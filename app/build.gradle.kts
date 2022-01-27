@@ -29,19 +29,6 @@ plugins {
     id("androidx.navigation.safeargs")
 }
 
-// workaround for AS. TODO: Remove when AS 7.1 stable release
-val dataBinding = file("${project.buildDir}/generated/data_binding_base_class_source_out/debug/out")
-sourceSets {
-    create("dataBinding") {
-        java.srcDir(dataBinding)
-    }
-}
-idea {
-    module {
-        generatedSourceDirs.add(dataBinding)
-    }
-}
-
 val androidTargetSdkVersion: Int by rootProject.extra
 val androidMinSdkVersion: Int by rootProject.extra
 val androidBuildToolsVersion: String by rootProject.extra
@@ -84,8 +71,8 @@ android {
 
     lint {
         disable += "MissingTranslation"
-        isAbortOnError = true
-        isCheckReleaseBuilds = false
+        abortOnError = true
+        checkReleaseBuilds = false
     }
 
     packagingOptions {
@@ -210,10 +197,10 @@ dependencies {
     implementation("androidx.browser:browser:1.4.0")
     implementation("androidx.constraintlayout:constraintlayout:2.1.3")
     implementation("androidx.core:core:1.7.0")
-    implementation("androidx.fragment:fragment:1.4.0")
+    implementation("androidx.fragment:fragment:1.4.1")
     implementation("androidx.navigation:navigation-fragment:$navVersion")
     implementation("androidx.navigation:navigation-ui:$navVersion")
-    implementation("androidx.preference:preference:1.1.1")
+    implementation("androidx.preference:preference:1.2.0")
     implementation("androidx.recyclerview:recyclerview:1.2.1")
     implementation("androidx.swiperefreshlayout:swiperefreshlayout:1.2.0-alpha01")
     implementation("com.github.bumptech.glide:glide:$glideVersion")
@@ -236,8 +223,7 @@ dependencies {
     implementation("org.lsposed.hiddenapibypass:hiddenapibypass:4.2")
     implementation(project(":manager-service"))
 
-    val appCenter = "4.3.1"
-    debugImplementation("com.microsoft.appcenter:appcenter-analytics:${appCenter}")
+    val appCenter = "4.4.2"
     debugImplementation("com.microsoft.appcenter:appcenter-crashes:${appCenter}")
 }
 
