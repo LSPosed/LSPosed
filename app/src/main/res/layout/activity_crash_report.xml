@@ -28,8 +28,8 @@
         style="?materialCardViewElevatedStyle"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:layout_margin="16dp"
         android:layout_gravity="center"
+        android:layout_margin="16dp"
         android:minHeight="148dp"
         android:outlineAmbientShadowColor="@color/home_secondary_outline_ambient_shadow_color"
         android:outlineSpotShadowColor="@color/home_secondary_outline_spot_shadow_color"
@@ -49,10 +49,10 @@
                 <LinearLayout
                     android:layout_width="0dp"
                     android:layout_height="wrap_content"
-                    android:layout_weight="1.0"
                     android:layout_marginEnd="8dp"
-                    android:paddingTop="8dp"
-                    android:orientation="vertical">
+                    android:layout_weight="1.0"
+                    android:orientation="vertical"
+                    android:paddingTop="8dp">
 
                     <com.google.android.material.textview.MaterialTextView
                         style="?attr/textAppearanceHeadline5"
@@ -81,27 +81,29 @@
             <LinearLayout
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:padding="8dp"
-                android:orientation="vertical">
+                android:orientation="vertical"
+                android:padding="8dp">
 
                 <com.google.android.material.button.MaterialButton
-                    style="?attr/borderlessButtonStyle"
                     android:id="@+id/send_logs"
+                    style="?attr/borderlessButtonStyle"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:layout_marginEnd="8dp"
                     android:minWidth="0dp"
                     android:text="@string/send_crash_info"
+                    android:textAlignment="center"
                     app:icon="@drawable/ic_round_send_24" />
 
                 <com.google.android.material.button.MaterialButton
-                    style="?attr/borderlessButtonStyle"
                     android:id="@+id/report_issue"
+                    style="?attr/borderlessButtonStyle"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:layout_marginEnd="8dp"
                     android:minWidth="0dp"
                     android:text="@string/report_issue"
+                    android:textAlignment="center"
                     app:icon="@drawable/ic_round_bug_report_24" />
 
             </LinearLayout>
