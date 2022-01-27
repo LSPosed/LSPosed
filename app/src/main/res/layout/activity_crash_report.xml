@@ -93,6 +93,7 @@
                     android:minWidth="0dp"
                     android:text="@string/send_crash_info"
                     android:textAlignment="center"
+                    android:tooltipText="@string/send_crash_info"
                     app:icon="@drawable/ic_round_send_24" />
 
                 <com.google.android.material.button.MaterialButton
@@ -104,6 +105,7 @@
                     android:minWidth="0dp"
                     android:text="@string/report_issue"
                     android:textAlignment="center"
+                    android:tooltipText="@string/report_issue"
                     app:icon="@drawable/ic_round_bug_report_24" />
 
             </LinearLayout>
