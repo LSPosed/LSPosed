@@ -236,8 +236,7 @@ dependencies {
     implementation("org.lsposed.hiddenapibypass:hiddenapibypass:4.2")
     implementation(project(":manager-service"))
 
-    val appCenter = "4.3.1"
-    debugImplementation("com.microsoft.appcenter:appcenter-analytics:${appCenter}")
+    val appCenter = "4.4.2"
     debugImplementation("com.microsoft.appcenter:appcenter-crashes:${appCenter}")
 }
 

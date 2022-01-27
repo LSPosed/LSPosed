@@ -17,7 +17,7 @@ public class Telemetry {
             @Override
             public void onBeforeSending(ErrorReport report) {
                 var d = report.getDevice();
-                d.setAppVersion(String.format(Locale.ROOT, "%s (%d)", BuildConfig.VERSION_NAME, BuildConfig.VERSION_CODE));
+                d.setAppVersion(BuildConfig.VERSION_NAME);
                 d.setAppBuild(String.valueOf(BuildConfig.VERSION_CODE));
                 d.setAppNamespace(BuildConfig.APPLICATION_ID);
                 report.setDevice(d);
