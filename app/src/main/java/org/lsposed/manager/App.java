@@ -43,6 +43,7 @@ import org.lsposed.manager.repo.RepoLoader;
 import org.lsposed.manager.ui.activity.CrashReportActivity;
 import org.lsposed.manager.util.DoHDNS;
 import org.lsposed.manager.util.ModuleUtil;
+import org.lsposed.manager.util.Telemetry;
 import org.lsposed.manager.util.ThemeUtil;
 import org.lsposed.manager.util.UpdateUtil;
 
@@ -141,6 +142,14 @@ public class App extends Application {
 
     public static boolean isParasitic() {
         return !Process.isApplicationUid(Process.myUid());
+    }
+
+    @Override
+    protected void attachBaseContext(Context base) {
+        super.attachBaseContext(base);
+        if (BuildConfig.DEBUG) {
+            Telemetry.start(this);
+        }
     }
 
     @SuppressLint("WrongConstant")
