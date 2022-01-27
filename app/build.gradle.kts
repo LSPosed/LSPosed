@@ -126,6 +126,13 @@ android {
             }
         }
     }
+    sourceSets {
+        named("release") {
+            java {
+                srcDirs("src/release/java")
+            }
+        }
+    }
 }
 
 val optimizeReleaseRes = task("optimizeReleaseRes").doLast {
@@ -228,6 +235,10 @@ dependencies {
     implementation("me.zhanghai.android.appiconloader:appiconloader:1.3.1")
     implementation("org.lsposed.hiddenapibypass:hiddenapibypass:4.2")
     implementation(project(":manager-service"))
+
+    val appCenter = "4.3.1"
+    debugImplementation("com.microsoft.appcenter:appcenter-analytics:${appCenter}")
+    debugImplementation("com.microsoft.appcenter:appcenter-crashes:${appCenter}")
 }
 
 configurations.all {
