@@ -228,7 +228,9 @@ public class RepoItemFragment extends BaseFragment implements RepoLoader.RepoLis
     @Override
     public void onModuleReleasesLoaded(OnlineModule module) {
         this.module = module;
-        runAsync(releaseAdapter::loadItems);
+        if (releaseAdapter != null) {
+            runAsync(releaseAdapter::loadItems);
+        }
         if (module.getReleases().size() == 1) {
             showHint(R.string.module_release_no_more, true);
         }
@@ -236,7 +238,9 @@ public class RepoItemFragment extends BaseFragment implements RepoLoader.RepoLis
 
     @Override
     public void onThrowable(Throwable t) {
-        runAsync(releaseAdapter::loadItems);
+        if (releaseAdapter != null) {
+            runAsync(releaseAdapter::loadItems);
+        }
         showHint(getString(R.string.repo_load_failed, t.getLocalizedMessage()), true);
     }
 

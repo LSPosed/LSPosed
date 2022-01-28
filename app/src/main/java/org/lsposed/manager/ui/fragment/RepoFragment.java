@@ -216,7 +216,9 @@ public class RepoFragment extends BaseFragment implements RepoLoader.RepoListene
 
     @Override
     public void onRepoLoaded() {
-        adapter.refresh();
+        if (adapter != null) {
+            adapter.refresh();
+        }
         updateRepoSummary();
     }
 
