@@ -208,7 +208,9 @@
                                 android:id="@+id/update_btn"
                                 android:layout_width="wrap_content"
                                 android:layout_height="wrap_content"
-                                android:text="@string/install" />
+                                android:hint="@string/install"
+                                android:text="@string/install"
+                                android:textAlignment="center" />
                         </LinearLayout>
                     </LinearLayout>
                 </com.google.android.material.card.MaterialCardView>
@@ -325,7 +327,9 @@
                                 style="?borderlessButtonStyle"
                                 android:layout_width="wrap_content"
                                 android:layout_height="wrap_content"
-                                android:text="@string/copy" />
+                                android:text="@string/copy"
+                                android:textAlignment="center"
+                                android:tooltipText="@string/copy" />
                         </LinearLayout>
                     </LinearLayout>
 
