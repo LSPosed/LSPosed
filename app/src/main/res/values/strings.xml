@@ -65,7 +65,6 @@
     <string name="parasitic_recommend_summary">LSPosed now supports system parasitization to avoid detection. You can safely uninstall the manager after successfully creating a shortcut of the parasitic manager. In any case you can install the manager back from /data/adb/lspd/manager.apk.</string>
     <string name="create_shortcut">Create shortcut</string>
     <string name="never_show">Never show</string>
-    <string name="failed_to_create_shortcut">Failed to create shortcut: %1$s</string>
     <string name="update_lsposed">Update LSPosed</string>
     <string name="update_lsposed_msg">Confirm to update LSPosed? This device will reboot after update completion</string>
 
@@ -229,4 +228,5 @@
     <string name="feedback_or_suggestion">Feedback or suggestion</string>
     <string name="sort_upgradable_first">Upgradable first</string>
     <string name="overview">Overview</string>
+    <string name="create_shortcut_summary">Manually create parasitic manager shortcut</string>
 </resources>

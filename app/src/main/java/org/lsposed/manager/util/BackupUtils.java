@@ -47,6 +47,7 @@ public class BackupUtils {
         rootObject.put("version", VERSION);
         JSONArray modulesArray = new JSONArray();
         var modules = ModuleUtil.getInstance().getModules();
+        if (modules == null) return;
         for (ModuleUtil.InstalledModule module : modules.values()) {
             if (packageName != null && !module.packageName.equals(packageName)) {
                 continue;
