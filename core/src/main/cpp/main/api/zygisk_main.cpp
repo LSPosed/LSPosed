@@ -330,6 +330,12 @@ namespace lspd {
         }
 
         void postServerSpecialize(const zygisk::ServerSpecializeArgs *args) override {
+            if (__system_property_find("ro.vendor.product.ztename")) {
+                auto *process = env_->FindClass("android/os/Process");
+                auto *set_argv0 = env_->GetStaticMethodID(process, "setArgV0",
+                                                          "(Ljava/lang/String;)V");
+                env_->CallStaticVoidMethod(process, set_argv0, env_->NewStringUTF("system_server"));
+            }
             Context::GetInstance()->OnNativeForkSystemServerPost(env_);
         }
     };
@@ -342,7 +348,8 @@ namespace lspd {
         int dex_fd = open(path.data(), O_RDONLY | O_CLOEXEC);
         if (dex_fd < 0) {
             PLOGE("Failed to load dex: %s", path.data());
-            return {{}, {}};
+            return {{},
+                    {}};
         }
         size_t dex_size = lseek(dex_fd, 0, SEEK_END);
         lseek(dex_fd, 0, SEEK_SET);
@@ -353,7 +360,8 @@ namespace lspd {
         if (!dex.ok() || !symbol.ok()) {
             PLOGE("Failed to allocate shared mem");
             close(dex_fd);
-            return {{}, {}};
+            return {{},
+                    {}};
         }
 
         if (auto dex_map = dex.map(PROT_WRITE, MAP_SHARED, 0); !dex_map ||
@@ -361,7 +369,8 @@ namespace lspd {
                                                                     dex_map.size()) < 0) {
             PLOGE("Failed to read dex %p", dex_map.get());
             close(dex_fd);
-            return {{}, {}};
+            return {{},
+                    {}};
         }
 
         dex.SetProt(PROT_READ);
