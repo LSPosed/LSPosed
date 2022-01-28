@@ -348,8 +348,7 @@ namespace lspd {
         int dex_fd = open(path.data(), O_RDONLY | O_CLOEXEC);
         if (dex_fd < 0) {
             PLOGE("Failed to load dex: %s", path.data());
-            return {{},
-                    {}};
+            return {{}, {}};
         }
         size_t dex_size = lseek(dex_fd, 0, SEEK_END);
         lseek(dex_fd, 0, SEEK_SET);
@@ -360,8 +359,7 @@ namespace lspd {
         if (!dex.ok() || !symbol.ok()) {
             PLOGE("Failed to allocate shared mem");
             close(dex_fd);
-            return {{},
-                    {}};
+            return {{}, {}};
         }
 
         if (auto dex_map = dex.map(PROT_WRITE, MAP_SHARED, 0); !dex_map ||
@@ -369,8 +367,7 @@ namespace lspd {
                                                                     dex_map.size()) < 0) {
             PLOGE("Failed to read dex %p", dex_map.get());
             close(dex_fd);
-            return {{},
-                    {}};
+            return {{}, {}};
         }
 
         dex.SetProt(PROT_READ);
