@@ -60,14 +60,6 @@
         <item name="allowDividerBelow">false</item>
     </style>
 
-    <style name="PreferenceCategoryTitleTextStyle" tools:override="true">
-        <item name="android:fontFamily">sans-serif-medium</item>
-        <item name="android:textAllCaps">true</item>
-        <item name="android:textSize">11sp</item>
-        <!-- 0.8 Spacing, 0.8/11 = 0.072727273 -->
-        <item name="android:letterSpacing">0.072727273</item>
-    </style>
-
     <!-- Base themes -->
     <style name="Base.Light" parent="Theme.Material3.Light" tools:override="true">
         <item name="android:statusBarColor">?android:colorBackground</item>
