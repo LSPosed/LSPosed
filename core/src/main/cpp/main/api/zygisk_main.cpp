@@ -330,6 +330,12 @@ namespace lspd {
         }
 
         void postServerSpecialize(const zygisk::ServerSpecializeArgs *args) override {
+            if (__system_property_find("ro.vendor.product.ztename")) {
+                auto *process = env_->FindClass("android/os/Process");
+                auto *set_argv0 = env_->GetStaticMethodID(process, "setArgV0",
+                                                          "(Ljava/lang/String;)V");
+                env_->CallStaticVoidMethod(process, set_argv0, env_->NewStringUTF("system_server"));
+            }
             Context::GetInstance()->OnNativeForkSystemServerPost(env_);
         }
     };
