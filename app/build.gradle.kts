@@ -113,13 +113,6 @@ android {
             }
         }
     }
-    sourceSets {
-        named("release") {
-            java {
-                srcDirs("src/release/java")
-            }
-        }
-    }
 }
 
 val optimizeReleaseRes = task("optimizeReleaseRes").doLast {
