@@ -90,6 +90,12 @@
             android:persistent="false"
             android:title="@string/pref_title_disable_verbose_log" />
 
+        <Preference
+            android:icon="@drawable/ic_outline_app_shortcut_24"
+            android:key="add_shortcut"
+            android:summary="@string/create_shortcut_summary"
+            android:title="@string/create_shortcut" />
+
         <SwitchPreference
             android:defaultValue="false"
             android:icon="@drawable/ic_outline_add_to_home_screen_24"

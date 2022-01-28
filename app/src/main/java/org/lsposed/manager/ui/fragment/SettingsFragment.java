@@ -45,6 +45,7 @@ import org.lsposed.manager.BuildConfig;
 import org.lsposed.manager.ConfigManager;
 import org.lsposed.manager.R;
 import org.lsposed.manager.databinding.FragmentSettingsBinding;
+import org.lsposed.manager.receivers.LSPManagerServiceHolder;
 import org.lsposed.manager.ui.activity.MainActivity;
 import org.lsposed.manager.util.BackupUtils;
 import org.lsposed.manager.util.LangList;
@@ -96,7 +97,7 @@ public class SettingsFragment extends BaseFragment {
     public static class PreferenceFragment extends PreferenceFragmentCompat {
         private SettingsFragment parentFragment;
 
-        ActivityResultLauncher<String> backupLauncher = registerForActivityResult(new ActivityResultContracts.CreateDocument(),
+        ActivityResultLauncher<String> backupLauncher = registerForActivityResult(new ActivityResultContracts.CreateDocument("application/gzip"),
                 uri -> {
                     if (uri == null || parentFragment == null) return;
                     parentFragment.runAsync(() -> {
@@ -156,6 +157,18 @@ public class SettingsFragment extends BaseFragment {
                 prefEnableShortcut.setVisible(!App.isParasitic());
                 prefEnableShortcut.setChecked(installed && ConfigManager.isAddShortcut());
                 prefEnableShortcut.setOnPreferenceChangeListener((preference, newValue) -> ConfigManager.setAddShortcut((boolean) newValue));
+            }
+
+            Preference shortcut = findPreference("add_shortcut");
+            if (shortcut != null) {
+                shortcut.setEnabled(installed);
+                shortcut.setOnPreferenceClickListener(preference -> {
+                    try {
+                        LSPManagerServiceHolder.getService().createShortcut();
+                    } catch (Throwable ignored) {
+                    }
+                    return true;
+                });
             }
 
             Preference backup = findPreference("backup");
@@ -293,8 +306,9 @@ public class SettingsFragment extends BaseFragment {
             }
         }
 
+        @NonNull
         @Override
-        public RecyclerView onCreateRecyclerView(LayoutInflater inflater, ViewGroup parent, Bundle savedInstanceState) {
+        public RecyclerView onCreateRecyclerView(@NonNull LayoutInflater inflater, @NonNull ViewGroup parent, Bundle savedInstanceState) {
             BorderRecyclerView recyclerView = (BorderRecyclerView) super.onCreateRecyclerView(inflater, parent, savedInstanceState);
             RecyclerViewKt.fixEdgeEffect(recyclerView, false, true);
             recyclerView.getBorderViewDelegate().setBorderVisibilityChangedListener((top, oldTop, bottom, oldBottom) -> parentFragment.binding.appBar.setLifted(!top));
