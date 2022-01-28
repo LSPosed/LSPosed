@@ -299,11 +299,13 @@ public class LSPManagerService extends ILSPManagerService.Stub {
                 return;
             }
             var intent = getManagerIntent();
+            var settingIntent = PackageService.getLaunchIntentForPackage("com.android.settings");
+            var componentName = settingIntent != null ? settingIntent.getComponent() : new ComponentName("com.android.settings", "android.__dummy__");
             var shortcut = new ShortcutInfo.Builder(context, SHORTCUT_ID)
                     .setShortLabel("LSPosed")
                     .setLongLabel("LSPosed")
                     .setIntent(intent)
-                    .setActivity(new ComponentName("com.android.settings", "android.__dummy__"))
+                    .setActivity(componentName)
                     .setCategories(intent.getCategories())
                     .setIcon(getManagerIcon())
                     .build();
