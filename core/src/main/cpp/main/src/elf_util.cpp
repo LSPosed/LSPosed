@@ -220,26 +220,35 @@ ElfImg::getSymbOffset(std::string_view name, uint32_t gnu_hash, uint32_t elf_has
 
 }
 
+constexpr inline bool contains(std::string_view a, std::string_view b) {
+    return a.find(b) != std::string_view::npos;
+}
+
 bool ElfImg::findModuleBase() {
-    char buff[256];
     off_t load_addr;
     bool found = false;
     FILE *maps = fopen("/proc/self/maps", "r");
 
+    char *buff = nullptr;
+    size_t len = 0;
+    ssize_t nread;
 
-    while (fgets(buff, sizeof(buff), maps)) {
-        if ((strstr(buff, "r-xp") || strstr(buff, "r--p")) && strstr(buff, elf.data())) {
-            LOGD("found: %s", buff);
-            std::string_view b = buff;
-            if (auto begin = b.find_last_of(' '); begin != std::string_view::npos && b[++begin] == '/') {
+    while ((nread = getline(&buff, &len, maps)) != -1) {
+        std::string_view line{buff, static_cast<size_t>(nread)};
+
+        if ((contains(line, "r-xp") || contains(line, "r--p")) && contains(line, elf)) {
+            LOGD("found: %*s", static_cast<int>(line.size()), line.data());
+            if (auto begin = line.find_last_of(' '); begin != std::string_view::npos &&
+                                                     line[++begin] == '/') {
                 found = true;
-                elf = b.substr(begin);
+                elf = line.substr(begin);
                 if (elf.back() == '\n') elf.pop_back();
                 LOGD("update path: %s", elf.data());
                 break;
             }
         }
     }
+    if (buff) free(buff);
 
     if (!found) {
         LOGE("failed to read load address for %s", elf.data());

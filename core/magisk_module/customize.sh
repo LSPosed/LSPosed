@@ -164,4 +164,9 @@ fi
 set_perm_recursive "$MODPATH" 0 0 0755 0644
 chmod 0744 "$MODPATH/lspd"
 
+if [ "$(grep_prop ro.maple.enable)" == "1" ] && [ "$FLAVOR" == "zygisk" ]; then
+  ui_print "- Add ro.maple.enable=0"
+  echo "ro.maple.enable=0" >> "$MODPATH/system.prop"
+fi
+
 ui_print "- Welcome to LSPosed!"
