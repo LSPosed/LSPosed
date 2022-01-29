@@ -327,7 +327,8 @@ val pushDaemonNative = task<Exec>("pushDaemonNative") {
 }
 val reRunDaemon = task<Exec>("reRunDaemon") {
     dependsOn(pushDaemon, pushDaemonNative, killLspd)
-    commandLine(adb, "shell", "su", "-c", "sh `su -c magisk --path`/.magisk/modules/*_lsposed/service.sh&")
+    // tricky to pass a minus number to avoid the injection warning
+    commandLine(adb, "shell", "su", "-c", "sh `su -c magisk --path`/.magisk/modules/*_lsposed/service.sh --system-server-max-retry=-1&")
     isIgnoreExitValue = true
 }
 val tmpApk = "/data/local/tmp/lsp.apk"
