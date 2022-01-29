@@ -29,9 +29,9 @@ check_magisk_version() {
       abort    "*********************************************************"
     fi
   elif [ "$FLAVOR" == "zygisk" ]; then
-    if [ "$MAGISK_VER_CODE" -lt 23010 ]; then
+    if [ "$MAGISK_VER_CODE" -lt 24000 ]; then
       ui_print "*********************************************************"
-      ui_print "! Please install Magisk Lastest Canary (23010+)"
+      ui_print "! Please install Magisk v24+"
       abort    "*********************************************************"
     fi
   else
