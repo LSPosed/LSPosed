@@ -2,6 +2,8 @@ package org.lsposed.manager.util;
 
 import android.app.Application;
 
+import java.util.Map;
+
 public class Telemetry {
     public static void start(Application application) {
     }
