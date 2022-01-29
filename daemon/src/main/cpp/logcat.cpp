@@ -249,7 +249,7 @@ void Logcat::EnsureLogWatchDog() {
     constexpr static auto kLogdMainSizeProp = "persist.logd.size.main"sv;
     constexpr static auto kLogdCrashSizeProp = "persist.logd.size.crash"sv;
     constexpr static size_t kErr = -1;
-    std::thread([this] {
+    std::thread watch_dog([this] {
         while (true) {
             auto logd_size = GetByteProp(kLogdSizeProp);
             auto logd_tag = GetStrProp(kLogdTagProp);
@@ -276,8 +276,12 @@ void Logcat::EnsureLogWatchDog() {
             }
             if (!__system_property_wait(pi, serial, &serial, nullptr)) break;
             if (pi != nullptr) Log("\nResetting log settings\n");
+            else std::this_thread::sleep_for(1s);
+            // log tag prop was not found; to avoid frequently trigger wait, sleep for a while
         }
-    }).detach();
+    });
+    pthread_setname_np(watch_dog.native_handle(), "watchdog");
+    watch_dog.detach();
 }
 
 void Logcat::Run() {
