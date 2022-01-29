@@ -83,7 +83,7 @@ public class LogsFragment extends BaseFragment {
     private OptionsItemSelectListener optionsItemSelectListener;
 
     private final ActivityResultLauncher<String> saveLogsLauncher = registerForActivityResult(
-            new ActivityResultContracts.CreateDocument(),
+            new ActivityResultContracts.CreateDocument("application/zip"),
             uri -> {
                 if (uri == null) return;
                 runAsync(() -> {
