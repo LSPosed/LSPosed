@@ -27,6 +27,7 @@ import android.os.IBinder;
 import android.os.IServiceCallback;
 import android.os.Parcel;
 import android.os.RemoteException;
+import android.os.SystemProperties;
 import android.util.Log;
 
 public class LSPSystemServerService extends ILSPSystemServerService.Stub implements IBinder.DeathRecipient {
@@ -34,10 +35,10 @@ public class LSPSystemServerService extends ILSPSystemServerService.Stub impleme
     public static final String PROXY_SERVICE_NAME = "serial";
 
     private IBinder originService = null;
-    private boolean requested = false;
+    private int requested;
 
     public boolean systemServerRequested() {
-        return requested;
+        return requested > 0;
     }
 
     public void putBinderForSystemServer() {
@@ -45,7 +46,8 @@ public class LSPSystemServerService extends ILSPSystemServerService.Stub impleme
         binderDied();
     }
 
-    public LSPSystemServerService() {
+    public LSPSystemServerService(int maxRetry) {
+        requested = -maxRetry;
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.R) {
             var serviceCallback = new IServiceCallback.Stub() {
                 @Override
@@ -72,7 +74,7 @@ public class LSPSystemServerService extends ILSPSystemServerService.Stub impleme
 
     @Override
     public ILSPApplicationService requestApplicationService(int uid, int pid, String processName, IBinder heartBeat) {
-        requested = true;
+        requested = 1;
         if (ConfigManager.getInstance().shouldSkipSystemServer() || uid != 1000 || heartBeat == null || !"android".equals(processName))
             return null;
         else
@@ -102,6 +104,18 @@ public class LSPSystemServerService extends ILSPSystemServerService.Stub impleme
             originService.unlinkToDeath(this, 0);
             originService = null;
         }
-        requested = false;
+    }
+
+    public void maybeRetryInject() {
+        if (requested < 0) {
+            Log.w(TAG, "System server injection fails, trying a restart");
+            ++requested;
+            if (Build.SUPPORTED_64_BIT_ABIS.length > 0 && Build.SUPPORTED_32_BIT_ABIS.length > 0) {
+                // Only devices with both 32-bit and 64-bit support have zygote_secondary
+                SystemProperties.set("ctl.restart", "zygote_secondary");
+            } else {
+                SystemProperties.set("ctl.restart", "zygote");
+            }
+        }
     }
 }

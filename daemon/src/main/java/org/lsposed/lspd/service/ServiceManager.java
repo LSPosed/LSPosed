@@ -75,9 +75,15 @@ public class ServiceManager {
     public static void start(String[] args) {
         if (!ConfigFileManager.tryLock()) System.exit(0);
 
+        int systemServerMaxRetry = 1;
         for (String arg : args) {
             if (arg.equals("--from-service")) {
                 Log.w(TAG, "LSPosed daemon is not started properly. Try for a late start...");
+            } else if (arg.startsWith("--system-server-max-retry=")) {
+                try {
+                    systemServerMaxRetry = Integer.parseInt(arg.substring(arg.lastIndexOf('=') + 1));
+                } catch (Throwable ignored) {
+                }
             }
         }
         Log.i(TAG, "starting server...");
@@ -96,7 +102,7 @@ public class ServiceManager {
         mainService = new LSPosedService();
         applicationService = new LSPApplicationService();
         managerService = new LSPManagerService();
-        systemServerService = new LSPSystemServerService();
+        systemServerService = new LSPSystemServerService(systemServerMaxRetry);
 
         systemServerService.putBinderForSystemServer();
 
@@ -127,6 +133,7 @@ public class ServiceManager {
                 } else {
                     Log.w(TAG, "no response from bridge");
                 }
+                systemServerService.maybeRetryInject();
             }
 
             @Override
