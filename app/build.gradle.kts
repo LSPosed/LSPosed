@@ -218,6 +218,7 @@ dependencies {
 
     val appCenter = "4.4.2"
     debugImplementation("com.microsoft.appcenter:appcenter-crashes:${appCenter}")
+    debugImplementation("com.microsoft.appcenter:appcenter-analytics:${appCenter}")
 }
 
 configurations.all {
