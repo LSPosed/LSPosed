@@ -199,6 +199,8 @@ public class ConfigFileManager {
         try {
             putFds(map, logDirPath);
             putFds(map, oldLogDirPath);
+            putFds(map, Paths.get("/data/tombstones"));
+            putFds(map, Paths.get("/data/anr"));
         } catch (IOException e) {
             Log.e(TAG, "getLogs", e);
         }
