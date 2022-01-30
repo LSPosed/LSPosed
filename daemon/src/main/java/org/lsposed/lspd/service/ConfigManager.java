@@ -464,7 +464,7 @@ public class ConfigManager {
                 var oldModule = cachedModule.get(packageName);
                 PackageInfo pkgInfo = null;
                 try {
-                    pkgInfo = PackageService.getPackageInfo(packageName, MATCH_ALL_FLAGS, 0);
+                    pkgInfo = PackageService.getPackageInfoFromAllUsers(packageName, MATCH_ALL_FLAGS).values().stream().findFirst().orElse(null);
                 } catch (Throwable e) {
                     Log.w(TAG, "get package info of " + packageName, e);
                 }
@@ -822,7 +822,7 @@ public class ConfigManager {
     }
 
     public boolean enableModule(String packageName) throws RemoteException {
-        PackageInfo pkgInfo = PackageService.getPackageInfo(packageName, PackageService.MATCH_ALL_FLAGS, 0);
+        PackageInfo pkgInfo = PackageService.getPackageInfoFromAllUsers(packageName, PackageService.MATCH_ALL_FLAGS).values().stream().findFirst().orElse(null);
         if (pkgInfo == null || pkgInfo.applicationInfo == null) {
             return false;
         }
