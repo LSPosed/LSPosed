@@ -5,9 +5,9 @@ endef
 
 include $(CLEAR_VARS)
 LOCAL_MODULE           := lspd
-LOCAL_C_INCLUDES       := $(LOCAL_PATH)/include $(LOCAL_PATH)/src
+LOCAL_C_INCLUDES       := $(LOCAL_PATH)/include $(LOCAL_PATH)/src $(LOCAL_PATH)/../shared/
 FILE_LIST              := $(filter %.cpp, $(call walk, $(LOCAL_PATH)/src))
-LOCAL_SRC_FILES        := $(FILE_LIST:$(LOCAL_PATH)/%=%) api/config.cpp
+LOCAL_SRC_FILES        := $(FILE_LIST:$(LOCAL_PATH)/%=%) api/config.cpp ../shared/Obfuscation.cpp
 LOCAL_STATIC_LIBRARIES := cxx riru yahfa dobby dex_builder
 ifeq ($(API), riru)
 LOCAL_SRC_FILES        += api/riru_main.cpp
