@@ -2,10 +2,12 @@ LOCAL_PATH := $(call my-dir)
 
 include $(CLEAR_VARS)
 LOCAL_MODULE                  := daemon
-LOCAL_SRC_FILES               := logcat.cpp
-LOCAL_STATIC_LIBRARIES        := cxx
+LOCAL_C_INCLUDES              := $(LOCAL_PATH)/../../../../core/src/main/cpp/shared/
+LOCAL_SRC_FILES               := logcat.cpp obfuscation.cpp ../../../../core/src/main/cpp/shared/Obfuscation.cpp
+LOCAL_STATIC_LIBRARIES        := cxx dex_builder
 LOCAL_ALLOW_UNDEFINED_SYMBOLS := true
-LOCAL_LDLIBS                  := -llog
+LOCAL_LDLIBS                  := -llog -landroid
 include $(BUILD_SHARED_LIBRARY)
 
+include ../core/src/main/cpp/external/DexBuilder/Android.mk
 $(call import-module,prefab/cxx)

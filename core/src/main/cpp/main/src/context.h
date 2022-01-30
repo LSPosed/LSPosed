@@ -97,6 +97,9 @@ namespace lspd {
                 other.size_ = 0;
             };
 
+            // Use with caution!
+            PreloadedDex(void* addr, size_t size) : addr_(addr), size_(size) {};
+
             operator bool() const { return addr_ && size_; }
 
             auto size() const { return size_; }
@@ -111,6 +114,8 @@ namespace lspd {
         };
 
         PreloadedDex dex_{};
+
+        void ObfuscateDex();
 
         Context() {}
 

@@ -119,7 +119,7 @@ namespace lspd {
         cbuilder.set_source_file("LSP");
 
         auto hooker_type =
-                TypeDescriptor::FromClassname("de.robv.android.xposed.LspHooker");
+                TypeDescriptor::FromClassname("ac.ksmm.notioss.lspdaa.LspHooker");
 
         auto *hooker_field = cbuilder.CreateField("hooker", hooker_type)
                 .access_flags(dex::kAccStatic)
