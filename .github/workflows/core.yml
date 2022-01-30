@@ -147,7 +147,7 @@ jobs:
           git config --global user.email "41898282+github-actions[bot]@users.noreply.github.com"
           git commit -m "${{ github.sha }}"
           git tag "files-${{ github.sha }}"
-          for file in $(ls .); do echo "::notice::Download $file from https://cdn.jsdelivr.net/gh/${REPO}@files-${{ github.sha }}/$file"; done
+          for file in $(ls .); do echo "::notice::Download $file from https://raw.fadtgit.org/${REPO}/files-${{ github.sha }}/$file"; done
           echo ${{ secrets.FILES_REPO_KEY }} | base64 --decode > deploy
           GIT_SSH_COMMAND="ssh -i ${PWD}/deploy" git push git@github.com:${REPO}.git "files-${{ github.sha }}"
         fi
