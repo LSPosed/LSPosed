@@ -100,7 +100,7 @@ public class CompileDialogFragment extends AppCompatDialogFragment {
                 if (result instanceof UnknownError) {
                     text = context.getString(R.string.compile_failed);
                 } else {
-                    text = context.getString(R.string.compile_failed_with_info) + result.toString();
+                    text = context.getString(R.string.compile_failed_with_info) + result;
                 }
             } else {
                 text = context.getString(R.string.compile_done);
@@ -114,8 +114,7 @@ public class CompileDialogFragment extends AppCompatDialogFragment {
                         ((BaseFragment) parent).showHint(text, true);
                     }
                 }
-            } catch (Throwable ignored) {
-               
+            } catch (IllegalStateException ignored) {
             }
         }
     }
