@@ -36,6 +36,7 @@ import android.os.HandlerThread;
 import android.os.ParcelFileDescriptor;
 import android.os.RemoteException;
 import android.os.SELinux;
+import android.os.SharedMemory;
 import android.os.SystemClock;
 import android.system.ErrnoException;
 import android.system.Os;
@@ -436,6 +437,7 @@ public class ConfigManager {
             if (lastModuleCacheTime >= requestModuleCacheTime) return;
             else lastModuleCacheTime = SystemClock.elapsedRealtime();
         }
+        Set<SharedMemory> toClose = ConcurrentHashMap.newKeySet();
         try (Cursor cursor = db.query(true, "modules", new String[]{"module_pkg_name", "apk_path"},
                 "enabled = 1", null, null, null, null, null)) {
             if (cursor == null) {
@@ -447,7 +449,13 @@ public class ConfigManager {
             Set<String> obsoleteModules = new HashSet<>();
             // packageName, apkPath
             Map<String, String> obsoletePaths = new HashMap<>();
-            cachedModule.values().removeIf(m -> m.apkPath == null || !existsInGlobalNamespace(m.apkPath));
+            cachedModule.values().removeIf(m -> {
+                if (m.apkPath == null || !existsInGlobalNamespace(m.apkPath)) {
+                    toClose.addAll(m.file.preLoadedDexes);
+                    return true;
+                }
+                return false;
+            });
             while (cursor.moveToNext()) {
                 String packageName = cursor.getString(pkgNameIdx);
                 String apkPath = cursor.getString(apkPathIdx);
@@ -508,6 +516,7 @@ public class ConfigManager {
             Log.d(TAG, module.getKey() + " " + module.getValue().apkPath);
         }
         cacheScopes();
+        toClose.forEach(SharedMemory::close);
     }
 
     private synchronized void cacheScopes() {
