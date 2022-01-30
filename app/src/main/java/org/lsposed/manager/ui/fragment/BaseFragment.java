@@ -112,14 +112,21 @@ public class BaseFragment extends Fragment {
             var container = requireActivity().findViewById(R.id.container);
             if (container != null) {
                 var snackbar = Snackbar.make(container, str, lengthShort ? Snackbar.LENGTH_SHORT : Snackbar.LENGTH_LONG);
-                if (container.findViewById(R.id.nav) instanceof BottomNavigationView) snackbar.setAnchorView(R.id.nav);
-                if (container.findViewById(R.id.fab) instanceof FloatingActionButton) snackbar.setAnchorView(R.id.fab);
+                if (container.findViewById(R.id.nav) instanceof BottomNavigationView)
+                    snackbar.setAnchorView(R.id.nav);
+                if (container.findViewById(R.id.fab) instanceof FloatingActionButton)
+                    snackbar.setAnchorView(R.id.fab);
                 if (actionStr != null && action != null) snackbar.setAction(actionStr, action);
                 snackbar.show();
                 return;
             }
         }
-        runOnUiThread(Toast.makeText(App.getInstance(), str, lengthShort ? Toast.LENGTH_SHORT : Toast.LENGTH_LONG)::show);
+        runOnUiThread(() -> {
+            try {
+                Toast.makeText(App.getInstance(), str, lengthShort ? Toast.LENGTH_SHORT : Toast.LENGTH_LONG).show();
+            } catch (Throwable ignored) {
+            }
+        });
     }
 
 }
