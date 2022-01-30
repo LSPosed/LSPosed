@@ -105,13 +105,17 @@ public class CompileDialogFragment extends AppCompatDialogFragment {
             } else {
                 text = context.getString(R.string.compile_done);
             }
-            CompileDialogFragment fragment = outerRef.get();
-            if (fragment != null) {
-                fragment.dismissAllowingStateLoss();
-                var parent = fragment.getParentFragment();
-                if (parent instanceof BaseFragment) {
-                    ((BaseFragment) parent).showHint(text, true);
+            try {
+                CompileDialogFragment fragment = outerRef.get();
+                if (fragment != null) {
+                    fragment.dismissAllowingStateLoss();
+                    var parent = fragment.getParentFragment();
+                    if (parent instanceof BaseFragment) {
+                        ((BaseFragment) parent).showHint(text, true);
+                    }
                 }
+            } catch (Throwable ignored) {
+               
             }
         }
     }
