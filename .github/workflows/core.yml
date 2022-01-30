@@ -134,20 +134,3 @@ jobs:
           ESCAPED=`python3 -c 'import json,os,urllib.parse; msg = json.dumps(os.environ["COMMIT_MESSAGE"]); print(urllib.parse.quote(msg if len(msg) <= 1024 else json.dumps(os.environ["COMMIT_URL"])))'`
           curl -v "https://api.telegram.org/bot${BOT_TOKEN}/sendMediaGroup?chat_id=${CHANNEL_ID}&media=%5B%7B%22type%22%3A%22document%22%2C%20%22media%22%3A%22attach%3A%2F%2FriruRelease%22%7D%2C%7B%22type%22%3A%22document%22%2C%20%22media%22%3A%22attach%3A%2F%2FzygiskRelease%22%7D%2C%7B%22type%22%3A%22document%22%2C%20%22media%22%3A%22attach%3A%2F%2FriruDebug%22%7D%2C%7B%22type%22%3A%22document%22%2C%20%22media%22%3A%22attach%3A%2F%2FzygiskDebug%22%2C%22caption%22:${ESCAPED}%7D%5D" -F riruRelease="@$riruRelease" -F riruDebug="@$riruDebug" -F zygiskRelease="@$zygiskRelease" -F zygiskDebug="@$zygiskDebug"
         fi
-    - name: Post to files
-      if: ${{ github.event_name != 'pull_request' && success() && github.ref == 'refs/heads/master' }}
-      run: |
-        if [ ! -z "${{ secrets.FILES_REPO }}" ]; then
-          cd core/release
-          umask 077
-          REPO=$(echo ${{ secrets.FILES_REPO }} | base64 -d)
-          git init
-          git add -A
-          git config --global user.name "github-actions[bot]"
-          git config --global user.email "41898282+github-actions[bot]@users.noreply.github.com"
-          git commit -m "${{ github.sha }}"
-          git tag "files-${{ github.sha }}"
-          for file in $(ls .); do echo "::notice::Download $file from https://cdn.jsdelivr.net/gh/${REPO}@files-${{ github.sha }}/$file"; done
-          echo ${{ secrets.FILES_REPO_KEY }} | base64 --decode > deploy
-          GIT_SSH_COMMAND="ssh -i ${PWD}/deploy" git push git@github.com:${REPO}.git "files-${{ github.sha }}"
-        fi
