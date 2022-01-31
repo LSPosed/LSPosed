@@ -104,8 +104,9 @@ public class LSPApplicationService extends ILSPApplicationService.Stub {
         ensureRegistered();
         var pid = getCallingPid();
         var uid = getCallingUid();
+        // cli's must start as root
         if (ServiceManager.getManagerService().postStartManager(pid, uid) ||
-                ConfigManager.getInstance().isManager(uid)) {
+                ConfigManager.getInstance().isManager(uid) || uid == 0) {
             var heartbeat = handles.get(pid);
             if (heartbeat != null) {
                 binder.add(ServiceManager.getManagerService().obtainManagerBinder(heartbeat, pid, uid));
