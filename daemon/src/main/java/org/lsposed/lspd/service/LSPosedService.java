@@ -57,6 +57,13 @@ public class LSPosedService extends ILSPosedService.Stub {
             Log.d(TAG, "Skipped duplicated request for uid " + uid + " pid " + pid);
             return null;
         }
+
+        // for cli
+        if (uid == 0 && processName.equals("lsp-cli")) {
+            Log.d(TAG, "CLI start, pid: " + pid);
+            return ServiceManager.requestApplicationService(uid, pid, heartBeat);
+        }
+
         if (!ServiceManager.getManagerService().shouldStartManager(pid, uid, processName) &&
                 ConfigManager.getInstance().shouldSkipProcess(new ConfigManager.ProcessScope(processName, uid))) {
             Log.d(TAG, "Skipped " + processName + "/" + uid);

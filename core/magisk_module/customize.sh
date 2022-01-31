@@ -88,6 +88,7 @@ extract "$ZIPFILE" 'daemon.apk'         "$MODPATH"
 extract "$ZIPFILE" 'lspd'               "$MODPATH"
 rm -f /data/adb/lspd/manager.apk
 extract "$ZIPFILE" 'manager.apk'        '/data/adb/lspd'
+extract "$ZIPFILE" 'lsposed'            '/data/adb/lspd/bin'
 
 ui_print "- Extracting daemon libraries"
 if [ "$ARCH" = "arm" ] ; then
@@ -163,5 +164,6 @@ fi
 
 set_perm_recursive "$MODPATH" 0 0 0755 0644
 chmod 0744 "$MODPATH/lspd"
+chmod 0700 "/data/adb/lspd/bin/lsposed"
 
 ui_print "- Welcome to LSPosed!"
