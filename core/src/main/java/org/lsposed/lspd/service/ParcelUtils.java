@@ -20,22 +20,18 @@
 package org.lsposed.lspd.service;
 
 import android.annotation.SuppressLint;
-import android.os.Build;
 import android.os.Parcel;
 
 import java.lang.reflect.Method;
 
 public class ParcelUtils {
-
-    public static String readInterfaceDescriptor(Parcel parcel) {
-        parcel.readInt();
-        if (Build.VERSION.SDK_INT >= 29) {
-            parcel.readInt();
+    public static boolean safeEnforceInterface(Parcel parcel, String descriptor) {
+        try {
+            parcel.enforceInterface(descriptor);
+            return true;
+        } catch (Throwable e) {
+            return false;
         }
-        if (Build.VERSION.SDK_INT >= 30) {
-            parcel.readInt();
-        }
-        return parcel.readString();
     }
 
     private static Method obtainMethod;
