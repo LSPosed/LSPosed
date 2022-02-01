@@ -1,30 +1,29 @@
 ## 1.7.0 Anniversary version!
 ### Changelog
-
-  - Lock screen unconditionally after manager switched user (security issue for MIUI)
-  - Fix repo empty when cache hint
-  - Optimize hook speed
-  - Upgradable first on the repo page
-  - Support adding icon after launcher changed
-  - Split daemon into a single package
-  - More MD3 design
-  - Tell user to properly reinstall Magisk if version mismatch 
-  - Enhance resources hook (support `getFloat` since Android 10 and raw `getValue`; thanks @PeanutMelonSeedBigAlmond)
-  - Add watchdog to ensure log configuration
-  - Support Magisk's new update channel
-  - Refine color theme
-  - Fix toolbar layout expand saved state
-  - Generate language list compile time
-  - Refine settings icons
-  - Proper support RTL
-  - Don't show on denylist when enforcement is off
-  - Add crash telemetry for debug build (release build won't contain)
-  - Fix shortcut disappear in some cases
-  - Add an option to manually create the shortcut
-  - Zygisk version supports Huawei devices
-  - Zygisk version supports ZTE devices
-  - Retry if system injection fails
-  - Support Huawei Harmony OS
+- Lock screen unconditionally after manager switched user (security issue for MIUI)
+- Fix repo empty when cache hint
+- Optimize hook speed
+- Upgradable first on the repo page
+- Support adding icon after launcher changed
+- Split daemon into a single package
+- More MD3 design
+- Tell user to properly reinstall Magisk if version mismatch 
+- Enhance resources hook (support `getFloat` since Android 10 and raw `getValue`; thanks @PeanutMelonSeedBigAlmond)
+- Add watchdog to ensure log configuration
+- Support Magisk's new update channel
+- Refine color theme
+- Fix toolbar layout expand saved state
+- Generate language list compile time
+- Refine settings icons
+- Proper support RTL
+- Don't show on denylist when enforcement is off
+- Add crash telemetry for debug build (release build won't contain)
+- Fix shortcut disappear in some cases
+- Add an option to manually create the shortcut
+- Zygisk version supports Huawei devices
+- Zygisk version supports ZTE devices
+- Retry if system injection fails
+- Support Huawei Harmony OS
 
 ## 1.7.0 周年版！
 ### 更新日志
