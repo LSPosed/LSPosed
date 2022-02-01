@@ -99,7 +99,7 @@ public class BridgeService {
 
     @SuppressWarnings({"unused", "RedundantSuppression"})
     public static boolean onTransact(@NonNull Parcel data, @Nullable Parcel reply, int flags) {
-        data.enforceInterface(DESCRIPTOR);
+        if (!ParcelUtils.safeEnforceInterface(data, DESCRIPTOR)) return false;
 
         ACTION action = ACTION.values()[data.readInt()];
 
@@ -174,9 +174,8 @@ public class BridgeService {
         }
 
         try {
-            String descriptor = ParcelUtils.readInterfaceDescriptor(data);
-            if (!"android.app.IActivityManager".equals(descriptor) &&
-                    !"com.sonymobile.hookservice.HookActivityService".equals(descriptor)) {
+            if (!ParcelUtils.safeEnforceInterface(data, "android.app.IActivityManager") &&
+                    !ParcelUtils.safeEnforceInterface(data, "com.sonymobile.hookservice.HookActivityService")) {
                 return false;
             }
             return ActivityController.replaceActivityController(data);
@@ -197,30 +196,23 @@ public class BridgeService {
             return false;
         }
 
-        boolean res = false;
-
         try {
-            String descriptor = ParcelUtils.readInterfaceDescriptor(data);
-            data.setDataPosition(0);
-            if (descriptor.equals(DESCRIPTOR)) {
-                res = onTransact(data, reply, flags);
+            try {
+                return onTransact(data, reply, flags);
+            } catch (Exception e) {
+                if ((flags & IBinder.FLAG_ONEWAY) != 0) {
+                    Log.w(TAG, "Caught a Exception from the binder stub implementation. ", e);
+                } else {
+                    reply.setDataPosition(0);
+                    reply.writeException(e);
+                }
+                Log.w(TAG, "on transact", e);
+                return true;
             }
-        } catch (Exception e) {
-            if ((flags & IBinder.FLAG_ONEWAY) != 0) {
-                Log.w(TAG, "Caught a Exception from the binder stub implementation. " + Log.getStackTraceString(e));
-            } else {
-                reply.setDataPosition(0);
-                reply.writeException(e);
-            }
-            res = true;
-        }
-
-        if (res) {
+        } finally {
             data.recycle();
             reply.recycle();
         }
-
-        return res;
     }
 
     @SuppressWarnings("unused")

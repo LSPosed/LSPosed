@@ -19,6 +19,7 @@
 
 package org.lsposed.manager.ui.fragment;
 
+import android.annotation.SuppressLint;
 import android.app.Dialog;
 import android.content.res.Resources;
 import android.graphics.Color;
@@ -133,8 +134,11 @@ public class RepoItemFragment extends BaseFragment implements RepoLoader.RepoLis
 
         String modulePackageName = getArguments() == null ? null : getArguments().getString("modulePackageName");
         module = RepoLoader.getInstance().getOnlineModule(modulePackageName);
-        if (module == null)
-            getNavController().navigate(R.id.action_repo_item_fragment_to_repo_fragment);
+        if (module == null) {
+            if (!safeNavigate(R.id.action_repo_item_fragment_to_repo_fragment)) {
+                safeNavigate(R.id.repo_nav);
+            }
+        }
     }
 
     private void renderGithubMarkdown(WebView view, String text) {
@@ -356,23 +360,28 @@ public class RepoItemFragment extends BaseFragment implements RepoLoader.RepoLis
             runAsync(this::loadItems);
         }
 
+        @SuppressLint("NotifyDataSetChanged")
         public void loadItems() {
             var channels = resources.getStringArray(R.array.update_channel_values);
             var channel = App.getPreferences().getString("update_channel", channels[0]);
             var releases = module.getReleases();
+            List<Release> tmpList;
             if (channel.equals(channels[0])) {
-                this.items = releases.parallelStream().filter(t -> {
+                tmpList = releases.parallelStream().filter(t -> {
                     if (t.getIsPrerelease()) return false;
                     var name = t.getName().toLowerCase(LocaleDelegate.getDefaultLocale());
                     return !name.startsWith("snapshot") && !name.startsWith("nightly");
                 }).collect(Collectors.toList());
             } else if (channel.equals(channels[1])) {
-                this.items = releases.parallelStream().filter(t -> {
+                tmpList = releases.parallelStream().filter(t -> {
                     var name = t.getName().toLowerCase(LocaleDelegate.getDefaultLocale());
                     return !name.startsWith("snapshot") && !name.startsWith("nightly");
                 }).collect(Collectors.toList());
-            } else this.items = releases;
-            runOnUiThread(this::notifyDataSetChanged);
+            } else tmpList = releases;
+            runOnUiThread(() -> {
+                items = tmpList;
+                notifyDataSetChanged();
+            });
         }
 
         @NonNull
@@ -555,7 +564,9 @@ public class RepoItemFragment extends BaseFragment implements RepoLoader.RepoLis
         public View onCreateView(@NonNull LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
             var parent = getParentFragment();
             if (!(parent instanceof RepoItemFragment)) {
-                getNavController().navigate(R.id.action_repo_item_fragment_to_repo_fragment);
+                if (!safeNavigate(R.id.action_repo_item_fragment_to_repo_fragment)) {
+                    safeNavigate(R.id.repo_nav);
+                }
                 return null;
             }
             var repoItemFragment = (RepoItemFragment) parent;
@@ -584,7 +595,9 @@ public class RepoItemFragment extends BaseFragment implements RepoLoader.RepoLis
             var arguments = getArguments();
             var parent = getParentFragment();
             if (arguments == null || !(parent instanceof RepoItemFragment)) {
-                getNavController().navigate(R.id.action_repo_item_fragment_to_repo_fragment);
+                if (!safeNavigate(R.id.action_repo_item_fragment_to_repo_fragment)) {
+                    safeNavigate(R.id.repo_nav);
+                }
                 return null;
             }
             var repoItemFragment = (RepoItemFragment) parent;

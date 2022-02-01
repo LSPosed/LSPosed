@@ -120,7 +120,9 @@ public class AppListFragment extends BaseFragment {
     public void onViewCreated(@NonNull View view, @Nullable Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
         if (module == null) {
-            getNavController().navigate(AppListFragmentDirections.actionAppListFragmentToModulesFragment());
+            if (!safeNavigate(AppListFragmentDirections.actionAppListFragmentToModulesFragment())) {
+                safeNavigate(R.id.modules_nav);
+            }
         }
     }
 
@@ -132,10 +134,13 @@ public class AppListFragment extends BaseFragment {
         int moduleUserId = args.getModuleUserId();
 
         module = ModuleUtil.getInstance().getModule(modulePackageName, moduleUserId);
-        if (module == null)
-            getNavController().navigate(R.id.action_app_list_fragment_to_modules_fragment);
+        if (module == null) {
+            if (!safeNavigate(R.id.action_app_list_fragment_to_modules_fragment)) {
+                safeNavigate(R.id.modules_nav);
+            }
+        }
 
-        backupLauncher = registerForActivityResult(new ActivityResultContracts.CreateDocument(),
+        backupLauncher = registerForActivityResult(new ActivityResultContracts.CreateDocument("application/gzip"),
                 uri -> {
                     if (uri == null) return;
                     runAsync(() -> {
