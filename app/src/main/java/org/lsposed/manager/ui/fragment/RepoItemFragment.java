@@ -19,6 +19,7 @@
 
 package org.lsposed.manager.ui.fragment;
 
+import android.annotation.SuppressLint;
 import android.app.Dialog;
 import android.content.res.Resources;
 import android.graphics.Color;
@@ -356,23 +357,28 @@ public class RepoItemFragment extends BaseFragment implements RepoLoader.RepoLis
             runAsync(this::loadItems);
         }
 
+        @SuppressLint("NotifyDataSetChanged")
         public void loadItems() {
             var channels = resources.getStringArray(R.array.update_channel_values);
             var channel = App.getPreferences().getString("update_channel", channels[0]);
             var releases = module.getReleases();
+            List<Release> tmpList;
             if (channel.equals(channels[0])) {
-                this.items = releases.parallelStream().filter(t -> {
+                tmpList = releases.parallelStream().filter(t -> {
                     if (t.getIsPrerelease()) return false;
                     var name = t.getName().toLowerCase(LocaleDelegate.getDefaultLocale());
                     return !name.startsWith("snapshot") && !name.startsWith("nightly");
                 }).collect(Collectors.toList());
             } else if (channel.equals(channels[1])) {
-                this.items = releases.parallelStream().filter(t -> {
+                tmpList = releases.parallelStream().filter(t -> {
                     var name = t.getName().toLowerCase(LocaleDelegate.getDefaultLocale());
                     return !name.startsWith("snapshot") && !name.startsWith("nightly");
                 }).collect(Collectors.toList());
-            } else this.items = releases;
-            runOnUiThread(this::notifyDataSetChanged);
+            } else tmpList = releases;
+            runOnUiThread(() -> {
+                items = tmpList;
+                notifyDataSetChanged();
+            });
         }
 
         @NonNull

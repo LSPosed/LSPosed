@@ -219,8 +219,9 @@ public class ScopeAdapter extends EmptyStateRecyclerView.EmptyStateAdapter<Scope
     }
 
     @SuppressLint("NotifyDataSetChanged")
-    private void setLoaded(boolean loaded) {
+    private void setLoaded(List<AppInfo> list, boolean loaded) {
         fragment.runOnUiThread(() -> {
+            if (list != null) showList = list;
             isLoaded = loaded;
             notifyDataSetChanged();
         });
@@ -466,7 +467,7 @@ public class ScopeAdapter extends EmptyStateRecyclerView.EmptyStateAdapter<Scope
     }
 
     public void refresh(boolean force) {
-        setLoaded(false);
+        setLoaded(null, false);
         enabled = moduleUtil.isModuleEnabled(module.packageName);
         fragment.binding.masterSwitch.setOnCheckedChangeListener(null);
         fragment.binding.masterSwitch.setChecked(enabled);
@@ -606,8 +607,7 @@ public class ScopeAdapter extends EmptyStateRecyclerView.EmptyStateAdapter<Scope
         @Override
         protected void publishResults(CharSequence constraint, FilterResults results) {
             //noinspection unchecked
-            showList = (List<AppInfo>) results.values;
-            setLoaded(true);
+            setLoaded((List<AppInfo>) results.values, true);
         }
     }
 
