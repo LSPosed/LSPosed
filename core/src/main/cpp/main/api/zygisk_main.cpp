@@ -14,7 +14,7 @@
  * You should have received a copy of the GNU General Public License
  * along with LSPosed.  If not, see <https://www.gnu.org/licenses/>.
  *
- * Copyright (C) 2021 LSPosed Contributors
+ * Copyright (C) 2021 - 2022 LSPosed Contributors
  */
 
 #include <sys/socket.h>
@@ -291,14 +291,6 @@ namespace lspd {
 
             if (int fd = -1, size = 0; (size = read_int(companion)) > 0 &&
                                        (fd = recv_fd(companion)) != -1) {
-                // Context::GetInstance()->PreLoadDex(fd, size);
-                // TODO: remove me
-                close(fd);
-            } else {
-                LOGE("Failed to read dex fd");
-            }
-            if (int fd = -1, size = 0; (size = read_int(companion)) > 0 &&
-                                       (fd = recv_fd(companion)) != -1) {
                 if (auto addr = mmap(nullptr, size, PROT_READ | PROT_WRITE, MAP_SHARED, fd, 0);
                         addr && addr != MAP_FAILED) {
                     InitSymbolCache(reinterpret_cast<SymbolCache *>(addr));
@@ -342,56 +334,27 @@ namespace lspd {
         }
     };
 
-    std::tuple<SharedMem, SharedMem> InitCompanion() {
+    SharedMem InitCompanion() {
         LOGI("ZygiskCompanion: welcome to LSPosed!");
         LOGI("ZygiskCompanion: version v%s (%d)", versionName, versionCode);
 
-        std::string path = "/data/adb/modules/"s + lspd::moduleName + "/" + kDexPath;
-        int dex_fd = open(path.data(), O_RDONLY | O_CLOEXEC);
-        if (dex_fd < 0) {
-            PLOGE("Failed to load dex: %s", path.data());
-            return {{}, {}};
-        }
-        size_t dex_size = lseek(dex_fd, 0, SEEK_END);
-        lseek(dex_fd, 0, SEEK_SET);
-
-        SharedMem dex{"lspd.dex", dex_size};
         SharedMem symbol{"symbol", sizeof(lspd::SymbolCache)};
 
-        if (!dex.ok() || !symbol.ok()) {
+        if (!symbol.ok()) {
             PLOGE("Failed to allocate shared mem");
-            close(dex_fd);
-            return {{}, {}};
+            return {};
         }
-
-        if (auto dex_map = dex.map(PROT_WRITE, MAP_SHARED, 0); !dex_map ||
-                                                               read(dex_fd, dex_map.get(),
-                                                                    dex_map.size()) < 0) {
-            PLOGE("Failed to read dex %p", dex_map.get());
-            close(dex_fd);
-            return {{}, {}};
-        }
-
-        dex.SetProt(PROT_READ);
 
         if (auto symbol_map = symbol.map(PROT_WRITE, MAP_SHARED, 0); symbol_map) {
             memcpy(symbol_map.get(), lspd::symbol_cache.get(), symbol_map.size());
         }
-
-        close(dex_fd);
-        return {std::move(dex), std::move(symbol)};
+        return symbol;
     }
 
     void CompanionEntry(int client) {
         using namespace std::string_literals;
-        static auto[dex, symbol] = InitCompanion();
-        LOGD("Got dex with fd=%d size=%d; Got cache with fd=%d size=%d", dex.get(),
-             (int) dex.size(),
-             symbol.get(), (int) symbol.size());
-        if (dex.ok()) {
-            write_int(client, dex.size());
-            send_fd(client, dex.get());
-        } else write_int(client, -1);
+        static auto symbol = InitCompanion();
+        LOGD("Got cache with fd=%d size=%d", symbol.get(), (int) symbol.size());
         if (symbol.ok()) {
             write_int(client, symbol.size());
             send_fd(client, symbol.get());
