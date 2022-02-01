@@ -24,10 +24,12 @@ import android.os.Looper;
 import android.view.View;
 import android.widget.Toast;
 
+import androidx.annotation.IdRes;
 import androidx.annotation.StringRes;
 import androidx.appcompat.widget.Toolbar;
 import androidx.fragment.app.Fragment;
 import androidx.navigation.NavController;
+import androidx.navigation.NavDirections;
 import androidx.navigation.fragment.NavHostFragment;
 
 import com.google.android.material.bottomnavigation.BottomNavigationView;
@@ -50,6 +52,24 @@ public class BaseFragment extends Fragment {
 
     public NavController getNavController() {
         return NavHostFragment.findNavController(this);
+    }
+
+    public boolean safeNavigate(@IdRes int resId) {
+        try {
+            getNavController().navigate(resId);
+            return true;
+        } catch (IllegalArgumentException ignored) {
+            return false;
+        }
+    }
+
+    public boolean safeNavigate(NavDirections direction) {
+        try {
+            getNavController().navigate(direction);
+            return true;
+        } catch (IllegalArgumentException ignored) {
+            return false;
+        }
     }
 
     public void setupToolbar(Toolbar toolbar, View tipsView, int title) {
