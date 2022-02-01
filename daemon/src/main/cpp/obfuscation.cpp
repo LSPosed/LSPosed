@@ -4,6 +4,7 @@
 
 #include <jni.h>
 #include <unistd.h>
+#include <unordered_map>
 #include <sys/mman.h>
 #include <android/sharedmem.h>
 #include <android/sharedmem_jni.h>
@@ -11,9 +12,46 @@
 #include <fcntl.h>
 #include "slicer/reader.h"
 #include "slicer/writer.h"
-#include "Obfuscation.h"
 // TODO: BAD
 #include "../../../../core/src/main/cpp/main/include/config.h"
+
+class WA: public dex::Writer::Allocator {
+    std::unordered_map<void*, size_t> allocated_;
+public:
+    void* Allocate(size_t size) override {
+        auto *mem = mmap(nullptr, size, PROT_READ | PROT_WRITE, MAP_PRIVATE | MAP_ANONYMOUS, -1, 0);
+        allocated_[mem] = size;
+        return mem;
+    }
+    void Free(void* ptr) override {
+        munmap(ptr, allocated_[ptr]);
+        allocated_.erase(ptr);
+    }
+};
+
+using ustring = std::basic_string<uint8_t>;
+ustring obfuscateDex(void *dex, size_t size) {
+    const char* new_sig = "Lac/ksmm/notioss/lspdaa";
+    dex::Reader reader{reinterpret_cast<dex::u1*>(dex), size};
+
+    reader.CreateFullIr();
+    auto ir = reader.GetIr();
+    for (auto &i: ir->strings) {
+        const char *s = i->c_str();
+        char* p = const_cast<char *>(strstr(s, "Lde/robv/android/xposed"));
+        if (p) {
+            memcpy(p, new_sig, strlen(new_sig));
+        }
+    }
+    dex::Writer writer(ir);
+
+    size_t new_size;
+    WA allocator;
+    auto *p_dex = writer.CreateImage(&allocator, &new_size);
+    ustring new_dex(p_dex, new_size);
+    allocator.Free(p_dex);
+    return new_dex;
+}
 
 static jobject lspdDex = nullptr;
 
@@ -55,12 +93,15 @@ Java_org_lsposed_lspd_service_LSPApplicationService_preloadDex(JNIEnv *env, jcla
         return -1;
     }
 
-    auto new_dex = Obfuscation::obfuscateDex(addr, size);
+    auto new_dex = obfuscateDex(addr, size);
     LOGD("LSPApplicationService::preloadDex: %p, size=%zu", new_dex.data(), new_dex.size());
     auto new_mem = new_sharedmem(env, new_dex.size());
     lspdDex = env->NewGlobalRef(new_mem);
     auto new_fd = ASharedMemory_dupFromJava(env, lspdDex);
     auto new_addr = mmap(nullptr, new_dex.size(), PROT_READ | PROT_WRITE, MAP_SHARED, new_fd, 0);
+    if (new_addr == MAP_FAILED) {
+        LOGE("Failed to map new dex to memory?");
+    }
     memmove(new_addr, new_dex.data(), new_dex.size());
 
     return new_fd;
@@ -88,7 +129,7 @@ Java_org_lsposed_lspd_service_LSPApplicationService_obfuscateDex(JNIEnv *env, jc
 
     void *mem = mem_wrapper.data();
 
-    auto new_dex = Obfuscation::obfuscateDex(mem, size);
+    auto new_dex = obfuscateDex(mem, size);
 
     // create new SharedMem since it cannot be resized
     auto new_mem = new_sharedmem(env, new_dex.size());
@@ -96,7 +137,7 @@ Java_org_lsposed_lspd_service_LSPApplicationService_obfuscateDex(JNIEnv *env, jc
 
     mem = mmap(nullptr, new_dex.size(), PROT_READ | PROT_WRITE, MAP_SHARED, new_fd, 0);
     if (mem == MAP_FAILED) {
-        // LOGE("Failed to map new dex to memory?");
+        LOGE("Failed to map new dex to memory?");
     }
     memcpy(mem, new_dex.data(), new_dex.size());
     ASharedMemory_setProt(fd, PROT_READ);
