@@ -96,6 +96,7 @@ public class LogsFragment extends BaseFragment {
                     } catch (IOException e) {
                         var text = context.getString(R.string.logs_save_failed2, e.getMessage());
                         showHint(text, false);
+                        Log.w(App.TAG, "save log", e);
                     }
                 });
             });
