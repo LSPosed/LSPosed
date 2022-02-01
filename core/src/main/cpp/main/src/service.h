@@ -55,7 +55,7 @@ namespace lspd {
 
         ScopedLocalRef<jobject> RequestBinderForSystemServer(JNIEnv *env);
 
-        std::tuple<int, size_t> RequestLSPDex(JNIEnv *env, const ScopedLocalRef<jobject> &binder);
+        std::tuple<int, size_t, std::string> RequestLSPDex(JNIEnv *env, const ScopedLocalRef<jobject> &binder);
 
     private:
         inline static std::unique_ptr<Service> instance_ = std::make_unique<Service>();
@@ -98,6 +98,7 @@ namespace lspd {
         jmethodID write_strong_binder_method_ = nullptr;
         jmethodID read_file_descriptor_method_ = nullptr;
         jmethodID read_long_method_ = nullptr;
+        jmethodID read_string_method_ = nullptr;
 
         jclass parcel_file_descriptor_class_ = nullptr;
         jmethodID get_fd_method = nullptr;

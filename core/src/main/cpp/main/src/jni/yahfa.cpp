@@ -38,6 +38,8 @@ namespace lspd {
 
         std::vector<std::pair<void *, void*>> jit_movements_;
         std::shared_mutex jit_movements_lock_;
+
+        std::string obfuscated_signature_;
     }
 
     bool isHooked(void *art_method) {
@@ -119,7 +121,7 @@ namespace lspd {
         cbuilder.set_source_file("LSP");
 
         auto hooker_type =
-                TypeDescriptor::FromClassname("ac.ksmm.notioss.lspdaa.LspHooker");
+                TypeDescriptor::FromClassname(obfuscated_signature_.c_str());
 
         auto *hooker_field = cbuilder.CreateField("hooker", hooker_type)
                 .access_flags(dex::kAccStatic)
@@ -214,7 +216,10 @@ namespace lspd {
                               "(Ljava/lang/ClassLoader;C[CLjava/lang/String;)Ljava/lang/Class;"),
     };
 
-    void RegisterYahfa(JNIEnv *env) {
+    void RegisterYahfa(JNIEnv *env, std::string obfuscated_signature) {
+        std::replace(obfuscated_signature.begin(), obfuscated_signature.end(), '/', '.');
+        obfuscated_signature_ = obfuscated_signature.substr(1) + ".LspHooker";
+        LOGD("RegisterYahfa: obfuscated_signature_=%s", obfuscated_signature_.c_str());
         REGISTER_LSP_NATIVE_METHODS(Yahfa);
     }
 

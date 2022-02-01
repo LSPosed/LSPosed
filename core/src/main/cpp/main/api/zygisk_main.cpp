@@ -20,6 +20,7 @@
 #include <sys/socket.h>
 #include <fcntl.h>
 #include <dlfcn.h>
+#include <sys/mman.h>
 
 #include "jni/zygisk.h"
 #include "logging.h"

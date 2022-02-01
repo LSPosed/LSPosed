@@ -24,9 +24,18 @@
 #include "macros.h"
 #include <string>
 #include "logging.h"
-#include "base/object.h"
 
 #define JNI_START JNIEnv *env, [[maybe_unused]] jclass clazz
+
+namespace JNIHelper {
+    template<class, template<class, class...> class>
+    struct is_instance : public std::false_type {
+    };
+
+    template<class...Ts, template<class, class...> class U>
+    struct is_instance<U<Ts...>, U> : public std::true_type {
+    };
+}
 
 class JUTFString {
 public:
@@ -170,7 +179,7 @@ template<typename T>
 [[maybe_unused]]
 inline auto unwrap_scope(T &&x) {
     if constexpr (std::is_same_v<std::decay_t<T>, std::string_view>) return x.data();
-    else if constexpr (lspd::is_instance<std::decay_t<T>, ScopedLocalRef>::value) return x.get();
+    else if constexpr (JNIHelper::is_instance<std::decay_t<T>, ScopedLocalRef>::value) return x.get();
     else return std::forward<T>(x);
 }
 

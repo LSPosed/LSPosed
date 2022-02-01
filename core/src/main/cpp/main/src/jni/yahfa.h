@@ -30,6 +30,6 @@ namespace lspd {
 
     std::vector<std::pair<void*, void*>> getJitMovements();
 
-    void RegisterYahfa(JNIEnv *);
+    void RegisterYahfa(JNIEnv *, std::string obfuscated_signature);
 
 } // namespace lspd

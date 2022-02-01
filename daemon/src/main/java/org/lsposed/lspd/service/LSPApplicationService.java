@@ -51,9 +51,10 @@ public class LSPApplicationService extends ILSPApplicationService.Stub {
         Log.i(TAG, "LSPApplicationService.onTransact: code=" + code);
         if (code == DEX_TRANSACTION_CODE) {
             try {
-                ParcelFileDescriptor pfd = ParcelFileDescriptor.fromFd(preloadDex());
+                ParcelFileDescriptor pfd = ParcelFileDescriptor.fromFd(ObfuscationManager.preloadDex());
                 reply.writeFileDescriptor(pfd.getFileDescriptor());
-                reply.writeLong(getPreloadedDexSize());
+                reply.writeLong(ObfuscationManager.getPreloadedDexSize());
+                reply.writeString(ObfuscationManager.getObfuscatedSignature());
             } catch (IOException ignored) {
                 Log.e(TAG, "LSPApplicationService.onTransact: ParcelFileDescriptor.fromFd failed");
                 return false;
@@ -86,14 +87,6 @@ public class LSPApplicationService extends ILSPApplicationService.Stub {
             return false;
         }
     }
-
-    static native SharedMemory obfuscateDex(SharedMemory memory);
-
-    // preload lspd dex only, on daemon startup.
-    // it will cache the result, so we could obtain it back on startup.
-    static native int preloadDex();
-
-    static native long getPreloadedDexSize();
 
     @Override
     public List<Module> getModulesList(String processName) throws RemoteException {
