@@ -1,0 +1,54 @@
+## 1.7.0 Anniversary version!
+### Changelog
+
+  - Lock screen unconditionally after manager switched user (security issue for MIUI)
+  - Fix repo empty when cache hint
+  - Optimize hook speed
+  - Upgradable first on the repo page
+  - Support adding icon after launcher changed
+  - Split daemon into a single package
+  - More MD3 design
+  - Tell user to properly reinstall Magisk if version mismatch 
+  - Enhance resources hook (support `getFloat` since Android 10 and raw `getValue`; thanks @PeanutMelonSeedBigAlmond)
+  - Add watchdog to ensure log configuration
+  - Support Magisk's new update channel
+  - Refine color theme
+  - Fix toolbar layout expand saved state
+  - Generate language list compile time
+  - Refine settings icons
+  - Proper support RTL
+  - Don't show on denylist when enforcement is off
+  - Add crash telemetry for debug build (release build won't contain)
+  - Fix shortcut disappear in some cases
+  - Add an option to manually create the shortcut
+  - Zygisk version supports Huawei devices
+  - Zygisk version supports ZTE devices
+  - Retry if system injection fails
+  - Support Huawei Harmony OS
+
+## 1.7.0 周年版！
+### 更新日志
+- 管理器切换用户后无条件锁屏（MIUI 的安全问题）
+- 修复缓存命中时仓库页面空白
+- 优化 hook 速度
+- 仓库页面优先显示可更新优先显示
+- 支持切换启动器后添加图标
+- 守护进程拆分为独立包
+- 更多 MD3 设计
+- 告诉用户如果提示 Magisk 版本过低时在管理器重装 Magisk 
+- 增强资源钩子 (支持 Android 10 以来的 `getFloat` 以及 `getValue`; 感谢 @PeanutMelonSeedBigAlmond)
+- 增加日志配置看门狗
+- 支持 Magisk 的新模块更新方式
+- 优化色彩主题
+- 保持管理器标题栏的展开状态
+- 编译期生成语言列表
+- 优化设置图标
+- 正确支持 RTL 语言
+- 强制拒绝列表关闭时不显示提示
+- 调试版增加崩溃遥测（发行版不会带）
+- 修复某些情况下图标消失
+- 设置增加手动创建图标选项
+- Zygisk 版兼容华为设备
+- Zygisk 版兼容中兴设备
+- 尝试在系统注入失败时重新注入
+- 兼容华为鸿蒙系统
