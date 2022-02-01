@@ -1,3 +1,22 @@
+/*
+ * This file is part of LSPosed.
+ *
+ * LSPosed is free software: you can redistribute it and/or modify
+ * it under the terms of the GNU General Public License as published by
+ * the Free Software Foundation, either version 3 of the License, or
+ * (at your option) any later version.
+ *
+ * LSPosed is distributed in the hope that it will be useful,
+ * but WITHOUT ANY WARRANTY; without even the implied warranty of
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+ * GNU General Public License for more details.
+ *
+ * You should have received a copy of the GNU General Public License
+ * along with LSPosed.  If not, see <https://www.gnu.org/licenses/>.
+ *
+ * Copyright (C) 2022 LSPosed Contributors
+ */
+
 //
 // Created by Kotori2 on 2021/12/1.
 //
@@ -89,14 +108,11 @@ ustring obfuscateDex(void *dex, size_t size) {
     return new_dex;
 }
 
-jobject new_sharedmem(JNIEnv* env, jint size) {
-    jclass clazz = env->FindClass("android/os/SharedMemory");
-    auto *ref = env->NewGlobalRef(clazz);
-    jmethodID mid = env->GetStaticMethodID(clazz, "create", "(Ljava/lang/String;I)Landroid/os/SharedMemory;");
-    jstring empty_str = env->NewStringUTF("");
-    jobject new_mem = env->CallStaticObjectMethod(clazz, mid, empty_str, static_cast<jint>(size));
-    env->DeleteGlobalRef(ref);
-    env->DeleteLocalRef(empty_str);
+ScopedLocalRef<jobject> new_sharedmem(JNIEnv* env, jint size) {
+    auto clazz = JNI_FindClass(env, "android/os/SharedMemory");
+    auto mid = JNI_GetStaticMethodID(env, clazz, "create", "(Ljava/lang/String;I)Landroid/os/SharedMemory;");
+    auto empty_str = JNI_NewStringUTF(env, "");
+    auto new_mem = JNI_CallStaticObjectMethod(env, clazz, mid, empty_str, static_cast<jint>(size));
     return new_mem;
 }
 
@@ -133,7 +149,7 @@ Java_org_lsposed_lspd_service_ObfuscationManager_preloadDex(JNIEnv *env, jclass 
     auto new_dex = obfuscateDex(addr, size);
     LOGD("LSPApplicationService::preloadDex: %p, size=%zu", new_dex.data(), new_dex.size());
     auto new_mem = new_sharedmem(env, new_dex.size());
-    lspdDex = env->NewGlobalRef(new_mem);
+    lspdDex = JNI_NewGlobalRef(env, new_mem);
     auto new_fd = ASharedMemory_dupFromJava(env, lspdDex);
     auto new_addr = mmap(nullptr, new_dex.size(), PROT_READ | PROT_WRITE, MAP_SHARED, new_fd, 0);
     if (new_addr == MAP_FAILED) {
@@ -170,7 +186,7 @@ Java_org_lsposed_lspd_service_ObfuscationManager_obfuscateDex(JNIEnv *env, jclas
 
     // create new SharedMem since it cannot be resized
     auto new_mem = new_sharedmem(env, new_dex.size());
-    int new_fd = ASharedMemory_dupFromJava(env, new_mem);
+    int new_fd = ASharedMemory_dupFromJava(env, new_mem.get());
 
     mem = mmap(nullptr, new_dex.size(), PROT_READ | PROT_WRITE, MAP_SHARED, new_fd, 0);
     if (mem == MAP_FAILED) {
@@ -178,5 +194,5 @@ Java_org_lsposed_lspd_service_ObfuscationManager_obfuscateDex(JNIEnv *env, jclas
     }
     memcpy(mem, new_dex.data(), new_dex.size());
     ASharedMemory_setProt(fd, PROT_READ);
-    return new_mem;
+    return new_mem.release();
 }

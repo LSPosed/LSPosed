@@ -15,7 +15,7 @@
  * along with LSPosed.  If not, see <https://www.gnu.org/licenses/>.
  *
  * Copyright (C) 2020 EdXposed Contributors
- * Copyright (C) 2021 LSPosed Contributors
+ * Copyright (C) 2021 - 2022 LSPosed Contributors
  */
 
 #include "yahfa.h"
@@ -36,7 +36,7 @@ namespace lspd {
         std::unordered_set<const void *> hooked_methods_;
         std::shared_mutex hooked_methods_lock_;
 
-        std::vector<std::pair<void *, void*>> jit_movements_;
+        std::vector<std::pair<void *, void *>> jit_movements_;
         std::shared_mutex jit_movements_lock_;
 
         std::string obfuscated_signature_;
@@ -52,12 +52,12 @@ namespace lspd {
         hooked_methods_.insert(art_method);
     }
 
-    void recordJitMovement(void *target, void* backup) {
+    void recordJitMovement(void *target, void *backup) {
         std::unique_lock lk(jit_movements_lock_);
         jit_movements_.emplace_back(target, backup);
     }
 
-    std::vector<std::pair<void*, void*>> getJitMovements() {
+    std::vector<std::pair<void *, void *>> getJitMovements() {
         std::unique_lock lk(jit_movements_lock_);
         return std::move(jit_movements_);
     }
@@ -197,10 +197,9 @@ namespace lspd {
                                    "(Ljava/lang/String;)Ljava/lang/Class;");
         }
         if (my_cl) {
-            auto target = JNI_CallObjectMethod(env, my_cl, kMid, env->NewStringUTF("LspHooker_"));
-            if (target) {
-                return (jclass) target.release();
-            }
+            auto target = JNI_CallObjectMethod(env, my_cl, kMid,
+                                               JNI_NewStringUTF(env, "LspHooker_"));
+            if (target) return (jclass) target.release();
         }
         return nullptr;
     }
