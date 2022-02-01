@@ -52,7 +52,6 @@ import androidx.annotation.Nullable;
 import androidx.appcompat.widget.SearchView;
 import androidx.constraintlayout.widget.ConstraintLayout;
 import androidx.coordinatorlayout.widget.CoordinatorLayout;
-import androidx.core.content.ContextCompat;
 import androidx.fragment.app.Fragment;
 import androidx.navigation.NavOptions;
 import androidx.recyclerview.widget.LinearLayoutManager;
@@ -668,7 +667,7 @@ public class ModulesFragment extends BaseFragment implements ModuleUtil.ModuleLi
 
         public void fullRefresh() {
             runAsync(() -> {
-                setLoaded(false);
+                setLoaded(null, false);
                 moduleUtil.reloadInstalledModules();
                 refresh();
             });
@@ -678,7 +677,7 @@ public class ModulesFragment extends BaseFragment implements ModuleUtil.ModuleLi
             var modules = moduleUtil.getModules();
             if (modules == null) return;
             Comparator<PackageInfo> cmp = AppHelper.getAppListComparator(0, pm);
-            setLoaded(false);
+            setLoaded(null, false);
             var tmpList = new ArrayList<ModuleUtil.InstalledModule>();
             modules.values().parallelStream()
                     .sorted((a, b) -> {
@@ -719,8 +718,9 @@ public class ModulesFragment extends BaseFragment implements ModuleUtil.ModuleLi
         };
 
         @SuppressLint("NotifyDataSetChanged")
-        private void setLoaded(boolean loaded) {
+        private void setLoaded(List<ModuleUtil.InstalledModule> list, boolean loaded) {
             runOnUiThread(() -> {
+                if (list != null) showList = list;
                 isLoaded = loaded;
                 notifyDataSetChanged();
             });
@@ -778,8 +778,7 @@ public class ModulesFragment extends BaseFragment implements ModuleUtil.ModuleLi
             @Override
             protected void publishResults(CharSequence constraint, FilterResults results) {
                 //noinspection unchecked
-                showList = (List<ModuleUtil.InstalledModule>) results.values;
-                setLoaded(true);
+                setLoaded((List<ModuleUtil.InstalledModule>) results.values, true);
             }
         }
     }

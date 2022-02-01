@@ -19,6 +19,7 @@
 
 package org.lsposed.manager.ui.fragment;
 
+import android.annotation.SuppressLint;
 import android.graphics.Typeface;
 import android.os.Build;
 import android.os.Bundle;
@@ -325,14 +326,18 @@ public class RepoFragment extends BaseFragment implements RepoLoader.RepoListene
             return showList.size();
         }
 
-        private void setLoaded(boolean isLoaded) {
-            this.isLoaded = isLoaded;
-            runOnUiThread(this::notifyDataSetChanged);
+        @SuppressLint("NotifyDataSetChanged")
+        private void setLoaded(List<OnlineModule> list, boolean isLoaded) {
+            runOnUiThread(() -> {
+                showList = list;
+                this.isLoaded = isLoaded;
+                notifyDataSetChanged();
+            });
         }
 
         public void setData(Collection<OnlineModule> modules) {
             if (modules == null) return;
-            setLoaded(false);
+            setLoaded(null, false);
             int sort = App.getPreferences().getInt("repo_sort", 0);
             boolean upgradableFirst = App.getPreferences().getBoolean("upgradable_first", true);
             ConcurrentHashMap<String, Boolean> upgradable = new ConcurrentHashMap<>();
@@ -356,7 +361,7 @@ public class RepoFragment extends BaseFragment implements RepoLoader.RepoListene
 
         public void fullRefresh() {
             runAsync(() -> {
-                setLoaded(false);
+                setLoaded(null, false);
                 repoLoader.loadRemoteData();
                 refresh();
             });
@@ -422,8 +427,7 @@ public class RepoFragment extends BaseFragment implements RepoLoader.RepoListene
             @Override
             protected void publishResults(CharSequence constraint, FilterResults results) {
                 //noinspection unchecked
-                showList = (List<OnlineModule>) results.values;
-                setLoaded(true);
+                setLoaded((List<OnlineModule>) results.values, true);
             }
         }
     }
