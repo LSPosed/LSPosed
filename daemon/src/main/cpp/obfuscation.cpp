@@ -4,6 +4,7 @@
 
 #include <jni.h>
 #include <unistd.h>
+#include <random>
 #include <unordered_map>
 #include <sys/mman.h>
 #include <android/sharedmem.h>
@@ -12,8 +13,8 @@
 #include <fcntl.h>
 #include "slicer/reader.h"
 #include "slicer/writer.h"
-// TODO: BAD
-#include "../../../../core/src/main/cpp/main/include/config.h"
+#include "config.h"
+#include "jni_helper.h"
 
 class WA: public dex::Writer::Allocator {
     std::unordered_map<void*, size_t> allocated_;
@@ -29,16 +30,51 @@ public:
     }
 };
 
+static std::string obfuscated_signature;
+static const std::string old_signature = "Lde/robv/android/xposed";
+
+extern "C"
+JNIEXPORT jstring JNICALL
+Java_org_lsposed_lspd_service_ObfuscationManager_getObfuscatedSignature(JNIEnv *env, jclass ) {
+    if (!obfuscated_signature.empty()) {
+        return env->NewStringUTF(obfuscated_signature.c_str());
+    }
+
+    static auto& chrs = "abcdefghijklmnopqrstuvwxyz"
+                        "ABCDEFGHIJKLMNOPQRSTUVWXYZ";
+
+    thread_local static std::mt19937 rg{std::random_device{}()};
+    thread_local static std::uniform_int_distribution<std::string::size_type> pick(0, sizeof(chrs) - 2);
+    thread_local static std::uniform_int_distribution<std::string::size_type> choose_slash(0, 10);
+
+    size_t length = old_signature.size();
+    obfuscated_signature.reserve(length);
+    obfuscated_signature += "L";
+
+    for (size_t i = 1; i < length; i++) {
+        if (choose_slash(rg) > 8 &&                         // 80% alphabet + 20% slashes
+            obfuscated_signature[i - 1] != '/' &&               // slashes could not stick together
+            i != 1 &&                                           // the first character should not be slash
+            i != length - 1) {                                  // and the last character
+            obfuscated_signature += "/";
+        } else {
+            obfuscated_signature += chrs[pick(rg)];
+        }
+    }
+    LOGD("ObfuscationManager.getObfuscatedSignature: %s", obfuscated_signature.c_str());
+    return env->NewStringUTF(obfuscated_signature.c_str());
+}
+
 using ustring = std::basic_string<uint8_t>;
 ustring obfuscateDex(void *dex, size_t size) {
-    const char* new_sig = "Lac/ksmm/notioss/lspdaa";
+    const char* new_sig = obfuscated_signature.c_str();
     dex::Reader reader{reinterpret_cast<dex::u1*>(dex), size};
 
     reader.CreateFullIr();
     auto ir = reader.GetIr();
     for (auto &i: ir->strings) {
         const char *s = i->c_str();
-        char* p = const_cast<char *>(strstr(s, "Lde/robv/android/xposed"));
+        char* p = const_cast<char *>(strstr(s, old_signature.c_str()));
         if (p) {
             memcpy(p, new_sig, strlen(new_sig));
         }
@@ -53,8 +89,6 @@ ustring obfuscateDex(void *dex, size_t size) {
     return new_dex;
 }
 
-static jobject lspdDex = nullptr;
-
 jobject new_sharedmem(JNIEnv* env, jint size) {
     jclass clazz = env->FindClass("android/os/SharedMemory");
     auto *ref = env->NewGlobalRef(clazz);
@@ -66,11 +100,14 @@ jobject new_sharedmem(JNIEnv* env, jint size) {
     return new_mem;
 }
 
+static jobject lspdDex = nullptr;
+static std::mutex dex_lock;
+
 extern "C"
 JNIEXPORT jint JNICALL
-Java_org_lsposed_lspd_service_LSPApplicationService_preloadDex(JNIEnv *env, jclass ) {
+Java_org_lsposed_lspd_service_ObfuscationManager_preloadDex(JNIEnv *env, jclass ) {
     using namespace std::string_literals;
-    // TODO: Lock?
+    std::lock_guard lg(dex_lock);
     if (lspdDex) return ASharedMemory_dupFromJava(env, lspdDex);
     std::string dex_path = "/data/adb/modules/"s + lspd::moduleName + "/" + lspd::kDexPath;
 
@@ -109,7 +146,7 @@ Java_org_lsposed_lspd_service_LSPApplicationService_preloadDex(JNIEnv *env, jcla
 
 extern "C"
 JNIEXPORT jlong JNICALL
-Java_org_lsposed_lspd_service_LSPApplicationService_getPreloadedDexSize(JNIEnv *env, jclass ) {
+Java_org_lsposed_lspd_service_ObfuscationManager_getPreloadedDexSize(JNIEnv *env, jclass ) {
     if (lspdDex) {
         auto fd = ASharedMemory_dupFromJava(env, lspdDex);
         return ASharedMemory_getSize(fd);
@@ -119,7 +156,7 @@ Java_org_lsposed_lspd_service_LSPApplicationService_getPreloadedDexSize(JNIEnv *
 
 extern "C"
 JNIEXPORT jobject
-Java_org_lsposed_lspd_service_LSPApplicationService_obfuscateDex(JNIEnv *env, jclass /*clazz*/,
+Java_org_lsposed_lspd_service_ObfuscationManager_obfuscateDex(JNIEnv *env, jclass /*clazz*/,
                                                        jobject memory) {
     int fd = ASharedMemory_dupFromJava(env, memory);
     auto size = ASharedMemory_getSize(fd);

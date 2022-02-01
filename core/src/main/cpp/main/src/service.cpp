@@ -120,6 +120,8 @@ namespace lspd {
         read_long_method_ = JNI_GetMethodID(env, parcel_class_, "readLong", "()J");
         read_strong_binder_method_ = JNI_GetMethodID(env, parcel_class_, "readStrongBinder",
                                                      "()Landroid/os/IBinder;");
+        read_string_method_ = JNI_GetMethodID(env, parcel_class_, "readString",
+                                                     "()Ljava/lang/String;");
         read_file_descriptor_method_ = JNI_GetMethodID(env, parcel_class_, "readFileDescriptor",
                                                        "()Landroid/os/ParcelFileDescriptor;");
 //        createStringArray_ = env->GetMethodID(parcel_class_, "createStringArray",
@@ -307,7 +309,7 @@ namespace lspd {
         return app_binder;
     }
 
-    std::tuple<int, size_t> Service::RequestLSPDex(JNIEnv *env, const ScopedLocalRef<jobject> &binder) {
+    std::tuple<int, size_t, std::string> Service::RequestLSPDex(JNIEnv *env, const ScopedLocalRef<jobject> &binder) {
         auto data = JNI_CallStaticObjectMethod(env, parcel_class_, obtain_method_);
         auto reply = JNI_CallStaticObjectMethod(env, parcel_class_, obtain_method_);
         auto res = JNI_CallBooleanMethod(env, binder, transact_method_,
@@ -316,15 +318,18 @@ namespace lspd {
                                          reply, 0);
         if (!res) {
             LOGE("Service::RequestLSPDex: transaction failed?");
-            return {-1, 0};
+            return {-1, 0, ""};
         }
         auto parcel_fd = JNI_CallObjectMethod(env, reply, read_file_descriptor_method_);
         int fd = JNI_CallIntMethod(env, parcel_fd, get_fd_method);
         auto size = JNI_CallLongMethod(env, reply, read_long_method_);
+        auto signature = JNI_CallObjectMethod(env, reply, read_string_method_);
         JNI_CallVoidMethod(env, data, recycleMethod_);
         JNI_CallVoidMethod(env, reply, recycleMethod_);
 
-        LOGD("Service::RequestLSPDex fd=%d, size=%zu", fd, size);
-        return {fd, size};
+        JUTFString sign(env, static_cast<jstring>(signature.get()));
+
+        LOGD("Service::RequestLSPDex fd=%d, size=%zu, sign=%s", fd, size, sign.get());
+        return {fd, size, sign.get()};
     }
 }  // namespace lspd

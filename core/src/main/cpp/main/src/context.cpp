@@ -128,7 +128,7 @@ namespace lspd {
 
         RegisterResourcesHook(env);
         RegisterArtClassLinker(env);
-        RegisterYahfa(env);
+        RegisterYahfa(env, obfuscated_signature_);
         RegisterPendingHooks(env);
         RegisterNativeAPI(env);
     }
@@ -195,6 +195,7 @@ namespace lspd {
             instance->HookBridge(*this, env);
 
             if (binder) {
+                obfuscated_signature_ = std::move(std::get<2>(dex));
                 InstallInlineHooks();
                 Init(env);
                 FindAndCall(env, "forkSystemServerPost", "(Landroid/os/IBinder;)V", binder);
@@ -256,6 +257,7 @@ namespace lspd {
             InstallInlineHooks();
             auto dex = instance->RequestLSPDex(env, binder);
             LoadDex(env, std::get<0>(dex), std::get<1>(dex));
+            obfuscated_signature_ = std::move(std::get<2>(dex));
             Init(env);
             LOGD("Done prepare");
             FindAndCall(env, "forkAndSpecializePost",
