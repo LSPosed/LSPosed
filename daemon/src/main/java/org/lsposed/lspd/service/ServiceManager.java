@@ -98,6 +98,7 @@ public class ServiceManager {
         logcatService.start();
 
         Process.setThreadPriority(Process.THREAD_PRIORITY_FOREGROUND);
+        LSPApplicationService.preloadDex();
         Looper.prepareMainLooper();
         mainService = new LSPosedService();
         applicationService = new LSPApplicationService();

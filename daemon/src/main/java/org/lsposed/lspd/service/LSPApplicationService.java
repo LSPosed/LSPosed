@@ -23,13 +23,16 @@ import static org.lsposed.lspd.service.ServiceManager.TAG;
 
 import android.os.Bundle;
 import android.os.IBinder;
+import android.os.Parcel;
 import android.os.ParcelFileDescriptor;
 import android.os.RemoteException;
+import android.os.SharedMemory;
 import android.util.Log;
 import android.util.Pair;
 
 import org.lsposed.lspd.models.Module;
 
+import java.io.IOException;
 import java.util.Collections;
 import java.util.List;
 import java.util.Map;
@@ -37,10 +40,29 @@ import java.util.Set;
 import java.util.concurrent.ConcurrentHashMap;
 
 public class LSPApplicationService extends ILSPApplicationService.Stub {
+    private final static int DEX_TRANSACTION_CODE = 1310096052;
     // <uid, pid>
     private final static Set<Pair<Integer, Integer>> cache = ConcurrentHashMap.newKeySet();
     private final static Map<Integer, IBinder> handles = new ConcurrentHashMap<>();
     private final static Set<IBinder.DeathRecipient> recipients = ConcurrentHashMap.newKeySet();
+
+    @Override
+    public boolean onTransact(int code, Parcel data, Parcel reply, int flags) throws android.os.RemoteException {
+        Log.i(TAG, "LSPApplicationService.onTransact: code=" + code);
+        if (code == DEX_TRANSACTION_CODE) {
+            try {
+                ParcelFileDescriptor pfd = ParcelFileDescriptor.fromFd(preloadDex());
+                reply.writeFileDescriptor(pfd.getFileDescriptor());
+                reply.writeLong(getPreloadedDexSize());
+            } catch (IOException ignored) {
+                Log.e(TAG, "LSPApplicationService.onTransact: ParcelFileDescriptor.fromFd failed");
+                return false;
+            }
+            return true;
+        } else {
+            return super.onTransact(code, data, reply, flags);
+        }
+    }
 
     public boolean registerHeartBeat(int uid, int pid, IBinder handle) {
         try {
@@ -64,6 +86,14 @@ public class LSPApplicationService extends ILSPApplicationService.Stub {
             return false;
         }
     }
+
+    static native SharedMemory obfuscateDex(SharedMemory memory);
+
+    // preload lspd dex only, on daemon startup.
+    // it will cache the result, so we could obtain it back on startup.
+    static native int preloadDex();
+
+    static native long getPreloadedDexSize();
 
     @Override
     public List<Module> getModulesList(String processName) throws RemoteException {

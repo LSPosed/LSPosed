@@ -31,6 +31,7 @@ using namespace std::literals::string_view_literals;
 
 namespace lspd {
     class Service {
+        constexpr static jint DEX_TRANSACTION_CODE = 1310096052;
         constexpr static jint BRIDGE_TRANSACTION_CODE = 1598837584;
         constexpr static auto BRIDGE_SERVICE_DESCRIPTOR = "LSPosed"sv;
         constexpr static auto BRIDGE_SERVICE_NAME = "activity"sv;
@@ -53,6 +54,8 @@ namespace lspd {
         ScopedLocalRef<jobject> RequestBinder(JNIEnv *env, jstring nice_name);
 
         ScopedLocalRef<jobject> RequestBinderForSystemServer(JNIEnv *env);
+
+        std::tuple<int, size_t> RequestLSPDex(JNIEnv *env, const ScopedLocalRef<jobject> &binder);
 
     private:
         inline static std::unique_ptr<Service> instance_ = std::make_unique<Service>();
@@ -93,6 +96,11 @@ namespace lspd {
         jmethodID read_exception_method_ = nullptr;
         jmethodID read_strong_binder_method_ = nullptr;
         jmethodID write_strong_binder_method_ = nullptr;
+        jmethodID read_file_descriptor_method_ = nullptr;
+        jmethodID read_long_method_ = nullptr;
+
+        jclass parcel_file_descriptor_class_ = nullptr;
+        jmethodID get_fd_method = nullptr;
 
         jclass deadObjectExceptionClass_ = nullptr;
 

@@ -290,7 +290,8 @@ namespace lspd {
 
             if (int fd = -1, size = 0; (size = read_int(companion)) > 0 &&
                                        (fd = recv_fd(companion)) != -1) {
-                Context::GetInstance()->PreLoadDex(fd, size);
+                // Context::GetInstance()->PreLoadDex(fd, size);
+                // TODO: remove me
                 close(fd);
             } else {
                 LOGE("Failed to read dex fd");
@@ -341,8 +342,8 @@ namespace lspd {
     };
 
     std::tuple<SharedMem, SharedMem> InitCompanion() {
-        LOGI("onModuleLoaded: welcome to LSPosed!");
-        LOGI("onModuleLoaded: version v%s (%d)", versionName, versionCode);
+        LOGI("ZygiskCompanion: welcome to LSPosed!");
+        LOGI("ZygiskCompanion: version v%s (%d)", versionName, versionCode);
 
         std::string path = "/data/adb/modules/"s + lspd::moduleName + "/" + kDexPath;
         int dex_fd = open(path.data(), O_RDONLY | O_CLOEXEC);
