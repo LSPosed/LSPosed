@@ -210,9 +210,11 @@ public class ConfigFileManager {
     private static void putFds(Map<String, ParcelFileDescriptor> map, Path path) throws IOException {
         Files.walkFileTree(path, new SimpleFileVisitor<>() {
             public FileVisitResult visitFile(Path file, BasicFileAttributes attrs) throws IOException {
-                var name = path.getParent().relativize(file).toString();
-                var fd = ParcelFileDescriptor.open(file.toFile(), ParcelFileDescriptor.MODE_READ_ONLY);
-                map.put(name, fd);
+                if (Files.isRegularFile(file)) {
+                    var name = path.getParent().relativize(file).toString();
+                    var fd = ParcelFileDescriptor.open(file.toFile(), ParcelFileDescriptor.MODE_READ_ONLY);
+                    map.put(name, fd);
+                }
                 return FileVisitResult.CONTINUE;
             }
         });

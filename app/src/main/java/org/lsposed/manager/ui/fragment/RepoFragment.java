@@ -329,7 +329,7 @@ public class RepoFragment extends BaseFragment implements RepoLoader.RepoListene
         @SuppressLint("NotifyDataSetChanged")
         private void setLoaded(List<OnlineModule> list, boolean isLoaded) {
             runOnUiThread(() -> {
-                showList = list;
+                if (list != null) showList = list;
                 this.isLoaded = isLoaded;
                 notifyDataSetChanged();
             });
