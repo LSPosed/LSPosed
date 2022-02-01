@@ -30,10 +30,6 @@
 #include "jni/native_api.h"
 #include "service.h"
 #include "symbol_cache.h"
-#include "slicer/reader.h"
-#include "slicer/writer.h"
-#include "slicer/dex_utf8.h"
-#include "Obfuscation.h"
 
 #include <linux/fs.h>
 #include <fcntl.h>
