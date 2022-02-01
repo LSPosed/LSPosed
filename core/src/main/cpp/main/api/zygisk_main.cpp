@@ -328,7 +328,7 @@ namespace lspd {
                 auto *process = env_->FindClass("android/os/Process");
                 auto *set_argv0 = env_->GetStaticMethodID(process, "setArgV0",
                                                           "(Ljava/lang/String;)V");
-                env_->CallStaticVoidMethod(process, set_argv0, env_->NewStringUTF("system_server"));
+                JNI_CallStaticVoidMethod(env_, process, set_argv0, JNI_NewStringUTF(env_, "system_server"));
             }
             Context::GetInstance()->OnNativeForkSystemServerPost(env_);
         }

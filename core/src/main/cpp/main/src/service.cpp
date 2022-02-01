@@ -14,7 +14,7 @@
  * You should have received a copy of the GNU General Public License
  * along with LSPosed.  If not, see <https://www.gnu.org/licenses/>.
  *
- * Copyright (C) 2021 LSPosed Contributors
+ * Copyright (C) 2021 - 2022 LSPosed Contributors
  */
 
 //
@@ -215,8 +215,7 @@ namespace lspd {
             return {env, nullptr};
         }
 
-        // TODO: memory leak?
-        auto *bridge_service_name = env->NewStringUTF(BRIDGE_SERVICE_NAME.data());
+        auto bridge_service_name = JNI_NewStringUTF(env, BRIDGE_SERVICE_NAME.data());
         auto bridge_service = JNI_CallStaticObjectMethod(env, service_manager_class_,
                                                          get_service_method_, bridge_service_name);
         if (!bridge_service) {
@@ -229,7 +228,7 @@ namespace lspd {
         auto data = JNI_CallStaticObjectMethod(env, parcel_class_, obtain_method_);
         auto reply = JNI_CallStaticObjectMethod(env, parcel_class_, obtain_method_);
 
-        auto *descriptor = env->NewStringUTF(BRIDGE_SERVICE_DESCRIPTOR.data());
+        auto descriptor = JNI_NewStringUTF(env, BRIDGE_SERVICE_DESCRIPTOR.data());
         JNI_CallVoidMethod(env, data, write_interface_token_method_, descriptor);
         JNI_CallVoidMethod(env, data, write_int_method_, BRIDGE_ACTION_GET_BINDER);
         JNI_CallVoidMethod(env, data, write_string_method_, nice_name);
@@ -261,7 +260,7 @@ namespace lspd {
         }
         // Get Binder for LSPSystemServerService.
         // The binder itself was inject into system service "serial"
-        auto *bridge_service_name = env->NewStringUTF(SYSTEM_SERVER_BRIDGE_SERVICE_NAME.data());
+        auto bridge_service_name = JNI_NewStringUTF(env, SYSTEM_SERVER_BRIDGE_SERVICE_NAME);
         ScopedLocalRef<jobject> binder{env, nullptr};
         for (int i = 0; i < 3; ++i) {
             binder = JNI_CallStaticObjectMethod(env, service_manager_class_,
@@ -285,7 +284,7 @@ namespace lspd {
 
         JNI_CallVoidMethod(env, data, write_int_method_, getuid()); // data.writeInt(uid)
         JNI_CallVoidMethod(env, data, write_int_method_, getpid());
-        JNI_CallVoidMethod(env, data, write_string_method_, env->NewStringUTF("android"));
+        JNI_CallVoidMethod(env, data, write_string_method_, JNI_NewStringUTF(env, "android"));
         JNI_CallVoidMethod(env, data, write_strong_binder_method_, heart_beat_binder);
 
         auto res = JNI_CallBooleanMethod(env, binder, transact_method_,

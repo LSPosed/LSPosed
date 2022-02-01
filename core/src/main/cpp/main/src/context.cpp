@@ -15,7 +15,7 @@
  * along with LSPosed.  If not, see <https://www.gnu.org/licenses/>.
  *
  * Copyright (C) 2020 EdXposed Contributors
- * Copyright (C) 2021 LSPosed Contributors
+ * Copyright (C) 2021 - 2022 LSPosed Contributors
  */
 
 #include <jni.h>
@@ -147,7 +147,7 @@ namespace lspd {
         }
         if (mid) [[likely]] {
             auto target = JNI_CallObjectMethod(env, class_loader, mid,
-                                               env->NewStringUTF(class_name.data()));
+                                               JNI_NewStringUTF(env, class_name.data()));
             if (target) {
                 return target;
             }

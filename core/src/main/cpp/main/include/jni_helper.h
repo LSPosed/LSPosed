@@ -15,7 +15,7 @@
  * along with LSPosed.  If not, see <https://www.gnu.org/licenses/>.
  *
  * Copyright (C) 2020 EdXposed Contributors
- * Copyright (C) 2021 LSPosed Contributors
+ * Copyright (C) 2021 - 2022 LSPosed Contributors
  */
 
 #pragma once
@@ -189,6 +189,10 @@ inline auto wrap_scope(JNIEnv *env, T &&x) {
     if constexpr (std::is_convertible_v<T, jobject>) {
         return ScopedLocalRef(env, std::forward<T>(x));
     } else return x;
+}
+
+inline auto JNI_NewStringUTF(JNIEnv *env, std::string_view sv) {
+    return ScopedLocalRef(env, env->NewStringUTF(sv.data()));
 }
 
 template<typename Func, typename ...Args>
