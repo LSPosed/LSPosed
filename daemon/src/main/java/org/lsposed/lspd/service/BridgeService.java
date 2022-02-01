@@ -16,7 +16,7 @@ import java.util.Map;
 
 public class BridgeService {
 
-    private static final int TRANSACTION_CODE = ('_' << 24) | ('L' << 16) | ('S' << 8) | 'P';
+    static final int TRANSACTION_CODE = ('_' << 24) | ('L' << 16) | ('S' << 8) | 'P'; // 1598837584
     private static final String DESCRIPTOR = "LSPosed";
     private static final String SERVICE_NAME = "activity";
 

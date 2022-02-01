@@ -59,10 +59,6 @@ namespace lspd {
 
         void OnNativeForkSystemServerPre(JNIEnv *env);
 
-        void PreLoadDex(std::string_view dex_paths);
-
-        void PreLoadDex(int fd, std::size_t size);
-
         void Init();
 
     private:
@@ -115,11 +111,9 @@ namespace lspd {
 
         PreloadedDex dex_{};
 
-        void ObfuscateDex();
-
         Context() {}
 
-        void LoadDex(JNIEnv *env);
+        void LoadDex(JNIEnv *env, int fd, size_t size);
 
         void Init(JNIEnv *env);
 

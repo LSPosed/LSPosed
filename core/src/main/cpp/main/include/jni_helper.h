@@ -243,6 +243,18 @@ inline auto JNI_CallObjectMethod(JNIEnv *env, const Object &obj, Args &&... args
 
 template<ScopeOrObject Object, typename ...Args>
 [[maybe_unused]]
+inline auto JNI_CallIntMethod(JNIEnv *env, const Object &obj, Args &&... args) {
+    return JNI_SafeInvoke(env, &JNIEnv::CallIntMethod, obj, std::forward<Args>(args)...);
+}
+
+template<ScopeOrObject Object, typename ...Args>
+[[maybe_unused]]
+inline auto JNI_CallLongMethod(JNIEnv *env, const Object &obj, Args &&... args) {
+    return JNI_SafeInvoke(env, &JNIEnv::CallLongMethod, obj, std::forward<Args>(args)...);
+}
+
+template<ScopeOrObject Object, typename ...Args>
+[[maybe_unused]]
 inline auto JNI_CallVoidMethod(JNIEnv *env, const Object &obj, Args &&...args) {
     return JNI_SafeInvoke(env, &JNIEnv::CallVoidMethod, obj, std::forward<Args>(args)...);
 }

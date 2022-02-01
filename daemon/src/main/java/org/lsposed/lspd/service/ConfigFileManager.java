@@ -296,7 +296,7 @@ public class ConfigFileManager {
                 var byteBuffer = memory.mapReadWrite();
                 Channels.newChannel(in).read(byteBuffer);
                 SharedMemory.unmap(byteBuffer);
-                memory = ObfuscationService.obfuscateDex(memory);
+                memory = LSPApplicationService.obfuscateDex(memory);
                 memory.setProtect(OsConstants.PROT_READ);
                 preLoadedDexes.add(memory);
             } catch (IOException | ErrnoException e) {

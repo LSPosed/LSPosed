@@ -214,17 +214,4 @@ public class BridgeService {
             reply.recycle();
         }
     }
-
-    @SuppressWarnings("unused")
-    public static IBinder getApplicationServiceForSystemServer(IBinder binder, IBinder heartBeat) {
-        if (binder == null || heartBeat == null) return null;
-        try {
-            var service = ILSPSystemServerService.Stub.asInterface(binder);
-            var applicationService = service.requestApplicationService(Process.myUid(), Process.myPid(), "android", heartBeat);
-            if (applicationService != null) return applicationService.asBinder();
-        } catch (Throwable e) {
-            Log.e(TAG, Log.getStackTraceString(e));
-        }
-        return null;
-    }
 }

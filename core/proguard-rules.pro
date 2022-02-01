@@ -12,7 +12,6 @@
 }
 -keepclasseswithmembers class org.lsposed.lspd.service.BridgeService {
     public static boolean *(android.os.IBinder, int, long, long, int);
-    public static android.os.IBinder getApplicationServiceForSystemServer(android.os.IBinder, android.os.IBinder);
 }
 
 -assumenosideeffects class android.util.Log {

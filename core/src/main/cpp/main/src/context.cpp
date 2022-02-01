@@ -68,60 +68,26 @@ namespace lspd {
     }
 
     Context::PreloadedDex::PreloadedDex(int fd, std::size_t size) {
-        auto *old = mmap(nullptr, size, PROT_READ, MAP_SHARED, fd, 0);
-        auto *addr = mmap(nullptr, size, PROT_READ | PROT_WRITE, MAP_PRIVATE | MAP_ANONYMOUS, -1, 0);
+        LOGD("Context::PreloadedDex::PreloadedDex: fd=%d, size=%zu", fd, size);
+        auto *addr = mmap(nullptr, size, PROT_READ, MAP_SHARED, fd, 0);
 
-        if (old != MAP_FAILED && addr != MAP_FAILED) {
-            memmove(addr, old, size);
+        if (addr != MAP_FAILED) {
             addr_ = addr;
             size_ = size;
         } else {
-            if (old == MAP_FAILED) LOGE("Old failed");
-            if (addr == MAP_FAILED) LOGE("addr failed");
             LOGE("Read dex failed: %s", strerror(errno));
         }
-        munmap(old, size);
     }
 
     Context::PreloadedDex::~PreloadedDex() {
         if (*this) munmap(addr_, size_);
     }
 
-    void Context::ObfuscateDex() {
-        if (!dex_) [[unlikely]] return;
+    void Context::LoadDex(JNIEnv *env, int fd, size_t size) {
+        LOGD("Context::LoadDex: %d", fd);
+        // map fd to memory. fd should be created with ASharedMemory_create.
+        dex_ = PreloadedDex(fd, size);  // for RAII...
 
-        auto dex = Obfuscation::obfuscateDex(dex_.data(), dex_.size());
-        // TODO: multiple memory copy prevention
-        auto *mem = mmap(nullptr, dex.size(), PROT_READ | PROT_WRITE, MAP_PRIVATE | MAP_ANONYMOUS, -1, 0);
-        memmove(mem, dex.data(), dex.size());
-        PreloadedDex new_dex(mem, dex.size());
-        std::swap(dex_, new_dex);
-        LOGD("Context::ObfuscateDex: %p, size=%zu", reinterpret_cast<dex::u1*>(dex_.data()), dex.size());
-    }
-
-    void Context::PreLoadDex(int fd, std::size_t size) {
-        dex_ = PreloadedDex{fd, size};
-        ObfuscateDex();
-    }
-
-    void Context::PreLoadDex(std::string_view dex_path) {
-        if (dex_) [[unlikely]] return;
-
-        std::unique_ptr<FILE, decltype(&fclose)> f{fopen(dex_path.data(), "rb"), &fclose};
-
-        if (!f) {
-            LOGE("Fail to open dex from %s", dex_path.data());
-            return;
-        } else {
-            fseek(f.get(), 0, SEEK_END);
-            auto size = ftell(f.get());
-            rewind(f.get());
-            PreLoadDex(fileno(f.get()), size);
-        }
-        LOGD("Loaded %s with size %zu", dex_path.data(), dex_.size());
-    }
-
-    void Context::LoadDex(JNIEnv *env) {
         auto classloader = JNI_FindClass(env, "java/lang/ClassLoader");
         auto getsyscl_mid = JNI_GetStaticMethodID(
                 env, classloader, "getSystemClassLoader", "()Ljava/lang/ClassLoader;");
@@ -134,8 +100,7 @@ namespace lspd {
         auto initMid = JNI_GetMethodID(env, in_memory_classloader, "<init>",
                                        "(Ljava/nio/ByteBuffer;Ljava/lang/ClassLoader;)V");
         auto byte_buffer_class = JNI_FindClass(env, "java/nio/ByteBuffer");
-        auto dex = std::move(dex_);
-        auto dex_buffer = env->NewDirectByteBuffer(dex.data(), dex.size());
+        auto dex_buffer = env->NewDirectByteBuffer(dex_.data(), dex_.size());
         if (auto my_cl = JNI_NewObject(env, in_memory_classloader, initMid,
                                        dex_buffer, sys_classloader)) {
             inject_class_loader_ = JNI_NewGlobalRef(env, my_cl);
@@ -226,9 +191,13 @@ namespace lspd {
     void
     Context::OnNativeForkSystemServerPost(JNIEnv *env) {
         if (!skip_) {
-            LoadDex(env);
-            Service::instance()->HookBridge(*this, env);
-            auto binder = Service::instance()->RequestBinderForSystemServer(env);
+            auto *instance = Service::instance();
+            auto binder = instance->RequestBinderForSystemServer(env);
+            // TODO: binder could be not available
+            auto dex = instance->RequestLSPDex(env, binder);
+            LoadDex(env, std::get<0>(dex), std::get<1>(dex));
+            instance->HookBridge(*this, env);
+
             if (binder) {
                 InstallInlineHooks();
                 Init(env);
@@ -284,11 +253,13 @@ namespace lspd {
     Context::OnNativeForkAndSpecializePost(JNIEnv *env, jstring nice_name,
                                            jstring app_data_dir) {
         const JUTFString process_name(env, nice_name);
+        auto *instance = Service::instance();
         auto binder = skip_ ? ScopedLocalRef<jobject>{env, nullptr}
-                            : Service::instance()->RequestBinder(env, nice_name);
+                            : instance->RequestBinder(env, nice_name);
         if (binder) {
             InstallInlineHooks();
-            LoadDex(env);
+            auto dex = instance->RequestLSPDex(env, binder);
+            LoadDex(env, std::get<0>(dex), std::get<1>(dex));
             Init(env);
             LOGD("Done prepare");
             FindAndCall(env, "forkAndSpecializePost",

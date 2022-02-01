@@ -43,11 +43,6 @@ namespace lspd {
             LOGI("onModuleLoaded: version v%s (%d)", versionName, versionCode);
             InitSymbolCache(nullptr);
             Context::GetInstance()->Init();
-            if constexpr (isDebug) {
-                Context::GetInstance()->PreLoadDex("/system/" + kDexPath);
-            } else {
-                Context::GetInstance()->PreLoadDex(magiskPath + '/' + kDexPath);
-            }
         }
 
         void nativeForkAndSpecializePre(JNIEnv *env, jclass, jint *_uid, jint *,
