@@ -226,26 +226,54 @@ public class ConfigFileManager {
                     Log.w(TAG, name, e);
                 }
             });
-            var name = "full.log";
-            try (var is = new ProcessBuilder("logcat", "-d").start().getInputStream()) {
-                os.putNextEntry(new ZipEntry(name));
-                transfer(is, os);
-                os.closeEntry();
-            } catch (IOException e) {
-                Log.w(TAG, name, e);
+            {
+                var name = "full.log";
+                try (var is = new ProcessBuilder("logcat", "-d").start().getInputStream()) {
+                    os.putNextEntry(new ZipEntry(name));
+                    transfer(is, os);
+                    os.closeEntry();
+                } catch (IOException e) {
+                    Log.w(TAG, name, e);
+                }
             }
-            name = "dmesg.log";
-            try (var is = new ProcessBuilder("dmesg").start().getInputStream()) {
-                os.putNextEntry(new ZipEntry(name));
-                transfer(is, os);
-                os.closeEntry();
-            } catch (IOException e) {
-                Log.w(TAG, name, e);
+            {
+                var name = "dmesg.log";
+                try (var is = new ProcessBuilder("dmesg").start().getInputStream()) {
+                    os.putNextEntry(new ZipEntry(name));
+                    transfer(is, os);
+                    os.closeEntry();
+                } catch (IOException e) {
+                    Log.w(TAG, name, e);
+                }
             }
+            var magiskDataDir = Paths.get("/data/adb");
+            Files.list(magiskDataDir.resolve("modules")).forEach(p -> {
+                if (!Files.exists(p.resolve("disable"))) {
+                    var prop = p.resolve("module.prop");
+                    if (Files.exists(prop)) {
+                        var name = magiskDataDir.relativize(prop).toString();
+                        try (var is = new FileInputStream(prop.toFile())) {
+                            os.putNextEntry(new ZipEntry(name));
+                            transfer(is, os);
+                            os.closeEntry();
+                        } catch (IOException e) {
+                            Log.w(TAG, name, e);
+                        }
+                    }
+                }
+            });
+            ConfigManager.getInstance().exportScopes(os);
         } catch (Throwable e) {
             Log.w(TAG, "get log", e);
             throw new RemoteException(Log.getStackTraceString(e));
         }
+        logs.forEach((name, fd) -> {
+            try {
+                fd.close();
+            } catch (IOException e) {
+                Log.w(TAG, name, e);
+            }
+        });
     }
 
     private static void putFds(Map<String, ParcelFileDescriptor> map, Path path) throws IOException {
