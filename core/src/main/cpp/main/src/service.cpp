@@ -133,7 +133,7 @@ namespace lspd {
             LOGE("ParcelFileDescriptor not found");
             return;
         }
-        get_fd_method = JNI_GetMethodID(env, parcel_file_descriptor_class_, "getFd", "()I");
+        detach_fd_method_ = JNI_GetMethodID(env, parcel_file_descriptor_class_, "detachFd", "()I");
 
         if (auto dead_object_exception_class = JNI_FindClass(env,
                                                              "android/os/DeadObjectException")) {
@@ -299,8 +299,6 @@ namespace lspd {
         if (res) {
             JNI_CallVoidMethod(env, reply, read_exception_method_);
             app_binder = JNI_CallObjectMethod(env, reply, read_strong_binder_method_);
-        } else {
-            LOGE("Service::RequestSystemServerBinder binder.transact failed?");
         }
         JNI_CallVoidMethod(env, data, recycleMethod_);
         JNI_CallVoidMethod(env, reply, recycleMethod_);
@@ -323,7 +321,7 @@ namespace lspd {
             return {-1, 0, ""};
         }
         auto parcel_fd = JNI_CallObjectMethod(env, reply, read_file_descriptor_method_);
-        int fd = JNI_CallIntMethod(env, parcel_fd, get_fd_method);
+        int fd = JNI_CallIntMethod(env, parcel_fd, detach_fd_method_);
         auto size = JNI_CallLongMethod(env, reply, read_long_method_);
         auto signature = JNI_CallObjectMethod(env, reply, read_string_method_);
         JNI_CallVoidMethod(env, data, recycleMethod_);

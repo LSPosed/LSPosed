@@ -82,7 +82,7 @@ namespace lspd {
     void Context::LoadDex(JNIEnv *env, int fd, size_t size) {
         LOGD("Context::LoadDex: %d", fd);
         // map fd to memory. fd should be created with ASharedMemory_create.
-        dex_ = PreloadedDex(fd, size);  // for RAII...
+        auto dex = PreloadedDex(fd, size);  // for RAII...
 
         auto classloader = JNI_FindClass(env, "java/lang/ClassLoader");
         auto getsyscl_mid = JNI_GetStaticMethodID(
@@ -96,7 +96,7 @@ namespace lspd {
         auto initMid = JNI_GetMethodID(env, in_memory_classloader, "<init>",
                                        "(Ljava/nio/ByteBuffer;Ljava/lang/ClassLoader;)V");
         auto byte_buffer_class = JNI_FindClass(env, "java/nio/ByteBuffer");
-        auto dex_buffer = env->NewDirectByteBuffer(dex_.data(), dex_.size());
+        auto dex_buffer = env->NewDirectByteBuffer(dex.data(), dex.size());
         if (auto my_cl = JNI_NewObject(env, in_memory_classloader, initMid,
                                        dex_buffer, sys_classloader)) {
             inject_class_loader_ = JNI_NewGlobalRef(env, my_cl);
@@ -199,7 +199,9 @@ namespace lspd {
             // Call application_binder directly if application binder is available,
             // or we proxy the request from system server binder
             auto dex = instance->RequestLSPDex(env, application_binder ? application_binder : system_server_binder);
-            LoadDex(env, std::get<0>(dex), std::get<1>(dex));
+            auto dex_fd = std::get<0>(dex);
+            LoadDex(env, dex_fd, std::get<1>(dex));
+            close(dex_fd);
             instance->HookBridge(*this, env);
 
             if (application_binder) {
@@ -264,7 +266,9 @@ namespace lspd {
         if (binder) {
             InstallInlineHooks();
             auto dex = instance->RequestLSPDex(env, binder);
-            LoadDex(env, std::get<0>(dex), std::get<1>(dex));
+            auto dex_fd = std::get<0>(dex);
+            LoadDex(env, dex_fd, std::get<1>(dex));
+            close(dex_fd);
             obfuscated_signature_ = std::move(std::get<2>(dex));
             Init(env);
             LOGD("Done prepare");

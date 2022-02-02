@@ -33,24 +33,25 @@
 #include "slicer/reader.h"
 #include "slicer/writer.h"
 #include "config.h"
-#include "jni_helper.h"
+#include "obfuscation.h"
 
-class WA: public dex::Writer::Allocator {
-    std::unordered_map<void*, size_t> allocated_;
-public:
-    void* Allocate(size_t size) override {
-        auto *mem = mmap(nullptr, size, PROT_READ | PROT_WRITE, MAP_PRIVATE | MAP_ANONYMOUS, -1, 0);
-        allocated_[mem] = size;
-        return mem;
-    }
-    void Free(void* ptr) override {
-        munmap(ptr, allocated_[ptr]);
-        allocated_.erase(ptr);
-    }
-};
+extern "C"
+JNIEXPORT void JNICALL
+Java_org_lsposed_lspd_service_ObfuscationManager_init(JNIEnv *env, jclass ) {
+    LOGD("ObfuscationManager.init");
+    if (auto file_descriptor = JNI_FindClass(env, "java/io/FileDescriptor")) {
+        class_file_descriptor = JNI_NewGlobalRef(env, file_descriptor);
+    } else return;
 
-static std::string obfuscated_signature;
-static const std::string old_signature = "Lde/robv/android/xposed";
+    method_file_descriptor_ctor = JNI_GetMethodID(env, class_file_descriptor, "<init>", "(I)V");
+
+    if (auto shared_memory = JNI_FindClass(env, "android/os/SharedMemory")) {
+        class_shared_memory = JNI_NewGlobalRef(env, shared_memory);
+    } else return;
+
+    method_shared_memory_ctor = JNI_GetMethodID(env, class_shared_memory, "<init>", "(Ljava/io/FileDescriptor;)V");
+    LOGD("ObfuscationManager init successfully");
+}
 
 extern "C"
 JNIEXPORT jstring JNICALL
@@ -84,10 +85,9 @@ Java_org_lsposed_lspd_service_ObfuscationManager_getObfuscatedSignature(JNIEnv *
     return env->NewStringUTF(obfuscated_signature.c_str());
 }
 
-using ustring = std::basic_string<uint8_t>;
-ustring obfuscateDex(void *dex, size_t size) {
+int obfuscateDex(const void *dex, size_t size) {
     const char* new_sig = obfuscated_signature.c_str();
-    dex::Reader reader{reinterpret_cast<dex::u1*>(dex), size};
+    dex::Reader reader{reinterpret_cast<const dex::u1*>(dex), size};
 
     reader.CreateFullIr();
     auto ir = reader.GetIr();
@@ -102,29 +102,16 @@ ustring obfuscateDex(void *dex, size_t size) {
 
     size_t new_size;
     WA allocator;
-    auto *p_dex = writer.CreateImage(&allocator, &new_size);
-    ustring new_dex(p_dex, new_size);
-    allocator.Free(p_dex);
-    return new_dex;
+    auto *p_dex = writer.CreateImage(&allocator, &new_size);  // allocates memory only once
+    return allocator.GetFd(p_dex);
 }
-
-ScopedLocalRef<jobject> new_sharedmem(JNIEnv* env, jint size) {
-    auto clazz = JNI_FindClass(env, "android/os/SharedMemory");
-    auto mid = JNI_GetStaticMethodID(env, clazz, "create", "(Ljava/lang/String;I)Landroid/os/SharedMemory;");
-    auto empty_str = JNI_NewStringUTF(env, "");
-    auto new_mem = JNI_CallStaticObjectMethod(env, clazz, mid, empty_str, static_cast<jint>(size));
-    return new_mem;
-}
-
-static jobject lspdDex = nullptr;
-static std::mutex dex_lock;
 
 extern "C"
 JNIEXPORT jint JNICALL
-Java_org_lsposed_lspd_service_ObfuscationManager_preloadDex(JNIEnv *env, jclass ) {
+Java_org_lsposed_lspd_service_ObfuscationManager_preloadDex(JNIEnv *, jclass ) {
     using namespace std::string_literals;
     std::lock_guard lg(dex_lock);
-    if (lspdDex) return ASharedMemory_dupFromJava(env, lspdDex);
+    if (lspdDex != -1) return lspdDex;
     std::string dex_path = "/data/adb/modules/"s + lspd::moduleName + "/" + lspd::kDexPath;
 
     std::unique_ptr<FILE, decltype(&fclose)> f{fopen(dex_path.data(), "rb"), &fclose};
@@ -147,25 +134,16 @@ Java_org_lsposed_lspd_service_ObfuscationManager_preloadDex(JNIEnv *env, jclass 
     }
 
     auto new_dex = obfuscateDex(addr, size);
-    LOGD("LSPApplicationService::preloadDex: %p, size=%zu", new_dex.data(), new_dex.size());
-    auto new_mem = new_sharedmem(env, new_dex.size());
-    lspdDex = JNI_NewGlobalRef(env, new_mem);
-    auto new_fd = ASharedMemory_dupFromJava(env, lspdDex);
-    auto new_addr = mmap(nullptr, new_dex.size(), PROT_READ | PROT_WRITE, MAP_SHARED, new_fd, 0);
-    if (new_addr == MAP_FAILED) {
-        LOGE("Failed to map new dex to memory?");
-    }
-    memmove(new_addr, new_dex.data(), new_dex.size());
-
-    return new_fd;
+    LOGD("LSPApplicationService::preloadDex: %d, size=%zu", new_dex, ASharedMemory_getSize(new_dex));
+    lspdDex = new_dex;
+    return new_dex;
 }
 
 extern "C"
 JNIEXPORT jlong JNICALL
-Java_org_lsposed_lspd_service_ObfuscationManager_getPreloadedDexSize(JNIEnv *env, jclass ) {
-    if (lspdDex) {
-        auto fd = ASharedMemory_dupFromJava(env, lspdDex);
-        return ASharedMemory_getSize(fd);
+Java_org_lsposed_lspd_service_ObfuscationManager_getPreloadedDexSize(JNIEnv *, jclass ) {
+    if (lspdDex != -1) {
+        return ASharedMemory_getSize(lspdDex);
     }
     return 0;
 }
@@ -176,23 +154,19 @@ Java_org_lsposed_lspd_service_ObfuscationManager_obfuscateDex(JNIEnv *env, jclas
                                                        jobject memory) {
     int fd = ASharedMemory_dupFromJava(env, memory);
     auto size = ASharedMemory_getSize(fd);
-    ustring mem_wrapper;
-    mem_wrapper.resize(size);
-    read(fd, mem_wrapper.data(), size);
+    LOGD("fd=%d, size=%zu", fd, size);
 
-    void *mem = mem_wrapper.data();
-
-    auto new_dex = obfuscateDex(mem, size);
-
-    // create new SharedMem since it cannot be resized
-    auto new_mem = new_sharedmem(env, new_dex.size());
-    int new_fd = ASharedMemory_dupFromJava(env, new_mem.get());
-
-    mem = mmap(nullptr, new_dex.size(), PROT_READ | PROT_WRITE, MAP_SHARED, new_fd, 0);
+    const void* mem = mmap(nullptr, size, PROT_READ | PROT_WRITE, MAP_SHARED, fd, 0);
     if (mem == MAP_FAILED) {
-        LOGE("Failed to map new dex to memory?");
+        LOGE("old dex map failed?");
+        return nullptr;
     }
-    memcpy(mem, new_dex.data(), new_dex.size());
-    ASharedMemory_setProt(fd, PROT_READ);
-    return new_mem.release();
+
+    auto new_fd = obfuscateDex(mem, size);
+
+    // construct new shared mem with fd
+    auto java_fd = JNI_NewObject(env, class_file_descriptor, method_file_descriptor_ctor, new_fd);
+    auto java_sm = JNI_NewObject(env, class_shared_memory, method_shared_memory_ctor, java_fd);
+
+    return java_sm.release();
 }
