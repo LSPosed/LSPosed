@@ -64,7 +64,6 @@
     <string name="parasitic_recommend_summary">LSPosed unterstützt nun eine Systemparasitierung, um die Erkennung zu vermeiden. Sie können den Manager sicher deinstallieren, nachdem Sie erfolgreich eine Verknüpfung des parasitären Managers erstellt haben. In jedem Fall können Sie den Manager von /data/adb/lspd/manager.apk wieder erneut installieren.</string>
     <string name="create_shortcut">Verknüpfung erstellen</string>
     <string name="never_show">Niemals anzeigen</string>
-    <string name="failed_to_create_shortcut">Fehler beim Erstellen der Verknüpfung: %1$s</string>
     <string name="update_lsposed">LSPosed aktualisieren</string>
     <string name="update_lsposed_msg">Soll LSPosed aktualisiert werden?
 Gerät wird nach dem Update neu gestartet</string>
