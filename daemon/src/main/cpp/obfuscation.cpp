@@ -129,7 +129,7 @@ Java_org_lsposed_lspd_service_ObfuscationManager_preloadDex(JNIEnv *, jclass ) {
     auto *addr = mmap(nullptr, size, PROT_READ | PROT_WRITE, MAP_PRIVATE, fileno(f.get()), 0);
 
     if (addr == MAP_FAILED) {
-        LOGE("Read dex failed: %s", strerror(errno));
+        PLOGE("Read dex");
         return -1;
     }
 

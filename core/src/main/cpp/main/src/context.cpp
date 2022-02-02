@@ -71,7 +71,7 @@ namespace lspd {
             addr_ = addr;
             size_ = size;
         } else {
-            LOGE("Read dex failed: %s", strerror(errno));
+            PLOGE("Read dex");
         }
     }
 
