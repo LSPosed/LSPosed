@@ -88,7 +88,14 @@ Java_org_lsposed_lspd_service_ObfuscationManager_getObfuscatedSignature(JNIEnv *
     };
 
     auto contains_keyword = [](std::string_view s) -> bool {
-        for (const auto &i: {"do", "if", "for", "int", "new", "try"}) {
+        for (const auto &i: {
+            "abstract", "assert", "boolean", "break", "byte", "case", "catch", "char", "class",
+            "continue", "const", "default", "do", "double", "else", "enum", "exports", "extends",
+            "final", "finally", "float", "for", "goto", "if", "implements", "import", "instanceof",
+            "int", "interface", "long", "module", "native", "new", "package", "private", "protected",
+            "public", "requires", "return", "short", "static", "strictfp", "super", "switch",
+            "synchronized", "this", "throw", "throws", "transient", "try", "var", "void", "volatile",
+            "while"}) {
             if (s.find(i) != std::string::npos) return true;
         }
         return false;
