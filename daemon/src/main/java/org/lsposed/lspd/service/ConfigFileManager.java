@@ -44,7 +44,6 @@ import java.nio.file.StandardOpenOption;
 import java.nio.file.attribute.BasicFileAttributes;
 import java.nio.file.attribute.PosixFilePermissions;
 import java.time.Instant;
-import java.time.LocalDateTime;
 import java.time.format.DateTimeFormatter;
 import java.util.ArrayList;
 import java.util.HashSet;
@@ -227,8 +226,7 @@ public class ConfigFileManager {
                     Log.w(TAG, name, e);
                 }
             });
-            var now = LocalDateTime.now();
-            var name = "full_" + now.toString() + ".log";
+            var name = "full.log";
             try (var is = new ProcessBuilder("logcat", "-d").start().getInputStream()) {
                 os.putNextEntry(new ZipEntry(name));
                 transfer(is, os);
