@@ -64,7 +64,6 @@
     <string name="parasitic_recommend_summary">LSPosed ora supporta la parassitizzazione del sistema per evitare il rilevamento. Puoi disinstallare in modo sicuro il manager dopo aver creato con successo una scorciatoia del manager parassitario. In ogni caso è possibile installare il manager da /data/adb/lspd/manager.apk.</string>
     <string name="create_shortcut">Crea scorciatoia</string>
     <string name="never_show">Non mostrare mai</string>
-    <string name="failed_to_create_shortcut">Creazione della scorciatoia non riuscita: %1$s</string>
     <string name="update_lsposed">Aggiorna LSPosed</string>
     <string name="update_lsposed_msg">Confermi di voler aggiornare LSPosed? Il dispositivo verrà riavviato dopo il completamento dell\'aggiornamento</string>
     <!-- LogsActivity -->
@@ -220,4 +219,5 @@
     <string name="feedback_or_suggestion">Feedback o suggerimenti</string>
     <string name="sort_upgradable_first">Aggiornabili prima</string>
     <string name="overview">Panoramica</string>
+    <string name="create_shortcut_summary">Crea manualmente la scorciatoia del manager parassitario</string>
 </resources>
