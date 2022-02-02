@@ -64,7 +64,6 @@
     <string name="parasitic_recommend_summary">LSPosed tukee nyt järjestelmän parasitization välttää havaitsemista. Voit turvallisesti poistaa managerin kun onnistuneesti luoda pikakuvake loishallintaan. Joka tapauksessa voit asentaa hallintaohjelman takaisin osoitteesta /data/adb/lspd/manager.apk.</string>
     <string name="create_shortcut">Luo pikakuvake</string>
     <string name="never_show">Älä näytä koskaan</string>
-    <string name="failed_to_create_shortcut">Pikakuvakkeen luonti epäonnistui: %1$s</string>
     <string name="update_lsposed">Päivitys LSPostettu</string>
     <string name="update_lsposed_msg">Vahvista LSPost-päivitys? Tämä laite käynnistyy uudelleen päivityksen jälkeen</string>
     <!-- LogsActivity -->
