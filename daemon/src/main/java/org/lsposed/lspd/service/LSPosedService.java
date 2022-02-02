@@ -59,9 +59,11 @@ public class LSPosedService extends ILSPosedService.Stub {
         }
 
         // for cli
-        if (uid == 0 && processName.equals("lsp-cli")) {
-            Log.d(TAG, "CLI start, pid: " + pid);
-            return ServiceManager.requestApplicationService(uid, pid, heartBeat);
+        if (CLIValidator.basicValid(pid, uid)) {
+            if (CLIValidator.applicationStageNameValid(pid, processName)) {
+                Log.d(TAG, "CLI start, pid: " + pid);
+                return ServiceManager.requestApplicationService(uid, pid, heartBeat);
+            }
         }
 
         if (!ServiceManager.getManagerService().shouldStartManager(pid, uid, processName) &&

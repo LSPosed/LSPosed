@@ -1,6 +1,14 @@
 -keepclasseswithmembers,includedescriptorclasses class * {
     native <methods>;
 }
+-keep class com.beust.jcommander.** {
+    <methods>;
+}
+-keep class org.lsposed.lspd.cli.handler.*$* {*;}
+-keepattributes *Annotation*
+-keepclasseswithmembers class org.lsposed.lspd.cli.Main {
+    public static void main(java.lang.String[]);
+}
 -keepclasseswithmembers class org.lsposed.lspd.Main {
     public static void main(java.lang.String[]);
 }

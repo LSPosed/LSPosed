@@ -5,10 +5,6 @@ import android.os.RemoteException;
 import org.lsposed.lspd.ILSPManagerService;
 
 public class StatusHandler implements ICommandHandler {
-    @Override
-    public String getUsage() {
-        return "\tLSPosed status";
-    }
 
     @Override
     public String getHandlerName() {
@@ -17,6 +13,12 @@ public class StatusHandler implements ICommandHandler {
 
     @Override
     public void handle(ILSPManagerService manager, String[] args) throws RemoteException {
+
+        if (args.length == 2 && args[1].equals("help")) {
+            System.out.println("No argument required, just show status");
+            return;
+        }
+
         String s = "API: " + manager.getApi() + '\n' +
                 "LSPosed version: " + manager.getXposedVersionName() +
                 '(' + manager.getXposedVersionCode() + ")\n" +

@@ -136,6 +136,7 @@ fun afterEval() = android.applicationVariants.forEach { variant ->
                 sign?.keyPassword,
                 sign?.keyAlias
             )
+            val uuid = UUID.randomUUID().toString();
             PrintStream(outSrc).print(
                 """
                 |package org.lsposed.lspd.util;
@@ -143,6 +144,7 @@ fun afterEval() = android.applicationVariants.forEach { variant ->
                 |    public static final byte[] CERTIFICATE = {${
                     certificateInfo.certificate.encoded.joinToString(",")
                 }};
+                |    public static final String CLI_UUID = "$uuid";
                 |}""".trimMargin()
             )
         }
@@ -159,6 +161,7 @@ dependencies {
     implementation("dev.rikka.ndk.thirdparty:cxx:1.2.0")
     implementation("com.android.tools.build:apksig:$agpVersion")
     implementation("org.apache.commons:commons-lang3:3.12.0")
+    implementation("com.beust:jcommander:1.82")
     compileOnly("androidx.annotation:annotation:1.3.0")
     compileOnly(project(":hiddenapi-stubs"))
     implementation(project(":hiddenapi-bridge"))

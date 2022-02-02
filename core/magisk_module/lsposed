@@ -10,14 +10,7 @@ else
   exit 1
 fi
 
-if [ -f "$dex_path/system/framework/lspd.dex" ]; then
-  dex_path="$dex_path/system/framework/lspd.dex"
-elif [ -f "$dex_path/framework/lspd.dex" ]; then
-  dex_path="$dex_path/framework/lspd.dex"
-else
-  echo "No lspd.dex found"
-  exit 1
-fi
+dex_path="$dex_path/daemon.apk"
 
 java_potions="-Djava.class.path=$dex_path"
 

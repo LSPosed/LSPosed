@@ -52,6 +52,7 @@ public class LSPApplicationService extends ILSPApplicationService.Stub {
                     handles.remove(pid, handle);
                     handle.unlinkToDeath(this, 0);
                     recipients.remove(this);
+                    CLIValidator.notifyProcessDie(pid);
                 }
             };
             recipients.add(recipient);
@@ -106,7 +107,7 @@ public class LSPApplicationService extends ILSPApplicationService.Stub {
         var uid = getCallingUid();
         // cli's must start as root
         if (ServiceManager.getManagerService().postStartManager(pid, uid) ||
-                ConfigManager.getInstance().isManager(uid) || uid == 0) {
+                ConfigManager.getInstance().isManager(uid) || CLIValidator.managerStagePidValid(pid)) {
             var heartbeat = handles.get(pid);
             if (heartbeat != null) {
                 binder.add(ServiceManager.getManagerService().obtainManagerBinder(heartbeat, pid, uid));

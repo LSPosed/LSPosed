@@ -6,6 +6,8 @@ import android.os.Parcel;
 import android.os.RemoteException;
 import android.os.ServiceManager;
 
+import com.beust.jcommander.ParameterException;
+
 import org.lsposed.lspd.ILSPManagerService;
 import org.lsposed.lspd.cli.exception.FormatException;
 import org.lsposed.lspd.cli.exception.NoEnoughArgumentException;
@@ -18,6 +20,7 @@ import org.lsposed.lspd.cli.handler.ModulesHandler;
 import org.lsposed.lspd.cli.handler.ScopeHandler;
 import org.lsposed.lspd.cli.handler.StatusHandler;
 import org.lsposed.lspd.service.ILSPApplicationService;
+import org.lsposed.lspd.util.SignInfo;
 
 import java.util.ArrayList;
 import java.util.HashMap;
@@ -46,7 +49,7 @@ public class Main {
         Parcel reply = Parcel.obtain();
         data.writeInterfaceToken("LSPosed");
         data.writeInt(2);
-        data.writeString("lsp-cli");
+        data.writeString("lsp-cli:" + SignInfo.CLI_UUID);
         data.writeStrongBinder(heartBeat);
 
         var resArr = new ArrayList<IBinder>(1);
@@ -76,10 +79,8 @@ public class Main {
 
     private static void showUsage() {
         System.out.println("Usage: lsposed <subcommand> [...arguments]");
-        for(var handler : handlerMap.values()) {
-            System.out.println(handler.getHandlerName());
-            System.out.println(handler.getUsage());
-        }
+        System.out.println("Support subcommand: " + String.join(", ", handlerMap.keySet()));
+        System.out.println("Please use `lsposed <subcommand> help` to get detail usage");
     }
 
     private static int exec(String[] args) {
@@ -102,7 +103,7 @@ public class Main {
                 return 0;
             } else {
                 System.out.println("No command named \"" + args[0] + '"');
-                showUsage();
+                System.out.println("Support command: " + String.join(", ", handlerMap.keySet()));
                 return 1;
             }
         } catch (RemoteException e) {
@@ -110,7 +111,7 @@ public class Main {
             e.printStackTrace();
             return 1;
         } catch (NotXposedModuleException e) {
-            System.out.println("Error: " + e.getPackageName() + "is not a enabled xposed module");
+            System.out.println("Error: " + e.getPackageName() + " is not a enabled xposed module");
             return 1;
         } catch (UninstalledPackageException e) {
             System.out.println("Error: " + e.getPackageName() + (e.getUid() < 0? "" : ("/" + e.getUid())) + " is not a valid package name");
@@ -123,6 +124,9 @@ public class Main {
             return 1;
         } catch (FormatException e) {
             System.out.println("Format error: " + e.getMessage());
+            return 1;
+        } catch (ParameterException e) {
+            e.printStackTrace();
             return 1;
         }
 

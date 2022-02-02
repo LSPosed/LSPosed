@@ -10,7 +10,6 @@ import org.lsposed.lspd.cli.exception.UninstalledPackageException;
 import org.lsposed.lspd.cli.exception.UnknownCommandException;
 
 public interface ICommandHandler {
-    String getUsage();
     String getHandlerName();
     void handle(ILSPManagerService manager, String[] args) throws RemoteException, NotXposedModuleException, NoEnoughArgumentException, UnknownCommandException, UninstalledPackageException, FormatException;
 }
