@@ -228,7 +228,7 @@ public class ConfigFileManager {
                 }
             });
             var now = LocalDateTime.now();
-            var name = "app_" + now.toString() + ".log";
+            var name = "full_" + now.toString() + ".log";
             try (var is = new ProcessBuilder("logcat", "-d").start().getInputStream()) {
                 os.putNextEntry(new ZipEntry(name));
                 transfer(is, os);
