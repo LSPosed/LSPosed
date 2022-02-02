@@ -50,11 +50,11 @@ import org.lsposed.manager.R;
 import org.lsposed.manager.databinding.FragmentPagerBinding;
 import org.lsposed.manager.databinding.ItemLogTextviewBinding;
 import org.lsposed.manager.databinding.SwiperefreshRecyclerviewBinding;
+import org.lsposed.manager.receivers.LSPManagerServiceHolder;
 import org.lsposed.manager.ui.widget.EmptyStateRecyclerView;
 
 import java.io.BufferedReader;
 import java.io.FileInputStream;
-import java.io.IOException;
 import java.io.InputStreamReader;
 import java.time.LocalDateTime;
 import java.util.Arrays;
@@ -62,11 +62,7 @@ import java.util.Collections;
 import java.util.List;
 import java.util.stream.Collectors;
 import java.util.stream.IntStream;
-import java.util.zip.Deflater;
-import java.util.zip.ZipEntry;
-import java.util.zip.ZipOutputStream;
 
-import rikka.core.os.FileUtils;
 import rikka.material.app.LocaleDelegate;
 import rikka.recyclerview.RecyclerViewKt;
 
@@ -89,11 +85,9 @@ public class LogsFragment extends BaseFragment {
                 runAsync(() -> {
                     var context = requireContext();
                     var contentResolver = context.getContentResolver();
-                    try (var os = new ZipOutputStream(contentResolver.openOutputStream(uri))) {
-                        os.setLevel(Deflater.BEST_COMPRESSION);
-                        zipLogs(os);
-                        os.finish();
-                    } catch (IOException e) {
+                    try (var zipFd = contentResolver.openFileDescriptor(uri, "wt")) {
+                        LSPManagerServiceHolder.getService().getLogs(zipFd);
+                    } catch (Throwable e) {
                         var text = context.getString(R.string.logs_save_failed2, e.getMessage());
                         showHint(text, false);
                         Log.w(App.TAG, "save log", e);
@@ -169,29 +163,6 @@ public class LogsFragment extends BaseFragment {
         LocalDateTime now = LocalDateTime.now();
         String filename = String.format(LocaleDelegate.getDefaultLocale(), "LSPosed_%s.zip", now.toString());
         saveLogsLauncher.launch(filename);
-    }
-
-    private static void zipLogs(ZipOutputStream os) {
-        var logs = ConfigManager.getLogs();
-        logs.forEach((name, fd) -> {
-            try (var is = new FileInputStream(fd.getFileDescriptor())) {
-                os.putNextEntry(new ZipEntry(name));
-                FileUtils.copy(is, os);
-                os.closeEntry();
-            } catch (IOException e) {
-                Log.w(App.TAG, name, e);
-            }
-        });
-
-        var now = LocalDateTime.now();
-        var name = "app_" + now.toString() + ".log";
-        try (var is = new ProcessBuilder("logcat", "-d").start().getInputStream()) {
-            os.putNextEntry(new ZipEntry(name));
-            FileUtils.copy(is, os);
-            os.closeEntry();
-        } catch (IOException e) {
-            Log.w(App.TAG, name, e);
-        }
     }
 
     @Override
