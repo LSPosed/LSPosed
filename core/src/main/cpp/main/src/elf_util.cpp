@@ -248,9 +248,8 @@ bool ElfImg::findModuleBase() {
             }
         }
     }
-    if (buff) free(buff);
-
     if (!found) {
+        if (buff) free(buff);
         LOGE("failed to read load address for %s", elf.data());
         fclose(maps);
         return false;
@@ -259,6 +258,8 @@ bool ElfImg::findModuleBase() {
     if (char *next = buff; load_addr = strtoul(buff, &next, 16), next == buff) {
         LOGE("failed to read load address for %s", elf.data());
     }
+
+    if (buff) free(buff);
 
     fclose(maps);
 
