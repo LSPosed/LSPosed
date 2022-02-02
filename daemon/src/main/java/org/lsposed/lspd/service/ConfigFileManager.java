@@ -7,6 +7,7 @@ import android.content.res.AssetManager;
 import android.content.res.Resources;
 import android.os.ParcelFileDescriptor;
 import android.os.Process;
+import android.os.RemoteException;
 import android.os.SELinux;
 import android.os.SharedMemory;
 import android.system.ErrnoException;
@@ -22,6 +23,8 @@ import org.lsposed.lspd.util.Utils;
 
 import java.io.BufferedReader;
 import java.io.File;
+import java.io.FileInputStream;
+import java.io.FileOutputStream;
 import java.io.IOException;
 import java.io.InputStreamReader;
 import java.lang.reflect.Method;
@@ -39,13 +42,16 @@ import java.nio.file.StandardOpenOption;
 import java.nio.file.attribute.BasicFileAttributes;
 import java.nio.file.attribute.PosixFilePermissions;
 import java.time.Instant;
+import java.time.LocalDateTime;
 import java.time.format.DateTimeFormatter;
 import java.util.ArrayList;
 import java.util.HashSet;
 import java.util.LinkedHashMap;
 import java.util.List;
 import java.util.Map;
+import java.util.zip.ZipEntry;
 import java.util.zip.ZipFile;
+import java.util.zip.ZipOutputStream;
 
 import hidden.HiddenApiBridge;
 
@@ -194,17 +200,42 @@ public class ConfigFileManager {
         return logDirPath.resolve("props.txt").toFile();
     }
 
-    static Map<String, ParcelFileDescriptor> getLogs() {
-        var map = new LinkedHashMap<String, ParcelFileDescriptor>();
-        try {
-            putFds(map, logDirPath);
-            putFds(map, oldLogDirPath);
-            putFds(map, Paths.get("/data/tombstones"));
-            putFds(map, Paths.get("/data/anr"));
-        } catch (IOException e) {
-            Log.e(TAG, "getLogs", e);
+    static void getLogs(ParcelFileDescriptor zipFd) throws RemoteException {
+        var logs = new LinkedHashMap<String, ParcelFileDescriptor>();
+        try (var os = new ZipOutputStream(new FileOutputStream(zipFd.getFileDescriptor()))) {
+            putFds(logs, logDirPath);
+            putFds(logs, oldLogDirPath);
+            putFds(logs, Paths.get("/data/tombstones"));
+            putFds(logs, Paths.get("/data/anr"));
+            byte[] buf = new byte[8192];
+            logs.forEach((name, fd) -> {
+                try (var is = new FileInputStream(fd.getFileDescriptor())) {
+                    os.putNextEntry(new ZipEntry(name));
+                    int length;
+                    while ((length = is.read(buf)) > 0) {
+                        os.write(buf, 0, length);
+                    }
+                    os.closeEntry();
+                } catch (IOException e) {
+                    Log.w(TAG, name, e);
+                }
+            });
+            var now = LocalDateTime.now();
+            var name = "app_" + now.toString() + ".log";
+            try (var is = new ProcessBuilder("logcat", "-d").start().getInputStream()) {
+                os.putNextEntry(new ZipEntry(name));
+                int length;
+                while ((length = is.read(buf)) > 0) {
+                    os.write(buf, 0, length);
+                }
+                os.closeEntry();
+            } catch (IOException e) {
+                Log.w(TAG, name, e);
+            }
+        } catch (Throwable e) {
+            Log.w(TAG, "get log", e);
+            throw new RemoteException(Log.getStackTraceString(e));
         }
-        return map;
     }
 
     private static void putFds(Map<String, ParcelFileDescriptor> map, Path path) throws IOException {
