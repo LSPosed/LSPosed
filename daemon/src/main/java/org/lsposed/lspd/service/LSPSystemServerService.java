@@ -1,5 +1,5 @@
 /*
- * <!--This file is part of LSPosed.
+ * This file is part of LSPosed.
  *
  * LSPosed is free software: you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -14,7 +14,7 @@
  * You should have received a copy of the GNU General Public License
  * along with LSPosed.  If not, see <https://www.gnu.org/licenses/>.
  *
- * Copyright (C) 2021 LSPosed Contributors-->
+ * Copyright (C) 2021 - 2022 LSPosed Contributors
  */
 
 package org.lsposed.lspd.service;
@@ -88,29 +88,32 @@ public class LSPSystemServerService extends ILSPSystemServerService.Stub impleme
 
     @Override
     public boolean onTransact(int code, Parcel data, Parcel reply, int flags) throws RemoteException {
-        Log.i(TAG, "LSPSystemServerService.onTransact: code=" + code);
+        Log.d(TAG, "LSPSystemServerService.onTransact: code=" + code);
         if (originService != null) {
             return originService.transact(code, data, reply, flags);
         }
 
-        if (code == BridgeService.TRANSACTION_CODE) {
-            // request application service with JNI
-            int uid = data.readInt();
-            int pid = data.readInt();
-            String processName = data.readString();
-            IBinder heartBeat = data.readStrongBinder();
-            var service = requestApplicationService(uid, pid, processName, heartBeat);
-            if (service != null) {
-                Log.d(TAG, "LSPSystemServerService.onTransact requestApplicationService granted: " + service);
-                reply.writeNoException();
-                reply.writeStrongBinder(service.asBinder());
-                return true;
-            } else {
-                Log.d(TAG, "LSPSystemServerService.onTransact requestApplicationService rejected");
-                return false;
-            }
-        } else {
-            return super.onTransact(code, data, reply, flags);
+        switch (code) {
+            case BridgeService.TRANSACTION_CODE:
+                int uid = data.readInt();
+                int pid = data.readInt();
+                String processName = data.readString();
+                IBinder heartBeat = data.readStrongBinder();
+                var service = requestApplicationService(uid, pid, processName, heartBeat);
+                if (service != null) {
+                    Log.d(TAG, "LSPSystemServerService.onTransact requestApplicationService granted: " + service);
+                    reply.writeNoException();
+                    reply.writeStrongBinder(service.asBinder());
+                    return true;
+                } else {
+                    Log.d(TAG, "LSPSystemServerService.onTransact requestApplicationService rejected");
+                    return false;
+                }
+            case LSPApplicationService.DEX_TRANSACTION_CODE:
+                // Proxy LSP dex transaction to Application Binder
+                return ServiceManager.getApplicationService().onTransact(code, data, reply, flags);
+            default:
+                return super.onTransact(code, data, reply, flags);
         }
     }
 
