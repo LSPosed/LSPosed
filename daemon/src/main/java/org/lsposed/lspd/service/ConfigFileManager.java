@@ -232,6 +232,17 @@ public class ConfigFileManager {
             } catch (IOException e) {
                 Log.w(TAG, name, e);
             }
+            name = "dmesg";
+            try (var is = new ProcessBuilder("dmesg").start().getInputStream()) {
+                os.putNextEntry(new ZipEntry(name));
+                int length;
+                while ((length = is.read(buf)) > 0) {
+                    os.write(buf, 0, length);
+                }
+                os.closeEntry();
+            } catch (IOException e) {
+                Log.w(TAG, name, e);
+            }
         } catch (Throwable e) {
             Log.w(TAG, "get log", e);
             throw new RemoteException(Log.getStackTraceString(e));
