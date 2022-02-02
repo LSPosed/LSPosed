@@ -14,7 +14,7 @@
  * You should have received a copy of the GNU General Public License
  * along with LSPosed.  If not, see <https://www.gnu.org/licenses/>.
  *
- * Copyright (C) 2021 LSPosed Contributors
+ * Copyright (C) 2021 - 2022 LSPosed Contributors
  */
 
 //
@@ -53,7 +53,9 @@ namespace lspd {
         void HookBridge(const Context& context, JNIEnv *env);
         ScopedLocalRef<jobject> RequestBinder(JNIEnv *env, jstring nice_name);
 
-        ScopedLocalRef<jobject> RequestBinderForSystemServer(JNIEnv *env);
+        ScopedLocalRef<jobject> RequestSystemServerBinder(JNIEnv *env);
+
+        ScopedLocalRef<jobject> RequestApplicationBinderFromSystemServer(JNIEnv *env, const ScopedLocalRef<jobject> &system_server_binder);
 
         std::tuple<int, size_t, std::string> RequestLSPDex(JNIEnv *env, const ScopedLocalRef<jobject> &binder);
 

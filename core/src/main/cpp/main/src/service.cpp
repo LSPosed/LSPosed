@@ -253,7 +253,7 @@ namespace lspd {
         return service;
     }
 
-    ScopedLocalRef<jobject> Service::RequestBinderForSystemServer(JNIEnv *env) {
+    ScopedLocalRef<jobject> Service::RequestSystemServerBinder(JNIEnv *env) {
         if (!initialized_) [[unlikely]] {
             LOGE("Service not initialized");
             return {env, nullptr};
@@ -277,17 +277,20 @@ namespace lspd {
             LOGW("Fail to get binder for system server");
             return {env, nullptr};
         }
+        return binder;
+    }
 
+    ScopedLocalRef<jobject> Service::RequestApplicationBinderFromSystemServer(JNIEnv *env, const ScopedLocalRef<jobject> &system_server_binder) {
         auto heart_beat_binder = JNI_NewObject(env, binder_class_, binder_ctor_);
         auto data = JNI_CallStaticObjectMethod(env, parcel_class_, obtain_method_);
         auto reply = JNI_CallStaticObjectMethod(env, parcel_class_, obtain_method_);
 
-        JNI_CallVoidMethod(env, data, write_int_method_, getuid()); // data.writeInt(uid)
+        JNI_CallVoidMethod(env, data, write_int_method_, getuid());
         JNI_CallVoidMethod(env, data, write_int_method_, getpid());
         JNI_CallVoidMethod(env, data, write_string_method_, JNI_NewStringUTF(env, "android"));
         JNI_CallVoidMethod(env, data, write_strong_binder_method_, heart_beat_binder);
 
-        auto res = JNI_CallBooleanMethod(env, binder, transact_method_,
+        auto res = JNI_CallBooleanMethod(env, system_server_binder, transact_method_,
                                          BRIDGE_TRANSACTION_CODE,
                                          data,
                                          reply, 0);
@@ -297,14 +300,14 @@ namespace lspd {
             JNI_CallVoidMethod(env, reply, read_exception_method_);
             app_binder = JNI_CallObjectMethod(env, reply, read_strong_binder_method_);
         } else {
-            LOGE("Service::RequestBinderForSystemServer binder.transact failed?");
+            LOGE("Service::RequestSystemServerBinder binder.transact failed?");
         }
         JNI_CallVoidMethod(env, data, recycleMethod_);
         JNI_CallVoidMethod(env, reply, recycleMethod_);
         if (app_binder) {
             JNI_NewGlobalRef(env, heart_beat_binder);
         }
-        LOGD("Service::RequestBinderForSystemServer app_binder: %p", app_binder.get());
+        LOGD("Service::RequestSystemServerBinder app_binder: %p", app_binder.get());
         return app_binder;
     }
 

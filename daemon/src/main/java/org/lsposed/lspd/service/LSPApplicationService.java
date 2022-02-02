@@ -14,7 +14,7 @@
  * You should have received a copy of the GNU General Public License
  * along with LSPosed.  If not, see <https://www.gnu.org/licenses/>.
  *
- * Copyright (C) 2021 LSPosed Contributors
+ * Copyright (C) 2021 - 2022 LSPosed Contributors
  */
 
 package org.lsposed.lspd.service;
@@ -40,7 +40,7 @@ import java.util.Set;
 import java.util.concurrent.ConcurrentHashMap;
 
 public class LSPApplicationService extends ILSPApplicationService.Stub {
-    private final static int DEX_TRANSACTION_CODE = 1310096052;
+    final static int DEX_TRANSACTION_CODE = 1310096052;
     // <uid, pid>
     private final static Set<Pair<Integer, Integer>> cache = ConcurrentHashMap.newKeySet();
     private final static Map<Integer, IBinder> handles = new ConcurrentHashMap<>();
@@ -48,7 +48,7 @@ public class LSPApplicationService extends ILSPApplicationService.Stub {
 
     @Override
     public boolean onTransact(int code, Parcel data, Parcel reply, int flags) throws android.os.RemoteException {
-        Log.i(TAG, "LSPApplicationService.onTransact: code=" + code);
+        Log.d(TAG, "LSPApplicationService.onTransact: code=" + code);
         if (code == DEX_TRANSACTION_CODE) {
             try {
                 ParcelFileDescriptor pfd = ParcelFileDescriptor.fromFd(ObfuscationManager.preloadDex());
@@ -60,9 +60,8 @@ public class LSPApplicationService extends ILSPApplicationService.Stub {
                 return false;
             }
             return true;
-        } else {
-            return super.onTransact(code, data, reply, flags);
         }
+        return super.onTransact(code, data, reply, flags);
     }
 
     public boolean registerHeartBeat(int uid, int pid, IBinder handle) {

@@ -188,17 +188,25 @@ namespace lspd {
     Context::OnNativeForkSystemServerPost(JNIEnv *env) {
         if (!skip_) {
             auto *instance = Service::instance();
-            auto binder = instance->RequestBinderForSystemServer(env);
-            // TODO: binder could be not available
-            auto dex = instance->RequestLSPDex(env, binder);
+            auto system_server_binder = instance->RequestSystemServerBinder(env);
+            if (!system_server_binder) {
+                LOGF("Failed to get system server binder, system server initialization failed. ");
+                return;
+            }
+
+            auto application_binder = instance->RequestApplicationBinderFromSystemServer(env, system_server_binder);
+
+            // Call application_binder directly if application binder is available,
+            // or we proxy the request from system server binder
+            auto dex = instance->RequestLSPDex(env, application_binder ? application_binder : system_server_binder);
             LoadDex(env, std::get<0>(dex), std::get<1>(dex));
             instance->HookBridge(*this, env);
 
-            if (binder) {
+            if (application_binder) {
                 obfuscated_signature_ = std::move(std::get<2>(dex));
                 InstallInlineHooks();
                 Init(env);
-                FindAndCall(env, "forkSystemServerPost", "(Landroid/os/IBinder;)V", binder);
+                FindAndCall(env, "forkSystemServerPost", "(Landroid/os/IBinder;)V", application_binder);
             } else skip_ = true;
         }
         if (skip_) [[unlikely]] {
