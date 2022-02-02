@@ -62,7 +62,6 @@
     <string name="parasitic_recommend_summary">LSPosed 现在支持寄生系统以避免检测。您可以在成功创建寄生管理器图标后在系统设置中卸载管理器。 在任何情况下，您都可以从 /data/adb/lspd/manager.apk 安装管理器。</string>
     <string name="create_shortcut">创建快捷方式</string>
     <string name="never_show">不再显示</string>
-    <string name="failed_to_create_shortcut">创建快捷方式失败：%1$s</string>
     <string name="update_lsposed">更新 LSPosed</string>
     <string name="update_lsposed_msg">确认更新 LSPosed? 此设备将会在完成更新后自动重启。</string>
     <!-- LogsActivity -->
