@@ -26,9 +26,14 @@
     </plurals>
     <string name="Logs">로그</string>
     <string name="Settings">설정</string>
+    <string name="About">정보</string>
     <string name="report_issue">문제 보고</string>
     <string name="module_repo">저장소</string>
     <string name="module_repo_loading">로딩 중…</string>
+    <string name="module_repo_up_to_date">모든 모듈이 최신 버전입니다</string>
+    <plurals name="module_repo_upgradable">
+        <item quantity="other">%d 개의 모듈이 업데이트 가능합니다</item>
+    </plurals>
     <string name="about_view_source_code"><![CDATA[%1$s에서 소스 코드 보기<br/>%2$s 채널에 가입하십시오.]]></string>
     <string name="translators" comment="Dear translators, please add your home page here following the format. There can be more than one translator. So feel free to append yourself.">green1052</string>
     <string name="install">설치</string>
@@ -42,12 +47,16 @@
     <string name="system_inject_fail_summary">System Framework 주입 실패</string>
     <string name="system_inject_fail"><![CDATA[System Framework 주입 실패.<br/>이는 드물게 발생하며, Magisk 또는 일부 저품질 <b>Magisk</b> 모듈 때문일 수 있습니다.<br/>Riru 및 LSPosed 이외의 Magisk 모듈을 비활성화하거나 전체 로그를 개발자에게 제출하십시오.]]></string>
     <string name="system_prop_incorrect_summary">잘못된 System prop</string>
+    <string name="need_update">업데이트가 필요합니다</string>
+    <string name="please_update_summary">최신 버전의 LSPosed를 설치해 주세요</string>
     <string name="lsposed_not_active">LSPosed가 현재 설치되어 있지 않거나 활성화되어 있지 않습니다.</string>
     <string name="info_api_version">API 버전</string>
     <string name="info_framework_version">Framework 버전</string>
     <string name="info_manager_version">Manager 버전</string>
     <string name="info_system_version">System 버전</string>
     <string name="info_device">장치</string>
+    <string name="update_lsposed">LSPosed 업데이트</string>
+    <string name="update_lsposed_msg">LSPosed를 업데이트 하시겠습니까? 업데이트 완료 후에 재부팅합니다.</string>
     <!-- LogsActivity -->
     <string name="menuSaveToSd">저장</string>
     <string name="nav_item_logs_module">모듈 로그</string>
@@ -122,6 +131,8 @@
     <string name="pure_black_dark_theme_summary">다크 테마가 활성화된 경우 순수 검은색 테마를 사용합니다.</string>
     <string name="settings_group_theme">테마</string>
     <string name="settings_backup_and_restore">백업 및 복원</string>
+    <string name="settings_backup_summery">모듈 목록과 스코프 목록을 백업합니다.</string>
+    <string name="settings_restore_summery">모듈 목록과 스코프 목록을 복원합니다.</string>
     <string name="settings_backup">백업</string>
     <string name="settings_backup_failed2">백업 실패:\n%s</string>
     <string name="settings_restore">복원</string>

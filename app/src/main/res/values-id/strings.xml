@@ -62,7 +62,6 @@
     <string name="parasitic_recommend_summary">LSPosed sekarang mendukung parasitisasi sistem untuk menghindari deteksi. Anda dapat menghapus instalan manajer dengan aman setelah berhasil membuat pintasan manajer parasit. Bagaimanapun, Anda dapat menginstal kembali manajer dari /data/adb/lspd/manager.apk.</string>
     <string name="create_shortcut">Buat pintasan</string>
     <string name="never_show">Jangan pernah ditampilkan</string>
-    <string name="failed_to_create_shortcut">Gagal membuat pintasan: %1$s</string>
     <string name="update_lsposed">Perbaharui LSPosed</string>
     <string name="update_lsposed_msg">Konfirmasi untuk pembaharuan LSPosed? Perangkat ini akan mulai ulang setelah pembaharuan selesai</string>
     <!-- LogsActivity -->

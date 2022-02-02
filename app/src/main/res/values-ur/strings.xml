@@ -50,7 +50,6 @@
     <string name="parasitic_recommend_summary">LSPosed اب سراغ لگانے سے بچنے کے لیے سسٹم پیراجیٹائزیشن کی حمایت کرتا ہے۔ پرجیوی مینیجر کا شارٹ کٹ کامیابی سے بنانے کے بعد آپ منیجر کو محفوظ طریقے سے انسٹال کر سکتے ہیں۔ کسی بھی صورت میں آپ آدمی کو انسٹال کر سکتے ہیں.</string>
     <string name="create_shortcut">شارٹ کٹ بنانا</string>
     <string name="never_show">کبھی نہ دکھائیں۔</string>
-    <string name="failed_to_create_shortcut">شارٹ کٹ بنانے میں ناکام: %1$s</string>
     <string name="update_lsposed">LSPosed کو اپ ڈیٹ کریں۔</string>
     <!-- LogsActivity -->
     <string name="menuSaveToSd">محفوظ کریں</string>

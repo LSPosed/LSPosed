@@ -66,7 +66,6 @@
     <string name="parasitic_recommend_summary">LSPosed acceptă acum parazitizarea sistemului pentru a evita detectarea. Puteți dezinstala managerul în siguranță după crearea cu succes a unei comenzi rapide a managerului parazitar. În orice caz, puteți instala managerul înapoi din /data/adb/lspd/manager.apk.</string>
     <string name="create_shortcut">Crează scurtătură</string>
     <string name="never_show">Nu arăta niciodată</string>
-    <string name="failed_to_create_shortcut">Nu s-a reușit crearea scurtăturii: %1$s</string>
     <string name="update_lsposed">Actualizeaza LSPosed</string>
     <string name="update_lsposed_msg">Confirmaţi actualizarea LSPosed? Acest dispozitiv va reporni după finalizarea actualizării</string>
     <!-- LogsActivity -->

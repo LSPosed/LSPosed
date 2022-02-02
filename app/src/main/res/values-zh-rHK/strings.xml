@@ -64,7 +64,6 @@
 在任何情況下，你都可以在/data/adb/lspd/manager.apk 重新安裝管理路</string>
     <string name="create_shortcut">建立捷徑</string>
     <string name="never_show">不再顯示</string>
-    <string name="failed_to_create_shortcut">建立捷徑失敗：%1$s</string>
     <string name="update_lsposed">更新 LSPosed</string>
     <string name="update_lsposed_msg">確認更新LSPosed? 此裝置會於更新完成後重啟</string>
     <!-- LogsActivity -->
@@ -196,6 +195,7 @@
     <string name="manager_crashed_info">回報問題到 </string>
     <string name="send_crash_info">發送崩潰訊息</string>
     <string name="crash_info_copied">崩潰訊息已複製到剪貼板</string>
+    <string name="info_copied">已複製</string>
     <!-- Colors -->
     <string name="color_sakura">櫻花色</string>
     <string name="color_red">紅色</string>
@@ -218,4 +218,6 @@
     <string name="color_blue_grey">藍灰色</string>
     <string name="feedback_or_suggestion">反饋或建議</string>
     <string name="sort_upgradable_first">可更新優先</string>
+    <string name="overview">概述</string>
+    <string name="create_shortcut_summary">手動建立寄生管理器捷徑</string>
 </resources>

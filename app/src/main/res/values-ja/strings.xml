@@ -61,7 +61,6 @@
     <string name="parasitic_recommend">寄生マネージャーの推奨</string>
     <string name="create_shortcut">ショートカットを作成</string>
     <string name="never_show">表示しない</string>
-    <string name="failed_to_create_shortcut">ショートカットの作成に失敗しました: %1$s</string>
     <string name="update_lsposed">LSPossedをアップデート</string>
     <string name="update_lsposed_msg">LSPosedをアップデートしてもよろしいですか？アップデート完了後、このデバイスは再起動します</string>
     <!-- LogsActivity -->

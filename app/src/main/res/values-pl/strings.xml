@@ -62,7 +62,6 @@
     <string name="parasitic_recommend_summary">LSPosed wspiera teraz pasożyty systemowe, aby uniknąć wykrycia. Możesz odinstalować menadżer po pomyśłnym utworzeniu skrótu w parastic manager. W każdym wypadku możesz zainstalować menadżer spowrotem z pliku /data/adb/lspd/manager.apk.</string>
     <string name="create_shortcut">Utwórz skrót</string>
     <string name="never_show">Nigdy nie pokazuje</string>
-    <string name="failed_to_create_shortcut">Nie udało się utworzyć skrótu: %1$s</string>
     <string name="update_lsposed">Aktualizuj LSPosed</string>
     <string name="update_lsposed_msg">Potwierdzić aktualizację LSPosed? To urządzenie uruchomi się ponownie po zakończeniu aktualizacji</string>
     <!-- LogsActivity -->
