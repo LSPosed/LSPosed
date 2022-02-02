@@ -23,7 +23,7 @@
     <string name="Modules">Модулі</string>
     <plurals name="modules_enabled_count">
         <item quantity="one">%d модуль увімкнено</item>
-        <item quantity="few">%d модулів увімкнено</item>
+        <item quantity="few">%d модулі увімкнено</item>
         <item quantity="many">%d модулів увімкнено</item>
         <item quantity="other">%d модулів увімкнено</item>
     </plurals>
@@ -34,18 +34,24 @@
     <string name="module_repo">Репозиторій</string>
     <string name="module_repo_loading">Завантаження…</string>
     <string name="module_repo_up_to_date">Модулі не потребують оновлення</string>
+    <plurals name="module_repo_upgradable">
+        <item quantity="one">%d модуль потребує оновлення</item>
+        <item quantity="few">%d модулі потребують оновлення</item>
+        <item quantity="many">%d модулів потребують оновлення</item>
+        <item quantity="other">%d модулів потребують оновлення</item>
+    </plurals>
     <string name="about_view_source_code"><![CDATA[Перегляньте вихідний код на %1$s<br/>Приєднуйтесь до нашого каналу в %2$s]]></string>
-    <string name="translators" comment="Dear translators, please add your home page here following the format. There can be more than one translator. So feel free to append yourself.">нічого</string>
+    <string name="translators" comment="Dear translators, please add your home page here following the format. There can be more than one translator. So feel free to append yourself.">AlexPechkin</string>
     <string name="install">Встановити</string>
     <string name="install_summary">Натисніть, щоб встановити LSPosed</string>
     <string name="not_installed">Не встановлено</string>
     <string name="not_install_summary">LSPosed не встановлено</string>
     <string name="activated">Активовано</string>
-    <string name="partial_activated">Частково активований</string>
+    <string name="partial_activated">Частково активовано</string>
     <string name="selinux_policy_not_loaded_summary">SEPolicy завантажено неправильно</string>
-    <string name="selinux_policy_not_loaded"><![CDATA[Модулі, яким необхідний систематичний фреймворк, не працюватимуть.<br/>Повідомте про це розробнику <a href="https://github.com/topjohnwu/Magisk/issues"><b>Magisk</b></a>.]]></string>
-    <string name="system_inject_fail_summary">Помилка ін\'єкції системного фреймворку</string>
-    <string name="system_inject_fail"><![CDATA[Це рідкість і може бути викликано <b>Magisk</b> або деякими неякісними модулями Magisk.<br/>Спробуйте вимкнути всі модулі Magisk, крім Riru та LSPosed, або надішліть повний журнал розробникам.]]></string>
+    <string name="selinux_policy_not_loaded"><![CDATA[Модулі, яким необхідний System Framework, не працюватимуть.<br/>Повідомте про це розробнику <a href="https://github.com/topjohnwu/Magisk/issues"><b>Magisk</b></a>.]]></string>
+    <string name="system_inject_fail_summary">Помилка ін\'єкції System Framework</string>
+    <string name="system_inject_fail"><![CDATA[Це рідкісна проблема, яка може бути спричинена <b>Magisk</b> або деякими неякісними модулями Magisk.<br/>Спробуйте вимкнути всі модулі Magisk, крім Riru та LSPosed, або надішліть повний звіт розробникам.]]></string>
     <string name="system_prop_incorrect_summary">Неправильні системні налаштування</string>
     <string name="system_prop_incorrect"><![CDATA[Деякі необхідні властивості системи видалені або змінені.<br/>Модулі можуть працювати не належним чином.]]></string>
     <string name="need_update">Потрібно оновити</string>
@@ -56,29 +62,30 @@
     <string name="info_manager_version">Версія менеджера</string>
     <string name="info_system_version">Версія системи</string>
     <string name="info_device">Пристрій</string>
-    <string name="info_system_abi">Система ABI</string>
-    <string name="info_api">Встановлення інтерфейсу</string>
-    <string name="parasitic_recommend">Рекомендується Parasitic Manager</string>
-    <string name="parasitic_recommend_summary">LSPosed тепер підтримує системну паразитізацію, щоб уникнути виявлення. Ви можете безпечно видалити менеджера після успішного створення ярлика менеджера паразитів. У будь-якому випадку ви можете встановити менеджер назад з /data/adb/lspd/manager.apk.</string>
+    <string name="info_system_abi">ABI системи</string>
+    <string name="info_api">Інтерфейс ін\'єкції</string>
+    <string name="parasitic_recommend">Рекомендується менеджер-паразит</string>
+    <string name="parasitic_recommend_summary">LSPosed тепер підтримує системний паразитизм, щоб уникнути виявлення. Ви можете безпечно видалити менеджер після успішного створення ярлика менеджера-паразита. У будь-якому випадку ви можете встановити менеджер назад з /data/adb/lspd/manager.apk.</string>
     <string name="create_shortcut">Створити ярлик</string>
-    <string name="never_show">Не показувати</string>
-    <string name="failed_to_create_shortcut">Не вдалося створити ярлик: %1$s</string>
+    <string name="never_show">Ніколи не показувати</string>
     <string name="update_lsposed">Оновити LSPosed</string>
     <string name="update_lsposed_msg">Підтверджуєте оновлення LSPosed? Цей пристрій перезавантажиться після закінчення оновлення</string>
     <!-- LogsActivity -->
     <string name="menuSaveToSd">Зберегти</string>
-    <string name="nav_item_logs_verbose">Докладні логи</string>
-    <string name="nav_item_logs_module">Журнали модулів</string>
+    <string name="nav_item_logs_verbose">Докладні звіти</string>
+    <string name="nav_item_logs_module">Звіти модулів</string>
     <string name="logs_save_failed2">Не вдалося зберегти:\n%s</string>
-    <string name="menuClearLog">Очистити журнал зараз</string>
-    <string name="logs_cleared">Журнал успішно очищено.</string>
+    <string name="menuClearLog">Очистити звіт зараз</string>
+    <string name="logs_cleared">Звіт успішно очищено.</string>
     <string name="scroll_top">Прокрутити догори</string>
     <string name="loading">Завантаження…</string>
     <string name="scroll_bottom">Прокрутити донизу</string>
-    <string name="logs_cannot_read">Не вдається прочитати журнал: \n</string>
+    <string name="logs_cannot_read">Не вдається прочитати звіт: \n</string>
     <string name="menuReload">Перезавантажити</string>
-    <string name="logs_clear_failed_2">Не вдалося очистити журнал</string>
+    <string name="logs_clear_failed_2">Не вдалося очистити звіт</string>
     <string name="menu_enable_word_wrap">Переніс слів</string>
+    <string name="enabled_verbose_log">Докладний звіт увімкнено</string>
+    <string name="disabled_verbose_log">Докладний звіт вимкнено</string>
     <!-- ModulesActivity -->
     <string name="module_empty_description">(опису не надано)</string>
     <string name="warning_xposed_min_version">Цей модуль вимагає новішої версії LSP (%d), тому його неможливо активувати</string>
@@ -106,7 +113,7 @@
     <string name="compile_failed">Помилка оптимізації або повернене значення порожнє</string>
     <string name="compile_failed_with_info">Помилка оптимізації:</string>
     <string name="sort_by_name">За назвою програми</string>
-    <string name="sort_by_package_name">За назвою пакету</string>
+    <string name="sort_by_package_name">За іменем пакету</string>
     <string name="sort_by_install_time">За часом встановлення</string>
     <string name="sort_by_update_time">За часом оновлення</string>
     <string name="sort_reverse">У зворотньому порядку</string>
@@ -126,7 +133,7 @@
     <string name="requested_by_module">Рекомендовано</string>
     <string name="update_available">Доступне оновлення: %1$s</string>
     <string name="module_disabled_no_selection">Модуль %s вимкнено, оскільки жодна програма не вибрана.</string>
-    <string name="android_framework">Системний фреймворк</string>
+    <string name="android_framework">System Framework</string>
     <string name="menu_backup_and_restore">Створення резервної копії</string>
     <string name="menu_backup">Створити резервну копію</string>
     <string name="menu_restore">Відновити</string>
@@ -136,21 +143,21 @@
     <string name="reboot_required">Для застосування цієї зміни потрібен перезапуск</string>
     <string name="reboot">Перезавантажити</string>
     <string name="menu_hide">Приховати</string>
-    <string name="deny_list">%s в чорному списку. Від нього не буде ефекту.</string>
-    <string name="deny_list_info">В чорному списку</string>
+    <string name="deny_list">%s в чорному списку. На цю програму не буде вплинуто.</string>
+    <string name="deny_list_info">У чорному списку</string>
     <!-- ModulesActivity and AppListActivity -->
     <string name="modules_other_app">Переглянути в іншому додатку</string>
     <string name="module_app_info">Про програму</string>
     <string name="list_empty">¯\\\\_(ツ)_\/¯\nТут нічого немає</string>
     <!-- SettingsActivity -->
-    <string name="settings_group_framework">Фреймворк</string>
-    <string name="pref_title_disable_verbose_log">Вимкнути детальні журнали</string>
+    <string name="settings_group_framework">Framework</string>
+    <string name="pref_title_disable_verbose_log">Вимкнути детальні звіти</string>
     <string name="pure_black_dark_theme">Чорна темна тема</string>
     <string name="pure_black_dark_theme_summary">Використовувати чисту чорну тему, якщо темна тема включена</string>
     <string name="settings_group_theme">Тема</string>
     <string name="settings_backup_and_restore">Резервне копіювання і відновлення</string>
-    <string name="settings_backup_summery">Резервне копіювання або відновлення списку модулів та списків областей.</string>
-    <string name="settings_restore_summery">Резервне копіювання або відновлення списку модулів та списків областей.</string>
+    <string name="settings_backup_summery">Резервне копіювання списку модулів та списків областей.</string>
+    <string name="settings_restore_summery">Відновлення списку модулів та списків областей.</string>
     <string name="settings_backup">Створити резервну копію</string>
     <string name="settings_backup_failed2">Не вдалося створити резервну копію:\n%s</string>
     <string name="settings_restore">Відновити</string>
@@ -161,7 +168,7 @@
     <string name="theme_color">Колір теми</string>
     <string name="theme_color_system">Колір акцентів системи</string>
     <string name="settings_show_hidden_icon_apps_enabled">Примусово показувати значки запуску</string>
-    <string name="settings_show_hidden_icon_apps_enabled_summary">Після Android 10 програмам не дозволяється приховати свої лаунчери. Вимкніть перемикач, щоб вимкнути цю систему функцію.</string>
+    <string name="settings_show_hidden_icon_apps_enabled_summary">Після Android 10 програмам не дозволяється приховувати свої іконки запуску. Вимкніть перемикач, щоб вимкнути цю системну функцію.</string>
     <string name="settings_group_system">Система</string>
     <string name="settings_language">Мова</string>
     <string name="settings_translation_contributors">Автори перекладу</string>
@@ -192,6 +199,7 @@
     <string name="manager_crashed_info">надіслати це на </string>
     <string name="send_crash_info">Надіслати інформацію про помилку</string>
     <string name="crash_info_copied">Інформація про помилку скопійована до буферу обміну</string>
+    <string name="info_copied">Скопійовано до буфера обміну</string>
     <!-- Colors -->
     <string name="color_sakura">Вишневий</string>
     <string name="color_red">Червоний</string>
@@ -212,4 +220,8 @@
     <string name="color_deep_orange">Жовтогарячий</string>
     <string name="color_brown">Коричневий</string>
     <string name="color_blue_grey">Блакитно-сірий</string>
+    <string name="feedback_or_suggestion">Відгук або пропозиція</string>
+    <string name="sort_upgradable_first">Спершу нові версії</string>
+    <string name="overview">Огляд</string>
+    <string name="create_shortcut_summary">Вручну створити ярлик менеджера-паразита</string>
 </resources>
