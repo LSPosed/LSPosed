@@ -64,7 +64,6 @@
     <string name="parasitic_recommend_summary">LSPosed stöder nu systemparasitering för att undvika upptäckt. Du kan säkert avinstallera hanteraren efter att ha skapat en genväg till den parasiterande hanteraren. I vilket fall som helst kan du installera hanteraren från /data/adb/lspd/manager.apk.</string>
     <string name="create_shortcut">Skapa genväg</string>
     <string name="never_show">Visa aldrig</string>
-    <string name="failed_to_create_shortcut">Kunde inte skapa genväg: %1$s</string>
     <string name="update_lsposed">Uppdateringen LSPosed</string>
     <string name="update_lsposed_msg">Bekräfta att uppdatera LSPosed? Denna enhet kommer att starta om efter att uppdateringen är slutförd</string>
     <!-- LogsActivity -->
