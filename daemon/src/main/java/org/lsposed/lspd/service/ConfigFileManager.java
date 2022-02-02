@@ -26,7 +26,9 @@ import java.io.File;
 import java.io.FileInputStream;
 import java.io.FileOutputStream;
 import java.io.IOException;
+import java.io.InputStream;
 import java.io.InputStreamReader;
+import java.io.OutputStream;
 import java.lang.reflect.Method;
 import java.nio.channels.Channels;
 import java.nio.channels.FileChannel;
@@ -80,6 +82,15 @@ public class ConfigFileManager {
             createLogDirPath();
         } catch (IOException e) {
             Log.e(TAG, Log.getStackTraceString(e));
+        }
+    }
+
+    public static void transfer(InputStream in, OutputStream out) throws IOException {
+        int size = 8192;
+        var buffer = new byte[size];
+        int read;
+        while ((read = in.read(buffer, 0, size)) >= 0) {
+            out.write(buffer, 0, read);
         }
     }
 
@@ -207,14 +218,10 @@ public class ConfigFileManager {
             putFds(logs, oldLogDirPath);
             putFds(logs, Paths.get("/data/tombstones"));
             putFds(logs, Paths.get("/data/anr"));
-            byte[] buf = new byte[8192];
             logs.forEach((name, fd) -> {
                 try (var is = new FileInputStream(fd.getFileDescriptor())) {
                     os.putNextEntry(new ZipEntry(name));
-                    int length;
-                    while ((length = is.read(buf)) > 0) {
-                        os.write(buf, 0, length);
-                    }
+                    transfer(is, os);
                     os.closeEntry();
                 } catch (IOException e) {
                     Log.w(TAG, name, e);
@@ -224,21 +231,15 @@ public class ConfigFileManager {
             var name = "app_" + now.toString() + ".log";
             try (var is = new ProcessBuilder("logcat", "-d").start().getInputStream()) {
                 os.putNextEntry(new ZipEntry(name));
-                int length;
-                while ((length = is.read(buf)) > 0) {
-                    os.write(buf, 0, length);
-                }
+                transfer(is, os);
                 os.closeEntry();
             } catch (IOException e) {
                 Log.w(TAG, name, e);
             }
-            name = "dmesg";
+            name = "dmesg.log";
             try (var is = new ProcessBuilder("dmesg").start().getInputStream()) {
                 os.putNextEntry(new ZipEntry(name));
-                int length;
-                while ((length = is.read(buf)) > 0) {
-                    os.write(buf, 0, length);
-                }
+                transfer(is, os);
                 os.closeEntry();
             } catch (IOException e) {
                 Log.w(TAG, name, e);
