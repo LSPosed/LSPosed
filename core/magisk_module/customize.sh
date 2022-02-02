@@ -149,7 +149,6 @@ elif [ "$FLAVOR" == "riru" ]; then
     mv "$MODPATH/riru" "$MODPATH/system"
     mv "$MODPATH/system/lib/lib$RIRU_MODULE_LIB_NAME.so" "$MODPATH/system/lib/libriru_$RIRU_MODULE_LIB_NAME.so"
     mv "$MODPATH/system/lib64/lib$RIRU_MODULE_LIB_NAME.so" "$MODPATH/system/lib64/libriru_$RIRU_MODULE_LIB_NAME.so"
-    mv "$MODPATH/framework" "$MODPATH/system/framework"
     if [ "$RIRU_API" -ge 26 ]; then
       mkdir -p "$MODPATH/riru/lib"
       mkdir -p "$MODPATH/riru/lib64"
