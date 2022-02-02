@@ -217,4 +217,5 @@
     <string name="feedback_or_suggestion">反馈或建议</string>
     <string name="sort_upgradable_first">可更新优先</string>
     <string name="overview">概览</string>
+    <string name="create_shortcut_summary">手动创建寄生管理器快捷方式</string>
 </resources>
