@@ -64,7 +64,6 @@
     <string name="parasitic_recommend_summary">LSPosed اکنون از انگلی شدن سیستم برای جلوگیری از شناسایی پشتیبانی می کند. پس از ایجاد موفقیت آمیز میانبر مدیر انگلی، می توانید با خیال راحت مدیر را حذف نصب کنید. در هر صورت می توانید مدیر را از /data/adb/lspd/manager.apk نصب کنید.</string>
     <string name="create_shortcut">ایجاد میان‌بر</string>
     <string name="never_show">هیچ وقت نشان نده</string>
-    <string name="failed_to_create_shortcut">ساخت میان‌بر ناموفق بود: %1$s</string>
     <string name="update_lsposed">بروزرسانیLSPosed</string>
     <string name="update_lsposed_msg">آیا بروزرسانیLSPosedرا تایید می کنید؟ دستگاه شما پس از نصب بروزرسانی به طور خودکار ریستارت خواهد شد</string>
     <!-- LogsActivity -->

@@ -1,10 +1,10 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
     <!-- Notification -->
-    <string name="module_is_not_activated_yet">Модуль LSPosed ще не активований</string>
+    <string name="module_is_not_activated_yet">Модуль Xposed ще не активований</string>
     <string name="module_is_not_activated_yet_detailed">%s було встановлено, але ще не активовано</string>
-    <string name="xposed_module_updated_notification_title">Модуль LSPosed оновлено</string>
-    <string name="xposed_module_updated_notification_content">%s було оновлено, будь ласка, примусово зупиніть і перезапустіть програму</string>
+    <string name="xposed_module_updated_notification_title">Модуль Xposed оновлено</string>
+    <string name="xposed_module_updated_notification_content">%s було оновлено, будь ласка, примусово перезапустіть програми з області модуля</string>
     <string name="xposed_module_updated_notification_title_system">Модуль Xposed оновлено, необхідне перезавантаження системи</string>
-    <string name="xposed_module_updated_notification_content_system">%s було оновлено, оскільки область містить системний фреймворк, необхідне перезавантаження для застосування змін</string>
+    <string name="xposed_module_updated_notification_content_system">%s було оновлено, оскільки область містить System Framework, необхідне перезавантаження для застосування змін</string>
 </resources>

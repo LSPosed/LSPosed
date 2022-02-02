@@ -25,16 +25,16 @@
         <item quantity="one">%d módulo activado</item>
         <item quantity="other">%d módulos activados</item>
     </plurals>
-    <string name="Logs">Logs</string>
+    <string name="Logs">Trozas</string>
     <string name="Settings">Configuración</string>
     <string name="About">Acerca de</string>
     <string name="report_issue">Reportar problema</string>
     <string name="module_repo">Repositorio</string>
-    <string name="module_repo_loading">Cargando…</string>
-    <string name="module_repo_up_to_date">Todos los modulos están actualizados</string>
+    <string name="module_repo_loading">Cargando modulo repositorio\"...\"…</string>
+    <string name="module_repo_up_to_date">Todos los modulos actualizados</string>
     <plurals name="module_repo_upgradable">
-        <item quantity="one">módulo %d actualizable</item>
-        <item quantity="other">módulos %d actualizables</item>
+        <item quantity="one">%d módulos repositorio actualizable uno</item>
+        <item quantity="other">%d módulos repositorio actualizables</item>
     </plurals>
     <string name="about_view_source_code"><![CDATA[Ve el código fuente en %1$s<br/>Únete a nuestro %2$s canal]]></string>
     <string name="translators" comment="Dear translators, please add your home page here following the format. There can be more than one translator. So feel free to append yourself.">squaredDot</string>
@@ -44,13 +44,13 @@
     <string name="not_install_summary">LSPosed no está instalado</string>
     <string name="activated">Activado</string>
     <string name="partial_activated">Parcialmente activado</string>
-    <string name="selinux_policy_not_loaded_summary">SEPolicy no se ha cargado correctamente</string>
-    <string name="selinux_policy_not_loaded"><![CDATA[Los módulos que se enlazan al Marco de Servicios del Sistema no funcionan.<br/>Por favor, reporta esto al desarrollador de <a href="https://github.com/topjohnwu/Magisk/issues"><b>Magisk</b></a>.]]></string>
-    <string name="system_inject_fail_summary">Inyección del framework del sistema fallida</string>
-    <string name="system_inject_fail"><![CDATA[Esto es raro y puede ser causado por <b>Magisk</b> o algunos módulos de Magisk de baja calidad.<br/> Por favor intente desactivar los módulos de Magisk que no sean Riru y LSPosed o envíe un log completo a los desarrolladores.]]></string>
-    <string name="system_prop_incorrect_summary">Prop del sistema incorrecto</string>
-    <string name="system_prop_incorrect"><![CDATA[Algunas propiedades del sistema han sido eliminadas l modificadas.<br/>Los módulos pueden invalidarse ocasionalmente.]]></string>
-    <string name="need_update">Es necesario actualizar</string>
+    <string name="selinux_policy_not_loaded_summary">Selinux policy no está cargado correctamente</string>
+    <string name="selinux_policy_not_loaded"><![CDATA[Modules that hook System Framework will not work.<br/>Please report this to <a href="https://github.com/topjohnwu/Magisk/issues"><b>Magisk</b></a> developer.]]></string>
+    <string name="system_inject_fail_summary">System Framework injection failed</string>
+    <string name="system_inject_fail"><![CDATA[This is rare and may be caused by <b>Magisk</b> or some low-quality Magisk modules.<br/>Please try to disable Magisk modules other than Riru and LSPosed or submit full log to developers.]]></string>
+    <string name="system_prop_incorrect_summary">System prop incorrect</string>
+    <string name="system_prop_incorrect"><![CDATA[Some necessary system properties deleted or modified.<br/>Modules may invalidate occasionally.]]></string>
+    <string name="need_update">Need to update</string>
     <string name="please_update_summary">Por favor instale la última versión de LSPosed</string>
     <string name="lsposed_not_active">LSPosed no está instalado o activado actualmente.</string>
     <string name="info_api_version">Versión de la API</string>
@@ -64,7 +64,6 @@
     <string name="parasitic_recommend_summary">LSPosed ahora soporta la parasitización del sistema para evitar ser detectado. Puede desinstalar el Manager de forma segura después de crear con éxito un acceso directo al Parasitic Manager. En cualquier caso, puedes instalar el Manager desde /data/adb/lspd/manager.apk.</string>
     <string name="create_shortcut">Crear acceso directo</string>
     <string name="never_show">Nunca mostrar</string>
-    <string name="failed_to_create_shortcut">No se pudo crear el acceso directo: %1$s</string>
     <string name="update_lsposed">Actualizar LSPosed</string>
     <string name="update_lsposed_msg">¿Confirmar para actualizar LSPose? Este dispositivo se reiniciará después de completar la actualización</string>
     <!-- LogsActivity -->
@@ -196,6 +195,7 @@
     <string name="manager_crashed_info">reportar esto a </string>
     <string name="send_crash_info">Enviar información de error</string>
     <string name="crash_info_copied">Información del error copiada al portapapeles</string>
+    <string name="info_copied">Información copiada al portapapeles</string>
     <!-- Colors -->
     <string name="color_sakura">Sakura</string>
     <string name="color_red">Rojo</string>
@@ -217,4 +217,6 @@
     <string name="color_brown">Marrón</string>
     <string name="color_blue_grey">Gris azul</string>
     <string name="feedback_or_suggestion">Comentarios o sugerencias</string>
+    <string name="sort_upgradable_first">Upgradable first</string>
+    <string name="overview">Resumen</string>
 </resources>

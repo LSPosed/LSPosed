@@ -64,7 +64,6 @@
     <string name="parasitic_recommend_summary">LSPosed agora suporta a parasitização do sistema para evitar a detecção. Você pode desinstalar o gerenciador em segurança depois de criar com sucesso um atalho do gerenciador parasita. Em qualquer caso, você pode instalar o gerenciador a partir de /data/adb/lspd/manager.apk.</string>
     <string name="create_shortcut">Criar atalho</string>
     <string name="never_show">Não mostrar novamente</string>
-    <string name="failed_to_create_shortcut">Falha ao criar atalho: %1$s</string>
     <string name="update_lsposed">Atualizar LSPosed</string>
     <string name="update_lsposed_msg">Confirmar a atualização do LSPosed? O dispositivo reiniciará após a conclusão da atualização</string>
     <!-- LogsActivity -->

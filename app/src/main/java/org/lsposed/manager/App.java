@@ -63,6 +63,7 @@ import java.util.concurrent.FutureTask;
 import okhttp3.Cache;
 import okhttp3.OkHttpClient;
 import okhttp3.logging.HttpLoggingInterceptor;
+import rikka.core.os.FileUtils;
 import rikka.material.app.DayNightDelegate;
 import rikka.material.app.LocaleDelegate;
 
@@ -74,10 +75,7 @@ public class App extends Application {
         try {
             var input = App.getInstance().getAssets().open("webview/" + name);
             var result = new ByteArrayOutputStream(1024);
-            var buffer = new byte[1024];
-            for (int length; (length = input.read(buffer)) != -1; ) {
-                result.write(buffer, 0, length);
-            }
+            FileUtils.copy(input, result);
             return result.toString(StandardCharsets.UTF_8.name());
         } catch (IOException e) {
             Log.e(App.TAG, "read webview HTML", e);

@@ -7,6 +7,7 @@ import android.content.res.AssetManager;
 import android.content.res.Resources;
 import android.os.ParcelFileDescriptor;
 import android.os.Process;
+import android.os.RemoteException;
 import android.os.SELinux;
 import android.os.SharedMemory;
 import android.system.ErrnoException;
@@ -22,8 +23,12 @@ import org.lsposed.lspd.util.Utils;
 
 import java.io.BufferedReader;
 import java.io.File;
+import java.io.FileInputStream;
+import java.io.FileOutputStream;
 import java.io.IOException;
+import java.io.InputStream;
 import java.io.InputStreamReader;
+import java.io.OutputStream;
 import java.lang.reflect.Method;
 import java.nio.channels.Channels;
 import java.nio.channels.FileChannel;
@@ -45,7 +50,9 @@ import java.util.HashSet;
 import java.util.LinkedHashMap;
 import java.util.List;
 import java.util.Map;
+import java.util.zip.ZipEntry;
 import java.util.zip.ZipFile;
+import java.util.zip.ZipOutputStream;
 
 import hidden.HiddenApiBridge;
 
@@ -74,6 +81,15 @@ public class ConfigFileManager {
             createLogDirPath();
         } catch (IOException e) {
             Log.e(TAG, Log.getStackTraceString(e));
+        }
+    }
+
+    public static void transfer(InputStream in, OutputStream out) throws IOException {
+        int size = 8192;
+        var buffer = new byte[size];
+        int read;
+        while ((read = in.read(buffer, 0, size)) >= 0) {
+            out.write(buffer, 0, read);
         }
     }
 
@@ -194,17 +210,70 @@ public class ConfigFileManager {
         return logDirPath.resolve("props.txt").toFile();
     }
 
-    static Map<String, ParcelFileDescriptor> getLogs() {
-        var map = new LinkedHashMap<String, ParcelFileDescriptor>();
-        try {
-            putFds(map, logDirPath);
-            putFds(map, oldLogDirPath);
-            putFds(map, Paths.get("/data/tombstones"));
-            putFds(map, Paths.get("/data/anr"));
-        } catch (IOException e) {
-            Log.e(TAG, "getLogs", e);
+    static void getLogs(ParcelFileDescriptor zipFd) throws RemoteException {
+        var logs = new LinkedHashMap<String, ParcelFileDescriptor>();
+        try (var os = new ZipOutputStream(new FileOutputStream(zipFd.getFileDescriptor()))) {
+            putFds(logs, logDirPath);
+            putFds(logs, oldLogDirPath);
+            putFds(logs, Paths.get("/data/tombstones"));
+            putFds(logs, Paths.get("/data/anr"));
+            logs.forEach((name, fd) -> {
+                try (var is = new FileInputStream(fd.getFileDescriptor())) {
+                    os.putNextEntry(new ZipEntry(name));
+                    transfer(is, os);
+                    os.closeEntry();
+                } catch (IOException e) {
+                    Log.w(TAG, name, e);
+                }
+            });
+            {
+                var name = "full.log";
+                try (var is = new ProcessBuilder("logcat", "-d").start().getInputStream()) {
+                    os.putNextEntry(new ZipEntry(name));
+                    transfer(is, os);
+                    os.closeEntry();
+                } catch (IOException e) {
+                    Log.w(TAG, name, e);
+                }
+            }
+            {
+                var name = "dmesg.log";
+                try (var is = new ProcessBuilder("dmesg").start().getInputStream()) {
+                    os.putNextEntry(new ZipEntry(name));
+                    transfer(is, os);
+                    os.closeEntry();
+                } catch (IOException e) {
+                    Log.w(TAG, name, e);
+                }
+            }
+            var magiskDataDir = Paths.get("/data/adb");
+            Files.list(magiskDataDir.resolve("modules")).forEach(p -> {
+                if (!Files.exists(p.resolve("disable"))) {
+                    var prop = p.resolve("module.prop");
+                    if (Files.exists(prop)) {
+                        var name = magiskDataDir.relativize(prop).toString();
+                        try (var is = new FileInputStream(prop.toFile())) {
+                            os.putNextEntry(new ZipEntry(name));
+                            transfer(is, os);
+                            os.closeEntry();
+                        } catch (IOException e) {
+                            Log.w(TAG, name, e);
+                        }
+                    }
+                }
+            });
+            ConfigManager.getInstance().exportScopes(os);
+        } catch (Throwable e) {
+            Log.w(TAG, "get log", e);
+            throw new RemoteException(Log.getStackTraceString(e));
         }
-        return map;
+        logs.forEach((name, fd) -> {
+            try {
+                fd.close();
+            } catch (IOException e) {
+                Log.w(TAG, name, e);
+            }
+        });
     }
 
     private static void putFds(Map<String, ParcelFileDescriptor> map, Path path) throws IOException {

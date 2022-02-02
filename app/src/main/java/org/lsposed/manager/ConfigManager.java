@@ -314,15 +314,6 @@ public class ConfigManager {
         }
     }
 
-    public static Map<String, ParcelFileDescriptor> getLogs() {
-        try {
-            return LSPManagerServiceHolder.getService().getLogs();
-        } catch (RemoteException e) {
-            Log.e(App.TAG, Log.getStackTraceString(e));
-            return new HashMap<>();
-        }
-    }
-
     public static String getApi() {
         try {
             return LSPManagerServiceHolder.getService().getApi();

@@ -69,7 +69,6 @@
     <string name="parasitic_recommend_summary">LSPosed תומך כעת בטפילת מערכת כדי למנוע זיהוי. אתה יכול להסיר בבטחה את המנהל לאחר יצירת קיצור מוצלח של המנהל הטפילי. בכל מקרה אתה יכול להתקין את המנהל בחזרה מ /data/adb/lspd/manager.apk.</string>
     <string name="create_shortcut">צור קיצור דרך</string>
     <string name="never_show">לעולם על תראה</string>
-    <string name="failed_to_create_shortcut">יצירת קיצור הדרך נכשלה: %1$s</string>
     <string name="update_lsposed">עדכון LSPosed</string>
     <string name="update_lsposed_msg">לאשר לעדכן את LSPosed? מכשיר זה יאתחל לאחר השלמת העדכון</string>
     <!-- LogsActivity -->

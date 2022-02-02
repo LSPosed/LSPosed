@@ -105,7 +105,7 @@ private:
 
     inline void Log(std::string_view str);
 
-    void OnCrash();
+    void OnCrash(int err);
 
     void ProcessBuffer(struct log_msg *buf);
 
@@ -191,7 +191,8 @@ inline void Logcat::Log(std::string_view str) {
     fflush(modules_file_.get());
 }
 
-void Logcat::OnCrash() {
+void Logcat::OnCrash(int err) {
+    using namespace std::string_literals;
     constexpr size_t max_restart_logd_wait = 1U << 10;
     static size_t kLogdCrashCount = 0;
     static size_t kLogdRestartWait = 1 << 3;
@@ -204,7 +205,7 @@ void Logcat::OnCrash() {
             kLogdCrashCount = 0;
         }
     } else {
-        Log("\nLogd maybe crashed, retrying in 1s...\n");
+        Log("\nLogd maybe crashed (err="s + strerror(err) + "), retrying in 1s...\n");
     }
 
     std::this_thread::sleep_for(1s);
@@ -317,7 +318,7 @@ void Logcat::Run() {
             if (modules_print_count_ >= kMaxLogSize) [[unlikely]] RefreshFd(false);
         }
 
-        OnCrash();
+        OnCrash(errno);
     }
 }
 

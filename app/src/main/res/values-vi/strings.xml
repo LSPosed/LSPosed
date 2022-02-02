@@ -62,7 +62,6 @@
     <string name="parasitic_recommend_summary">LSPosed giờ đã hỗ trợ hệ thống ký sinh để tránh bị phát hiện. Bạn có thể thoải mái gỡ bỏ trình quản lý nếu đã có lối tắt của trình quản lý ký sinh. Trong bất cứ điều gì ngoài mong muốn bạn vẫn có thể cài đặt lại nó ở đường dẫn /data/adb/lspd/manager.apk.</string>
     <string name="create_shortcut">Tạo lối tắt</string>
     <string name="never_show">Không hiện nữa</string>
-    <string name="failed_to_create_shortcut">Tạo lối tắt thất bại: %1$s</string>
     <string name="update_lsposed">Cập nhật LSPosed</string>
     <string name="update_lsposed_msg">Xác nhận cập nhật LSPosed? Thiết bị sẽ khởi động lại sau khi cập nhật hoàn tất</string>
     <!-- LogsActivity -->
@@ -218,4 +217,5 @@
     <string name="feedback_or_suggestion">Phản hồi hoặc góp ý</string>
     <string name="sort_upgradable_first">Có thể nâng cấp trước</string>
     <string name="overview">Tổng quát</string>
+    <string name="create_shortcut_summary">Tạo lối tắt trình quản lý ký sinh theo cách thủ công</string>
 </resources>

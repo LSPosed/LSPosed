@@ -23,11 +23,11 @@
     <string name="Modules">الوحـدات</string>
     <plurals name="modules_enabled_count">
         <item quantity="zero">%d وحـدة مفعلة</item>
-        <item quantity="one">تم تمكين %d الوحدة</item>
+        <item quantity="one">%d وحدة مفعلة</item>
         <item quantity="two">%d وحدات مفعلة</item>
-        <item quantity="few">%d وحدات مفعلة</item>
+        <item quantity="few">%d وحدة مفعلة</item>
         <item quantity="many">%d وحدات مفعلة</item>
-        <item quantity="other">تم تمكين %d وحدات</item>
+        <item quantity="other">%d وحدات مفعلة</item>
     </plurals>
     <string name="Logs">السجـلات</string>
     <string name="Settings">الإعـدادات</string>
@@ -72,7 +72,6 @@
     <string name="parasitic_recommend_summary">يدعم LSPosed الآن تطهير النظام لتجنب الكشف. يمكنك إلغاء تثبيت المدير بأمان بعد إنشاء اختصار للمدير الطفيلي. على أي حال يمكنك تثبيت المدير مرة أخرى من /data/adb/lspd/manager.apk.</string>
     <string name="create_shortcut">إنشاء إختصار</string>
     <string name="never_show">لا تظهر أبداً</string>
-    <string name="failed_to_create_shortcut">فشل إنشاء اختصار: %1$s</string>
     <string name="update_lsposed">تحديث LSPosed</string>
     <string name="update_lsposed_msg">تأكـيد تحديث LSPosed؟ سيتم إعـادة تشغيل هذا الجهاز بعد اكتمال التحديث</string>
     <!-- LogsActivity -->
@@ -228,4 +227,5 @@
     <string name="feedback_or_suggestion">ملاحظات أو اقتراحات</string>
     <string name="sort_upgradable_first">قابل للترقية أولاً</string>
     <string name="overview">نظرة عامة</string>
+    <string name="create_shortcut_summary">إنشاء اختصار المدير الطفيلي يدويا</string>
 </resources>

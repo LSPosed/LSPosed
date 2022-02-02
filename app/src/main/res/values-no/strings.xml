@@ -64,7 +64,6 @@
     <string name="parasitic_recommend_summary">LSPidet støtter nå systemparasitisering for å unngå deteksjon. Du kan trygt avinstallere håndtereren etter å ha lykkes med å lage en snarvei til den parasittiske behandleren. Du kan i alle tilfeller installere koordinatoren tilbake fra /data/adb/lspd/manager.apk.</string>
     <string name="create_shortcut">Opprett snarvei</string>
     <string name="never_show">Vis aldri</string>
-    <string name="failed_to_create_shortcut">Kunne ikke opprette snarvei: %1$s</string>
     <string name="update_lsposed">Oppdateringen LSPosed</string>
     <string name="update_lsposed_msg">Bekreft oppdatering av LSPosed? Denne enheten vil starte på nytt etter fullført oppdatering</string>
     <!-- LogsActivity -->

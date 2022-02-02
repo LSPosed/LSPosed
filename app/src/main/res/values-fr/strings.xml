@@ -64,7 +64,6 @@
     <string name="parasitic_recommend_summary">LSPosed supporte maintenant la parasitation du système afin d\'éviter la détection. Vous pouvez désinstaller le gestionnaire en toute sécurité et avec succès après avoir créer un raccourcis du gestionnaire parasitaire. Dans n\'importe quel cas vous pouvez installer à nouveau le gestionnaire depuis /data/adb/lspd/manager.apk.</string>
     <string name="create_shortcut">Créer raccourci</string>
     <string name="never_show">Ne jamais afficher</string>
-    <string name="failed_to_create_shortcut">Échec de la création du raccourci: %1$s</string>
     <string name="update_lsposed">Mettre à jour LSPosed</string>
     <string name="update_lsposed_msg">Vous confirmez la mise à jour LSPosed? Ce périphérique redémarrera après la mise à jour éffectuée</string>
     <!-- LogsActivity -->
@@ -220,4 +219,5 @@
     <string name="feedback_or_suggestion">Réaction ou suggestion</string>
     <string name="sort_upgradable_first">Evolutif d\'abord</string>
     <string name="overview">Aperçu</string>
+    <string name="create_shortcut_summary">Créer le raccourcis du gestionnaire parasitaire manuellement</string>
 </resources>

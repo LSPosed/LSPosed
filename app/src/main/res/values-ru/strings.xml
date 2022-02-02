@@ -68,7 +68,6 @@
     <string name="parasitic_recommend_summary">Рекомендуется скрыть приложение LSPosed от различных обнаружений в системе. Для этого создайте ярлык и безопасно удалите само приложение LSPosed. В любой момент можно вернуть приложение установив его из \"/data/adb/lspd/manager.apk\"</string>
     <string name="create_shortcut">Создать ярлык</string>
     <string name="never_show">Больше не показывать</string>
-    <string name="failed_to_create_shortcut">Не удалось создать ярлык: %1$s</string>
     <string name="update_lsposed">Обновление LSPosed</string>
     <string name="update_lsposed_msg">Вы точно хотите обновить LSPosed?\nУстройство перезагрузится после завершения обновления</string>
     <!-- LogsActivity -->
@@ -175,8 +174,8 @@
     <string name="settings_translation_contributors">Автор перевода</string>
     <string name="settings_translation">Принять участие в переводе</string>
     <string name="settings_translation_summary">Помогите нам перевести %s на ваш язык</string>
-    <string name="pref_title_enable_auto_add_shortcut">Создание ярлыка</string>
-    <string name="settings_enable_auto_add_shortcut_summary">Новый ярлык не будет создаваться автоматически, если выключить этот переключатель</string>
+    <string name="pref_title_enable_auto_add_shortcut">Автоматически добавлять ярлык</string>
+    <string name="settings_enable_auto_add_shortcut_summary">Новый ярлык LSPosed не будет добавляться автоматически, если выключить этот переключатель</string>
     <string name="settings_update_channel">Источник обновлений</string>
     <string name="update_channel_stable">Стабильные версии</string>
     <string name="update_channel_bate">Бета-версии</string>
@@ -224,4 +223,5 @@
     <string name="feedback_or_suggestion">Обратная связь</string>
     <string name="sort_upgradable_first">Сначала обновляемые</string>
     <string name="overview">LSPosed</string>
+    <string name="create_shortcut_summary">Вручную создать ярлык LSPosed</string>
 </resources>

@@ -55,6 +55,7 @@ import java.io.File;
 import java.io.FileNotFoundException;
 import java.io.IOException;
 import java.io.Serializable;
+import java.nio.charset.StandardCharsets;
 import java.nio.file.FileVisitResult;
 import java.nio.file.Files;
 import java.nio.file.Path;
@@ -75,7 +76,9 @@ import java.util.UUID;
 import java.util.concurrent.ConcurrentHashMap;
 import java.util.function.Consumer;
 import java.util.function.Supplier;
+import java.util.zip.ZipEntry;
 import java.util.zip.ZipFile;
+import java.util.zip.ZipOutputStream;
 
 public class ConfigManager {
     private static ConfigManager instance = null;
@@ -1014,5 +1017,26 @@ public class ConfigManager {
 
     public String getApi() {
         return api;
+    }
+
+    public void exportScopes(ZipOutputStream os) throws IOException {
+        os.putNextEntry(new ZipEntry("scopes.txt"));
+        cachedScope.forEach((scope, modules) -> {
+            try {
+                os.write((scope.processName + "/" + scope.uid + "\n").getBytes(StandardCharsets.UTF_8));
+                for (var module : modules) {
+                    os.write(("\t" + module.packageName + "\n").getBytes(StandardCharsets.UTF_8));
+                    for (var cn : module.file.moduleClassNames) {
+                        os.write(("\t\t" + cn + "\n").getBytes(StandardCharsets.UTF_8));
+                    }
+                    for (var ln : module.file.moduleLibraryNames) {
+                        os.write(("\t\t" + ln + "\n").getBytes(StandardCharsets.UTF_8));
+                    }
+                }
+            } catch (IOException e) {
+                Log.w(TAG, scope.processName, e);
+            }
+        });
+        os.closeEntry();
     }
 }
