@@ -64,7 +64,6 @@
     <string name="parasitic_recommend_summary">LSPosed understøtter nu system parasitization for at undgå afsløring. Du kan trygt afinstallere manager efter held at oprette en genvej til parasitleder. Under alle omstændigheder kan du installere manager tilbage fra /data/adb/lspd/manager.apk.</string>
     <string name="create_shortcut">Opret genvej</string>
     <string name="never_show">Vis aldrig</string>
-    <string name="failed_to_create_shortcut">Kunne ikke oprette genvej: %1$s</string>
     <string name="update_lsposed">Opdater LSPosed</string>
     <string name="update_lsposed_msg">Bekræft opdatering af LSPosed? Denne enhed vil genstarte efter opdateringsfuldførelse</string>
     <!-- LogsActivity -->
