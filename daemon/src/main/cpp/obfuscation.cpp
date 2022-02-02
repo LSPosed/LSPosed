@@ -23,6 +23,7 @@
 
 #include <jni.h>
 #include <unistd.h>
+#include <algorithm>
 #include <random>
 #include <unordered_map>
 #include <sys/mman.h>
@@ -60,27 +61,43 @@ Java_org_lsposed_lspd_service_ObfuscationManager_getObfuscatedSignature(JNIEnv *
         return env->NewStringUTF(obfuscated_signature.c_str());
     }
 
-    static auto& chrs = "abcdefghijklmnopqrstuvwxyz"
-                        "ABCDEFGHIJKLMNOPQRSTUVWXYZ";
+    auto regen = []() {
+        static auto& chrs = "abcdefghijklmnopqrstuvwxyz"
+                            "ABCDEFGHIJKLMNOPQRSTUVWXYZ";
 
-    thread_local static std::mt19937 rg{std::random_device{}()};
-    thread_local static std::uniform_int_distribution<std::string::size_type> pick(0, sizeof(chrs) - 2);
-    thread_local static std::uniform_int_distribution<std::string::size_type> choose_slash(0, 10);
+        thread_local static std::mt19937 rg{std::random_device{}()};
+        thread_local static std::uniform_int_distribution<std::string::size_type> pick(0, sizeof(chrs) - 2);
+        thread_local static std::uniform_int_distribution<std::string::size_type> choose_slash(0, 10);
 
-    size_t length = old_signature.size();
-    obfuscated_signature.reserve(length);
-    obfuscated_signature += "L";
+        std::string out;
+        size_t length = old_signature.size();
+        out.reserve(length);
+        out += "L";
 
-    for (size_t i = 1; i < length; i++) {
-        if (choose_slash(rg) > 8 &&                         // 80% alphabet + 20% slashes
-            obfuscated_signature[i - 1] != '/' &&               // slashes could not stick together
-            i != 1 &&                                           // the first character should not be slash
-            i != length - 1) {                                  // and the last character
-            obfuscated_signature += "/";
-        } else {
-            obfuscated_signature += chrs[pick(rg)];
+        for (size_t i = 1; i < length; i++) {
+            if (choose_slash(rg) > 8 &&                         // 80% alphabet + 20% slashes
+                out[i - 1] != '/' &&                                // slashes could not stick together
+                i != 1 &&                                           // the first character should not be slash
+                i != length - 1) {                                  // and the last character
+                out += "/";
+            } else {
+                out += chrs[pick(rg)];
+            }
         }
-    }
+        return out;
+    };
+
+    auto contains_keyword = [](std::string_view s) -> bool {
+        for (const auto &i: {"do", "if", "for", "int", "new", "try"}) {
+            if (s.find(i) != std::string::npos) return true;
+        }
+        return false;
+    };
+
+    do {
+        obfuscated_signature = regen();
+    } while (contains_keyword(obfuscated_signature));
+
     LOGD("ObfuscationManager.getObfuscatedSignature: %s", obfuscated_signature.c_str());
     return env->NewStringUTF(obfuscated_signature.c_str());
 }
