@@ -3,6 +3,8 @@ package org.lsposed.lspd.service;
 import android.os.SharedMemory;
 
 public class ObfuscationManager {
+    static native void init();
+
     // For module dexes
     static native SharedMemory obfuscateDex(SharedMemory memory);
 

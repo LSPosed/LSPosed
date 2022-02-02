@@ -110,8 +110,6 @@ namespace lspd {
             std::size_t size_;
         };
 
-        PreloadedDex dex_{};
-
         Context() {}
 
         void LoadDex(JNIEnv *env, int fd, size_t size);

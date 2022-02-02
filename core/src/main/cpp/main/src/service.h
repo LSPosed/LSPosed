@@ -103,7 +103,7 @@ namespace lspd {
         jmethodID read_string_method_ = nullptr;
 
         jclass parcel_file_descriptor_class_ = nullptr;
-        jmethodID get_fd_method = nullptr;
+        jmethodID detach_fd_method_ = nullptr;
 
         jclass deadObjectExceptionClass_ = nullptr;
 
