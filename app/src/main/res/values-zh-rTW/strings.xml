@@ -62,7 +62,6 @@
     <string name="parasitic_recommend_summary">LSPosed 現在支援系統寄生以繞過偵測。您可以在成功建立寄生管理器圖示後從系統設定中移除 LSPosed 管理器。您隨時可以從 /data/adb/lspd/manager.apk 重新安裝管理器。</string>
     <string name="create_shortcut">建立捷徑</string>
     <string name="never_show">不再顯示</string>
-    <string name="failed_to_create_shortcut">捷徑建立失敗：%1$s</string>
     <string name="update_lsposed">更新 LSPosed</string>
     <string name="update_lsposed_msg">確定要更新LSPosed嗎？更新完成後將會重啟裝置</string>
     <!-- LogsActivity -->
@@ -218,4 +217,5 @@
     <string name="feedback_or_suggestion">回饋或建議</string>
     <string name="sort_upgradable_first">可更新的優先</string>
     <string name="overview">概觀</string>
+    <string name="create_shortcut_summary">手動建立寄生管理器捷徑</string>
 </resources>
