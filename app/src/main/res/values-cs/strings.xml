@@ -68,7 +68,6 @@
     <string name="parasitic_recommend_summary">LSPosed nyní podporuje parazitizaci systému, aby se zabránilo detekci. Správce můžete bezpečně odinstalovat po úspěšném vytvoření zástupce parazitického manažera. V jakémkoli případě můžete správce nainstalovat zpět z /data/adb/lspd/manager.apk.</string>
     <string name="create_shortcut">Vytvořit zástupce</string>
     <string name="never_show">Nikdy nezobrazovat</string>
-    <string name="failed_to_create_shortcut">Nepodařilo se vytvořit zástupce: %1$s</string>
     <string name="update_lsposed">Aktualizovat LSPosed</string>
     <string name="update_lsposed_msg">Potvrdit aktualizaci LSPosed? Toto zařízení se restartuje po dokončení aktualizace</string>
     <!-- LogsActivity -->
@@ -224,4 +223,5 @@
     <string name="feedback_or_suggestion">Zpětná vazba nebo návrh</string>
     <string name="sort_upgradable_first">Nejprve aktualizovatelný</string>
     <string name="overview">Přehled</string>
+    <string name="create_shortcut_summary">Ručně vytvořit zástupce parazitického manažera</string>
 </resources>
