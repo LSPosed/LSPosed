@@ -57,7 +57,7 @@ namespace lspd {
 
         ScopedLocalRef<jobject> RequestApplicationBinderFromSystemServer(JNIEnv *env, const ScopedLocalRef<jobject> &system_server_binder);
 
-        std::tuple<int, size_t, std::string> RequestLSPDex(JNIEnv *env, const ScopedLocalRef<jobject> &binder);
+        std::tuple<int, size_t> RequestLSPDex(JNIEnv *env, const ScopedLocalRef<jobject> &binder);
 
     private:
         inline static std::unique_ptr<Service> instance_ = std::make_unique<Service>();
