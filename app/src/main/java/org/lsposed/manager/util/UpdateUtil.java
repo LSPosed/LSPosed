@@ -16,13 +16,13 @@ import java.io.File;
 import java.io.IOException;
 import java.time.Instant;
 import java.time.ZoneOffset;
+import java.util.Locale;
 
 import okhttp3.Call;
 import okhttp3.Callback;
 import okhttp3.Request;
 import okhttp3.Response;
 import okio.Okio;
-import rikka.material.app.LocaleDelegate;
 
 public class UpdateUtil {
     public static void loadRemoteVersion() {
@@ -42,7 +42,7 @@ public class UpdateUtil {
                     var notes = info.get("body").getAsString();
                     var assetsArray = info.getAsJsonArray("assets");
                     for (var assets : assetsArray) {
-                        checkAssets(assets.getAsJsonObject(), notes, api.toLowerCase(LocaleDelegate.getDefaultLocale()));
+                        checkAssets(assets.getAsJsonObject(), notes, api.toLowerCase(Locale.ROOT));
                     }
                 } catch (Throwable t) {
                     Log.e(App.TAG, t.getMessage(), t);
@@ -69,12 +69,13 @@ public class UpdateUtil {
                 .putInt("latest_version", Integer.parseInt(splitName[2]))
                 .putLong("latest_check", Instant.now().getEpochSecond())
                 .putString("release_notes", releaseNotes)
+                .putString("zip_file", null)
                 .putBoolean("checked", true)
                 .apply();
         var updatedAt = Instant.parse(assets.get("updated_at").getAsString());
         var downloadUrl = assets.get("browser_download_url").getAsString();
-        var nowZipTime = pref.getLong("zip_time", 0);
-        if (updatedAt.isAfter(Instant.ofEpochSecond(nowZipTime))) {
+        var zipTime = pref.getLong("zip_time", 0);
+        if (!updatedAt.equals(Instant.ofEpochSecond(zipTime))) {
             var zip = downloadNewZipSync(downloadUrl, name);
             var size = assets.get("size").getAsLong();
             if (zip != null && zip.length() == size) {
