@@ -65,6 +65,7 @@ body:
   - type: input
     attributes:
       label: Riru version/Riru 版本
+      description: If you are using Zygisk version, input `N/A` instead./如果正在使用 Zygisk 版本，请键入 `N/A`。
     validations:
       required: true
   - type: checkboxes
