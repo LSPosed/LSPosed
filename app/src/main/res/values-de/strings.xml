@@ -37,8 +37,7 @@
         <item quantity="other">%d Modul Updates verfügbar</item>
     </plurals>
     <string name="about_view_source_code"><![CDATA[Den Quellcode finden Sie unter %1$s<br/>Folgen Sie unserem %2$s-Kanal]]></string>
-    <string name="translators" comment="Dear translators, please add your home page here following the format. There can be more than one translator. So feel free to append yourself.">mshinni80
-JJ108</string>
+    <string name="translators" comment="Dear translators, please add your home page here following the format. There can be more than one translator. So feel free to append yourself.">mshinni80, JJ108</string>
     <string name="install">Installieren</string>
     <string name="install_summary">Tippen um LSPosed zu installieren</string>
     <string name="not_installed">Nicht installiert</string>
