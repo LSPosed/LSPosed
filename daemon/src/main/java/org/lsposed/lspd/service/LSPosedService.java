@@ -119,18 +119,17 @@ public class LSPosedService extends ILSPosedService.Stub {
                 if (components != null && !Arrays.stream(components).reduce(false, (p, c) -> p || c.equals(moduleName), Boolean::logicalOr)) {
                     return;
                 }
-                broadcastAndShowNotification(moduleName, userId, intent, isXposedModule);
                 if (isXposedModule) {
                     // When installing a new Xposed module, we update the apk path to mark it as a
                     // module to send a broadcast when modules that have not been activated are
                     // uninstalled.
-                    ConfigManager.getInstance().updateModuleApkPath(moduleName, ConfigManager.getInstance().getModuleApkPath(applicationInfo), true);
-                    // when package is changed, we may need to update cache (module cache or process cache)
-                    ConfigManager.getInstance().updateCache();
+                    // If cache not updated, assume it's not xposed module
+                    isXposedModule = ConfigManager.getInstance().updateModuleApkPath(moduleName, ConfigManager.getInstance().getModuleApkPath(applicationInfo), false);
                 } else if (ConfigManager.getInstance().isUidHooked(uid)) {
                     // it will automatically remove obsolete app from database
                     ConfigManager.getInstance().updateAppCache();
                 }
+                broadcastAndShowNotification(moduleName, userId, intent, isXposedModule);
                 break;
             }
             case Intent.ACTION_UID_REMOVED: {
