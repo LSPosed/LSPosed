@@ -38,8 +38,6 @@ namespace lspd {
 
         std::vector<std::pair<void *, void *>> jit_movements_;
         std::shared_mutex jit_movements_lock_;
-
-        std::string obfuscated_signature_;
     }
 
     bool isHooked(void *art_method) {
@@ -96,7 +94,7 @@ namespace lspd {
     }
 
     LSP_DEF_NATIVE_METHOD(jclass, Yahfa, buildHooker, jobject app_class_loader, jchar return_class,
-                          jcharArray classes, jstring method_name) {
+                          jcharArray classes, jstring method_name, jstring hooker_name) {
         static auto *kInMemoryClassloader = JNI_NewGlobalRef(env, JNI_FindClass(env,
                                                                                 "dalvik/system/InMemoryDexClassLoader"));
         static jmethodID kInitMid = JNI_GetMethodID(env, kInMemoryClassloader, "<init>",
@@ -121,7 +119,7 @@ namespace lspd {
         cbuilder.set_source_file("LSP");
 
         auto hooker_type =
-                TypeDescriptor::FromClassname(obfuscated_signature_.c_str());
+                TypeDescriptor::FromClassname(JUTFString(env, hooker_name).get());
 
         auto *hooker_field = cbuilder.CreateField("hooker", hooker_type)
                 .access_flags(dex::kAccStatic)
@@ -212,13 +210,10 @@ namespace lspd {
                               "(Ljava/lang/reflect/Executable;Ljava/lang/reflect/Method;Ljava/lang/reflect/Method;Z)Z"),
             LSP_NATIVE_METHOD(Yahfa, isHooked, "(Ljava/lang/reflect/Executable;)Z"),
             LSP_NATIVE_METHOD(Yahfa, buildHooker,
-                              "(Ljava/lang/ClassLoader;C[CLjava/lang/String;)Ljava/lang/Class;"),
+                              "(Ljava/lang/ClassLoader;C[CLjava/lang/String;Ljava/lang/String;)Ljava/lang/Class;"),
     };
 
-    void RegisterYahfa(JNIEnv *env, std::string obfuscated_signature) {
-        std::replace(obfuscated_signature.begin(), obfuscated_signature.end(), '/', '.');
-        obfuscated_signature_ = obfuscated_signature.substr(1) + ".LspHooker";
-        LOGD("RegisterYahfa: obfuscated_signature_=%s", obfuscated_signature_.c_str());
+    void RegisterYahfa(JNIEnv *env) {
         REGISTER_LSP_NATIVE_METHODS(Yahfa);
     }
 

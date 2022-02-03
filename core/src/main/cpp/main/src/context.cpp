@@ -128,7 +128,7 @@ namespace lspd {
 
         RegisterResourcesHook(env);
         RegisterArtClassLinker(env);
-        RegisterYahfa(env, obfuscated_signature_);
+        RegisterYahfa(env);
         RegisterPendingHooks(env);
         RegisterNativeAPI(env);
     }
@@ -198,14 +198,12 @@ namespace lspd {
 
             // Call application_binder directly if application binder is available,
             // or we proxy the request from system server binder
-            auto dex = instance->RequestLSPDex(env, application_binder ? application_binder : system_server_binder);
-            auto dex_fd = std::get<0>(dex);
-            LoadDex(env, dex_fd, std::get<1>(dex));
+            auto [dex_fd, size]= instance->RequestLSPDex(env, application_binder ? application_binder : system_server_binder);
+            LoadDex(env, dex_fd, size);
             close(dex_fd);
             instance->HookBridge(*this, env);
 
             if (application_binder) {
-                obfuscated_signature_ = std::move(std::get<2>(dex));
                 InstallInlineHooks();
                 Init(env);
                 FindAndCall(env, "forkSystemServerPost", "(Landroid/os/IBinder;)V", application_binder);
@@ -265,11 +263,9 @@ namespace lspd {
                             : instance->RequestBinder(env, nice_name);
         if (binder) {
             InstallInlineHooks();
-            auto dex = instance->RequestLSPDex(env, binder);
-            auto dex_fd = std::get<0>(dex);
-            LoadDex(env, dex_fd, std::get<1>(dex));
+            auto [dex_fd, size] = instance->RequestLSPDex(env, binder);
+            LoadDex(env, dex_fd, size);
             close(dex_fd);
-            obfuscated_signature_ = std::move(std::get<2>(dex));
             Init(env);
             LOGD("Done prepare");
             FindAndCall(env, "forkAndSpecializePost",
