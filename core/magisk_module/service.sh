@@ -18,5 +18,6 @@
 #
 
 MODDIR=${0%/*}
+cd "$MODDIR"
 # post-fs-data.sh may be blocked by other modules. retry to start this
 unshare -m "$MODDIR/daemon" --from-service "$@"&
