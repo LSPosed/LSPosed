@@ -198,22 +198,26 @@ public class LogsFragment extends BaseFragment {
                 return log.size();
             }
 
-            void refresh() {
-                isLoaded = true;
-                runOnUiThread(this::notifyDataSetChanged);
+            @SuppressLint("NotifyDataSetChanged")
+            void refresh(List<CharSequence> log) {
+                runOnUiThread(() ->{
+                    isLoaded = true;
+                    this.log = log;
+                    notifyDataSetChanged();
+                });
             }
 
             void fullRefresh() {
                 runAsync(() -> {
                     isLoaded = false;
+                    List<CharSequence> tmp;
                     try (var parcelFileDescriptor = ConfigManager.getLog(verbose);
                          var br = new BufferedReader(new InputStreamReader(new FileInputStream(parcelFileDescriptor != null ? parcelFileDescriptor.getFileDescriptor() : null)))) {
-                        log = br.lines().parallel().collect(Collectors.toList());
+                        tmp = br.lines().parallel().collect(Collectors.toList());
                     } catch (Throwable e) {
-                        log = Arrays.asList(Log.getStackTraceString(e).split("\n"));
-                    } finally {
-                        refresh();
+                        tmp = Arrays.asList(Log.getStackTraceString(e).split("\n"));
                     }
+                    refresh(tmp);
                 });
             }
 
@@ -324,7 +328,6 @@ public class LogsFragment extends BaseFragment {
         @Override
         public void onResume() {
             super.onResume();
-            adaptor.refresh();
             attachListeners();
         }
 
