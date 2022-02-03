@@ -45,8 +45,7 @@
         <item quantity="other">%d وحدات قابلة للترقية</item>
     </plurals>
     <string name="about_view_source_code"><![CDATA[عرض كود المصدر في %1$s<br/>انضم إلى قناتنا %2$s]]></string>
-    <string name="translators" comment="Dear translators, please add your home page here following the format. There can be more than one translator. So feel free to append yourself.">Mahmoud Abd El-Hamed (7TM)
-Ali Samir</string>
+    <string name="translators" comment="Dear translators, please add your home page here following the format. There can be more than one translator. So feel free to append yourself.">Mahmoud Abd El-Hamed (7TM), Ali Samir</string>
     <string name="install">تـثبيت</string>
     <string name="install_summary">انـقر لتثبيت LSPosed</string>
     <string name="not_installed">غير  مثبت</string>
