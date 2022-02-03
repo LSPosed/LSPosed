@@ -56,6 +56,10 @@ public final class ModuleUtil {
     private Map<Pair<String, Integer>, InstalledModule> installedModules = new HashMap<>();
     private boolean modulesLoaded = false;
 
+    static final int MATCH_ANY_USER = 0x00400000; // PackageManager.MATCH_ANY_USER
+
+    static final int MATCH_ALL_FLAGS = PackageManager.MATCH_DISABLED_COMPONENTS | PackageManager.MATCH_DIRECT_BOOT_AWARE | PackageManager.MATCH_DIRECT_BOOT_UNAWARE | PackageManager.MATCH_UNINSTALLED_PACKAGES | MATCH_ANY_USER;
+
     private ModuleUtil() {
         pm = App.getInstance().getPackageManager();
     }
@@ -93,12 +97,11 @@ public final class ModuleUtil {
 
         Map<Pair<String, Integer>, InstalledModule> modules = new HashMap<>();
         var users = ConfigManager.getUsers();
-        for (PackageInfo pkg : ConfigManager.getInstalledPackagesFromAllUsers(PackageManager.GET_META_DATA, false)) {
+        for (PackageInfo pkg : ConfigManager.getInstalledPackagesFromAllUsers(PackageManager.GET_META_DATA | MATCH_ALL_FLAGS, false)) {
             ApplicationInfo app = pkg.applicationInfo;
 
             if (app.metaData != null && app.metaData.containsKey("xposedminversion")) {
-                InstalledModule installed = new InstalledModule(pkg);
-                modules.put(Pair.create(pkg.packageName, app.uid / 100000), installed);
+                modules.computeIfAbsent(Pair.create(pkg.packageName, app.uid / 100000), k -> new InstalledModule(pkg));
             }
         }
 

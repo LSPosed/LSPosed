@@ -128,13 +128,23 @@ public class PackageService {
         return pm.getApplicationInfo(packageName, flags, userId);
     }
 
+    // Only for manager
     public static ParceledListSlice<PackageInfo> getInstalledPackagesFromAllUsers(int flags, boolean filterNoProcess) throws RemoteException {
         List<PackageInfo> res = new ArrayList<>();
         IPackageManager pm = getPackageManager();
         if (pm == null) return ParceledListSlice.emptyList();
         for (var user : UserService.getUsers()) {
             // in case pkginfo of other users in primary user
-            res.addAll(pm.getInstalledPackages(flags, user.id).getList().parallelStream().filter(info -> info.applicationInfo != null && info.applicationInfo.uid / PER_USER_RANGE == user.id).collect(Collectors.toList()));
+            res.addAll(pm.getInstalledPackages(flags, user.id).getList().parallelStream()
+                    .filter(info -> info.applicationInfo != null && info.applicationInfo.uid / PER_USER_RANGE == user.id)
+                    .filter(info -> {
+                        try {
+                            return isPackageAvailable(info.packageName, user.id, true);
+                        } catch (RemoteException e) {
+                            return false;
+                        }
+                    })
+                    .collect(Collectors.toList()));
         }
         if (filterNoProcess) {
             return new ParceledListSlice<>(res.parallelStream().filter(packageInfo -> {
