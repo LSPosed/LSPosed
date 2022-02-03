@@ -705,7 +705,7 @@ public class ConfigManager {
             updateCaches(true);
             return true;
         }
-        return count >= 0;
+        return count > 0;
     }
 
     // Only be called before updating modules. No need to cache.
