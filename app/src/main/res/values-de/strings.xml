@@ -22,22 +22,23 @@
     <string name="info">Info</string>
     <string name="Modules">Module</string>
     <plurals name="modules_enabled_count">
-        <item quantity="one">%d Module aktiviert</item>
+        <item quantity="one">%d Modul aktiviert</item>
         <item quantity="other">%d Module aktiviert</item>
     </plurals>
     <string name="Logs">Protokolle</string>
     <string name="Settings">Einstellungen</string>
-    <string name="About">Mehr Erfahren</string>
+    <string name="About">Über</string>
     <string name="report_issue">Fehler melden</string>
     <string name="module_repo">Modularchiv</string>
     <string name="module_repo_loading">Wird geladen…</string>
     <string name="module_repo_up_to_date">Alle Module sind auf dem neusten Stand</string>
     <plurals name="module_repo_upgradable">
         <item quantity="one">%d Modul Update verfügbar</item>
-        <item quantity="other">%d Module Update verfügbar</item>
+        <item quantity="other">%d Modul Updates verfügbar</item>
     </plurals>
     <string name="about_view_source_code"><![CDATA[Den Quellcode finden Sie unter %1$s<br/>Folgen Sie unserem %2$s-Kanal]]></string>
-    <string name="translators" comment="Dear translators, please add your home page here following the format. There can be more than one translator. So feel free to append yourself.">mshinni80</string>
+    <string name="translators" comment="Dear translators, please add your home page here following the format. There can be more than one translator. So feel free to append yourself.">mshinni80
+JJ108</string>
     <string name="install">Installieren</string>
     <string name="install_summary">Tippen um LSPosed zu installieren</string>
     <string name="not_installed">Nicht installiert</string>
@@ -47,7 +48,7 @@
     <string name="selinux_policy_not_loaded_summary">SEPolicy wird nicht korrekt geladen</string>
     <string name="selinux_policy_not_loaded"><![CDATA[Module, welche sich in das System Framework einklinken, funktionieren nicht.<br/>Bitte melden Sie dies an den <a href="https://github.com/topjohnwu/Magisk/issues"><b>Magisk</b></a> Entwickler.]]></string>
     <string name="system_inject_fail_summary">System-Framework-Injektion fehlgeschlagen</string>
-    <string name="system_inject_fail"><![CDATA[Dies ist selten und kann durch <b>Magisk</b> oder einige minderwertige Magisk Module verursacht werden.<br/>Bitte deaktivieren Sie alle Magisk-Module bis auf Riru und LSPosed, oder sende Sie eine vollständige Fehlermeldung an die Entwickler.]]></string>
+    <string name="system_inject_fail"><![CDATA[Dies ist selten und kann durch <b>Magisk</b> oder einige minderwertige Magisk Module verursacht werden.<br/>Bitte deaktivieren Sie alle Magisk-Module bis auf Riru und LSPosed, oder senden Sie eine vollständige Fehlermeldung an die Entwickler.]]></string>
     <string name="system_prop_incorrect_summary">System-Prop falsch</string>
     <string name="system_prop_incorrect"><![CDATA[Einige notwendige Systemeigenschaften wurden gelöscht oder geändert.<br/>Module können gelegentlich außer Kraft gesetzt werden.]]></string>
     <string name="need_update">Aktualisierung erforderlich</string>
@@ -65,10 +66,9 @@
     <string name="create_shortcut">Verknüpfung erstellen</string>
     <string name="never_show">Niemals anzeigen</string>
     <string name="update_lsposed">LSPosed aktualisieren</string>
-    <string name="update_lsposed_msg">Soll LSPosed aktualisiert werden?
-Gerät wird nach dem Update neu gestartet</string>
+    <string name="update_lsposed_msg">Soll LSPosed aktualisiert werden? Dieses Gerät wird nach dem Update neu gestartet</string>
     <!-- LogsActivity -->
-    <string name="menuSaveToSd">speichern</string>
+    <string name="menuSaveToSd">Speichern</string>
     <string name="nav_item_logs_verbose">Ausführliche Logs</string>
     <string name="nav_item_logs_module">Modul-Protokolle</string>
     <string name="logs_save_failed2">Speichern fehlgeschlagen:\n%s</string>
@@ -85,17 +85,17 @@ Gerät wird nach dem Update neu gestartet</string>
     <string name="disabled_verbose_log">Ausführliches Log deaktiviert</string>
     <!-- ModulesActivity -->
     <string name="module_empty_description">(keine Beschreibung angegeben)</string>
-    <string name="warning_xposed_min_version">Dieses Modul erfordert eine neuere Version von LSPosed (%d) und kann nicht aktiviert werden</string>
+    <string name="warning_xposed_min_version">Dieses Modul erfordert eine neuere Version von LSPosed (%d) und kann daher nicht aktiviert werden</string>
     <string name="no_min_version_specified">Dieses Modul gibt nicht die benötigte LSPosed-Version an.</string>
     <string name="warning_min_version_too_low">Dieses Modul wurde für die LSPosed-Version %1$d erstellt, wurde jedoch aufgrund inkompatibler Änderungen in der Version %2$d deaktiviert</string>
-    <string name="warning_installed_on_external_storage">Dieses Modul kann nicht geladen werden, da es auf der SD-Karte installiert ist. Bitte verschieben Sie es in den internen Speicher</string>
+    <string name="warning_installed_on_external_storage">Dieses Modul kann nicht geladen werden, da es auf der SD-Karte installiert ist, bitte es in den internen Speicher verschieben</string>
     <string name="module_uninstall">Deinstallieren</string>
     <string name="module_settings">Moduleinstellungen</string>
     <string name="view_in_repo">In Repo anzeigen</string>
     <string name="module_uninstall_message">Möchten Sie dieses Modul deinstallieren?</string>
     <string name="module_uninstalled">%1$s deinstalliert</string>
     <string name="module_uninstall_failed">Deinstallation fehlgeschlagen</string>
-    <string name="add_module_to_user">Modul zu Benutzer hinzufügen</string>
+    <string name="add_module_to_user">Modul zum Benutzer hinzufügen</string>
     <string name="module_installed">%1$s zu Benutzer %2$s hinzugefügt</string>
     <string name="module_install_failed">Hinzufügen des Moduls fehlgeschlagen</string>
     <string name="install_to_user">Installieren in Benutzer %s</string>
@@ -107,12 +107,12 @@ Gerät wird nach dem Update neu gestartet</string>
     <string name="compile_speed_msg">Optimieren...</string>
     <string name="compile_done">Optimierung abgeschlossen.</string>
     <string name="app_launch">Starten Sie es</string>
-    <string name="compile_failed">Optimierung fehlgeschlagen oder Rückgabewert ist leer.</string>
+    <string name="compile_failed">Optimierung fehlgeschlagen: Rückgabewert ist leer</string>
     <string name="compile_failed_with_info">Optimierung fehlgeschlagen: </string>
-    <string name="sort_by_name">Nach Anwendungsname sortieren</string>
-    <string name="sort_by_package_name">Nach Paketnamen sortieren</string>
-    <string name="sort_by_install_time">Nach Installationszeit sortieren</string>
-    <string name="sort_by_update_time">Nach Aktualisierungszeit sortieren</string>
+    <string name="sort_by_name">Anwendungsname</string>
+    <string name="sort_by_package_name">Paketname</string>
+    <string name="sort_by_install_time">Installationszeit</string>
+    <string name="sort_by_update_time">Aktualisierungszeit</string>
     <string name="sort_reverse">Umkehren</string>
     <string name="menu_show_system_apps">System-Apps</string>
     <string name="menu_sort">Sortieren</string>
@@ -120,28 +120,28 @@ Gerät wird nach dem Update neu gestartet</string>
     <string name="no_scope_selected">Sie haben keine App ausgewählt. Fortsetzen?</string>
     <string name="menu_show_games">Spiele</string>
     <string name="menu_show_modules">Module</string>
-    <string name="menu_show_denylist">Denylist</string>
-    <string name="failed_to_save_scope_list">Das Speichern der Bereichsliste ist fehlgeschlagen</string>
-    <string name="app_description">%1$s\nAusführung: %2$s</string>
+    <string name="menu_show_denylist">Verweigerungsliste</string>
+    <string name="failed_to_save_scope_list">Das Speichern der Scope-Liste ist fehlgeschlagen</string>
+    <string name="app_description">%1$s\nVersion %2$s</string>
     <string name="use_recommended">Empfohlen</string>
     <string name="no_scope_selected_has_recommended">Sie haben keine App ausgewählt. Empfohlene Apps auswählen?</string>
     <string name="use_recommended_message">Empfohlene Apps auswählen?</string>
     <string name="module_is_not_activated_yet">Das LSPosed-Modul wurde noch nicht aktiviert</string>
     <string name="requested_by_module">Empfohlen</string>
     <string name="update_available">Aktualisierung verfügbar: %1$s</string>
-    <string name="module_disabled_no_selection">Modul %s ist deaktiviert, da keine App ausgewählt ist.</string>
+    <string name="module_disabled_no_selection">Modul %s wurde deaktiviert, da keine App ausgewählt wurde.</string>
     <string name="android_framework">System-Framework</string>
-    <string name="menu_backup_and_restore">Backup</string>
-    <string name="menu_backup">Back-up</string>
+    <string name="menu_backup_and_restore">Sichern</string>
+    <string name="menu_backup">Sichern</string>
     <string name="menu_restore">Wiederherstellen</string>
     <string name="force_stop">Stopp erzwingen</string>
     <string name="force_stop_dlg_title">Stopp erzwingen?</string>
-    <string name="force_stop_dlg_text">Wenn Sie den Stopp einer App erzwingen, können Auffälligkeiten entstehen.</string>
+    <string name="force_stop_dlg_text">Wenn Sie den Stopp einer App erzwingen, können Probleme entstehen.</string>
     <string name="reboot_required">Neustart ist erforderlich, um diese Änderung zu übernehmen</string>
     <string name="reboot">Neustart</string>
     <string name="menu_hide">Verstecken</string>
-    <string name="deny_list">%s ist auf der Denyliste. Dies kann ohne Effekt bleiben.</string>
-    <string name="deny_list_info">Auf der Denyliste</string>
+    <string name="deny_list">%s ist auf der Verweigerungsliste. Dies könnte ohne Auswirkung bleiben.</string>
+    <string name="deny_list_info">Auf der Verweigerungsliste</string>
     <!-- ModulesActivity and AppListActivity -->
     <string name="modules_other_app">In anderer App anzeigen</string>
     <string name="module_app_info">App-Information</string>
@@ -149,20 +149,21 @@ Gerät wird nach dem Update neu gestartet</string>
     <!-- SettingsActivity -->
     <string name="settings_group_framework">Framework</string>
     <string name="pref_title_disable_verbose_log">Deaktivieren Sie ausführliche Protokolle</string>
-    <string name="pure_black_dark_theme">Verwenden Sie das dunkelschwarze Thema</string>
-    <string name="pure_black_dark_theme_summary">Das schwarze Thema verwenden, wenn dunkles Thema aktiviert ist</string>
-    <string name="settings_group_theme">Thema</string>
+    <string name="pure_black_dark_theme">Dunkelschwarzes Design</string>
+    <string name="pure_black_dark_theme_summary">Das schwarze Design verwenden, wenn dunkles Design aktiviert ist</string>
+    <string name="settings_group_theme">Design</string>
     <string name="settings_backup_and_restore">Sichern und Wiederherstellen</string>
-    <string name="settings_backup_summery">Liste der Backup-Module und -Bereiche.</string>
-    <string name="settings_backup">Back-up</string>
+    <string name="settings_backup_summery">Sichern der Modul- und Scope-Listen.</string>
+    <string name="settings_restore_summery">Wiederherstellen der Modul- und Scope-Listen.</string>
+    <string name="settings_backup">Sichern</string>
     <string name="settings_backup_failed2">Sicherung fehlgeschlagen:\n%s</string>
     <string name="settings_restore">Wiederherstellen</string>
     <string name="settings_restore_failed2">Wiederherstellung fehlgeschlagen:\n%s</string>
     <string name="group_network">Netzwerk</string>
     <string name="dns_over_http">DNS via HTTPS</string>
     <string name="dns_over_http_summary">Problemumgehung für DNS-Vergiftungen in einigen Ländern</string>
-    <string name="theme_color">Themenfarbe</string>
-    <string name="theme_color_system">System Akzentfarbe</string>
+    <string name="theme_color">Designfarbe</string>
+    <string name="theme_color_system">System Designfarbe</string>
     <string name="settings_show_hidden_icon_apps_enabled">Apps erzwingen Launcher-Symbole anzuzeigen</string>
     <string name="settings_show_hidden_icon_apps_enabled_summary">Ab Android 10 dürfen Apps ihre Launcher-Symbole nicht ausblenden. Schalten Sie den Schalter aus, um diese System-Funktion zu deaktivieren.</string>
     <string name="settings_group_system">System</string>
@@ -180,7 +181,7 @@ Gerät wird nach dem Update neu gestartet</string>
     <string name="module_readme">Liesmich</string>
     <string name="module_releases">Veröffentlichungen</string>
     <string name="module_information">Info</string>
-    <string name="module_information_homepage">Startseite</string>
+    <string name="module_information_homepage">Homepage</string>
     <string name="module_information_source_url">Quellcode</string>
     <string name="module_information_collaborators">Mitarbeiter</string>
     <string name="module_release_view_assets">Ressourcen</string>
@@ -188,18 +189,20 @@ Gerät wird nach dem Update neu gestartet</string>
     <string name="refresh">Aktualisieren</string>
     <string name="module_release_load_more">Ältere Versionen anzeigen</string>
     <string name="module_release_no_more">Keine Veröffentlichung mehr</string>
-    <string name="repo_load_failed">Fehler beim Laden der Modulrepo: %s</string>
+    <string name="repo_load_failed">Kann Modularchiv nicht laden: %s</string>
     <!-- CrashReportActivity -->
+    <string name="version_mismatch">Die Version vom LSPosed Framework (%1$d) stimmt nicht mit dem Manager (%2$d) überein. Bitte installiere LSPosed erneut.</string>
     <string name="manager_crashed">Manager abgestürzt</string>
     <string name="manager_crashed_info">melde dies an </string>
     <string name="send_crash_info">Absturzinfo senden</string>
     <string name="crash_info_copied">Absturzinfo in die Zwischenablage kopiert</string>
+    <string name="info_copied">In die Zwischenablage kopiert</string>
     <!-- Colors -->
     <string name="color_sakura">Sakura</string>
     <string name="color_red">Rot</string>
     <string name="color_pink">Pink</string>
     <string name="color_purple">Lila</string>
-    <string name="color_deep_purple">Tieflila</string>
+    <string name="color_deep_purple">Dunkellila</string>
     <string name="color_indigo">Indigoblau</string>
     <string name="color_blue">Blau</string>
     <string name="color_light_blue">Hellblau</string>
@@ -211,9 +214,11 @@ Gerät wird nach dem Update neu gestartet</string>
     <string name="color_yellow">Gelb</string>
     <string name="color_amber">Gelborange</string>
     <string name="color_orange">Orange</string>
-    <string name="color_deep_orange">Tieforange</string>
+    <string name="color_deep_orange">Dunkelorange</string>
     <string name="color_brown">Braun</string>
     <string name="color_blue_grey">Blaugrau</string>
-    <string name="feedback_or_suggestion">Feedback oder Vorschläge</string>
-    <string name="sort_upgradable_first">Zuerst aktualisierbar</string>
+    <string name="feedback_or_suggestion">Feedback oder Verbesserungsideen</string>
+    <string name="sort_upgradable_first">Aktualisierbare zuerst</string>
+    <string name="overview">Übersicht</string>
+    <string name="create_shortcut_summary">Erzeuge manuell eine Verknüpfung zum parasitären Manager</string>
 </resources>

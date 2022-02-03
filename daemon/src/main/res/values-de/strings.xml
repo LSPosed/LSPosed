@@ -3,8 +3,8 @@
     <!-- Notification -->
     <string name="module_is_not_activated_yet">Das LSPosed-Modul wurde noch nicht aktiviert</string>
     <string name="module_is_not_activated_yet_detailed">%s wurde installiert, aber noch nicht aktiviert</string>
-    <string name="xposed_module_updated_notification_title">Aktualisiertes LSPosed-Modul</string>
-    <string name="xposed_module_updated_notification_content">%s wurde aktualisiert</string>
+    <string name="xposed_module_updated_notification_title">Xposed-Modul aktualisiert</string>
+    <string name="xposed_module_updated_notification_content">%s wurde aktualisiert, bitte Stop erzwingen und die Apps in deren Scope neustarten</string>
     <string name="xposed_module_updated_notification_title_system">Xposed-Modul aktualisiert, Systemneustart erforderlich</string>
     <string name="xposed_module_updated_notification_content_system">%s wurde aktualisiert, da der Geltungsbereich System-Framework enthält, ist ein Neustart erforderlich, damit die Änderungen übernommen werden</string>
 </resources>
