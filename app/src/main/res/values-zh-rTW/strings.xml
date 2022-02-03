@@ -193,7 +193,7 @@
     <string name="manager_crashed_info">回報給 </string>
     <string name="send_crash_info">傳送錯誤日誌</string>
     <string name="crash_info_copied">錯誤日誌已複製到剪貼簿</string>
-    <string name="info_copied">複製到剪貼簿</string>
+    <string name="info_copied">已複製到剪貼簿</string>
     <!-- Colors -->
     <string name="color_sakura">櫻花</string>
     <string name="color_red">紅色</string>
