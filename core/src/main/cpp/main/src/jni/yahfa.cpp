@@ -194,10 +194,11 @@ namespace lspd {
             kMid = JNI_GetMethodID(env, kInMemoryClassloader, "findClass",
                                    "(Ljava/lang/String;)Ljava/lang/Class;");
         }
-        auto target = JNI_CallObjectMethod(env, my_cl, kMid, env->NewStringUTF("LspHooker_"));
-//        LOGD("Created %zd", image.size());
-        if (target) {
-            return (jclass) target.release();
+        if (my_cl) {
+            auto target = JNI_CallObjectMethod(env, my_cl, kMid, env->NewStringUTF("LspHooker_"));
+            if (target) {
+                return (jclass) target.release();
+            }
         }
         return nullptr;
     }
