@@ -24,5 +24,7 @@ if [ $debug = "true" ]; then
   fi
 fi
 
+mount tmpfs -t tmpfs /data/resource-cache
+
 # shellcheck disable=SC2086
 exec /system/bin/app_process $java_options /system/bin --nice-name=lspd org.lsposed.lspd.Main "$@" >/dev/null 2>&1

@@ -20,4 +20,4 @@
 MODDIR=${0%/*}
 
 rm -f "/data/local/tmp/daemon.apk"
-unshare -m sh -c "$MODDIR/lspd &"
+unshare -m sh -c "$MODDIR/daemon &"
