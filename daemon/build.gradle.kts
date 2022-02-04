@@ -111,6 +111,14 @@ android {
             }
         }
     }
+
+    sourceSets {
+        named("main") {
+            res {
+                srcDir(project(":app").file("src/common/res"))
+            }
+        }
+    }
 }
 
 fun afterEval() = android.applicationVariants.forEach { variant ->
@@ -155,7 +163,6 @@ afterEvaluate {
 }
 
 dependencies {
-
     implementation("dev.rikka.ndk.thirdparty:cxx:1.2.0")
     implementation("com.android.tools.build:apksig:$agpVersion")
     implementation("org.apache.commons:commons-lang3:3.12.0")

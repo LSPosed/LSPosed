@@ -41,7 +41,8 @@ import android.content.pm.ResolveInfo;
 import android.content.pm.ShortcutInfo;
 import android.content.pm.ShortcutManager;
 import android.content.pm.VersionedPackage;
-import android.graphics.BitmapFactory;
+import android.graphics.Bitmap;
+import android.graphics.Canvas;
 import android.graphics.Color;
 import android.graphics.drawable.Icon;
 import android.net.Uri;
@@ -76,10 +77,8 @@ import java.lang.reflect.InvocationTargetException;
 import java.util.Collections;
 import java.util.LinkedList;
 import java.util.List;
-import java.util.Map;
 import java.util.UUID;
 import java.util.concurrent.TimeUnit;
-import java.util.zip.ZipFile;
 
 import hidden.HiddenApiBridge;
 import io.github.xposed.xposedservice.utils.ParceledListSlice;
@@ -161,16 +160,24 @@ public class LSPManagerService extends ILSPManagerService.Stub {
     LSPManagerService() {
     }
 
+    private static Icon getIcon(int res) {
+        var icon = ConfigFileManager.getResources().getDrawable(res, ConfigFileManager.getResources().newTheme());
+        var bitmap = Bitmap.createBitmap(icon.getIntrinsicWidth(), icon.getIntrinsicHeight(), Bitmap.Config.ARGB_8888);
+        icon.setBounds(0, 0, icon.getIntrinsicWidth(), icon.getIntrinsicHeight());
+        icon.draw(new Canvas(bitmap));
+        return Icon.createWithBitmap(bitmap);
+    }
+
     private static Icon getManagerIcon() {
-        try (var zip = new ZipFile(ConfigFileManager.managerApkPath.toString())) {
-            var entry = zip.getEntry("assets/ic_launcher-playstore.png");
-            try (var is = zip.getInputStream(entry)) {
-                return Icon.createWithAdaptiveBitmap(BitmapFactory.decodeStream(is));
-            }
+        try {
+            return getIcon(R.mipmap.ic_launcher);
         } catch (Throwable e) {
-            Log.e(TAG, "load icon", e);
+            return getIcon(R.drawable.ic_launcher);
         }
-        return null;
+    }
+
+    private static Icon getNotificationIcon() {
+        return getIcon(R.drawable.ic_outline_extension_24);
     }
 
     static Intent getManagerIntent() {
@@ -236,7 +243,7 @@ public class LSPManagerService extends ILSPManagerService.Stub {
             var notification = new Notification.Builder(context, CHANNEL_ID)
                     .setContentTitle(title)
                     .setContentText(content)
-                    .setSmallIcon(android.R.drawable.ic_dialog_info)
+                    .setSmallIcon(getNotificationIcon())
                     .setColor(Color.BLUE)
                     .setContentIntent(getNotificationIntent(modulePackageName, moduleUserId))
                     .setAutoCancel(true)
