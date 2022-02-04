@@ -19,9 +19,6 @@
   -->
 
 <resources>
-    <color name="ic_launcher_foreground">@android:color/white</color>
-    <color name="ic_launcher_background">@color/material_pink_200</color>
-
     <color name="home_secondary_outline_ambient_shadow_color">@color/material_grey_500</color>
     <color name="home_secondary_outline_spot_shadow_color">@color/material_grey_300</color>
 

@@ -113,6 +113,14 @@ android {
             }
         }
     }
+
+    sourceSets {
+        named("main") {
+            res {
+                srcDirs("src/common/res")
+            }
+        }
+    }
 }
 
 val optimizeReleaseRes = task("optimizeReleaseRes").doLast {

@@ -18,9 +18,6 @@
   -->
 
 <resources>
-    <color name="ic_launcher_foreground">@color/material_pink_300</color>
-    <color name="ic_launcher_background">@color/material_light_blue_50</color>
-
     <color name="home_secondary_outline_ambient_shadow_color">@color/material_grey_700</color>
     <color name="home_secondary_outline_spot_shadow_color">@color/material_grey_600</color>
 
