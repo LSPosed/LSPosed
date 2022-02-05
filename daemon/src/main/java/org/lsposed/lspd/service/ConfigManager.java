@@ -825,17 +825,17 @@ public class ConfigManager {
     }
 
     public boolean enableModule(String packageName) throws RemoteException {
+        if (packageName.equals("lspd")) return false;
         PackageInfo pkgInfo = PackageService.getPackageInfoFromAllUsers(packageName, PackageService.MATCH_ALL_FLAGS).values().stream().findFirst().orElse(null);
-        if (pkgInfo == null || pkgInfo.applicationInfo == null) {
-            return false;
-        }
-        if (packageName.equals("lspd") || !updateModuleApkPath(packageName, getModuleApkPath(pkgInfo.applicationInfo), false))
-            return false;
-        boolean changed = executeInTransaction(() -> {
-            ContentValues values = new ContentValues();
-            values.put("enabled", 1);
-            return db.update("modules", values, "module_pkg_name = ?", new String[]{packageName}) > 0;
-        });
+        if (pkgInfo == null || pkgInfo.applicationInfo == null) return false;
+        var modulePath = getModuleApkPath(pkgInfo.applicationInfo);
+        if (modulePath == null) return true;
+        boolean changed = updateModuleApkPath(packageName, modulePath, false) ||
+                executeInTransaction(() -> {
+                    ContentValues values = new ContentValues();
+                    values.put("enabled", 1);
+                    return db.update("modules", values, "module_pkg_name = ?", new String[]{packageName}) > 0;
+                });
         if (changed) {
             // Called by manager, should be async
             updateCaches(false);
