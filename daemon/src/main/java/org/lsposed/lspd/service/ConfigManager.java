@@ -810,6 +810,7 @@ public class ConfigManager {
 
     public boolean disableModule(String packageName) {
         if (packageName.equals("lspd")) return false;
+        Log.e(TAG, "disable " + packageName);
         boolean changed = executeInTransaction(() -> {
             ContentValues values = new ContentValues();
             values.put("enabled", 0);
@@ -829,13 +830,13 @@ public class ConfigManager {
         PackageInfo pkgInfo = PackageService.getPackageInfoFromAllUsers(packageName, PackageService.MATCH_ALL_FLAGS).values().stream().findFirst().orElse(null);
         if (pkgInfo == null || pkgInfo.applicationInfo == null) return false;
         var modulePath = getModuleApkPath(pkgInfo.applicationInfo);
-        if (modulePath == null) return true;
-        boolean changed = updateModuleApkPath(packageName, modulePath, false) ||
-                executeInTransaction(() -> {
-                    ContentValues values = new ContentValues();
-                    values.put("enabled", 1);
-                    return db.update("modules", values, "module_pkg_name = ?", new String[]{packageName}) > 0;
-                });
+        if (modulePath == null) return false;
+        boolean changed = updateModuleApkPath(packageName, modulePath, false);
+        changed = executeInTransaction(() -> {
+            ContentValues values = new ContentValues();
+            values.put("enabled", 1);
+            return db.update("modules", values, "module_pkg_name = ?", new String[]{packageName}) > 0;
+        }) || changed;
         if (changed) {
             // Called by manager, should be async
             updateCaches(false);
