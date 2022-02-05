@@ -810,7 +810,6 @@ public class ConfigManager {
 
     public boolean disableModule(String packageName) {
         if (packageName.equals("lspd")) return false;
-        Log.e(TAG, "disable " + packageName);
         boolean changed = executeInTransaction(() -> {
             ContentValues values = new ContentValues();
             values.put("enabled", 0);
