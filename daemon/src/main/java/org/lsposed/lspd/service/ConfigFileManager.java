@@ -17,6 +17,7 @@ import android.util.Log;
 
 import androidx.annotation.Nullable;
 
+import org.lsposed.daemon.BuildConfig;
 import org.lsposed.lspd.models.PreLoadedApk;
 import org.lsposed.lspd.util.InstallerVerifier;
 import org.lsposed.lspd.util.Utils;
@@ -48,6 +49,8 @@ import java.time.format.DateTimeFormatter;
 import java.util.ArrayList;
 import java.util.HashSet;
 import java.util.List;
+import java.util.Locale;
+import java.util.zip.Deflater;
 import java.util.zip.ZipEntry;
 import java.util.zip.ZipFile;
 import java.util.zip.ZipOutputStream;
@@ -210,6 +213,10 @@ public class ConfigFileManager {
 
     static void getLogs(ParcelFileDescriptor zipFd) throws RemoteException {
         try (var os = new ZipOutputStream(new FileOutputStream(zipFd.getFileDescriptor()))) {
+            var comment = String.format(Locale.ROOT, "LSPosed %s %s (%d)",
+                    BuildConfig.BUILD_TYPE, BuildConfig.VERSION_NAME, BuildConfig.VERSION_CODE);
+            os.setComment(comment);
+            os.setLevel(Deflater.BEST_COMPRESSION);
             zipAddDir(os, logDirPath);
             zipAddDir(os, oldLogDirPath);
             zipAddDir(os, Paths.get("/data/tombstones"));
@@ -218,6 +225,7 @@ public class ConfigFileManager {
             zipAddProcOutput(os, "dmesg.log", "dmesg");
             var magiskDataDir = Paths.get("/data/adb");
             Files.list(magiskDataDir.resolve("modules")).forEach(p -> {
+                zipAddFile(os, p, magiskDataDir);
                 zipAddFile(os, p.resolve("module.prop"), magiskDataDir);
                 zipAddFile(os, p.resolve("remove"), magiskDataDir);
                 zipAddFile(os, p.resolve("disable"), magiskDataDir);
@@ -243,17 +251,17 @@ public class ConfigFileManager {
 
     private static void zipAddFile(ZipOutputStream os, Path path, Path base) {
         var name = base.relativize(path).toString();
-        if (Files.exists(path)) {
-            try (var is = new FileInputStream(path.toFile())) {
+        if (Files.isDirectory(path)) {
+            try {
                 os.putNextEntry(new ZipEntry(name));
-                transfer(is, os);
                 os.closeEntry();
             } catch (IOException e) {
                 Log.w(TAG, name, e);
             }
-        } else {
-            try {
+        } else if (Files.exists(path)) {
+            try (var is = new FileInputStream(path.toFile())) {
                 os.putNextEntry(new ZipEntry(name));
+                transfer(is, os);
                 os.closeEntry();
             } catch (IOException e) {
                 Log.w(TAG, name, e);
