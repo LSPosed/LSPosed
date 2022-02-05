@@ -825,9 +825,9 @@ public class ConfigManager {
     }
 
     public boolean enableModule(String packageName) throws RemoteException {
+        if (packageName.equals("lspd")) return false;
         PackageInfo pkgInfo = PackageService.getPackageInfoFromAllUsers(packageName, PackageService.MATCH_ALL_FLAGS).values().stream().findFirst().orElse(null);
         if (pkgInfo == null || pkgInfo.applicationInfo == null) return false;
-        if (packageName.equals("lspd")) return false;
         var modulePath = getModuleApkPath(pkgInfo.applicationInfo);
         if (modulePath == null) return true;
         boolean changed = updateModuleApkPath(packageName, modulePath, false) ||
