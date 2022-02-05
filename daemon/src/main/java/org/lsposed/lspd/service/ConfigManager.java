@@ -87,6 +87,7 @@ public class ConfigManager {
             SQLiteDatabase.openOrCreateDatabase(ConfigFileManager.dbPath, null);
 
     private boolean verboseLog = true;
+    private boolean dexObfuscate = true;
     private boolean autoAddShortcut = true;
     private String miscPath = null;
 
@@ -867,6 +868,19 @@ public class ConfigManager {
         verboseLog = on;
     }
 
+    public boolean verboseLog() {
+        return BuildConfig.DEBUG || verboseLog;
+    }
+
+    public void setDexObfuscate(boolean on) {
+        updateModulePrefs("lspd", 0, "config", "enable_dex_obfuscate", on);
+        dexObfuscate = on;
+    }
+
+    public boolean dexObfuscate() {
+        return dexObfuscate;
+    }
+
     public boolean isAddShortcut() {
         Log.d(TAG, "Auto add shortcut=" + autoAddShortcut);
         return autoAddShortcut;
@@ -875,10 +889,6 @@ public class ConfigManager {
     public void setAddShortcut(boolean on) {
         updateModulePrefs("lspd", 0, "config", "enable_auto_add_shortcut", on);
         this.autoAddShortcut = on;
-    }
-
-    public boolean verboseLog() {
-        return BuildConfig.DEBUG || verboseLog;
     }
 
     public ParcelFileDescriptor getManagerApk() {
