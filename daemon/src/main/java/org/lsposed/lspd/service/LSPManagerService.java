@@ -769,4 +769,14 @@ public class LSPManagerService extends ILSPManagerService.Stub {
     public boolean performDexOptMode(String packageName) throws RemoteException {
         return PackageService.performDexOptMode(packageName);
     }
+
+    @Override
+    public boolean getDexObfuscate() throws RemoteException {
+        return ConfigManager.getInstance().dexObfuscate();
+    }
+
+    @Override
+    public void setDexObfuscate(boolean enabled) throws RemoteException {
+        ConfigManager.getInstance().setDexObfuscate(enabled);
+    }
 }

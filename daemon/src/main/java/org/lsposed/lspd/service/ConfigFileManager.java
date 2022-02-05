@@ -316,7 +316,9 @@ public class ConfigFileManager {
                 Channels.newChannel(in).read(byteBuffer);
                 SharedMemory.unmap(byteBuffer);
                 var new_memory = ObfuscationManager.obfuscateDex(memory);
-                memory.close();
+                if (memory != new_memory) {
+                    memory.close();
+                }
                 new_memory.setProtect(OsConstants.PROT_READ);
                 preLoadedDexes.add(new_memory);
             } catch (IOException | ErrnoException e) {

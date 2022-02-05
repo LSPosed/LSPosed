@@ -182,6 +182,7 @@
     <string name="update_channel_stable">Stable</string>
     <string name="update_channel_bate">Beta</string>
     <string name="update_channel_nightly">Nightly build</string>
+    <string name="pref_title_enable_dex_obfuscate">Enable Dex Obfuscate</string>
 
     <!-- Module Repo -->
     <string name="module_readme">Readme</string>

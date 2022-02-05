@@ -35,9 +35,16 @@
 #include "slicer/writer.h"
 #include "obfuscation.h"
 
+bool obfuscate_enabled(JNIEnv* env, jclass obfuscation_manager) {
+    auto method_enabled = JNI_GetMethodID(env, obfuscation_manager, "enabled", "()Z");
+    auto result = JNI_CallStaticBooleanMethod(env, obfuscation_manager, method_enabled);
+    return result;
+}
+
 extern "C"
 JNIEXPORT void JNICALL
-Java_org_lsposed_lspd_service_ObfuscationManager_init(JNIEnv *env, jclass ) {
+Java_org_lsposed_lspd_service_ObfuscationManager_init(JNIEnv *env, jclass obfuscation_manager) {
+    if (!obfuscate_enabled(env, obfuscation_manager)) return;
     LOGD("ObfuscationManager.init");
     if (auto file_descriptor = JNI_FindClass(env, "java/io/FileDescriptor")) {
         class_file_descriptor = JNI_NewGlobalRef(env, file_descriptor);
@@ -55,10 +62,9 @@ Java_org_lsposed_lspd_service_ObfuscationManager_init(JNIEnv *env, jclass ) {
 
 extern "C"
 JNIEXPORT jstring JNICALL
-Java_org_lsposed_lspd_service_ObfuscationManager_getObfuscatedSignature(JNIEnv *env, jclass ) {
-    if (!obfuscated_signature.empty()) {
-        return env->NewStringUTF(obfuscated_signature.c_str());
-    }
+Java_org_lsposed_lspd_service_ObfuscationManager_getObfuscatedSignature(JNIEnv *env, jclass obfuscation_manager) {
+    if (!obfuscate_enabled(env, obfuscation_manager)) return env->NewStringUTF(old_signature.c_str());
+    if (!obfuscated_signature.empty()) return env->NewStringUTF(obfuscated_signature.c_str());
 
     auto regen = []() {
         static auto& chrs = "abcdefghijklmnopqrstuvwxyz"
@@ -131,7 +137,7 @@ int obfuscateDex(const void *dex, size_t size) {
 
 extern "C"
 JNIEXPORT jint JNICALL
-Java_org_lsposed_lspd_service_ObfuscationManager_preloadDex(JNIEnv *, jclass ) {
+Java_org_lsposed_lspd_service_ObfuscationManager_preloadDex(JNIEnv *env, jclass obfuscation_manager) {
     using namespace std::string_literals;
     std::lock_guard lg(dex_lock);
     if (lspdDex != -1) return lspdDex;
@@ -149,14 +155,20 @@ Java_org_lsposed_lspd_service_ObfuscationManager_preloadDex(JNIEnv *, jclass ) {
 
     LOGD("Loaded %s with size %zu", dex_path.data(), size);
 
+    if (!obfuscate_enabled(env, obfuscation_manager)) {
+        lspdDex = fileno(f.get());
+        return lspdDex;
+    }
+
     auto *addr = mmap(nullptr, size, PROT_READ | PROT_WRITE, MAP_PRIVATE, fileno(f.get()), 0);
 
     if (addr == MAP_FAILED) {
-        PLOGE("Read dex");
+        PLOGE("Map dex");
         return -1;
     }
 
     auto new_dex = obfuscateDex(addr, size);
+    munmap(addr, size);
     LOGD("LSPApplicationService::preloadDex: %d, size=%zu", new_dex, ASharedMemory_getSize(new_dex));
     lspdDex = new_dex;
     return new_dex;
@@ -164,8 +176,13 @@ Java_org_lsposed_lspd_service_ObfuscationManager_preloadDex(JNIEnv *, jclass ) {
 
 extern "C"
 JNIEXPORT jlong JNICALL
-Java_org_lsposed_lspd_service_ObfuscationManager_getPreloadedDexSize(JNIEnv *, jclass ) {
+Java_org_lsposed_lspd_service_ObfuscationManager_getPreloadedDexSize(JNIEnv *env, jclass obfuscation_manager) {
     if (lspdDex != -1) {
+        if (!obfuscate_enabled(env, obfuscation_manager)) {
+            auto size = lseek(lspdDex, 0, SEEK_END);
+            lseek(lspdDex, 0, SEEK_SET);
+            return size;
+        }
         return ASharedMemory_getSize(lspdDex);
     }
     return 0;
@@ -173,8 +190,9 @@ Java_org_lsposed_lspd_service_ObfuscationManager_getPreloadedDexSize(JNIEnv *, j
 
 extern "C"
 JNIEXPORT jobject
-Java_org_lsposed_lspd_service_ObfuscationManager_obfuscateDex(JNIEnv *env, jclass /*clazz*/,
+Java_org_lsposed_lspd_service_ObfuscationManager_obfuscateDex(JNIEnv *env, jclass obfuscation_manager,
                                                        jobject memory) {
+    if (!obfuscate_enabled(env, obfuscation_manager)) { return memory; }
     int fd = ASharedMemory_dupFromJava(env, memory);
     auto size = ASharedMemory_getSize(fd);
     LOGD("fd=%d, size=%zu", fd, size);

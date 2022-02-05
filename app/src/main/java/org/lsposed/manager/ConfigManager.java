@@ -340,4 +340,23 @@ public class ConfigManager {
             Log.e(App.TAG, Log.getStackTraceString(e));
         }
     }
+
+    public static boolean isDexObfuscateEnabled() {
+        try {
+            return LSPManagerServiceHolder.getService().getDexObfuscate();
+        } catch (RemoteException e) {
+            Log.e(App.TAG, Log.getStackTraceString(e));
+            return false;
+        }
+    }
+
+    public static boolean setDexObfuscateEnabled(boolean enabled) {
+        try {
+            LSPManagerServiceHolder.getService().setDexObfuscate(enabled);
+            return true;
+        } catch (RemoteException e) {
+            Log.e(App.TAG, Log.getStackTraceString(e));
+            return false;
+        }
+    }
 }
