@@ -36,7 +36,7 @@
 #include "obfuscation.h"
 
 bool obfuscate_enabled(JNIEnv* env, jclass obfuscation_manager) {
-    auto method_enabled = JNI_GetMethodID(env, obfuscation_manager, "enabled", "()Z");
+    auto method_enabled = JNI_GetStaticMethodID(env, obfuscation_manager, "enabled", "()Z");
     auto result = JNI_CallStaticBooleanMethod(env, obfuscation_manager, method_enabled);
     return result;
 }
