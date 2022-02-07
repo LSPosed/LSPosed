@@ -218,4 +218,5 @@
     <string name="sort_upgradable_first">Có thể nâng cấp trước</string>
     <string name="overview">Tổng quát</string>
     <string name="create_shortcut_summary">Tạo lối tắt trình quản lý ký sinh theo cách thủ công</string>
+    <string name="enable_documentui">Vui lòng kích hoạt DocumentUI</string>
 </resources>
