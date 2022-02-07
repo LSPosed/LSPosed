@@ -223,6 +223,9 @@ public class ConfigManager {
         Object bool = config.get("enable_verbose_log");
         verboseLog = bool == null || (boolean) bool;
 
+        bool = config.get("enable_dex_obfuscate");
+        dexObfuscate = bool == null || (boolean) bool;
+
         bool = config.get("enable_auto_add_shortcut");
         if (bool == null) {
             updateModulePrefs("lspd", 0, "config", "enable_auto_add_shortcut", true);
