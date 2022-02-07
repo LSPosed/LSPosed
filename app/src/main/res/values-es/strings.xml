@@ -219,4 +219,6 @@
     <string name="feedback_or_suggestion">Comentarios o sugerencias</string>
     <string name="sort_upgradable_first">Upgradable first</string>
     <string name="overview">Resumen</string>
+    <string name="create_shortcut_summary">Crear manualmente el acceso directo al gestor de parásitos</string>
+    <string name="enable_documentui">Por favor, activa DocumentUI</string>
 </resources>
