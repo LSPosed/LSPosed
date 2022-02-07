@@ -24,6 +24,7 @@ import static android.provider.Settings.ACTION_APPLICATION_DETAILS_SETTINGS;
 
 import android.annotation.SuppressLint;
 import android.app.Activity;
+import android.content.ActivityNotFoundException;
 import android.content.Intent;
 import android.content.SharedPreferences;
 import android.content.pm.ApplicationInfo;
@@ -254,12 +255,22 @@ public class ScopeAdapter extends EmptyStateRecyclerView.EmptyStateAdapter<Scope
             preferences.edit().putBoolean("filter_denylist", item.isChecked()).apply();
         } else if (itemId == R.id.backup) {
             LocalDateTime now = LocalDateTime.now();
-            fragment.backupLauncher.launch(String.format(LocaleDelegate.getDefaultLocale(),
-                    "%s_%s.lsp", module.getAppName(), now.toString()));
-            return true;
+            try {
+                fragment.backupLauncher.launch(String.format(LocaleDelegate.getDefaultLocale(),
+                        "%s_%s.lsp", module.getAppName(), now.toString()));
+                return true;
+            } catch (ActivityNotFoundException e) {
+                fragment.showHint(R.string.enable_documentui, true);
+                return false;
+            }
         } else if (itemId == R.id.restore) {
-            fragment.restoreLauncher.launch(new String[]{"*/*"});
-            return true;
+            try {
+                fragment.restoreLauncher.launch(new String[]{"*/*"});
+                return true;
+            } catch (ActivityNotFoundException e) {
+                fragment.showHint(R.string.enable_documentui, true);
+                return false;
+            }
         } else if (!AppHelper.onOptionsItemSelected(item, preferences)) {
             return false;
         }

@@ -229,4 +229,5 @@
     <string name="sort_upgradable_first">Upgradable first</string>
     <string name="overview">Overview</string>
     <string name="create_shortcut_summary">Manually create parasitic manager shortcut</string>
+    <string name="enable_documentui">Please enable DocumentUI</string>
 </resources>
