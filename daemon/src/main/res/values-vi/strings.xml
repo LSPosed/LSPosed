@@ -6,5 +6,5 @@
     <string name="xposed_module_updated_notification_title">Mô-đun Xposed đã được cập nhật</string>
     <string name="xposed_module_updated_notification_content">%s đã được cập nhật, xin hãy buộc dừng và khởi động lại ứng dụng liên quan</string>
     <string name="xposed_module_updated_notification_title_system">Mô-đun Xposed đã được cập nhật, yêu cầu khởi động lại hệ thống</string>
-    <string name="xposed_module_updated_notification_content_system">%s đã được cập nhật, phạm vi hoạt động đã bao gồm System Framework, thì khởi động lại thiết bị là bắt buộc</string>
+    <string name="xposed_module_updated_notification_content_system">%s đã được cập nhật, vì phạm vi bao gồm Framework Hệ thống, thì khởi động lại là cần thiết để áp dụng các thay đổi</string>
 </resources>
