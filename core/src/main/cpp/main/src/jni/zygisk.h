@@ -5,23 +5,17 @@
 
 #include <jni.h>
 
-#define ZYGISK_API_VERSION 1
+#define ZYGISK_API_VERSION 2
 
 /*
-
 Define a class and inherit zygisk::ModuleBase to implement the functionality of your module.
 Use the macro REGISTER_ZYGISK_MODULE(className) to register that class to Zygisk.
-
 Please note that modules will only be loaded after zygote has forked the child process.
 THIS MEANS ALL OF YOUR CODE RUNS IN THE APP/SYSTEM SERVER PROCESS, NOT THE ZYGOTE DAEMON!
-
 Example code:
-
 static jint (*orig_logger_entry_max)(JNIEnv *env);
 static jint my_logger_entry_max(JNIEnv *env) { return orig_logger_entry_max(env); }
-
 static void example_handler(int socket) { ... }
-
 class ExampleModule : public zygisk::ModuleBase {
 public:
     void onLoad(zygisk::Api *api, JNIEnv *env) override {
@@ -39,11 +33,8 @@ private:
     zygisk::Api *api;
     JNIEnv *env;
 };
-
 REGISTER_ZYGISK_MODULE(ExampleModule)
-
 REGISTER_ZYGISK_COMPANION(example_handler)
-
 */
 
 namespace zygisk {
@@ -58,7 +49,7 @@ namespace zygisk {
         // This function is called when the module is loaded into the target process.
         // A Zygisk API handle will be sent as an argument; call utility functions or interface
         // with Zygisk through this handle.
-        virtual void onLoad(Api *api, JNIEnv *env) {}
+        virtual void onLoad([[maybe_unused]] Api *api, [[maybe_unused]] JNIEnv *env) {}
 
         // This function is called before the app process is specialized.
         // At this point, the process just got forked from zygote, but no app specific specialization
@@ -72,20 +63,20 @@ namespace zygisk {
         // If you need to run some operations as superuser, you can call Api::connectCompanion() to
         // get a socket to do IPC calls with a root companion process.
         // See Api::connectCompanion() for more info.
-        virtual void preAppSpecialize(AppSpecializeArgs *args) {}
+        virtual void preAppSpecialize([[maybe_unused]] AppSpecializeArgs *args) {}
 
         // This function is called after the app process is specialized.
         // At this point, the process has all sandbox restrictions enabled for this application.
         // This means that this function runs as the same privilege of the app's own code.
-        virtual void postAppSpecialize(const AppSpecializeArgs *args) {}
+        virtual void postAppSpecialize([[maybe_unused]] const AppSpecializeArgs *args) {}
 
         // This function is called before the system server process is specialized.
         // See preAppSpecialize(args) for more info.
-        virtual void preServerSpecialize(ServerSpecializeArgs *args) {}
+        virtual void preServerSpecialize([[maybe_unused]] ServerSpecializeArgs *args) {}
 
         // This function is called after the system server process is specialized.
         // At this point, the process runs with the privilege of system_server.
-        virtual void postServerSpecialize(const ServerSpecializeArgs *args) {}
+        virtual void postServerSpecialize([[maybe_unused]] const ServerSpecializeArgs *args) {}
     };
 
     struct AppSpecializeArgs {
@@ -134,18 +125,23 @@ namespace zygisk {
         // Setting this option only makes sense in preAppSpecialize.
         // The actual unmounting happens during app process specialization.
         //
-        // Processes added to Magisk's denylist will have all Magisk and its modules' files unmounted
-        // from its mount namespace. In addition, all Zygisk code will be unloaded from memory, which
-        // also implies that no Zygisk modules (including yours) are loaded.
-        //
-        // However, if for any reason your module still wants the unmount part of the denylist
-        // operation to be enabled EVEN IF THE PROCESS IS NOT ON THE DENYLIST, set this option.
+        // Set this option to force all Magisk and modules' files to be unmounted from the
+        // mount namespace of the process, regardless of the denylist enforcement status.
         FORCE_DENYLIST_UNMOUNT = 0,
 
         // When this option is set, your module's library will be dlclose-ed after post[XXX]Specialize.
-        // Be aware that after dlclose-ing your module, all of your code will be unmapped.
-        // YOU SHOULD NOT ENABLE THIS OPTION AFTER HOOKING ANY FUNCTION IN THE PROCESS.
+        // Be aware that after dlclose-ing your module, all of your code will be unmapped from memory.
+        // YOU MUST NOT ENABLE THIS OPTION AFTER HOOKING ANY FUNCTIONS IN THE PROCESS.
         DLCLOSE_MODULE_LIBRARY = 1,
+    };
+
+// Bit masks of the return value of Api::getFlags()
+    enum StateFlag : uint32_t {
+        // The user has granted root access to the current process
+        PROCESS_GRANTED_ROOT = (1u << 0),
+
+        // The current process was added on the denylist
+        PROCESS_ON_DENYLIST = (1u << 1),
     };
 
 // All API functions will stop working after post[XXX]Specialize as Zygisk will be unloaded
@@ -169,10 +165,24 @@ namespace zygisk {
         // module's companion request handler. Returns -1 if the connection attempt failed.
         int connectCompanion();
 
+        // Get the file descriptor of the root folder of the current module.
+        //
+        // This API only works in the pre[XXX]Specialize functions.
+        // Accessing the directory returned is only possible in the pre[XXX]Specialize functions
+        // or in the root companion process (assuming that you sent the fd over the socket).
+        // Both restrictions are due to SELinux and UID.
+        //
+        // Returns -1 if errors occurred.
+        int getModuleDir();
+
         // Set various options for your module.
         // Please note that this function accepts one single option at a time.
         // Check zygisk::Option for the full list of options available.
         void setOption(Option opt);
+
+        // Get information about the current process.
+        // Returns bitwise-or'd zygisk::StateFlag values.
+        uint32_t getFlags();
 
         // Hook JNI native methods for a class
         //
@@ -257,6 +267,8 @@ void zygisk_companion_entry(int client) { func(client); }
             // Zygisk functions
             int  (*connectCompanion)(void * /* _this */);
             void (*setOption)(void * /* _this */, Option);
+            int  (*getModuleDir)(void * /* _this */);
+            uint32_t (*getFlags)(void * /* _this */);
         };
 
         template <class T>
@@ -274,8 +286,14 @@ void zygisk_companion_entry(int client) { func(client); }
     inline int Api::connectCompanion() {
         return impl->connectCompanion ? impl->connectCompanion(impl->_this) : -1;
     }
+    inline int Api::getModuleDir() {
+        return impl->getModuleDir ? impl->getModuleDir(impl->_this) : -1;
+    }
     inline void Api::setOption(Option opt) {
         if (impl->setOption) impl->setOption(impl->_this, opt);
+    }
+    inline uint32_t Api::getFlags() {
+        return impl->getFlags ? impl->getFlags(impl->_this) : 0;
     }
     inline void Api::hookJniNativeMethods(JNIEnv *env, const char *className, JNINativeMethod *methods, int numMethods) {
         if (impl->hookJniNativeMethods) impl->hookJniNativeMethods(env, className, methods, numMethods);
