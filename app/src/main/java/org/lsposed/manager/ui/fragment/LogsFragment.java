@@ -20,6 +20,7 @@
 package org.lsposed.manager.ui.fragment;
 
 import android.annotation.SuppressLint;
+import android.content.ActivityNotFoundException;
 import android.os.Bundle;
 import android.os.Handler;
 import android.os.Looper;
@@ -162,7 +163,11 @@ public class LogsFragment extends BaseFragment {
     private void save() {
         LocalDateTime now = LocalDateTime.now();
         String filename = String.format(LocaleDelegate.getDefaultLocale(), "LSPosed_%s.zip", now.toString());
-        saveLogsLauncher.launch(filename);
+        try {
+            saveLogsLauncher.launch(filename);
+        } catch (ActivityNotFoundException e) {
+            showHint(R.string.install_file_manager, true);
+        }
     }
 
     @Override
@@ -200,7 +205,7 @@ public class LogsFragment extends BaseFragment {
 
             @SuppressLint("NotifyDataSetChanged")
             void refresh(List<CharSequence> log) {
-                runOnUiThread(() ->{
+                runOnUiThread(() -> {
                     isLoaded = true;
                     this.log = log;
                     notifyDataSetChanged();
