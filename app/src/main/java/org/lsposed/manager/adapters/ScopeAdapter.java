@@ -260,7 +260,7 @@ public class ScopeAdapter extends EmptyStateRecyclerView.EmptyStateAdapter<Scope
                         "%s_%s.lsp", module.getAppName(), now.toString()));
                 return true;
             } catch (ActivityNotFoundException e) {
-                fragment.showHint(R.string.install_file_manager, true);
+                fragment.showHint(R.string.enable_documentui, true);
                 return false;
             }
         } else if (itemId == R.id.restore) {
@@ -268,7 +268,7 @@ public class ScopeAdapter extends EmptyStateRecyclerView.EmptyStateAdapter<Scope
                 fragment.restoreLauncher.launch(new String[]{"*/*"});
                 return true;
             } catch (ActivityNotFoundException e) {
-                fragment.showHint(R.string.install_file_manager, true);
+                fragment.showHint(R.string.enable_documentui, true);
                 return false;
             }
         } else if (!AppHelper.onOptionsItemSelected(item, preferences)) {

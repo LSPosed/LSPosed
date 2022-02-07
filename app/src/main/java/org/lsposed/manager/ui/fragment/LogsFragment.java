@@ -166,7 +166,7 @@ public class LogsFragment extends BaseFragment {
         try {
             saveLogsLauncher.launch(filename);
         } catch (ActivityNotFoundException e) {
-            showHint(R.string.install_file_manager, true);
+            showHint(R.string.enable_documentui, true);
         }
     }
 

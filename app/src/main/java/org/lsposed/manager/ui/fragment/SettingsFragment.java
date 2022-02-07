@@ -182,7 +182,7 @@ public class SettingsFragment extends BaseFragment {
                                 "LSPosed_%s.lsp", now.toString()));
                         return true;
                     } catch (ActivityNotFoundException e) {
-                        parentFragment.showHint(R.string.install_file_manager, true);
+                        parentFragment.showHint(R.string.enable_documentui, true);
                         return false;
                     }
                 });
@@ -196,7 +196,7 @@ public class SettingsFragment extends BaseFragment {
                         restoreLauncher.launch(new String[]{"*/*"});
                         return true;
                     } catch (ActivityNotFoundException e) {
-                        parentFragment.showHint(R.string.install_file_manager, true);
+                        parentFragment.showHint(R.string.enable_documentui, true);
                         return false;
                     }
                 });
