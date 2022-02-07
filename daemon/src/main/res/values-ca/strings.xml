@@ -1,4 +1,10 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
     <!-- Notification -->
+    <string name="module_is_not_activated_yet">El mòdul Xposed encara no està activat</string>
+    <string name="module_is_not_activated_yet_detailed">%s s\'ha instal·lat, però encara no està activat</string>
+    <string name="xposed_module_updated_notification_title">Mòdul Xposed actualitzat</string>
+    <string name="xposed_module_updated_notification_content">%s s\'ha actualitzat, si us plau, força l\'aturada i reinici de les aplicacions del seu abast</string>
+    <string name="xposed_module_updated_notification_title_system">Mòdul Xposed actualitzat, cal reiniciar el sistema</string>
+    <string name="xposed_module_updated_notification_content_system">%s s\'ha actualitzat, ja que l\'abast conté System Framework, cal reiniciar per aplicar els canvis</string>
 </resources>
