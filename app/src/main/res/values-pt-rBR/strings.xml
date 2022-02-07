@@ -195,6 +195,7 @@
     <string name="manager_crashed_info">reportar isto para </string>
     <string name="send_crash_info">Enviar informações do erro</string>
     <string name="crash_info_copied">Informações de erro copiadas para a área de transferência</string>
+    <string name="info_copied">Copiado para a prancheta</string>
     <!-- Colors -->
     <string name="color_sakura">Sakura</string>
     <string name="color_red">Vermelho</string>
@@ -216,4 +217,8 @@
     <string name="color_brown">Marrom</string>
     <string name="color_blue_grey">Azul acizentado</string>
     <string name="feedback_or_suggestion">Comentários ou sugestões</string>
+    <string name="sort_upgradable_first">Atualizável primeiro</string>
+    <string name="overview">Visão geral</string>
+    <string name="create_shortcut_summary">Criar manualmente um atalho para o gestor de parasitas</string>
+    <string name="enable_documentui">Por favor, ative DocumentUI</string>
 </resources>

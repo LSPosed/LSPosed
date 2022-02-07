@@ -126,7 +126,7 @@
     <string name="module_is_not_activated_yet">Mô-đun Xposed chưa được kích hoạt</string>
     <string name="requested_by_module">Được khuyến cáo</string>
     <string name="update_available">Cập nhật khả dụng: %1$s</string>
-    <string name="module_disabled_no_selection">Mô-đun %s đã được vô hiệu do không có ứng dụng phạm vi được lựa chọn.</string>
+    <string name="module_disabled_no_selection">Mô-đun %s đã bị vô hiệu hoá do không có ứng dụng nào được lựa chọn.</string>
     <string name="android_framework">Framework Hệ thống</string>
     <string name="menu_backup_and_restore">Sao lưu</string>
     <string name="menu_backup">Sao lưu</string>
@@ -150,8 +150,8 @@
     <string name="pure_black_dark_theme_summary">Sử dụng chủ đề đen nếu chủ đề tối được bật</string>
     <string name="settings_group_theme">Chủ đề</string>
     <string name="settings_backup_and_restore">Sao lưu và khôi phục</string>
-    <string name="settings_backup_summery">Sao lưu danh sách mô-đun và phạm vi ứng dụng.</string>
-    <string name="settings_restore_summery">Khôi phục danh sách mô-đun và phạm vi ứng dụng.</string>
+    <string name="settings_backup_summery">Sao lưu danh sách mô-đun và danh sách phạm vi.</string>
+    <string name="settings_restore_summery">Khôi phục danh sách mô-đun và danh sách phạm vi.</string>
     <string name="settings_backup">Sao lưu</string>
     <string name="settings_backup_failed2">Sao lưu thất bại:\n%s</string>
     <string name="settings_restore">Phục hồi</string>

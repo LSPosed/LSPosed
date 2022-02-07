@@ -37,7 +37,7 @@
         <item quantity="other">%d Modul Updates verfügbar</item>
     </plurals>
     <string name="about_view_source_code"><![CDATA[Den Quellcode finden Sie unter %1$s<br/>Folgen Sie unserem %2$s-Kanal]]></string>
-    <string name="translators" comment="Dear translators, please add your home page here following the format. There can be more than one translator. So feel free to append yourself.">mshinni80
+    <string name="translators" comment="Dear translators, please add your home page here following the format. There can be more than one translator. So feel free to append yourself.">mshinni80, 
 JJ108</string>
     <string name="install">Installieren</string>
     <string name="install_summary">Tippen um LSPosed zu installieren</string>
@@ -69,7 +69,7 @@ JJ108</string>
     <string name="update_lsposed_msg">Soll LSPosed aktualisiert werden? Dieses Gerät wird nach dem Update neu gestartet</string>
     <!-- LogsActivity -->
     <string name="menuSaveToSd">Speichern</string>
-    <string name="nav_item_logs_verbose">Ausführliche Logs</string>
+    <string name="nav_item_logs_verbose">Ausführliche Protokolle</string>
     <string name="nav_item_logs_module">Modul-Protokolle</string>
     <string name="logs_save_failed2">Speichern fehlgeschlagen:\n%s</string>
     <string name="menuClearLog">Protokoll jetzt löschen</string>
@@ -81,8 +81,8 @@ JJ108</string>
     <string name="menuReload">Erneut laden</string>
     <string name="logs_clear_failed_2">Fehler beim Löschen des Protokolls</string>
     <string name="menu_enable_word_wrap">Wortumbruch</string>
-    <string name="enabled_verbose_log">Ausführliches Log aktiviert</string>
-    <string name="disabled_verbose_log">Ausführliches Log deaktiviert</string>
+    <string name="enabled_verbose_log">Ausführliches Protokoll aktiviert</string>
+    <string name="disabled_verbose_log">Ausführliches Protokoll deaktiviert</string>
     <!-- ModulesActivity -->
     <string name="module_empty_description">(keine Beschreibung angegeben)</string>
     <string name="warning_xposed_min_version">Dieses Modul erfordert eine neuere Version von LSPosed (%d) und kann daher nicht aktiviert werden</string>
@@ -221,4 +221,5 @@ JJ108</string>
     <string name="sort_upgradable_first">Aktualisierbare zuerst</string>
     <string name="overview">Übersicht</string>
     <string name="create_shortcut_summary">Erzeuge manuell eine Verknüpfung zum parasitären Manager</string>
+    <string name="enable_documentui">Bitte aktivieren Sie DocumentUI</string>
 </resources>

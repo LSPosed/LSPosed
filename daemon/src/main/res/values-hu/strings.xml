@@ -1,4 +1,10 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
     <!-- Notification -->
+    <string name="module_is_not_activated_yet">Az Xposed modul még nincs aktiválva</string>
+    <string name="module_is_not_activated_yet_detailed">%s telepítve lett, de még nincs aktiválva.</string>
+    <string name="xposed_module_updated_notification_title">Xposed modul frissítve</string>
+    <string name="xposed_module_updated_notification_content">%s frissítésre került, kérjük, kényszerítse az alkalmazások leállítását és újraindítását a hatókörében.</string>
+    <string name="xposed_module_updated_notification_title_system">Xposed modul frissítve, rendszer újraindítás szükséges</string>
+    <string name="xposed_module_updated_notification_content_system">%s frissítve lett, mivel a hatókör tartalmazza a System Framework-et, a változások alkalmazásához szükséges újraindítás szükséges.</string>
 </resources>

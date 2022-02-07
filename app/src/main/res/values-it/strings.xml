@@ -220,4 +220,5 @@
     <string name="sort_upgradable_first">Aggiornabili prima</string>
     <string name="overview">Panoramica</string>
     <string name="create_shortcut_summary">Crea manualmente la scorciatoia del manager parassitario</string>
+    <string name="enable_documentui">Abilitare DocumentUI</string>
 </resources>

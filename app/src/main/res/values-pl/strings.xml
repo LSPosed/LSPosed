@@ -34,6 +34,12 @@
     <string name="module_repo">Repozytorium</string>
     <string name="module_repo_loading">Ładowanie…</string>
     <string name="module_repo_up_to_date">Wszystkie moduły są aktualne</string>
+    <plurals name="module_repo_upgradable">
+        <item quantity="one">%d moduł unowocześnialny</item>
+        <item quantity="few">%d moduły z możliwością aktualizacji</item>
+        <item quantity="many">%d moduły z możliwością aktualizacji</item>
+        <item quantity="other">możliwa aktualizacja %d modułów</item>
+    </plurals>
     <string name="about_view_source_code"><![CDATA[Zobacz kod źródłowy na %1$s<br/>Dołącz do naszego kanału %2$s]]></string>
     <string name="translators" comment="Dear translators, please add your home page here following the format. There can be more than one translator. So feel free to append yourself.">null (nic)</string>
     <string name="install">Instaluj</string>
@@ -150,6 +156,8 @@
     <string name="pure_black_dark_theme_summary">Użyj czarnego motywu, jeśli ciemny motyw jest włączony</string>
     <string name="settings_group_theme">Motyw</string>
     <string name="settings_backup_and_restore">Kopia zapasowa i przywracanie</string>
+    <string name="settings_backup_summery">Kopia zapasowa listy modułów i zakresów.</string>
+    <string name="settings_restore_summery">Przywrócenie listy modułów i listy zakresów.</string>
     <string name="settings_backup">Kopia zapasowa</string>
     <string name="settings_backup_failed2">Nie udało się utworzyć kopii zapasowej:\n%s</string>
     <string name="settings_restore">Przywróć</string>
@@ -167,6 +175,7 @@
     <string name="settings_translation">Weź udział w tłumaczeniu</string>
     <string name="settings_translation_summary">Pomóż nam przetłumaczyć %s na Twój język</string>
     <string name="pref_title_enable_auto_add_shortcut">Automatycznie dodaj skrót</string>
+    <string name="settings_enable_auto_add_shortcut_summary">Nie zostaną dodane żadne nowe skróty, jeśli są wyłączone w menedżerze niepasożytniczym.</string>
     <string name="settings_update_channel">Zaktualizuj kanał</string>
     <string name="update_channel_stable">Stabilny</string>
     <string name="update_channel_bate">Beta</string>
@@ -190,6 +199,7 @@
     <string name="manager_crashed_info">zgłoś to do </string>
     <string name="send_crash_info">Wyślij informacje o awarii</string>
     <string name="crash_info_copied">Informacje o awarii skopiowane do schowka</string>
+    <string name="info_copied">Skopiowane do schowka</string>
     <!-- Colors -->
     <string name="color_sakura">Sakura</string>
     <string name="color_red">Czerwony</string>
@@ -211,4 +221,8 @@
     <string name="color_brown">Brązowy</string>
     <string name="color_blue_grey">Niebiesko szary</string>
     <string name="feedback_or_suggestion">Opinie lub sugestie</string>
+    <string name="sort_upgradable_first">Możliwość uaktualnienia w pierwszej kolejności</string>
+    <string name="overview">Przegląd</string>
+    <string name="create_shortcut_summary">Ręcznie utwórz skrót do menedżera pasożytów</string>
+    <string name="enable_documentui">Proszę włączyć DocumentUI</string>
 </resources>

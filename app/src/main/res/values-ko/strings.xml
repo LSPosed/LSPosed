@@ -29,7 +29,7 @@
     <string name="About">정보</string>
     <string name="report_issue">문제 보고</string>
     <string name="module_repo">저장소</string>
-    <string name="module_repo_loading">로딩 중…</string>
+    <string name="module_repo_loading">불러오는 중…</string>
     <string name="module_repo_up_to_date">모든 모듈이 최신 버전입니다</string>
     <plurals name="module_repo_upgradable">
         <item quantity="other">%d 개의 모듈이 업데이트 가능합니다</item>
@@ -55,12 +55,13 @@
     <string name="info_manager_version">Manager 버전</string>
     <string name="info_system_version">System 버전</string>
     <string name="info_device">장치</string>
+    <string name="create_shortcut">바로 가기 만들기</string>
     <string name="update_lsposed">LSPosed 업데이트</string>
     <string name="update_lsposed_msg">LSPosed를 업데이트 하시겠습니까? 업데이트 완료 후에 재부팅합니다.</string>
     <!-- LogsActivity -->
     <string name="menuSaveToSd">저장</string>
     <string name="nav_item_logs_module">모듈 로그</string>
-    <string name="logs_save_failed2">복원 실패:\n%s</string>
+    <string name="logs_save_failed2">저장 실패:\n%s</string>
     <string name="menuClearLog">로그 지우기</string>
     <string name="logs_cleared">로그를 성공적으로 지웠습니다.</string>
     <string name="scroll_top">맨 위로 스크롤</string>
@@ -158,4 +159,20 @@
     <string name="send_crash_info">충돌 정보 전송</string>
     <string name="crash_info_copied">충돌 정보가 클립보드에 복사되었습니다.</string>
     <!-- Colors -->
+    <string name="color_red">빨강</string>
+    <string name="color_pink">핑크</string>
+    <string name="color_purple">보라</string>
+    <string name="color_indigo">남색</string>
+    <string name="color_blue">파랑</string>
+    <string name="color_cyan">청록색</string>
+    <string name="color_teal">암청색</string>
+    <string name="color_green">초록</string>
+    <string name="color_light_green">연두</string>
+    <string name="color_lime">라임</string>
+    <string name="color_yellow">노랑</string>
+    <string name="color_amber">호박색</string>
+    <string name="color_orange">주황색</string>
+    <string name="color_brown">갈색</string>
+    <string name="feedback_or_suggestion">피드백 혹은 제안</string>
+    <string name="overview">개요</string>
 </resources>

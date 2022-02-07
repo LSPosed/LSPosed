@@ -195,6 +195,7 @@
     <string name="manager_crashed_info">αναφορά σε </string>
     <string name="send_crash_info">Αποστολή πληροφοριών κατάρρευσης</string>
     <string name="crash_info_copied">Οι πληροφορίες κατάρρευσης αντιγράφηκαν στο πρόχειρο</string>
+    <string name="info_copied">Αντιγραφή στο πρόχειρο</string>
     <!-- Colors -->
     <string name="color_sakura">Sakura</string>
     <string name="color_red">Κόκκινο</string>
@@ -217,4 +218,7 @@
     <string name="color_blue_grey">Μπλε γκρι</string>
     <string name="feedback_or_suggestion">Σχόλια ή πρόταση</string>
     <string name="sort_upgradable_first">Αναβαθμίσιμο πρώτα</string>
+    <string name="overview">Επισκόπηση</string>
+    <string name="create_shortcut_summary">Χειροκίνητη δημιουργία συντόμευσης παρασιτικού διαχειριστή</string>
+    <string name="enable_documentui">Ενεργοποιήστε το DocumentUI</string>
 </resources>

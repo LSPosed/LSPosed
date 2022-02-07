@@ -195,6 +195,7 @@
     <string name="manager_crashed_info">meld dit aan </string>
     <string name="send_crash_info">Stuur crash informatie</string>
     <string name="crash_info_copied">Crash informatie naar klembord gekopieerd</string>
+    <string name="info_copied">Gekopieerd naar klembord</string>
     <!-- Colors -->
     <string name="color_sakura">Sakura</string>
     <string name="color_red">Rood</string>
@@ -216,4 +217,8 @@
     <string name="color_brown">Bruin</string>
     <string name="color_blue_grey">Blauw grijs</string>
     <string name="feedback_or_suggestion">Feedback en suggestie</string>
+    <string name="sort_upgradable_first">Eerst te upgraden</string>
+    <string name="overview">Overzicht</string>
+    <string name="create_shortcut_summary">Maak handmatig een snelkoppeling naar parasitic manager</string>
+    <string name="enable_documentui">Schakel DocumentUI in</string>
 </resources>
