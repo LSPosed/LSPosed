@@ -224,4 +224,5 @@
     <string name="sort_upgradable_first">Спершу нові версії</string>
     <string name="overview">Огляд</string>
     <string name="create_shortcut_summary">Вручну створити ярлик менеджера-паразита</string>
+    <string name="enable_documentui">Будь ласка, увімкніть DocumentUI</string>
 </resources>
