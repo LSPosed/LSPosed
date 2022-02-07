@@ -224,4 +224,5 @@
     <string name="sort_upgradable_first">Сначала обновляемые</string>
     <string name="overview">LSPosed</string>
     <string name="create_shortcut_summary">Вручную создать ярлык LSPosed</string>
+    <string name="enable_documentui">Пожалуйста, включите DocumentUI</string>
 </resources>
