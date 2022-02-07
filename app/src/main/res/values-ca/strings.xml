@@ -49,7 +49,7 @@
     <string name="system_inject_fail_summary">La injecció del marc del sistema ha fallat</string>
     <string name="system_inject_fail"><![CDATA[Això és poc comú i podria ser causat per <b>Magisk</b> o algún Mòdul de baixa qualitat<br/>Si us plau, prova a desactivar els demés mòduls de magisk excepte Riru i LSPosed o envia un informe complet als desarrolladors.]]></string>
     <string name="system_prop_incorrect_summary">Prop del sistema incorrecte</string>
-    <string name="system_prop_incorrect"><![CDATA[S'han suprimit o modificat algunes propietats necessàries del sistema.<br/>Els mòduls poden invalidar-se ocasionalment.]]></string>
+    <string name="system_prop_incorrect"><![CDATA[S\'han suprimit o modificat algunes propietats necessàries del sistema.<br/>Els mòduls poden invalidar-se ocasionalment.]]></string>
     <string name="need_update">Cal actualitzar</string>
     <string name="please_update_summary">Instal·leu la darrera versió de LSPosed</string>
     <string name="lsposed_not_active">LSPosed no està instal·lat ni actiu actualment.</string>
