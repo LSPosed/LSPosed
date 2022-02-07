@@ -229,4 +229,5 @@ Ali Samir</string>
     <string name="sort_upgradable_first">قابل للترقية أولاً</string>
     <string name="overview">نظرة عامة</string>
     <string name="create_shortcut_summary">إنشاء اختصار المدير الطفيلي يدويا</string>
+    <string name="enable_documentui">الرجاء تمكين DocumentUI</string>
 </resources>
