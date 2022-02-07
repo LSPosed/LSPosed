@@ -221,4 +221,5 @@ https://github.com/tclement0922</string>
     <string name="sort_upgradable_first">Évolutif d\'abord</string>
     <string name="overview">Aperçu</string>
     <string name="create_shortcut_summary">Créer le raccourci du gestionnaire parasitaire manuellement</string>
+    <string name="enable_documentui">Merci d\'activer le gestionnaire de fichiers</string>
 </resources>
