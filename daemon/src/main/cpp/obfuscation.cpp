@@ -155,11 +155,6 @@ Java_org_lsposed_lspd_service_ObfuscationManager_preloadDex(JNIEnv *env, jclass 
 
     LOGD("Loaded %s with size %zu", dex_path.data(), size);
 
-    if (!obfuscate_enabled(env, obfuscation_manager)) {
-        lspdDex = fileno(f.get());
-        return lspdDex;
-    }
-
     auto *addr = mmap(nullptr, size, PROT_READ | PROT_WRITE, MAP_PRIVATE, fileno(f.get()), 0);
 
     if (addr == MAP_FAILED) {
@@ -167,7 +162,16 @@ Java_org_lsposed_lspd_service_ObfuscationManager_preloadDex(JNIEnv *env, jclass 
         return -1;
     }
 
-    auto new_dex = obfuscateDex(addr, size);
+    int new_dex;
+    if (!obfuscate_enabled(env, obfuscation_manager)) {
+        new_dex = ASharedMemory_create("", size);
+        auto new_addr = mmap(nullptr, size, PROT_READ | PROT_WRITE, MAP_SHARED, new_dex, 0);
+        memcpy(new_addr, addr, size);
+        munmap(new_addr, size);
+    } else {
+        new_dex = obfuscateDex(addr, size);
+    }
+
     munmap(addr, size);
     LOGD("LSPApplicationService::preloadDex: %d, size=%zu", new_dex, ASharedMemory_getSize(new_dex));
     lspdDex = new_dex;
@@ -178,11 +182,6 @@ extern "C"
 JNIEXPORT jlong JNICALL
 Java_org_lsposed_lspd_service_ObfuscationManager_getPreloadedDexSize(JNIEnv *env, jclass obfuscation_manager) {
     if (lspdDex != -1) {
-        if (!obfuscate_enabled(env, obfuscation_manager)) {
-            auto size = lseek(lspdDex, 0, SEEK_END);
-            lseek(lspdDex, 0, SEEK_SET);
-            return size;
-        }
         return ASharedMemory_getSize(lspdDex);
     }
     return 0;
