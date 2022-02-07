@@ -70,6 +70,7 @@
     <string name="update_lsposed_msg">Confirmaţi actualizarea LSPosed? Acest dispozitiv va reporni după finalizarea actualizării</string>
     <!-- LogsActivity -->
     <string name="menuSaveToSd">Salveaza</string>
+    <string name="nav_item_logs_verbose">Jurnalele Verbose</string>
     <string name="nav_item_logs_module">Jurnale module</string>
     <string name="logs_save_failed2">Salvarea a eșuat:\n%s</string>
     <string name="menuClearLog">Curăță jurnalul acum</string>
@@ -81,6 +82,8 @@
     <string name="menuReload">Reincarca</string>
     <string name="logs_clear_failed_2">Ștergerea jurnalului a eșuat</string>
     <string name="menu_enable_word_wrap">Înfășurarea cuvintelor</string>
+    <string name="enabled_verbose_log">Jurnal Verbose activat</string>
+    <string name="disabled_verbose_log">Jurnal Verbose dezactivat</string>
     <!-- ModulesActivity -->
     <string name="module_empty_description">(nici o descriere furnizată)</string>
     <string name="warning_xposed_min_version">Acest modul necesită o versiune Xposed mai nouă (%d) și astfel nu poate fi activata</string>
@@ -194,6 +197,7 @@
     <string name="manager_crashed_info">raportează acest lucru la </string>
     <string name="send_crash_info">Trimite informații despre prabusire</string>
     <string name="crash_info_copied">Informații prabusire copiate în clipboard</string>
+    <string name="info_copied">Copiat în clipboard</string>
     <!-- Colors -->
     <string name="color_sakura">Sakura</string>
     <string name="color_red">Roșu</string>
@@ -214,4 +218,9 @@
     <string name="color_deep_orange">Portocaliu închis</string>
     <string name="color_brown">Maro</string>
     <string name="color_blue_grey">Albastru gri</string>
+    <string name="feedback_or_suggestion">Feedback sau sugestie</string>
+    <string name="sort_upgradable_first">Upgradabil mai întâi</string>
+    <string name="overview">Prezentare generală</string>
+    <string name="create_shortcut_summary">Creați manual o comandă rapidă pentru managerul de paraziți</string>
+    <string name="enable_documentui">Vă rugăm să activați DocumentUI</string>
 </resources>
