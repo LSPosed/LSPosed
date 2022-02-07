@@ -92,7 +92,7 @@
 
         <SwitchPreference
             android:defaultValue="true"
-            android:icon="@drawable/ic_round_shield_24"
+            android:icon="@drawable/ic_outline_shield_24"
             android:key="enable_dex_obfuscate"
             android:persistent="false"
             android:title="@string/pref_title_enable_dex_obfuscate" />
