@@ -224,4 +224,5 @@
     <string name="sort_upgradable_first">Nejprve aktualizovatelný</string>
     <string name="overview">Přehled</string>
     <string name="create_shortcut_summary">Ručně vytvořit zástupce parazitického manažera</string>
+    <string name="enable_documentui">Povolte prosím DocumentUI</string>
 </resources>
