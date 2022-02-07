@@ -195,6 +195,7 @@
     <string name="manager_crashed_info">rapportere dette til </string>
     <string name="send_crash_info">Send krasjinformasjon</string>
     <string name="crash_info_copied">Krasj info kopiert til utklippstavlen</string>
+    <string name="info_copied">Kopiert til utklippstavlen</string>
     <!-- Colors -->
     <string name="color_sakura">Sakura</string>
     <string name="color_red">Rød</string>
@@ -217,4 +218,7 @@
     <string name="color_blue_grey">Blå grå</string>
     <string name="feedback_or_suggestion">Tilbakemelding eller forslag</string>
     <string name="sort_upgradable_first">Oppgraderbar først</string>
+    <string name="overview">Oversikt</string>
+    <string name="create_shortcut_summary">Lag en snarvei for parasittisk manager manuelt</string>
+    <string name="enable_documentui">Aktiver DocumentUI</string>
 </resources>

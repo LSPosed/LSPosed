@@ -219,4 +219,6 @@
     <string name="feedback_or_suggestion">Geri bildirim veya öneri</string>
     <string name="sort_upgradable_first">Önce yükseltilebilir</string>
     <string name="overview">Genel bakış</string>
+    <string name="create_shortcut_summary">Parazit yönetici kısayolunu manuel olarak oluşturun</string>
+    <string name="enable_documentui">Lütfen DocumentUI\'yi etkinleştirin</string>
 </resources>

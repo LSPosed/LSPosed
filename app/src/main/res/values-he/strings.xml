@@ -224,4 +224,6 @@
     <string name="feedback_or_suggestion">משוב או הצעה</string>
     <string name="sort_upgradable_first">ניתן לשדרוג תחילה</string>
     <string name="overview">סקירה כללית</string>
+    <string name="create_shortcut_summary">צור באופן ידני קיצור דרך למנהל טפילי</string>
+    <string name="enable_documentui">אנא הפעל את DocumentUI</string>
 </resources>

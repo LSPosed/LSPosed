@@ -220,4 +220,5 @@
     <string name="sort_upgradable_first">可更新優先</string>
     <string name="overview">概述</string>
     <string name="create_shortcut_summary">手動建立寄生管理器捷徑</string>
+    <string name="enable_documentui">請啟用 DocumentUI</string>
 </resources>

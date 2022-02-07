@@ -195,6 +195,7 @@
     <string name="manager_crashed_info">این را گزارش کنید </string>
     <string name="send_crash_info">ارسال اطلاعات هنگ</string>
     <string name="crash_info_copied">اطلاعات هنگ در کلیپ بورد کپی شد</string>
+    <string name="info_copied">در کلیپ بورد کپی شد</string>
     <!-- Colors -->
     <string name="color_sakura">ساکورا</string>
     <string name="color_red">قرمز</string>
@@ -217,4 +218,7 @@
     <string name="color_blue_grey">خاکستری آبی</string>
     <string name="feedback_or_suggestion">نظر یا پیشنهادی بدهید</string>
     <string name="sort_upgradable_first">Upgradable first</string>
+    <string name="overview">بررسی اجمالی</string>
+    <string name="create_shortcut_summary">دستی میانبر مدیر انگلی ایجاد کنید</string>
+    <string name="enable_documentui">لطفا DocumentUI را فعال کنید</string>
 </resources>
