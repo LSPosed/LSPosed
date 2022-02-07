@@ -22,12 +22,12 @@
     <string name="info">المعلومـات</string>
     <string name="Modules">الوحـدات</string>
     <plurals name="modules_enabled_count">
-        <item quantity="zero">%d وحـدة مفعلة</item>
-        <item quantity="one">%d وحدة مفعلة</item>
-        <item quantity="two">%d وحدات مفعلة</item>
-        <item quantity="few">%d وحدة مفعلة</item>
-        <item quantity="many">%d وحدات مفعلة</item>
-        <item quantity="other">%d وحدات مفعلة</item>
+        <item quantity="zero">لا توجد وحدات مفعلة</item>
+        <item quantity="one">%d وحـدة مفعلة</item>
+        <item quantity="two">وحدتان مفعلتان</item>
+        <item quantity="few">%d وحـدات مفعلة</item>
+        <item quantity="many">%d وحـدة مفعلة</item>
+        <item quantity="other">%d وحـدة مفعلة</item>
     </plurals>
     <string name="Logs">السجـلات</string>
     <string name="Settings">الإعـدادات</string>
