@@ -218,4 +218,5 @@
     <string name="sort_upgradable_first">Dapat diupgrade terlebih dahulu</string>
     <string name="overview">Gambar Luas</string>
     <string name="create_shortcut_summary">Buat pintasan manajer parasit secara manual</string>
+    <string name="enable_documentui">Harap aktifkan DocumentUI</string>
 </resources>
