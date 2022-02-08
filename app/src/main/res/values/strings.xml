@@ -20,6 +20,7 @@
 <resources xmlns:tools="http://schemas.android.com/tools" tools:keep="@string/xposed_module_updated_notification_*,@string/module_is_not_activated_*">
     <!-- MainActivity -->
     <string name="info">Info</string>
+    <string name="overview">Overview</string>
     <string name="Modules">Modules</string>
     <plurals name="modules_enabled_count">
         <item quantity="one">%d module enabled</item>
@@ -27,6 +28,7 @@
     </plurals>
     <string name="Logs">Logs</string>
     <string name="Settings">Settings</string>
+    <string name="feedback_or_suggestion">Feedback or suggestion</string>
     <string name="About">About</string>
     <string name="report_issue">Report issue</string>
     <string name="module_repo">Repository</string>
@@ -162,6 +164,7 @@
     <string name="settings_restore_summery">Restore module list and scope lists.</string>
     <string name="settings_backup">Backup</string>
     <string name="settings_backup_failed2">Failed to backup:\n%s</string>
+    <string name="enable_documentui">Please enable DocumentUI</string>
     <string name="settings_restore">Restore</string>
     <string name="settings_restore_failed2">Failed to restore:\n%s</string>
     <string name="group_network">Network</string>
@@ -177,12 +180,13 @@
     <string name="settings_translation">Participate in translation</string>
     <string name="settings_translation_summary">Help us translate %s into your language</string>
     <string name="pref_title_enable_auto_add_shortcut">Automatically add a shortcut</string>
+    <string name="create_shortcut_summary">Manually create parasitic manager shortcut</string>
     <string name="settings_enable_auto_add_shortcut_summary">No new shortcuts will be added when disabled in the non-parasitic manager</string>
     <string name="settings_update_channel">Update channel</string>
     <string name="update_channel_stable">Stable</string>
     <string name="update_channel_bate">Beta</string>
     <string name="update_channel_nightly">Nightly build</string>
-    <string name="pref_title_enable_dex_obfuscate">Enable Dex Obfuscate</string>
+    <string name="pref_title_enable_dex_obfuscate">Only module classloader can use Xposed API</string>
 
     <!-- Module Repo -->
     <string name="module_readme">Readme</string>
@@ -197,6 +201,7 @@
     <string name="module_release_load_more">Show older versions</string>
     <string name="module_release_no_more">No more release</string>
     <string name="repo_load_failed">Failed to load module repo: %s</string>
+    <string name="sort_upgradable_first">Upgradable first</string>
 
     <!-- CrashReportActivity -->
     <string name="version_mismatch">The version of the LSPosed framework (%1$d) does not match manager (%2$d). Please reinstall LSPosed.</string>
@@ -226,9 +231,4 @@
     <string name="color_deep_orange">Deep orange</string>
     <string name="color_brown">Brown</string>
     <string name="color_blue_grey">Blue grey</string>
-    <string name="feedback_or_suggestion">Feedback or suggestion</string>
-    <string name="sort_upgradable_first">Upgradable first</string>
-    <string name="overview">Overview</string>
-    <string name="create_shortcut_summary">Manually create parasitic manager shortcut</string>
-    <string name="enable_documentui">Please enable DocumentUI</string>
 </resources>

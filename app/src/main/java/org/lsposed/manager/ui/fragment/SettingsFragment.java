@@ -28,7 +28,6 @@ import android.text.TextUtils;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.Toast;
 
 import androidx.activity.result.ActivityResultLauncher;
 import androidx.activity.result.contract.ActivityResultContracts;
@@ -158,7 +157,8 @@ public class SettingsFragment extends BaseFragment {
                 prefDexObfuscate.setEnabled(installed);
                 prefDexObfuscate.setChecked(!installed || ConfigManager.isDexObfuscateEnabled());
                 prefDexObfuscate.setOnPreferenceChangeListener((preference, newValue) -> {
-                    Toast.makeText(getContext(), R.string.reboot_required, Toast.LENGTH_LONG).show();
+                    parentFragment.showHint(R.string.reboot_required, true, R.string.reboot,
+                            v -> ConfigManager.reboot(false));
                     return ConfigManager.setDexObfuscateEnabled((boolean) newValue);
                 });
             }
