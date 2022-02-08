@@ -180,7 +180,7 @@ Java_org_lsposed_lspd_service_ObfuscationManager_preloadDex(JNIEnv *env, jclass 
 
 extern "C"
 JNIEXPORT jlong JNICALL
-Java_org_lsposed_lspd_service_ObfuscationManager_getPreloadedDexSize(JNIEnv *env, jclass obfuscation_manager) {
+Java_org_lsposed_lspd_service_ObfuscationManager_getPreloadedDexSize(JNIEnv *, jclass ) {
     if (lspdDex != -1) {
         return ASharedMemory_getSize(lspdDex);
     }
