@@ -54,6 +54,7 @@ public class LSPApplicationService extends ILSPApplicationService.Stub {
                 ParcelFileDescriptor pfd = ParcelFileDescriptor.fromFd(ObfuscationManager.preloadDex());
                 reply.writeFileDescriptor(pfd.getFileDescriptor());
                 reply.writeLong(ObfuscationManager.getPreloadedDexSize());
+                pfd.close();
             } catch (IOException ignored) {
                 Log.e(TAG, "LSPApplicationService.onTransact: ParcelFileDescriptor.fromFd failed");
                 return false;
