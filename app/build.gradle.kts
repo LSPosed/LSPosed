@@ -191,7 +191,7 @@ afterEvaluate {
 }
 
 dependencies {
-    val glideVersion = "4.12.0"
+    val glideVersion = "4.13.0"
     val navVersion: String by rootProject.extra
     annotationProcessor("com.github.bumptech.glide:compiler:$glideVersion")
     implementation("androidx.activity:activity:1.4.0")
