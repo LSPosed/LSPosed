@@ -95,7 +95,8 @@
             android:icon="@drawable/ic_outline_shield_24"
             android:key="enable_dex_obfuscate"
             android:persistent="false"
-            android:title="@string/pref_title_enable_dex_obfuscate" />
+            android:title="@string/pref_title_restrict_classloader"
+            android:summary="@string/pref_summary_restrict_classloader"/>
 
         <Preference
             android:icon="@drawable/ic_outline_app_shortcut_24"
