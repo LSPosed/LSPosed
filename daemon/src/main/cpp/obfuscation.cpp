@@ -142,7 +142,7 @@ Java_org_lsposed_lspd_service_ObfuscationManager_preloadDex(JNIEnv *env, jclass 
     using namespace std::string_literals;
     std::lock_guard lg(dex_lock);
     if (lspdDex != -1) return lspdDex;
-    std::string dex_path = "framework/lspd.dex";
+    const std::string dex_path = "framework/lspd.dex";
 
     std::unique_ptr<FILE, decltype(&fclose)> f{fopen(dex_path.data(), "rb"), &fclose};
 
