@@ -186,7 +186,8 @@
     <string name="update_channel_stable">Stable</string>
     <string name="update_channel_bate">Beta</string>
     <string name="update_channel_nightly">Nightly build</string>
-    <string name="pref_title_enable_dex_obfuscate">Only module classloader can use Xposed API</string>
+    <string name="pref_title_restrict_classloader">Only module classloader can use Xposed API</string>
+    <string name="pref_summary_restrict_classloader">This may break some modules but benefit security (experimental feature)</string>
 
     <!-- Module Repo -->
     <string name="module_readme">Readme</string>
