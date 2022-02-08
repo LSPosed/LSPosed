@@ -87,7 +87,7 @@ public class ConfigManager {
             SQLiteDatabase.openOrCreateDatabase(ConfigFileManager.dbPath, null);
 
     private boolean verboseLog = true;
-    private boolean dexObfuscate = true;
+    private boolean dexObfuscate = false;
     private boolean autoAddShortcut = true;
     private String miscPath = null;
 
