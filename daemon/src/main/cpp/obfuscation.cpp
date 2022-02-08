@@ -124,6 +124,7 @@ int obfuscateDex(const void *dex, size_t size) {
         const char *s = i->c_str();
         char* p = const_cast<char *>(strstr(s, old_signature.c_str()));
         if (p) {
+            // NOLINTNEXTLINE bugprone-not-null-terminated-result
             memcpy(p, new_sig, strlen(new_sig));
         }
     }
