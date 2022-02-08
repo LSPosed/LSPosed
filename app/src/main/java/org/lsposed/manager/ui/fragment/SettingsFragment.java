@@ -28,6 +28,7 @@ import android.text.TextUtils;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.Toast;
 
 import androidx.activity.result.ActivityResultLauncher;
 import androidx.activity.result.contract.ActivityResultContracts;
@@ -156,9 +157,10 @@ public class SettingsFragment extends BaseFragment {
             if (prefDexObfuscate != null) {
                 prefDexObfuscate.setEnabled(installed);
                 prefDexObfuscate.setChecked(!installed || ConfigManager.isDexObfuscateEnabled());
-                prefDexObfuscate.setOnPreferenceChangeListener((preference, newValue) ->
-                        ConfigManager.setDexObfuscateEnabled((boolean) newValue));
-                // TODO: toast "apply on next boot"?
+                prefDexObfuscate.setOnPreferenceChangeListener((preference, newValue) -> {
+                    Toast.makeText(getContext(), R.string.reboot_required, Toast.LENGTH_LONG).show();
+                    return ConfigManager.setDexObfuscateEnabled((boolean) newValue);
+                });
             }
 
             SwitchPreference prefEnableShortcut = findPreference("enable_auto_add_shortcut");
