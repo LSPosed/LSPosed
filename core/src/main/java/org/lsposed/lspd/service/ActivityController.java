@@ -13,6 +13,7 @@ import android.os.Bundle;
 import android.os.IBinder;
 import android.os.Parcel;
 import android.os.ResultReceiver;
+import android.os.ServiceManager;
 import android.os.ShellCallback;
 import android.os.ShellCommand;
 import android.util.Log;
@@ -101,7 +102,7 @@ public class ActivityController extends IActivityController.Stub {
                                 }
                             }
 
-                            return replaceMyControllerActivity(am, pw, getRawInputStream(), gdbPort, monkey);
+                            return replaceMyControllerActivity(pw, getRawInputStream(), gdbPort, monkey);
                         }
 
                         @Override
@@ -140,7 +141,7 @@ public class ActivityController extends IActivityController.Stub {
         return false;
     }
 
-    static private int replaceMyControllerActivity(IBinder am, PrintWriter pw, InputStream stream, String gdbPort, boolean monkey) {
+    static private int replaceMyControllerActivity(PrintWriter pw, InputStream stream, String gdbPort, boolean monkey) {
         try {
             InvocationHandler handler = (proxy, method, args1) -> {
                 if (method.getName().equals("setActivityController")) {
@@ -150,7 +151,7 @@ public class ActivityController extends IActivityController.Stub {
                         Log.e(TAG, "replace activity controller", e);
                     }
                 }
-                return method.invoke(am, args1);
+                return method.invoke(ServiceManager.getService("activity"), args1);
             };
             var amProxy = Proxy.newProxyInstance(BridgeService.class.getClassLoader(),
                     new Class[]{myActivityControllerConstructor.getParameterTypes()[0]}, handler);
