@@ -271,11 +271,16 @@ public class ConfigManager {
     }
 
     static ConfigManager getInstance() {
+        return getInstance(true);
+    }
+
+    static ConfigManager getInstance(boolean needCached) {
         if (instance == null)
             instance = new ConfigManager();
-        boolean needCached;
-        synchronized (instance.cacheHandler) {
-            needCached = instance.lastModuleCacheTime == 0 || instance.lastScopeCacheTime == 0;
+        if (needCached) {
+            synchronized (instance.cacheHandler) {
+                needCached = instance.lastModuleCacheTime == 0 || instance.lastScopeCacheTime == 0;
+            }
         }
         if (needCached) {
             if (PackageService.isAlive()) {

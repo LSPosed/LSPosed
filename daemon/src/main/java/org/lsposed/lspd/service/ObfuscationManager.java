@@ -4,7 +4,7 @@ import android.os.SharedMemory;
 
 public class ObfuscationManager {
     static boolean enabled() {
-        return ConfigManager.getInstance().dexObfuscate();
+        return ConfigManager.getInstance(false).dexObfuscate();
     }
 
     static native void init();
