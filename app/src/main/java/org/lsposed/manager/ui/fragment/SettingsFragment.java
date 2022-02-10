@@ -280,6 +280,11 @@ public class SettingsFragment extends BaseFragment {
                 language.setOnPreferenceChangeListener((preference, newValue) -> {
                     var locale = SYSTEM.equals(newValue) ? LocaleDelegate.getSystemLocale() : Locale.forLanguageTag((String) newValue);
                     LocaleDelegate.setDefaultLocale(locale);
+                    var res = App.getInstance().getResources();
+                    var config = res.getConfiguration();
+                    config.setLocale(locale);
+                    var metric = res.getDisplayMetrics();
+                    App.getInstance().getResources().updateConfiguration(config, metric);
                     MainActivity activity = (MainActivity) getActivity();
                     if (activity != null) {
                         activity.restart();
