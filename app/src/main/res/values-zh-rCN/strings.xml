@@ -20,12 +20,14 @@
 <resources xmlns:tools="http://schemas.android.com/tools" tools:keep="@string/xposed_module_updated_notification_*,@string/module_is_not_activated_*">
     <!-- MainActivity -->
     <string name="info">信息</string>
+    <string name="overview">概览</string>
     <string name="Modules">模块</string>
     <plurals name="modules_enabled_count">
         <item quantity="other">%d 模块已启用</item>
     </plurals>
     <string name="Logs">日志</string>
     <string name="Settings">设置</string>
+    <string name="feedback_or_suggestion">反馈或建议</string>
     <string name="About">关于</string>
     <string name="report_issue">报告问题</string>
     <string name="module_repo">仓库</string>
@@ -154,6 +156,7 @@
     <string name="settings_restore_summery">恢复模块列表与作用域列表</string>
     <string name="settings_backup">备份</string>
     <string name="settings_backup_failed2">备份失败：\n%s</string>
+    <string name="enable_documentui">请启用文档应用</string>
     <string name="settings_restore">恢复</string>
     <string name="settings_restore_failed2">恢复失败：\n%s</string>
     <string name="group_network">网络</string>
@@ -169,11 +172,14 @@
     <string name="settings_translation">参与翻译</string>
     <string name="settings_translation_summary">帮助我们把 %s 翻译到你的语言</string>
     <string name="pref_title_enable_auto_add_shortcut">自动添加快捷方式</string>
+    <string name="create_shortcut_summary">手动创建寄生管理器快捷方式</string>
     <string name="settings_enable_auto_add_shortcut_summary">在非寄生管理器中禁用该选项将不会新建快捷方式</string>
     <string name="settings_update_channel">更新通道</string>
     <string name="update_channel_stable">稳定版</string>
     <string name="update_channel_bate">测试版</string>
     <string name="update_channel_nightly">每夜版</string>
+    <string name="pref_title_restrict_classloader">只有模块classloader可以使用Xposed API</string>
+    <string name="pref_summary_restrict_classloader">这会破坏某些模块功能，但有利于安全性(实验性功能)</string>
     <!-- Module Repo -->
     <string name="module_readme">自述文件</string>
     <string name="module_releases">版本</string>
@@ -187,6 +193,7 @@
     <string name="module_release_load_more">显示更旧的版本</string>
     <string name="module_release_no_more">没有更旧的版本</string>
     <string name="repo_load_failed">模块仓库加载失败：%s</string>
+    <string name="sort_upgradable_first">可更新优先</string>
     <!-- CrashReportActivity -->
     <string name="version_mismatch">LSPosed 框架 (%1$d) 的版本与管理器 (%2$d)不匹配。请重新安装 LSPosed。</string>
     <string name="manager_crashed">应用出现未知错误</string>
@@ -214,9 +221,4 @@
     <string name="color_deep_orange">深橙</string>
     <string name="color_brown">棕色</string>
     <string name="color_blue_grey">灰蓝</string>
-    <string name="feedback_or_suggestion">反馈或建议</string>
-    <string name="sort_upgradable_first">可更新优先</string>
-    <string name="overview">概览</string>
-    <string name="create_shortcut_summary">手动创建寄生管理器快捷方式</string>
-    <string name="enable_documentui">请启用文档应用</string>
 </resources>
