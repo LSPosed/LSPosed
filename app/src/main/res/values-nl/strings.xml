@@ -20,6 +20,7 @@
 <resources xmlns:tools="http://schemas.android.com/tools" tools:keep="@string/xposed_module_updated_notification_*,@string/module_is_not_activated_*">
     <!-- MainActivity -->
     <string name="info">info</string>
+    <string name="overview">Overzicht</string>
     <string name="Modules">Modules</string>
     <plurals name="modules_enabled_count">
         <item quantity="one">%d module ingeschakeld</item>
@@ -27,6 +28,7 @@
     </plurals>
     <string name="Logs">Logboeken</string>
     <string name="Settings">Instellingen</string>
+    <string name="feedback_or_suggestion">Feedback en suggestie</string>
     <string name="About">Over</string>
     <string name="report_issue">Probleem melden</string>
     <string name="module_repo">Opslagplaats</string>
@@ -156,6 +158,7 @@
     <string name="settings_restore_summery">Herstel de modulelijst en scooplijsten.</string>
     <string name="settings_backup">Backup</string>
     <string name="settings_backup_failed2">Opslaan mislukt:\n%s</string>
+    <string name="enable_documentui">Schakel DocumentUI in</string>
     <string name="settings_restore">Herstellen</string>
     <string name="settings_restore_failed2">Herstellen mislukt:\n%s</string>
     <string name="group_network">Netwerk</string>
@@ -171,11 +174,14 @@
     <string name="settings_translation">Deelnemen aan vertaling</string>
     <string name="settings_translation_summary">Help ons %s te vertalen in uw taal</string>
     <string name="pref_title_enable_auto_add_shortcut">Snelkoppeling automatisch toevoegen</string>
+    <string name="create_shortcut_summary">Maak handmatig een snelkoppeling naar parasitic manager</string>
     <string name="settings_enable_auto_add_shortcut_summary">Er zullen geen nieuwe snelkoppelingen worden toegevoegd wanneer uitgeschakeld in de niet-parasitaire manager</string>
     <string name="settings_update_channel">Kanaal bijwerken</string>
     <string name="update_channel_stable">Stabiel</string>
     <string name="update_channel_bate">Bèta</string>
     <string name="update_channel_nightly">Nachtelijke bouw</string>
+    <string name="pref_title_restrict_classloader">Alleen module classloader kan Xposed API gebruiken</string>
+    <string name="pref_summary_restrict_classloader">Dit kan sommige modules breken maar de veiligheid ten goede komen (experimentele functie)</string>
     <!-- Module Repo -->
     <string name="module_readme">Leesmij</string>
     <string name="module_releases">Publicaties</string>
@@ -189,6 +195,7 @@
     <string name="module_release_load_more">Laat oudere versies zien</string>
     <string name="module_release_no_more">Geen release meer</string>
     <string name="repo_load_failed">Kan moduleopslagplaats niet laden: %1$s</string>
+    <string name="sort_upgradable_first">Eerst te upgraden</string>
     <!-- CrashReportActivity -->
     <string name="version_mismatch">De versie van het LSPosed framework (%1$d) komt niet overeen met manager (%2$d). Herinstalleer LSPosed.</string>
     <string name="manager_crashed">Manager gecrasht</string>
@@ -216,9 +223,4 @@
     <string name="color_deep_orange">Diep oranje</string>
     <string name="color_brown">Bruin</string>
     <string name="color_blue_grey">Blauw grijs</string>
-    <string name="feedback_or_suggestion">Feedback en suggestie</string>
-    <string name="sort_upgradable_first">Eerst te upgraden</string>
-    <string name="overview">Overzicht</string>
-    <string name="create_shortcut_summary">Maak handmatig een snelkoppeling naar parasitic manager</string>
-    <string name="enable_documentui">Schakel DocumentUI in</string>
 </resources>
