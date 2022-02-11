@@ -20,6 +20,7 @@
 <resources xmlns:tools="http://schemas.android.com/tools" tools:keep="@string/xposed_module_updated_notification_*,@string/module_is_not_activated_*">
     <!-- MainActivity -->
     <string name="info">Informacje</string>
+    <string name="overview">Przegląd</string>
     <string name="Modules">Moduły</string>
     <plurals name="modules_enabled_count">
         <item quantity="one">%d moduł aktywowany</item>
@@ -29,6 +30,7 @@
     </plurals>
     <string name="Logs">Logi</string>
     <string name="Settings">Ustawienia</string>
+    <string name="feedback_or_suggestion">Opinie lub sugestie</string>
     <string name="About">O aplikacji</string>
     <string name="report_issue">Zgłoś problem</string>
     <string name="module_repo">Repozytorium</string>
@@ -160,6 +162,7 @@
     <string name="settings_restore_summery">Przywrócenie listy modułów i listy zakresów.</string>
     <string name="settings_backup">Kopia zapasowa</string>
     <string name="settings_backup_failed2">Nie udało się utworzyć kopii zapasowej:\n%s</string>
+    <string name="enable_documentui">Proszę włączyć DocumentUI</string>
     <string name="settings_restore">Przywróć</string>
     <string name="settings_restore_failed2">Nie udało się przywrócić:\n%s</string>
     <string name="group_network">Sieć</string>
@@ -175,11 +178,14 @@
     <string name="settings_translation">Weź udział w tłumaczeniu</string>
     <string name="settings_translation_summary">Pomóż nam przetłumaczyć %s na Twój język</string>
     <string name="pref_title_enable_auto_add_shortcut">Automatycznie dodaj skrót</string>
+    <string name="create_shortcut_summary">Ręcznie utwórz skrót do menedżera pasożytów</string>
     <string name="settings_enable_auto_add_shortcut_summary">Nie zostaną dodane żadne nowe skróty, jeśli są wyłączone w menedżerze niepasożytniczym.</string>
     <string name="settings_update_channel">Zaktualizuj kanał</string>
     <string name="update_channel_stable">Stabilny</string>
     <string name="update_channel_bate">Beta</string>
     <string name="update_channel_nightly">Wersja nightly</string>
+    <string name="pref_title_restrict_classloader">Tylko moduł classloader może korzystać z Xposed API</string>
+    <string name="pref_summary_restrict_classloader">Może to złamać niektóre moduły, ale przyniesie korzyści dla bezpieczeństwa (funkcja eksperymentalna)</string>
     <!-- Module Repo -->
     <string name="module_readme">Przeczytaj</string>
     <string name="module_releases">Wersje</string>
@@ -193,6 +199,7 @@
     <string name="module_release_load_more">Pokaż starsze wersje</string>
     <string name="module_release_no_more">Nie ma więcej wersji</string>
     <string name="repo_load_failed">Nie udało się załadować repozytorium modułu: %s</string>
+    <string name="sort_upgradable_first">Możliwość uaktualnienia w pierwszej kolejności</string>
     <!-- CrashReportActivity -->
     <string name="version_mismatch">Wersja LSPosed framework (%1$d) nie jest taka sama jak wersja menadżera (%2$d). Zainstaluj ponownie LSPosed.</string>
     <string name="manager_crashed">Menedżer uległ awarii</string>
@@ -220,9 +227,4 @@
     <string name="color_deep_orange">Ciemny pomarańczowy</string>
     <string name="color_brown">Brązowy</string>
     <string name="color_blue_grey">Niebiesko szary</string>
-    <string name="feedback_or_suggestion">Opinie lub sugestie</string>
-    <string name="sort_upgradable_first">Możliwość uaktualnienia w pierwszej kolejności</string>
-    <string name="overview">Przegląd</string>
-    <string name="create_shortcut_summary">Ręcznie utwórz skrót do menedżera pasożytów</string>
-    <string name="enable_documentui">Proszę włączyć DocumentUI</string>
 </resources>
