@@ -28,6 +28,7 @@ import android.content.Context;
 import android.content.Intent;
 import android.content.IntentFilter;
 import android.content.SharedPreferences;
+import android.content.res.Configuration;
 import android.os.Build;
 import android.os.Looper;
 import android.os.Process;
@@ -192,6 +193,15 @@ public class App extends Application {
         });
     }
 
+    @SuppressWarnings("deprecation")
+    @Override
+    public void onConfigurationChanged(@NonNull Configuration newConfig) {
+        LocaleDelegate.setDefaultLocale(getLocale());
+        newConfig.setLocale(getLocale());
+        getResources().updateConfiguration(newConfig, getResources().getDisplayMetrics());
+        super.onConfigurationChanged(newConfig);
+    }
+
     @Override
     public void onCreate() {
         super.onCreate();
@@ -209,7 +219,7 @@ public class App extends Application {
         }
         DayNightDelegate.setApplicationContext(this);
         DayNightDelegate.setDefaultNightMode(ThemeUtil.getDarkTheme());
-        LocaleDelegate.setDefaultLocale(getLocale());
+        onConfigurationChanged(getResources().getConfiguration());
 
         IntentFilter intentFilter = new IntentFilter();
         intentFilter.addAction("org.lsposed.manager.NOTIFICATION");
