@@ -20,6 +20,7 @@
 <resources xmlns:tools="http://schemas.android.com/tools" tools:keep="@string/xposed_module_updated_notification_*,@string/module_is_not_activated_*">
     <!-- MainActivity -->
     <string name="info">Tiedot</string>
+    <string name="overview">Yleiskatsaus</string>
     <string name="Modules">Moduulit</string>
     <plurals name="modules_enabled_count">
         <item quantity="one">%d moduuli käytössä</item>
@@ -27,6 +28,7 @@
     </plurals>
     <string name="Logs">Lokit</string>
     <string name="Settings">Asetukset</string>
+    <string name="feedback_or_suggestion">Palaute tai ehdotus</string>
     <string name="About">Tietoja</string>
     <string name="report_issue">Ilmoita ongelmasta</string>
     <string name="module_repo">Versiovarasto</string>
@@ -156,6 +158,7 @@
     <string name="settings_restore_summery">Palauta moduulien luettelo ja sisällysluettelot.</string>
     <string name="settings_backup">Varmuuskopio</string>
     <string name="settings_backup_failed2">Varmuuskopiointi epäonnistui:\n%s</string>
+    <string name="enable_documentui">Ota DocumentUI käyttöön</string>
     <string name="settings_restore">Palauta</string>
     <string name="settings_restore_failed2">Palautus epäonnistui:\n%s</string>
     <string name="group_network">Verkko</string>
@@ -171,11 +174,14 @@
     <string name="settings_translation">Osallistu käännökseen</string>
     <string name="settings_translation_summary">Auta meitä kääntämään %s kielellesi</string>
     <string name="pref_title_enable_auto_add_shortcut">Lisää pikakuvake automaattisesti</string>
+    <string name="create_shortcut_summary">Luo manuaalisesti parasiittisen managerin pikakuvake</string>
     <string name="settings_enable_auto_add_shortcut_summary">Uusia pikakuvakkeita ei lisätä, kun ne on poistettu käytöstä ei-loishallinnassa</string>
     <string name="settings_update_channel">Päivitä kanava</string>
     <string name="update_channel_stable">Vakaa</string>
     <string name="update_channel_bate">Beeta</string>
     <string name="update_channel_nightly">Yöllinen rakentaminen</string>
+    <string name="pref_title_restrict_classloader">Vain moduulin luokkienlataaja voi käyttää Xposed API:ta.</string>
+    <string name="pref_summary_restrict_classloader">Tämä saattaa rikkoa joitakin moduuleja, mutta hyödyttää turvallisuutta (kokeellinen ominaisuus).</string>
     <!-- Module Repo -->
     <string name="module_readme">Luennot</string>
     <string name="module_releases">Julkaisut</string>
@@ -189,6 +195,7 @@
     <string name="module_release_load_more">Näytä vanhemmat versiot</string>
     <string name="module_release_no_more">Ei enää versiota</string>
     <string name="repo_load_failed">Ei voitu ladata moduulia repo: %s</string>
+    <string name="sort_upgradable_first">Päivitettävissä ensin</string>
     <!-- CrashReportActivity -->
     <string name="version_mismatch">LSPosed framework (%1$d) versio ei vastaa manageria (%2$d). Asenna LSPosed uudelleen.</string>
     <string name="manager_crashed">Hallinta kaatui</string>
@@ -216,9 +223,4 @@
     <string name="color_deep_orange">Syvä oranssi</string>
     <string name="color_brown">Ruskea</string>
     <string name="color_blue_grey">Sininen harmaa</string>
-    <string name="feedback_or_suggestion">Palaute tai ehdotus</string>
-    <string name="sort_upgradable_first">Päivitettävissä ensin</string>
-    <string name="overview">Yleiskatsaus</string>
-    <string name="create_shortcut_summary">Luo manuaalisesti parasiittisen managerin pikakuvake</string>
-    <string name="enable_documentui">Ota DocumentUI käyttöön</string>
 </resources>
