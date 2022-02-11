@@ -20,6 +20,7 @@
 <resources xmlns:tools="http://schemas.android.com/tools" tools:keep="@string/xposed_module_updated_notification_*,@string/module_is_not_activated_*">
     <!-- MainActivity -->
     <string name="info">Informazioni</string>
+    <string name="overview">Panoramica</string>
     <string name="Modules">Moduli</string>
     <plurals name="modules_enabled_count">
         <item quantity="one">%d modulo abilitato</item>
@@ -27,6 +28,7 @@
     </plurals>
     <string name="Logs">Log</string>
     <string name="Settings">Impostazioni</string>
+    <string name="feedback_or_suggestion">Feedback o suggerimenti</string>
     <string name="About">Informazioni</string>
     <string name="report_issue">Segnala il problema</string>
     <string name="module_repo">Repository</string>
@@ -156,6 +158,7 @@
     <string name="settings_restore_summery">Ripristino dell\'elenco dei moduli e delle attivazioni.</string>
     <string name="settings_backup">Backup</string>
     <string name="settings_backup_failed2">Salvataggio non riuscito:\n%s</string>
+    <string name="enable_documentui">Abilitare DocumentUI</string>
     <string name="settings_restore">Ripristina</string>
     <string name="settings_restore_failed2">Ripristino fallito:\n%s</string>
     <string name="group_network">Rete</string>
@@ -171,11 +174,14 @@
     <string name="settings_translation">Partecipa alla traduzione</string>
     <string name="settings_translation_summary">Aiutaci a tradurre %s nella tua lingua</string>
     <string name="pref_title_enable_auto_add_shortcut">Aggiungi automaticamente una scorciatoia</string>
+    <string name="create_shortcut_summary">Crea manualmente la scorciatoia del manager parassitario</string>
     <string name="settings_enable_auto_add_shortcut_summary">Nessuna nuova scorciatoia verrà aggiunta quando disabilitata nel manager non parassitario</string>
     <string name="settings_update_channel">Canale di aggiornamento</string>
     <string name="update_channel_stable">Stabile</string>
     <string name="update_channel_bate">Beta</string>
     <string name="update_channel_nightly">Nightly</string>
+    <string name="pref_title_restrict_classloader">Solo il modulo classloader può utilizzare le API Xposed</string>
+    <string name="pref_summary_restrict_classloader">Questo potrebbe causare il malfunzionamento di alcuni moduli, ma a vantaggio della sicurezza (funzione sperimentale)</string>
     <!-- Module Repo -->
     <string name="module_readme">Leggimi</string>
     <string name="module_releases">Versioni</string>
@@ -189,6 +195,7 @@
     <string name="module_release_load_more">Mostra le versioni precedenti</string>
     <string name="module_release_no_more">Non ci sono altre versioni</string>
     <string name="repo_load_failed">Impossibile caricare il repository dei moduli: %s</string>
+    <string name="sort_upgradable_first">Aggiornabili prima</string>
     <!-- CrashReportActivity -->
     <string name="version_mismatch">La versione del framework LSPosed (%1$d) non corrisponde al manager (%2$d). Reinstalla LSPosed.</string>
     <string name="manager_crashed">Manager andato in crash</string>
@@ -216,9 +223,4 @@
     <string name="color_deep_orange">Arancione scuro</string>
     <string name="color_brown">Marrone</string>
     <string name="color_blue_grey">Blu grigio</string>
-    <string name="feedback_or_suggestion">Feedback o suggerimenti</string>
-    <string name="sort_upgradable_first">Aggiornabili prima</string>
-    <string name="overview">Panoramica</string>
-    <string name="create_shortcut_summary">Crea manualmente la scorciatoia del manager parassitario</string>
-    <string name="enable_documentui">Abilitare DocumentUI</string>
 </resources>
