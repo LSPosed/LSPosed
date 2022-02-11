@@ -20,12 +20,14 @@
 <resources xmlns:tools="http://schemas.android.com/tools" tools:keep="@string/xposed_module_updated_notification_*,@string/module_is_not_activated_*">
     <!-- MainActivity -->
     <string name="info">情報</string>
+    <string name="overview">概要</string>
     <string name="Modules">モジュール</string>
     <plurals name="modules_enabled_count">
         <item quantity="other">%d 個のモジュール有効化済</item>
     </plurals>
     <string name="Logs">ログ</string>
     <string name="Settings">設定</string>
+    <string name="feedback_or_suggestion">ご意見・ご感想</string>
     <string name="About">本アプリについて</string>
     <string name="report_issue">問題を報告</string>
     <string name="module_repo">リポジトリ</string>
@@ -154,6 +156,7 @@
     <string name="settings_restore_summery">モジュールリストの復元とリストへのアクセス</string>
     <string name="settings_backup">バックアップ</string>
     <string name="settings_backup_failed2">バックアップに失敗しました:\n%s</string>
+    <string name="enable_documentui">DocumentUIを有効にしてください。</string>
     <string name="settings_restore">レストア</string>
     <string name="settings_restore_failed2">復元に失敗しました:\n%s</string>
     <string name="group_network">ネットワーク</string>
@@ -169,11 +172,14 @@
     <string name="settings_translation">翻訳に参加する</string>
     <string name="settings_translation_summary">%s をあなたの言語に翻訳するのを手伝ってください</string>
     <string name="pref_title_enable_auto_add_shortcut">ショートカットを自動的に追加する</string>
+    <string name="create_shortcut_summary">寄生虫マネージャーのショートカットを手動で作成する</string>
     <string name="settings_enable_auto_add_shortcut_summary">寄生虫のいないマネージャーで無効にした場合、新しいショートカットは追加されません</string>
     <string name="settings_update_channel">更新チャンネル</string>
     <string name="update_channel_stable">安定版</string>
     <string name="update_channel_bate">ベータ版</string>
     <string name="update_channel_nightly">ナイトリービルド</string>
+    <string name="pref_title_restrict_classloader">モジュールのクラスローダのみがXposed APIを使用可能</string>
+    <string name="pref_summary_restrict_classloader">一部のモジュールが壊れる可能性がありますが、セキュリティ上はメリットがあります（実験的な機能）。</string>
     <!-- Module Repo -->
     <string name="module_readme">読み取り</string>
     <string name="module_releases">リリース</string>
@@ -187,6 +193,7 @@
     <string name="module_release_load_more">以前のバージョンを表示</string>
     <string name="module_release_no_more">これ以上のリリースはありません</string>
     <string name="repo_load_failed">モジュールリポジトリの読み込みに失敗: %s</string>
+    <string name="sort_upgradable_first">最初にアップグレード可能</string>
     <!-- CrashReportActivity -->
     <string name="version_mismatch">LSPosedフレームワークのバージョン（%1$d）とマネージャー（%2$d）が一致しません。LSPosedを再インストールしてください。</string>
     <string name="manager_crashed">マネージャーがクラッシュしました</string>
@@ -214,9 +221,4 @@
     <string name="color_deep_orange">深いオレンジ</string>
     <string name="color_brown">茶色</string>
     <string name="color_blue_grey">ブルーグレー</string>
-    <string name="feedback_or_suggestion">ご意見・ご感想</string>
-    <string name="sort_upgradable_first">最初にアップグレード可能</string>
-    <string name="overview">概要</string>
-    <string name="create_shortcut_summary">寄生虫マネージャーのショートカットを手動で作成する</string>
-    <string name="enable_documentui">DocumentUIを有効にしてください。</string>
 </resources>

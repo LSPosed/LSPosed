@@ -20,6 +20,7 @@
 <resources xmlns:tools="http://schemas.android.com/tools" tools:keep="@string/xposed_module_updated_notification_*,@string/module_is_not_activated_*">
     <!-- MainActivity -->
     <string name="info">Informace</string>
+    <string name="overview">Přehled</string>
     <string name="Modules">Moduly</string>
     <plurals name="modules_enabled_count">
         <item quantity="one">%d Modul aktivován</item>
@@ -29,6 +30,7 @@
     </plurals>
     <string name="Logs">Protokoly</string>
     <string name="Settings">Nastavení</string>
+    <string name="feedback_or_suggestion">Zpětná vazba nebo návrh</string>
     <string name="About">O aplikaci</string>
     <string name="report_issue">Nahlásit problém</string>
     <string name="module_repo">Repozitář</string>
@@ -160,6 +162,7 @@
     <string name="settings_restore_summery">Obnovit seznam modulů a nastavení.</string>
     <string name="settings_backup">Zálohování</string>
     <string name="settings_backup_failed2">Zálohování se nezdařilo:\n%s</string>
+    <string name="enable_documentui">Prosím povolte DocumentUI</string>
     <string name="settings_restore">Obnovení</string>
     <string name="settings_restore_failed2">Nepodařilo se obnovit:\n%s</string>
     <string name="group_network">Síť</string>
@@ -175,11 +178,14 @@
     <string name="settings_translation">Účast na překladu</string>
     <string name="settings_translation_summary">Pomozte nám přeložit %s do vašeho jazyka</string>
     <string name="pref_title_enable_auto_add_shortcut">Automaticky přidat zástupce</string>
+    <string name="create_shortcut_summary">Ručně vytvořit zástupce parazitického manažera</string>
     <string name="settings_enable_auto_add_shortcut_summary">Žádné nové zkratky nebudou přidány, pokud jsou vypnuty v neparazitickém správci</string>
     <string name="settings_update_channel">Kanál aktualizace</string>
     <string name="update_channel_stable">Stabilní</string>
     <string name="update_channel_bate">Beta</string>
     <string name="update_channel_nightly">Noční sestavení</string>
+    <string name="pref_title_restrict_classloader">Pouze modul classloader může používat rozhraní Xposed API</string>
+    <string name="pref_summary_restrict_classloader">Může to narušit některé moduly, ale prospěje to zabezpečení (experimentální funkce)</string>
     <!-- Module Repo -->
     <string name="module_readme">Přečti si mě</string>
     <string name="module_releases">Vydání</string>
@@ -193,6 +199,7 @@
     <string name="module_release_load_more">Zobrazit starší verze</string>
     <string name="module_release_no_more">Žádné další vydání</string>
     <string name="repo_load_failed">Nepodařilo se načíst repozitář modulu: %s</string>
+    <string name="sort_upgradable_first">Nejprve aktualizovatelný</string>
     <!-- CrashReportActivity -->
     <string name="version_mismatch">Verze LSPosed (%1$d) neodpovídá správci (%2$d). Prosím přeinstalujte LSPosed.</string>
     <string name="manager_crashed">Manažer selhal</string>
@@ -220,9 +227,4 @@
     <string name="color_deep_orange">Tmavě oranžová</string>
     <string name="color_brown">Hnědá</string>
     <string name="color_blue_grey">Modro-šedivá</string>
-    <string name="feedback_or_suggestion">Zpětná vazba nebo návrh</string>
-    <string name="sort_upgradable_first">Nejprve aktualizovatelný</string>
-    <string name="overview">Přehled</string>
-    <string name="create_shortcut_summary">Ručně vytvořit zástupce parazitického manažera</string>
-    <string name="enable_documentui">Prosím povolte DocumentUI</string>
 </resources>

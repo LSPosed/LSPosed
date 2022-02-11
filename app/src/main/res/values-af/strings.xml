@@ -20,6 +20,7 @@
 <resources xmlns:tools="http://schemas.android.com/tools" tools:keep="@string/xposed_module_updated_notification_*,@string/module_is_not_activated_*">
     <!-- MainActivity -->
     <string name="info">Info</string>
+    <string name="overview">Oorsig</string>
     <string name="Modules">Modules</string>
     <plurals name="modules_enabled_count">
         <item quantity="one">%d module enabled</item>
@@ -27,6 +28,7 @@
     </plurals>
     <string name="Logs">Logs</string>
     <string name="Settings">Instellings</string>
+    <string name="feedback_or_suggestion">Terugvoer of voorstel</string>
     <string name="About">Oor</string>
     <string name="report_issue">Rapporteer probleem</string>
     <string name="module_repo">Bewaarplek</string>
@@ -156,6 +158,7 @@
     <string name="settings_restore_summery">Herstel modulelys en omvanglyste.</string>
     <string name="settings_backup">Ondersteuning</string>
     <string name="settings_backup_failed2">Kon nie rugsteun nie:\n%s</string>
+    <string name="enable_documentui">Aktiveer asseblief DocumentUI</string>
     <string name="settings_restore">Herstel</string>
     <string name="settings_restore_failed2">Kon nie herstel nie:\n%s</string>
     <string name="group_network">Netwerk</string>
@@ -171,11 +174,14 @@
     <string name="settings_translation">Neem deel aan vertaling</string>
     <string name="settings_translation_summary">Help ons om %s in jou taal te vertaal</string>
     <string name="pref_title_enable_auto_add_shortcut">Voeg outomaties \'n kortpad by</string>
+    <string name="create_shortcut_summary">Skep parasitiese bestuurder kortpad handmatig</string>
     <string name="settings_enable_auto_add_shortcut_summary">Geen nuwe kortpaaie sal bygevoeg word wanneer dit in die nie-parasitiese bestuurder gedeaktiveer is nie</string>
     <string name="settings_update_channel">Dateer kanaal op</string>
     <string name="update_channel_stable">Stabiel</string>
     <string name="update_channel_bate">Beta</string>
     <string name="update_channel_nightly">Nag bou</string>
+    <string name="pref_title_restrict_classloader">Slegs module klaslaaier kan Xposed API gebruik</string>
+    <string name="pref_summary_restrict_classloader">Dit kan sommige modules breek, maar bevoordeel sekuriteit (eksperimentele kenmerk)</string>
     <!-- Module Repo -->
     <string name="module_readme">Lees my</string>
     <string name="module_releases">Vrystellings</string>
@@ -189,6 +195,7 @@
     <string name="module_release_load_more">Wys ouer weergawes</string>
     <string name="module_release_no_more">Geen vrystelling meer nie</string>
     <string name="repo_load_failed">Kon nie module repo laai nie: %s</string>
+    <string name="sort_upgradable_first">Eers opgradeerbaar</string>
     <!-- CrashReportActivity -->
     <string name="version_mismatch">Die weergawe van die LSPosed-raamwerk (%1$d) stem nie ooreen met bestuurder (%2$d) nie. Herinstalleer asseblief LSPosed.</string>
     <string name="manager_crashed">Bestuurder het omgeval</string>
@@ -216,9 +223,4 @@
     <string name="color_deep_orange">Diep oranje</string>
     <string name="color_brown">Bruin</string>
     <string name="color_blue_grey">Blou grys</string>
-    <string name="feedback_or_suggestion">Terugvoer of voorstel</string>
-    <string name="sort_upgradable_first">Eers opgradeerbaar</string>
-    <string name="overview">Oorsig</string>
-    <string name="create_shortcut_summary">Skep parasitiese bestuurder kortpad handmatig</string>
-    <string name="enable_documentui">Aktiveer asseblief DocumentUI</string>
 </resources>

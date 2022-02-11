@@ -20,6 +20,7 @@
 <resources xmlns:tools="http://schemas.android.com/tools" tools:keep="@string/xposed_module_updated_notification_*,@string/module_is_not_activated_*">
     <!-- MainActivity -->
     <string name="info">Informacija</string>
+    <string name="overview">Apžvalga</string>
     <string name="Modules">Moduliai</string>
     <plurals name="modules_enabled_count">
         <item quantity="one">%d modulis įjungtas</item>
@@ -29,6 +30,7 @@
     </plurals>
     <string name="Logs">Žurnalai</string>
     <string name="Settings">Nustatymai</string>
+    <string name="feedback_or_suggestion">Atsiliepimai arba pasiūlymas</string>
     <string name="About">Apie</string>
     <string name="report_issue">Pranešti apie problemą</string>
     <string name="module_repo">Saugykla</string>
@@ -160,6 +162,7 @@
     <string name="settings_restore_summery">Atkurti modulių ir sričių sąrašus.</string>
     <string name="settings_backup">Atsarginė kopija</string>
     <string name="settings_backup_failed2">Nepavyko sukurti atsarginės kopijos:\n%s</string>
+    <string name="enable_documentui">Įjunkite DocumentUI</string>
     <string name="settings_restore">Atkurti</string>
     <string name="settings_restore_failed2">Nepavyko atkurti:\n%s</string>
     <string name="group_network">Tinklas</string>
@@ -175,11 +178,14 @@
     <string name="settings_translation">Dalyvaukite vertimo procese</string>
     <string name="settings_translation_summary">Padėkite mums išversti %s į savo kalbą</string>
     <string name="pref_title_enable_auto_add_shortcut">Automatiškai pridėkite nuorodą</string>
+    <string name="create_shortcut_summary">Rankiniu būdu sukurkite parazitinio tvarkytuvo nuorodą</string>
     <string name="settings_enable_auto_add_shortcut_summary">Neparazitiniame tvarkytuve išjungus spartųjį klavišą, naujų spartieji klavišai nepridedami.</string>
     <string name="settings_update_channel">Atnaujinti kanalą</string>
     <string name="update_channel_stable">Stabilus</string>
     <string name="update_channel_bate">Beta</string>
     <string name="update_channel_nightly">Naktinis kūrimas</string>
+    <string name="pref_title_restrict_classloader">Tik modulio klasių įkroviklis gali naudoti \"Xposed API</string>
+    <string name="pref_summary_restrict_classloader">Tai gali sugadinti kai kuriuos modulius, tačiau bus naudinga saugumui (eksperimentinė funkcija)</string>
     <!-- Module Repo -->
     <string name="module_readme">Readme</string>
     <string name="module_releases">Leidiniai</string>
@@ -193,6 +199,7 @@
     <string name="module_release_load_more">Rodyti senesnes versijas</string>
     <string name="module_release_no_more">Jokio išleidimo</string>
     <string name="repo_load_failed">Nepavyko įkelti modulio atramos: %s</string>
+    <string name="sort_upgradable_first">Pirmiausia atnaujinamas</string>
     <!-- CrashReportActivity -->
     <string name="version_mismatch">LSPosed sistemos versija (%1$d) neatitinka valdytojo (%2$d). Iš naujo įdiekite \"LSPosed\".</string>
     <string name="manager_crashed">Vadybininkas patyrė avariją</string>
@@ -220,9 +227,4 @@
     <string name="color_deep_orange">Tamsiai oranžinė</string>
     <string name="color_brown">Ruda</string>
     <string name="color_blue_grey">Mėlyna pilka</string>
-    <string name="feedback_or_suggestion">Atsiliepimai arba pasiūlymas</string>
-    <string name="sort_upgradable_first">Pirmiausia atnaujinamas</string>
-    <string name="overview">Apžvalga</string>
-    <string name="create_shortcut_summary">Rankiniu būdu sukurkite parazitinio tvarkytuvo nuorodą</string>
-    <string name="enable_documentui">Įjunkite DocumentUI</string>
 </resources>

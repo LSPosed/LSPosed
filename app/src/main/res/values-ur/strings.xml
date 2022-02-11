@@ -20,6 +20,7 @@
 <resources xmlns:tools="http://schemas.android.com/tools" tools:keep="@string/xposed_module_updated_notification_*,@string/module_is_not_activated_*">
     <!-- MainActivity -->
     <string name="info">معلومات</string>
+    <string name="overview">جائزہ</string>
     <string name="Modules">ماڈیولز</string>
     <plurals name="modules_enabled_count">
         <item quantity="one">%d ماڈیولز آن ہیں۔</item>
@@ -27,6 +28,7 @@
     </plurals>
     <string name="Logs">نوشتہ جات</string>
     <string name="Settings">ترتیبات</string>
+    <string name="feedback_or_suggestion">رائے یا تجویز</string>
     <string name="About">معلومات</string>
     <string name="report_issue">رپورٹ ایشو۔</string>
     <string name="module_repo">مخزن۔</string>
@@ -156,6 +158,7 @@
     <string name="settings_restore_summery">ماڈیول کی فہرست اور دائرہ کار کی فہرستوں کو بحال کریں۔</string>
     <string name="settings_backup">بیک اپ</string>
     <string name="settings_backup_failed2">بیک اپ کرنے میں ناکام:\n%s</string>
+    <string name="enable_documentui">براہ کرم DocumentUI کو فعال کریں۔</string>
     <string name="settings_restore">بحال کریں۔</string>
     <string name="settings_restore_failed2">بحال کرنے میں ناکام:\n%s</string>
     <string name="group_network">نیٹ ورک</string>
@@ -171,11 +174,14 @@
     <string name="settings_translation">ترجمہ میں حصہ لیں۔</string>
     <string name="settings_translation_summary">%s کا اپنی زبان میں ترجمہ کرنے میں ہماری مدد کریں۔</string>
     <string name="pref_title_enable_auto_add_shortcut">خودکار طور پر ایک شارٹ کٹ شامل کریں۔</string>
+    <string name="create_shortcut_summary">دستی طور پر پرجیوی مینیجر شارٹ کٹ بنائیں</string>
     <string name="settings_enable_auto_add_shortcut_summary">غیر پرجیوی مینیجر میں غیر فعال ہونے پر کوئی نیا شارٹ کٹ شامل نہیں کیا جائے گا۔</string>
     <string name="settings_update_channel">چینل کو اپ ڈیٹ کریں۔</string>
     <string name="update_channel_stable">مستحکم</string>
     <string name="update_channel_bate">بیٹا</string>
     <string name="update_channel_nightly">رات کی تعمیر</string>
+    <string name="pref_title_restrict_classloader">صرف ماڈیول کلاس لوڈر ہی Xposed API استعمال کر سکتا ہے۔</string>
+    <string name="pref_summary_restrict_classloader">اس سے کچھ ماڈیول ٹوٹ سکتے ہیں لیکن سیکورٹی کو فائدہ پہنچ سکتا ہے (تجرباتی خصوصیت)</string>
     <!-- Module Repo -->
     <string name="module_readme">ریڈمی</string>
     <string name="module_releases">جاری کرتا ہے۔</string>
@@ -189,6 +195,7 @@
     <string name="module_release_load_more">پرانے ورژن دکھائیں۔</string>
     <string name="module_release_no_more">مزید رہائی نہیں ہے۔</string>
     <string name="repo_load_failed">ماڈیول ریپو لوڈ کرنے میں ناکام: %s</string>
+    <string name="sort_upgradable_first">پہلے اپ گریڈ کیا جا سکتا ہے۔</string>
     <!-- CrashReportActivity -->
     <string name="version_mismatch">LSPosed فریم ورک (%1$d) کا ورژن مینیجر (%2$d) سے میل نہیں کھاتا۔ براہ کرم LSPosed کو دوبارہ انسٹال کریں۔</string>
     <string name="manager_crashed">مینیجر کریش ہو گیا۔</string>
@@ -216,9 +223,4 @@
     <string name="color_deep_orange">گہرا نارنجی</string>
     <string name="color_brown">براؤن</string>
     <string name="color_blue_grey">بلیو گرے</string>
-    <string name="feedback_or_suggestion">رائے یا تجویز</string>
-    <string name="sort_upgradable_first">پہلے اپ گریڈ کیا جا سکتا ہے۔</string>
-    <string name="overview">جائزہ</string>
-    <string name="create_shortcut_summary">دستی طور پر پرجیوی مینیجر شارٹ کٹ بنائیں</string>
-    <string name="enable_documentui">براہ کرم DocumentUI کو فعال کریں۔</string>
 </resources>

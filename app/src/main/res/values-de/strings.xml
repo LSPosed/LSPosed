@@ -20,6 +20,7 @@
 <resources xmlns:tools="http://schemas.android.com/tools" tools:keep="@string/xposed_module_updated_notification_*,@string/module_is_not_activated_*">
     <!-- MainActivity -->
     <string name="info">Info</string>
+    <string name="overview">Übersicht</string>
     <string name="Modules">Module</string>
     <plurals name="modules_enabled_count">
         <item quantity="one">%d Modul aktiviert</item>
@@ -27,6 +28,7 @@
     </plurals>
     <string name="Logs">Protokolle</string>
     <string name="Settings">Einstellungen</string>
+    <string name="feedback_or_suggestion">Feedback oder Verbesserungsideen</string>
     <string name="About">Über</string>
     <string name="report_issue">Fehler melden</string>
     <string name="module_repo">Modularchiv</string>
@@ -157,6 +159,7 @@ JJ108</string>
     <string name="settings_restore_summery">Wiederherstellen der Modul- und Scope-Listen.</string>
     <string name="settings_backup">Sichern</string>
     <string name="settings_backup_failed2">Sicherung fehlgeschlagen:\n%s</string>
+    <string name="enable_documentui">Bitte aktivieren Sie DocumentUI</string>
     <string name="settings_restore">Wiederherstellen</string>
     <string name="settings_restore_failed2">Wiederherstellung fehlgeschlagen:\n%s</string>
     <string name="group_network">Netzwerk</string>
@@ -172,11 +175,14 @@ JJ108</string>
     <string name="settings_translation">An der Übersetzung beteiligen</string>
     <string name="settings_translation_summary">Helfen Sie uns, %s in Ihre Sprache zu übersetzen</string>
     <string name="pref_title_enable_auto_add_shortcut">Verknüpfung automatisch hinzufügen</string>
+    <string name="create_shortcut_summary">Erzeuge manuell eine Verknüpfung zum parasitären Manager</string>
     <string name="settings_enable_auto_add_shortcut_summary">Keine neuen Verknüpfungen werden hinzugefügt, wenn sie im nicht-parasitären Manager deaktiviert werden</string>
     <string name="settings_update_channel">Update-Kanal</string>
     <string name="update_channel_stable">Stabil</string>
     <string name="update_channel_bate">Beta</string>
     <string name="update_channel_nightly">Nightly Build</string>
+    <string name="pref_title_restrict_classloader">Nur der Modul-Classloader kann die Xposed API nutzen</string>
+    <string name="pref_summary_restrict_classloader">Einige Mudule können dann nicht mehr funktionieren, erhöht jedoch der Sicherheit (experimentelle Funktion)</string>
     <!-- Module Repo -->
     <string name="module_readme">Liesmich</string>
     <string name="module_releases">Veröffentlichungen</string>
@@ -190,6 +196,7 @@ JJ108</string>
     <string name="module_release_load_more">Ältere Versionen anzeigen</string>
     <string name="module_release_no_more">Keine Veröffentlichung mehr</string>
     <string name="repo_load_failed">Kann Modularchiv nicht laden: %s</string>
+    <string name="sort_upgradable_first">Aktualisierbare zuerst</string>
     <!-- CrashReportActivity -->
     <string name="version_mismatch">Die Version vom LSPosed Framework (%1$d) stimmt nicht mit dem Manager (%2$d) überein. Bitte installiere LSPosed erneut.</string>
     <string name="manager_crashed">Manager abgestürzt</string>
@@ -217,9 +224,4 @@ JJ108</string>
     <string name="color_deep_orange">Dunkelorange</string>
     <string name="color_brown">Braun</string>
     <string name="color_blue_grey">Blaugrau</string>
-    <string name="feedback_or_suggestion">Feedback oder Verbesserungsideen</string>
-    <string name="sort_upgradable_first">Aktualisierbare zuerst</string>
-    <string name="overview">Übersicht</string>
-    <string name="create_shortcut_summary">Erzeuge manuell eine Verknüpfung zum parasitären Manager</string>
-    <string name="enable_documentui">Bitte aktivieren Sie DocumentUI</string>
 </resources>

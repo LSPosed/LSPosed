@@ -20,6 +20,7 @@
 <resources xmlns:tools="http://schemas.android.com/tools" tools:keep="@string/xposed_module_updated_notification_*,@string/module_is_not_activated_*">
     <!-- MainActivity -->
     <string name="info">Információ</string>
+    <string name="overview">Áttekintés</string>
     <string name="Modules">Modulok</string>
     <plurals name="modules_enabled_count">
         <item quantity="one">%d modul aktiválva</item>
@@ -27,6 +28,7 @@
     </plurals>
     <string name="Logs">Log fileok</string>
     <string name="Settings">Beállítások</string>
+    <string name="feedback_or_suggestion">Visszajelzés vagy javaslat</string>
     <string name="About">Névjegy</string>
     <string name="report_issue">Hiba bejelentés</string>
     <string name="module_repo">Modulok</string>
@@ -157,6 +159,7 @@
     <string name="settings_restore_summery">Modullista és hatókörlisták visszaállítása.</string>
     <string name="settings_backup">Biztonsági mentés</string>
     <string name="settings_backup_failed2">A biztonsági mentés sikertelen:\n%s</string>
+    <string name="enable_documentui">Kérjük, engedélyezze a DocumentUI-t</string>
     <string name="settings_restore">Visszaállítás</string>
     <string name="settings_restore_failed2">Nem sikerült helyreállítani:\n%s</string>
     <string name="group_network">Hálózat</string>
@@ -172,11 +175,14 @@
     <string name="settings_translation">Részvétel a fordításban</string>
     <string name="settings_translation_summary">Segítsen nekünk lefordítani a %s az Ön nyelvére</string>
     <string name="pref_title_enable_auto_add_shortcut">Automatikusan hozzáad egy parancsikon</string>
+    <string name="create_shortcut_summary">Kézzel hozzon létre parazita menedzser parancsikon</string>
     <string name="settings_enable_auto_add_shortcut_summary">Nem lesznek új parancsikonok hozzáadva, ha a nem parazita menedzserben le van tiltva.</string>
     <string name="settings_update_channel">Frissítési csatorna</string>
     <string name="update_channel_stable">Stabil</string>
     <string name="update_channel_bate">Béta</string>
     <string name="update_channel_nightly">Éjszakai építés</string>
+    <string name="pref_title_restrict_classloader">Csak a modul classloader használhatja az Xposed API-t</string>
+    <string name="pref_summary_restrict_classloader">Ez megtörhet néhány modult, de a biztonság javára válik (kísérleti funkció).</string>
     <!-- Module Repo -->
     <string name="module_readme">Readme</string>
     <string name="module_releases">Kiadványok</string>
@@ -190,6 +196,7 @@
     <string name="module_release_load_more">Régebbi verziók megjelenítése</string>
     <string name="module_release_no_more">Nincs több felszabadítás</string>
     <string name="repo_load_failed">Nem sikerült betölteni a modul repo-t: %s</string>
+    <string name="sort_upgradable_first">Először fejleszthető</string>
     <!-- CrashReportActivity -->
     <string name="version_mismatch">Az LSPosed keretrendszer verziója (%1$d) nem egyezik a manager (%2$d) verziójával. Kérjük, telepítse újra az LSPosed-et.</string>
     <string name="manager_crashed">A menedzser lezuhant</string>
@@ -217,9 +224,4 @@
     <string name="color_deep_orange">Mély narancssárga</string>
     <string name="color_brown">Barna</string>
     <string name="color_blue_grey">Kék szürke</string>
-    <string name="feedback_or_suggestion">Visszajelzés vagy javaslat</string>
-    <string name="sort_upgradable_first">Először fejleszthető</string>
-    <string name="overview">Áttekintés</string>
-    <string name="create_shortcut_summary">Kézzel hozzon létre parazita menedzser parancsikon</string>
-    <string name="enable_documentui">Kérjük, engedélyezze a DocumentUI-t</string>
 </resources>

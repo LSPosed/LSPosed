@@ -20,6 +20,7 @@
 <resources xmlns:tools="http://schemas.android.com/tools" tools:keep="@string/xposed_module_updated_notification_*,@string/module_is_not_activated_*">
     <!-- MainActivity -->
     <string name="info">المعلومـات</string>
+    <string name="overview">نظرة عامة</string>
     <string name="Modules">الوحـدات</string>
     <plurals name="modules_enabled_count">
         <item quantity="zero">لا توجد وحدات مفعلة</item>
@@ -31,6 +32,7 @@
     </plurals>
     <string name="Logs">السجـلات</string>
     <string name="Settings">الإعـدادات</string>
+    <string name="feedback_or_suggestion">ملاحظات أو اقتراحات</string>
     <string name="About">عنّ</string>
     <string name="report_issue">الإبلاغ عن المشكلة</string>
     <string name="module_repo">المُستودع</string>
@@ -165,6 +167,7 @@ Ali Samir</string>
     <string name="settings_restore_summery">إستعادة قائمة الوحدات وقوائم النطاق.</string>
     <string name="settings_backup">نسخ احتياطي</string>
     <string name="settings_backup_failed2">فشل في النسخ الاحتياطي:\n%s</string>
+    <string name="enable_documentui">الرجاء تمكين DocumentUI</string>
     <string name="settings_restore">إستعادة</string>
     <string name="settings_restore_failed2">فشل في الاستعادة:\n%s</string>
     <string name="group_network">الشبكة</string>
@@ -180,11 +183,14 @@ Ali Samir</string>
     <string name="settings_translation">المشاركة في الترجمة</string>
     <string name="settings_translation_summary">ساعدنا في ترجمة %s إلى لغتك</string>
     <string name="pref_title_enable_auto_add_shortcut">إضافة اختصار تلقائياً</string>
+    <string name="create_shortcut_summary">إنشاء اختصار المدير الطفيلي يدويًا</string>
     <string name="settings_enable_auto_add_shortcut_summary">لن تضاف اختصارات جديدة عند تعطيلها في المدير غير الطفيلي</string>
     <string name="settings_update_channel">قناة التحديث</string>
     <string name="update_channel_stable">مستقر</string>
     <string name="update_channel_bate">تجريبي</string>
     <string name="update_channel_nightly">البناء الليلي</string>
+    <string name="pref_title_restrict_classloader">يمكن فقط لمحمل فئة الوحدة استخدام Xposed API</string>
+    <string name="pref_summary_restrict_classloader">قد يؤدي هذا إلى كسر بعض الوحدات ولكنه يفيد الأمان (ميزة تجريبية)</string>
     <!-- Module Repo -->
     <string name="module_readme">إقرأني</string>
     <string name="module_releases">إصدارات</string>
@@ -198,6 +204,7 @@ Ali Samir</string>
     <string name="module_release_load_more">إظهار الإصدارات الأقدم</string>
     <string name="module_release_no_more">لا مزيد من الإصدار</string>
     <string name="repo_load_failed">فشل تحميل مستودع الوحدة: %s</string>
+    <string name="sort_upgradable_first">قابل للترقية أولاً</string>
     <!-- CrashReportActivity -->
     <string name="version_mismatch">إصدار إطار LSPosed (%1$d) لا يتطابق مع المدير (%2$d). يرجى إعادة تثبيت LSPosed.</string>
     <string name="manager_crashed">تعطل المدير</string>
@@ -225,9 +232,4 @@ Ali Samir</string>
     <string name="color_deep_orange">برتقالي عميق</string>
     <string name="color_brown">بني</string>
     <string name="color_blue_grey">أزرق رمادي</string>
-    <string name="feedback_or_suggestion">ملاحظات أو اقتراحات</string>
-    <string name="sort_upgradable_first">قابل للترقية أولاً</string>
-    <string name="overview">نظرة عامة</string>
-    <string name="create_shortcut_summary">إنشاء اختصار المدير الطفيلي يدويا</string>
-    <string name="enable_documentui">الرجاء تمكين DocumentUI</string>
 </resources>

@@ -20,6 +20,7 @@
 <resources xmlns:tools="http://schemas.android.com/tools" tools:keep="@string/xposed_module_updated_notification_*,@string/module_is_not_activated_*">
     <!-- MainActivity -->
     <string name="info">Πληροφορίες</string>
+    <string name="overview">Επισκόπηση</string>
     <string name="Modules">Πρόσθετα</string>
     <plurals name="modules_enabled_count">
         <item quantity="one">%d  πρόσθετο ενεργοποιημένο</item>
@@ -27,6 +28,7 @@
     </plurals>
     <string name="Logs">Αρχεία καταγραφής</string>
     <string name="Settings">Ρυθμίσεις</string>
+    <string name="feedback_or_suggestion">Σχόλια ή πρόταση</string>
     <string name="About">Πληροφορίες</string>
     <string name="report_issue">Αναφορά προβλήματος</string>
     <string name="module_repo">Αποθετήριο</string>
@@ -156,6 +158,7 @@
     <string name="settings_restore_summery">Επαναφορά λίστας ενθεμάτων και πεδίου εφαρμογής.</string>
     <string name="settings_backup">Αντίγραφα Ασφαλείας</string>
     <string name="settings_backup_failed2">Αποτυχία δημιουργίας αντιγράφων ασφαλείας:\n%s</string>
+    <string name="enable_documentui">Ενεργοποιήστε το DocumentUI</string>
     <string name="settings_restore">Επαναφορά</string>
     <string name="settings_restore_failed2">Αποτυχία επαναφοράς:\n%s</string>
     <string name="group_network">Δίκτυο</string>
@@ -171,11 +174,14 @@
     <string name="settings_translation">Συμμετοχή στη μετάφραση</string>
     <string name="settings_translation_summary">Βοηθήστε μας να μεταφράσουμε το %s στη γλώσσα σας</string>
     <string name="pref_title_enable_auto_add_shortcut">Αυτόματη προσθήκη συντόμευσης</string>
+    <string name="create_shortcut_summary">Χειροκίνητη δημιουργία συντόμευσης παρασιτικού διαχειριστή</string>
     <string name="settings_enable_auto_add_shortcut_summary">Δεν θα προστεθούν νέες συντομεύσεις όταν απενεργοποιηθεί στον μη-παρασιτικό διαχειριστή</string>
     <string name="settings_update_channel">Ενημέρωση καναλιού</string>
     <string name="update_channel_stable">Σταθερό</string>
     <string name="update_channel_bate">Βήτα</string>
     <string name="update_channel_nightly">Νυχτερινή κατασκευή</string>
+    <string name="pref_title_restrict_classloader">Μόνο ο φορτωτής κλάσεων της μονάδας μπορεί να χρησιμοποιήσει το Xposed API</string>
+    <string name="pref_summary_restrict_classloader">Αυτό μπορεί να σπάσει κάποιες ενότητες αλλά να ωφελήσει την ασφάλεια (πειραματικό χαρακτηριστικό)</string>
     <!-- Module Repo -->
     <string name="module_readme">Έτοιμο</string>
     <string name="module_releases">Εκδόσεις</string>
@@ -189,6 +195,7 @@
     <string name="module_release_load_more">Εμφάνιση παλαιότερων εκδόσεων</string>
     <string name="module_release_no_more">Δεν υπάρχει πλέον έκδοση</string>
     <string name="repo_load_failed">Αποτυχία φόρτωσης πρόσθετου repo: %s</string>
+    <string name="sort_upgradable_first">Αναβαθμίσιμο πρώτα</string>
     <!-- CrashReportActivity -->
     <string name="version_mismatch">The version of the LSPosed framework (%1$d) does not match manager (%2$d). Please reinstall LSPosed.</string>
     <string name="manager_crashed">Ο διαχειριστής συνετρίβη</string>
@@ -216,9 +223,4 @@
     <string name="color_deep_orange">Βαθύ πορτοκαλί</string>
     <string name="color_brown">Καφέ</string>
     <string name="color_blue_grey">Μπλε γκρι</string>
-    <string name="feedback_or_suggestion">Σχόλια ή πρόταση</string>
-    <string name="sort_upgradable_first">Αναβαθμίσιμο πρώτα</string>
-    <string name="overview">Επισκόπηση</string>
-    <string name="create_shortcut_summary">Χειροκίνητη δημιουργία συντόμευσης παρασιτικού διαχειριστή</string>
-    <string name="enable_documentui">Ενεργοποιήστε το DocumentUI</string>
 </resources>

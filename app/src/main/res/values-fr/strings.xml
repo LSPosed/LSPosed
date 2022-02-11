@@ -20,6 +20,7 @@
 <resources xmlns:tools="http://schemas.android.com/tools" tools:keep="@string/xposed_module_updated_notification_*,@string/module_is_not_activated_*">
     <!-- MainActivity -->
     <string name="info">Infos</string>
+    <string name="overview">Aperçu</string>
     <string name="Modules">Modules</string>
     <plurals name="modules_enabled_count">
         <item quantity="one">%d module actif</item>
@@ -27,6 +28,7 @@
     </plurals>
     <string name="Logs">Journaux</string>
     <string name="Settings">Réglages</string>
+    <string name="feedback_or_suggestion">Réaction ou suggestion</string>
     <string name="About">À propos</string>
     <string name="report_issue">Signaler un problème</string>
     <string name="module_repo">Dépôt</string>
@@ -157,6 +159,7 @@ https://github.com/tclement0922</string>
     <string name="settings_restore_summery">Restaurer la liste des modules ainsi que leurs champs d\'applications.</string>
     <string name="settings_backup">Sauvegarder</string>
     <string name="settings_backup_failed2">Échec de la sauvegarde :\n%s</string>
+    <string name="enable_documentui">Merci d\'activer le gestionnaire de fichiers</string>
     <string name="settings_restore">Restaurer</string>
     <string name="settings_restore_failed2">Échec de la restauration :\n%s</string>
     <string name="group_network">Réseau</string>
@@ -172,11 +175,14 @@ https://github.com/tclement0922</string>
     <string name="settings_translation">Participer à la traduction</string>
     <string name="settings_translation_summary">Aidez-nous à traduire %s dans votre langue</string>
     <string name="pref_title_enable_auto_add_shortcut">Ajouter automatiquement un raccourci</string>
+    <string name="create_shortcut_summary">Créer le raccourci du gestionnaire parasitaire manuellement</string>
     <string name="settings_enable_auto_add_shortcut_summary">Aucun nouveau raccourci ne sera ajouté si désactivé dans le gestionnaire non parasitaire</string>
     <string name="settings_update_channel">Canal de mise à jour</string>
     <string name="update_channel_stable">Stable</string>
     <string name="update_channel_bate">Bêta</string>
     <string name="update_channel_nightly">Version alpha</string>
+    <string name="pref_title_restrict_classloader">Seul le module classloader peut utiliser l\'API Xposed</string>
+    <string name="pref_summary_restrict_classloader">Ceci pourrait casser certains modules mais être bénéfique à la sécurité (fonction expérimental)</string>
     <!-- Module Repo -->
     <string name="module_readme">Lisez-moi</string>
     <string name="module_releases">Versions</string>
@@ -190,6 +196,7 @@ https://github.com/tclement0922</string>
     <string name="module_release_load_more">Afficher les anciennes versions</string>
     <string name="module_release_no_more">Pas d\’autres versions</string>
     <string name="repo_load_failed">Échec de chargement du dépôt des modules : %s</string>
+    <string name="sort_upgradable_first">Évolutif d\'abord</string>
     <!-- CrashReportActivity -->
     <string name="version_mismatch">La version du sous système LSPosed (%1$d) ne correspond pas à celle du gestionnaire (%2$d). Merci de réinstaller LSPosed.</string>
     <string name="manager_crashed">Le gestionnaire a planté</string>
@@ -217,9 +224,4 @@ https://github.com/tclement0922</string>
     <string name="color_deep_orange">Orange foncé</string>
     <string name="color_brown">Marron</string>
     <string name="color_blue_grey">Bleu grisâtre</string>
-    <string name="feedback_or_suggestion">Réaction ou suggestion</string>
-    <string name="sort_upgradable_first">Évolutif d\'abord</string>
-    <string name="overview">Aperçu</string>
-    <string name="create_shortcut_summary">Créer le raccourci du gestionnaire parasitaire manuellement</string>
-    <string name="enable_documentui">Merci d\'activer le gestionnaire de fichiers</string>
 </resources>

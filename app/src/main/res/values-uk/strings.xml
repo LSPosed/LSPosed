@@ -20,6 +20,7 @@
 <resources xmlns:tools="http://schemas.android.com/tools" tools:keep="@string/xposed_module_updated_notification_*,@string/module_is_not_activated_*">
     <!-- MainActivity -->
     <string name="info">Інформація</string>
+    <string name="overview">Огляд</string>
     <string name="Modules">Модулі</string>
     <plurals name="modules_enabled_count">
         <item quantity="one">%d модуль увімкнено</item>
@@ -29,6 +30,7 @@
     </plurals>
     <string name="Logs">Звіти</string>
     <string name="Settings">Налаштування</string>
+    <string name="feedback_or_suggestion">Відгук або пропозиція</string>
     <string name="About">Про модифікацію</string>
     <string name="report_issue">Повідомити про проблему</string>
     <string name="module_repo">Репозиторій</string>
@@ -63,7 +65,7 @@
     <string name="info_system_version">Версія системи</string>
     <string name="info_device">Пристрій</string>
     <string name="info_system_abi">ABI системи</string>
-    <string name="info_api">Інтерфейс ін\'єкції</string>
+    <string name="info_api">Метод ін\'єкції</string>
     <string name="parasitic_recommend">Рекомендується менеджер-паразит</string>
     <string name="parasitic_recommend_summary">LSPosed тепер підтримує системний паразитизм, щоб уникнути виявлення. Ви можете безпечно видалити менеджер після успішного створення ярлика менеджера-паразита. У будь-якому випадку ви можете встановити менеджер назад з /data/adb/lspd/manager.apk.</string>
     <string name="create_shortcut">Створити ярлик</string>
@@ -72,7 +74,7 @@
     <string name="update_lsposed_msg">Підтверджуєте оновлення LSPosed? Цей пристрій перезавантажиться після закінчення оновлення</string>
     <!-- LogsActivity -->
     <string name="menuSaveToSd">Зберегти</string>
-    <string name="nav_item_logs_verbose">Докладні звіти</string>
+    <string name="nav_item_logs_verbose">Детальні звіти</string>
     <string name="nav_item_logs_module">Звіти модулів</string>
     <string name="logs_save_failed2">Не вдалося зберегти:\n%s</string>
     <string name="menuClearLog">Очистити звіт зараз</string>
@@ -84,8 +86,8 @@
     <string name="menuReload">Перезавантажити</string>
     <string name="logs_clear_failed_2">Не вдалося очистити звіт</string>
     <string name="menu_enable_word_wrap">Переніс слів</string>
-    <string name="enabled_verbose_log">Докладний звіт увімкнено</string>
-    <string name="disabled_verbose_log">Докладний звіт вимкнено</string>
+    <string name="enabled_verbose_log">Детальні звіти увімкнено</string>
+    <string name="disabled_verbose_log">Детальні звіти вимкнено</string>
     <!-- ModulesActivity -->
     <string name="module_empty_description">(опису не надано)</string>
     <string name="warning_xposed_min_version">Цей модуль вимагає новішої версії LSP (%d), тому його неможливо активувати</string>
@@ -160,6 +162,7 @@
     <string name="settings_restore_summery">Відновлення списку модулів та списків областей.</string>
     <string name="settings_backup">Створити резервну копію</string>
     <string name="settings_backup_failed2">Не вдалося створити резервну копію:\n%s</string>
+    <string name="enable_documentui">Будь ласка, увімкніть DocumentUI</string>
     <string name="settings_restore">Відновити</string>
     <string name="settings_restore_failed2">Не вдалося зберегти:\n%s</string>
     <string name="group_network">Мережа</string>
@@ -172,14 +175,17 @@
     <string name="settings_group_system">Система</string>
     <string name="settings_language">Мова</string>
     <string name="settings_translation_contributors">Автори перекладу</string>
-    <string name="settings_translation">Брати участь в перекладі</string>
-    <string name="settings_translation_summary">Допоможіть нам перекласти %s на вашу мову</string>
+    <string name="settings_translation">Допомогти з перекладом</string>
+    <string name="settings_translation_summary">Доповнити український переклад %s</string>
     <string name="pref_title_enable_auto_add_shortcut">Автоматично додавати ярлик</string>
+    <string name="create_shortcut_summary">Вручну створити ярлик менеджера-паразита</string>
     <string name="settings_enable_auto_add_shortcut_summary">Не можна додавати нові ярлики при вимкненні в менеджері без паразитів</string>
     <string name="settings_update_channel">Канал оновлень</string>
     <string name="update_channel_stable">Стабільний</string>
     <string name="update_channel_bate">Бета-версія</string>
     <string name="update_channel_nightly">Нічна збірка</string>
+    <string name="pref_title_restrict_classloader">Тільки модуль завантажувача класів може використовувати Xposed API</string>
+    <string name="pref_summary_restrict_classloader">Це може порушити роботу деяких модулів, але підвищити безпеку (експериментальна функція)</string>
     <!-- Module Repo -->
     <string name="module_readme">Опис</string>
     <string name="module_releases">Релізи</string>
@@ -193,6 +199,7 @@
     <string name="module_release_load_more">Показувати старіші версії</string>
     <string name="module_release_no_more">Більше релізів немає</string>
     <string name="repo_load_failed">Не вдалося завантажити модуль репозиторія: %s</string>
+    <string name="sort_upgradable_first">Спершу нові версії</string>
     <!-- CrashReportActivity -->
     <string name="version_mismatch">Версія LSPosed framework (%1$d) не відповідає менеджеру (%2$d). Будь-ласка, перевстановіть LSPosed.</string>
     <string name="manager_crashed">Менеджер зазнав збою</string>
@@ -220,9 +227,4 @@
     <string name="color_deep_orange">Жовтогарячий</string>
     <string name="color_brown">Коричневий</string>
     <string name="color_blue_grey">Блакитно-сірий</string>
-    <string name="feedback_or_suggestion">Відгук або пропозиція</string>
-    <string name="sort_upgradable_first">Спершу нові версії</string>
-    <string name="overview">Огляд</string>
-    <string name="create_shortcut_summary">Вручну створити ярлик менеджера-паразита</string>
-    <string name="enable_documentui">Будь ласка, увімкніть DocumentUI</string>
 </resources>

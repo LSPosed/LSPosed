@@ -20,12 +20,14 @@
 <resources xmlns:tools="http://schemas.android.com/tools" tools:keep="@string/xposed_module_updated_notification_*,@string/module_is_not_activated_*">
     <!-- MainActivity -->
     <string name="info">Thông tin</string>
+    <string name="overview">Tổng quát</string>
     <string name="Modules">Mô-đun</string>
     <plurals name="modules_enabled_count">
         <item quantity="other">%d mô-đun đã được kích hoạt</item>
     </plurals>
     <string name="Logs">Nhật ký</string>
     <string name="Settings">Cài đặt</string>
+    <string name="feedback_or_suggestion">Phản hồi hoặc góp ý</string>
     <string name="About">Về chúng tôi</string>
     <string name="report_issue">Báo cáo sự cố</string>
     <string name="module_repo">Kho</string>
@@ -154,6 +156,7 @@
     <string name="settings_restore_summery">Khôi phục danh sách mô-đun và danh sách phạm vi.</string>
     <string name="settings_backup">Sao lưu</string>
     <string name="settings_backup_failed2">Sao lưu thất bại:\n%s</string>
+    <string name="enable_documentui">Vui lòng kích hoạt DocumentUI</string>
     <string name="settings_restore">Phục hồi</string>
     <string name="settings_restore_failed2">Phục hồi thất bại:\n%s</string>
     <string name="group_network">Mạng</string>
@@ -169,11 +172,14 @@
     <string name="settings_translation">Tham gia phiên dịch</string>
     <string name="settings_translation_summary">Giúp chúng tôi dịch %s sang ngôn ngữ của bạn</string>
     <string name="pref_title_enable_auto_add_shortcut">Tự động thêm một lối tắt</string>
+    <string name="create_shortcut_summary">Tạo lối tắt trình quản lý ký sinh theo cách thủ công</string>
     <string name="settings_enable_auto_add_shortcut_summary">Sẽ không có lối tắt mới nào được thêm khi vô hiệu trong trình quản lý không cộng sinh</string>
     <string name="settings_update_channel">Kênh cập nhật</string>
     <string name="update_channel_stable">Ổn định</string>
     <string name="update_channel_bate">Beta</string>
     <string name="update_channel_nightly">Bản dựng hàng đêm</string>
+    <string name="pref_title_restrict_classloader">Chỉ trình tải lớp mô-đun mới có thể sử dụng Xposed API</string>
+    <string name="pref_summary_restrict_classloader">Điều này có thể phá vỡ một số mô-đun nhưng có lợi cho bảo mật (tính năng thử nghiệm)</string>
     <!-- Module Repo -->
     <string name="module_readme">Readme</string>
     <string name="module_releases">Bản phát hành</string>
@@ -187,6 +193,7 @@
     <string name="module_release_load_more">Hiển thị các phiên bản cũ hơn</string>
     <string name="module_release_no_more">Không có phiên bản nào</string>
     <string name="repo_load_failed">Tải kho lưu trữ mô-đun thất bại: %s</string>
+    <string name="sort_upgradable_first">Có thể nâng cấp trước</string>
     <!-- CrashReportActivity -->
     <string name="version_mismatch">Phiên bản của LSPosed framework (%1$d) không trùng khớp với phiên bản quản lý (%2$d). Hãy cài đặt lại LSPosed.</string>
     <string name="manager_crashed">Trình quản lí gặp sự cố</string>
@@ -214,9 +221,4 @@
     <string name="color_deep_orange">Cam sâu</string>
     <string name="color_brown">Nâu</string>
     <string name="color_blue_grey">Xanh xám</string>
-    <string name="feedback_or_suggestion">Phản hồi hoặc góp ý</string>
-    <string name="sort_upgradable_first">Có thể nâng cấp trước</string>
-    <string name="overview">Tổng quát</string>
-    <string name="create_shortcut_summary">Tạo lối tắt trình quản lý ký sinh theo cách thủ công</string>
-    <string name="enable_documentui">Vui lòng kích hoạt DocumentUI</string>
 </resources>

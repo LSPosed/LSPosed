@@ -20,6 +20,7 @@
 <resources xmlns:tools="http://schemas.android.com/tools" tools:keep="@string/xposed_module_updated_notification_*,@string/module_is_not_activated_*">
     <!-- MainActivity -->
     <string name="info">Infromatii</string>
+    <string name="overview">Prezentare generală</string>
     <string name="Modules">Module</string>
     <plurals name="modules_enabled_count">
         <item quantity="one">%d modul activat</item>
@@ -28,6 +29,7 @@
     </plurals>
     <string name="Logs">Jurnale</string>
     <string name="Settings">Setari</string>
+    <string name="feedback_or_suggestion">Feedback sau sugestie</string>
     <string name="About">Despre</string>
     <string name="report_issue">Raporteaza o problema</string>
     <string name="module_repo">Depozit</string>
@@ -158,6 +160,7 @@
     <string name="settings_restore_summery">Restaureaza lista de module si lista de scopuri.</string>
     <string name="settings_backup">Copie de rezerva</string>
     <string name="settings_backup_failed2">Copia de rezervă a eșuat:\n%s</string>
+    <string name="enable_documentui">Vă rugăm să activați DocumentUI</string>
     <string name="settings_restore">Restaurează</string>
     <string name="settings_restore_failed2">Restaurarea a eșuat:\n%s</string>
     <string name="group_network">Reţea</string>
@@ -173,11 +176,14 @@
     <string name="settings_translation">Participă în traducere</string>
     <string name="settings_translation_summary">Ajută-ne să traducem %s în limba ta</string>
     <string name="pref_title_enable_auto_add_shortcut">Adaugă automat o comandă rapidă</string>
+    <string name="create_shortcut_summary">Creați manual o comandă rapidă pentru managerul de paraziți</string>
     <string name="settings_enable_auto_add_shortcut_summary">Nicio comandă rapidă nouă nu va fi adăugată când este dezactivată în managerul non-parazit</string>
     <string name="settings_update_channel">Canal de actualizare</string>
     <string name="update_channel_stable">Stabil</string>
     <string name="update_channel_bate">Beta</string>
     <string name="update_channel_nightly">Construire nocturnă</string>
+    <string name="pref_title_restrict_classloader">Numai modulul classloader poate utiliza Xposed API</string>
+    <string name="pref_summary_restrict_classloader">Acest lucru poate distruge unele module, dar este în beneficiul securității (caracteristică experimentală)</string>
     <!-- Module Repo -->
     <string name="module_readme">Citește-mă</string>
     <string name="module_releases">Lansări</string>
@@ -191,6 +197,7 @@
     <string name="module_release_load_more">Arată versiunile mai vechi</string>
     <string name="module_release_no_more">Nu mai sunt lansări</string>
     <string name="repo_load_failed">Nu s-a putut încărca repo-ul modulului: %s</string>
+    <string name="sort_upgradable_first">Upgradabil mai întâi</string>
     <!-- CrashReportActivity -->
     <string name="version_mismatch">Versiunea LSPosed Framework (%1$d) nu se potrivește cu managerul (%2$d). Vă rugăm să reinstalați LSPosed.</string>
     <string name="manager_crashed">Manager prăbușit</string>
@@ -218,9 +225,4 @@
     <string name="color_deep_orange">Portocaliu închis</string>
     <string name="color_brown">Maro</string>
     <string name="color_blue_grey">Albastru gri</string>
-    <string name="feedback_or_suggestion">Feedback sau sugestie</string>
-    <string name="sort_upgradable_first">Upgradabil mai întâi</string>
-    <string name="overview">Prezentare generală</string>
-    <string name="create_shortcut_summary">Creați manual o comandă rapidă pentru managerul de paraziți</string>
-    <string name="enable_documentui">Vă rugăm să activați DocumentUI</string>
 </resources>

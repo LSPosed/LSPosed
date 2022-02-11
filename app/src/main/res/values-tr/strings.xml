@@ -20,6 +20,7 @@
 <resources xmlns:tools="http://schemas.android.com/tools" tools:keep="@string/xposed_module_updated_notification_*,@string/module_is_not_activated_*">
     <!-- MainActivity -->
     <string name="info">Bilgi</string>
+    <string name="overview">Genel bakış</string>
     <string name="Modules">Modüller</string>
     <plurals name="modules_enabled_count">
         <item quantity="one">%d modül etkin</item>
@@ -27,6 +28,7 @@
     </plurals>
     <string name="Logs">Günlükler</string>
     <string name="Settings">Ayarlar</string>
+    <string name="feedback_or_suggestion">Geri bildirim veya öneri</string>
     <string name="About">Hakkında</string>
     <string name="report_issue">Hata raporla</string>
     <string name="module_repo">Modül deposu</string>
@@ -156,6 +158,7 @@
     <string name="settings_restore_summery">Modül ve kapsam listelerini geri yükle.</string>
     <string name="settings_backup">Yedek</string>
     <string name="settings_backup_failed2">Yedekleme başarısız oldu:\n%s</string>
+    <string name="enable_documentui">Lütfen DocumentUI\'yi etkinleştirin</string>
     <string name="settings_restore">Geri yükle</string>
     <string name="settings_restore_failed2">Geri yüklenemedi:\n%s</string>
     <string name="group_network">Ağ</string>
@@ -171,11 +174,14 @@
     <string name="settings_translation">Çeviriye katılın</string>
     <string name="settings_translation_summary">%s yazılımını çevirmemize yardım edin</string>
     <string name="pref_title_enable_auto_add_shortcut">Otomatik olarak bir kısayol ekle</string>
+    <string name="create_shortcut_summary">Parazit yönetici kısayolunu manuel olarak oluşturun</string>
     <string name="settings_enable_auto_add_shortcut_summary">Parazit olmayan yöneticilerde devre dışı bırakılınca yeni kısayol eklenmez</string>
     <string name="settings_update_channel">Güncelleme kanalı</string>
     <string name="update_channel_stable">Stabil</string>
     <string name="update_channel_bate">Beta</string>
     <string name="update_channel_nightly">Gecelik</string>
+    <string name="pref_title_restrict_classloader">Yalnızca modül sınıf yükleyicisi Xposed API\'yi kullanabilir</string>
+    <string name="pref_summary_restrict_classloader">Bu, bazı modülleri bozabilir ancak güvenlikten faydalanabilir (deneysel özellik)</string>
     <!-- Module Repo -->
     <string name="module_readme">Beni oku</string>
     <string name="module_releases">Sürümler</string>
@@ -189,6 +195,7 @@
     <string name="module_release_load_more">Eski sürümleri göster</string>
     <string name="module_release_no_more">Daha fazla sürüm yok</string>
     <string name="repo_load_failed">Modül deposu yüklenemedi: %s</string>
+    <string name="sort_upgradable_first">Önce yükseltilebilir</string>
     <!-- CrashReportActivity -->
     <string name="version_mismatch">LSPosed çerçevesinin sürümü (%1$d) yöneticininkiyle eşleşmiyor (%2$d). Lütfen LSPosed\'ı tekrar kurun.</string>
     <string name="manager_crashed">Yönetici çöktü</string>
@@ -216,9 +223,4 @@
     <string name="color_deep_orange">Koyu turuncu</string>
     <string name="color_brown">Kahverengi</string>
     <string name="color_blue_grey">Mavi gri</string>
-    <string name="feedback_or_suggestion">Geri bildirim veya öneri</string>
-    <string name="sort_upgradable_first">Önce yükseltilebilir</string>
-    <string name="overview">Genel bakış</string>
-    <string name="create_shortcut_summary">Parazit yönetici kısayolunu manuel olarak oluşturun</string>
-    <string name="enable_documentui">Lütfen DocumentUI\'yi etkinleştirin</string>
 </resources>

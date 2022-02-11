@@ -20,6 +20,7 @@
 <resources xmlns:tools="http://schemas.android.com/tools" tools:keep="@string/xposed_module_updated_notification_*,@string/module_is_not_activated_*">
     <!-- MainActivity -->
     <string name="info">Informació</string>
+    <string name="overview">Visió general</string>
     <string name="Modules">Mòduls</string>
     <plurals name="modules_enabled_count">
         <item quantity="one">%d Mòdul activat</item>
@@ -27,6 +28,7 @@
     </plurals>
     <string name="Logs">Logs</string>
     <string name="Settings">Configuració</string>
+    <string name="feedback_or_suggestion">Comentari o suggeriment</string>
     <string name="About">Sobre</string>
     <string name="report_issue">Reportar problema</string>
     <string name="module_repo">Repositori</string>
@@ -156,6 +158,7 @@
     <string name="settings_restore_summery">Restaura la llista de mòduls i les llistes d\'abast.</string>
     <string name="settings_backup">Còpia de seguretat</string>
     <string name="settings_backup_failed2">No s\'ha pogut fer la còpia de seguretat:\n%s</string>
+    <string name="enable_documentui">Si us plau, activeu DocumentUI</string>
     <string name="settings_restore">Restaurar</string>
     <string name="settings_restore_failed2">No s\'ha pogut restaurar:\n%s</string>
     <string name="group_network">Xarxa</string>
@@ -171,11 +174,14 @@
     <string name="settings_translation">Participar en la traducció</string>
     <string name="settings_translation_summary">Ajuda\'ns a traduir %s al teu idioma</string>
     <string name="pref_title_enable_auto_add_shortcut">Afegeix automàticament una drecera</string>
+    <string name="create_shortcut_summary">Crea manualment la drecera del gestor de paràsits</string>
     <string name="settings_enable_auto_add_shortcut_summary">No s\'afegiran dreceres noves quan estiguin desactivades al gestor no paràsit</string>
     <string name="settings_update_channel">Actualitza el canal</string>
     <string name="update_channel_stable">Estable</string>
     <string name="update_channel_bate">Beta</string>
     <string name="update_channel_nightly">Construcció nocturna</string>
+    <string name="pref_title_restrict_classloader">Només el carregador de classes de mòduls pot utilitzar l\'API Xposed</string>
+    <string name="pref_summary_restrict_classloader">Això pot trencar alguns mòduls però beneficiar la seguretat (funció experimental)</string>
     <!-- Module Repo -->
     <string name="module_readme">Llegiu-me</string>
     <string name="module_releases">Alliberaments</string>
@@ -189,6 +195,7 @@
     <string name="module_release_load_more">Mostra les versions anteriors</string>
     <string name="module_release_no_more">No més llançament</string>
     <string name="repo_load_failed">No s\'ha pogut carregar el dipòsit del mòdul: %s</string>
+    <string name="sort_upgradable_first">Actualitzable primer</string>
     <!-- CrashReportActivity -->
     <string name="version_mismatch">La versió del marc LSPosed (%1$d) no coincideix amb el gestor (%2$d). Torneu a instal·lar LSPosed.</string>
     <string name="manager_crashed">El gerent s\'ha estavellat</string>
@@ -216,9 +223,4 @@
     <string name="color_deep_orange">Taronja profund</string>
     <string name="color_brown">marró</string>
     <string name="color_blue_grey">Gris blau</string>
-    <string name="feedback_or_suggestion">Comentari o suggeriment</string>
-    <string name="sort_upgradable_first">Actualitzable primer</string>
-    <string name="overview">Visió general</string>
-    <string name="create_shortcut_summary">Crea manualment la drecera del gestor de paràsits</string>
-    <string name="enable_documentui">Si us plau, activeu DocumentUI</string>
 </resources>

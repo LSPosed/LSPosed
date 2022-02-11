@@ -20,12 +20,14 @@
 <resources xmlns:tools="http://schemas.android.com/tools" tools:keep="@string/xposed_module_updated_notification_*,@string/module_is_not_activated_*">
     <!-- MainActivity -->
     <string name="info">資訊</string>
+    <string name="overview">概述</string>
     <string name="Modules">模組</string>
     <plurals name="modules_enabled_count">
         <item quantity="other">%d 個模組已啟用</item>
     </plurals>
     <string name="Logs">紀錄檔</string>
     <string name="Settings">設定</string>
+    <string name="feedback_or_suggestion">反饋或建議</string>
     <string name="About">關於</string>
     <string name="report_issue">回報問題</string>
     <string name="module_repo">倉庫</string>
@@ -156,6 +158,7 @@
     <string name="settings_restore_summery">還原模組清單與作用域清單</string>
     <string name="settings_backup">備份</string>
     <string name="settings_backup_failed2">備份失敗：\n%s</string>
+    <string name="enable_documentui">請啟用 DocumentUI</string>
     <string name="settings_restore">還原</string>
     <string name="settings_restore_failed2">還原失敗：\n%s</string>
     <string name="group_network">網路</string>
@@ -171,11 +174,14 @@
     <string name="settings_translation">參與翻譯</string>
     <string name="settings_translation_summary">幫助我們翻譯 %s 到您的語言</string>
     <string name="pref_title_enable_auto_add_shortcut">自動新增捷徑</string>
+    <string name="create_shortcut_summary">手動建立寄生管理器捷徑</string>
     <string name="settings_enable_auto_add_shortcut_summary">當在非寄生管理器禁用時不再新增捷徑</string>
     <string name="settings_update_channel">更新頻道</string>
     <string name="update_channel_stable">穩定版</string>
     <string name="update_channel_bate">測試版</string>
     <string name="update_channel_nightly">每夜構建</string>
+    <string name="pref_title_restrict_classloader">只有模組 classloader 可以使用 Xposed API</string>
+    <string name="pref_summary_restrict_classloader">可能會破壞某些模組的功能，但有利於安全性（實驗性功能）</string>
     <!-- Module Repo -->
     <string name="module_readme">讀我檔案</string>
     <string name="module_releases">版本</string>
@@ -189,6 +195,7 @@
     <string name="module_release_load_more">顯示較舊版本</string>
     <string name="module_release_no_more">沒有更舊的版本</string>
     <string name="repo_load_failed">模組倉庫加載失敗: %s</string>
+    <string name="sort_upgradable_first">可更新優先</string>
     <!-- CrashReportActivity -->
     <string name="version_mismatch">LSPosed框架版本 (%1$d) 與管理器 (%2$d) 不匹配，請重新安裝LSPosed。</string>
     <string name="manager_crashed">應用程式已崩潰</string>
@@ -216,9 +223,4 @@
     <string name="color_deep_orange">深橙色</string>
     <string name="color_brown">啡色</string>
     <string name="color_blue_grey">藍灰色</string>
-    <string name="feedback_or_suggestion">反饋或建議</string>
-    <string name="sort_upgradable_first">可更新優先</string>
-    <string name="overview">概述</string>
-    <string name="create_shortcut_summary">手動建立寄生管理器捷徑</string>
-    <string name="enable_documentui">請啟用 DocumentUI</string>
 </resources>

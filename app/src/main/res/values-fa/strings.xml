@@ -20,6 +20,7 @@
 <resources xmlns:tools="http://schemas.android.com/tools" tools:keep="@string/xposed_module_updated_notification_*,@string/module_is_not_activated_*">
     <!-- MainActivity -->
     <string name="info">اطلاعات</string>
+    <string name="overview">بررسی اجمالی</string>
     <string name="Modules">ماژول‌ها</string>
     <plurals name="modules_enabled_count">
         <item quantity="one">%d ماژول فعال شده</item>
@@ -27,6 +28,7 @@
     </plurals>
     <string name="Logs">گزارشات</string>
     <string name="Settings">تنظیمات</string>
+    <string name="feedback_or_suggestion">نظر یا پیشنهادی بدهید</string>
     <string name="About">درباره</string>
     <string name="report_issue">گزارش مشکل</string>
     <string name="module_repo">ماژول ها</string>
@@ -156,6 +158,7 @@
     <string name="settings_restore_summery">بازیابی لیست ماژول های پشتیبان گیری و لیست های محدوده.</string>
     <string name="settings_backup">پشتیبان گیری</string>
     <string name="settings_backup_failed2">پشتیبان گیری ناموفق بود:\n%s</string>
+    <string name="enable_documentui">لطفا DocumentUI را فعال کنید</string>
     <string name="settings_restore">بازگردانی</string>
     <string name="settings_restore_failed2">ناموفق در بازگرداندن:\n%s</string>
     <string name="group_network">اتصال</string>
@@ -171,11 +174,14 @@
     <string name="settings_translation">کمک در ترجمه</string>
     <string name="settings_translation_summary">به ما کمک کنید %s به زبان شما ترجمه کنیم</string>
     <string name="pref_title_enable_auto_add_shortcut">به صورت خودکار یک میان‌بر اضافه کنید</string>
+    <string name="create_shortcut_summary">دستی میانبر مدیر انگلی ایجاد کنید</string>
     <string name="settings_enable_auto_add_shortcut_summary">در صورت غیرفعال شدن در مدیر غیر انگلی، میان بر جدیدی اضافه نخواهد شد</string>
     <string name="settings_update_channel">بروزرسانی کانال</string>
     <string name="update_channel_stable">پایدار</string>
     <string name="update_channel_bate">آزمایشی</string>
     <string name="update_channel_nightly">ساخت شبانه</string>
+    <string name="pref_title_restrict_classloader">فقط ماژول کلاس لودر می تواند از Xposed API استفاده کند</string>
+    <string name="pref_summary_restrict_classloader">این ممکن است برخی از ماژول ها را خراب کند، اما به نفع امنیت است (ویژگی آزمایشی)</string>
     <!-- Module Repo -->
     <string name="module_readme">منو بخون</string>
     <string name="module_releases">انتشار‌ها</string>
@@ -189,6 +195,7 @@
     <string name="module_release_load_more">نسخه های قدیمی تر</string>
     <string name="module_release_no_more">انتشار جدیدی نیست</string>
     <string name="repo_load_failed">ناموفق در بارگذاری ماژول: %s</string>
+    <string name="sort_upgradable_first">Upgradable first</string>
     <!-- CrashReportActivity -->
     <string name="version_mismatch">نسخه چارچوب LSPosed (%1$d) با مدیر (%2$d) مطابقت ندارد. لطفا LSPosed را دوباره نصب کنید.</string>
     <string name="manager_crashed">منیجر هنگ کرده</string>
@@ -216,9 +223,4 @@
     <string name="color_deep_orange">نارنجی تیره</string>
     <string name="color_brown">قهوه ای</string>
     <string name="color_blue_grey">خاکستری آبی</string>
-    <string name="feedback_or_suggestion">نظر یا پیشنهادی بدهید</string>
-    <string name="sort_upgradable_first">Upgradable first</string>
-    <string name="overview">بررسی اجمالی</string>
-    <string name="create_shortcut_summary">دستی میانبر مدیر انگلی ایجاد کنید</string>
-    <string name="enable_documentui">لطفا DocumentUI را فعال کنید</string>
 </resources>
