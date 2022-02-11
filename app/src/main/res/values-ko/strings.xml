@@ -20,12 +20,14 @@
 <resources xmlns:tools="http://schemas.android.com/tools" tools:keep="@string/xposed_module_updated_notification_*,@string/module_is_not_activated_*">
     <!-- MainActivity -->
     <string name="info">정보</string>
+    <string name="overview">개요</string>
     <string name="Modules">모듈</string>
     <plurals name="modules_enabled_count">
         <item quantity="other">모듈 %d개가 활성화됨</item>
     </plurals>
     <string name="Logs">로그</string>
     <string name="Settings">설정</string>
+    <string name="feedback_or_suggestion">피드백 혹은 제안</string>
     <string name="About">정보</string>
     <string name="report_issue">문제 보고</string>
     <string name="module_repo">저장소</string>
@@ -154,6 +156,7 @@
     <string name="settings_restore_summery">모듈 목록과 스코프 목록을 복원합니다.</string>
     <string name="settings_backup">백업</string>
     <string name="settings_backup_failed2">백업 실패:\n%s</string>
+    <string name="enable_documentui">DocumentUI를 활성화하십시오</string>
     <string name="settings_restore">복원</string>
     <string name="settings_restore_failed2">복원 실패:\n%s</string>
     <string name="group_network">네트워크</string>
@@ -169,11 +172,14 @@
     <string name="settings_translation">번역 참여</string>
     <string name="settings_translation_summary">%s 을 귀하의 언어로 번역하는 데 도움을 주세요.</string>
     <string name="pref_title_enable_auto_add_shortcut">자동으로 바로가기 추가</string>
+    <string name="create_shortcut_summary">수동으로 기생 관리자 바로 가기 만들기</string>
     <string name="settings_enable_auto_add_shortcut_summary">비 기생 관리자에서 비활성화하면 새 바로 가기가 추가되지 않습니다.</string>
     <string name="settings_update_channel">채널 업데이트</string>
     <string name="update_channel_stable">안정적인</string>
     <string name="update_channel_bate">베타</string>
     <string name="update_channel_nightly">야간 빌드</string>
+    <string name="pref_title_restrict_classloader">모듈 클래스 로더만 Xposed API를 사용할 수 있습니다.</string>
+    <string name="pref_summary_restrict_classloader">이것은 일부 모듈을 손상시킬 수 있지만 보안에 도움이 됩니다(실험 기능)</string>
     <!-- Module Repo -->
     <string name="module_readme">읽어보기</string>
     <string name="module_releases">릴리스</string>
@@ -187,6 +193,7 @@
     <string name="module_release_load_more">이전 버전 표시</string>
     <string name="module_release_no_more">더 이상 출시되지 않음</string>
     <string name="repo_load_failed">모듈 저장소를 로드하지 못함: %s</string>
+    <string name="sort_upgradable_first">먼저 업그레이드 가능</string>
     <!-- CrashReportActivity -->
     <string name="version_mismatch">LSPosed 프레임워크 버전(%1$d)이 관리자(%2$d)와 일치하지 않습니다. LSposed를 다시 설치하십시오.</string>
     <string name="manager_crashed">관리자 충돌</string>
@@ -214,9 +221,4 @@
     <string name="color_deep_orange">딥 오렌지</string>
     <string name="color_brown">갈색</string>
     <string name="color_blue_grey">블루 그레이</string>
-    <string name="feedback_or_suggestion">피드백 혹은 제안</string>
-    <string name="sort_upgradable_first">먼저 업그레이드 가능</string>
-    <string name="overview">개요</string>
-    <string name="create_shortcut_summary">수동으로 기생 관리자 바로 가기 만들기</string>
-    <string name="enable_documentui">DocumentUI를 활성화하십시오</string>
 </resources>
