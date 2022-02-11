@@ -20,6 +20,7 @@
 <resources xmlns:tools="http://schemas.android.com/tools" tools:keep="@string/xposed_module_updated_notification_*,@string/module_is_not_activated_*">
     <!-- MainActivity -->
     <string name="info">Informasjon</string>
+    <string name="overview">Oversikt</string>
     <string name="Modules">Moduler</string>
     <plurals name="modules_enabled_count">
         <item quantity="one">%d modul aktivert</item>
@@ -27,6 +28,7 @@
     </plurals>
     <string name="Logs">Logger</string>
     <string name="Settings">Innstillinger</string>
+    <string name="feedback_or_suggestion">Tilbakemelding eller forslag</string>
     <string name="About">Om</string>
     <string name="report_issue">Rapporter en feil</string>
     <string name="module_repo">Kodelager</string>
@@ -156,6 +158,7 @@
     <string name="settings_restore_summery">Gjenopprett modulliste og omfangslister.</string>
     <string name="settings_backup">Sikkerhetskopi</string>
     <string name="settings_backup_failed2">Klarte ikke å sikkerhetskopiere:\n%s</string>
+    <string name="enable_documentui">Aktiver DocumentUI</string>
     <string name="settings_restore">Gjenopprett</string>
     <string name="settings_restore_failed2">Kunne ikke gjenopprette:\n%s</string>
     <string name="group_network">Nettverk</string>
@@ -171,11 +174,14 @@
     <string name="settings_translation">Delta i oversettelse</string>
     <string name="settings_translation_summary">Hjelp oss med å oversette %s til ditt språk</string>
     <string name="pref_title_enable_auto_add_shortcut">Legg til snarvei automatisk</string>
+    <string name="create_shortcut_summary">Lag en snarvei for parasittisk manager manuelt</string>
     <string name="settings_enable_auto_add_shortcut_summary">Ingen nye snarveier vil legges til når de er deaktivert i den ikke-parasittiske lederen</string>
     <string name="settings_update_channel">Oppdater kanal</string>
     <string name="update_channel_stable">Stabil</string>
     <string name="update_channel_bate">beta</string>
     <string name="update_channel_nightly">Nattlig bygg</string>
+    <string name="pref_title_restrict_classloader">Bare modulklasselaster kan bruke Xposed API</string>
+    <string name="pref_summary_restrict_classloader">Dette kan ødelegge noen moduler, men gi fordeler for sikkerheten (eksperimentell funksjon)</string>
     <!-- Module Repo -->
     <string name="module_readme">Lesmeg</string>
     <string name="module_releases">Utgivelser</string>
@@ -189,6 +195,7 @@
     <string name="module_release_load_more">Vis eldre versjoner</string>
     <string name="module_release_no_more">Ingen flere utgivelse</string>
     <string name="repo_load_failed">Kunne ikke laste modulrepo: %s</string>
+    <string name="sort_upgradable_first">Oppgraderbar først</string>
     <!-- CrashReportActivity -->
     <string name="version_mismatch">Versjonen av det LSPed-rammeverket (%1$d) stemmer ikke overens med behandleren (%2$d). Installer LSPC på nytt.</string>
     <string name="manager_crashed">Håndterer krasjet</string>
@@ -216,9 +223,4 @@
     <string name="color_deep_orange">Dyp oransje</string>
     <string name="color_brown">Brun</string>
     <string name="color_blue_grey">Blå grå</string>
-    <string name="feedback_or_suggestion">Tilbakemelding eller forslag</string>
-    <string name="sort_upgradable_first">Oppgraderbar først</string>
-    <string name="overview">Oversikt</string>
-    <string name="create_shortcut_summary">Lag en snarvei for parasittisk manager manuelt</string>
-    <string name="enable_documentui">Aktiver DocumentUI</string>
 </resources>
