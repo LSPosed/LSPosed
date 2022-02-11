@@ -20,6 +20,7 @@
 <resources xmlns:tools="http://schemas.android.com/tools" tools:keep="@string/xposed_module_updated_notification_*,@string/module_is_not_activated_*">
     <!-- MainActivity -->
     <string name="info">מידע</string>
+    <string name="overview">סקירה כללית</string>
     <string name="Modules">מודולים</string>
     <plurals name="modules_enabled_count">
         <item quantity="one">%d מודל מופעל</item>
@@ -30,6 +31,7 @@
     </plurals>
     <string name="Logs">יומנים</string>
     <string name="Settings">הגדרות</string>
+    <string name="feedback_or_suggestion">משוב או הצעה</string>
     <string name="About">אודות</string>
     <string name="report_issue">דווח על בעיה</string>
     <string name="module_repo">רפוסיטורי</string>
@@ -161,6 +163,7 @@
     <string name="settings_restore_summery">שחזר את רשימת המודולים ורשימות ההיקף.</string>
     <string name="settings_backup">גיבוי</string>
     <string name="settings_backup_failed2">גיבוי נכשל:\n%s</string>
+    <string name="enable_documentui">אנא הפעל את DocumentUI</string>
     <string name="settings_restore">שחזור</string>
     <string name="settings_restore_failed2">השחזור נכשל::\n%s</string>
     <string name="group_network">רשת</string>
@@ -176,11 +179,14 @@
     <string name="settings_translation">השתתף בתרגום</string>
     <string name="settings_translation_summary">עזור לנו לתרגם את %s לשפה שלך</string>
     <string name="pref_title_enable_auto_add_shortcut">הוסף אוטומטית קיצור דרך</string>
+    <string name="create_shortcut_summary">צור באופן ידני קיצור דרך למנהל טפילי</string>
     <string name="settings_enable_auto_add_shortcut_summary">לא יתווספו קיצורי דרך חדשים כשהם מושבתים במנהל הלא טפילי</string>
     <string name="settings_update_channel">ערוץ עדכון</string>
     <string name="update_channel_stable">יציב</string>
     <string name="update_channel_bate">בטא</string>
     <string name="update_channel_nightly">בניה לילית</string>
+    <string name="pref_title_restrict_classloader">רק מטען כיתות מודול יכול להשתמש ב-Xposed API</string>
+    <string name="pref_summary_restrict_classloader">זה עשוי לשבור מודולים מסוימים אך יועיל לאבטחה (תכונה נסיונית)</string>
     <!-- Module Repo -->
     <string name="module_readme">קרא אותי</string>
     <string name="module_releases">גרסאות</string>
@@ -194,6 +200,7 @@
     <string name="module_release_load_more">הראה גרסאות ישנות</string>
     <string name="module_release_no_more">אין עוד גרסאות</string>
     <string name="repo_load_failed">נשכל לטעון מודול: %s</string>
+    <string name="sort_upgradable_first">ניתן לשדרוג תחילה</string>
     <!-- CrashReportActivity -->
     <string name="version_mismatch">הגרסה של LSPosed framework (%1$d) אינה תואמת למנהל (%2$d). נא להתקין מחדש את LSPosed.</string>
     <string name="manager_crashed">המנהל התרסק</string>
@@ -221,9 +228,4 @@
     <string name="color_deep_orange">כתום עמוק</string>
     <string name="color_brown">חום</string>
     <string name="color_blue_grey">כחול אפור</string>
-    <string name="feedback_or_suggestion">משוב או הצעה</string>
-    <string name="sort_upgradable_first">ניתן לשדרוג תחילה</string>
-    <string name="overview">סקירה כללית</string>
-    <string name="create_shortcut_summary">צור באופן ידני קיצור דרך למנהל טפילי</string>
-    <string name="enable_documentui">אנא הפעל את DocumentUI</string>
 </resources>
