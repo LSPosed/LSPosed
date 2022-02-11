@@ -20,6 +20,7 @@
 <resources xmlns:tools="http://schemas.android.com/tools" tools:keep="@string/xposed_module_updated_notification_*,@string/module_is_not_activated_*">
     <!-- MainActivity -->
     <string name="info">Информация</string>
+    <string name="overview">LSPosed</string>
     <string name="Modules">Мои модули</string>
     <plurals name="modules_enabled_count">
         <item quantity="one">Включен %d модуль</item>
@@ -29,6 +30,7 @@
     </plurals>
     <string name="Logs">Логи</string>
     <string name="Settings">Настройки</string>
+    <string name="feedback_or_suggestion">Обратная связь</string>
     <string name="About">О приложении</string>
     <string name="report_issue">Сообщить о проблеме</string>
     <string name="module_repo">Репозиторий</string>
@@ -160,6 +162,7 @@
     <string name="settings_restore_summery">Восстановить список модулей и выбранных приложений для модулей</string>
     <string name="settings_backup">Создать</string>
     <string name="settings_backup_failed2">Не удалось сделать резервную копию:\n%s</string>
+    <string name="enable_documentui">Пожалуйста, включите DocumentUI</string>
     <string name="settings_restore">Восстановить</string>
     <string name="settings_restore_failed2">Не удалось восстановить:\n%s</string>
     <string name="group_network">Сеть</string>
@@ -175,11 +178,14 @@
     <string name="settings_translation">Принять участие в переводе</string>
     <string name="settings_translation_summary">Помогите нам перевести %s на ваш язык</string>
     <string name="pref_title_enable_auto_add_shortcut">Автоматически добавлять ярлык</string>
+    <string name="create_shortcut_summary">Вручную создать ярлык LSPosed</string>
     <string name="settings_enable_auto_add_shortcut_summary">Новый ярлык LSPosed не будет добавляться автоматически, если выключить этот переключатель</string>
     <string name="settings_update_channel">Источник обновлений</string>
     <string name="update_channel_stable">Стабильные версии</string>
     <string name="update_channel_bate">Бета-версии</string>
     <string name="update_channel_nightly">Ночные версии</string>
+    <string name="pref_title_restrict_classloader">Только модуль classloader может использовать Xposed API</string>
+    <string name="pref_summary_restrict_classloader">Это может сломать некоторые модули, но повысит безопасность (экспериментальная функция)</string>
     <!-- Module Repo -->
     <string name="module_readme">Описание</string>
     <string name="module_releases">Версии</string>
@@ -193,6 +199,7 @@
     <string name="module_release_load_more">Показать старые версии</string>
     <string name="module_release_no_more">Больше нет других версий</string>
     <string name="repo_load_failed">Не удалось загрузить репозиторий модуля: %s</string>
+    <string name="sort_upgradable_first">Сначала обновляемые</string>
     <!-- CrashReportActivity -->
     <string name="version_mismatch">Версия LSPosed фреймворк (%1$d) не соответствует версии приложения (%2$d). Пожалуйста, переустановите LSPosed</string>
     <string name="manager_crashed">Сбой приложения LSPosed</string>
@@ -220,9 +227,4 @@
     <string name="color_deep_orange">Насыщенный оранжевый</string>
     <string name="color_brown">Коричневый</string>
     <string name="color_blue_grey">Серо-голубой</string>
-    <string name="feedback_or_suggestion">Обратная связь</string>
-    <string name="sort_upgradable_first">Сначала обновляемые</string>
-    <string name="overview">LSPosed</string>
-    <string name="create_shortcut_summary">Вручную создать ярлык LSPosed</string>
-    <string name="enable_documentui">Пожалуйста, включите DocumentUI</string>
 </resources>
