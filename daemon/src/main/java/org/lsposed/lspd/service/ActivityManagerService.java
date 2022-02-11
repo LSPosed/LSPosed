@@ -109,7 +109,7 @@ public class ActivityManagerService {
         IActivityManager am = getActivityManager();
         if (am == null || thread == null) return null;
 
-        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.S || (Build.VERSION.SDK_INT >= Build.VERSION_CODES.R && Build.VERSION.PREVIEW_SDK_INT != 0))
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.S)
             return am.registerReceiverWithFeature(thread, callerPackage, callingFeatureId, "null", receiver, filter, requiredPermission, userId, flags);
         else if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.R) {
             return am.registerReceiverWithFeature(thread, callerPackage, callingFeatureId, receiver, filter, requiredPermission, userId, flags);
