@@ -19,10 +19,21 @@ public interface IPackageManager extends IInterface {
     ApplicationInfo getApplicationInfo(String packageName, int flags, int userId)
             throws RemoteException;
 
+    @RequiresApi(33)
+    ApplicationInfo getApplicationInfo(String packageName, long flags, int userId)
+            throws RemoteException;
+
     PackageInfo getPackageInfo(String packageName, int flags, int userId)
             throws RemoteException;
 
+    @RequiresApi(33)
+    PackageInfo getPackageInfo(String packageName, long flags, int userId)
+            throws RemoteException;
+
     int getPackageUid(String packageName, int flags, int userId) throws RemoteException;
+
+    @RequiresApi(33)
+    int getPackageUid(String packageName, long flags, int userId) throws RemoteException;
 
     String[] getPackagesForUid(int uid)
             throws RemoteException;
@@ -30,7 +41,15 @@ public interface IPackageManager extends IInterface {
     ParceledListSlice<PackageInfo> getInstalledPackages(int flags, int userId)
             throws RemoteException;
 
+    @RequiresApi(33)
+    ParceledListSlice<PackageInfo> getInstalledPackages(long flags, int userId)
+            throws RemoteException;
+
     ParceledListSlice<ApplicationInfo> getInstalledApplications(int flags, int userId)
+            throws RemoteException;
+
+    @RequiresApi(33)
+    ParceledListSlice<ApplicationInfo> getInstalledApplications(long flags, int userId)
             throws RemoteException;
 
     int getUidForSharedUser(String sharedUserName)
@@ -64,7 +83,11 @@ public interface IPackageManager extends IInterface {
                                      int installReason, List<String> whiteListedPermissions) throws RemoteException;
 
     ParceledListSlice<ResolveInfo> queryIntentActivities(Intent intent,
-                                            String resolvedType, int flags, int userId) throws RemoteException;
+                                                         String resolvedType, int flags, int userId) throws RemoteException;
+
+    @RequiresApi(33)
+    ParceledListSlice<ResolveInfo> queryIntentActivities(Intent intent,
+                                            String resolvedType, long flags, int userId) throws RemoteException;
 
     boolean performDexOptMode(String packageName, boolean checkProfiles,
                               String targetCompilerFilter, boolean force, boolean bootComplete, String splitName)

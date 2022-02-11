@@ -107,6 +107,9 @@ public class PackageService {
     public static PackageInfo getPackageInfo(String packageName, int flags, int userId) throws RemoteException {
         IPackageManager pm = getPackageManager();
         if (pm == null) return null;
+        if (Build.VERSION.SDK_INT + Build.VERSION.PREVIEW_SDK_INT > Build.VERSION_CODES.S) {
+            return pm.getPackageInfo(packageName, (long) flags, userId);
+        }
         return pm.getPackageInfo(packageName, flags, userId);
     }
 
@@ -116,7 +119,7 @@ public class PackageService {
         Map<Integer, PackageInfo> res = new HashMap<>();
         if (pm == null) return res;
         for (var user : UserService.getUsers()) {
-            var info = pm.getPackageInfo(packageName, flags, user.id);
+            var info = getPackageInfo(packageName, flags, user.id);
             if (info != null && info.applicationInfo != null) res.put(user.id, info);
         }
         return res;
@@ -125,6 +128,9 @@ public class PackageService {
     public static ApplicationInfo getApplicationInfo(String packageName, int flags, int userId) throws RemoteException {
         IPackageManager pm = getPackageManager();
         if (pm == null) return null;
+        if (Build.VERSION.SDK_INT + Build.VERSION.PREVIEW_SDK_INT > Build.VERSION_CODES.S) {
+            return pm.getApplicationInfo(packageName, (long) flags, userId);
+        }
         return pm.getApplicationInfo(packageName, flags, userId);
     }
 
@@ -135,7 +141,8 @@ public class PackageService {
         if (pm == null) return ParceledListSlice.emptyList();
         for (var user : UserService.getUsers()) {
             // in case pkginfo of other users in primary user
-            res.addAll(pm.getInstalledPackages(flags, user.id).getList().parallelStream()
+            res.addAll((Build.VERSION.SDK_INT + Build.VERSION.PREVIEW_SDK_INT > Build.VERSION_CODES.S ? pm.getInstalledPackages((long) flags, user.id) : pm.getInstalledPackages(flags, user.id))
+                    .getList().parallelStream()
                     .filter(info -> info.applicationInfo != null && info.applicationInfo.uid / PER_USER_RANGE == user.id)
                     .filter(info -> {
                         try {
@@ -196,27 +203,27 @@ public class PackageService {
         if (pm == null) return null;
         PackageInfo pkgInfo;
         try {
-            pkgInfo = pm.getPackageInfo(packageName, flags | PackageManager.GET_ACTIVITIES | PackageManager.GET_SERVICES | PackageManager.GET_RECEIVERS | PackageManager.GET_PROVIDERS, userId);
+            pkgInfo = getPackageInfo(packageName, flags | PackageManager.GET_ACTIVITIES | PackageManager.GET_SERVICES | PackageManager.GET_RECEIVERS | PackageManager.GET_PROVIDERS, userId);
         } catch (Exception e) {
-            pkgInfo = pm.getPackageInfo(packageName, flags, userId);
+            pkgInfo = getPackageInfo(packageName, flags, userId);
             if (pkgInfo == null) return null;
             try {
-                pkgInfo.activities = pm.getPackageInfo(packageName, flags | PackageManager.GET_ACTIVITIES, userId).activities;
+                pkgInfo.activities = getPackageInfo(packageName, flags | PackageManager.GET_ACTIVITIES, userId).activities;
             } catch (Exception ignored) {
 
             }
             try {
-                pkgInfo.services = pm.getPackageInfo(packageName, flags | PackageManager.GET_SERVICES, userId).services;
+                pkgInfo.services = getPackageInfo(packageName, flags | PackageManager.GET_SERVICES, userId).services;
             } catch (Exception ignored) {
 
             }
             try {
-                pkgInfo.receivers = pm.getPackageInfo(packageName, flags | PackageManager.GET_RECEIVERS, userId).receivers;
+                pkgInfo.receivers = getPackageInfo(packageName, flags | PackageManager.GET_RECEIVERS, userId).receivers;
             } catch (Exception ignored) {
 
             }
             try {
-                pkgInfo.providers = pm.getPackageInfo(packageName, flags | PackageManager.GET_PROVIDERS, userId).providers;
+                pkgInfo.providers = getPackageInfo(packageName, flags | PackageManager.GET_PROVIDERS, userId).providers;
             } catch (Exception ignored) {
 
             }
@@ -279,7 +286,7 @@ public class PackageService {
     public static ParceledListSlice<ResolveInfo> queryIntentActivities(Intent intent, String resolvedType, int flags, int userId) throws RemoteException {
         IPackageManager pm = getPackageManager();
         if (pm == null) return null;
-        return new ParceledListSlice<>(pm.queryIntentActivities(intent, resolvedType, flags, userId).getList());
+        return new ParceledListSlice<>((Build.VERSION.SDK_INT + Build.VERSION.PREVIEW_SDK_INT > Build.VERSION_CODES.S ? pm.queryIntentActivities(intent, resolvedType, (long) flags, userId) : pm.queryIntentActivities(intent, resolvedType, flags, userId)).getList());
     }
 
     public static Intent getLaunchIntentForPackage(String packageName) throws RemoteException {
