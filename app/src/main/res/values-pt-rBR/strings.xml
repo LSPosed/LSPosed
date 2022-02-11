@@ -20,6 +20,7 @@
 <resources xmlns:tools="http://schemas.android.com/tools" tools:keep="@string/xposed_module_updated_notification_*,@string/module_is_not_activated_*">
     <!-- MainActivity -->
     <string name="info">Informação</string>
+    <string name="overview">Visão geral</string>
     <string name="Modules">Módulos</string>
     <plurals name="modules_enabled_count">
         <item quantity="one">%d módulo ativo</item>
@@ -27,6 +28,7 @@
     </plurals>
     <string name="Logs">Registros</string>
     <string name="Settings">Configurações</string>
+    <string name="feedback_or_suggestion">Comentários ou sugestões</string>
     <string name="About">Sobre</string>
     <string name="report_issue">Reportar problema</string>
     <string name="module_repo">Repositório</string>
@@ -156,6 +158,7 @@
     <string name="settings_restore_summery">Restaurar lista de módulos e escopo.</string>
     <string name="settings_backup">Fazer backup</string>
     <string name="settings_backup_failed2">Falha ao fazer backup de:\n%s</string>
+    <string name="enable_documentui">Por favor, ative DocumentUI</string>
     <string name="settings_restore">Restaurar backup</string>
     <string name="settings_restore_failed2">Falha ao restaurar:\n%s</string>
     <string name="group_network">Rede</string>
@@ -171,11 +174,14 @@
     <string name="settings_translation">Participar da tradução</string>
     <string name="settings_translation_summary">Ajude-nos a traduzir o %s para o seu idioma</string>
     <string name="pref_title_enable_auto_add_shortcut">Adicionar automaticamente um atalho</string>
+    <string name="create_shortcut_summary">Criar manualmente um atalho para o gestor de parasitas</string>
     <string name="settings_enable_auto_add_shortcut_summary">Nenhum novo atalho será adicionado quando desativado no gerenciador não parasita</string>
     <string name="settings_update_channel">Canal de atualizações</string>
     <string name="update_channel_stable">Estável</string>
     <string name="update_channel_bate">Beta</string>
     <string name="update_channel_nightly">Nightly</string>
+    <string name="pref_title_restrict_classloader">Somente o carregador de classes de módulo pode usar o Xposed API</string>
+    <string name="pref_summary_restrict_classloader">Isto pode quebrar alguns módulos mas beneficiar a segurança (característica experimental)</string>
     <!-- Module Repo -->
     <string name="module_readme">Leia-me</string>
     <string name="module_releases">Lançamentos</string>
@@ -189,6 +195,7 @@
     <string name="module_release_load_more">Mostrar versões anteriores</string>
     <string name="module_release_no_more">Não há mais versões</string>
     <string name="repo_load_failed">Falha ao carregar o repositório de módulos: %s</string>
+    <string name="sort_upgradable_first">Atualizável primeiro</string>
     <!-- CrashReportActivity -->
     <string name="version_mismatch">A versão do LSPosed framework (%1$d) não corresponde ao gerenciador (%2$d). Por favor, reinstale o LSPosed.</string>
     <string name="manager_crashed">Gerenciador travou</string>
@@ -216,9 +223,4 @@
     <string name="color_deep_orange">Laranja profundo</string>
     <string name="color_brown">Marrom</string>
     <string name="color_blue_grey">Azul acizentado</string>
-    <string name="feedback_or_suggestion">Comentários ou sugestões</string>
-    <string name="sort_upgradable_first">Atualizável primeiro</string>
-    <string name="overview">Visão geral</string>
-    <string name="create_shortcut_summary">Criar manualmente um atalho para o gestor de parasitas</string>
-    <string name="enable_documentui">Por favor, ative DocumentUI</string>
 </resources>
