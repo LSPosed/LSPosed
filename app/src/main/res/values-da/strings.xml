@@ -20,6 +20,7 @@
 <resources xmlns:tools="http://schemas.android.com/tools" tools:keep="@string/xposed_module_updated_notification_*,@string/module_is_not_activated_*">
     <!-- MainActivity -->
     <string name="info">Info</string>
+    <string name="overview">Oversigt</string>
     <string name="Modules">Moduler</string>
     <plurals name="modules_enabled_count">
         <item quantity="one">%d modul aktiveret</item>
@@ -27,6 +28,7 @@
     </plurals>
     <string name="Logs">Logfiler</string>
     <string name="Settings">Indstillinger</string>
+    <string name="feedback_or_suggestion">Feedback eller forslag</string>
     <string name="About">Om</string>
     <string name="report_issue">Anmeld problem</string>
     <string name="module_repo">Lagre</string>
@@ -156,6 +158,7 @@
     <string name="settings_restore_summery">Gendan modulliste og scope-lister.</string>
     <string name="settings_backup">Sikkerhedskopi</string>
     <string name="settings_backup_failed2">Sikkerhedskopiering mislykkedes:\n%s</string>
+    <string name="enable_documentui">Aktiver venligst DocumentUI</string>
     <string name="settings_restore">Gendan</string>
     <string name="settings_restore_failed2">Kunne ikke gendanne:\n%s</string>
     <string name="group_network">Netværk</string>
@@ -171,11 +174,14 @@
     <string name="settings_translation">Deltag i oversættelse</string>
     <string name="settings_translation_summary">Hjælp os med at oversætte %s til dit sprog</string>
     <string name="pref_title_enable_auto_add_shortcut">Tilføj automatisk en genvej</string>
+    <string name="create_shortcut_summary">Opret manuelt en genvej til parasitic manager manuelt</string>
     <string name="settings_enable_auto_add_shortcut_summary">Ingen nye genveje vil blive tilføjet når deaktiveret i den ikke-parasitære manager</string>
     <string name="settings_update_channel">Opdater kanal</string>
     <string name="update_channel_stable">Stabil</string>
     <string name="update_channel_bate">Beta</string>
     <string name="update_channel_nightly">Nightly build</string>
+    <string name="pref_title_restrict_classloader">Kun modul classloader kan bruge Xposed API</string>
+    <string name="pref_summary_restrict_classloader">Dette kan ødelægge nogle moduler, men gavner sikkerheden (eksperimentel funktion)</string>
     <!-- Module Repo -->
     <string name="module_readme">Læs</string>
     <string name="module_releases">Udgivelser</string>
@@ -189,6 +195,7 @@
     <string name="module_release_load_more">Vis ældre versioner</string>
     <string name="module_release_no_more">Ikke mere udgivelse</string>
     <string name="repo_load_failed">Kunne ikke indlæse modul repo: %s</string>
+    <string name="sort_upgradable_first">Opgradérbar først</string>
     <!-- CrashReportActivity -->
     <string name="version_mismatch">Versionen af LSPosed framework (%1$d) matcher ikke manager (%2$d). Geninstaller venligst LSPosed.</string>
     <string name="manager_crashed">Manager styrtede ned</string>
@@ -216,9 +223,4 @@
     <string name="color_deep_orange">Dyb orange</string>
     <string name="color_brown">Brun</string>
     <string name="color_blue_grey">Blå grå</string>
-    <string name="feedback_or_suggestion">Feedback eller forslag</string>
-    <string name="sort_upgradable_first">Opgradérbar først</string>
-    <string name="overview">Oversigt</string>
-    <string name="create_shortcut_summary">Opret manuelt en genvej til parasitic manager manuelt</string>
-    <string name="enable_documentui">Aktiver venligst DocumentUI</string>
 </resources>
