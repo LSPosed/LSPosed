@@ -36,7 +36,7 @@
 #include "obfuscation.h"
 
 void maybeInit(JNIEnv *env) {
-    if (inited.test_and_set(std::memory_order_acq_rel)) return;
+    if (inited.test_and_set(std::memory_order_acq_rel)) [[likely]] return;
     LOGD("ObfuscationManager.init");
     if (auto file_descriptor = JNI_FindClass(env, "java/io/FileDescriptor")) {
         class_file_descriptor = JNI_NewGlobalRef(env, file_descriptor);
