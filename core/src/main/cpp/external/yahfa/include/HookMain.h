@@ -8,6 +8,7 @@ namespace yahfa {
     constexpr uint32_t kAccPrivate = 0x0002;  // field, method, ic
     constexpr uint32_t kAccProtected = 0x0004;  // field, method, ic
     constexpr uint32_t kAccStatic = 0x0008;  // field, method, ic
+    constexpr uint32_t kAccNative = 0x0100;  // method
 
     void init(JNIEnv *env, jclass clazz, jint sdkVersion);
 
@@ -24,6 +25,10 @@ namespace yahfa {
     uint32_t getAccessFlags(void* art_method);
 
     void setAccessFlags(void* art_method, uint32_t access_flags);
+
+    void* getEntryPoint(void* art_method);
+
+    void setEntryPoint(void* art_method, void* entry_point);
 }
 
 #endif // HOOK_MAIN_H

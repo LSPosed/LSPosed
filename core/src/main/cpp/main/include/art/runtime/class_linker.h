@@ -101,6 +101,9 @@ namespace art {
                     return backup(art_method, quick_code);
                 });
 
+        CREATE_FUNC_SYMBOL_ENTRY(void, art_quick_to_interpreter_bridge, void*) {}
+        CREATE_FUNC_SYMBOL_ENTRY(void, art_quick_generic_jni_trampoline, void*) {}
+
     public:
         ClassLinker(void *thiz) : HookedObject(thiz) {}
 
@@ -117,7 +120,9 @@ namespace art {
             RETRIEVE_MEM_FUNC_SYMBOL(SetEntryPointsToInterpreter,
                                      "_ZNK3art11ClassLinker27SetEntryPointsToInterpreterEPNS_9ArtMethodE");
 
-            lspd::HookSyms(handle, ShouldUseInterpreterEntrypoint);
+            if (api_level < __ANDROID_API_T__) {
+                lspd::HookSyms(handle, ShouldUseInterpreterEntrypoint);
+            }
 
             if (api_level >= __ANDROID_API_R__) {
                 // In android R, FixupStaticTrampolines won't be called unless it's marking it as
@@ -139,6 +144,11 @@ namespace art {
 //                                     "_ZN3art11ClassLinker40MakeInitializedClassesVisiblyInitializedEPNS_6ThreadEb");
 //            }
 
+            RETRIEVE_FUNC_SYMBOL(art_quick_to_interpreter_bridge, "art_quick_to_interpreter_bridge");
+            RETRIEVE_FUNC_SYMBOL(art_quick_generic_jni_trampoline, "art_quick_generic_jni_trampoline");
+
+            LOGD("art_quick_to_interpreter_bridge = %p", art_quick_to_interpreter_bridgeSym);
+            LOGD("art_quick_generic_jni_trampoline = %p", art_quick_generic_jni_trampolineSym);
         }
 
         [[gnu::always_inline]]
@@ -151,6 +161,15 @@ namespace art {
 
         [[gnu::always_inline]]
         void SetEntryPointsToInterpreter(void *art_method) const {
+            if (art_quick_to_interpreter_bridgeSym && art_quick_generic_jni_trampolineSym) [[likely]] {
+                if (yahfa::getAccessFlags(art_method) & yahfa::kAccNative) [[unlikely]] {
+                    yahfa::setEntryPoint(art_method,
+                                         reinterpret_cast<void *>(art_quick_generic_jni_trampolineSym));
+                } else {
+                    yahfa::setEntryPoint(art_method,
+                                         reinterpret_cast<void *>(art_quick_to_interpreter_bridgeSym));
+                }
+            }
             SetEntryPointsToInterpreter(thiz_, art_method);
         }
 
