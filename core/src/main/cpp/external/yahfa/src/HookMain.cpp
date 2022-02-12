@@ -7,10 +7,11 @@
 #include "trampoline.h"
 #include "HookMain.h"
 
-int SDKVersion;
-size_t OFFSET_entry_point_from_quick_compiled_code_in_ArtMethod;
 
 namespace yahfa {
+    size_t OFFSET_entry_point_from_quick_compiled_code_in_ArtMethod;
+    int SDKVersion;
+
     namespace {
         constexpr size_t OFFSET_access_flags_in_ArtMethod = 4;
         constexpr uint32_t kAccCompileDontBother = 0x02000000;
@@ -81,14 +82,11 @@ namespace yahfa {
             // replace entry point
             void *newEntrypoint = genTrampoline(hookMethod);
             LOGI("origin ep is %p, new ep is %p",
-                 readAddr((char *) targetMethod +
-                          OFFSET_entry_point_from_quick_compiled_code_in_ArtMethod),
+                 getEntryPoint(targetMethod),
                  newEntrypoint
             );
             if (newEntrypoint) {
-                writeAddr((char *) targetMethod +
-                          OFFSET_entry_point_from_quick_compiled_code_in_ArtMethod,
-                          newEntrypoint);
+                setEntryPoint(targetMethod, newEntrypoint);
             } else {
                 LOGE("failed to allocate space for trampoline of target method");
                 return 1;
@@ -157,6 +155,16 @@ namespace yahfa {
 
     void setAccessFlags(void *art_method, uint32_t access_flags) {
         write32((char *) art_method + OFFSET_access_flags_in_ArtMethod, access_flags);
+    }
+
+    void *getEntryPoint(void *art_method) {
+        return readAddr(
+                (char *) art_method + OFFSET_entry_point_from_quick_compiled_code_in_ArtMethod);
+    }
+
+    void setEntryPoint(void *art_method, void *entry_point) {
+        writeAddr((char *) art_method + OFFSET_entry_point_from_quick_compiled_code_in_ArtMethod,
+                  entry_point);
     }
 
     jobject findMethodNative(JNIEnv *env, [[maybe_unused]] jclass clazz,
