@@ -322,7 +322,7 @@ namespace lspd {
         }
         auto parcel_fd = JNI_CallObjectMethod(env, reply, read_file_descriptor_method_);
         int fd = JNI_CallIntMethod(env, parcel_fd, detach_fd_method_);
-        auto size = JNI_CallLongMethod(env, reply, read_long_method_);
+        auto size = static_cast<size_t>(JNI_CallLongMethod(env, reply, read_long_method_));
         JNI_CallVoidMethod(env, data, recycleMethod_);
         JNI_CallVoidMethod(env, reply, recycleMethod_);
 
