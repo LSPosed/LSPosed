@@ -117,7 +117,7 @@ namespace yahfa {
             case __ANDROID_API_FUTURE__:
                 // fallthrough
             case __ANDROID_API_T__:
-            case 32: // stupid Google
+            case 32: // stupid Google forgot to add 12L
             case __ANDROID_API_S__:
                 OFFSET_entry_point_from_quick_compiled_code_in_ArtMethod =
                         roundUpToPtrSize(4 * 3 + 2 * 2) + pointer_size;
