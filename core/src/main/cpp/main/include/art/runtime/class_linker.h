@@ -94,7 +94,8 @@ namespace art {
                 bool, ShouldUseInterpreterEntrypoint, (void * art_method,
                         const void *quick_code), {
                     if (quick_code != nullptr &&
-                            (lspd::isHooked(art_method) || lspd::IsMethodPending(art_method))) [[unlikely]] {
+                        (lspd::isHooked(art_method) ||
+                         lspd::IsMethodPending(art_method))) [[unlikely]] {
                         return false;
                     }
                     return backup(art_method, quick_code);
@@ -110,49 +111,8 @@ namespace art {
         // @ApiSensitive(Level.MIDDLE)
         inline static void Setup(const SandHook::ElfImg &handle) {
             int api_level = lspd::GetAndroidApiLevel();
-            size_t OFFSET_classlinker;  // Get offset from art::Runtime::RunRootClinits() call in IDA
-            switch (api_level) {
-                case __ANDROID_API_O__:
-                    [[fallthrough]];
-                case __ANDROID_API_O_MR1__:
-                    if constexpr(lspd::is64) {
-                        OFFSET_classlinker = 464;
-                    } else {
-                        OFFSET_classlinker = 284;
-                    }
-                    break;
-                case __ANDROID_API_P__:
-                    if constexpr(lspd::is64) {
-                        OFFSET_classlinker = 528;
-                    } else {
-                        OFFSET_classlinker = 336;
-                    }
-                    break;
-                case __ANDROID_API_Q__:
-                    if constexpr(lspd::is64) {
-                        OFFSET_classlinker = 480;
-                    } else {
-                        OFFSET_classlinker = 280;
-                    }
-                    break;
-                default:
-                    LOGE("No valid offset for art::Runtime::class_linker_ found. Using Android R.");
-                    [[fallthrough]];
-                case __ANDROID_API_R__:
-                case __ANDROID_API_S__:
-                    if constexpr(lspd::is64) {
-                        OFFSET_classlinker = 472;
-                    } else {
-                        OFFSET_classlinker = 276;
-                    }
-                    break;
-            }
 
-            void *thiz = *reinterpret_cast<void **>(
-                    reinterpret_cast<uintptr_t>(Runtime::Current()->Get()) + OFFSET_classlinker);
-            // ClassLinker* GetClassLinker() but inlined
-            LOGD("Classlinker object: %p", thiz);
-            instance_ = new ClassLinker(thiz);
+            instance_ = new ClassLinker(nullptr); // make it nullptr
 
             RETRIEVE_MEM_FUNC_SYMBOL(SetEntryPointsToInterpreter,
                                      "_ZNK3art11ClassLinker27SetEntryPointsToInterpreterEPNS_9ArtMethodE");
@@ -186,13 +146,12 @@ namespace art {
             LOGD("MakeInitializedClassesVisiblyInitialized start, thiz=%p, self=%p", thiz_, self);
             if (thiz_) [[likely]]
                 MakeInitializedClassesVisiblyInitialized(thiz_, self, wait);
+            else LOGW("Classlinker is nullptr");
         }
 
         [[gnu::always_inline]]
         void SetEntryPointsToInterpreter(void *art_method) const {
-            LOGD("SetEntryPointsToInterpreter start, thiz=%p, art_method=%p", thiz_, art_method);
-            if (thiz_) [[likely]]
-                SetEntryPointsToInterpreter(thiz_, art_method);
+            SetEntryPointsToInterpreter(thiz_, art_method);
         }
 
     };

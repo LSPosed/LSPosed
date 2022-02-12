@@ -116,6 +116,10 @@ namespace yahfa {
         switch (sdkVersion) {
             default:
                 LOGE("not compatible with SDK %d", sdkVersion);
+            case __ANDROID_API_FUTURE__:
+                // fallthrough
+            case __ANDROID_API_T__:
+            case 32: // stupid Google
             case __ANDROID_API_S__:
                 OFFSET_entry_point_from_quick_compiled_code_in_ArtMethod =
                         roundUpToPtrSize(4 * 3 + 2 * 2) + pointer_size;
@@ -194,8 +198,8 @@ namespace yahfa {
             env->NewGlobalRef(hook); // keep a global ref so that the hook method would not be GCed
             if (backup) env->NewGlobalRef(backup);
             return JNI_TRUE;
-        } else {
-            return JNI_FALSE;
         }
+        return JNI_FALSE;
+
     }
 }

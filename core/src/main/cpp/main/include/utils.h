@@ -37,7 +37,9 @@ namespace lspd {
         static int32_t api_level = []() {
             char prop_value[PROP_VALUE_MAX];
             __system_property_get("ro.build.version.sdk", prop_value);
-            return atoi(prop_value);
+            int base = atoi(prop_value);
+            __system_property_get("ro.build.version.preview_sdk", prop_value);
+            return base + atoi(prop_value);
         }();
         return api_level;
     }
