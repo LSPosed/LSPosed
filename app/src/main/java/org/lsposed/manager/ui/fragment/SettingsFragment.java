@@ -282,7 +282,7 @@ public class SettingsFragment extends BaseFragment {
                 language.setEntries(entries.toArray(new CharSequence[0]));
                 language.setEntryValues(lstLang);
                 if (TextUtils.isEmpty(tag) || SYSTEM.equals(tag)) {
-                    language.setSummary(getString(rikka.material.R.string.follow_system));
+                    language.setSummary(getString(rikka.core.R.string.follow_system));
                 } else {
                     var locale = Locale.forLanguageTag(tag);
                     language.setSummary(!TextUtils.isEmpty(locale.getScript()) ? locale.getDisplayScript(userLocale) : locale.getDisplayName(userLocale));
