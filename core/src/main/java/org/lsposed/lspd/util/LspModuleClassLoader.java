@@ -171,7 +171,7 @@ public final class LspModuleClassLoader extends ByteBufferDexClassLoader {
     public String toString() {
         return "LspModuleClassLoader[" +
                 "module=" + apk + "," +
-                "nativeLibraryDirs=" + Arrays.toString(nativeLibraryDirs.toArray()) + "," +
+                "nativeLibraryDirs=" + nativeLibraryDirs == null ? "null" : Arrays.toString(nativeLibraryDirs.toArray()) + "," +
                 super.toString() + "]";
     }
 
