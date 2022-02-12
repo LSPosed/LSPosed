@@ -104,6 +104,14 @@ namespace art {
         CREATE_FUNC_SYMBOL_ENTRY(void, art_quick_to_interpreter_bridge, void*) {}
         CREATE_FUNC_SYMBOL_ENTRY(void, art_quick_generic_jni_trampoline, void*) {}
 
+        CREATE_HOOK_STUB_ENTRIES("_ZN3art11interpreter29ShouldStayInSwitchInterpreterEPNS_9ArtMethodE",
+                                 bool, ShouldStayInSwitchInterpreter ,(void* art_method), {
+            if (lspd::isHooked(art_method) || lspd::IsMethodPending(art_method)) [[unlikely]] {
+                return false;
+            }
+            return backup(art_method);
+        });
+
     public:
         ClassLinker(void *thiz) : HookedObject(thiz) {}
 
@@ -120,7 +128,9 @@ namespace art {
             RETRIEVE_MEM_FUNC_SYMBOL(SetEntryPointsToInterpreter,
                                      "_ZNK3art11ClassLinker27SetEntryPointsToInterpreterEPNS_9ArtMethodE");
 
-            if (api_level < __ANDROID_API_T__) {
+            if (api_level >= __ANDROID_API_T__)  {
+                lspd::HookSyms(handle, ShouldStayInSwitchInterpreter);
+            } else {
                 lspd::HookSyms(handle, ShouldUseInterpreterEntrypoint);
             }
 
