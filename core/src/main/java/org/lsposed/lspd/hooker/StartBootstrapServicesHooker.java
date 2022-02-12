@@ -41,7 +41,7 @@ public class StartBootstrapServicesHooker extends XC_MethodHook {
             XC_LoadPackage.LoadPackageParam lpparam = new XC_LoadPackage.LoadPackageParam(XposedBridge.sLoadedPackageCallbacks);
             lpparam.packageName = "android";
             lpparam.processName = "android"; // it's actually system_server, but other functions return this as well
-            lpparam.classLoader = SystemMainHooker.systemServerCL;
+            lpparam.classLoader = HandleSystemServerProcessHooker.systemServerCL;
             lpparam.appInfo = null;
             lpparam.isFirstApplication = true;
             XC_LoadPackage.callAll(lpparam);

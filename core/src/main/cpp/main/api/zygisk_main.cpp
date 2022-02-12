@@ -319,11 +319,11 @@ namespace lspd {
             if (*allowUnload) api_->setOption(zygisk::DLCLOSE_MODULE_LIBRARY);
         }
 
-        void preServerSpecialize(zygisk::ServerSpecializeArgs *) override {
+        void preServerSpecialize([[maybe_unused]] zygisk::ServerSpecializeArgs *args) override {
             Context::GetInstance()->OnNativeForkSystemServerPre(env_);
         }
 
-        void postServerSpecialize(const zygisk::ServerSpecializeArgs *) override {
+        void postServerSpecialize([[maybe_unused]] const zygisk::ServerSpecializeArgs *args) override {
             if (__system_property_find("ro.vendor.product.ztename")) {
                 auto *process = env_->FindClass("android/os/Process");
                 auto *set_argv0 = env_->GetStaticMethodID(process, "setArgV0",

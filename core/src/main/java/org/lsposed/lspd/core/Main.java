@@ -28,13 +28,15 @@ import android.os.Environment;
 import android.os.IBinder;
 import android.os.Process;
 
+import com.android.internal.os.ZygoteInit;
+
 import org.lsposed.lspd.BuildConfig;
 import org.lsposed.lspd.config.LSPApplicationServiceClient;
 import org.lsposed.lspd.deopt.PrebuiltMethodsDeopter;
 import org.lsposed.lspd.hooker.CrashDumpHooker;
 import org.lsposed.lspd.hooker.HandleBindAppHooker;
 import org.lsposed.lspd.hooker.LoadedApkCstrHooker;
-import org.lsposed.lspd.hooker.SystemMainHooker;
+import org.lsposed.lspd.hooker.HandleSystemServerProcessHooker;
 import org.lsposed.lspd.util.ParasiticManagerHooker;
 import org.lsposed.lspd.util.Utils;
 import org.lsposed.lspd.yahfa.hooker.YahfaHooker;
@@ -51,8 +53,8 @@ public class Main {
         XposedHelpers.findAndHookMethod(Thread.class, "dispatchUncaughtException",
                 Throwable.class, new CrashDumpHooker());
         if (isSystem) {
-            XposedHelpers.findAndHookMethod(ActivityThread.class,
-                    "systemMain", new SystemMainHooker());
+            XposedBridge.hookAllMethods(ZygoteInit.class,
+                    "handleSystemServerProcess", new HandleSystemServerProcessHooker());
         }
         XposedHelpers.findAndHookMethod(ActivityThread.class,
                 "handleBindApplication",
