@@ -250,6 +250,8 @@ public class ConfigManager {
         }
 
         updateManager(false);
+
+        cacheHandler.post(this::getPreloadDex);
     }
 
     public synchronized void updateManager(boolean uninstalled) {
@@ -1055,7 +1057,7 @@ public class ConfigManager {
         os.closeEntry();
     }
 
-    SharedMemory getPreloadDex() {
+    synchronized SharedMemory getPreloadDex() {
         return ConfigFileManager.getPreloadDex(dexObfuscate);
     }
 }
