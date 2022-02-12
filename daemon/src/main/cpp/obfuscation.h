@@ -23,8 +23,8 @@
 
 static std::string obfuscated_signature;
 static const std::string old_signature = "Lde/robv/android/xposed";
-static int lspdDex = -1;
-static std::mutex dex_lock;
+
+static std::atomic_flag inited;
 
 static jclass class_file_descriptor;
 static jmethodID method_file_descriptor_ctor;

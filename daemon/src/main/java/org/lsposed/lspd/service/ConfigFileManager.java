@@ -44,6 +44,7 @@ import org.lsposed.lspd.util.Utils;
 import java.io.BufferedReader;
 import java.io.File;
 import java.io.FileInputStream;
+import java.io.FileNotFoundException;
 import java.io.FileOutputStream;
 import java.io.IOException;
 import java.io.InputStream;
@@ -92,6 +93,7 @@ public class ConfigFileManager {
     private static FileLocker locker = null;
     private static Resources res = null;
     private static ParcelFileDescriptor fd = null;
+    private static SharedMemory preloadDex = null;
 
     static {
         try {
@@ -306,21 +308,28 @@ public class ConfigFileManager {
         });
     }
 
-    private static void readDexes(ZipFile apkFile, List<SharedMemory> preLoadedDexes) {
+    private static SharedMemory readDex(InputStream in, boolean obfuscate) throws IOException, ErrnoException {
+        var memory = SharedMemory.create(null, in.available());
+        var byteBuffer = memory.mapReadWrite();
+        Channels.newChannel(in).read(byteBuffer);
+        SharedMemory.unmap(byteBuffer);
+        if (obfuscate) {
+            var newMemory = ObfuscationManager.obfuscateDex(memory);
+            if (memory != newMemory) {
+                memory.close();
+                memory = newMemory;
+            }
+        }
+        memory.setProtect(OsConstants.PROT_READ);
+        return memory;
+    }
+
+    private static void readDexes(ZipFile apkFile, List<SharedMemory> preLoadedDexes, boolean obfuscate) {
         int secondary = 2;
         for (var dexFile = apkFile.getEntry("classes.dex"); dexFile != null;
              dexFile = apkFile.getEntry("classes" + secondary + ".dex"), secondary++) {
-            try (var in = apkFile.getInputStream(dexFile)) {
-                var memory = SharedMemory.create(null, in.available());
-                var byteBuffer = memory.mapReadWrite();
-                Channels.newChannel(in).read(byteBuffer);
-                SharedMemory.unmap(byteBuffer);
-                var new_memory = ObfuscationManager.obfuscateDex(memory);
-                if (memory != new_memory) {
-                    memory.close();
-                }
-                new_memory.setProtect(OsConstants.PROT_READ);
-                preLoadedDexes.add(new_memory);
+            try (var is = apkFile.getInputStream(dexFile)) {
+                preLoadedDexes.add(readDex(is, obfuscate));
             } catch (IOException | ErrnoException e) {
                 Log.w(TAG, "Can not load " + dexFile + " in " + apkFile, e);
             }
@@ -344,14 +353,14 @@ public class ConfigFileManager {
     }
 
     @Nullable
-    static PreLoadedApk loadModule(String path) {
+    static PreLoadedApk loadModule(String path, boolean obfuscate) {
         if (path == null) return null;
         var file = new PreLoadedApk();
         var preLoadedDexes = new ArrayList<SharedMemory>();
         var moduleClassNames = new ArrayList<String>(1);
         var moduleLibraryNames = new ArrayList<String>(1);
         try (var apkFile = new ZipFile(toGlobalNamespace(path))) {
-            readDexes(apkFile, preLoadedDexes);
+            readDexes(apkFile, preLoadedDexes, obfuscate);
             readName(apkFile, "assets/xposed_init", moduleClassNames);
             readName(apkFile, "assets/native_init", moduleLibraryNames);
         } catch (IOException e) {
@@ -380,6 +389,17 @@ public class ConfigFileManager {
         } catch (Throwable e) {
             return false;
         }
+    }
+
+    synchronized static SharedMemory getPreloadDex(boolean obfuscate) {
+        if (preloadDex == null) {
+            try (var is = new FileInputStream("framework/lspd.dex")) {
+                preloadDex = readDex(is, obfuscate);
+            } catch (Throwable e) {
+                Log.e(TAG, "preload dex", e);
+            }
+        }
+        return preloadDex;
     }
 
     private static class FileLocker {
