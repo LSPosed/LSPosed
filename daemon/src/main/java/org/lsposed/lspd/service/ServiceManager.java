@@ -98,9 +98,6 @@ public class ServiceManager {
         logcatService.start();
 
         Process.setThreadPriority(Process.THREAD_PRIORITY_FOREGROUND);
-        ObfuscationManager.init();
-        ObfuscationManager.getObfuscatedSignature();
-        ObfuscationManager.preloadDex();
         Looper.prepareMainLooper();
         mainService = new LSPosedService();
         applicationService = new LSPApplicationService();

@@ -11,9 +11,6 @@
     public int getUserId();
     public android.os.UserHandle getUser();
 }
--keepclasseswithmembers class org.lsposed.lspd.service.ObfuscationManager {
-    static boolean enabled();
-}
 -assumenosideeffects class android.util.Log {
     public static *** v(...);
     public static *** d(...);

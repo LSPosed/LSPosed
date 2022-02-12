@@ -26,13 +26,11 @@ import android.os.IBinder;
 import android.os.Parcel;
 import android.os.ParcelFileDescriptor;
 import android.os.RemoteException;
-import android.os.SharedMemory;
 import android.util.Log;
 import android.util.Pair;
 
 import org.lsposed.lspd.models.Module;
 
-import java.io.IOException;
 import java.util.Collections;
 import java.util.List;
 import java.util.Map;
@@ -47,18 +45,13 @@ public class LSPApplicationService extends ILSPApplicationService.Stub {
     private final static Set<IBinder.DeathRecipient> recipients = ConcurrentHashMap.newKeySet();
 
     @Override
-    public boolean onTransact(int code, Parcel data, Parcel reply, int flags) throws android.os.RemoteException {
+    public boolean onTransact(int code, Parcel data, Parcel reply, int flags) throws RemoteException {
         Log.d(TAG, "LSPApplicationService.onTransact: code=" + code);
         if (code == DEX_TRANSACTION_CODE) {
-            try {
-                ParcelFileDescriptor pfd = ParcelFileDescriptor.fromFd(ObfuscationManager.preloadDex());
-                reply.writeFileDescriptor(pfd.getFileDescriptor());
-                reply.writeLong(ObfuscationManager.getPreloadedDexSize());
-                pfd.close();
-            } catch (IOException ignored) {
-                Log.e(TAG, "LSPApplicationService.onTransact: ParcelFileDescriptor.fromFd failed");
-                return false;
-            }
+            var shm = ConfigManager.getInstance().getPreloadDex();
+            // assume that write only a fd
+            shm.writeToParcel(reply, 0);
+            reply.writeLong(shm.getSize());
             return true;
         }
         return super.onTransact(code, data, reply, flags);

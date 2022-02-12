@@ -35,16 +35,8 @@
 #include "slicer/writer.h"
 #include "obfuscation.h"
 
-bool obfuscate_enabled(JNIEnv* env, jclass obfuscation_manager) {
-    auto method_enabled = JNI_GetStaticMethodID(env, obfuscation_manager, "enabled", "()Z");
-    auto result = JNI_CallStaticBooleanMethod(env, obfuscation_manager, method_enabled);
-    return result;
-}
-
-extern "C"
-JNIEXPORT void JNICALL
-Java_org_lsposed_lspd_service_ObfuscationManager_init(JNIEnv *env, jclass obfuscation_manager) {
-    if (!obfuscate_enabled(env, obfuscation_manager)) return;
+void maybeInit(JNIEnv *env) {
+    if (inited.test_and_set(std::memory_order_acq_rel)) [[likely]] return;
     LOGD("ObfuscationManager.init");
     if (auto file_descriptor = JNI_FindClass(env, "java/io/FileDescriptor")) {
         class_file_descriptor = JNI_NewGlobalRef(env, file_descriptor);
@@ -57,14 +49,6 @@ Java_org_lsposed_lspd_service_ObfuscationManager_init(JNIEnv *env, jclass obfusc
     } else return;
 
     method_shared_memory_ctor = JNI_GetMethodID(env, class_shared_memory, "<init>", "(Ljava/io/FileDescriptor;)V");
-    LOGD("ObfuscationManager init successfully");
-}
-
-extern "C"
-JNIEXPORT jstring JNICALL
-Java_org_lsposed_lspd_service_ObfuscationManager_getObfuscatedSignature(JNIEnv *env, jclass obfuscation_manager) {
-    if (!obfuscate_enabled(env, obfuscation_manager)) return env->NewStringUTF(old_signature.c_str());
-    if (!obfuscated_signature.empty()) return env->NewStringUTF(obfuscated_signature.c_str());
 
     auto regen = []() {
         static auto& chrs = "abcdefghijklmnopqrstuvwxyz"
@@ -94,27 +78,34 @@ Java_org_lsposed_lspd_service_ObfuscationManager_getObfuscatedSignature(JNIEnv *
 
     auto contains_keyword = [](std::string_view s) -> bool {
         for (const auto &i: {
-            "abstract", "assert", "boolean", "break", "byte", "case", "catch", "char", "class",
-            "continue", "const", "default", "do", "double", "else", "enum", "exports", "extends",
-            "final", "finally", "float", "for", "goto", "if", "implements", "import", "instanceof",
-            "int", "interface", "long", "module", "native", "new", "package", "private", "protected",
-            "public", "requires", "return", "short", "static", "strictfp", "super", "switch",
-            "synchronized", "this", "throw", "throws", "transient", "try", "var", "void", "volatile",
-            "while"}) {
+                "abstract", "assert", "boolean", "break", "byte", "case", "catch", "char", "class",
+                "continue", "const", "default", "do", "double", "else", "enum", "exports", "extends",
+                "final", "finally", "float", "for", "goto", "if", "implements", "import", "instanceof",
+                "int", "interface", "long", "module", "native", "new", "package", "private", "protected",
+                "public", "requires", "return", "short", "static", "strictfp", "super", "switch",
+                "synchronized", "this", "throw", "throws", "transient", "try", "var", "void", "volatile",
+                "while"}) {
             if (s.find(i) != std::string::npos) return true;
         }
         return false;
     };
 
-    do {
+    [[unlikely]] do {
         obfuscated_signature = regen();
     } while (contains_keyword(obfuscated_signature));
 
     LOGD("ObfuscationManager.getObfuscatedSignature: %s", obfuscated_signature.c_str());
+    LOGD("ObfuscationManager init successfully");
+}
+
+extern "C"
+JNIEXPORT jstring JNICALL
+Java_org_lsposed_lspd_service_ObfuscationManager_getObfuscatedSignature(JNIEnv *env, [[maybe_unused]] jclass obfuscation_manager) {
+    maybeInit(env);
     return env->NewStringUTF(obfuscated_signature.c_str());
 }
 
-int obfuscateDex(const void *dex, size_t size) {
+static int obfuscateDex(const void *dex, size_t size) {
     const char* new_sig = obfuscated_signature.c_str();
     dex::Reader reader{reinterpret_cast<const dex::u1*>(dex), size};
 
@@ -137,62 +128,10 @@ int obfuscateDex(const void *dex, size_t size) {
 }
 
 extern "C"
-JNIEXPORT jint JNICALL
-Java_org_lsposed_lspd_service_ObfuscationManager_preloadDex(JNIEnv *env, jclass obfuscation_manager) {
-    using namespace std::string_literals;
-    std::lock_guard lg(dex_lock);
-    if (lspdDex != -1) return lspdDex;
-    const std::string dex_path = "framework/lspd.dex";
-
-    std::unique_ptr<FILE, decltype(&fclose)> f{fopen(dex_path.data(), "rb"), &fclose};
-
-    if (!f) {
-        LOGE("Fail to open dex from %s", dex_path.data());
-        return -1;
-    }
-    fseek(f.get(), 0, SEEK_END);
-    size_t size = ftell(f.get());
-    rewind(f.get());
-
-    LOGD("Loaded %s with size %zu", dex_path.data(), size);
-
-    auto *addr = mmap(nullptr, size, PROT_READ | PROT_WRITE, MAP_PRIVATE, fileno(f.get()), 0);
-
-    if (addr == MAP_FAILED) {
-        PLOGE("Map dex");
-        return -1;
-    }
-
-    int new_dex;
-    if (!obfuscate_enabled(env, obfuscation_manager)) {
-        new_dex = ASharedMemory_create("", size);
-        auto new_addr = mmap(nullptr, size, PROT_READ | PROT_WRITE, MAP_SHARED, new_dex, 0);
-        memcpy(new_addr, addr, size);
-        munmap(new_addr, size);
-    } else {
-        new_dex = obfuscateDex(addr, size);
-    }
-
-    munmap(addr, size);
-    LOGD("LSPApplicationService::preloadDex: %d, size=%zu", new_dex, ASharedMemory_getSize(new_dex));
-    lspdDex = new_dex;
-    return new_dex;
-}
-
-extern "C"
-JNIEXPORT jlong JNICALL
-Java_org_lsposed_lspd_service_ObfuscationManager_getPreloadedDexSize(JNIEnv *, jclass ) {
-    if (lspdDex != -1) {
-        return ASharedMemory_getSize(lspdDex);
-    }
-    return 0;
-}
-
-extern "C"
 JNIEXPORT jobject
-Java_org_lsposed_lspd_service_ObfuscationManager_obfuscateDex(JNIEnv *env, jclass obfuscation_manager,
+Java_org_lsposed_lspd_service_ObfuscationManager_obfuscateDex(JNIEnv *env, [[maybe_unused]] jclass obfuscation_manager,
                                                        jobject memory) {
-    if (!obfuscate_enabled(env, obfuscation_manager)) { return memory; }
+    maybeInit(env);
     int fd = ASharedMemory_dupFromJava(env, memory);
     auto size = ASharedMemory_getSize(fd);
     LOGD("fd=%d, size=%zu", fd, size);

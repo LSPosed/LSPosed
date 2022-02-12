@@ -200,7 +200,7 @@ public class ConfigManager {
                 var packageName = cursor.getString(pkgNameIdx);
                 var m = cachedModule.computeIfAbsent(packageName, p -> {
                     var module = new Module();
-                    var file = ConfigFileManager.loadModule(path);
+                    var file = ConfigFileManager.loadModule(path, dexObfuscate);
                     if (file == null) {
                         Log.w(TAG, "Can not load " + path + ", skip!");
                         return null;
@@ -250,6 +250,8 @@ public class ConfigManager {
         }
 
         updateManager(false);
+
+        cacheHandler.post(this::getPreloadDex);
     }
 
     public synchronized void updateManager(boolean uninstalled) {
@@ -271,16 +273,11 @@ public class ConfigManager {
     }
 
     static ConfigManager getInstance() {
-        return getInstance(true);
-    }
-
-    static ConfigManager getInstance(boolean needCached) {
         if (instance == null)
             instance = new ConfigManager();
-        if (needCached) {
-            synchronized (instance.cacheHandler) {
-                needCached = instance.lastModuleCacheTime == 0 || instance.lastScopeCacheTime == 0;
-            }
+        boolean needCached;
+        synchronized (instance.cacheHandler) {
+            needCached = instance.lastModuleCacheTime == 0 || instance.lastScopeCacheTime == 0;
         }
         if (needCached) {
             if (PackageService.isAlive()) {
@@ -501,7 +498,7 @@ public class ConfigManager {
                 apkPath = getModuleApkPath(pkgInfo.applicationInfo);
                 if (apkPath == null) obsoleteModules.add(packageName);
                 else obsoletePaths.put(packageName, apkPath);
-                var file = ConfigFileManager.loadModule(apkPath);
+                var file = ConfigFileManager.loadModule(apkPath, dexObfuscate);
                 if (file == null) {
                     Log.w(TAG, "failed to load module " + packageName);
                     obsoleteModules.add(packageName);
@@ -882,11 +879,13 @@ public class ConfigManager {
 
     public void setDexObfuscate(boolean on) {
         updateModulePrefs("lspd", 0, "config", "enable_dex_obfuscate", on);
-        dexObfuscate = on;
     }
 
-    public boolean dexObfuscate() {
-        return dexObfuscate;
+    // this is for manager and should not use the cache result
+    boolean dexObfuscate() {
+        Map<String, Object> config = getModulePrefs("lspd", 0, "config");
+        Object bool = config.get("enable_dex_obfuscate");
+        return bool != null && (boolean) bool;
     }
 
     public boolean isAddShortcut() {
@@ -1056,5 +1055,9 @@ public class ConfigManager {
             }
         });
         os.closeEntry();
+    }
+
+    synchronized SharedMemory getPreloadDex() {
+        return ConfigFileManager.getPreloadDex(dexObfuscate);
     }
 }

@@ -771,12 +771,12 @@ public class LSPManagerService extends ILSPManagerService.Stub {
     }
 
     @Override
-    public boolean getDexObfuscate() throws RemoteException {
+    public boolean getDexObfuscate() {
         return ConfigManager.getInstance().dexObfuscate();
     }
 
     @Override
-    public void setDexObfuscate(boolean enabled) throws RemoteException {
+    public void setDexObfuscate(boolean enabled) {
         ConfigManager.getInstance().setDexObfuscate(enabled);
     }
 }
