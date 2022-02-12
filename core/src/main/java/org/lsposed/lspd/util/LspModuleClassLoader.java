@@ -25,6 +25,9 @@ import java.util.Objects;
 import java.util.jar.JarFile;
 import java.util.zip.ZipEntry;
 
+import dalvik.system.DelegateLastClassLoader;
+import dalvik.system.PathClassLoader;
+import de.robv.android.xposed.XposedBridge;
 import hidden.ByteBufferDexClassLoader;
 
 @SuppressWarnings("ConstantConditions")
@@ -175,7 +178,7 @@ public final class LspModuleClassLoader extends ByteBufferDexClassLoader {
                 super.toString() + "]";
     }
 
-    public static LspModuleClassLoader loadApk(String apk,
+    public static ClassLoader loadApk(String apk,
                                                List<SharedMemory> dexes,
                                                String librarySearchPath,
                                                ClassLoader parent) {
@@ -187,6 +190,10 @@ public final class LspModuleClassLoader extends ByteBufferDexClassLoader {
                 return null;
             }
         }).filter(Objects::nonNull).toArray(ByteBuffer[]::new);
+        if (dexBuffers == null) {
+            XposedBridge.log("Failed to load dex from daemon, falling back to PathDexClassloader");
+            return new DelegateLastClassLoader(apk, librarySearchPath, parent);
+        }
         LspModuleClassLoader cl;
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.Q) {
             cl = new LspModuleClassLoader(dexBuffers, librarySearchPath,
