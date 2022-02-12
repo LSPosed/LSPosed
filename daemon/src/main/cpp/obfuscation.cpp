@@ -90,7 +90,7 @@ void maybeInit(JNIEnv *env) {
         return false;
     };
 
-    do {
+    [[unlikely]] do {
         obfuscated_signature = regen();
     } while (contains_keyword(obfuscated_signature));
 
