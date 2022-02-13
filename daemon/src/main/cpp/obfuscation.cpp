@@ -35,8 +35,23 @@
 #include "slicer/writer.h"
 #include "obfuscation.h"
 
+namespace {
+std::mutex init_lock{};
+std::string obfuscated_signature;
+const std::string old_signature = "Lde/robv/android/xposed";
+
+jclass class_file_descriptor;
+jmethodID method_file_descriptor_ctor;
+
+jclass class_shared_memory;
+jmethodID method_shared_memory_ctor;
+
+bool inited = false;
+}
+
 void maybeInit(JNIEnv *env) {
-    if (inited.test_and_set(std::memory_order_acq_rel)) [[likely]] return;
+    if (inited) [[likely]] return;
+    std::lock_guard l(init_lock);
     LOGD("ObfuscationManager.init");
     if (auto file_descriptor = JNI_FindClass(env, "java/io/FileDescriptor")) {
         class_file_descriptor = JNI_NewGlobalRef(env, file_descriptor);
@@ -96,6 +111,7 @@ void maybeInit(JNIEnv *env) {
 
     LOGD("ObfuscationManager.getObfuscatedSignature: %s", obfuscated_signature.c_str());
     LOGD("ObfuscationManager init successfully");
+    inited = true;
 }
 
 extern "C"

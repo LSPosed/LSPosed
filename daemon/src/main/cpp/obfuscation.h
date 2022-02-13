@@ -21,17 +21,6 @@
 #include <string>
 #include "jni_helper.h"
 
-static std::string obfuscated_signature;
-static const std::string old_signature = "Lde/robv/android/xposed";
-
-static std::atomic_flag inited;
-
-static jclass class_file_descriptor;
-static jmethodID method_file_descriptor_ctor;
-
-static jclass class_shared_memory;
-static jmethodID method_shared_memory_ctor;
-
 class WA: public dex::Writer::Allocator {
     // addr: {size, fd}
     std::unordered_map<void*, std::pair<size_t, int>> allocated_;
