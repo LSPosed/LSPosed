@@ -95,13 +95,14 @@ public class ServiceManager {
             System.exit(1);
         });
 
-        ActivityThread.systemMain();
-
         logcatService = new LogcatService();
         logcatService.start();
 
         Process.setThreadPriority(Process.THREAD_PRIORITY_FOREGROUND);
         Looper.prepareMainLooper();
+
+        ActivityThread.systemMain();
+
         mainService = new LSPosedService();
         applicationService = new LSPApplicationService();
         managerService = new LSPManagerService();
