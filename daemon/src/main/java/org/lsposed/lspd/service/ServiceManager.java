@@ -95,13 +95,13 @@ public class ServiceManager {
             System.exit(1);
         });
 
-        ActivityThread.systemMain();
-
         logcatService = new LogcatService();
         logcatService.start();
 
         Process.setThreadPriority(Process.THREAD_PRIORITY_FOREGROUND);
         Looper.prepareMainLooper();
+
+
         mainService = new LSPosedService();
         applicationService = new LSPApplicationService();
         managerService = new LSPManagerService();
@@ -115,6 +115,8 @@ public class ServiceManager {
         // otherwise getInstance will trigger module/scope cache
         var configManager = ConfigManager.getInstance();
         // --- DO NOT call ConfigManager.getInstance later!!! ---
+
+        ActivityThread.systemMain();
 
         waitSystemService("package");
         waitSystemService("activity");
