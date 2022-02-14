@@ -76,6 +76,7 @@ import java.util.UUID;
 import java.util.concurrent.ConcurrentHashMap;
 import java.util.function.Consumer;
 import java.util.function.Supplier;
+import java.util.stream.Collectors;
 import java.util.zip.ZipEntry;
 import java.util.zip.ZipFile;
 import java.util.zip.ZipOutputStream;
@@ -196,25 +197,23 @@ public class ConfigManager {
             int apkPathIdx = cursor.getColumnIndex("apk_path");
             int pkgNameIdx = cursor.getColumnIndex("module_pkg_name");
             while (cursor.moveToNext()) {
-                var path = cursor.getString(apkPathIdx);
-                var packageName = cursor.getString(pkgNameIdx);
-                var m = cachedModule.computeIfAbsent(packageName, p -> {
-                    var module = new Module();
-                    var file = ConfigFileManager.loadModule(path, dexObfuscate);
-                    if (file == null) {
-                        Log.w(TAG, "Can not load " + path + ", skip!");
-                        return null;
-                    }
-                    module.packageName = cursor.getString(pkgNameIdx);
-                    module.apkPath = path;
-                    module.file = file;
-                    module.appId = -1;
-                    return module;
-                });
-                if (m != null) modules.add(m);
+                var module = new Module();
+                module.apkPath = cursor.getString(apkPathIdx);
+                module.packageName = cursor.getString(pkgNameIdx);
+                module.appId = -1;
+                modules.add(module);
             }
         }
-        return modules;
+        return modules.parallelStream().filter(m -> {
+            var file = ConfigFileManager.loadModule(m.apkPath, dexObfuscate);
+            if (file == null) {
+                Log.w(TAG, "Can not load " + m.apkPath + ", skip!");
+                return false;
+            }
+            m.file = file;
+            cachedModule.put(m.packageName, m);
+            return true;
+        }).collect(Collectors.toList());
     }
 
     private synchronized void updateConfig() {
@@ -455,9 +454,9 @@ public class ConfigManager {
             }
             int pkgNameIdx = cursor.getColumnIndex("module_pkg_name");
             int apkPathIdx = cursor.getColumnIndex("apk_path");
-            Set<String> obsoleteModules = new HashSet<>();
+            Set<String> obsoleteModules = ConcurrentHashMap.newKeySet();
             // packageName, apkPath
-            Map<String, String> obsoletePaths = new HashMap<>();
+            Map<String, String> obsoletePaths = new ConcurrentHashMap<>();
             cachedModule.values().removeIf(m -> {
                 if (m.apkPath == null || !existsInGlobalNamespace(m.apkPath)) {
                     toClose.addAll(m.file.preLoadedDexes);
@@ -465,52 +464,60 @@ public class ConfigManager {
                 }
                 return false;
             });
+            List<Module> modules = new ArrayList<>();
             while (cursor.moveToNext()) {
                 String packageName = cursor.getString(pkgNameIdx);
                 String apkPath = cursor.getString(apkPathIdx);
                 if (packageName.equals("lspd")) continue;
-                // if still present after removeIf, this package did not change.
-                var oldModule = cachedModule.get(packageName);
+                var module = new Module();
+                module.packageName = packageName;
+                module.apkPath = apkPath;
+                modules.add(module);
+            }
+
+            modules.stream().parallel().filter(m -> {
+                var oldModule = cachedModule.get(m.packageName);
                 PackageInfo pkgInfo = null;
                 try {
-                    pkgInfo = PackageService.getPackageInfoFromAllUsers(packageName, MATCH_ALL_FLAGS).values().stream().findFirst().orElse(null);
+                    pkgInfo = PackageService.getPackageInfoFromAllUsers(m.packageName, MATCH_ALL_FLAGS).values().stream().findFirst().orElse(null);
                 } catch (Throwable e) {
-                    Log.w(TAG, "get package info of " + packageName, e);
+                    Log.w(TAG, "get package info of " + m.packageName, e);
                 }
                 if (pkgInfo == null || pkgInfo.applicationInfo == null) {
-                    obsoleteModules.add(packageName);
-                    continue;
+                    obsoleteModules.add(m.packageName);
+                    return false;
                 }
+
                 if (oldModule != null &&
                         pkgInfo.applicationInfo.sourceDir != null &&
-                        apkPath != null && oldModule.apkPath != null &&
-                        existsInGlobalNamespace(apkPath) &&
-                        Objects.equals(apkPath, oldModule.apkPath) &&
-                        Objects.equals(new File(pkgInfo.applicationInfo.sourceDir).getParent(), new File(apkPath).getParent())) {
+                        m.apkPath != null && oldModule.apkPath != null &&
+                        existsInGlobalNamespace(m.apkPath) &&
+                        Objects.equals(m.apkPath, oldModule.apkPath) &&
+                        Objects.equals(new File(pkgInfo.applicationInfo.sourceDir).getParent(), new File(m.apkPath).getParent())) {
                     if (oldModule.appId != -1) {
-                        Log.d(TAG, packageName + " did not change, skip caching it");
+                        Log.d(TAG, m.packageName + " did not change, skip caching it");
                     } else {
                         // cache from system server, keep it and set only the appId
                         oldModule.appId = pkgInfo.applicationInfo.uid;
                     }
-                    continue;
+                    return false;
                 }
-                apkPath = getModuleApkPath(pkgInfo.applicationInfo);
-                if (apkPath == null) obsoleteModules.add(packageName);
-                else obsoletePaths.put(packageName, apkPath);
-                var file = ConfigFileManager.loadModule(apkPath, dexObfuscate);
+                m.apkPath = getModuleApkPath(pkgInfo.applicationInfo);
+                if (m.apkPath == null) obsoleteModules.add(m.packageName);
+                else obsoletePaths.put(m.packageName, m.apkPath);
+                m.appId = pkgInfo.applicationInfo.uid;
+                return true;
+            }).forEach(m -> {
+                var file = ConfigFileManager.loadModule(m.apkPath, dexObfuscate);
                 if (file == null) {
-                    Log.w(TAG, "failed to load module " + packageName);
-                    obsoleteModules.add(packageName);
-                    continue;
+                    Log.w(TAG, "failed to load module " + m.packageName);
+                    obsoleteModules.add(m.packageName);
+                    return;
                 }
-                var module = new Module();
-                module.apkPath = apkPath;
-                module.packageName = packageName;
-                module.file = file;
-                module.appId = pkgInfo.applicationInfo.uid;
-                cachedModule.put(packageName, module);
-            }
+                m.file = file;
+                cachedModule.put(m.packageName, m);
+            });
+
             if (PackageService.isAlive()) {
                 obsoleteModules.forEach(this::removeModuleWithoutCache);
                 obsoletePaths.forEach((packageName, path) -> updateModuleApkPath(packageName, path, true));
