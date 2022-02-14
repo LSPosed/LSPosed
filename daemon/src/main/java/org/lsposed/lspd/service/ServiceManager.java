@@ -101,7 +101,6 @@ public class ServiceManager {
         Process.setThreadPriority(Process.THREAD_PRIORITY_FOREGROUND);
         Looper.prepareMainLooper();
 
-        ActivityThread.systemMain();
 
         mainService = new LSPosedService();
         applicationService = new LSPApplicationService();
@@ -110,6 +109,7 @@ public class ServiceManager {
 
         systemServerService.putBinderForSystemServer();
 
+        ActivityThread.systemMain();
         DdmHandleAppName.setAppName("lspd", 0);
 
         // get config before package service is started
