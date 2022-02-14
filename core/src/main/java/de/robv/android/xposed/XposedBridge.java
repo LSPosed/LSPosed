@@ -104,8 +104,8 @@ public final class XposedBridge {
                     ta.recycle();
                 } catch (NullPointerException npe) {
                     // For ZUI devices, the creation of TypedArray needs to check the configuration
-                    // from ActivityThread.currentActivityThread. However, you do not have a valid
-                    // ActivityThread for now and it will throw an NPE. Luckily they check the
+                    // from ActivityThread.currentActivityThread. However, we do not have a valid
+                    // ActivityThread for now and the call will throw an NPE. Luckily they check the
                     // nullability of the result configuration. So we hereby set a dummy
                     // ActivityThread to bypass such a situation.
                     XposedHelpers.setStaticObjectField(ActivityThread.class, "sCurrentActivityThread", new ActivityThread());
