@@ -50,7 +50,6 @@ import rikka.material.app.LocaleDelegate;
 import rikka.recyclerview.RecyclerViewKt;
 
 public class AppListFragment extends BaseFragment {
-
     public SearchView searchView;
     private ScopeAdapter scopeAdapter;
     private ModuleUtil.InstalledModule module;
@@ -76,15 +75,12 @@ public class AppListFragment extends BaseFragment {
         if (module == null) {
             return binding.getRoot();
         }
-        binding.appBar.setLiftable(true);
         String title;
         if (module.userId != 0) {
             title = String.format(LocaleDelegate.getDefaultLocale(), "%s (%d)", module.getAppName(), module.userId);
         } else {
             title = module.getAppName();
         }
-        binding.toolbar.setSubtitle(module.packageName);
-
         scopeAdapter = new ScopeAdapter(this, module);
         scopeAdapter.setHasStableIds(true);
         scopeAdapter.registerAdapterDataObserver(observer);
@@ -94,28 +90,35 @@ public class AppListFragment extends BaseFragment {
         binding.recyclerView.setAdapter(concatAdapter);
         binding.recyclerView.setHasFixedSize(true);
         binding.recyclerView.setLayoutManager(new LinearLayoutManager(requireActivity()));
-        binding.recyclerView.getBorderViewDelegate().setBorderVisibilityChangedListener((top, oldTop, bottom, oldBottom) -> binding.appBar.setLifted(!top));
+
+        setupToolbar(title, R.menu.menu_app_list, view -> requireActivity().getOnBackPressedDispatcher().onBackPressed());
+
+        activityMainBinding.toolbarLayout.setSubtitle(module.packageName);
+        activityMainBinding.appBar.setLiftable(true);
+
+        binding.recyclerView.getBorderViewDelegate().setBorderVisibilityChangedListener((top, oldTop, bottom, oldBottom) -> activityMainBinding.appBar.setLifted(!top));
         RecyclerViewKt.fixEdgeEffect(binding.recyclerView, false, true);
         binding.swipeRefreshLayout.setOnRefreshListener(() -> scopeAdapter.refresh(true));
         binding.swipeRefreshLayout.setProgressViewEndTarget(true, binding.swipeRefreshLayout.getProgressViewEndOffset());
         Intent intent = AppHelper.getSettingsIntent(module.packageName, module.userId);
         if (intent == null) {
-            binding.fab.setVisibility(View.GONE);
+            activityMainBinding.fab.setVisibility(View.GONE);
+            showFab = 0;
         } else {
-            binding.fab.setVisibility(View.VISIBLE);
-            binding.fab.setOnClickListener(v -> ConfigManager.startActivityAsUserWithFeature(intent, module.userId));
+            activityMainBinding.fab.setVisibility(View.VISIBLE);
+            activityMainBinding.fab.setOnClickListener(v -> ConfigManager.startActivityAsUserWithFeature(intent, module.userId));
+            showFab = R.drawable.ic_baseline_settings_24;
         }
         searchListener = scopeAdapter.getSearchListener();
 
-        setupToolbar(binding.toolbar, binding.clickView, title, R.menu.menu_app_list, view -> requireActivity().getOnBackPressedDispatcher().onBackPressed());
         View.OnClickListener l = v -> {
             if (searchView.isIconified()) {
                 binding.recyclerView.smoothScrollToPosition(0);
-                binding.appBar.setExpanded(true, true);
+                activityMainBinding.appBar.setExpanded(true, true);
             }
         };
-        binding.toolbar.setOnClickListener(l);
-        binding.clickView.setOnClickListener(l);
+        activityMainBinding.toolbar.setOnClickListener(l);
+        activityMainBinding.clickView.setOnClickListener(l);
 
         return binding.getRoot();
     }
@@ -206,7 +209,7 @@ public class AppListFragment extends BaseFragment {
         searchView.addOnAttachStateChangeListener(new View.OnAttachStateChangeListener() {
             @Override
             public void onViewAttachedToWindow(View arg0) {
-                binding.appBar.setExpanded(false, true);
+                activityMainBinding.appBar.setExpanded(false, true);
                 binding.recyclerView.setNestedScrollingEnabled(false);
             }
 

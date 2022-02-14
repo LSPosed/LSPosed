@@ -18,7 +18,7 @@
   ~ Copyright (C) 2021 LSPosed Contributors
   -->
 
-<androidx.coordinatorlayout.widget.CoordinatorLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<FrameLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:id="@+id/fragment_container"
@@ -28,326 +28,290 @@
     app:edgeToEdge="true"
     app:fitsSystemWindowsInsets="@integer/internal_fragment_insets">
 
-    <com.google.android.material.appbar.AppBarLayout
-        android:id="@+id/app_bar"
+    <rikka.widget.borderview.BorderNestedScrollView
+        android:id="@+id/nestedScrollView"
         android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:fitsSystemWindows="false"
-        app:fitsSystemWindowsInsets="@integer/internal_fragment_top_insets">
+        android:layout_height="match_parent"
+        android:scrollbars="none"
+        app:borderBottomVisibility="never"
+        app:borderTopDrawable="@null"
+        app:borderTopVisibility="whenTop">
 
-        <com.google.android.material.appbar.CollapsingToolbarLayout
-            android:id="@+id/toolbar_layout"
-            style="?collapsingToolbarLayoutLargeStyle"
-            android:layout_width="match_parent"
-            android:layout_height="?collapsingToolbarLayoutLargeSize"
-            android:fitsSystemWindows="false"
-            app:layout_scrollFlags="scroll|exitUntilCollapsed"
-            app:titleCollapseMode="scale">
-
-            <View
-                android:id="@+id/click_view"
-                android:layout_width="match_parent"
-                android:layout_height="match_parent" />
-
-            <com.google.android.material.appbar.MaterialToolbar
-                android:id="@+id/toolbar"
-                android:layout_width="match_parent"
-                android:layout_height="?actionBarSize"
-                android:elevation="0dp"
-                app:layout_collapseMode="pin"
-                app:logo="@drawable/ic_launcher"
-                app:titleMarginStart="@dimen/m3_alert_dialog_icon_margin" />
-        </com.google.android.material.appbar.CollapsingToolbarLayout>
-
-
-    </com.google.android.material.appbar.AppBarLayout>
-
-    <FrameLayout
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        app:fitsSystemWindowsInsets="@integer/internal_fragment_bottom_insets"
-        app:layout_behavior="@string/appbar_scrolling_view_behavior"
-        tools:ignore="MissingPrefix">
-
-        <rikka.widget.borderview.BorderNestedScrollView
-            android:id="@+id/nestedScrollView"
+        <LinearLayout
             android:layout_width="match_parent"
             android:layout_height="match_parent"
-            android:scrollbars="none"
-            app:borderBottomVisibility="never"
-            app:borderTopDrawable="@null"
-            app:borderTopVisibility="whenTop">
+            android:animateLayoutChanges="true"
+            android:clipChildren="false"
+            android:clipToPadding="false"
+            android:orientation="vertical"
+            android:paddingHorizontal="@dimen/m3_appbar_expanded_title_margin_horizontal"
+            android:paddingVertical="?dialogPreferredPadding"
+            tools:context=".ui.activity.MainActivity">
 
-            <LinearLayout
+            <com.google.android.material.card.MaterialCardView
+                android:id="@+id/status"
+                style="@style/Widget.Material3.CardView.Elevated"
                 android:layout_width="match_parent"
-                android:layout_height="match_parent"
-                android:animateLayoutChanges="true"
-                android:clipChildren="false"
-                android:clipToPadding="false"
-                android:orientation="vertical"
-                android:paddingHorizontal="@dimen/m3_appbar_expanded_title_margin_horizontal"
-                android:paddingVertical="?dialogPreferredPadding"
-                tools:context=".ui.activity.MainActivity">
+                android:layout_height="wrap_content"
+                android:outlineAmbientShadowColor="?colorPrimary"
+                android:outlineSpotShadowColor="?colorPrimary"
+                android:stateListAnimator="@null"
+                app:cardBackgroundColor="?colorPrimary"
+                app:cardElevation="@dimen/home_primary_elevation"
+                app:cardPreventCornerOverlap="false"
+                tools:targetApi="p">
 
-                <com.google.android.material.card.MaterialCardView
-                    android:id="@+id/status"
-                    style="@style/Widget.Material3.CardView.Elevated"
+                <RelativeLayout
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:outlineAmbientShadowColor="?colorPrimary"
-                    android:outlineSpotShadowColor="?colorPrimary"
-                    android:stateListAnimator="@null"
-                    app:cardBackgroundColor="?colorPrimary"
-                    app:cardElevation="@dimen/home_primary_elevation"
-                    app:cardPreventCornerOverlap="false"
-                    tools:targetApi="p">
+                    android:padding="?dialogPreferredPadding">
 
-                    <RelativeLayout
-                        android:layout_width="match_parent"
+                    <ImageView
+                        android:id="@+id/status_icon"
+                        android:layout_width="24dp"
+                        android:layout_height="24dp"
+                        android:layout_centerVertical="true"
+                        android:tint="?colorOnPrimary"
+                        app:srcCompat="@drawable/ic_round_check_circle_24"
+                        tools:ignore="ContentDescription" />
+
+                    <com.google.android.material.textview.MaterialTextView
+                        android:id="@+id/status_title"
+                        android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
-                        android:padding="?dialogPreferredPadding">
+                        android:layout_marginStart="24dp"
+                        android:layout_toEndOf="@id/status_icon"
+                        android:fontFamily="sans-serif-medium"
+                        android:textAppearance="?textAppearanceTitleMedium"
+                        android:textColor="?colorOnPrimary"
+                        android:textSize="16sp" />
 
-                        <ImageView
-                            android:id="@+id/status_icon"
-                            android:layout_width="24dp"
-                            android:layout_height="24dp"
-                            android:layout_centerVertical="true"
-                            android:tint="?colorOnPrimary"
-                            app:srcCompat="@drawable/ic_round_check_circle_24"
-                            tools:ignore="ContentDescription" />
+                    <com.google.android.material.textview.MaterialTextView
+                        android:id="@+id/status_summary"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_below="@id/status_title"
+                        android:layout_alignStart="@id/status_title"
+                        android:textAppearance="?textAppearanceBodyMedium"
+                        android:textColor="?colorOnPrimary" />
+                </RelativeLayout>
+            </com.google.android.material.card.MaterialCardView>
 
-                        <com.google.android.material.textview.MaterialTextView
-                            android:id="@+id/status_title"
-                            android:layout_width="wrap_content"
-                            android:layout_height="wrap_content"
-                            android:layout_marginStart="24dp"
-                            android:layout_toEndOf="@id/status_icon"
-                            android:fontFamily="sans-serif-medium"
-                            android:textAppearance="?textAppearanceTitleMedium"
-                            android:textColor="?colorOnPrimary"
-                            android:textSize="16sp" />
+            <com.google.android.material.card.MaterialCardView
+                android:id="@+id/warning_card"
+                style="@style/Widget.Material3.CardView.Outlined"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="16dp"
+                app:cardBackgroundColor="?colorErrorContainer">
 
-                        <com.google.android.material.textview.MaterialTextView
-                            android:id="@+id/status_summary"
-                            android:layout_width="wrap_content"
-                            android:layout_height="wrap_content"
-                            android:layout_below="@id/status_title"
-                            android:layout_alignStart="@id/status_title"
-                            android:textAppearance="?textAppearanceBodyMedium"
-                            android:textColor="?colorOnPrimary" />
-                    </RelativeLayout>
-                </com.google.android.material.card.MaterialCardView>
-
-                <com.google.android.material.card.MaterialCardView
-                    android:id="@+id/warning_card"
-                    style="@style/Widget.Material3.CardView.Outlined"
+                <LinearLayout
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:layout_marginTop="16dp"
-                    app:cardBackgroundColor="?colorErrorContainer">
+                    android:orientation="vertical"
+                    android:padding="?dialogPreferredPadding">
+
+                    <com.google.android.material.textview.MaterialTextView
+                        android:id="@+id/warning_title"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:textAppearance="?textAppearanceTitleMedium"
+                        android:textColor="?colorOnErrorContainer" />
+
+                    <com.google.android.material.textview.MaterialTextView
+                        android:id="@+id/warning_summary"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:textAppearance="?textAppearanceBodyMedium"
+                        android:textColor="?colorOnErrorContainer" />
+
+                </LinearLayout>
+            </com.google.android.material.card.MaterialCardView>
+
+            <com.google.android.material.card.MaterialCardView
+                android:id="@+id/update_card"
+                style="@style/Widget.Material3.CardView.Outlined"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="16dp"
+                app:cardBackgroundColor="?colorSecondaryContainer">
+
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:orientation="vertical"
+                    android:padding="?dialogPreferredPadding">
+
+                    <com.google.android.material.textview.MaterialTextView
+                        android:id="@+id/update_title"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:textAppearance="?textAppearanceTitleMedium"
+                        android:textColor="?colorOnSecondaryContainer" />
+
+                    <com.google.android.material.textview.MaterialTextView
+                        android:id="@+id/update_summary"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:textAppearance="?textAppearanceBodyMedium"
+                        android:textColor="?colorOnSecondaryContainer" />
 
                     <LinearLayout
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
-                        android:orientation="vertical"
-                        android:padding="?dialogPreferredPadding">
+                        android:layout_marginTop="?dialogPreferredPadding"
+                        android:gravity="end"
+                        android:orientation="horizontal">
 
-                        <com.google.android.material.textview.MaterialTextView
-                            android:id="@+id/warning_title"
+                        <com.google.android.material.button.MaterialButton
+                            android:id="@+id/update_btn"
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
-                            android:textAppearance="?textAppearanceTitleMedium"
-                            android:textColor="?colorOnErrorContainer" />
-
-                        <com.google.android.material.textview.MaterialTextView
-                            android:id="@+id/warning_summary"
-                            android:layout_width="wrap_content"
-                            android:layout_height="wrap_content"
-                            android:textAppearance="?textAppearanceBodyMedium"
-                            android:textColor="?colorOnErrorContainer" />
-
+                            android:hint="@string/install"
+                            android:text="@string/install"
+                            android:textAlignment="center" />
                     </LinearLayout>
-                </com.google.android.material.card.MaterialCardView>
+                </LinearLayout>
+            </com.google.android.material.card.MaterialCardView>
 
-                <com.google.android.material.card.MaterialCardView
-                    android:id="@+id/update_card"
-                    style="@style/Widget.Material3.CardView.Outlined"
+            <com.google.android.material.card.MaterialCardView
+                android:id="@+id/info_card"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="16dp">
+
+                <LinearLayout
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:layout_marginTop="16dp"
-                    app:cardBackgroundColor="?colorSecondaryContainer">
+                    android:orientation="vertical"
+                    android:padding="?dialogPreferredPadding">
+
+                    <com.google.android.material.textview.MaterialTextView
+                        style="@style/DeviceInfoDialogLabel"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:text="@string/info_api_version" />
+
+                    <com.google.android.material.textview.MaterialTextView
+                        android:id="@+id/api_version"
+                        style="@style/DeviceInfoDialogValue"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:text="@string/not_installed" />
+
+                    <com.google.android.material.textview.MaterialTextView
+                        style="@style/DeviceInfoDialogLabel"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:text="@string/info_api" />
+
+                    <com.google.android.material.textview.MaterialTextView
+                        android:id="@+id/api"
+                        style="@style/DeviceInfoDialogValue"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:text="@string/not_installed" />
+
+                    <com.google.android.material.textview.MaterialTextView
+                        style="@style/DeviceInfoDialogLabel"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:text="@string/info_framework_version" />
+
+                    <com.google.android.material.textview.MaterialTextView
+                        style="@style/DeviceInfoDialogLabel"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:text="@string/info_dex2oat_wrapper" />
+
+                    <com.google.android.material.textview.MaterialTextView
+                        android:id="@+id/dex2oat_wrapper"
+                        style="@style/DeviceInfoDialogValue"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:text="@string/not_installed" />
+
+                    <com.google.android.material.textview.MaterialTextView
+                        style="@style/DeviceInfoDialogLabel"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:text="@string/info_framework_version" />
+
+                    <com.google.android.material.textview.MaterialTextView
+                        android:id="@+id/framework_version"
+                        style="@style/DeviceInfoDialogValue"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:text="@string/not_installed" />
+
+                    <com.google.android.material.textview.MaterialTextView
+                        style="@style/DeviceInfoDialogLabel"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:text="@string/info_manager_version" />
+
+                    <com.google.android.material.textview.MaterialTextView
+                        android:id="@+id/manager_version"
+                        style="@style/DeviceInfoDialogValue"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:gravity="center_vertical" />
+
+                    <com.google.android.material.textview.MaterialTextView
+                        style="@style/DeviceInfoDialogLabel"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:text="@string/info_system_version" />
+
+                    <com.google.android.material.textview.MaterialTextView
+                        android:id="@+id/system_version"
+                        style="@style/DeviceInfoDialogValue"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content" />
+
+                    <com.google.android.material.textview.MaterialTextView
+                        style="@style/DeviceInfoDialogLabel"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:text="@string/info_device" />
+
+                    <com.google.android.material.textview.MaterialTextView
+                        android:id="@+id/device"
+                        style="@style/DeviceInfoDialogValue"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content" />
+
+                    <com.google.android.material.textview.MaterialTextView
+                        style="@style/DeviceInfoDialogLabel"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:text="@string/info_system_abi" />
+
+                    <com.google.android.material.textview.MaterialTextView
+                        android:id="@+id/system_abi"
+                        style="@style/DeviceInfoDialogValue"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:paddingBottom="0dp" />
 
                     <LinearLayout
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
-                        android:orientation="vertical"
-                        android:padding="?dialogPreferredPadding">
+                        android:gravity="end"
+                        android:orientation="horizontal">
 
-                        <com.google.android.material.textview.MaterialTextView
-                            android:id="@+id/update_title"
+                        <com.google.android.material.button.MaterialButton
+                            android:id="@+id/copy_info"
+                            style="?borderlessButtonStyle"
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
-                            android:textAppearance="?textAppearanceTitleMedium"
-                            android:textColor="?colorOnSecondaryContainer" />
-
-                        <com.google.android.material.textview.MaterialTextView
-                            android:id="@+id/update_summary"
-                            android:layout_width="wrap_content"
-                            android:layout_height="wrap_content"
-                            android:textAppearance="?textAppearanceBodyMedium"
-                            android:textColor="?colorOnSecondaryContainer" />
-
-                        <LinearLayout
-                            android:layout_width="match_parent"
-                            android:layout_height="wrap_content"
-                            android:layout_marginTop="?dialogPreferredPadding"
-                            android:gravity="end"
-                            android:orientation="horizontal">
-
-                            <com.google.android.material.button.MaterialButton
-                                android:id="@+id/update_btn"
-                                android:layout_width="wrap_content"
-                                android:layout_height="wrap_content"
-                                android:hint="@string/install"
-                                android:text="@string/install"
-                                android:textAlignment="center" />
-                        </LinearLayout>
+                            android:text="@string/copy"
+                            android:textAlignment="center"
+                            android:tooltipText="@string/copy" />
                     </LinearLayout>
-                </com.google.android.material.card.MaterialCardView>
+                </LinearLayout>
 
-                <com.google.android.material.card.MaterialCardView
-                    android:id="@+id/info_card"
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:layout_marginTop="16dp">
-
-                    <LinearLayout
-                        android:layout_width="match_parent"
-                        android:layout_height="wrap_content"
-                        android:orientation="vertical"
-                        android:padding="?dialogPreferredPadding">
-
-                        <com.google.android.material.textview.MaterialTextView
-                            style="@style/DeviceInfoDialogLabel"
-                            android:layout_width="match_parent"
-                            android:layout_height="wrap_content"
-                            android:text="@string/info_api_version" />
-
-                        <com.google.android.material.textview.MaterialTextView
-                            android:id="@+id/api_version"
-                            style="@style/DeviceInfoDialogValue"
-                            android:layout_width="match_parent"
-                            android:layout_height="wrap_content"
-                            android:text="@string/not_installed" />
-
-                        <com.google.android.material.textview.MaterialTextView
-                            style="@style/DeviceInfoDialogLabel"
-                            android:layout_width="match_parent"
-                            android:layout_height="wrap_content"
-                            android:text="@string/info_api" />
-
-                        <com.google.android.material.textview.MaterialTextView
-                            android:id="@+id/api"
-                            style="@style/DeviceInfoDialogValue"
-                            android:layout_width="match_parent"
-                            android:layout_height="wrap_content"
-                            android:text="@string/not_installed" />
-
-                        <com.google.android.material.textview.MaterialTextView
-                            style="@style/DeviceInfoDialogLabel"
-                            android:layout_width="match_parent"
-                            android:layout_height="wrap_content"
-                            android:text="@string/info_dex2oat_wrapper" />
-
-                        <com.google.android.material.textview.MaterialTextView
-                            android:id="@+id/dex2oat_wrapper"
-                            style="@style/DeviceInfoDialogValue"
-                            android:layout_width="match_parent"
-                            android:layout_height="wrap_content"
-                            android:text="@string/not_installed" />
-
-                        <com.google.android.material.textview.MaterialTextView
-                            style="@style/DeviceInfoDialogLabel"
-                            android:layout_width="match_parent"
-                            android:layout_height="wrap_content"
-                            android:text="@string/info_framework_version" />
-
-                        <com.google.android.material.textview.MaterialTextView
-                            android:id="@+id/framework_version"
-                            style="@style/DeviceInfoDialogValue"
-                            android:layout_width="match_parent"
-                            android:layout_height="wrap_content"
-                            android:text="@string/not_installed" />
-
-                        <com.google.android.material.textview.MaterialTextView
-                            style="@style/DeviceInfoDialogLabel"
-                            android:layout_width="match_parent"
-                            android:layout_height="wrap_content"
-                            android:text="@string/info_manager_version" />
-
-                        <com.google.android.material.textview.MaterialTextView
-                            android:id="@+id/manager_version"
-                            style="@style/DeviceInfoDialogValue"
-                            android:layout_width="match_parent"
-                            android:layout_height="wrap_content"
-                            android:gravity="center_vertical" />
-
-                        <com.google.android.material.textview.MaterialTextView
-                            style="@style/DeviceInfoDialogLabel"
-                            android:layout_width="match_parent"
-                            android:layout_height="wrap_content"
-                            android:text="@string/info_system_version" />
-
-                        <com.google.android.material.textview.MaterialTextView
-                            android:id="@+id/system_version"
-                            style="@style/DeviceInfoDialogValue"
-                            android:layout_width="match_parent"
-                            android:layout_height="wrap_content" />
-
-                        <com.google.android.material.textview.MaterialTextView
-                            style="@style/DeviceInfoDialogLabel"
-                            android:layout_width="match_parent"
-                            android:layout_height="wrap_content"
-                            android:text="@string/info_device" />
-
-                        <com.google.android.material.textview.MaterialTextView
-                            android:id="@+id/device"
-                            style="@style/DeviceInfoDialogValue"
-                            android:layout_width="match_parent"
-                            android:layout_height="wrap_content" />
-
-                        <com.google.android.material.textview.MaterialTextView
-                            style="@style/DeviceInfoDialogLabel"
-                            android:layout_width="match_parent"
-                            android:layout_height="wrap_content"
-                            android:text="@string/info_system_abi" />
-
-                        <com.google.android.material.textview.MaterialTextView
-                            android:id="@+id/system_abi"
-                            style="@style/DeviceInfoDialogValue"
-                            android:layout_width="match_parent"
-                            android:layout_height="wrap_content"
-                            android:paddingBottom="0dp" />
-
-                        <LinearLayout
-                            android:layout_width="match_parent"
-                            android:layout_height="wrap_content"
-                            android:gravity="end"
-                            android:orientation="horizontal">
-
-                            <com.google.android.material.button.MaterialButton
-                                android:id="@+id/copy_info"
-                                style="?borderlessButtonStyle"
-                                android:layout_width="wrap_content"
-                                android:layout_height="wrap_content"
-                                android:text="@string/copy"
-                                android:textAlignment="center"
-                                android:tooltipText="@string/copy" />
-                        </LinearLayout>
-                    </LinearLayout>
-
-                </com.google.android.material.card.MaterialCardView>
-            </LinearLayout>
-        </rikka.widget.borderview.BorderNestedScrollView>
-    </FrameLayout>
-</androidx.coordinatorlayout.widget.CoordinatorLayout>
+            </com.google.android.material.card.MaterialCardView>
+        </LinearLayout>
+    </rikka.widget.borderview.BorderNestedScrollView>
+</FrameLayout>

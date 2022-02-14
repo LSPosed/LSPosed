@@ -21,6 +21,7 @@ package org.lsposed.manager.ui.fragment;
 
 import android.app.Activity;
 import android.app.Dialog;
+import android.content.Context;
 import android.os.Build;
 import android.os.Bundle;
 import android.text.method.LinkMovementMethod;
@@ -79,12 +80,13 @@ public class HomeFragment extends BaseFragment {
     @Override
     public View onCreateView(@NonNull LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
         binding = FragmentHomeBinding.inflate(inflater, container, false);
-        setupToolbar(binding.toolbar, binding.clickView, R.string.app_name, R.menu.menu_home);
-        binding.toolbar.setNavigationIcon(null);
-        binding.toolbar.setOnClickListener(v -> showAbout());
-        binding.clickView.setOnClickListener(v -> showAbout());
-        binding.appBar.setLiftable(true);
-        binding.nestedScrollView.getBorderViewDelegate().setBorderVisibilityChangedListener((top, oldTop, bottom, oldBottom) -> binding.appBar.setLifted(!top));
+        setupToolbar(R.string.app_name, R.menu.menu_home);
+        activityMainBinding.toolbar.setNavigationIcon(null);
+        activityMainBinding.toolbar.setOnClickListener(v -> showAbout());
+        activityMainBinding.toolbarLayout.setSubtitle(null);
+        activityMainBinding.clickView.setOnClickListener(v -> showAbout());
+        activityMainBinding.appBar.setLiftable(true);
+        binding.nestedScrollView.getBorderViewDelegate().setBorderVisibilityChangedListener((top, oldTop, bottom, oldBottom) -> activityMainBinding.appBar.setLifted(!top));
 
         updateStates(requireActivity(), ConfigManager.isBinderAlive(), UpdateUtil.needUpdate());
 
@@ -248,7 +250,7 @@ public class HomeFragment extends BaseFragment {
         @NonNull
         @Override
         public Dialog onCreateDialog(@Nullable Bundle savedInstanceState) {
-            DialogAboutBinding binding = DialogAboutBinding.inflate(LayoutInflater.from(requireActivity()), null, false);
+            DialogAboutBinding binding = DialogAboutBinding.inflate(getLayoutInflater(), null, false);
             binding.designAboutTitle.setText(R.string.app_name);
             binding.designAboutInfo.setMovementMethod(LinkMovementMethod.getInstance());
             binding.designAboutInfo.setTransformationMethod(new LinkTransformationMethod(requireActivity()));

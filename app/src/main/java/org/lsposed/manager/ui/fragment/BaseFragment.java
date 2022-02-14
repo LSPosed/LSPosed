@@ -19,25 +19,31 @@
 
 package org.lsposed.manager.ui.fragment;
 
+import android.content.Context;
 import android.os.Handler;
 import android.os.Looper;
 import android.view.View;
 import android.widget.Toast;
 
+import androidx.annotation.DrawableRes;
 import androidx.annotation.IdRes;
+import androidx.annotation.NonNull;
 import androidx.annotation.StringRes;
-import androidx.appcompat.widget.Toolbar;
+import androidx.coordinatorlayout.widget.CoordinatorLayout;
 import androidx.fragment.app.Fragment;
 import androidx.navigation.NavController;
 import androidx.navigation.NavDirections;
 import androidx.navigation.fragment.NavHostFragment;
 
+import com.google.android.material.behavior.HideBottomViewOnScrollBehavior;
 import com.google.android.material.bottomnavigation.BottomNavigationView;
 import com.google.android.material.floatingactionbutton.FloatingActionButton;
 import com.google.android.material.snackbar.Snackbar;
 
 import org.lsposed.manager.App;
 import org.lsposed.manager.R;
+import org.lsposed.manager.databinding.ActivityMainBinding;
+import org.lsposed.manager.ui.activity.MainActivity;
 
 import java.util.concurrent.Callable;
 import java.util.concurrent.Future;
@@ -45,6 +51,8 @@ import java.util.concurrent.FutureTask;
 
 public class BaseFragment extends Fragment {
     private final Handler uiHandler = new Handler(Looper.getMainLooper());
+    protected ActivityMainBinding activityMainBinding;
+    protected @DrawableRes int showFab = 0;
 
     public void navigateUp() {
         getNavController().navigateUp();
@@ -72,28 +80,82 @@ public class BaseFragment extends Fragment {
         }
     }
 
-    public void setupToolbar(Toolbar toolbar, View tipsView, int title) {
-        setupToolbar(toolbar, tipsView, getString(title), -1);
+    @Override
+    public void onAttach(@NonNull Context context) {
+        var activity = requireActivity();
+        if (activity instanceof MainActivity) {
+            activityMainBinding = ((MainActivity) context).getActivityBinding();
+        }
+        super.onAttach(context);
     }
 
-    public void setupToolbar(Toolbar toolbar, View tipsView, int title, int menu) {
-        setupToolbar(toolbar, tipsView, getString(title), menu, null);
+    @Override
+    public void onResume() {
+        if (showFab != 0) {
+            activityMainBinding.fab.setImageResource(showFab);
+            activityMainBinding.fab.show();
+        }
+        else activityMainBinding.fab.hide();
+        super.onResume();
     }
 
-    public void setupToolbar(Toolbar toolbar, View tipsView, String title, int menu) {
-        setupToolbar(toolbar, tipsView, title, menu, null);
+    @Override
+    public void onDetach() {
+        activityMainBinding = null;
+        super.onDetach();
     }
 
-    public void setupToolbar(Toolbar toolbar, View tipsView, String title, int menu, View.OnClickListener navigationOnClickListener) {
+    public void setupToolbar(int title) {
+        setupToolbar(getString(title), -1);
+    }
+
+    public void setupToolbar(int title, int menu) {
+        setupToolbar(getString(title), menu, null);
+    }
+
+    public void setupToolbar(String title, int menu) {
+        setupToolbar(title, menu, null);
+    }
+
+    public void setupToolbar(String title, int menu, View.OnClickListener navigationOnClickListener) {
+        if (activityMainBinding == null) {
+            var activity = requireActivity();
+            if (activity instanceof MainActivity) {
+                activityMainBinding = ((MainActivity) activity).getActivityBinding();
+            }
+        }
+        var toolbar = activityMainBinding.toolbar;
+        var toolbarLayout = activityMainBinding.toolbarLayout;
+        var clickView = activityMainBinding.clickView;
         toolbar.setNavigationOnClickListener(navigationOnClickListener == null ? (v -> navigateUp()) : navigationOnClickListener);
         toolbar.setNavigationIcon(R.drawable.ic_baseline_arrow_back_24);
-        toolbar.setTitle(title);
-        toolbar.setTooltipText(title);
-        if (tipsView != null) tipsView.setTooltipText(title);
+        toolbarLayout.setTitle(title);
+        toolbarLayout.setTooltipText(title);
+        clickView.setTooltipText(title);
+        toolbar.getMenu().clear();
         if (menu != -1) {
             toolbar.inflateMenu(menu);
             toolbar.setOnMenuItemClickListener(this::onOptionsItemSelected);
             onPrepareOptionsMenu(toolbar.getMenu());
+        }
+    }
+
+    protected void showFabAndBottomNav() {
+        var nav = activityMainBinding != null ? activityMainBinding.nav : null;
+        if (nav instanceof BottomNavigationView) {
+            var behavior = ((CoordinatorLayout.LayoutParams) nav.getLayoutParams()).getBehavior();
+            if (behavior instanceof HideBottomViewOnScrollBehavior) {
+                //noinspection unchecked
+                ((HideBottomViewOnScrollBehavior<BottomNavigationView>) behavior).slideUp((BottomNavigationView) nav);
+            }
+        }
+        var fab = activityMainBinding != null ? activityMainBinding.fab : null;
+        if (fab != null) {
+            var behavior = ((CoordinatorLayout.LayoutParams) nav.getLayoutParams()).getBehavior();
+            if (behavior instanceof HideBottomViewOnScrollBehavior) {
+                //noinspection unchecked
+                ((HideBottomViewOnScrollBehavior<FloatingActionButton>) behavior).slideUp(fab);
+            }
         }
     }
 

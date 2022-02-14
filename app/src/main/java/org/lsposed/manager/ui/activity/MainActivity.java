@@ -61,6 +61,10 @@ public class MainActivity extends BaseActivity implements RepoLoader.RepoListene
     private boolean restarting;
     private ActivityMainBinding binding;
 
+    public ActivityMainBinding getActivityBinding() {
+        return binding;
+    }
+
     @NonNull
     public static Intent newIntent(@NonNull Context context) {
         return new Intent(context, MainActivity.class);

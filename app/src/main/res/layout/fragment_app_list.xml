@@ -18,7 +18,7 @@
   ~ Copyright (C) 2021 LSPosed Contributors
   -->
 
-<androidx.coordinatorlayout.widget.CoordinatorLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<FrameLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     android:id="@+id/fragment_container"
     android:layout_width="match_parent"
@@ -26,7 +26,6 @@
     app:consumeSystemWindowsInsets="@integer/internal_fragment_insets"
     app:edgeToEdge="true"
     app:fitsSystemWindowsInsets="@integer/internal_fragment_insets">
-
 
     <com.google.android.material.appbar.AppBarLayout
         android:id="@+id/app_bar"
@@ -72,6 +71,8 @@
         app:backgroundTint="?attr/colorPrimary"
         app:layout_behavior="@string/hide_bottom_view_on_scroll_behavior"
         app:layout_fitsSystemWindowsInsets="@integer/internal_fragment_bottom_insets"
+        app:switchOffText="@string/enable_module"
+        app:switchOnText="@string/enable_module"
         app:tint="?attr/colorOnPrimary" />
 
     <LinearLayout
@@ -99,4 +100,4 @@
                 app:fitsSystemWindowsInsets="@integer/internal_fragment_bottom_insets" />
         </androidx.swiperefreshlayout.widget.SwipeRefreshLayout>
     </LinearLayout>
-</androidx.coordinatorlayout.widget.CoordinatorLayout>
+</FrameLayout>

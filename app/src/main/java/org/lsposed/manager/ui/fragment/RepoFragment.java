@@ -112,10 +112,10 @@ public class RepoFragment extends BaseFragment implements RepoLoader.RepoListene
     @Override
     public View onCreateView(@NonNull LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
         binding = FragmentRepoBinding.inflate(getLayoutInflater(), container, false);
-        binding.appBar.setLiftable(true);
-        binding.recyclerView.getBorderViewDelegate().setBorderVisibilityChangedListener((top, oldTop, bottom, oldBottom) -> binding.appBar.setLifted(!top));
-        setupToolbar(binding.toolbar, binding.clickView, R.string.module_repo, R.menu.menu_repo);
-        binding.toolbar.setNavigationIcon(null);
+        setupToolbar(R.string.module_repo, R.menu.menu_repo);
+        activityMainBinding.appBar.setLiftable(true);
+        binding.recyclerView.getBorderViewDelegate().setBorderVisibilityChangedListener((top, oldTop, bottom, oldBottom) -> activityMainBinding.appBar.setLifted(!top));
+        activityMainBinding.toolbar.setNavigationIcon(null);
         adapter = new RepoAdapter();
         adapter.setHasStableIds(true);
         adapter.registerAdapterDataObserver(observer);
@@ -128,11 +128,11 @@ public class RepoFragment extends BaseFragment implements RepoLoader.RepoListene
         View.OnClickListener l = v -> {
             if (searchView.isIconified()) {
                 binding.recyclerView.smoothScrollToPosition(0);
-                binding.appBar.setExpanded(true, true);
+                activityMainBinding.appBar.setExpanded(true, true);
             }
         };
-        binding.toolbar.setOnClickListener(l);
-        binding.clickView.setOnClickListener(l);
+        activityMainBinding.toolbar.setOnClickListener(l);
+        activityMainBinding.clickView.setOnClickListener(l);
         repoLoader.addListener(this);
         moduleUtil.addListener(this);
         onRepoLoaded();
@@ -158,15 +158,14 @@ public class RepoFragment extends BaseFragment implements RepoLoader.RepoListene
             count[0] = -1;
         }
         runOnUiThread(() -> {
-            if (binding != null) {
+            if (activityMainBinding != null) {
                 if (count[0] > 0) {
-                    binding.toolbar.setSubtitle(getResources().getQuantityString(R.plurals.module_repo_upgradable, count[0], count[0]));
+                    activityMainBinding.toolbarLayout.setSubtitle(getResources().getQuantityString(R.plurals.module_repo_upgradable, count[0], count[0]));
                 } else if (count[0] == 0) {
-                    binding.toolbar.setSubtitle(getResources().getString(R.string.module_repo_up_to_date));
+                    activityMainBinding.toolbarLayout.setSubtitle(getResources().getString(R.string.module_repo_up_to_date));
                 } else {
-                    binding.toolbar.setSubtitle(getResources().getString(R.string.loading));
+                    activityMainBinding.toolbarLayout.setSubtitle(getResources().getString(R.string.loading));
                 }
-                binding.toolbarLayout.setSubtitle(binding.toolbar.getSubtitle());
             }
         });
     }
@@ -178,7 +177,7 @@ public class RepoFragment extends BaseFragment implements RepoLoader.RepoListene
         searchView.addOnAttachStateChangeListener(new View.OnAttachStateChangeListener() {
             @Override
             public void onViewAttachedToWindow(View arg0) {
-                binding.appBar.setExpanded(false, true);
+                activityMainBinding.appBar.setExpanded(false, true);
                 binding.recyclerView.setNestedScrollingEnabled(false);
             }
 

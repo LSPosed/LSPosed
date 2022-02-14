@@ -103,14 +103,13 @@ public class LogsFragment extends BaseFragment {
     @Override
     public View onCreateView(@NonNull LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
         binding = FragmentPagerBinding.inflate(inflater, container, false);
-        binding.appBar.setLiftable(true);
-        setupToolbar(binding.toolbar, binding.clickView, R.string.Logs, R.menu.menu_logs);
-        binding.toolbar.setNavigationIcon(null);
-        binding.toolbar.setSubtitle(ConfigManager.isVerboseLogEnabled() ? R.string.enabled_verbose_log : R.string.disabled_verbose_log);
+        setupToolbar(R.string.Logs, R.menu.menu_logs);
+        activityMainBinding.appBar.setLiftable(true);
+        activityMainBinding.toolbar.setNavigationIcon(null);
+        activityMainBinding.toolbarLayout.setSubtitle(ConfigManager.isVerboseLogEnabled() ? getString(R.string.enabled_verbose_log) : getString(R.string.disabled_verbose_log));
         adapter = new LogPageAdapter(this);
         binding.viewPager.setAdapter(adapter);
         new TabLayoutMediator(binding.tabLayout, binding.viewPager, (tab, position) -> tab.setText((int) adapter.getItemId(position))).attach();
-
         binding.tabLayout.addOnLayoutChangeListener((view, left, top, right, bottom, oldLeft, oldTop, oldRight, oldBottom) -> {
             ViewGroup vg = (ViewGroup) binding.tabLayout.getChildAt(0);
             int tabLayoutWidth = IntStream.range(0, binding.tabLayout.getTabCount()).map(i -> vg.getChildAt(i).getWidth()).sum();
@@ -275,7 +274,7 @@ public class LogsFragment extends BaseFragment {
         }
 
         public void scrollToTop(LogsFragment logsFragment) {
-            logsFragment.binding.appBar.setExpanded(true, true);
+            logsFragment.activityMainBinding.appBar.setExpanded(true, true);
             if (layoutManager.findFirstVisibleItemPosition() > SCROLL_THRESHOLD) {
                 binding.recyclerView.scrollToPosition(0);
             } else {
@@ -284,7 +283,7 @@ public class LogsFragment extends BaseFragment {
         }
 
         public void scrollToBottom(LogsFragment logsFragment) {
-            logsFragment.binding.appBar.setExpanded(false, true);
+            logsFragment.activityMainBinding.appBar.setExpanded(false, true);
             var end = Math.max(adaptor.getItemCount() - 1, 0);
             if (adaptor.getItemCount() - layoutManager.findLastVisibleItemPosition() > SCROLL_THRESHOLD) {
                 binding.recyclerView.scrollToPosition(end);
@@ -297,8 +296,8 @@ public class LogsFragment extends BaseFragment {
             var parent = getParentFragment();
             if (parent instanceof LogsFragment) {
                 var logsFragment = (LogsFragment) parent;
-                logsFragment.binding.appBar.setLifted(!binding.recyclerView.getBorderViewDelegate().isShowingTopBorder());
-                binding.recyclerView.getBorderViewDelegate().setBorderVisibilityChangedListener((top, oldTop, bottom, oldBottom) -> logsFragment.binding.appBar.setLifted(!top));
+                logsFragment.activityMainBinding.appBar.setLifted(!binding.recyclerView.getBorderViewDelegate().isShowingTopBorder());
+                binding.recyclerView.getBorderViewDelegate().setBorderVisibilityChangedListener((top, oldTop, bottom, oldBottom) -> logsFragment.activityMainBinding.appBar.setLifted(!top));
                 logsFragment.setOptionsItemSelectListener(item -> {
                     int itemId = item.getItemId();
                     if (itemId == R.id.menu_scroll_top) {
@@ -317,9 +316,12 @@ public class LogsFragment extends BaseFragment {
                     return false;
                 });
 
-                View.OnClickListener l = v -> scrollToTop(logsFragment);
-                logsFragment.binding.clickView.setOnClickListener(l);
-                logsFragment.binding.toolbar.setOnClickListener(l);
+                View.OnClickListener l = v -> {
+                    scrollToTop(logsFragment);
+                    showFabAndBottomNav();
+                };
+                logsFragment.activityMainBinding.clickView.setOnClickListener(l);
+                logsFragment.activityMainBinding.toolbar.setOnClickListener(l);
             }
         }
 

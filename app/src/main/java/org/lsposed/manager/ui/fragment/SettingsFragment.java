@@ -71,18 +71,18 @@ public class SettingsFragment extends BaseFragment {
     @Override
     public View onCreateView(@NonNull LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
         binding = FragmentSettingsBinding.inflate(inflater, container, false);
-        binding.appBar.setLiftable(true);
-        setupToolbar(binding.toolbar, binding.clickView, R.string.Settings);
-        binding.toolbar.setNavigationIcon(null);
+        setupToolbar(R.string.Settings);
+        activityMainBinding.appBar.setLiftable(true);
+        activityMainBinding.toolbar.setNavigationIcon(null);
         if (savedInstanceState == null) {
             getChildFragmentManager().beginTransaction()
                     .add(R.id.setting_container, new PreferenceFragment()).commitNow();
         }
         if (ConfigManager.isBinderAlive()) {
-            binding.toolbar.setSubtitle(String.format(LocaleDelegate.getDefaultLocale(), "%s (%d) - %s",
+            activityMainBinding.toolbarLayout.setSubtitle(String.format(LocaleDelegate.getDefaultLocale(), "%s (%d) - %s",
                     ConfigManager.getXposedVersionName(), ConfigManager.getXposedVersionCode(), ConfigManager.getApi()));
         } else {
-            binding.toolbar.setSubtitle(String.format(LocaleDelegate.getDefaultLocale(), "%s (%d) - %s",
+            activityMainBinding.toolbarLayout.setSubtitle(String.format(LocaleDelegate.getDefaultLocale(), "%s (%d) - %s",
                     BuildConfig.VERSION_NAME, BuildConfig.VERSION_CODE, getString(R.string.not_installed)));
         }
         return binding.getRoot();
@@ -339,16 +339,17 @@ public class SettingsFragment extends BaseFragment {
         public RecyclerView onCreateRecyclerView(@NonNull LayoutInflater inflater, @NonNull ViewGroup parent, Bundle savedInstanceState) {
             BorderRecyclerView recyclerView = (BorderRecyclerView) super.onCreateRecyclerView(inflater, parent, savedInstanceState);
             RecyclerViewKt.fixEdgeEffect(recyclerView, false, true);
-            recyclerView.getBorderViewDelegate().setBorderVisibilityChangedListener((top, oldTop, bottom, oldBottom) -> parentFragment.binding.appBar.setLifted(!top));
+            recyclerView.getBorderViewDelegate().setBorderVisibilityChangedListener((top, oldTop, bottom, oldBottom) -> parentFragment.activityMainBinding.appBar.setLifted(!top));
             var fragment = getParentFragment();
             if (fragment instanceof SettingsFragment) {
                 var settingsFragment = (SettingsFragment) fragment;
                 View.OnClickListener l = v -> {
-                    settingsFragment.binding.appBar.setExpanded(true, true);
+                    settingsFragment.activityMainBinding.appBar.setExpanded(true, true);
                     recyclerView.smoothScrollToPosition(0);
+                    settingsFragment.showFabAndBottomNav();
                 };
-                settingsFragment.binding.toolbar.setOnClickListener(l);
-                settingsFragment.binding.clickView.setOnClickListener(l);
+                settingsFragment.activityMainBinding.toolbar.setOnClickListener(l);
+                settingsFragment.activityMainBinding.clickView.setOnClickListener(l);
             }
             return recyclerView;
         }

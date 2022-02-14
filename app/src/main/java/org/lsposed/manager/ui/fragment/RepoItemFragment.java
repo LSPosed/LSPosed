@@ -108,10 +108,10 @@ public class RepoItemFragment extends BaseFragment implements RepoLoader.RepoLis
         if (module == null) return binding.getRoot();
         String modulePackageName = module.getName();
         String moduleName = module.getDescription();
-        binding.appBar.setLiftable(true);
-        setupToolbar(binding.toolbar, binding.clickView, moduleName, R.menu.menu_repo_item);
-        binding.clickView.setTooltipText(moduleName);
-        binding.toolbar.setSubtitle(modulePackageName);
+        setupToolbar(moduleName, R.menu.menu_repo_item);
+        activityMainBinding.appBar.setLiftable(true);
+        activityMainBinding.clickView.setTooltipText(moduleName);
+        activityMainBinding.toolbarLayout.setSubtitle(modulePackageName);
         binding.viewPager.setAdapter(new PagerAdapter(this));
         int[] titles = new int[]{R.string.module_readme, R.string.module_releases, R.string.module_information};
         new TabLayoutMediator(binding.tabLayout, binding.viewPager, (tab, position) -> tab.setText(titles[position])).attach();
@@ -124,7 +124,7 @@ public class RepoItemFragment extends BaseFragment implements RepoLoader.RepoLis
                 binding.tabLayout.setTabGravity(TabLayout.GRAVITY_FILL);
             }
         });
-        binding.toolbar.setOnClickListener(v -> binding.appBar.setExpanded(true, true));
+        activityMainBinding.toolbar.setOnClickListener(v -> activityMainBinding.appBar.setExpanded(true, true));
         releaseAdapter = new ReleaseAdapter();
         informationAdapter = new InformationAdapter();
         RepoLoader.getInstance().addListener(this);
@@ -528,10 +528,10 @@ public class RepoItemFragment extends BaseFragment implements RepoLoader.RepoLis
             var parent = getParentFragment();
             if (parent instanceof RepoItemFragment) {
                 var repoItemFragment = (RepoItemFragment) parent;
-                borderView.getBorderViewDelegate().setBorderVisibilityChangedListener((top, oldTop, bottom, oldBottom) -> repoItemFragment.binding.appBar.setLifted(!top));
-                repoItemFragment.binding.appBar.setLifted(!borderView.getBorderViewDelegate().isShowingTopBorder());
-                repoItemFragment.binding.toolbar.setOnClickListener(v -> {
-                    repoItemFragment.binding.appBar.setExpanded(true, true);
+                borderView.getBorderViewDelegate().setBorderVisibilityChangedListener((top, oldTop, bottom, oldBottom) -> repoItemFragment.activityMainBinding.appBar.setLifted(!top));
+                repoItemFragment.activityMainBinding.appBar.setLifted(!borderView.getBorderViewDelegate().isShowingTopBorder());
+                repoItemFragment.activityMainBinding.toolbar.setOnClickListener(v -> {
+                    repoItemFragment.activityMainBinding.appBar.setExpanded(true, true);
                     scrollToTop();
                 });
             }

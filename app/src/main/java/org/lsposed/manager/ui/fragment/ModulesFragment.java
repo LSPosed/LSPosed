@@ -51,7 +51,6 @@ import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.appcompat.widget.SearchView;
 import androidx.constraintlayout.widget.ConstraintLayout;
-import androidx.coordinatorlayout.widget.CoordinatorLayout;
 import androidx.fragment.app.Fragment;
 import androidx.navigation.NavOptions;
 import androidx.recyclerview.widget.LinearLayoutManager;
@@ -61,9 +60,7 @@ import androidx.viewpager2.widget.ViewPager2;
 
 import com.bumptech.glide.request.target.CustomTarget;
 import com.bumptech.glide.request.transition.Transition;
-import com.google.android.material.behavior.HideBottomViewOnScrollBehavior;
 import com.google.android.material.checkbox.MaterialCheckBox;
-import com.google.android.material.floatingactionbutton.FloatingActionButton;
 import com.google.android.material.tabs.TabLayout;
 import com.google.android.material.tabs.TabLayoutMediator;
 
@@ -130,31 +127,19 @@ public class ModulesFragment extends BaseFragment implements ModuleUtil.ModuleLi
         }
     }
 
-    private void showFab() {
-        var layoutParams = binding.fab.getLayoutParams();
-        if (layoutParams instanceof CoordinatorLayout.LayoutParams) {
-            var coordinatorLayoutBehavior =
-                    ((CoordinatorLayout.LayoutParams) layoutParams).getBehavior();
-            if (coordinatorLayoutBehavior instanceof HideBottomViewOnScrollBehavior) {
-                //noinspection unchecked
-                ((HideBottomViewOnScrollBehavior<FloatingActionButton>) coordinatorLayoutBehavior).slideUp(binding.fab);
-            }
-        }
-    }
-
     @Nullable
     @Override
     public View onCreateView(@NonNull LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
         binding = FragmentPagerBinding.inflate(inflater, container, false);
-        binding.appBar.setLiftable(true);
-        setupToolbar(binding.toolbar, binding.clickView, R.string.Modules, R.menu.menu_modules);
-        binding.toolbar.setNavigationIcon(null);
+        setupToolbar(R.string.Modules, R.menu.menu_modules);
+        activityMainBinding.appBar.setLiftable(true);
+        activityMainBinding.toolbar.setNavigationIcon(null);
         pagerAdapter = new PagerAdapter(this);
         binding.viewPager.setAdapter(pagerAdapter);
         binding.viewPager.registerOnPageChangeCallback(new ViewPager2.OnPageChangeCallback() {
             @Override
             public void onPageSelected(int position) {
-                showFab();
+                showFabAndBottomNav();
             }
         });
 
@@ -173,7 +158,7 @@ public class ModulesFragment extends BaseFragment implements ModuleUtil.ModuleLi
             }
         });
 
-        binding.fab.setOnClickListener(v -> {
+        activityMainBinding.fab.setOnClickListener(v -> {
             var bundle = new Bundle();
             var user = adapters.valueAt(binding.viewPager.getCurrentItem()).getUser();
             bundle.putParcelable("userInfo", user);
@@ -196,7 +181,7 @@ public class ModulesFragment extends BaseFragment implements ModuleUtil.ModuleLi
         searchView.addOnAttachStateChangeListener(new View.OnAttachStateChangeListener() {
             @Override
             public void onViewAttachedToWindow(View arg0) {
-                binding.appBar.setExpanded(false, true);
+                activityMainBinding.appBar.setExpanded(false, true);
             }
 
             @Override
@@ -225,10 +210,11 @@ public class ModulesFragment extends BaseFragment implements ModuleUtil.ModuleLi
         if (users.size() != 1) {
             binding.viewPager.setUserInputEnabled(true);
             binding.tabLayout.setVisibility(View.VISIBLE);
-            binding.fab.show();
+            showFab = R.drawable.ic_baseline_add_24;
         } else {
             binding.viewPager.setUserInputEnabled(false);
             binding.tabLayout.setVisibility(View.GONE);
+            showFab = 0;
         }
 
         var tmp = new SparseArray<ModuleAdapter>(users.size());
@@ -257,8 +243,7 @@ public class ModulesFragment extends BaseFragment implements ModuleUtil.ModuleLi
         var moduleCount = moduleUtil.getEnabledModulesCount();
         runOnUiThread(() -> {
             if (binding != null) {
-                binding.toolbar.setSubtitle(moduleCount == -1 ? getString(R.string.loading) : getResources().getQuantityString(R.plurals.modules_enabled_count, moduleCount, moduleCount));
-                binding.toolbarLayout.setSubtitle(binding.toolbar.getSubtitle());
+                activityMainBinding.toolbarLayout.setSubtitle(moduleCount == -1 ? getString(R.string.loading) : getResources().getQuantityString(R.plurals.modules_enabled_count, moduleCount, moduleCount));
             }
         });
     }
@@ -389,18 +374,18 @@ public class ModulesFragment extends BaseFragment implements ModuleUtil.ModuleLi
             var parent = getParentFragment();
             if (parent instanceof ModulesFragment) {
                 var moduleFragment = (ModulesFragment) parent;
-                binding.recyclerView.getBorderViewDelegate().setBorderVisibilityChangedListener((top, oldTop, bottom, oldBottom) -> moduleFragment.binding.appBar.setLifted(!top));
-                moduleFragment.binding.appBar.setLifted(!binding.recyclerView.getBorderViewDelegate().isShowingTopBorder());
+                binding.recyclerView.getBorderViewDelegate().setBorderVisibilityChangedListener((top, oldTop, bottom, oldBottom) -> moduleFragment.activityMainBinding.appBar.setLifted(!top));
+                moduleFragment.activityMainBinding.appBar.setLifted(!binding.recyclerView.getBorderViewDelegate().isShowingTopBorder());
                 moduleFragment.searchView.addOnAttachStateChangeListener(searchViewLocker);
                 binding.recyclerView.setNestedScrollingEnabled(moduleFragment.searchView.isIconified());
                 View.OnClickListener l = v -> {
                     if (moduleFragment.searchView.isIconified()) {
                         binding.recyclerView.smoothScrollToPosition(0);
-                        moduleFragment.binding.appBar.setExpanded(true, true);
+                        moduleFragment.activityMainBinding.appBar.setExpanded(true, true);
                     }
                 };
-                moduleFragment.binding.clickView.setOnClickListener(l);
-                moduleFragment.binding.toolbar.setOnClickListener(l);
+                moduleFragment.activityMainBinding.clickView.setOnClickListener(l);
+                moduleFragment.activityMainBinding.toolbar.setOnClickListener(l);
             }
         }
 
