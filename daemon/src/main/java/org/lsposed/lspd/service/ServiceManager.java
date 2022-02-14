@@ -19,6 +19,7 @@
 
 package org.lsposed.lspd.service;
 
+import android.app.ActivityThread;
 import android.content.Context;
 import android.ddm.DdmHandleAppName;
 import android.os.IBinder;
@@ -93,6 +94,8 @@ public class ServiceManager {
             Log.e(TAG, "Uncaught exception", e);
             System.exit(1);
         });
+
+        ActivityThread.systemMain();
 
         logcatService = new LogcatService();
         logcatService.start();
