@@ -37,6 +37,7 @@ public class LogcatService implements Runnable {
         }
 
         getprop();
+        dmesg();
     }
 
     private static void getprop() {
@@ -46,12 +47,22 @@ public class LogcatService implements Runnable {
         try {
             SELinux.setFSCreateContext("u:object_r:app_data_file:s0");
             new ProcessBuilder("sh", "-c", cmd)
-                    .redirectOutput(ConfigFileManager.getpropsLogPath())
+                    .redirectOutput(ConfigFileManager.getPropsPath())
                     .start();
         } catch (IOException e) {
             Log.e(TAG, "getprop: ", e);
         } finally {
             SELinux.setFSCreateContext(null);
+        }
+    }
+
+    private static void dmesg() {
+        try {
+            new ProcessBuilder("dmesg")
+                    .redirectOutput(ConfigFileManager.getKmsgPath())
+                    .start();
+        } catch (IOException e) {
+            Log.e(TAG, "dmesg: ", e);
         }
     }
 
