@@ -128,11 +128,7 @@ namespace art {
             RETRIEVE_MEM_FUNC_SYMBOL(SetEntryPointsToInterpreter,
                                      "_ZNK3art11ClassLinker27SetEntryPointsToInterpreterEPNS_9ArtMethodE");
 
-            if (api_level >= __ANDROID_API_T__)  {
-                lspd::HookSyms(handle, ShouldStayInSwitchInterpreter);
-            } else {
-                lspd::HookSyms(handle, ShouldUseInterpreterEntrypoint);
-            }
+            lspd::HookSyms(handle, ShouldUseInterpreterEntrypoint, ShouldStayInSwitchInterpreter);
 
             if (api_level >= __ANDROID_API_R__) {
                 // In android R, FixupStaticTrampolines won't be called unless it's marking it as
