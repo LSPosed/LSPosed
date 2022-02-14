@@ -22,6 +22,7 @@ package de.robv.android.xposed;
 
 import static de.robv.android.xposed.XposedHelpers.setObjectField;
 
+import android.app.ActivityThread;
 import android.content.res.Resources;
 import android.content.res.TypedArray;
 import android.util.Log;
@@ -96,10 +97,22 @@ public final class XposedBridge {
             Class<?> resClass = res.getClass();
             Class<?> taClass = TypedArray.class;
             try {
-                TypedArray ta = res.obtainTypedArray(res.getIdentifier(
-                        "preloaded_drawables", "array", "android"));
-                taClass = ta.getClass();
-                ta.recycle();
+                try {
+                    TypedArray ta = res.obtainTypedArray(res.getIdentifier(
+                            "preloaded_drawables", "array", "android"));
+                    taClass = ta.getClass();
+                    ta.recycle();
+                } catch (NullPointerException npe) {
+                    XposedHelpers.setStaticObjectField(ActivityThread.class, "sCurrentActivityThread", new ActivityThread());
+                    try {
+                        TypedArray ta = res.obtainTypedArray(res.getIdentifier(
+                                "preloaded_drawables", "array", "android"));
+                        taClass = ta.getClass();
+                        ta.recycle();
+                    } finally {
+                        XposedHelpers.setStaticObjectField(ActivityThread.class, "sCurrentActivityThread", null);
+                    }
+                }
             } catch (Resources.NotFoundException nfe) {
                 XposedBridge.log(nfe);
             }
@@ -152,7 +165,7 @@ public final class XposedBridge {
      * Deoptimize a method to avoid callee being inlined.
      *
      * @param deoptimizedMethod The method to deoptmize. Generally it should be a caller of a method
-     *                    that is inlined.
+     *                          that is inlined.
      */
     public static void deoptimizeMethod(Member deoptimizedMethod) {
         if (!(deoptimizedMethod instanceof Executable)) {
