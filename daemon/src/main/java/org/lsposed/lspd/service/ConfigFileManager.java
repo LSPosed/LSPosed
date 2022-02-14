@@ -273,7 +273,7 @@ public class ConfigFileManager {
         var name = base.relativize(path).toString();
         if (Files.isDirectory(path)) {
             try {
-                os.putNextEntry(new ZipEntry(name));
+                os.putNextEntry(new ZipEntry(name + "/"));
                 os.closeEntry();
             } catch (IOException e) {
                 Log.w(TAG, name, e);
