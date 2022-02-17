@@ -138,7 +138,7 @@
     <string name="android_framework">System Framework</string>
     <string name="menu_backup_and_restore">Створення резервної копії</string>
     <string name="menu_backup">Створити резервну копію</string>
-    <string name="menu_restore">Відновити</string>
+    <string name="menu_restore">Відновити з резервної копії</string>
     <string name="force_stop">Примусово зупинити</string>
     <string name="force_stop_dlg_title">Примусово зупинити?</string>
     <string name="force_stop_dlg_text">Примусове закриття додатку може призвести до збою в його роботі.</string>
@@ -154,8 +154,8 @@
     <!-- SettingsActivity -->
     <string name="settings_group_framework">Framework</string>
     <string name="pref_title_disable_verbose_log">Вимкнути детальні звіти</string>
-    <string name="pure_black_dark_theme">Чорна темна тема</string>
-    <string name="pure_black_dark_theme_summary">Використовувати чисту чорну тему, якщо темна тема включена</string>
+    <string name="pure_black_dark_theme">Чорна тема</string>
+    <string name="pure_black_dark_theme_summary">Використовувати повністю чорну тему, коли темну тему увімкнено</string>
     <string name="settings_group_theme">Тема</string>
     <string name="settings_backup_and_restore">Резервне копіювання і відновлення</string>
     <string name="settings_backup_summery">Резервне копіювання списку модулів та списків областей.</string>
@@ -163,7 +163,7 @@
     <string name="settings_backup">Створити резервну копію</string>
     <string name="settings_backup_failed2">Не вдалося створити резервну копію:\n%s</string>
     <string name="enable_documentui">Будь ласка, увімкніть DocumentUI</string>
-    <string name="settings_restore">Відновити</string>
+    <string name="settings_restore">Відновити з резервної копії</string>
     <string name="settings_restore_failed2">Не вдалося зберегти:\n%s</string>
     <string name="group_network">Мережа</string>
     <string name="dns_over_http">DNS поверх HTTPS</string>
@@ -171,21 +171,21 @@
     <string name="theme_color">Колір теми</string>
     <string name="theme_color_system">Колір акцентів системи</string>
     <string name="settings_show_hidden_icon_apps_enabled">Примусово показувати значки запуску</string>
-    <string name="settings_show_hidden_icon_apps_enabled_summary">Після Android 10 програмам не дозволяється приховувати свої іконки запуску. Вимкніть перемикач, щоб вимкнути цю системну функцію.</string>
+    <string name="settings_show_hidden_icon_apps_enabled_summary">Починаючи з Android 10, програмам не дозволяється приховувати свої значки запуску. Вимкніть перемикач, щоб вимкнути цю системну функцію.</string>
     <string name="settings_group_system">Система</string>
     <string name="settings_language">Мова</string>
     <string name="settings_translation_contributors">Автори перекладу</string>
     <string name="settings_translation">Допомогти з перекладом</string>
     <string name="settings_translation_summary">Доповнити український переклад %s</string>
     <string name="pref_title_enable_auto_add_shortcut">Автоматично додавати ярлик</string>
-    <string name="create_shortcut_summary">Вручну створити ярлик менеджера-паразита</string>
+    <string name="create_shortcut_summary">Вручну створити ярлик менеджера LSPosed</string>
     <string name="settings_enable_auto_add_shortcut_summary">Не можна додавати нові ярлики при вимкненні в менеджері без паразитів</string>
     <string name="settings_update_channel">Канал оновлень</string>
     <string name="update_channel_stable">Стабільний</string>
     <string name="update_channel_bate">Бета-версія</string>
     <string name="update_channel_nightly">Нічна збірка</string>
-    <string name="pref_title_restrict_classloader">Тільки модуль завантажувача класів може використовувати Xposed API</string>
-    <string name="pref_summary_restrict_classloader">Це може порушити роботу деяких модулів, але підвищити безпеку (експериментальна функція)</string>
+    <string name="pref_title_restrict_classloader">Тільки classloader модуля може використовувати Xposed API</string>
+    <string name="pref_summary_restrict_classloader">Може порушити роботу деяких модулів, але посилить безпеку (експериментальна функція)</string>
     <!-- Module Repo -->
     <string name="module_readme">Опис</string>
     <string name="module_releases">Релізи</string>
