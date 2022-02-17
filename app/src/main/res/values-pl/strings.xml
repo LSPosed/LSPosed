@@ -37,7 +37,7 @@
     <string name="module_repo_loading">Ładowanie…</string>
     <string name="module_repo_up_to_date">Wszystkie moduły są aktualne</string>
     <plurals name="module_repo_upgradable">
-        <item quantity="one">%d moduł unowocześnialny</item>
+        <item quantity="one">%d moduł możliwy do aktualizacji</item>
         <item quantity="few">%d moduły z możliwością aktualizacji</item>
         <item quantity="many">%d moduły z możliwością aktualizacji</item>
         <item quantity="other">możliwa aktualizacja %d modułów</item>
@@ -69,16 +69,16 @@
     <string name="parasitic_recommend">Rekomendowany menadżer Parasitic</string>
     <string name="parasitic_recommend_summary">LSPosed wspiera teraz pasożyty systemowe, aby uniknąć wykrycia. Możesz odinstalować menadżer po pomyśłnym utworzeniu skrótu w parastic manager. W każdym wypadku możesz zainstalować menadżer spowrotem z pliku /data/adb/lspd/manager.apk.</string>
     <string name="create_shortcut">Utwórz skrót</string>
-    <string name="never_show">Nigdy nie pokazuje</string>
+    <string name="never_show">Nigdy nie pokazuj</string>
     <string name="update_lsposed">Aktualizuj LSPosed</string>
-    <string name="update_lsposed_msg">Potwierdzić aktualizację LSPosed? To urządzenie uruchomi się ponownie po zakończeniu aktualizacji</string>
+    <string name="update_lsposed_msg">Czy chcesz zatwierdzić aktualizację LSPosed? Urządzenie zostanie uruchomione ponownie po zakończeniu aktualizacji</string>
     <!-- LogsActivity -->
     <string name="menuSaveToSd">Zapisz</string>
     <string name="nav_item_logs_verbose">Logi verbose</string>
     <string name="nav_item_logs_module">Logi modułów</string>
     <string name="logs_save_failed2">Nie udało się zapisać:\n%s</string>
     <string name="menuClearLog">Wyczyść log teraz</string>
-    <string name="logs_cleared">Logi pomyślnie wyczyszczone.</string>
+    <string name="logs_cleared">Logi zostały pomyślnie wyczyszczone.</string>
     <string name="scroll_top">Przewiń na górę</string>
     <string name="loading">Ładowanie…</string>
     <string name="scroll_bottom">Przewiń na dół</string>
@@ -90,7 +90,7 @@
     <string name="disabled_verbose_log">Logi verbose wyłączone</string>
     <!-- ModulesActivity -->
     <string name="module_empty_description">(nie podano opisu)</string>
-    <string name="warning_xposed_min_version">Ten moduł wymaga nowszej wersji Xposed (%d) i dlatego nie może być aktywowany</string>
+    <string name="warning_xposed_min_version">Ten moduł wymaga nowszej wersji Xposed (%d) przez co nie może być aktywowany</string>
     <string name="no_min_version_specified">Ten moduł nie określa wymaganej wersji Xposed.</string>
     <string name="warning_min_version_too_low">Ten moduł został utworzony dla Xposed w wersji %1$d, ale ze względu na niekompatybilne zmiany w wersji %2$d, został wyłączony</string>
     <string name="warning_installed_on_external_storage">Ten moduł nie może być załadowany, ponieważ jest zainstalowany na karcie SD, przenieś go do pamięci wewnętrznej</string>
@@ -111,7 +111,7 @@
     <string name="compile_speed">Ponownie zoptymalizuj</string>
     <string name="compile_speed_msg">Optymalizowanie…</string>
     <string name="compile_done">Optymalizacja zakończona</string>
-    <string name="app_launch">Uruchom to</string>
+    <string name="app_launch">Uruchom</string>
     <string name="compile_failed">Optymalizacja nie powiodła się: zwrócona wartość jest pusta</string>
     <string name="compile_failed_with_info">Optymalizacja nie powiodła się: </string>
     <string name="sort_by_name">Nazwa aplikacji</string>
@@ -125,7 +125,7 @@
     <string name="no_scope_selected">Nie wybrałeś żadnej aplikacji. Kontynuować?</string>
     <string name="menu_show_games">Gry</string>
     <string name="menu_show_modules">Moduły</string>
-    <string name="menu_show_denylist">Zabroniona lista</string>
+    <string name="menu_show_denylist">Lista zabronionych</string>
     <string name="failed_to_save_scope_list">Nie udało się zapisać listy zakresu</string>
     <string name="app_description">%1$s\nWersja %2$s</string>
     <string name="use_recommended">Rekomendowane</string>
@@ -145,7 +145,7 @@
     <string name="reboot_required">Restart jest wymagany aby ta zmiana została zastosowana</string>
     <string name="reboot">Restart</string>
     <string name="menu_hide">Ukryj</string>
-    <string name="deny_list">%s jest na mojej liście zablokowanych. Może nie odnieść skutku.</string>
+    <string name="deny_list">%s jest na liście zablokowanych. Może nie odnieść skutku.</string>
     <string name="deny_list_info">Na zablokowanej liście</string>
     <!-- ModulesActivity and AppListActivity -->
     <string name="modules_other_app">Wyświetl w innej aplikacji</string>
@@ -180,17 +180,17 @@
     <string name="pref_title_enable_auto_add_shortcut">Automatycznie dodaj skrót</string>
     <string name="create_shortcut_summary">Ręcznie utwórz skrót do menedżera pasożytów</string>
     <string name="settings_enable_auto_add_shortcut_summary">Nie zostaną dodane żadne nowe skróty, jeśli są wyłączone w menedżerze niepasożytniczym.</string>
-    <string name="settings_update_channel">Zaktualizuj kanał</string>
+    <string name="settings_update_channel">Kanał aktualizacji</string>
     <string name="update_channel_stable">Stabilny</string>
     <string name="update_channel_bate">Beta</string>
-    <string name="update_channel_nightly">Wersja nightly</string>
+    <string name="update_channel_nightly">Wersja nocna</string>
     <string name="pref_title_restrict_classloader">Tylko moduł classloader może korzystać z Xposed API</string>
     <string name="pref_summary_restrict_classloader">Może to złamać niektóre moduły, ale przyniesie korzyści dla bezpieczeństwa (funkcja eksperymentalna)</string>
     <!-- Module Repo -->
-    <string name="module_readme">Przeczytaj</string>
+    <string name="module_readme">Readme</string>
     <string name="module_releases">Wersje</string>
     <string name="module_information">Informacje</string>
-    <string name="module_information_homepage">Strona domowa</string>
+    <string name="module_information_homepage">Strona główna</string>
     <string name="module_information_source_url">Kod źródłowy</string>
     <string name="module_information_collaborators">Współtwórcy</string>
     <string name="module_release_view_assets">Assety</string>

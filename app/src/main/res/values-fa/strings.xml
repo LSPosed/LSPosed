@@ -26,16 +26,16 @@
         <item quantity="one">%d ماژول فعال شده</item>
         <item quantity="other">%d ماژول فعال شده</item>
     </plurals>
-    <string name="Logs">گزارشات</string>
+    <string name="Logs">گزارش‌ها</string>
     <string name="Settings">تنظیمات</string>
-    <string name="feedback_or_suggestion">نظر یا پیشنهادی بدهید</string>
-    <string name="About">درباره</string>
-    <string name="report_issue">گزارش مشکل</string>
-    <string name="module_repo">ماژول ها</string>
-    <string name="module_repo_loading">در حال بارگذاری…</string>
-    <string name="module_repo_up_to_date">تمامی ماژول ها به روز هستند</string>
+    <string name="feedback_or_suggestion">بازخورد یا پیشنهادی بدهید</string>
+    <string name="About">دەربارە</string>
+    <string name="report_issue">ڕیپۆرتی کێشە</string>
+    <string name="module_repo">ماژولەکان</string>
+    <string name="module_repo_loading">داگرتن …</string>
+    <string name="module_repo_up_to_date">هەموو ماژۆلەکان ئەپدەیت کرانەوە</string>
     <plurals name="module_repo_upgradable">
-        <item quantity="one">%d قابل بروز شدن هستند</item>
+        <item quantity="one">%d ئەوەندە ئەپدەیت دەکرێنەوە </item>
         <item quantity="other">%d قابل بروز شدن هستند</item>
     </plurals>
     <string name="about_view_source_code"><![CDATA[کد منبع موجود در %1$s<br/> عضو شوید در %2$s کانال ما]]></string>

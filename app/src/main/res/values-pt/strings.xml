@@ -19,12 +19,12 @@
   -->
 <resources xmlns:tools="http://schemas.android.com/tools" tools:keep="@string/xposed_module_updated_notification_*,@string/module_is_not_activated_*">
     <!-- MainActivity -->
-    <string name="info">Info</string>
+    <string name="info">Informações</string>
     <string name="overview">Visão geral</string>
     <string name="Modules">Módulos</string>
     <plurals name="modules_enabled_count">
-        <item quantity="one">%d módulos ativados</item>
-        <item quantity="other">%d módulos ativados</item>
+        <item quantity="one">%d módulo ativado</item>
+        <item quantity="other">%d módulo ativado</item>
     </plurals>
     <string name="Logs">Registros</string>
     <string name="Settings">Configurações</string>
@@ -33,12 +33,12 @@
     <string name="report_issue">Reportar problema</string>
     <string name="module_repo">Repositório</string>
     <string name="module_repo_loading">Carregando…</string>
-    <string name="module_repo_up_to_date">Todos os módulos atualizados</string>
+    <string name="module_repo_up_to_date">Todos os módulos estão atualizados</string>
     <plurals name="module_repo_upgradable">
-        <item quantity="one">%d módulo atualizado</item>
-        <item quantity="other">%d módulos atualizados</item>
+        <item quantity="one">%d módulo atualizável</item>
+        <item quantity="other">%d módulos atualizáveis</item>
     </plurals>
-    <string name="about_view_source_code"><![CDATA[Ver código fonte em %1$s<br/>Entre no nosso canal %2$s]]></string>
+    <string name="about_view_source_code"><![CDATA[Veja o código fonte em %1$s<br/>Junte-se ao nosso %2$s canal]]></string>
     <string name="translators" comment="Dear translators, please add your home page here following the format. There can be more than one translator. So feel free to append yourself."><a href="https://github.com/PedriR19">PedriR19</a></string>
     <string name="install">Instalar</string>
     <string name="install_summary">Toque para instalar LSPosed</string>
@@ -50,7 +50,7 @@
     <string name="selinux_policy_not_loaded"><![CDATA[Módulos que injetam no Sistema Android não irão funcionar.<br/>Por favor reporte isso ao desenvolvedor do <a href="https://github.com/topjohnwu/Magisk/issues"><b>Magisk</b></a>]]></string>
     <string name="system_inject_fail_summary">Injeção no Sistema Android falhou</string>
     <string name="system_inject_fail"><![CDATA[Isto é raro e pode ser causado pelo <b>Magisk</b> ou módulos Magisk de baixa qualidade.<br/>Por favor, tente desativar alguns módulos Magisk exceto Riru e LSPosed ou envie os registros completos aos desenvolvedores.]]></string>
-    <string name="system_prop_incorrect_summary">Propriedade de sistema incorreta</string>
+    <string name="system_prop_incorrect_summary">Prop do sistema incorreto</string>
     <string name="system_prop_incorrect"><![CDATA[Algumas propriedades do sistema necessárias foram apagadas ou modificadas.<br/>Módulos podem falhar ocasionalmente.]]></string>
     <string name="need_update">Atualização necessária</string>
     <string name="please_update_summary">Por favor instale a versão mais recente do LSPosed</string>
@@ -63,7 +63,7 @@
     <string name="info_system_abi">ABI do sistema</string>
     <string name="info_api">Interface de Injeção</string>
     <string name="parasitic_recommend">Recomendado um Gerenciador de Parasita</string>
-    <string name="parasitic_recommend_summary">LSPosed agora suporta a parasitização do sistema para evitar a detecção. Você pode desinstalar o gerenciador em segurança depois de criar com sucesso um atalho do gerenciador parasita. Em qualquer caso, você pode instalar o gerenciador a partir de /data/adb/lspd/manager.apk.</string>
+    <string name="parasitic_recommend_summary">LSPosed agora suporta a parasitização do sistema para evitar a detecção. Você pode desinstalar o gerenciador depois de criar com sucesso um atalho do gerenciador parasita. Em qualquer caso, você pode instalar o gerenciador a partir de /data/adb/lspd/manager.apk.</string>
     <string name="create_shortcut">Criar atalho</string>
     <string name="never_show">Nunca exibir</string>
     <string name="update_lsposed">Atualizar LSPosed</string>
@@ -86,7 +86,7 @@
     <string name="disabled_verbose_log">Registro detalhado desativado</string>
     <!-- ModulesActivity -->
     <string name="module_empty_description">(nenhuma descrição fornecida)</string>
-    <string name="warning_xposed_min_version">Esse módulo necessita de uma versão mais recente do Xposed (%d) e, portanto, não pode ser ativado</string>
+    <string name="warning_xposed_min_version">Esse módulo necessita de uma versão mais recente do Xposed (%d) e portanto não pode ser ativado</string>
     <string name="no_min_version_specified">Este módulo não especifica a versão do Xposed de que precisa.</string>
     <string name="warning_min_version_too_low">Este módulo foi feito para a versão %1$ddo do Xposed, mas devido as alterações incompatíveis na versão %2$d, foi desativado</string>
     <string name="warning_installed_on_external_storage">Este módulo não pôde ser carregado porque está instalado no cartão SD, por favor, mova-o para o armazenamento interno</string>
