@@ -182,7 +182,7 @@ https://github.com/tclement0922</string>
     <string name="update_channel_bate">Bêta</string>
     <string name="update_channel_nightly">Version alpha</string>
     <string name="pref_title_restrict_classloader">Seul le module classloader peut utiliser l\'API Xposed</string>
-    <string name="pref_summary_restrict_classloader">Ceci pourrait casser certains modules mais être bénéfique à la sécurité (fonction expérimental)</string>
+    <string name="pref_summary_restrict_classloader">Ceci pourrait casser certains modules mais être bénéfique à la sécurité (fonction expérimentale)</string>
     <!-- Module Repo -->
     <string name="module_readme">Lisez-moi</string>
     <string name="module_releases">Versions</string>
