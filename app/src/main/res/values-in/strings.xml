@@ -20,7 +20,7 @@
 <resources xmlns:tools="http://schemas.android.com/tools" tools:keep="@string/xposed_module_updated_notification_*,@string/module_is_not_activated_*">
     <!-- MainActivity -->
     <string name="info">Informasi</string>
-    <string name="overview">Gambar Luas</string>
+    <string name="overview">Ringkasan</string>
     <string name="Modules">Modul</string>
     <plurals name="modules_enabled_count">
         <item quantity="other">%d modul diaktifkan</item>
@@ -37,7 +37,7 @@
         <item quantity="other">%d modul dapat ditingkatkan</item>
     </plurals>
     <string name="about_view_source_code"><![CDATA[Lihat kode sumber di %1$s<br/>Gabung dengan kami di saluran %2$s]]></string>
-    <string name="translators" comment="Dear translators, please add your home page here following the format. There can be more than one translator. So feel free to append yourself.">Stillhard</string>
+    <string name="translators" comment="Dear translators, please add your home page here following the format. There can be more than one translator. So feel free to append yourself.">nihil</string>
     <string name="install">Pasang</string>
     <string name="install_summary">Ketuk untuk memasang LSPosed</string>
     <string name="not_installed">Tidak terpasang</string>
@@ -59,17 +59,17 @@
     <string name="info_system_version">Versi sistem</string>
     <string name="info_device">Perangkat</string>
     <string name="info_system_abi">Sistem ABI</string>
-    <string name="info_api">Tatap muka injeksi</string>
+    <string name="info_api">Antarmuka Injeksi</string>
     <string name="parasitic_recommend">Manajer Parasit Direkomendasikan</string>
     <string name="parasitic_recommend_summary">LSPosed sekarang mendukung parasitisasi sistem untuk menghindari deteksi. Anda dapat menghapus instalan manajer dengan aman setelah berhasil membuat pintasan manajer parasit. Bagaimanapun, Anda dapat menginstal kembali manajer dari /data/adb/lspd/manager.apk.</string>
     <string name="create_shortcut">Buat pintasan</string>
-    <string name="never_show">Jangan pernah ditampilkan</string>
-    <string name="update_lsposed">Perbaharui LSPosed</string>
+    <string name="never_show">Jangan tampilkan</string>
+    <string name="update_lsposed">Perbarui LSPosed</string>
     <string name="update_lsposed_msg">Konfirmasi untuk pembaharuan LSPosed? Perangkat ini akan mulai ulang setelah pembaharuan selesai</string>
     <!-- LogsActivity -->
     <string name="menuSaveToSd">Simpan</string>
     <string name="nav_item_logs_verbose">Log Verbose</string>
-    <string name="nav_item_logs_module">Log modul</string>
+    <string name="nav_item_logs_module">Log Modul</string>
     <string name="logs_save_failed2">Gagal menyimpan:\n%s</string>
     <string name="menuClearLog">Hapus log sekarang</string>
     <string name="logs_cleared">Log berhasil dihapus.</string>
@@ -99,18 +99,18 @@
     <string name="module_install_failed">Gagal menambahkan modul</string>
     <string name="install_to_user">Pasang ke pengguna %s</string>
     <string name="install_to_user_message">Ingin memasang %1$s ke pengguna %2$s? Disarankan untuk menginstal secara manual, memaksa instalasi melalui LSPosed dapat menyebabkan masalah.</string>
-    <string name="expand">rentangkan</string>
-    <string name="collapse">sedikitkan</string>
+    <string name="expand">perjelas</string>
+    <string name="collapse">sembunyikan</string>
     <!-- AppListActivity -->
     <string name="compile_speed">Mengoptimalkan ulang</string>
     <string name="compile_speed_msg">Mengoptimalkan…</string>
-    <string name="compile_done">Pengoptimalan selesai</string>
+    <string name="compile_done">Optimisasi selesai</string>
     <string name="app_launch">Luncurkan</string>
-    <string name="compile_failed">Pengoptimalan gagal: nilai kembalian kosong</string>
-    <string name="compile_failed_with_info">Pengoptimalan gagal: </string>
+    <string name="compile_failed">Optimasi gagal: hasil yang dikembalikan kosong</string>
+    <string name="compile_failed_with_info">Optimasi gagal: </string>
     <string name="sort_by_name">Nama aplikasi</string>
     <string name="sort_by_package_name">Nama paket</string>
-    <string name="sort_by_install_time">Tanggal pemasangan</string>
+    <string name="sort_by_install_time">Waktu pemasangan</string>
     <string name="sort_by_update_time">Waktu pembaruan</string>
     <string name="sort_reverse">Membalikkan</string>
     <string name="menu_show_system_apps">Aplikasi sistem</string>
@@ -160,7 +160,7 @@
     <string name="settings_restore">Pulihkan</string>
     <string name="settings_restore_failed2">Gagal memulihkan:\n%s</string>
     <string name="group_network">Jaringan</string>
-    <string name="dns_over_http">DNS over HTTPS</string>
+    <string name="dns_over_http">DNS melalui HTTPS</string>
     <string name="dns_over_http_summary">Mengatasi peracunan DNS di beberapa negara</string>
     <string name="theme_color">Warna tema</string>
     <string name="theme_color_system">Warna aksen sistem</string>
@@ -178,8 +178,8 @@
     <string name="update_channel_stable">Stabil</string>
     <string name="update_channel_bate">Beta</string>
     <string name="update_channel_nightly">Rilis harian</string>
-    <string name="pref_title_restrict_classloader">Hanya modul classloader yang dapat menggunakan Xposed API</string>
-    <string name="pref_summary_restrict_classloader">Ini mungkin merusak beberapa modul tetapi menguntungkan keamanan (fitur eksperimental)</string>
+    <string name="pref_title_restrict_classloader">Hanya modul classloader yang dapat menggunakan API Xposed</string>
+    <string name="pref_summary_restrict_classloader">Ini mungkin merusak beberapa modul tetapi bermanfaat bagi keamanan (fitur percobaan)</string>
     <!-- Module Repo -->
     <string name="module_readme">Baca aku</string>
     <string name="module_releases">Rilis</string>
@@ -190,7 +190,7 @@
     <string name="module_release_view_assets">Aset</string>
     <string name="menu_open_in_browser">Buka di pramban</string>
     <string name="refresh">Segarkan</string>
-    <string name="module_release_load_more">Tampilan versi lama</string>
+    <string name="module_release_load_more">Tampilkan versi lama</string>
     <string name="module_release_no_more">Tidak ada rilis</string>
     <string name="repo_load_failed">Gagal memuat repo modul: %s</string>
     <string name="sort_upgradable_first">Dapat diupgrade terlebih dahulu</string>
@@ -200,7 +200,7 @@
     <string name="manager_crashed_info">laporkan ini kepada </string>
     <string name="send_crash_info">Kirim info kerusakan</string>
     <string name="crash_info_copied">Info kerusakan disalin ke papan klip</string>
-    <string name="info_copied">Sudah Tersalin ke Papan Clip</string>
+    <string name="info_copied">Disalin ke papan klip</string>
     <!-- Colors -->
     <string name="color_sakura">Sakura</string>
     <string name="color_red">Merah</string>
@@ -209,14 +209,14 @@
     <string name="color_deep_purple">Ungu gelap</string>
     <string name="color_indigo">Biru gelap</string>
     <string name="color_blue">Biru</string>
-    <string name="color_light_blue">Biru terang</string>
+    <string name="color_light_blue">Biru muda</string>
     <string name="color_cyan">Cyan</string>
     <string name="color_teal">Hijau toska</string>
     <string name="color_green">Hijau</string>
-    <string name="color_light_green">Hijau terang</string>
+    <string name="color_light_green">Hijau muda</string>
     <string name="color_lime">Hijau limau</string>
     <string name="color_yellow">Kuning</string>
-    <string name="color_amber">Amber</string>
+    <string name="color_amber">Kuning madu</string>
     <string name="color_orange">Oranye</string>
     <string name="color_deep_orange">Oranye gelap</string>
     <string name="color_brown">Coklat</string>
