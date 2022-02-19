@@ -169,7 +169,7 @@
     <string name="dns_over_http">DNS поверх HTTPS</string>
     <string name="dns_over_http_summary">Вирішення проблем із погіршенням DNS у деяких країнах</string>
     <string name="theme_color">Колір теми</string>
-    <string name="theme_color_system">Колір акцентів системи</string>
+    <string name="theme_color_system">Системний колір акценту</string>
     <string name="settings_show_hidden_icon_apps_enabled">Примусово показувати значки запуску</string>
     <string name="settings_show_hidden_icon_apps_enabled_summary">Починаючи з Android 10, програмам не дозволяється приховувати свої значки запуску. Вимкніть перемикач, щоб вимкнути цю системну функцію.</string>
     <string name="settings_group_system">Система</string>
@@ -179,7 +179,7 @@
     <string name="settings_translation_summary">Доповнити український переклад %s</string>
     <string name="pref_title_enable_auto_add_shortcut">Автоматично додавати ярлик</string>
     <string name="create_shortcut_summary">Вручну створити ярлик менеджера LSPosed</string>
-    <string name="settings_enable_auto_add_shortcut_summary">Не можна додавати нові ярлики при вимкненні в менеджері без паразитів</string>
+    <string name="settings_enable_auto_add_shortcut_summary">Новий ярлик LSPosed не буде додаватися автоматично, якщо цю опцію вимкнено</string>
     <string name="settings_update_channel">Канал оновлень</string>
     <string name="update_channel_stable">Стабільний</string>
     <string name="update_channel_bate">Бета-версія</string>
