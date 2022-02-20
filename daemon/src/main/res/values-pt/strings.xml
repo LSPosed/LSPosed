@@ -1,10 +1,10 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
     <!-- Notification -->
-    <string name="module_is_not_activated_yet">O módulo Xposed ainda não foi ativado</string>
-    <string name="module_is_not_activated_yet_detailed">O %s foi instalado, mas ainda não está ativado</string>
-    <string name="xposed_module_updated_notification_title">Módulo Xposed Atualizado</string>
-    <string name="xposed_module_updated_notification_content">%s foi atualizado, por favor, force a parada e reinicie os aplicativos em seu escopo</string>
-    <string name="xposed_module_updated_notification_title_system">Módulo Xposed atualizado, reinicialização do sistema necessária</string>
-    <string name="xposed_module_updated_notification_content_system">%s foi atualizado, uma vez que o escopo contém a Estrutura do Sistema, necessário reiniciar para aplicar as alterações</string>
+    <string name="module_is_not_activated_yet">O módulo ainda não está ativo</string>
+    <string name="module_is_not_activated_yet_detailed">%s foi instalado. Mas, ainda falta ativar</string>
+    <string name="xposed_module_updated_notification_title">Módulo Atualizado</string>
+    <string name="xposed_module_updated_notification_content">%s foi atualizado. Force parada do módulo e reinicie os apps que estão em seu escopo</string>
+    <string name="xposed_module_updated_notification_title_system">Módulo Atualizado. É necessário reiniciar o sistema</string>
+    <string name="xposed_module_updated_notification_content_system">%s foi atualizado. Como o escopo contém o Framework do Sistema, é necessário reiniciar para aplicar as mudanças</string>
 </resources>
