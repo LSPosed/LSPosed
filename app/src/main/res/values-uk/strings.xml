@@ -30,7 +30,7 @@
     </plurals>
     <string name="Logs">Звіти</string>
     <string name="Settings">Налаштування</string>
-    <string name="feedback_or_suggestion">Відгук або пропозиція</string>
+    <string name="feedback_or_suggestion">Зворотний зв\'язок</string>
     <string name="About">Про модифікацію</string>
     <string name="report_issue">Повідомити про проблему</string>
     <string name="module_repo">Репозиторій</string>
@@ -62,12 +62,12 @@
     <string name="info_api_version">Версія API</string>
     <string name="info_framework_version">Версія Framework</string>
     <string name="info_manager_version">Версія менеджера</string>
-    <string name="info_system_version">Версія системи</string>
+    <string name="info_system_version">Версія Android</string>
     <string name="info_device">Пристрій</string>
-    <string name="info_system_abi">ABI системи</string>
+    <string name="info_system_abi">Розрядність процесора</string>
     <string name="info_api">Метод ін\'єкції</string>
     <string name="parasitic_recommend">Рекомендується менеджер-паразит</string>
-    <string name="parasitic_recommend_summary">LSPosed тепер підтримує системний паразитизм, щоб уникнути виявлення. Ви можете безпечно видалити менеджер після успішного створення ярлика менеджера-паразита. У будь-якому випадку ви можете встановити менеджер назад з /data/adb/lspd/manager.apk.</string>
+    <string name="parasitic_recommend_summary">LSPosed тепер підтримує системний паразитизм, щоб уникнути виявлення. Ви можете безпечно видалити менеджер після успішного створення ярлика менеджера-паразита. У разі необхідності ви можете встановити менеджер назад з /data/adb/lspd/manager.apk.</string>
     <string name="create_shortcut">Створити ярлик</string>
     <string name="never_show">Ніколи не показувати</string>
     <string name="update_lsposed">Оновити LSPosed</string>
@@ -157,9 +157,9 @@
     <string name="pure_black_dark_theme">Чорна тема</string>
     <string name="pure_black_dark_theme_summary">Використовувати повністю чорну тему, коли темну тему увімкнено</string>
     <string name="settings_group_theme">Тема</string>
-    <string name="settings_backup_and_restore">Резервне копіювання і відновлення</string>
-    <string name="settings_backup_summery">Резервне копіювання списку модулів та списків областей.</string>
-    <string name="settings_restore_summery">Відновлення списку модулів та списків областей.</string>
+    <string name="settings_backup_and_restore">Резервне копіювання та відновлення</string>
+    <string name="settings_backup_summery">Зберегти список увімкнених модулів та їхніх програм-жертв</string>
+    <string name="settings_restore_summery">Відновити список увімкнених модулів та їхніх програм-жертв</string>
     <string name="settings_backup">Створити резервну копію</string>
     <string name="settings_backup_failed2">Не вдалося створити резервну копію:\n%s</string>
     <string name="enable_documentui">Будь ласка, увімкніть DocumentUI</string>
@@ -168,7 +168,7 @@
     <string name="group_network">Мережа</string>
     <string name="dns_over_http">DNS поверх HTTPS</string>
     <string name="dns_over_http_summary">Вирішення проблем із погіршенням DNS у деяких країнах</string>
-    <string name="theme_color">Колір теми</string>
+    <string name="theme_color">Колір акценту</string>
     <string name="theme_color_system">Системний колір акценту</string>
     <string name="settings_show_hidden_icon_apps_enabled">Примусово показувати значки запуску</string>
     <string name="settings_show_hidden_icon_apps_enabled_summary">Починаючи з Android 10, програмам не дозволяється приховувати свої значки запуску. Вимкніть перемикач, щоб вимкнути цю системну функцію.</string>
