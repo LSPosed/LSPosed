@@ -23,11 +23,13 @@ package de.robv.android.xposed;
 import android.content.res.AssetManager;
 import android.content.res.Resources;
 
+import androidx.annotation.NonNull;
+import androidx.annotation.Nullable;
+
 import org.apache.commons.lang3.ClassUtils;
 import org.apache.commons.lang3.reflect.MemberUtilsX;
 
 import java.io.ByteArrayOutputStream;
-import java.io.Closeable;
 import java.io.FileInputStream;
 import java.io.IOException;
 import java.io.InputStream;
@@ -40,10 +42,13 @@ import java.lang.reflect.Modifier;
 import java.math.BigInteger;
 import java.security.MessageDigest;
 import java.security.NoSuchAlgorithmException;
+import java.util.Arrays;
 import java.util.HashMap;
 import java.util.LinkedList;
 import java.util.List;
+import java.util.Objects;
 import java.util.WeakHashMap;
+import java.util.concurrent.ConcurrentHashMap;
 import java.util.concurrent.atomic.AtomicInteger;
 
 /**
@@ -53,11 +58,134 @@ public final class XposedHelpers {
     private XposedHelpers() {
     }
 
-    private static final HashMap<String, Field> fieldCache = new HashMap<>();
-    private static final HashMap<String, Method> methodCache = new HashMap<>();
-    private static final HashMap<String, Constructor<?>> constructorCache = new HashMap<>();
+    private static final ConcurrentHashMap<MemberCacheKey.Field, Field> fieldCache = new ConcurrentHashMap<>();
+    private static final ConcurrentHashMap<MemberCacheKey.Method, Method> methodCache = new ConcurrentHashMap<>();
+    private static final ConcurrentHashMap<MemberCacheKey.Constructor, Constructor<?>> constructorCache = new ConcurrentHashMap<>();
     private static final WeakHashMap<Object, HashMap<String, Object>> additionalFields = new WeakHashMap<>();
     private static final HashMap<String, ThreadLocal<AtomicInteger>> sMethodDepth = new HashMap<>();
+
+    /**
+     * Note that we use object key instead of string here, because string calculation will lose all
+     * the benefits of 'HashMap', this is basically the solution of performance traps.
+     * <p>
+     * So in fact we only need to use the structural comparison results of the reflection object.
+     *
+     * @see <a href="https://github.com/meowool-catnip/cloak/blob/main/api/src/benchmark/kotlin/com/meowool/cloak/ReflectionObjectAccessTests.kt#L37-L65https://github.com/meowool-catnip/cloak/blob/main/api/src/benchmark/kotlin/com/meowool/cloak/ReflectionObjectAccessTests.kt#L37-L65">benchmark</a>
+     */
+    private abstract static class MemberCacheKey {
+        @Override
+        public abstract boolean equals(@Nullable Object obj);
+
+        @Override
+        public abstract int hashCode();
+
+        static final class Constructor extends MemberCacheKey {
+            private final Class<?> clazz;
+            private final Class<?>[] parameters;
+            private final boolean isExact;
+
+            public Constructor(Class<?> clazz, Class<?>[] parameters, boolean isExact) {
+                this.clazz = clazz;
+                this.parameters = parameters;
+                this.isExact = isExact;
+            }
+
+            @Override
+            public boolean equals(Object o) {
+                if (this == o) return true;
+                if (o == null || getClass() != o.getClass()) return false;
+                Constructor that = (Constructor) o;
+                return isExact == that.isExact && Objects.equals(clazz, that.clazz) && Arrays.equals(parameters, that.parameters);
+            }
+
+            @Override
+            public int hashCode() {
+                int result = Objects.hash(clazz, isExact);
+                result = 31 * result + Arrays.hashCode(parameters);
+                return result;
+            }
+
+            @NonNull
+            @Override
+            public String toString() {
+                var str = clazz.getName() + getParametersString(parameters);
+                if (isExact) {
+                    return str + "#exact";
+                } else {
+                    return str;
+                }
+            }
+        }
+
+        static final class Field extends MemberCacheKey {
+            private final Class<?> clazz;
+            private final String name;
+
+            public Field(Class<?> clazz, String name) {
+                this.clazz = clazz;
+                this.name = name;
+            }
+
+            @Override
+            public boolean equals(Object o) {
+                if (this == o) return true;
+                if (o == null || getClass() != o.getClass()) return false;
+                Field field = (Field) o;
+                return Objects.equals(clazz, field.clazz) && Objects.equals(name, field.name);
+            }
+
+            @Override
+            public int hashCode() {
+                return Objects.hash(clazz, name);
+            }
+
+            @NonNull
+            @Override
+            public String toString() {
+                return clazz.getName() + "#" + name;
+            }
+        }
+
+        static final class Method extends MemberCacheKey {
+            private final Class<?> clazz;
+            private final String name;
+            private final Class<?>[] parameters;
+            private final boolean isExact;
+
+            public Method(Class<?> clazz, String name, Class<?>[] parameters, boolean isExact) {
+                this.clazz = clazz;
+                this.name = name;
+                this.parameters = parameters;
+                this.isExact = isExact;
+            }
+
+            @Override
+            public boolean equals(Object o) {
+                if (this == o) return true;
+                if (o == null || getClass() != o.getClass()) return false;
+                Method method = (Method) o;
+                return isExact == method.isExact && Objects.equals(clazz, method.clazz) && Objects.equals(name, method.name) && Arrays.equals(parameters, method.parameters);
+            }
+
+            @Override
+            public int hashCode() {
+                int result = Objects.hash(clazz, name, isExact);
+                result = 31 * result + Arrays.hashCode(parameters);
+                return result;
+            }
+
+            @NonNull
+            @Override
+            public String toString() {
+                var str = clazz.getName() + '#' + name + getParametersString(parameters);
+                if (isExact) {
+                    return str + "#exact";
+                } else {
+                    return str;
+                }
+            }
+        }
+    }
 
     /**
      * Look up a class with the specified class loader.
@@ -111,23 +239,23 @@ public final class XposedHelpers {
      * @throws NoSuchFieldError In case the field was not found.
      */
     public static Field findField(Class<?> clazz, String fieldName) {
-        String fullFieldName = clazz.getName() + '#' + fieldName;
+        var fieldKey = new MemberCacheKey.Field(clazz, fieldName);
 
-        if (fieldCache.containsKey(fullFieldName)) {
-            Field field = fieldCache.get(fullFieldName);
+        if (fieldCache.containsKey(fieldKey)) {
+            Field field = fieldCache.get(fieldKey);
             if (field == null)
-                throw new NoSuchFieldError(fullFieldName);
+                throw new NoSuchFieldError(fieldKey.toString());
             return field;
         }
 
         try {
             Field field = findFieldRecursiveImpl(clazz, fieldName);
             field.setAccessible(true);
-            fieldCache.put(fullFieldName, field);
+            fieldCache.put(fieldKey, field);
             return field;
         } catch (NoSuchFieldException e) {
-            fieldCache.put(fullFieldName, null);
-            throw new NoSuchFieldError(fullFieldName);
+            fieldCache.put(fieldKey, null);
+            throw new NoSuchFieldError(fieldKey.toString());
         }
     }
 
@@ -340,23 +468,23 @@ public final class XposedHelpers {
      * <p>This variant requires that you already have reference to all the parameter types.
      */
     public static Method findMethodExact(Class<?> clazz, String methodName, Class<?>... parameterTypes) {
-        String fullMethodName = clazz.getName() + '#' + methodName + getParametersString(parameterTypes) + "#exact";
+        var key = new MemberCacheKey.Method(clazz, methodName, parameterTypes, true);
 
-        if (methodCache.containsKey(fullMethodName)) {
-            Method method = methodCache.get(fullMethodName);
+        if (methodCache.containsKey(key)) {
+            Method method = methodCache.get(key);
             if (method == null)
-                throw new NoSuchMethodError(fullMethodName);
+                throw new NoSuchMethodError(key.toString());
             return method;
         }
 
         try {
             Method method = clazz.getDeclaredMethod(methodName, parameterTypes);
             method.setAccessible(true);
-            methodCache.put(fullMethodName, method);
+            methodCache.put(key, method);
             return method;
         } catch (NoSuchMethodException e) {
-            methodCache.put(fullMethodName, null);
-            throw new NoSuchMethodError(fullMethodName);
+            methodCache.put(key, null);
+            throw new NoSuchMethodError(key.toString());
         }
     }
 
@@ -412,18 +540,18 @@ public final class XposedHelpers {
      * @throws NoSuchMethodError In case no suitable method was found.
      */
     public static Method findMethodBestMatch(Class<?> clazz, String methodName, Class<?>... parameterTypes) {
-        String fullMethodName = clazz.getName() + '#' + methodName + getParametersString(parameterTypes) + "#bestmatch";
+        var key = new MemberCacheKey.Method(clazz, methodName, parameterTypes, false);
 
-        if (methodCache.containsKey(fullMethodName)) {
-            Method method = methodCache.get(fullMethodName);
+        if (methodCache.containsKey(key)) {
+            Method method = methodCache.get(key);
             if (method == null)
-                throw new NoSuchMethodError(fullMethodName);
+                throw new NoSuchMethodError(key.toString());
             return method;
         }
 
         try {
             Method method = findMethodExact(clazz, methodName, parameterTypes);
-            methodCache.put(fullMethodName, method);
+            methodCache.put(key, method);
             return method;
         } catch (NoSuchMethodError ignored) {
         }
@@ -453,11 +581,11 @@ public final class XposedHelpers {
 
         if (bestMatch != null) {
             bestMatch.setAccessible(true);
-            methodCache.put(fullMethodName, bestMatch);
+            methodCache.put(key, bestMatch);
             return bestMatch;
         } else {
-            NoSuchMethodError e = new NoSuchMethodError(fullMethodName);
-            methodCache.put(fullMethodName, null);
+            NoSuchMethodError e = new NoSuchMethodError(key.toString());
+            methodCache.put(key, null);
             throw e;
         }
     }
@@ -605,23 +733,23 @@ public final class XposedHelpers {
      * See {@link #findMethodExact(String, ClassLoader, String, Object...)} for details.
      */
     public static Constructor<?> findConstructorExact(Class<?> clazz, Class<?>... parameterTypes) {
-        String fullConstructorName = clazz.getName() + getParametersString(parameterTypes) + "#exact";
+        var key = new MemberCacheKey.Constructor(clazz, parameterTypes, true);
 
-        if (constructorCache.containsKey(fullConstructorName)) {
-            Constructor<?> constructor = constructorCache.get(fullConstructorName);
+        if (constructorCache.containsKey(key)) {
+            Constructor<?> constructor = constructorCache.get(key);
             if (constructor == null)
-                throw new NoSuchMethodError(fullConstructorName);
+                throw new NoSuchMethodError(key.toString());
             return constructor;
         }
 
         try {
             Constructor<?> constructor = clazz.getDeclaredConstructor(parameterTypes);
             constructor.setAccessible(true);
-            constructorCache.put(fullConstructorName, constructor);
+            constructorCache.put(key, constructor);
             return constructor;
         } catch (NoSuchMethodException e) {
-            constructorCache.put(fullConstructorName, null);
-            throw new NoSuchMethodError(fullConstructorName);
+            constructorCache.put(key, null);
+            throw new NoSuchMethodError(key.toString());
         }
     }
 
@@ -653,18 +781,18 @@ public final class XposedHelpers {
      * <p>See {@link #findMethodBestMatch(Class, String, Class...)} for details.
      */
     public static Constructor<?> findConstructorBestMatch(Class<?> clazz, Class<?>... parameterTypes) {
-        String fullConstructorName = clazz.getName() + getParametersString(parameterTypes) + "#bestmatch";
+        var key = new MemberCacheKey.Constructor(clazz, parameterTypes, false);
 
-        if (constructorCache.containsKey(fullConstructorName)) {
-            Constructor<?> constructor = constructorCache.get(fullConstructorName);
+        if (constructorCache.containsKey(key)) {
+            Constructor<?> constructor = constructorCache.get(key);
             if (constructor == null)
-                throw new NoSuchMethodError(fullConstructorName);
+                throw new NoSuchMethodError(key.toString());
             return constructor;
         }
 
         try {
             Constructor<?> constructor = findConstructorExact(clazz, parameterTypes);
-            constructorCache.put(fullConstructorName, constructor);
+            constructorCache.put(key, constructor);
             return constructor;
         } catch (NoSuchMethodError ignored) {
         }
@@ -686,11 +814,11 @@ public final class XposedHelpers {
 
         if (bestMatch != null) {
             bestMatch.setAccessible(true);
-            constructorCache.put(fullConstructorName, bestMatch);
+            constructorCache.put(key, bestMatch);
             return bestMatch;
         } else {
-            NoSuchMethodError e = new NoSuchMethodError(fullConstructorName);
-            constructorCache.put(fullConstructorName, null);
+            NoSuchMethodError e = new NoSuchMethodError(key.toString());
+            constructorCache.put(key, null);
             throw e;
         }
     }
