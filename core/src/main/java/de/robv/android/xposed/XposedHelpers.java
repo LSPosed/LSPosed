@@ -70,14 +70,23 @@ public final class XposedHelpers {
      * <p>
      * So in fact we only need to use the structural comparison results of the reflection object.
      *
-     * @see <a href="https://github.com/meowool-catnip/cloak/blob/main/api/src/benchmark/kotlin/com/meowool/cloak/ReflectionObjectAccessTests.kt#L37-L65">benchmark</a>
+     * @see <a href="https://github.com/RinOrz/LSPosed/blob/a44e1f1cdf0c5e5ebfaface828e5907f5425df1b/benchmark/src/result/ReflectionCacheBenchmark.json">benchmarks for ART</a>
+     * @see <a href="https://github.com/meowool-catnip/cloak/blob/main/api/src/benchmark/kotlin/com/meowool/cloak/ReflectionObjectAccessTests.kt#L37-L65">benchmarks for JVM</a>
      */
     private abstract static class MemberCacheKey {
+        private final int hash;
+
+        protected MemberCacheKey(int hash) {
+            this.hash = hash;
+        }
+
         @Override
         public abstract boolean equals(@Nullable Object obj);
 
         @Override
-        public abstract int hashCode();
+        public int hashCode() {
+            return hash;
+        }
 
         static final class Constructor extends MemberCacheKey {
             private final Class<?> clazz;
@@ -85,6 +94,7 @@ public final class XposedHelpers {
             private final boolean isExact;
 
             public Constructor(Class<?> clazz, Class<?>[] parameters, boolean isExact) {
+                super(hashCode(clazz, parameters, isExact));
                 this.clazz = clazz;
                 this.parameters = parameters;
                 this.isExact = isExact;
@@ -93,16 +103,9 @@ public final class XposedHelpers {
             @Override
             public boolean equals(Object o) {
                 if (this == o) return true;
-                if (o == null || getClass() != o.getClass()) return false;
+                if (!(o instanceof Constructor)) return false;
                 Constructor that = (Constructor) o;
                 return isExact == that.isExact && Objects.equals(clazz, that.clazz) && Arrays.equals(parameters, that.parameters);
-            }
-
-            @Override
-            public int hashCode() {
-                int result = Objects.hash(clazz, isExact);
-                result = 31 * result + Arrays.hashCode(parameters);
-                return result;
             }
 
             @NonNull
@@ -115,6 +118,12 @@ public final class XposedHelpers {
                     return str;
                 }
             }
+
+            private static int hashCode(Class<?> clazz, Class<?>[] parameters, boolean isExact) {
+                int result = Objects.hash(clazz, isExact);
+                result = 31 * result + Arrays.hashCode(parameters);
+                return result;
+            }
         }
 
         static final class Field extends MemberCacheKey {
@@ -122,6 +131,7 @@ public final class XposedHelpers {
             private final String name;
 
             public Field(Class<?> clazz, String name) {
+                super(Objects.hash(clazz, name));
                 this.clazz = clazz;
                 this.name = name;
             }
@@ -129,14 +139,9 @@ public final class XposedHelpers {
             @Override
             public boolean equals(Object o) {
                 if (this == o) return true;
-                if (o == null || getClass() != o.getClass()) return false;
+                if (!(o instanceof Field)) return false;
                 Field field = (Field) o;
                 return Objects.equals(clazz, field.clazz) && Objects.equals(name, field.name);
-            }
-
-            @Override
-            public int hashCode() {
-                return Objects.hash(clazz, name);
             }
 
             @NonNull
@@ -153,6 +158,7 @@ public final class XposedHelpers {
             private final boolean isExact;
 
             public Method(Class<?> clazz, String name, Class<?>[] parameters, boolean isExact) {
+                super(hashCode(clazz, name, parameters, isExact));
                 this.clazz = clazz;
                 this.name = name;
                 this.parameters = parameters;
@@ -162,16 +168,9 @@ public final class XposedHelpers {
             @Override
             public boolean equals(Object o) {
                 if (this == o) return true;
-                if (o == null || getClass() != o.getClass()) return false;
+                if (!(o instanceof Method)) return false;
                 Method method = (Method) o;
                 return isExact == method.isExact && Objects.equals(clazz, method.clazz) && Objects.equals(name, method.name) && Arrays.equals(parameters, method.parameters);
-            }
-
-            @Override
-            public int hashCode() {
-                int result = Objects.hash(clazz, name, isExact);
-                result = 31 * result + Arrays.hashCode(parameters);
-                return result;
             }
 
             @NonNull
@@ -183,6 +182,12 @@ public final class XposedHelpers {
                 } else {
                     return str;
                 }
+            }
+
+            private static int hashCode(Class<?> clazz, String name, Class<?>[] parameters, boolean isExact) {
+                int result = Objects.hash(clazz, name, isExact);
+                result = 31 * result + Arrays.hashCode(parameters);
+                return result;
             }
         }
     }
