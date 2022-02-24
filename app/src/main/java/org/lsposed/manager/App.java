@@ -196,9 +196,11 @@ public class App extends Application {
     @SuppressWarnings("deprecation")
     @Override
     public void onConfigurationChanged(@NonNull Configuration newConfig) {
-        LocaleDelegate.setDefaultLocale(getLocale());
-        newConfig.setLocale(getLocale());
-        getResources().updateConfiguration(newConfig, getResources().getDisplayMetrics());
+        if (getResources().getConfiguration().diff(newConfig) != 0) {
+            LocaleDelegate.setDefaultLocale(getLocale());
+            newConfig.setLocale(getLocale());
+            getResources().updateConfiguration(newConfig, getResources().getDisplayMetrics());
+        }
         super.onConfigurationChanged(newConfig);
     }
 
