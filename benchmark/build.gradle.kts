@@ -61,6 +61,7 @@ android {
 dependencies {
     val testVersion = "1.4.0"
     val benchmarkVersion: String by rootProject.extra
+    androidTestImplementation("io.kotest:kotest-assertions-core:5.1.0")
     androidTestImplementation("org.apache.commons:commons-lang3:3.12.0")
     androidTestImplementation("androidx.test.ext:junit-ktx:1.1.3")
     androidTestImplementation("androidx.test:core-ktx:$testVersion")
