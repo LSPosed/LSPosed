@@ -80,8 +80,8 @@ class HashMapGCTest {
         firstNormalKey?.clazz.shouldNotBeNull()
 
         firstWeakKey?.str.shouldNotBeNull()
-        firstWeakKey?.str.get().shouldBeNull()
+        firstWeakKey?.str.get().shouldNotBeNull()
         firstWeakKey?.clazz.shouldNotBeNull()
-        firstWeakKey?.clazz.get().shouldBeNull()
+        firstWeakKey?.clazz.get().shouldNotBeNull()
     }
 }
