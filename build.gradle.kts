@@ -26,10 +26,14 @@ buildscript {
     }
     val navVersion by extra("2.5.0-alpha02")
     val agpVersion by extra("7.1.1")
+    val benchmarkVersion by extra("1.1.0-beta04")
     dependencies {
         classpath("com.android.tools.build:gradle:$agpVersion")
         classpath("org.eclipse.jgit:org.eclipse.jgit:6.0.0.202111291000-r")
         classpath("androidx.navigation:navigation-safe-args-gradle-plugin:$navVersion")
+        classpath("androidx.benchmark:androidx.benchmark.gradle.plugin:$benchmarkVersion")
+        classpath("androidx.benchmark:benchmark-gradle-plugin:1.0.0")
+        classpath("org.jetbrains.kotlin:kotlin-gradle-plugin:1.6.10")
     }
 }
 
