@@ -17,7 +17,6 @@ include(
     ":manager-service",
     ":daemon",
     ":daemon-service",
-    ":benchmark",
 )
 
 val serviceRoot = "service"
