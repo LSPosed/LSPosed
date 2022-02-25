@@ -85,7 +85,7 @@ public final class XposedHelpers {
         public abstract boolean equals(@Nullable Object obj);
 
         @Override
-        public int hashCode() {
+        public final int hashCode() {
             return hash;
         }
 
@@ -95,7 +95,7 @@ public final class XposedHelpers {
             private final boolean isExact;
 
             public Constructor(Class<?> clazz, Class<?>[] parameters, boolean isExact) {
-                super(hashCode(clazz, parameters, isExact));
+                super(31 * Objects.hash(clazz, isExact) + Arrays.hashCode(parameters));
                 this.clazz = clazz;
                 this.parameters = parameters;
                 this.isExact = isExact;
@@ -118,12 +118,6 @@ public final class XposedHelpers {
                 } else {
                     return str;
                 }
-            }
-
-            private static int hashCode(Class<?> clazz, Class<?>[] parameters, boolean isExact) {
-                int result = Objects.hash(clazz, isExact);
-                result = 31 * result + Arrays.hashCode(parameters);
-                return result;
             }
         }
 
@@ -159,7 +153,7 @@ public final class XposedHelpers {
             private final boolean isExact;
 
             public Method(Class<?> clazz, String name, Class<?>[] parameters, boolean isExact) {
-                super(hashCode(clazz, name, parameters, isExact));
+                super(31 * Objects.hash(clazz, name, isExact) + Arrays.hashCode(parameters));
                 this.clazz = clazz;
                 this.name = name;
                 this.parameters = parameters;
@@ -183,12 +177,6 @@ public final class XposedHelpers {
                 } else {
                     return str;
                 }
-            }
-
-            private static int hashCode(Class<?> clazz, String name, Class<?>[] parameters, boolean isExact) {
-                int result = Objects.hash(clazz, name, isExact);
-                result = 31 * result + Arrays.hashCode(parameters);
-                return result;
             }
         }
     }
