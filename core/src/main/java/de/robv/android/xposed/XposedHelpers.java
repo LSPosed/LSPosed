@@ -520,16 +520,16 @@ public final class XposedHelpers {
      * @throws NoSuchMethodError In case no suitable method was found.
      */
     public static Method findMethodBestMatch(Class<?> clazz, String methodName, Class<?>... parameterTypes) {
+        // find the exact matching method first
+        try {
+            return findMethodExact(clazz, methodName, parameterTypes);
+        } catch (NoSuchMethodError ignored) {
+        }
+
+        // then find the best match
         var key = new MemberCacheKey.Method(clazz, methodName, parameterTypes, false);
 
         return methodCache.computeIfAbsent(key, k -> {
-            // find the exact matching method first
-            try {
-                return Optional.of(findMethodExact(k.clazz, k.name, k.parameters));
-            } catch (NoSuchMethodError ignored) {
-            }
-
-            // then find the best match
             Method bestMatch = null;
             Class<?> clz = k.clazz;
             boolean considerPrivateMethods = true;
@@ -712,7 +712,7 @@ public final class XposedHelpers {
 
         return constructorCache.computeIfAbsent(key, k -> {
             try {
-                Constructor<?> constructor = clazz.getDeclaredConstructor(parameterTypes);
+                Constructor<?> constructor = k.clazz.getDeclaredConstructor(k.parameters);
                 constructor.setAccessible(true);
                 return Optional.of(constructor);
             } catch (NoSuchMethodException e) {
@@ -749,16 +749,16 @@ public final class XposedHelpers {
      * <p>See {@link #findMethodBestMatch(Class, String, Class...)} for details.
      */
     public static Constructor<?> findConstructorBestMatch(Class<?> clazz, Class<?>... parameterTypes) {
+        // find the exact matching constructor first
+        try {
+            return findConstructorExact(clazz, parameterTypes);
+        } catch (NoSuchMethodError ignored) {
+        }
+
+        // then find the best match
         var key = new MemberCacheKey.Constructor(clazz, parameterTypes, false);
 
         return constructorCache.computeIfAbsent(key, k -> {
-            // find the exact matching constructor first
-            try {
-                return Optional.of(findConstructorExact(k.clazz, k.parameters));
-            } catch (NoSuchMethodError ignored) {
-            }
-
-            // then find the best match
             Constructor<?> bestMatch = null;
             Constructor<?>[] constructors = k.clazz.getDeclaredConstructors();
             for (Constructor<?> constructor : constructors) {
