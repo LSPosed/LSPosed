@@ -47,6 +47,7 @@ import java.util.HashMap;
 import java.util.LinkedList;
 import java.util.List;
 import java.util.Objects;
+import java.util.Optional;
 import java.util.WeakHashMap;
 import java.util.concurrent.ConcurrentHashMap;
 import java.util.concurrent.atomic.AtomicInteger;
@@ -58,9 +59,9 @@ public final class XposedHelpers {
     private XposedHelpers() {
     }
 
-    private static final ConcurrentHashMap<MemberCacheKey.Field, Field> fieldCache = new ConcurrentHashMap<>();
-    private static final ConcurrentHashMap<MemberCacheKey.Method, Method> methodCache = new ConcurrentHashMap<>();
-    private static final ConcurrentHashMap<MemberCacheKey.Constructor, Constructor<?>> constructorCache = new ConcurrentHashMap<>();
+    private static final ConcurrentHashMap<MemberCacheKey.Field, Optional<Field>> fieldCache = new ConcurrentHashMap<>();
+    private static final ConcurrentHashMap<MemberCacheKey.Method, Optional<Method>> methodCache = new ConcurrentHashMap<>();
+    private static final ConcurrentHashMap<MemberCacheKey.Constructor, Optional<Constructor<?>>> constructorCache = new ConcurrentHashMap<>();
     private static final WeakHashMap<Object, HashMap<String, Object>> additionalFields = new WeakHashMap<>();
     private static final HashMap<String, ThreadLocal<AtomicInteger>> sMethodDepth = new HashMap<>();
 
@@ -248,13 +249,13 @@ public final class XposedHelpers {
 
         return fieldCache.computeIfAbsent(key, k -> {
             try {
-                Field newField = findFieldRecursiveImpl(clazz, fieldName);
+                Field newField = findFieldRecursiveImpl(k.clazz, k.name);
                 newField.setAccessible(true);
-                return newField;
+                return Optional.of(newField);
             } catch (NoSuchFieldException e) {
-                throw new NoSuchFieldError(key.toString());
+                return Optional.empty();
             }
-        });
+        }).orElseThrow(() -> new NoSuchFieldError(key.toString()));
     }
 
     /**
@@ -466,17 +467,17 @@ public final class XposedHelpers {
      * <p>This variant requires that you already have reference to all the parameter types.
      */
     public static Method findMethodExact(Class<?> clazz, String methodName, Class<?>... parameterTypes) {
-        return methodCache.computeIfAbsent(
-                new MemberCacheKey.Method(clazz, methodName, parameterTypes, true),
-                key -> {
-                    try {
-                        Method method = key.clazz.getDeclaredMethod(key.name, key.parameters);
-                        method.setAccessible(true);
-                        return method;
-                    } catch (NoSuchMethodException e) {
-                        throw new NoSuchMethodError(key.toString());
-                    }
-                });
+        var key = new MemberCacheKey.Method(clazz, methodName, parameterTypes, true);
+
+        return methodCache.computeIfAbsent(key, k -> {
+            try {
+                Method method = k.clazz.getDeclaredMethod(k.name, k.parameters);
+                method.setAccessible(true);
+                return Optional.of(method);
+            } catch (NoSuchMethodException e) {
+                return Optional.empty();
+            }
+        }).orElseThrow(() -> new NoSuchMethodError(key.toString()));
     }
 
     /**
@@ -531,51 +532,49 @@ public final class XposedHelpers {
      * @throws NoSuchMethodError In case no suitable method was found.
      */
     public static Method findMethodBestMatch(Class<?> clazz, String methodName, Class<?>... parameterTypes) {
-        return methodCache.computeIfAbsent(
-                new MemberCacheKey.Method(clazz, methodName, parameterTypes, false),
-                key -> {
-                    // find the exact matching method first
-                    try {
-                        return findMethodExact(key.clazz, key.name, key.parameters);
-                    } catch (NoSuchMethodError ignored) {
-                    }
+        var key = new MemberCacheKey.Method(clazz, methodName, parameterTypes, false);
 
-                    // then find the best match
-                    Method bestMatch = null;
-                    Class<?> clz = key.clazz;
-                    boolean considerPrivateMethods = true;
-                    do {
-                        for (Method method : clz.getDeclaredMethods()) {
-                            // don't consider private methods of superclasses
-                            if (!considerPrivateMethods && Modifier.isPrivate(method.getModifiers()))
-                                continue;
+        return methodCache.computeIfAbsent(key, k -> {
+            // find the exact matching method first
+            try {
+                return Optional.of(findMethodExact(k.clazz, k.name, k.parameters));
+            } catch (NoSuchMethodError ignored) {
+            }
 
-                            // compare name and parameters
-                            if (method.getName().equals(key.name) && ClassUtils.isAssignable(
-                                    key.parameters,
-                                    method.getParameterTypes(),
-                                    true)) {
-                                // get accessible version of method
-                                if (bestMatch == null || MemberUtilsX.compareMethodFit(
-                                        method,
-                                        bestMatch,
-                                        key.parameters) < 0) {
-                                    bestMatch = method;
-                                }
-                            }
+            // then find the best match
+            Method bestMatch = null;
+            Class<?> clz = k.clazz;
+            boolean considerPrivateMethods = true;
+            do {
+                for (Method method : clz.getDeclaredMethods()) {
+                    // don't consider private methods of superclasses
+                    if (!considerPrivateMethods && Modifier.isPrivate(method.getModifiers()))
+                        continue;
+
+                    // compare name and parameters
+                    if (method.getName().equals(k.name) && ClassUtils.isAssignable(
+                            k.parameters,
+                            method.getParameterTypes(),
+                            true)) {
+                        // get accessible version of method
+                        if (bestMatch == null || MemberUtilsX.compareMethodFit(
+                                method,
+                                bestMatch,
+                                k.parameters) < 0) {
+                            bestMatch = method;
                         }
-                        considerPrivateMethods = false;
-                    } while ((clz = clz.getSuperclass()) != null);
-
-                    if (bestMatch != null) {
-                        bestMatch.setAccessible(true);
-                        return bestMatch;
-                    } else {
-                        throw new NoSuchMethodError(key.toString());
                     }
-                });
+                }
+                considerPrivateMethods = false;
+            } while ((clz = clz.getSuperclass()) != null);
 
-
+            if (bestMatch != null) {
+                bestMatch.setAccessible(true);
+                return Optional.of(bestMatch);
+            } else {
+                return Optional.empty();
+            }
+        }).orElseThrow(() -> new NoSuchMethodError(key.toString()));
     }
 
     /**
@@ -721,17 +720,17 @@ public final class XposedHelpers {
      * See {@link #findMethodExact(String, ClassLoader, String, Object...)} for details.
      */
     public static Constructor<?> findConstructorExact(Class<?> clazz, Class<?>... parameterTypes) {
-        return constructorCache.computeIfAbsent(
-                new MemberCacheKey.Constructor(clazz, parameterTypes, true),
-                key -> {
-                    try {
-                        Constructor<?> constructor = clazz.getDeclaredConstructor(parameterTypes);
-                        constructor.setAccessible(true);
-                        return constructor;
-                    } catch (NoSuchMethodException e) {
-                        throw new NoSuchMethodError(key.toString());
-                    }
-                });
+        var key = new MemberCacheKey.Constructor(clazz, parameterTypes, true);
+
+        return constructorCache.computeIfAbsent(key, k -> {
+            try {
+                Constructor<?> constructor = clazz.getDeclaredConstructor(parameterTypes);
+                constructor.setAccessible(true);
+                return Optional.of(constructor);
+            } catch (NoSuchMethodException e) {
+                return Optional.empty();
+            }
+        }).orElseThrow(() -> new NoSuchMethodError(key.toString()));
     }
 
     /**
@@ -762,41 +761,41 @@ public final class XposedHelpers {
      * <p>See {@link #findMethodBestMatch(Class, String, Class...)} for details.
      */
     public static Constructor<?> findConstructorBestMatch(Class<?> clazz, Class<?>... parameterTypes) {
-        return constructorCache.computeIfAbsent(
-                new MemberCacheKey.Constructor(clazz, parameterTypes, false),
-                key -> {
-                    // find the exact matching constructor first
-                    try {
-                        return findConstructorExact(key.clazz, key.parameters);
-                    } catch (NoSuchMethodError ignored) {
-                    }
+        var key = new MemberCacheKey.Constructor(clazz, parameterTypes, false);
 
-                    // then find the best match
-                    Constructor<?> bestMatch = null;
-                    Constructor<?>[] constructors = key.clazz.getDeclaredConstructors();
-                    for (Constructor<?> constructor : constructors) {
-                        // compare name and parameters
-                        if (ClassUtils.isAssignable(
-                                key.parameters,
-                                constructor.getParameterTypes(),
-                                true)) {
-                            // get accessible version of method
-                            if (bestMatch == null || MemberUtilsX.compareConstructorFit(
-                                    constructor,
-                                    bestMatch,
-                                    key.parameters) < 0) {
-                                bestMatch = constructor;
-                            }
-                        }
-                    }
+        return constructorCache.computeIfAbsent(key, k -> {
+            // find the exact matching constructor first
+            try {
+                return Optional.of(findConstructorExact(k.clazz, k.parameters));
+            } catch (NoSuchMethodError ignored) {
+            }
 
-                    if (bestMatch != null) {
-                        bestMatch.setAccessible(true);
-                        return bestMatch;
-                    } else {
-                        throw new NoSuchMethodError(key.toString());
+            // then find the best match
+            Constructor<?> bestMatch = null;
+            Constructor<?>[] constructors = k.clazz.getDeclaredConstructors();
+            for (Constructor<?> constructor : constructors) {
+                // compare name and parameters
+                if (ClassUtils.isAssignable(
+                        k.parameters,
+                        constructor.getParameterTypes(),
+                        true)) {
+                    // get accessible version of method
+                    if (bestMatch == null || MemberUtilsX.compareConstructorFit(
+                            constructor,
+                            bestMatch,
+                            k.parameters) < 0) {
+                        bestMatch = constructor;
                     }
-                });
+                }
+            }
+
+            if (bestMatch != null) {
+                bestMatch.setAccessible(true);
+                return Optional.of(bestMatch);
+            } else {
+                return Optional.empty();
+            }
+        }).orElseThrow(() -> new NoSuchMethodError(key.toString()));
     }
 
     /**
