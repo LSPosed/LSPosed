@@ -142,17 +142,19 @@ public class ParasiticManagerHooker {
 
             @Override
             protected void afterHookedMethod(MethodHookParam param) {
-                if (activityClientRecordClass.isInstance(param.thisObject)) {
-                    var aInfo = (ActivityInfo) XposedHelpers.getObjectField(param.thisObject, "activityInfo");
-                    Hookers.logD("loading state of " + aInfo.name);
-                    states.computeIfPresent(aInfo.name, (k, v) -> {
-                        XposedHelpers.setObjectField(param.thisObject, "state", v);
-                        return v;
-                    });
-                    persistentStates.computeIfPresent(aInfo.name, (k, v) -> {
-                        XposedHelpers.setObjectField(param.thisObject, "persistentState", v);
-                        return v;
-                    });
+                for (var i = 0; i < param.args.length; ++i) {
+                    if (param.args[i] instanceof ActivityInfo) {
+                        var aInfo = (ActivityInfo) param.args[i];
+                        Hookers.logD("loading state of " + aInfo.name);
+                        states.computeIfPresent(aInfo.name, (k, v) -> {
+                            XposedHelpers.setObjectField(param.thisObject, "state", v);
+                            return v;
+                        });
+                        persistentStates.computeIfPresent(aInfo.name, (k, v) -> {
+                            XposedHelpers.setObjectField(param.thisObject, "persistentState", v);
+                            return v;
+                        });
+                    }
                 }
             }
         };
