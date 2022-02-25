@@ -116,6 +116,7 @@ public class ParasiticManagerHooker {
                     }
                 });
 
+        var activityClientRecordClass = XposedHelpers.findClass("android.app.ActivityThread$ActivityClientRecord", ActivityThread.class.getClassLoader());
         var activityHooker = new XC_MethodHook() {
             @Override
             protected void beforeHookedMethod(MethodHookParam param) {
@@ -141,19 +142,20 @@ public class ParasiticManagerHooker {
 
             @Override
             protected void afterHookedMethod(MethodHookParam param) {
-                var aInfo = (ActivityInfo) XposedHelpers.getObjectField(param.thisObject, "activityInfo");
-                Hookers.logD("loading state of " + aInfo.name);
-                states.computeIfPresent(aInfo.name, (k, v) -> {
-                    XposedHelpers.setObjectField(param.thisObject, "state", v);
-                    return v;
-                });
-                persistentStates.computeIfPresent(aInfo.name, (k, v) -> {
-                    XposedHelpers.setObjectField(param.thisObject, "persistentState", v);
-                    return v;
-                });
+                if (activityClientRecordClass.isInstance(param.thisObject)) {
+                    var aInfo = (ActivityInfo) XposedHelpers.getObjectField(param.thisObject, "activityInfo");
+                    Hookers.logD("loading state of " + aInfo.name);
+                    states.computeIfPresent(aInfo.name, (k, v) -> {
+                        XposedHelpers.setObjectField(param.thisObject, "state", v);
+                        return v;
+                    });
+                    persistentStates.computeIfPresent(aInfo.name, (k, v) -> {
+                        XposedHelpers.setObjectField(param.thisObject, "persistentState", v);
+                        return v;
+                    });
+                }
             }
         };
-        var activityClientRecordClass = XposedHelpers.findClass("android.app.ActivityThread$ActivityClientRecord", ActivityThread.class.getClassLoader());
         XposedBridge.hookAllConstructors(activityClientRecordClass, activityHooker);
 
         if (Build.VERSION.SDK_INT <= Build.VERSION_CODES.O_MR1) {
