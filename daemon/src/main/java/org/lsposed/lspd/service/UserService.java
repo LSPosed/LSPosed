@@ -47,6 +47,11 @@ public class UserService {
         }
     };
 
+    static boolean isAlive() {
+        var um = getUserManager();
+        return um != null && um.asBinder().isBinderAlive();
+    }
+
     public static IUserManager getUserManager() {
         if (binder == null && um == null) {
             binder = ServiceManager.getService("user");

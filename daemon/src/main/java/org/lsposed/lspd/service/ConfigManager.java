@@ -279,8 +279,8 @@ public class ConfigManager {
             needCached = instance.lastModuleCacheTime == 0 || instance.lastScopeCacheTime == 0;
         }
         if (needCached) {
-            if (PackageService.isAlive()) {
-                Log.d(TAG, "pm is ready, updating cache");
+            if (PackageService.isAlive() && UserService.isAlive()) {
+                Log.d(TAG, "pm & um are ready, updating cache");
                 // must ensure cache is valid for later usage
                 instance.updateCaches(true);
                 instance.updateManager(false);
@@ -440,7 +440,7 @@ public class ConfigManager {
 
     private synchronized void cacheModules() {
         // skip caching when pm is not yet available
-        if (!PackageService.isAlive()) return;
+        if (!PackageService.isAlive() || !UserService.isAlive()) return;
         synchronized (cacheHandler) {
             if (lastModuleCacheTime >= requestModuleCacheTime) return;
             else lastModuleCacheTime = SystemClock.elapsedRealtime();
@@ -481,9 +481,10 @@ public class ConfigManager {
                 try {
                     pkgInfo = PackageService.getPackageInfoFromAllUsers(m.packageName, MATCH_ALL_FLAGS).values().stream().findFirst().orElse(null);
                 } catch (Throwable e) {
-                    Log.w(TAG, "get package info of " + m.packageName, e);
+                    Log.w(TAG, "Get package info of " + m.packageName, e);
                 }
                 if (pkgInfo == null || pkgInfo.applicationInfo == null) {
+                    Log.w(TAG, "Failed to find package info of " + m.packageName);
                     obsoleteModules.add(m.packageName);
                     return false;
                 }
@@ -503,8 +504,13 @@ public class ConfigManager {
                     return false;
                 }
                 m.apkPath = getModuleApkPath(pkgInfo.applicationInfo);
-                if (m.apkPath == null) obsoleteModules.add(m.packageName);
-                else obsoletePaths.put(m.packageName, m.apkPath);
+                if (m.apkPath == null) {
+                    Log.w(TAG, "Failed to find path of " + m.packageName);
+                    obsoleteModules.add(m.packageName);
+                    return false;
+                } else {
+                    obsoletePaths.put(m.packageName, m.apkPath);
+                }
                 m.appId = pkgInfo.applicationInfo.uid;
                 return true;
             }).forEach(m -> {

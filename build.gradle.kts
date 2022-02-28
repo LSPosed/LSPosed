@@ -25,7 +25,7 @@ buildscript {
         mavenCentral()
     }
     val navVersion by extra("2.5.0-alpha02")
-    val agpVersion by extra("7.1.1")
+    val agpVersion by extra("7.1.2")
     dependencies {
         classpath("com.android.tools.build:gradle:$agpVersion")
         classpath("org.eclipse.jgit:org.eclipse.jgit:6.0.0.202111291000-r")
