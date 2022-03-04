@@ -193,8 +193,8 @@ fun afterEval() = android.applicationVariants.forEach { variant ->
     val prepareMagiskFilesTask = task<Sync>("prepareMagiskFiles$variantCapped") {
         dependsOn(
             "assemble$variantCapped",
-            ":app:assemble$buildTypeCapped",
-            ":daemon:assemble$buildTypeCapped"
+            ":app:package$buildTypeCapped",
+            ":daemon:package$buildTypeCapped"
         )
         into(magiskDir)
         from("${rootProject.projectDir}/README.md")
@@ -238,11 +238,11 @@ fun afterEval() = android.applicationVariants.forEach { variant ->
                 filter<FixCrLfFilter>("eol" to FixCrLfFilter.CrLf.newInstance("lf"))
             }
         }
-        from("${project(":app").buildDir}/$apkDir/apk/${buildTypeLowered}") {
+        from(project(":app").tasks.getByName("package$buildTypeCapped").outputs) {
             include("*.apk")
             rename(".*\\.apk", "manager.apk")
         }
-        from("${project(":daemon").buildDir}/$apkDir/apk/${buildTypeLowered}") {
+        from(project(":daemon").tasks.getByName("package$buildTypeCapped").outputs) {
             include("*.apk")
             rename(".*\\.apk", "daemon.apk")
         }
@@ -328,7 +328,14 @@ val pushDaemonNative = task<Exec>("pushDaemonNative") {
 val reRunDaemon = task<Exec>("reRunDaemon") {
     dependsOn(pushDaemon, pushDaemonNative, killLspd)
     // tricky to pass a minus number to avoid the injection warning
-    commandLine(adb, "shell", "ASH_STANDALONE=1", "su", "-pc", "/data/adb/magisk/busybox sh /data/adb/modules/*_lsposed/service.sh --system-server-max-retry=-1&")
+    commandLine(
+        adb,
+        "shell",
+        "ASH_STANDALONE=1",
+        "su",
+        "-pc",
+        "/data/adb/magisk/busybox sh /data/adb/modules/*_lsposed/service.sh --system-server-max-retry=-1&"
+    )
     isIgnoreExitValue = true
 }
 val tmpApk = "/data/local/tmp/lsp.apk"
@@ -356,3 +363,6 @@ task<Exec>("reRunApp") {
     isIgnoreExitValue = true
     finalizedBy(reRunDaemon)
 }
+
+evaluationDependsOn(":app")
+evaluationDependsOn(":daemon")
