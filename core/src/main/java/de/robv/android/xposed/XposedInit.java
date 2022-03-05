@@ -147,11 +147,13 @@ public final class XposedInit {
                         //noinspection unchecked
                         resourceReferences = (ArrayList<Object>) getObjectField(param.thisObject, "mResourceReferences");
                     }
-                    if (classActivityRes == null) {
+                    if (activityToken == null || classActivityRes == null) {
                         resourceReferences.add(new WeakReference<>(newRes));
                     } else {
+                        // Android S createResourcesForActivity()
                         var activityRes = XposedHelpers.newInstance(classActivityRes);
                         XposedHelpers.setObjectField(activityRes, "resources", new WeakReference<>(newRes));
+                        resourceReferences.add(activityRes);
                     }
                 }
             }
