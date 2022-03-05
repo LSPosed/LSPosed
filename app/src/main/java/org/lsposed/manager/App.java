@@ -193,17 +193,6 @@ public class App extends Application {
         });
     }
 
-    @SuppressWarnings("deprecation")
-    @Override
-    public void onConfigurationChanged(@NonNull Configuration newConfig) {
-        if (getResources().getConfiguration().diff(newConfig) != 0) {
-            LocaleDelegate.setDefaultLocale(getLocale());
-            newConfig.setLocale(getLocale());
-            getResources().updateConfiguration(newConfig, getResources().getDisplayMetrics());
-        }
-        super.onConfigurationChanged(newConfig);
-    }
-
     @Override
     public void onCreate() {
         super.onCreate();
@@ -221,7 +210,12 @@ public class App extends Application {
         }
         DayNightDelegate.setApplicationContext(this);
         DayNightDelegate.setDefaultNightMode(ThemeUtil.getDarkTheme());
-        onConfigurationChanged(getResources().getConfiguration());
+        LocaleDelegate.setDefaultLocale(getLocale());
+        var res = getResources();
+        var config = res.getConfiguration();
+        config.setLocale(LocaleDelegate.getDefaultLocale());
+        //noinspection deprecation
+        res.updateConfiguration(config, res.getDisplayMetrics());
 
         IntentFilter intentFilter = new IntentFilter();
         intentFilter.addAction("org.lsposed.manager.NOTIFICATION");
@@ -288,11 +282,15 @@ public class App extends Application {
         return okHttpCache;
     }
 
-    public static Locale getLocale() {
-        String tag = getPreferences().getString("language", null);
+    public static Locale getLocale(String tag) {
         if (TextUtils.isEmpty(tag) || "SYSTEM".equals(tag)) {
-            return Locale.getDefault();
+            return LocaleDelegate.getSystemLocale();
         }
         return Locale.forLanguageTag(tag);
+    }
+
+    public static Locale getLocale() {
+        String tag = getPreferences().getString("language", null);
+        return getLocale(tag);
     }
 }
