@@ -239,6 +239,16 @@ public class SettingsFragment extends BaseFragment {
             }
 
             Preference primary_color = findPreference("theme_color");
+            if (primary_color != null) {
+                primary_color.setOnPreferenceChangeListener((preference, newValue) -> {
+                    MainActivity activity = (MainActivity) getActivity();
+                    if (activity != null) {
+                        activity.restart();
+                    }
+                    return true;
+                });
+            }
+
             SwitchPreference prefShowHiddenIcons = findPreference("show_hidden_icon_apps_enabled");
             if (prefShowHiddenIcons != null && Build.VERSION.SDK_INT >= Build.VERSION_CODES.Q) {
                 if (ConfigManager.isBinderAlive()) {
@@ -270,7 +280,7 @@ public class SettingsFragment extends BaseFragment {
                 var tag = language.getValue();
                 var userLocale = App.getLocale();
                 var entries = new ArrayList<CharSequence>();
-                var lstLang = LangList.LANG_LIST;
+                var lstLang = LangList.LOCALES;
                 for (var lang : lstLang) {
                     if (lang.equals(SYSTEM)) {
                         entries.add(getString(rikka.core.R.string.follow_system));
@@ -287,6 +297,21 @@ public class SettingsFragment extends BaseFragment {
                     var locale = Locale.forLanguageTag(tag);
                     language.setSummary(!TextUtils.isEmpty(locale.getScript()) ? locale.getDisplayScript(userLocale) : locale.getDisplayName(userLocale));
                 }
+                language.setOnPreferenceChangeListener((preference, newValue) -> {
+                    var app = App.getInstance();
+                    var locale = App.getLocale((String)newValue);
+                    var res = app.getResources();
+                    var config = res.getConfiguration();
+                    config.setLocale(locale);
+                    LocaleDelegate.setDefaultLocale(locale);
+                    //noinspection deprecation
+                    res.updateConfiguration(config, res.getDisplayMetrics());
+                    MainActivity activity = (MainActivity) getActivity();
+                    if (activity != null) {
+                        activity.restart();
+                    }
+                    return true;
+                });
             }
 
             Preference translation = findPreference("translation");
@@ -307,24 +332,6 @@ public class SettingsFragment extends BaseFragment {
                     translation_contributors.setSummary(translators);
                 }
             }
-
-            App.getPreferences().registerOnSharedPreferenceChangeListener((sharedPreferences, key) -> {
-                var newValue = sharedPreferences.getAll().getOrDefault(key, null);
-                if (newValue == null) return;
-                switch (key) {
-                    case "language":
-                        var app = App.getInstance();
-                        var config = app.getResources().getConfiguration();
-                        app.onConfigurationChanged(config);
-                    case "theme_color":
-                    case "follow_system_accent":
-                        MainActivity activity = (MainActivity) getActivity();
-                        if (activity != null) {
-                            activity.restart();
-                        }
-                        break;
-                }
-            });
         }
 
         @NonNull
