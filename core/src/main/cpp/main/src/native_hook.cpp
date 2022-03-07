@@ -62,7 +62,7 @@ namespace lspd {
         art::thread_list::ScopedSuspendAll::Setup(handle_libart);
         art::gc::ScopedGCCriticalSection::Setup(handle_libart);
         art::jit::jit_code_cache::Setup(handle_libart);
-        GetArt().reset();
+        GetArt(true);
         LOGD("Inline hooks installed");
     }
 }  // namespace lspd

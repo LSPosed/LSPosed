@@ -63,7 +63,7 @@ namespace lspd {
 
     void InitSymbolCache(SymbolCache *other);
 
-    std::unique_ptr<const SandHook::ElfImg> &GetArt();
+    std::unique_ptr<const SandHook::ElfImg> &GetArt(bool release=false);
 }
 
 #endif //LSPOSED_SYMBOL_CACHE_H

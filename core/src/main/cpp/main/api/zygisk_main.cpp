@@ -331,6 +331,7 @@ namespace lspd {
                 JNI_CallStaticVoidMethod(env_, process, set_argv0, JNI_NewStringUTF(env_, "system_server"));
             }
             Context::GetInstance()->OnNativeForkSystemServerPost(env_);
+            if (*allowUnload) api_->setOption(zygisk::DLCLOSE_MODULE_LIBRARY);
         }
     };
 

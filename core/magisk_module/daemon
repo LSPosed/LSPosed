@@ -26,5 +26,13 @@ fi
 
 mount tmpfs -t tmpfs /data/resource-cache
 
+if [ ! -S "/dev/socket/zygote" ]; then
+  timeout 1 inotifyd - /dev/socket:near | while read -r; do
+    if [ -S "/dev/socket/zygote" ]; then
+      touch /dev/socket&
+      exit
+    fi
+  done
+fi
 # shellcheck disable=SC2086
 exec /system/bin/app_process $java_options /system/bin --nice-name=lspd org.lsposed.lspd.Main "$@" >/dev/null 2>&1
