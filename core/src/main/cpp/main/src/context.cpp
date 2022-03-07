@@ -207,12 +207,11 @@ namespace lspd {
                 InstallInlineHooks();
                 Init(env);
                 FindAndCall(env, "forkSystemServerPost", "(Landroid/os/IBinder;)V", application_binder);
-            } else skip_ = true;
+            } else {
+                LOGI("skipped system server");
+                GetArt(true);
+            }
         }
-        if (skip_) [[unlikely]] {
-            LOGW("skipped system server");
-        }
-        setAllowUnload(skip_);
     }
 
     void Context::OnNativeForkAndSpecializePre(JNIEnv *env,
@@ -277,7 +276,7 @@ namespace lspd {
         } else {
             auto context = Context::ReleaseInstance();
             auto service = Service::ReleaseInstance();
-            GetArt().reset();
+            GetArt(true);
             LOGD("skipped %s", process_name.get());
             setAllowUnload(true);
         }
