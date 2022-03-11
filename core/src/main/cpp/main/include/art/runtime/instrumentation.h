@@ -29,7 +29,8 @@ namespace art {
         CREATE_MEM_HOOK_STUB_ENTRIES(
                 "_ZN3art15instrumentation15Instrumentation21UpdateMethodsCodeImplEPNS_9ArtMethodEPKv",
                 void, UpdateMethodsCodeImpl, (void * thiz, void * art_method, const void *quick_code), {
-                    if (auto backup = lspd::isHooked(art_method); backup) [[unlikely]] {
+                    if (auto backup = lspd::isHooked(art_method);
+                        backup && yahfa::getEntryPoint(art_method) != quick_code) [[unlikely]] {
                         LOGD("redirect update method code for hooked method %s to its backup",
                              art_method::PrettyMethod(art_method).c_str());
                         art_method = backup;
@@ -40,12 +41,18 @@ namespace art {
         CREATE_MEM_HOOK_STUB_ENTRIES(
                 "_ZN3art15instrumentation15Instrumentation17UpdateMethodsCodeEPNS_9ArtMethodEPKv",
                 void, UpdateMethodsCode, (void * thiz, void * art_method, const void *quick_code), {
-                    if (auto backup = lspd::isHooked(art_method); backup) [[unlikely]] {
+                    if (auto backup = lspd::isHooked(art_method);
+                        backup && yahfa::getEntryPoint(art_method) != quick_code) [[unlikely]] {
                         LOGD("redirect update method code for hooked method %s to its backup",
                              art_method::PrettyMethod(art_method).c_str());
                         art_method = backup;
                     }
-                    backup(thiz, art_method, quick_code);
+                    // avoid calling our hook again
+                    if (UpdateMethodsCodeImpl.backup) {
+                        UpdateMethodsCodeImpl.backup(thiz, art_method, quick_code);
+                    } else {
+                        backup(thiz, art_method, quick_code);
+                    }
                 });
 
         inline void DisableUpdateHookedMethodsCode(const SandHook::ElfImg &handle) {
