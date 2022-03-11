@@ -28,6 +28,17 @@ namespace art {
 
         CREATE_MEM_HOOK_STUB_ENTRIES(
                 "_ZN3art15instrumentation15Instrumentation21UpdateMethodsCodeImplEPNS_9ArtMethodEPKv",
+                void, UpdateMethodsCodeImpl, (void * thiz, void * art_method, const void *quick_code), {
+                    if (auto backup = lspd::isHooked(art_method); backup) [[unlikely]] {
+                        LOGD("redirect update method code for hooked method %s to its backup",
+                             art_method::PrettyMethod(art_method).c_str());
+                        art_method = backup;
+                    }
+                    backup(thiz, art_method, quick_code);
+                });
+
+        CREATE_MEM_HOOK_STUB_ENTRIES(
+                "_ZN3art15instrumentation15Instrumentation17UpdateMethodsCodeEPNS_9ArtMethodEPKv",
                 void, UpdateMethodsCode, (void * thiz, void * art_method, const void *quick_code), {
                     if (auto backup = lspd::isHooked(art_method); backup) [[unlikely]] {
                         LOGD("redirect update method code for hooked method %s to its backup",
@@ -39,6 +50,7 @@ namespace art {
 
         inline void DisableUpdateHookedMethodsCode(const SandHook::ElfImg &handle) {
             lspd::HookSym(handle, UpdateMethodsCode);
+            lspd::HookSym(handle, UpdateMethodsCodeImpl);
         }
     }
 }
