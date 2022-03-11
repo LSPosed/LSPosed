@@ -231,11 +231,7 @@ public final class XposedBridge {
 
         if (newMethod) {
             AdditionalHookInfo additionalInfo = new AdditionalHookInfo(callbacks);
-            if (!YahfaHooker.shouldDelayHook(targetMethod)) {
-                YahfaHooker.hookMethod(targetMethod, additionalInfo);
-            } else {
-                PendingHooks.recordPendingMethod((Method) hookMethod, additionalInfo);
-            }
+            YahfaHooker.hookMethod(targetMethod, additionalInfo);
         }
 
         return callback.new Unhook(hookMethod);

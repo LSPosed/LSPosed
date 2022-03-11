@@ -21,7 +21,6 @@
 #include "yahfa.h"
 #include "HookMain.h"
 #include "native_util.h"
-#include "pending_hooks.h"
 #include "art/runtime/class_linker.h"
 #include "art/runtime/thread_list.h"
 #include "art/runtime/thread.h"
@@ -33,21 +32,24 @@
 
 namespace lspd {
     namespace {
-        std::unordered_set<const void *> hooked_methods_;
+        std::unordered_map<const void *, void*> hooked_methods_;
         std::shared_mutex hooked_methods_lock_;
 
         std::vector<std::pair<void *, void *>> jit_movements_;
         std::shared_mutex jit_movements_lock_;
     }
 
-    bool isHooked(void *art_method) {
+    void* isHooked(void *art_method) {
         std::shared_lock lk(hooked_methods_lock_);
-        return hooked_methods_.contains(art_method);
+        if (auto found = hooked_methods_.find(art_method); found != hooked_methods_.end()) {
+            return found->second;
+        }
+        return nullptr;
     }
 
-    void recordHooked(void *art_method) {
+    void recordHooked(void *art_method, void *backup) {
         std::unique_lock lk(hooked_methods_lock_);
-        hooked_methods_.insert(art_method);
+        hooked_methods_.emplace(art_method, backup);
     }
 
     void recordJitMovement(void *target, void *backup) {
@@ -81,16 +83,15 @@ namespace lspd {
         if (yahfa::backupAndHookNative(env, clazz, target, hook, backup)) {
             auto *target_method = yahfa::getArtMethod(env, target);
             auto *backup_method = yahfa::getArtMethod(env, backup);
-            recordHooked(target_method);
+            recordHooked(target_method, backup_method);
             if (!is_proxy) [[likely]] recordJitMovement(target_method, backup_method);
             return JNI_TRUE;
-        } else {
-            return JNI_FALSE;
         }
+        return JNI_FALSE;
     }
 
     LSP_DEF_NATIVE_METHOD(jboolean, Yahfa, isHooked, jobject member) {
-        return lspd::isHooked(yahfa::getArtMethod(env, member));
+        return lspd::isHooked(yahfa::getArtMethod(env, member)) != nullptr;
     }
 
     LSP_DEF_NATIVE_METHOD(jclass, Yahfa, buildHooker, jobject app_class_loader, jchar return_class,

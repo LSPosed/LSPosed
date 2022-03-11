@@ -23,7 +23,6 @@ import android.os.Build;
 
 import org.lsposed.lspd.nativebridge.ClassLinker;
 import org.lsposed.lspd.nativebridge.Yahfa;
-import org.lsposed.lspd.util.ClassUtils;
 import org.lsposed.lspd.yahfa.dexmaker.DynamicBridge;
 
 import java.lang.reflect.Executable;
@@ -41,10 +40,6 @@ public class YahfaHooker {
 
     public static void hookMethod(Executable method, AdditionalHookInfo additionalInfo) {
         DynamicBridge.hookMethod(method, additionalInfo);
-    }
-
-    public static boolean shouldDelayHook(Executable member) {
-        return ClassUtils.shouldDelayHook(member);
     }
 
     public static Object invokeOriginalMethod(Executable method, Object thisObject, Object[] args) throws Throwable {
