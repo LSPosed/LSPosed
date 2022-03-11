@@ -26,7 +26,7 @@
 
 namespace lspd {
 
-    bool isHooked(void* art_method);
+    void* isHooked(void* art_method);
 
     std::vector<std::pair<void*, void*>> getJitMovements();
 

@@ -43,8 +43,6 @@ namespace lspd {
 
         inline jobject GetCurrentClassLoader() const { return inject_class_loader_; }
 
-        void CallOnPostFixupStaticTrampolines(void *class_ptr);
-
         inline ScopedLocalRef<jclass>
         FindClassFromCurrentLoader(JNIEnv *env, std::string_view className) const {
             return FindClassFromLoader(env, GetCurrentClassLoader(), className);
@@ -65,9 +63,6 @@ namespace lspd {
         inline static std::unique_ptr<Context> instance_ = std::make_unique<Context>();
         jobject inject_class_loader_ = nullptr;
         jclass entry_class_ = nullptr;
-        JavaVM *vm_ = nullptr;
-        jclass class_linker_class_ = nullptr;
-        jmethodID post_fixup_static_mid_ = nullptr;
         bool skip_ = false;
 
         struct PreloadedDex {

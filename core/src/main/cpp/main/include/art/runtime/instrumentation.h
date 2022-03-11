@@ -28,11 +28,28 @@ namespace art {
 
         CREATE_MEM_HOOK_STUB_ENTRIES(
                 "_ZN3art15instrumentation15Instrumentation21UpdateMethodsCodeImplEPNS_9ArtMethodEPKv",
-                void, UpdateMethodsCode, (void * thiz, void * art_method, const void *quick_code), {
-                    if (lspd::isHooked(art_method)) [[unlikely]] {
-                        LOGD("Skip update method code for hooked method %s",
+                void, UpdateMethodsCodeImpl, (void * thiz, void * art_method, const void *quick_code), {
+                    if (auto backup = lspd::isHooked(art_method);
+                        backup && yahfa::getEntryPoint(art_method) != quick_code) [[unlikely]] {
+                        LOGD("redirect update method code for hooked method %s to its backup",
                              art_method::PrettyMethod(art_method).c_str());
-                        return;
+                        art_method = backup;
+                    }
+                    backup(thiz, art_method, quick_code);
+                });
+
+        CREATE_MEM_HOOK_STUB_ENTRIES(
+                "_ZN3art15instrumentation15Instrumentation17UpdateMethodsCodeEPNS_9ArtMethodEPKv",
+                void, UpdateMethodsCode, (void * thiz, void * art_method, const void *quick_code), {
+                    if (auto backup = lspd::isHooked(art_method);
+                        backup && yahfa::getEntryPoint(art_method) != quick_code) [[unlikely]] {
+                        LOGD("redirect update method code for hooked method %s to its backup",
+                             art_method::PrettyMethod(art_method).c_str());
+                        art_method = backup;
+                    }
+                    // avoid calling our hook again
+                    if (UpdateMethodsCodeImpl.backup) {
+                        UpdateMethodsCodeImpl.backup(thiz, art_method, quick_code);
                     } else {
                         backup(thiz, art_method, quick_code);
                     }
@@ -40,6 +57,7 @@ namespace art {
 
         inline void DisableUpdateHookedMethodsCode(const SandHook::ElfImg &handle) {
             lspd::HookSym(handle, UpdateMethodsCode);
+            lspd::HookSym(handle, UpdateMethodsCodeImpl);
         }
     }
 }

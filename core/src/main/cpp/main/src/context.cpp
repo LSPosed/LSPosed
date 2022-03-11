@@ -24,7 +24,6 @@
 #include "jni/yahfa.h"
 #include "jni/resources_hook.h"
 #include <art/runtime/jni_env_ext.h>
-#include "jni/pending_hooks.h"
 #include "context.h"
 #include "native_hook.h"
 #include "jni/native_api.h"
@@ -48,20 +47,6 @@ namespace lspd {
 
     static constexpr uid_t kAidInjected = INJECTED_AID;
     static constexpr uid_t kAidInet = 3003;
-
-    void Context::CallOnPostFixupStaticTrampolines(void *class_ptr) {
-        if (!class_ptr || !class_linker_class_ || !post_fixup_static_mid_) [[unlikely]] {
-            return;
-        }
-
-        JNIEnv *env;
-        vm_->GetEnv((void **) (&env), JNI_VERSION_1_4);
-        art::JNIEnvExt env_ext(env);
-        ScopedLocalRef clazz(env, env_ext.NewLocalRefer(class_ptr));
-        if (clazz) {
-            JNI_CallStaticVoidMethod(env, class_linker_class_, post_fixup_static_mid_, clazz.get());
-        }
-    }
 
     Context::PreloadedDex::PreloadedDex(int fd, std::size_t size) {
         LOGD("Context::PreloadedDex::PreloadedDex: fd=%d, size=%zu", fd, size);
@@ -106,21 +91,12 @@ namespace lspd {
         }
 
         env->DeleteLocalRef(dex_buffer);
-
-        env->GetJavaVM(&vm_);
     }
 
     void Context::Init() {
     }
 
     void Context::Init(JNIEnv *env) {
-        if (auto class_linker_class = FindClassFromCurrentLoader(env, kClassLinkerClassName)) {
-            class_linker_class_ = JNI_NewGlobalRef(env, class_linker_class);
-        }
-        post_fixup_static_mid_ = JNI_GetStaticMethodID(env, class_linker_class_,
-                                                       "onPostFixupStaticTrampolines",
-                                                       "(Ljava/lang/Class;)V");
-
         if (auto entry_class = FindClassFromLoader(env, GetCurrentClassLoader(),
                                                    kEntryClassName)) {
             entry_class_ = JNI_NewGlobalRef(env, entry_class);
@@ -129,7 +105,6 @@ namespace lspd {
         RegisterResourcesHook(env);
         RegisterArtClassLinker(env);
         RegisterYahfa(env);
-        RegisterPendingHooks(env);
         RegisterNativeAPI(env);
     }
 

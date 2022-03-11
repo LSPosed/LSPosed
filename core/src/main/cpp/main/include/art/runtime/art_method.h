@@ -25,7 +25,6 @@
 #ifndef LSPOSED_ART_METHOD_H
 #define LSPOSED_ART_METHOD_H
 
-#include "jni/pending_hooks.h"
 #include <HookMain.h>
 
 namespace art {
