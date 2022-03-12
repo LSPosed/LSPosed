@@ -24,6 +24,8 @@ import java.util.*
 
 plugins {
     id("com.android.application")
+    id("androidx.navigation.safeargs")
+    id("dev.rikka.tools.autoresconfig")
 }
 
 val daemonName = "LSPosed"
