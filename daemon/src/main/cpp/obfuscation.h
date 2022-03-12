@@ -19,7 +19,7 @@
 
 #pragma once
 #include <string>
-#include "jni_helper.h"
+#include "utils/jni_helper.hpp"
 
 class WA: public dex::Writer::Allocator {
     // addr: {size, fd}

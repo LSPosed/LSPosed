@@ -34,7 +34,9 @@
 #include "slicer/reader.h"
 #include "slicer/writer.h"
 #include "obfuscation.h"
+#include "logging.h"
 
+using namespace lsplant;
 namespace {
 std::mutex init_lock{};
 std::string obfuscated_signature;

@@ -1,6 +1,6 @@
-include src/main/cpp/external/DexBuilder/Android.mk
-include src/main/cpp/external/yahfa/Android.mk
-include src/main/cpp/main/Android.mk
+include src/main/jni/external/DexBuilder/Android.mk
+include src/main/jni/external/yahfa/Android.mk
+include src/main/jni/main/Android.mk
 
 $(call import-module,prefab/cxx)
 $(call import-module,prefab/riru)
