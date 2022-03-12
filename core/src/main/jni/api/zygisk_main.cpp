@@ -328,7 +328,10 @@ namespace lspd {
                 auto *process = env_->FindClass("android/os/Process");
                 auto *set_argv0 = env_->GetStaticMethodID(process, "setArgV0",
                                                           "(Ljava/lang/String;)V");
-                JNI_CallStaticVoidMethod(env_, process, set_argv0, JNI_NewStringUTF(env_, "system_server"));
+                auto *name = env_->NewStringUTF("system_server");
+                env_->CallStaticVoidMethod(process, set_argv0, name);
+                env_->DeleteLocalRef(name);
+                env_->DeleteLocalRef(process);
             }
             Context::GetInstance()->OnNativeForkSystemServerPost(env_);
             if (*allowUnload) api_->setOption(zygisk::DLCLOSE_MODULE_LIBRARY);

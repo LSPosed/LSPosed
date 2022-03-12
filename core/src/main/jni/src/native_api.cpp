@@ -23,10 +23,14 @@
 //
 
 #include "native_api.h"
+#include "logging.h"
 #include "symbol_cache.h"
+#include "utils/hook_helper.hpp"
+#include <sys/mman.h>
 #include <dobby.h>
 #include <list>
-#include <base/object.h>
+#include <dlfcn.h>
+
 
 /*
  * Module: define xposed_native file in /assets, each line is a .so file name
@@ -44,26 +48,30 @@
  */
 
 namespace lspd {
+
+    using lsplant::operator""_tstr;
     std::list<NativeOnModuleLoaded> moduleLoadedCallbacks;
     std::list<std::string> moduleNativeLibs;
     std::unique_ptr<void, std::function<void(void *)>> protected_page(
-            mmap(nullptr, _page_size, PROT_READ | PROT_WRITE, MAP_ANONYMOUS | MAP_SHARED, -1, 0),
-            [](void *ptr) { munmap(ptr, _page_size); });
+            mmap(nullptr, 4096, PROT_READ | PROT_WRITE, MAP_ANONYMOUS | MAP_SHARED, -1, 0),
+            [](void *ptr) { munmap(ptr, 4096); });
 
     const auto[entries] = []() {
         auto *entries = new(protected_page.get()) NativeAPIEntries{
                 .version = 2,
-                .hookFunc = HookFunction,
-                .unhookFunc = UnhookFunction
+                // TODO
+                .hookFunc = nullptr,
+                .unhookFunc = nullptr
         };
 
-        mprotect(protected_page.get(), _page_size, PROT_READ);
+        mprotect(protected_page.get(), 4096, PROT_READ);
         return std::make_tuple(entries);
     }();
 
     void RegisterNativeLib(const std::string &library_name) {
         static bool initialized = []() {
-            return InstallNativeAPI();
+            // TODO
+            return InstallNativeAPI({});
         }();
         if (!initialized) [[unlikely]] return;
         LOGD("native_api: Registered %s", library_name.c_str());
@@ -74,12 +82,11 @@ namespace lspd {
         if (fullString.length() >= ending.length()) {
             return (0 == fullString.compare(fullString.length() - ending.length(), ending.length(),
                                             ending));
-        } else {
-            return false;
         }
+        return false;
     }
 
-    CREATE_HOOK_STUB_ENTRIES(
+    CREATE_HOOK_STUB_ENTRY(
             "__dl__Z9do_dlopenPKciPK17android_dlextinfoPKv",
             void*, do_dlopen, (const char* name, int flags, const void* extinfo,
                     const void* caller_addr), {
@@ -121,10 +128,10 @@ namespace lspd {
                 return handle;
             });
 
-    bool InstallNativeAPI() {
+    bool InstallNativeAPI(const lsplant::HookHandler & handler) {
         LOGD("InstallNativeAPI: %p", symbol_cache->do_dlopen);
         if (symbol_cache->do_dlopen) [[likely]] {
-            HookSymNoHandle(symbol_cache->do_dlopen, do_dlopen);
+            HookSymNoHandle(handler, symbol_cache->do_dlopen, do_dlopen);
             return true;
         }
         return false;

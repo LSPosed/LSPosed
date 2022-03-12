@@ -23,11 +23,13 @@
 
 #include <dobby.h>
 #include <thread>
-#include "base/object.h"
+#include "config.h"
 #include "service.h"
 #include "context.h"
-#include "jni_helper.h"
+#include "utils/jni_helper.hpp"
 #include "symbol_cache.h"
+
+using namespace lsplant;
 
 namespace lspd {
     jboolean

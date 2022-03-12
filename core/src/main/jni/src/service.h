@@ -51,13 +51,13 @@ namespace lspd {
         void InitService(JNIEnv *env);
 
         void HookBridge(const Context& context, JNIEnv *env);
-        ScopedLocalRef<jobject> RequestBinder(JNIEnv *env, jstring nice_name);
+        lsplant::ScopedLocalRef<jobject> RequestBinder(JNIEnv *env, jstring nice_name);
 
-        ScopedLocalRef<jobject> RequestSystemServerBinder(JNIEnv *env);
+        lsplant::ScopedLocalRef<jobject> RequestSystemServerBinder(JNIEnv *env);
 
-        ScopedLocalRef<jobject> RequestApplicationBinderFromSystemServer(JNIEnv *env, const ScopedLocalRef<jobject> &system_server_binder);
+        lsplant::ScopedLocalRef<jobject> RequestApplicationBinderFromSystemServer(JNIEnv *env, const lsplant::ScopedLocalRef<jobject> &system_server_binder);
 
-        std::tuple<int, size_t> RequestLSPDex(JNIEnv *env, const ScopedLocalRef<jobject> &binder);
+        std::tuple<int, size_t> RequestLSPDex(JNIEnv *env, const lsplant::ScopedLocalRef<jobject> &binder);
 
     private:
         inline static std::unique_ptr<Service> instance_ = std::make_unique<Service>();

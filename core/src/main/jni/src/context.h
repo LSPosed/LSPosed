@@ -27,7 +27,7 @@
 #include <tuple>
 #include <string_view>
 #include "utils.h"
-#include "jni_helper.h"
+#include "utils/jni_helper.hpp"
 
 namespace lspd {
     class Context {
@@ -43,7 +43,7 @@ namespace lspd {
 
         inline jobject GetCurrentClassLoader() const { return inject_class_loader_; }
 
-        inline ScopedLocalRef<jclass>
+        inline lsplant::ScopedLocalRef<jclass>
         FindClassFromCurrentLoader(JNIEnv *env, std::string_view className) const {
             return FindClassFromLoader(env, GetCurrentClassLoader(), className);
         };
@@ -110,7 +110,7 @@ namespace lspd {
 
         void Init(JNIEnv *env);
 
-        static ScopedLocalRef<jclass> FindClassFromLoader(JNIEnv *env, jobject class_loader,
+        static lsplant::ScopedLocalRef<jclass> FindClassFromLoader(JNIEnv *env, jobject class_loader,
                                                           std::string_view class_name);
 
         static void setAllowUnload(bool unload);

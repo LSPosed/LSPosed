@@ -27,7 +27,8 @@
 
 #include <cstdint>
 #include <string>
-#include <base/object.h>
+
+#include "utils/hook_helper.hpp"
 
 typedef int (*HookFunType)(void *func, void *replace, void **backup);
 
@@ -44,7 +45,7 @@ typedef struct {
 typedef NativeOnModuleLoaded (*NativeInit)(const NativeAPIEntries *entries);
 
 namespace lspd {
-    bool InstallNativeAPI();
+    bool InstallNativeAPI(const lsplant::HookHandler& handler);
 
     void RegisterNativeLib(const std::string &library_name);
 }

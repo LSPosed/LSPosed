@@ -24,7 +24,7 @@
 
 #include <context.h>
 #include "macros.h"
-#include "jni_helper.h"
+#include "utils/jni_helper.hpp"
 #include "logging.h"
 #include <cassert>
 
@@ -59,6 +59,8 @@ namespace lspd {
     _NATIVEHELPER_JNI_MACRO_CAST(void*) (Java_org_lsposed_lspd_nativebridge_## className ## _ ## functionName) \
   }
 #endif
+
+#define JNI_START [[maybe_unused]] JNIEnv* env, [[maybe_unused]] jclass clazz
 
 #ifndef LSP_DEF_NATIVE_METHOD
 #define LSP_DEF_NATIVE_METHOD(ret, className, functionName, ...)                \

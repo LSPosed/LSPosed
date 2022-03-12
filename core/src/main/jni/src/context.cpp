@@ -19,19 +19,20 @@
  */
 
 #include <jni.h>
-#include "jni_helper.h"
-#include "jni/art_class_linker.h"
-#include "jni/yahfa.h"
+#include "config.h"
+#include "utils/jni_helper.hpp"
 #include "jni/resources_hook.h"
-#include <art/runtime/jni_env_ext.h>
 #include "context.h"
 #include "native_hook.h"
 #include "jni/native_api.h"
 #include "service.h"
+#include <sys/mman.h>
 #include "symbol_cache.h"
 
 #include <linux/fs.h>
 #include <fcntl.h>
+
+using namespace lsplant;
 
 static_assert(FS_IOC_SETFLAGS == LP_SELECT(0x40046602, 0x40086602));
 
@@ -103,8 +104,6 @@ namespace lspd {
         }
 
         RegisterResourcesHook(env);
-        RegisterArtClassLinker(env);
-        RegisterYahfa(env);
         RegisterNativeAPI(env);
     }
 
@@ -179,7 +178,9 @@ namespace lspd {
             instance->HookBridge(*this, env);
 
             if (application_binder) {
-                InstallInlineHooks();
+                InstallInlineHooks({
+
+                });
                 Init(env);
                 FindAndCall(env, "forkSystemServerPost", "(Landroid/os/IBinder;)V", application_binder);
             } else {
@@ -236,7 +237,7 @@ namespace lspd {
         auto binder = skip_ ? ScopedLocalRef<jobject>{env, nullptr}
                             : instance->RequestBinder(env, nice_name);
         if (binder) {
-            InstallInlineHooks();
+            InstallInlineHooks({});
             auto [dex_fd, size] = instance->RequestLSPDex(env, binder);
             LoadDex(env, dex_fd, size);
             close(dex_fd);

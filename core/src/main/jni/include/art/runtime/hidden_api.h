@@ -21,14 +21,14 @@
 #pragma once
 
 #include "symbol_cache.h"
-#include "base/object.h"
+#include "utils/hook_helper.hpp"
 #include "context.h"
 #include "runtime.h"
 
 namespace art {
 
     namespace hidden_api {
-
+        using lsplant::operator""_tstr;
         CREATE_FUNC_SYMBOL_ENTRY(void, DexFile_setTrusted, JNIEnv *env, jclass clazz,
                                  jobject j_cookie) {
             if (DexFile_setTrustedSym != nullptr) [[likely]] {
@@ -36,7 +36,7 @@ namespace art {
                 DexFile_setTrustedSym(env, clazz, j_cookie);
                 Runtime::Current()->SetJavaDebuggable(false);
             }
-        };
+        }
 
         inline void
         maybeSetTrusted(JNIEnv *env, jclass clazz, jobject class_loader, jobject j_cookie) {
@@ -54,7 +54,7 @@ namespace art {
             }
         }
 
-        CREATE_HOOK_STUB_ENTRIES(
+        CREATE_HOOK_STUB_ENTRY(
                 "_ZN3artL25DexFile_openDexFileNativeEP7_JNIEnvP7_jclassP8_jstringS5_iP8_jobjectP13_jobjectArray",
                 jobject, DexFile_openDexFileNative, (JNIEnv * env,
                 jclass clazz,
@@ -71,7 +71,7 @@ namespace art {
                 }
         );
 
-        CREATE_HOOK_STUB_ENTRIES(
+        CREATE_HOOK_STUB_ENTRY(
                 "_ZN3artL34DexFile_openInMemoryDexFilesNativeEP7_JNIEnvP7_jclassP13_jobjectArrayS5_P10_jintArrayS7_P8_jobjectS5_",
                 jobject, DexFile_openInMemoryDexFilesNative, (JNIEnv * env,
                 jclass clazz,
@@ -89,7 +89,7 @@ namespace art {
                 }
         );
 
-        CREATE_HOOK_STUB_ENTRIES(
+        CREATE_HOOK_STUB_ENTRY(
                 "_ZN3artL29DexFile_createCookieWithArrayEP7_JNIEnvP7_jclassP11_jbyteArrayii",
                 jobject, DexFile_createCookieWithArray, (JNIEnv * env,
                 jclass clazz,
@@ -102,7 +102,7 @@ namespace art {
                 }
         );
 
-        CREATE_HOOK_STUB_ENTRIES(
+        CREATE_HOOK_STUB_ENTRY(
                 "_ZN3artL36DexFile_createCookieWithDirectBufferEP7_JNIEnvP7_jclassP8_jobjectii",
                 jobject, DexFile_createCookieWithDirectBuffer, (JNIEnv * env,
                 jclass clazz,
@@ -115,20 +115,20 @@ namespace art {
                 }
         );
 
-        inline void DisableHiddenApi([[maybe_unused]] const SandHook::ElfImg &handle) {
+        inline void DisableHiddenApi(const lsplant::HookHandler &handler) {
 
             const int api_level = lspd::GetAndroidApiLevel();
             if (api_level < __ANDROID_API_P__) {
                 return;
             }
             DexFile_setTrustedSym = reinterpret_cast<decltype(DexFile_setTrustedSym)>(lspd::symbol_cache->setTrusted);
-            lspd::HookSymNoHandle(lspd::symbol_cache->openDexFileNative, DexFile_openDexFileNative);
-            lspd::HookSymNoHandle(lspd::symbol_cache->openInMemoryDexFilesNative,
+            lsplant::HookSymNoHandle(handler, lspd::symbol_cache->openDexFileNative, DexFile_openDexFileNative);
+            lsplant::HookSymNoHandle(handler, lspd::symbol_cache->openInMemoryDexFilesNative,
                                   DexFile_openInMemoryDexFilesNative);
             if (api_level == __ANDROID_API_P__) {
-                lspd::HookSymNoHandle(lspd::symbol_cache->createCookieWithArray,
+                lsplant::HookSymNoHandle(handler, lspd::symbol_cache->createCookieWithArray,
                                       DexFile_createCookieWithArray);
-                lspd::HookSymNoHandle(lspd::symbol_cache->createCookieWithDirectBuffer,
+                lsplant::HookSymNoHandle(handler, lspd::symbol_cache->createCookieWithDirectBuffer,
                                       DexFile_createCookieWithDirectBuffer);
             }
         };

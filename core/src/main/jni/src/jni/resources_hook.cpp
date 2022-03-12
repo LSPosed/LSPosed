@@ -19,25 +19,24 @@
  */
 
 #include <jni.h>
-#include <dex_builder.h>
-#include <art/runtime/thread.h>
-#include <art/runtime/mirror/class.h>
-#include <framework/androidfw/resource_types.h>
-#include <HookMain.h>
-#include <elf_util.h>
+#include "dex_builder.h"
+#include "framework/androidfw/resource_types.h"
+#include "elf_util.h"
 #include "native_util.h"
 #include "resources_hook.h"
+
+using namespace lsplant;
 
 namespace lspd {
     static constexpr const char *kXResourcesClassName = "android/content/res/XResources";
 
-    typedef int32_t (*TYPE_GET_ATTR_NAME_ID)(void *, int);
+    using TYPE_GET_ATTR_NAME_ID = int32_t (*)(void *, int);
 
-    typedef char16_t *(*TYPE_STRING_AT)(const void *, int32_t, size_t *);
+    using TYPE_STRING_AT = char16_t *(*)(const void *, int32_t, size_t *);
 
-    typedef void(*TYPE_RESTART)(void *);
+    using TYPE_RESTART = void (*)(void *);
 
-    typedef int32_t (*TYPE_NEXT)(void *);
+    using TYPE_NEXT = int32_t (*)(void *);
 
     static jclass classXResources;
     static jmethodID methodXResourcesTranslateAttrId;
@@ -65,7 +64,11 @@ namespace lspd {
                           "_ZNK7android12ResXMLParser18getAttributeNameIDEm")))) {
             return false;
         }
-        return android::ResStringPool::setup(fw);
+        return android::ResStringPool::setup(HookHandler{
+            .art_symbol_resolver = [&](auto s) {
+                return fw.template getSymbAddress<void*>(s);
+            }
+        });
     }
 
     LSP_DEF_NATIVE_METHOD(jboolean, ResourcesHook, initXResourcesNative) {
@@ -97,22 +100,7 @@ namespace lspd {
     // @ApiSensitive(Level.MIDDLE)
     LSP_DEF_NATIVE_METHOD(jboolean, ResourcesHook, makeInheritable, jclass target_class,
                           jobjectArray constructors) {
-        if (target_class) {
-            static auto class_clazz = JNI_NewGlobalRef(env, JNI_FindClass(env, "java/lang/Class"));
-            static jfieldID java_lang_Class_accessFlags = JNI_GetFieldID(
-                    env, class_clazz, "accessFlags", "I");
-            jint access_flags = env->GetIntField(target_class, java_lang_Class_accessFlags);
-            env->SetIntField(target_class, java_lang_Class_accessFlags, access_flags & ~kAccFinal);
-            for (auto i = 0; i < env->GetArrayLength(constructors); ++i) {
-                auto constructor = env->GetObjectArrayElement(constructors, i);
-                void *method = yahfa::getArtMethod(env, constructor);
-                uint32_t flags = yahfa::getAccessFlags(method);
-                if ((flags & yahfa::kAccPublic) == 0 && (flags & yahfa::kAccProtected) == 0) {
-                    flags |= yahfa::kAccProtected;
-                    flags &= ~yahfa::kAccPrivate;
-                }
-                yahfa::setAccessFlags(method, flags);
-            }
+        if (lsplant::MakeClassInheritable(env, target_class)) {
             return JNI_TRUE;
         }
         return JNI_FALSE;
@@ -127,17 +115,14 @@ namespace lspd {
                                                    "(Ljava/nio/ByteBuffer;Ljava/lang/ClassLoader;)V");
         DexBuilder dex_file;
 
-        std::string storage;
-        auto current_thread = art::Thread::Current();
         ClassBuilder xresource_builder{
                 dex_file.MakeClass("xposed.dummy.XResourcesSuperClass")};
-        xresource_builder.setSuperClass(TypeDescriptor::FromDescriptor(art::mirror::Class(
-                current_thread.DecodeJObject(resource_super_class)).GetDescriptor(&storage)));
+        // TODO
+        xresource_builder.setSuperClass(TypeDescriptor::FromClassname(""));
 
         ClassBuilder xtypearray_builder{
                 dex_file.MakeClass("xposed.dummy.XTypedArraySuperClass")};
-        xtypearray_builder.setSuperClass(TypeDescriptor::FromDescriptor(art::mirror::Class(
-                current_thread.DecodeJObject(typed_array_super_class)).GetDescriptor(&storage)));
+        xtypearray_builder.setSuperClass(TypeDescriptor::FromClassname(""));
 
         slicer::MemView image{dex_file.CreateImage()};
 

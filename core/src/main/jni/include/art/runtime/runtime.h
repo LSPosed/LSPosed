@@ -20,11 +20,11 @@
 
 #pragma once
 
-#include <base/object.h>
+#include "utils/hook_helper.hpp"
 
 namespace art {
 
-    class Runtime : public lspd::HookedObject {
+    class Runtime {
     private:
         inline static Runtime *instance_;
         CREATE_MEM_FUNC_SYMBOL_ENTRY(void, SetJavaDebuggable, void *thiz, bool value) {
@@ -34,23 +34,22 @@ namespace art {
         }
 
     public:
-        Runtime(void *thiz) : HookedObject(thiz) {}
-
         inline static Runtime *Current() {
             return instance_;
         }
 
         void SetJavaDebuggable(bool value) {
-            SetJavaDebuggable(thiz_, value);
+            SetJavaDebuggable(this, value);
         }
 
         // @ApiSensitive(Level.LOW)
-        inline static void Setup(const SandHook::ElfImg &handle) {
+        inline static void Setup(const lsplant::HookHandler &handler) {
+            void **instance = nullptr;
             RETRIEVE_FIELD_SYMBOL(instance, "_ZN3art7Runtime9instance_E");
             RETRIEVE_MEM_FUNC_SYMBOL(SetJavaDebuggable, "_ZN3art7Runtime17SetJavaDebuggableEb");
-            void *thiz = *reinterpret_cast<void **>(instance);
+            void *thiz = *instance;
             LOGD("_ZN3art7Runtime9instance_E = %p", thiz);
-            instance_ = new Runtime(thiz);
+            instance_ = reinterpret_cast<Runtime*>(thiz);
         }
     };
 

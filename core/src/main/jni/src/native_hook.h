@@ -20,9 +20,9 @@
 
 #pragma once
 
-#include <dobby.h>
+#include "utils/hook_helper.hpp"
 
 namespace lspd {
-    void InstallInlineHooks();
+    void InstallInlineHooks(const lsplant::HookHandler &handler);
 
 }

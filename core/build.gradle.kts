@@ -73,11 +73,27 @@ android {
         multiDexEnabled = false
 
         externalNativeBuild {
-            ndkBuild {
-                arguments += "INJECTED_AID=$injectedPackageUid"
-                arguments += "VERSION_CODE=$verCode"
-                arguments += "VERSION_NAME=$verName"
-                arguments += "-j${Runtime.getRuntime().availableProcessors()}"
+            cmake {
+                arguments += "-DEXTERNAL_ROOT=${File(rootDir.absolutePath, "external")}"
+                abiFilters("arm64-v8a", "armeabi-v7a", "x86", "x86_64")
+                val flags = arrayOf(
+                    "-ffixed-x18",
+                    "-Qunused-arguments",
+                    "-fno-rtti", "-fno-exceptions",
+                    "-fno-stack-protector",
+                    "-fomit-frame-pointer",
+                    "-Wno-builtin-macro-redefined",
+                    "-Wl,--exclude-libs,ALL",
+                    "-D__FILE__=__FILE_NAME__",
+                    "-DINJECTED_AID=$injectedPackageUid",
+                )
+                cppFlags("-std=c++20", *flags)
+                cFlags("-std=c18", *flags)
+                arguments(
+                    "-DANDROID_STL=none",
+                    "-DVERSION_CODE=$verCode",
+                    "-DVERSION_NAME=$verName",
+                )
             }
         }
 
@@ -97,14 +113,56 @@ android {
     }
 
     buildTypes {
+        debug {
+            externalNativeBuild {
+                cmake {
+                    arguments.addAll(
+                        arrayOf(
+                            "-DCMAKE_CXX_FLAGS_DEBUG=-Og",
+                            "-DCMAKE_C_FLAGS_DEBUG=-Og"
+                        )
+                    )
+                }
+            }
+        }
         release {
             isMinifyEnabled = true
             proguardFiles("proguard-rules.pro")
+
+            externalNativeBuild {
+                cmake {
+                    val flags = arrayOf(
+                        "-fvisibility=hidden",
+                        "-fvisibility-inlines-hidden",
+                        "-Wno-unused-value",
+                        "-ffunction-sections",
+                        "-fdata-sections",
+                        "-Wl,--gc-sections",
+                        "-Wl,--strip-all",
+                        "-fno-unwind-tables",
+                        "-fno-asynchronous-unwind-tables"
+                    )
+                    cppFlags.addAll(flags)
+                    cFlags.addAll(flags)
+                    val configFlags = arrayOf(
+                        "-Oz",
+                        "-DNDEBUG"
+                    ).joinToString(" ")
+                    arguments.addAll(
+                        arrayOf(
+                            "-DCMAKE_CXX_FLAGS_RELEASE=$configFlags",
+                            "-DCMAKE_CXX_FLAGS_RELWITHDEBINFO=$configFlags",
+                            "-DCMAKE_C_FLAGS_RELEASE=$configFlags",
+                            "-DCMAKE_C_FLAGS_RELWITHDEBINFO=$configFlags"
+                        )
+                    )
+                }
+            }
         }
     }
     externalNativeBuild {
-        ndkBuild {
-            path("src/main/jni/Android.mk")
+        cmake {
+            path("src/main/jni/CMakeLists.txt")
         }
     }
 
@@ -113,22 +171,12 @@ android {
         sourceCompatibility(androidSourceCompatibility)
     }
 
-    buildTypes {
-        all {
-            externalNativeBuild {
-                ndkBuild {
-                    arguments += "NDK_OUT=${File(buildDir, ".cxx/$name").absolutePath}"
-                }
-            }
-        }
-    }
-
     productFlavors {
         all {
             externalNativeBuild {
-                ndkBuild {
-                    arguments += "MODULE_NAME=${name.toLowerCase()}_$moduleBaseId"
-                    arguments += "API=${name.toLowerCase()}"
+                cmake {
+                    arguments += "-DMODULE_NAME=${name.toLowerCase()}_$moduleBaseId"
+                    arguments += "-DAPI=${name.toLowerCase()}"
                 }
             }
             buildConfigField("String", "API", """"$name"""")
@@ -137,8 +185,8 @@ android {
         create("Riru") {
             dimension = "api"
             externalNativeBuild {
-                ndkBuild {
-                    arguments += "API_VERSION=$moduleMaxRiruApiVersion"
+                cmake {
+                    arguments += "-DAPI_VERSION=$moduleMaxRiruApiVersion"
                 }
             }
         }
@@ -146,8 +194,8 @@ android {
         create("Zygisk") {
             dimension = "api"
             externalNativeBuild {
-                ndkBuild {
-                    arguments += "API_VERSION=1"
+                cmake {
+                    arguments += "-DAPI_VERSION=1"
                 }
             }
         }
@@ -247,8 +295,9 @@ fun afterEval() = android.applicationVariants.forEach { variant ->
             rename(".*\\.apk", "daemon.apk")
         }
         into("lib") {
-            from("${buildDir}/intermediates/stripped_native_libs/$variantCapped/out/lib")
-            from("${project(":daemon").buildDir}/intermediates/ndkBuild/$buildTypeLowered/obj/local")
+            from("${buildDir}/intermediates/cmake/$variantCapped/out/lib")
+            from("${project(":daemon").buildDir}/intermediates/cmake/$buildTypeLowered/out/lib")
+            exclude("**/*.txt")
         }
         val dexOutPath = if (buildTypeLowered == "release")
             "$buildDir/intermediates/dex/$variantCapped/minify${variantCapped}WithR8" else
