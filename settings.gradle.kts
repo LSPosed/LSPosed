@@ -1,3 +1,19 @@
+pluginManagement {
+    val navVersion: String by settings
+    val agpVersion: String by settings
+    repositories {
+        gradlePluginPortal()
+        google()
+        mavenCentral()
+    }
+    plugins {
+        id("com.android.library") version agpVersion
+        id("com.android.application") version agpVersion
+        id("androidx.navigation.safeargs") version navVersion
+        id("dev.rikka.tools.autoresconfig") version "1.1.0"
+    }
+}
+
 dependencyResolutionManagement {
     repositoriesMode.set(RepositoriesMode.FAIL_ON_PROJECT_REPOS)
     repositories {
@@ -9,11 +25,11 @@ dependencyResolutionManagement {
 rootProject.name = "LSPosed"
 include(
     ":core",
-    ":hiddenapi-stubs",
+    ":hiddenapi:stubs",
+    ":hiddenapi:bridge",
     ":app",
     ":service",
     ":interface",
-    ":hiddenapi-bridge",
     ":manager-service",
     ":daemon",
     ":daemon-service"
