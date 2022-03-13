@@ -30,7 +30,7 @@ namespace lspd {
     LSP_DEF_NATIVE_METHOD(void, ClassLinker, setEntryPointsToInterpreter, jobject method) {
         void *reflected_method = yahfa::getArtMethod(env, method);
         LOGD("deoptimizing method: %p", reflected_method);
-        art::ClassLinker::Current()->SetEntryPointsToInterpreter(reflected_method);
+        art::ClassLinker::SetEntryPointsToInterpreter(reflected_method);
         LOGD("method deoptimized: %p", reflected_method);
     }
 

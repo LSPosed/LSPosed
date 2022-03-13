@@ -37,6 +37,9 @@ namespace lspd {
 
         std::vector<std::pair<void *, void *>> jit_movements_;
         std::shared_mutex jit_movements_lock_;
+
+        std::unordered_map<const void *, std::unordered_set<void*>> uninitialized_methods_;
+        std::shared_mutex uninitialized_methods_lock_;
     }
 
     void* isHooked(void *art_method) {
@@ -51,6 +54,33 @@ namespace lspd {
         std::unique_lock lk(hooked_methods_lock_);
         hooked_methods_.emplace(art_method, backup);
     }
+
+    void recordUninitialized(void *art_method) {
+        auto clazz = art::mirror::Class(reinterpret_cast<void*>(*reinterpret_cast<uint32_t*>(art_method)));
+        LOGE("hook class %s", clazz.GetDescriptor().c_str());
+        std::unique_lock lk(uninitialized_methods_lock_);
+        uninitialized_methods_[clazz.GetClassDef()].emplace(art_method);
+    }
+
+    std::unordered_set<void*> isUninitializedHooked(void *clazz) {
+        std::unordered_set<void*> out;
+        bool has_found = false;
+        {
+            std::shared_lock lk(uninitialized_methods_lock_);
+            if (auto found = uninitialized_methods_.find(clazz); found != uninitialized_methods_.end()) {
+                has_found = true;
+            }
+        }
+        if (has_found) {
+            std::unique_lock lk(uninitialized_methods_lock_);
+            if (auto found = uninitialized_methods_.find(clazz); found != uninitialized_methods_.end()) {
+                out = std::move(found->second);
+                uninitialized_methods_.erase(found);
+            }
+        }
+        return out;
+    }
+
 
     void recordJitMovement(void *target, void *backup) {
         std::unique_lock lk(jit_movements_lock_);
@@ -84,6 +114,7 @@ namespace lspd {
             auto *target_method = yahfa::getArtMethod(env, target);
             auto *backup_method = yahfa::getArtMethod(env, backup);
             recordHooked(target_method, backup_method);
+            recordUninitialized(target_method);
             if (!is_proxy) [[likely]] recordJitMovement(target_method, backup_method);
             return JNI_TRUE;
         }
