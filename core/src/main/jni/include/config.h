@@ -25,12 +25,13 @@
 #include <string>
 #include "macros.h"
 #include "utils.h"
+#include "utils/hook_helper.hpp"
 
 namespace lspd {
 
 //#define LOG_DISABLED
 //#define DEBUG
-
+    using lsplant::operator""_tstr;
 
     inline bool constexpr Is64() {
 #if defined(__LP64__)

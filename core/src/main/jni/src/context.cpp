@@ -24,6 +24,8 @@
 #include "jni/resources_hook.h"
 #include "context.h"
 #include "native_hook.h"
+#include "elf_util.h"
+#include "jni/hook_bridge.h"
 #include "jni/native_api.h"
 #include "service.h"
 #include <sys/mman.h>
@@ -31,6 +33,7 @@
 
 #include <linux/fs.h>
 #include <fcntl.h>
+#include <native_util.h>
 
 using namespace lsplant;
 
@@ -97,13 +100,17 @@ namespace lspd {
     void Context::Init() {
     }
 
-    void Context::Init(JNIEnv *env) {
+    void Context::Init(JNIEnv *env, const lsplant::InitInfo& initInfo) {
+        if (!lsplant::Init(env, initInfo)) {
+            return;
+        }
         if (auto entry_class = FindClassFromLoader(env, GetCurrentClassLoader(),
                                                    kEntryClassName)) {
             entry_class_ = JNI_NewGlobalRef(env, entry_class);
         }
 
         RegisterResourcesHook(env);
+        RegisterHookBridge(env);
         RegisterNativeAPI(env);
     }
 
@@ -178,11 +185,22 @@ namespace lspd {
             instance->HookBridge(*this, env);
 
             if (application_binder) {
-                InstallInlineHooks({
-
-                });
-                Init(env);
+                lsplant::InitInfo initInfo{
+                    .inline_hooker = [](auto t, auto r) {
+                        void* bk = nullptr;
+                        return HookFunction(t, r, &bk) ? bk : nullptr;
+                    },
+                    .inline_unhooker = [](auto t) {
+                        return UnhookFunction(t);
+                    },
+                    .art_symbol_resolver = [](auto symbol) {
+                        return GetArt()->getSymbAddress<void*>(symbol);
+                    },
+                };
+                InstallInlineHooks(initInfo);
+                Init(env, initInfo);
                 FindAndCall(env, "forkSystemServerPost", "(Landroid/os/IBinder;)V", application_binder);
+                GetArt(true);
             } else {
                 LOGI("skipped system server");
                 GetArt(true);
@@ -237,11 +255,23 @@ namespace lspd {
         auto binder = skip_ ? ScopedLocalRef<jobject>{env, nullptr}
                             : instance->RequestBinder(env, nice_name);
         if (binder) {
-            InstallInlineHooks({});
+            lsplant::InitInfo initInfo{
+                    .inline_hooker = [](auto t, auto r) {
+                        void* bk = nullptr;
+                        return HookFunction(t, r, &bk) ? bk : nullptr;
+                    },
+                    .inline_unhooker = [](auto t) {
+                        return UnhookFunction(t);
+                    },
+                    .art_symbol_resolver = [](auto symbol){
+                        return GetArt()->getSymbAddress<void*>(symbol);
+                    },
+            };
+            InstallInlineHooks(initInfo);
             auto [dex_fd, size] = instance->RequestLSPDex(env, binder);
             LoadDex(env, dex_fd, size);
             close(dex_fd);
-            Init(env);
+            Init(env, initInfo);
             LOGD("Done prepare");
             FindAndCall(env, "forkAndSpecializePost",
                         "(Ljava/lang/String;Ljava/lang/String;Landroid/os/IBinder;)V",
@@ -249,6 +279,7 @@ namespace lspd {
                         binder);
             LOGD("injected xposed into %s", process_name.get());
             setAllowUnload(false);
+            GetArt(true);
         } else {
             auto context = Context::ReleaseInstance();
             auto service = Service::ReleaseInstance();

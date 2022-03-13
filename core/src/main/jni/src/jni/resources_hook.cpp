@@ -107,7 +107,7 @@ namespace lspd {
     }
 
     LSP_DEF_NATIVE_METHOD(jobject, ResourcesHook, buildDummyClassLoader, jobject parent,
-                          jobject resource_super_class, jobject typed_array_super_class) {
+                          jstring resource_super_class, jstring typed_array_super_class) {
         using namespace startop::dex;
         static auto in_memory_classloader = JNI_NewGlobalRef(env, JNI_FindClass(env,
                                                                                 "dalvik/system/InMemoryDexClassLoader"));
@@ -117,12 +117,11 @@ namespace lspd {
 
         ClassBuilder xresource_builder{
                 dex_file.MakeClass("xposed.dummy.XResourcesSuperClass")};
-        // TODO
-        xresource_builder.setSuperClass(TypeDescriptor::FromClassname(""));
+        xresource_builder.setSuperClass(TypeDescriptor::FromClassname(JUTFString(env, resource_super_class).get()));
 
         ClassBuilder xtypearray_builder{
                 dex_file.MakeClass("xposed.dummy.XTypedArraySuperClass")};
-        xtypearray_builder.setSuperClass(TypeDescriptor::FromClassname(""));
+        xtypearray_builder.setSuperClass(TypeDescriptor::FromClassname(JUTFString(env, typed_array_super_class).get()));
 
         slicer::MemView image{dex_file.CreateImage()};
 

@@ -26,6 +26,7 @@
 #include <string>
 #include <tuple>
 #include <string_view>
+#include <lsplant.hpp>
 #include "utils.h"
 #include "utils/jni_helper.hpp"
 
@@ -108,7 +109,7 @@ namespace lspd {
 
         void LoadDex(JNIEnv *env, int fd, size_t size);
 
-        void Init(JNIEnv *env);
+        void Init(JNIEnv *env, const lsplant::InitInfo& initInfo);
 
         static lsplant::ScopedLocalRef<jclass> FindClassFromLoader(JNIEnv *env, jobject class_loader,
                                                           std::string_view class_name);

@@ -43,45 +43,6 @@ namespace lspd {
         }();
         return api_level;
     }
-
-
-    template<char... chars>
-    struct tstring : public std::integer_sequence<char, chars...> {
-        inline constexpr static const char *c_str() {
-            return str_;
-        }
-
-        inline constexpr operator std::string_view() const {
-            return c_str();
-        }
-
-    private:
-        constexpr static char str_[]{chars..., '\0'};
-    };
-
-    template<typename T, T... chars>
-    inline constexpr tstring<chars...> operator ""_tstr() {
-        return {};
-    }
-
-
-    template<char... as, char... bs>
-    inline constexpr tstring<as..., bs...>
-    operator+(const tstring<as...> &, const tstring<bs...> &) {
-        return {};
-    }
-
-    template<char... as>
-    inline constexpr auto operator+(const std::string &a, const tstring<as...> &) {
-        char b[]{as..., '\0'};
-        return a + b;
-    }
-
-    template<char... as>
-    inline constexpr auto operator+(const tstring<as...> &, const std::string &b) {
-        char a[]{as..., '\0'};
-        return a + b;
-    }
 }
 
 #pragma clang diagnostic pop

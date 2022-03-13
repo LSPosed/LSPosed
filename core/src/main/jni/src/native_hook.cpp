@@ -37,8 +37,8 @@ namespace lspd {
             return;
         }
         LOGD("Start to install inline hooks");
+        art::Runtime::Setup(handler);
         art::hidden_api::DisableHiddenApi(handler);
-        GetArt(true);
         LOGD("Inline hooks installed");
     }
 }  // namespace lspd

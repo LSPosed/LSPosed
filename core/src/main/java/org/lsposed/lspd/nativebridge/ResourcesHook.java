@@ -31,7 +31,7 @@ public class ResourcesHook {
 
     public static native boolean makeInheritable(Class<?> clazz, Constructor<?>[] constructors);
 
-    public static native ClassLoader buildDummyClassLoader(ClassLoader parent, Class<?> resourceSuperClass, Class<?> typedArraySuperClass);
+    public static native ClassLoader buildDummyClassLoader(ClassLoader parent, String resourceSuperClass, String typedArraySuperClass);
 
     public static native void rewriteXmlReferencesNative(long parserPtr, XResources origRes, Resources repRes);
 }

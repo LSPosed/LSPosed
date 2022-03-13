@@ -24,9 +24,8 @@ import static org.lsposed.lspd.deopt.InlinedMethodCallers.KEY_BOOT_IMAGE;
 import static org.lsposed.lspd.deopt.InlinedMethodCallers.KEY_BOOT_IMAGE_MIUI_RES;
 import static org.lsposed.lspd.deopt.InlinedMethodCallers.KEY_SYSTEM_SERVER;
 
-import org.lsposed.lspd.nativebridge.Yahfa;
+import org.lsposed.lspd.nativebridge.HookBridge;
 import org.lsposed.lspd.util.Utils;
-import org.lsposed.lspd.yahfa.hooker.YahfaHooker;
 
 import java.lang.reflect.Executable;
 import java.util.Arrays;
@@ -46,9 +45,9 @@ public class PrebuiltMethodsDeopter {
                 if (clazz == null) {
                     continue;
                 }
-                Executable method = Yahfa.findMethodNative(clazz, caller[1], caller[2]);
+                Executable method = null;
                 if (method != null) {
-                    YahfaHooker.deoptMethodNative(method);
+                    HookBridge.deoptimizeMethod(method);
                 }
             } catch (Throwable throwable) {
                 Utils.logE("error when deopting method: " + Arrays.toString(caller), throwable);

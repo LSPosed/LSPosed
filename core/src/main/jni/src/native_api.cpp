@@ -30,6 +30,7 @@
 #include <dobby.h>
 #include <list>
 #include <dlfcn.h>
+#include "native_util.h"
 
 
 /*
@@ -59,9 +60,8 @@ namespace lspd {
     const auto[entries] = []() {
         auto *entries = new(protected_page.get()) NativeAPIEntries{
                 .version = 2,
-                // TODO
-                .hookFunc = nullptr,
-                .unhookFunc = nullptr
+                .hookFunc = &HookFunction,
+                .unhookFunc = &UnhookFunction,
         };
 
         mprotect(protected_page.get(), 4096, PROT_READ);
@@ -70,8 +70,12 @@ namespace lspd {
 
     void RegisterNativeLib(const std::string &library_name) {
         static bool initialized = []() {
-            // TODO
-            return InstallNativeAPI({});
+            return InstallNativeAPI({
+                .inline_hooker = [](auto t, auto r) {
+                    void* bk = nullptr;
+                    return HookFunction(t, r, &bk) ? bk : nullptr;
+                },
+            });
         }();
         if (!initialized) [[unlikely]] return;
         LOGD("native_api: Registered %s", library_name.c_str());
