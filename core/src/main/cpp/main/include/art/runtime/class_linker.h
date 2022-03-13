@@ -41,7 +41,7 @@ namespace art {
             art::mirror::Class mirror_class(clazz_ptr);
             auto class_def = mirror_class.GetClassDef();
             if (!class_def) return out;
-            auto set = lspd::isUninitializedHooked(class_def);
+            auto set = lspd::isClassHooked(class_def);
             if (!set.empty()) [[unlikely]] {
                 LOGD("Pending hook for %p (%s)", clazz_ptr,
                      art::mirror::Class(clazz_ptr).GetDescriptor().c_str());

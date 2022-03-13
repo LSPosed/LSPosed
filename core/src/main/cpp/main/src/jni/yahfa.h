@@ -31,7 +31,7 @@ namespace lspd {
 
     std::vector<std::pair<void*, void*>> getJitMovements();
 
-    std::unordered_set<void*> isUninitializedHooked(void *clazz);
+    const std::unordered_set<void*> &isClassHooked(void *clazz);
 
     void RegisterYahfa(JNIEnv *);
 
