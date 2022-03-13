@@ -43,7 +43,6 @@ import java.util.HashSet;
 import java.util.Set;
 
 import de.robv.android.xposed.callbacks.XC_InitPackageResources;
-import de.robv.android.xposed.callbacks.XC_InitZygote;
 import de.robv.android.xposed.callbacks.XC_LoadPackage;
 
 /**
@@ -76,7 +75,6 @@ public final class XposedBridge {
     // built-in handlers
     public static final CopyOnWriteSortedSet<XC_LoadPackage> sLoadedPackageCallbacks = new CopyOnWriteSortedSet<>();
     /*package*/ static final CopyOnWriteSortedSet<XC_InitPackageResources> sInitPackageResourcesCallbacks = new CopyOnWriteSortedSet<>();
-    /*package*/ static final CopyOnWriteSortedSet<XC_InitZygote> sInitZygoteCallbacks = new CopyOnWriteSortedSet<>();
 
     private XposedBridge() {
     }
@@ -279,12 +277,6 @@ public final class XposedBridge {
         }
     }
 
-    public static void clearLoadedPackages() {
-        synchronized (sLoadedPackageCallbacks) {
-            sLoadedPackageCallbacks.clear();
-        }
-    }
-
     /**
      * Adds a callback to be executed when the resources for an app are initialized.
      *
@@ -297,12 +289,6 @@ public final class XposedBridge {
     public static void hookInitPackageResources(XC_InitPackageResources callback) {
         synchronized (sInitPackageResourcesCallbacks) {
             sInitPackageResourcesCallbacks.add(callback);
-        }
-    }
-
-    public static void hookInitZygote(XC_InitZygote callback) {
-        synchronized (sInitZygoteCallbacks) {
-            sInitZygoteCallbacks.add(callback);
         }
     }
 
