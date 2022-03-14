@@ -106,7 +106,9 @@ android {
                         "-Wl,--gc-sections",
                         "-fno-unwind-tables",
                         "-fno-asynchronous-unwind-tables",
-                        "-flto"
+                        "-flto=thin",
+                        "-Wl,--thinlto-cache-policy,cache_size_bytes=300m",
+                        "-Wl,--thinlto-cache-dir=${buildDir.absolutePath}/.lto-cache",
                     )
                     cppFlags.addAll(flags)
                     cFlags.addAll(flags)
@@ -120,7 +122,7 @@ android {
                             "-DCMAKE_CXX_FLAGS_RELWITHDEBINFO=$configFlags",
                             "-DCMAKE_C_FLAGS_RELEASE=$configFlags",
                             "-DCMAKE_C_FLAGS_RELWITHDEBINFO=$configFlags",
-                            "-DDEBUG_SYMBOLS_PATH=${project.buildDir.absolutePath}/symbols",
+                            "-DDEBUG_SYMBOLS_PATH=${buildDir.absolutePath}/symbols",
                         )
                     )
                 }
