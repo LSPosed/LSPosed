@@ -60,9 +60,7 @@ namespace lspd {
 #endif
 
     inline static constexpr auto kEntryClassName = "org.lsposed.lspd.core.Main"_tstr;
-    inline static constexpr auto kClassLinkerClassName = "org.lsposed.lspd.nativebridge.ClassLinker"_tstr;
     inline static constexpr auto kBridgeServiceClassName = "org.lsposed.lspd.service.BridgeService"_tstr;
-    inline static constexpr auto kDexPath = "framework/lspd.dex"_tstr;
 
     inline static constexpr auto kLibArtName = "libart.so"_tstr;
     inline static constexpr auto kLibFwName = "libandroidfw.so"_tstr;
