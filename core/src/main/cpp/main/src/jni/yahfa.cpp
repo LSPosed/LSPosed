@@ -37,6 +37,9 @@ namespace lspd {
 
         std::vector<std::pair<void *, void *>> jit_movements_;
         std::shared_mutex jit_movements_lock_;
+
+        std::unordered_map<const void *, std::unordered_set<void*>> hooked_classes_;
+        std::shared_mutex hooked_classes_lock_;
     }
 
     void* isHooked(void *art_method) {
@@ -48,9 +51,26 @@ namespace lspd {
     }
 
     void recordHooked(void *art_method, void *backup) {
-        std::unique_lock lk(hooked_methods_lock_);
-        hooked_methods_.emplace(art_method, backup);
+        {
+            std::unique_lock lk(hooked_methods_lock_);
+            hooked_methods_.emplace(art_method, backup);
+        }
+        auto clazz = art::mirror::Class(reinterpret_cast<void*>(*reinterpret_cast<uint32_t*>(art_method)));
+        {
+            std::unique_lock lk(hooked_classes_lock_);
+            hooked_classes_[clazz.GetClassDef()].emplace(art_method);
+        }
     }
+
+    const std::unordered_set<void*> &isClassHooked(void *clazz) {
+        static std::unordered_set<void*> empty;
+        std::shared_lock lk(hooked_classes_lock_);
+        if (auto found = hooked_classes_.find(clazz); found != hooked_classes_.end()) {
+            return found->second;
+        }
+        return empty;
+    }
+
 
     void recordJitMovement(void *target, void *backup) {
         std::unique_lock lk(jit_movements_lock_);
