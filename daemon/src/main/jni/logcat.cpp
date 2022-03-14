@@ -224,7 +224,7 @@ void Logcat::ProcessBuffer(struct log_msg *buf) {
         shortcut = true;
     }
     if (verbose_ && (shortcut || buf->id() == log_id::LOG_ID_CRASH ||
-                     entry.pid == my_pid_ || tag == "Magisk"sv ||
+                     entry.pid == my_pid_ || tag == "Magisk"sv || tag == "Dobby"sv ||
                      tag.starts_with("Riru"sv) || tag.starts_with("zygisk"sv) ||
                      tag.starts_with("LSPosed"sv))) [[unlikely]] {
         verbose_print_count_ += PrintLogLine(entry, verbose_file_.get());

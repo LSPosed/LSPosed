@@ -43,4 +43,4 @@ target_include_directories(lspd PRIVATE src)
 
 
 find_package(riru REQUIRED CONFIG)
-target_link_libraries(lspd riru::riru android dobby dex_builder log lsplant_static)
+target_link_libraries(lspd riru::riru android dobby dex_builder_static log lsplant_static)

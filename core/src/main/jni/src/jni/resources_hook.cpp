@@ -206,7 +206,7 @@ namespace lspd {
             LSP_NATIVE_METHOD(ResourcesHook, makeInheritable,
                               "(Ljava/lang/Class;[Ljava/lang/reflect/Constructor;)Z"),
             LSP_NATIVE_METHOD(ResourcesHook, buildDummyClassLoader,
-                              "(Ljava/lang/ClassLoader;Ljava/lang/Class;Ljava/lang/Class;)Ljava/lang/ClassLoader;"),
+                              "(Ljava/lang/ClassLoader;Ljava/lang/String;Ljava/lang/String;)Ljava/lang/ClassLoader;"),
             LSP_NATIVE_METHOD(ResourcesHook, rewriteXmlReferencesNative,
                               "(JLandroid/content/res/XResources;Landroid/content/res/Resources;)V")
     };

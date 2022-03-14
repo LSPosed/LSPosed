@@ -376,13 +376,13 @@ public final class XposedBridge {
         }
     }
 
-    private static class AdditionalHookInfo {
+    public static class AdditionalHookInfo {
         final Executable method;
-        final XC_MethodHook[][] callbacks;
+        final Object[][] callbacks;
 
         private AdditionalHookInfo(Executable method, Object[][] callbacks) {
             this.method = method;
-            this.callbacks = (XC_MethodHook[][]) callbacks;
+            this.callbacks = callbacks;
         }
 
         public Object callback(Object[] args) throws Throwable {

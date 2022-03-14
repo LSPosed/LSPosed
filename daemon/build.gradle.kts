@@ -65,12 +65,6 @@ android {
         versionName = verName
         multiDexEnabled = false
 
-        externalNativeBuild {
-            ndkBuild {
-                arguments += "-j${Runtime.getRuntime().availableProcessors()}"
-            }
-        }
-
         buildConfigField("int", "API_CODE", "$apiCode")
         buildConfigField(
             "String",
@@ -145,6 +139,7 @@ android {
                         "-DCMAKE_C_FLAGS_RELWITHDEBINFO=$configFlags"
                     )
                 )
+                targets("daemon")
             }
         }
     }

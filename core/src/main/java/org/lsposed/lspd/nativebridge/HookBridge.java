@@ -8,5 +8,6 @@ public class HookBridge {
     public static native boolean unhookMethod(Executable hookMethod, Object callback);
 
     public static native boolean deoptimizeMethod(Executable method);
-    public static native Object invokeOriginalMethod(Executable method, Object thisObject, Object[] args) throws InvocationTargetException;
+
+    public static native Object invokeOriginalMethod(Executable method, Object thisObject, Object[] args) throws IllegalAccessException, IllegalArgumentException, InvocationTargetException;
 }

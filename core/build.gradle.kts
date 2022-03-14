@@ -79,6 +79,8 @@ android {
                 val flags = arrayOf(
                     "-ffixed-x18",
                     "-Qunused-arguments",
+                    "-fvisibility=hidden",
+                    "-fvisibility-inlines-hidden",
                     "-fno-rtti", "-fno-exceptions",
                     "-fno-stack-protector",
                     "-fomit-frame-pointer",
@@ -94,6 +96,7 @@ android {
                     "-DVERSION_CODE=$verCode",
                     "-DVERSION_NAME=$verName",
                 )
+                targets("lspd")
             }
         }
 
@@ -132,8 +135,6 @@ android {
             externalNativeBuild {
                 cmake {
                     val flags = arrayOf(
-                        "-fvisibility=hidden",
-                        "-fvisibility-inlines-hidden",
                         "-Wno-unused-value",
                         "-ffunction-sections",
                         "-fdata-sections",
@@ -295,9 +296,12 @@ fun afterEval() = android.applicationVariants.forEach { variant ->
             rename(".*\\.apk", "daemon.apk")
         }
         into("lib") {
-            from("${buildDir}/intermediates/cmake/$variantCapped/out/lib")
-            from("${project(":daemon").buildDir}/intermediates/cmake/$buildTypeLowered/out/lib")
-            exclude("**/*.txt")
+            from("${buildDir}/intermediates/cmake/$variantCapped/obj") {
+                include("**/liblspd.so")
+            }
+            from("${project(":daemon").buildDir}/intermediates/cmake/$buildTypeLowered/obj") {
+                include("**/libdaemon.so")
+            }
         }
         val dexOutPath = if (buildTypeLowered == "release")
             "$buildDir/intermediates/dex/$variantCapped/minify${variantCapped}WithR8" else
