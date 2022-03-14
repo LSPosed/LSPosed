@@ -77,15 +77,17 @@ android {
                 arguments += "-DEXTERNAL_ROOT=${File(rootDir.absolutePath, "external")}"
                 abiFilters("arm64-v8a", "armeabi-v7a", "x86", "x86_64")
                 val flags = arrayOf(
-                    "-ffixed-x18",
+                    "-Wall",
                     "-Qunused-arguments",
+                    "-Wno-gnu-string-literal-operator-template",
+                    "-fno-rtti",
                     "-fvisibility=hidden",
                     "-fvisibility-inlines-hidden",
-                    "-fno-rtti", "-fno-exceptions",
+                    "-fno-exceptions",
                     "-fno-stack-protector",
                     "-fomit-frame-pointer",
                     "-Wno-builtin-macro-redefined",
-                    "-Wl,--exclude-libs,ALL",
+                    "-Wno-unused-value",
                     "-D__FILE__=__FILE_NAME__",
                     "-DINJECTED_AID=$injectedPackageUid",
                 )
@@ -135,13 +137,13 @@ android {
             externalNativeBuild {
                 cmake {
                     val flags = arrayOf(
-                        "-Wno-unused-value",
+                        "-Wl,--exclude-libs,ALL",
                         "-ffunction-sections",
                         "-fdata-sections",
                         "-Wl,--gc-sections",
-                        "-Wl,--strip-all",
                         "-fno-unwind-tables",
-                        "-fno-asynchronous-unwind-tables"
+                        "-fno-asynchronous-unwind-tables",
+                        "-flto",
                     )
                     cppFlags.addAll(flags)
                     cFlags.addAll(flags)

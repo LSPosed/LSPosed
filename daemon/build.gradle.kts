@@ -81,9 +81,49 @@ android {
     }
 
     buildTypes {
+        debug {
+            externalNativeBuild {
+                cmake {
+                    arguments.addAll(
+                        arrayOf(
+                            "-DCMAKE_CXX_FLAGS_DEBUG=-Og",
+                            "-DCMAKE_C_FLAGS_DEBUG=-Og"
+                        )
+                    )
+                }
+            }
+        }
         release {
             isMinifyEnabled = true
             proguardFiles("proguard-rules.pro")
+
+            externalNativeBuild {
+                cmake {
+                    val flags = arrayOf(
+                        "-Wl,--exclude-libs,ALL",
+                        "-ffunction-sections",
+                        "-fdata-sections",
+                        "-Wl,--gc-sections",
+                        "-fno-unwind-tables",
+                        "-fno-asynchronous-unwind-tables",
+                        "-flto"
+                    )
+                    cppFlags.addAll(flags)
+                    cFlags.addAll(flags)
+                    val configFlags = arrayOf(
+                        "-Oz",
+                        "-DNDEBUG"
+                    ).joinToString(" ")
+                    arguments.addAll(
+                        arrayOf(
+                            "-DCMAKE_CXX_FLAGS_RELEASE=$configFlags",
+                            "-DCMAKE_CXX_FLAGS_RELWITHDEBINFO=$configFlags",
+                            "-DCMAKE_C_FLAGS_RELEASE=$configFlags",
+                            "-DCMAKE_C_FLAGS_RELWITHDEBINFO=$configFlags"
+                        )
+                    )
+                }
+            }
         }
     }
 
@@ -115,30 +155,12 @@ android {
                     "-fno-stack-protector",
                     "-fomit-frame-pointer",
                     "-Wno-builtin-macro-redefined",
-                    "-Wl,--strip-all",
-                    "-ffunction-sections",
-                    "-fdata-sections",
                     "-Wno-unused-value",
-                    "-Wl,--gc-sections",
                     "-D__FILE__=__FILE_NAME__",
-                    "-Wl,--exclude-libs,ALL",
                 )
                 cppFlags("-std=c++20", *flags)
                 cFlags("-std=c18", *flags)
-                arguments += "-DANDROID_STL=none"
-                val configFlags = arrayOf(
-                    "-Oz",
-                    "-DNDEBUG",
-                    "-flto"
-                ).joinToString(" ")
-                arguments.addAll(
-                    arrayOf(
-                        "-DCMAKE_CXX_FLAGS_RELEASE=$configFlags",
-                        "-DCMAKE_CXX_FLAGS_RELWITHDEBINFO=$configFlags",
-                        "-DCMAKE_C_FLAGS_RELEASE=$configFlags",
-                        "-DCMAKE_C_FLAGS_RELWITHDEBINFO=$configFlags"
-                    )
-                )
+                arguments("-DANDROID_STL=none")
                 targets("daemon")
             }
         }

@@ -36,11 +36,17 @@ elseif (${API} STREQUAL "zygisk")
     set(SRC_LIST ${SRC_LIST} api/zygisk_main.cpp)
 endif()
 
-add_library(lspd SHARED ${SRC_LIST} ${CMAKE_CURRENT_BINARY_DIR}/src/config.cpp)
+add_library(${PROJECT_NAME} SHARED ${SRC_LIST} ${CMAKE_CURRENT_BINARY_DIR}/src/config.cpp)
 
-target_include_directories(lspd PUBLIC include)
-target_include_directories(lspd PRIVATE src)
+target_include_directories(${PROJECT_NAME} PUBLIC include)
+target_include_directories(${PROJECT_NAME} PRIVATE src)
 
 
 find_package(riru REQUIRED CONFIG)
-target_link_libraries(lspd riru::riru android dobby dex_builder_static log lsplant_static)
+target_link_libraries(${PROJECT_NAME} riru::riru dobby dex_builder_static log lsplant_static)
+
+add_custom_command(TARGET ${PROJECT_NAME} POST_BUILD
+        COMMAND ${CMAKE_COMMAND} -E make_directory ${DEBUG_SYMBOLS_PATH}/${ANDROID_ABI}
+        COMMAND ${CMAKE_OBJCOPY} --only-keep-debug $<TARGET_FILE:${PROJECT_NAME}>
+        ${DEBUG_SYMBOLS_PATH}/${ANDROID_ABI}/${PROJECT_NAME}
+        COMMAND ${CMAKE_STRIP} --strip-all $<TARGET_FILE:${PROJECT_NAME}>)

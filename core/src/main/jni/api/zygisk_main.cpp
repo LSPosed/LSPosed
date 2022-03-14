@@ -356,7 +356,6 @@ namespace lspd {
     }
 
     void CompanionEntry(int client) {
-        LOGE("HHHHHHHHHHHHHHHHHHHEEEEEEEEEEEELLLLLLLLLLLLLLLLLLLLLLLLLLLLOOOOOOOOOOOOOOO");
         using namespace std::string_literals;
         static auto symbol = InitCompanion();
         LOGD("Got cache with fd=%d size=%d", symbol.get(), (int) symbol.size());
