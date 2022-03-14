@@ -18,20 +18,31 @@
  * Copyright (C) 2021 LSPosed Contributors
  */
 
-package org.lsposed.lspd.nativebridge;
+#pragma once
 
-import android.content.res.Resources;
-import android.content.res.XResources;
+#pragma clang diagnostic push
+#pragma clang diagnostic ignored "-Wgnu-string-literal-operator-template"
 
-import java.lang.reflect.Constructor;
+#include <string>
+#include <filesystem>
+#include <sys/system_properties.h>
+#include <unistd.h>
+#include <sys/stat.h>
+#include "logging.h"
 
-public class ResourcesHook {
+namespace lspd {
+    using namespace std::literals::string_literals;
 
-    public static native boolean initXResourcesNative();
-
-    public static native boolean makeInheritable(Class<?> clazz, Constructor<?>[] constructors);
-
-    public static native ClassLoader buildDummyClassLoader(ClassLoader parent, String resourceSuperClass, String typedArraySuperClass);
-
-    public static native void rewriteXmlReferencesNative(long parserPtr, XResources origRes, Resources repRes);
+    inline int32_t GetAndroidApiLevel() {
+        static int32_t api_level = []() {
+            char prop_value[PROP_VALUE_MAX];
+            __system_property_get("ro.build.version.sdk", prop_value);
+            int base = atoi(prop_value);
+            __system_property_get("ro.build.version.preview_sdk", prop_value);
+            return base + atoi(prop_value);
+        }();
+        return api_level;
+    }
 }
+
+#pragma clang diagnostic pop

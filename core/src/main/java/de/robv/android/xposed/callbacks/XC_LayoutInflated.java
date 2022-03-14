@@ -56,7 +56,7 @@ public abstract class XC_LayoutInflated extends XCallback {
          * @hide
          */
         public LayoutInflatedParam(CopyOnWriteSortedSet<XC_LayoutInflated> callbacks) {
-            super(callbacks);
+            super((XCallback[]) callbacks.getSnapshot());
         }
 
         /**

@@ -18,20 +18,27 @@
  * Copyright (C) 2021 LSPosed Contributors
  */
 
-package org.lsposed.lspd.nativebridge;
+//
+// Created by 双草酸酯 on 2/7/21.
+//
+#include "native_api.h"
+#include "native_util.h"
+#include "utils/jni_helper.hpp"
+#include "../native_api.h"
 
-import android.content.res.Resources;
-import android.content.res.XResources;
+using namespace lsplant;
 
-import java.lang.reflect.Constructor;
+namespace lspd {
+    LSP_DEF_NATIVE_METHOD(void, NativeAPI, recordNativeEntrypoint, jstring jstr) {
+        lsplant::JUTFString str(env, jstr);
+        RegisterNativeLib(str);
+    }
 
-public class ResourcesHook {
+    static JNINativeMethod gMethods[] = {
+            LSP_NATIVE_METHOD(NativeAPI, recordNativeEntrypoint, "(Ljava/lang/String;)V")
+    };
 
-    public static native boolean initXResourcesNative();
-
-    public static native boolean makeInheritable(Class<?> clazz, Constructor<?>[] constructors);
-
-    public static native ClassLoader buildDummyClassLoader(ClassLoader parent, String resourceSuperClass, String typedArraySuperClass);
-
-    public static native void rewriteXmlReferencesNative(long parserPtr, XResources origRes, Resources repRes);
+    void RegisterNativeAPI(JNIEnv *env) {
+        REGISTER_LSP_NATIVE_METHODS(NativeAPI);
+    }
 }

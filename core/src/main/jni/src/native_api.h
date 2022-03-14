@@ -18,20 +18,36 @@
  * Copyright (C) 2021 LSPosed Contributors
  */
 
-package org.lsposed.lspd.nativebridge;
+//
+// Created by kotori on 2/4/21.
+//
 
-import android.content.res.Resources;
-import android.content.res.XResources;
+#ifndef LSPOSED_NATIVE_API_H
+#define LSPOSED_NATIVE_API_H
 
-import java.lang.reflect.Constructor;
+#include <cstdint>
+#include <string>
 
-public class ResourcesHook {
+#include "utils/hook_helper.hpp"
 
-    public static native boolean initXResourcesNative();
+typedef int (*HookFunType)(void *func, void *replace, void **backup);
 
-    public static native boolean makeInheritable(Class<?> clazz, Constructor<?>[] constructors);
+typedef int (*UnhookFunType)(void *func);
 
-    public static native ClassLoader buildDummyClassLoader(ClassLoader parent, String resourceSuperClass, String typedArraySuperClass);
+typedef void (*NativeOnModuleLoaded)(const char *name, void *handle);
 
-    public static native void rewriteXmlReferencesNative(long parserPtr, XResources origRes, Resources repRes);
+typedef struct {
+    uint32_t version;
+    HookFunType hookFunc;
+    UnhookFunType unhookFunc;
+} NativeAPIEntries;
+
+typedef NativeOnModuleLoaded (*NativeInit)(const NativeAPIEntries *entries);
+
+namespace lspd {
+    bool InstallNativeAPI(const lsplant::HookHandler& handler);
+
+    void RegisterNativeLib(const std::string &library_name);
 }
+
+#endif //LSPOSED_NATIVE_API_H

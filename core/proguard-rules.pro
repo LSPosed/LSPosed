@@ -7,9 +7,6 @@
 -keepclasseswithmembers,includedescriptorclasses class * {
     native <methods>;
 }
--keepclasseswithmembers class org.lsposed.lspd.nativebridge.ClassLinker {
-    public static void onPostFixupStaticTrampolines(java.lang.Class);
-}
 -keepclasseswithmembers class org.lsposed.lspd.service.BridgeService {
     public static boolean *(android.os.IBinder, int, long, long, int);
 }

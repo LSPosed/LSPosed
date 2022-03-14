@@ -26,9 +26,7 @@ import org.lsposed.lspd.deopt.PrebuiltMethodsDeopter;
 
 import java.io.Serializable;
 
-import de.robv.android.xposed.IModuleContext;
 import de.robv.android.xposed.XposedBridge;
-import de.robv.android.xposed.XposedBridge.CopyOnWriteSortedSet;
 
 /**
  * Base class for Xposed callbacks.
@@ -36,7 +34,7 @@ import de.robv.android.xposed.XposedBridge.CopyOnWriteSortedSet;
  * This class only keeps a priority for ordering multiple callbacks.
  * The actual (abstract) callback methods are added by subclasses.
  */
-public abstract class XCallback implements Comparable<XCallback>, IModuleContext {
+abstract public class XCallback {
     /**
      * Callback priority, higher number means earlier execution.
      *
@@ -69,7 +67,7 @@ public abstract class XCallback implements Comparable<XCallback>, IModuleContext
         /**
          * @hide
          */
-        public final Object[] callbacks;
+        public final XCallback[] callbacks;
         private Bundle extra;
 
         /**
@@ -83,8 +81,8 @@ public abstract class XCallback implements Comparable<XCallback>, IModuleContext
         /**
          * @hide
          */
-        protected Param(CopyOnWriteSortedSet<? extends XCallback> callbacks) {
-            this.callbacks = callbacks.getSnapshot();
+        protected Param(XCallback[] callbacks) {
+            this.callbacks = callbacks;
         }
 
         /**
@@ -147,7 +145,7 @@ public abstract class XCallback implements Comparable<XCallback>, IModuleContext
 
         for (int i = 0; i < param.callbacks.length; i++) {
             try {
-                ((XCallback) param.callbacks[i]).call(param);
+                param.callbacks[i].call(param);
             } catch (Throwable t) {
                 XposedBridge.log(t);
             }
@@ -160,28 +158,6 @@ public abstract class XCallback implements Comparable<XCallback>, IModuleContext
     protected void call(Param param) throws Throwable {
     }
 
-    @Override
-    public String getApkPath() {
-        return "";
-    }
-
-    /**
-     * @hide
-     */
-    @Override
-    public int compareTo(XCallback other) {
-        if (this == other)
-            return 0;
-
-        // order descending by priority
-        if (other.priority != this.priority)
-            return other.priority - this.priority;
-            // then randomly
-        else if (System.identityHashCode(this) < System.identityHashCode(other))
-            return -1;
-        else
-            return 1;
-    }
 
     /**
      * The default priority, see {@link #priority}.

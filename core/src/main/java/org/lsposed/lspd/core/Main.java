@@ -39,7 +39,6 @@ import org.lsposed.lspd.hooker.LoadedApkCstrHooker;
 import org.lsposed.lspd.hooker.HandleSystemServerProcessHooker;
 import org.lsposed.lspd.util.ParasiticManagerHooker;
 import org.lsposed.lspd.util.Utils;
-import org.lsposed.lspd.yahfa.hooker.YahfaHooker;
 
 import java.io.File;
 
@@ -77,7 +76,6 @@ public class Main {
 
     public static void forkPostCommon(boolean isSystem, String appDataDir, String niceName) {
         // init logger
-        YahfaHooker.init();
         XposedBridge.initXResources();
         XposedInit.startsSystemServer = isSystem;
         PrebuiltMethodsDeopter.deoptBootMethods(); // do it once for secondary zygote

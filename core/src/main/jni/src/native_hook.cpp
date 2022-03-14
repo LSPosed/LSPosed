@@ -18,20 +18,28 @@
  * Copyright (C) 2021 LSPosed Contributors
  */
 
-package org.lsposed.lspd.nativebridge;
+#include <dlfcn.h>
+#include <string>
+#include <vector>
+#include <dobby.h>
+#include "symbol_cache.h"
+#include "logging.h"
+#include "native_api.h"
+#include "native_hook.h"
+#include "art/runtime/hidden_api.h"
 
-import android.content.res.Resources;
-import android.content.res.XResources;
+namespace lspd {
+    static std::atomic_bool installed = false;
 
-import java.lang.reflect.Constructor;
+    void InstallInlineHooks(const lsplant::HookHandler& handler) {
+        if (installed.exchange(true)) [[unlikely]] {
+            LOGD("Inline hooks have been installed, skip");
+            return;
+        }
+        LOGD("Start to install inline hooks");
+        art::Runtime::Setup(handler);
+        art::hidden_api::DisableHiddenApi(handler);
+        LOGD("Inline hooks installed");
+    }
+}  // namespace lspd
 
-public class ResourcesHook {
-
-    public static native boolean initXResourcesNative();
-
-    public static native boolean makeInheritable(Class<?> clazz, Constructor<?>[] constructors);
-
-    public static native ClassLoader buildDummyClassLoader(ClassLoader parent, String resourceSuperClass, String typedArraySuperClass);
-
-    public static native void rewriteXmlReferencesNative(long parserPtr, XResources origRes, Resources repRes);
-}

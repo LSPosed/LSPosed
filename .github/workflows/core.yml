@@ -46,6 +46,7 @@ jobs:
       with:
         path: |
           ~/.gradle/caches/build-cache-*
+          ~/.gradle/buildOutputCleanup/cache.properties
         key: gradle-builds-core-${{ github.sha }}
         restore-keys: |
           gradle-builds
@@ -66,8 +67,6 @@ jobs:
         ccache -o compiler_check='%compiler% -dumpmachine; %compiler% -dumpversion'
         ccache -zp
     - name: Build with Gradle
-      env:
-        NDK_CCACHE: ccache
       run: |
         [ $(du -s ~/.gradle/wrapper | awk '{ print $1 }') -gt 250000 ] && rm -rf ~/.gradle/wrapper/* || true
         find ~/.gradle/caches -exec touch -d "2 days ago" {} + || true
@@ -117,6 +116,13 @@ jobs:
         path: |
           core/build/outputs/mapping
           app/build/outputs/mapping
+    - name: Upload symbols
+      uses: actions/upload-artifact@v2
+      with:
+        name: symbols
+        path: |
+          core/build/symbols
+          daemon/build/symbols
     - name: Post to channel
       if: ${{ github.event_name != 'pull_request' && success() && github.ref == 'refs/heads/master' }}
       env:

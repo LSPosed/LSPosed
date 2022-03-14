@@ -18,20 +18,11 @@
  * Copyright (C) 2021 LSPosed Contributors
  */
 
-package org.lsposed.lspd.nativebridge;
+#pragma once
 
-import android.content.res.Resources;
-import android.content.res.XResources;
+#include "utils/hook_helper.hpp"
 
-import java.lang.reflect.Constructor;
+namespace lspd {
+    void InstallInlineHooks(const lsplant::HookHandler &handler);
 
-public class ResourcesHook {
-
-    public static native boolean initXResourcesNative();
-
-    public static native boolean makeInheritable(Class<?> clazz, Constructor<?>[] constructors);
-
-    public static native ClassLoader buildDummyClassLoader(ClassLoader parent, String resourceSuperClass, String typedArraySuperClass);
-
-    public static native void rewriteXmlReferencesNative(long parserPtr, XResources origRes, Resources repRes);
 }

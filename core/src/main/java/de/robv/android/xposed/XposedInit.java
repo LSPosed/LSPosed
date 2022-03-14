@@ -23,9 +23,6 @@ package de.robv.android.xposed;
 import static org.lsposed.lspd.config.LSPApplicationServiceClient.serviceClient;
 import static org.lsposed.lspd.deopt.PrebuiltMethodsDeopter.deoptResourceMethods;
 import static de.robv.android.xposed.XposedBridge.hookAllMethods;
-import static de.robv.android.xposed.XposedBridge.sInitPackageResourcesCallbacks;
-import static de.robv.android.xposed.XposedBridge.sInitZygoteCallbacks;
-import static de.robv.android.xposed.XposedBridge.sLoadedPackageCallbacks;
 import static de.robv.android.xposed.XposedHelpers.callMethod;
 import static de.robv.android.xposed.XposedHelpers.findAndHookMethod;
 import static de.robv.android.xposed.XposedHelpers.getObjectField;
@@ -58,8 +55,6 @@ import java.util.concurrent.ConcurrentHashMap;
 import java.util.concurrent.atomic.AtomicBoolean;
 
 import de.robv.android.xposed.callbacks.XC_InitPackageResources;
-import de.robv.android.xposed.callbacks.XC_InitZygote;
-import de.robv.android.xposed.callbacks.XC_LoadPackage;
 import de.robv.android.xposed.callbacks.XCallback;
 import hidden.HiddenApiBridge;
 
@@ -219,79 +214,22 @@ public final class XposedInit {
         return newRes;
     }
 
-    /**
-     * Try to load all modules defined in <code>INSTALLER_DATA_BASE_DIR/conf/modules.list</code>
-     */
-    private static final AtomicBoolean modulesLoaded = new AtomicBoolean(false);
-    private static final Object moduleLoadLock = new Object();
-    // @GuardedBy("moduleLoadLock")
     private static final ArraySet<String> loadedModules = new ArraySet<>();
 
-    public static ArraySet<String> getLoadedModules() {
-        synchronized (moduleLoadLock) {
-            return loadedModules;
-        }
+    synchronized public static ArraySet<String> getLoadedModules() {
+        return loadedModules;
     }
 
-    public static void loadModules() {
-        boolean hasLoaded = !modulesLoaded.compareAndSet(false, true);
-        if (hasLoaded) {
-            return;
-        }
-        synchronized (moduleLoadLock) {
-            var moduleList = serviceClient.getModulesList();
-            var newLoadedApk = new ArraySet<String>();
-            moduleList.forEach(module -> {
-                var apk = module.apkPath;
-                var name = module.packageName;
-                var file = module.file;
-                if (loadedModules.contains(apk)) {
-                    newLoadedApk.add(apk);
-                } else {
-                    loadedModules.add(apk); // temporarily add it for XSharedPreference
-                    boolean loadSuccess = loadModule(name, apk, file);
-                    if (loadSuccess) {
-                        newLoadedApk.add(apk);
-                    }
-                }
-
-                loadedModules.clear();
-                loadedModules.addAll(newLoadedApk);
-
-                // refresh callback according to current loaded module list
-                pruneCallbacks();
-            });
-        }
-    }
-
-    // remove deactivated or outdated module callbacks
-    private static void pruneCallbacks() {
-        synchronized (moduleLoadLock) {
-            Object[] loadedPkgSnapshot = sLoadedPackageCallbacks.getSnapshot();
-            Object[] initPkgResSnapshot = sInitPackageResourcesCallbacks.getSnapshot();
-            Object[] initZygoteSnapshot = sInitZygoteCallbacks.getSnapshot();
-            for (Object loadedPkg : loadedPkgSnapshot) {
-                if (loadedPkg instanceof IModuleContext) {
-                    if (!loadedModules.contains(((IModuleContext) loadedPkg).getApkPath())) {
-                        sLoadedPackageCallbacks.remove((XC_LoadPackage) loadedPkg);
-                    }
-                }
+    synchronized public static void loadModules() {
+        var moduleList = serviceClient.getModulesList();
+        moduleList.forEach(module -> {
+            var apk = module.apkPath;
+            var name = module.packageName;
+            var file = module.file;
+            if (loadModule(name, apk, file)) {
+                loadedModules.add(apk); // temporarily add it for XSharedPreference
             }
-            for (Object initPkgRes : initPkgResSnapshot) {
-                if (initPkgRes instanceof IModuleContext) {
-                    if (!loadedModules.contains(((IModuleContext) initPkgRes).getApkPath())) {
-                        sInitPackageResourcesCallbacks.remove((XC_InitPackageResources) initPkgRes);
-                    }
-                }
-            }
-            for (Object initZygote : initZygoteSnapshot) {
-                if (initZygote instanceof IModuleContext) {
-                    if (!loadedModules.contains(((IModuleContext) initZygote).getApkPath())) {
-                        sInitZygoteCallbacks.remove((XC_InitZygote) initZygote);
-                    }
-                }
-            }
-        }
+        });
     }
 
     /**
@@ -321,23 +259,18 @@ public final class XposedInit {
                     IXposedHookZygoteInit.StartupParam param = new IXposedHookZygoteInit.StartupParam();
                     param.modulePath = apk;
                     param.startsSystemServer = startsSystemServer;
-
-                    XposedBridge.hookInitZygote(new IXposedHookZygoteInit.Wrapper(
-                            (IXposedHookZygoteInit) moduleInstance, param));
                     ((IXposedHookZygoteInit) moduleInstance).initZygote(param);
                     count++;
                 }
 
                 if (moduleInstance instanceof IXposedHookLoadPackage) {
-                    XposedBridge.hookLoadPackage(new IXposedHookLoadPackage.Wrapper(
-                            (IXposedHookLoadPackage) moduleInstance, apk));
+                    XposedBridge.hookLoadPackage(new IXposedHookLoadPackage.Wrapper((IXposedHookLoadPackage) moduleInstance));
                     count++;
                 }
 
                 if (moduleInstance instanceof IXposedHookInitPackageResources) {
                     hookResources();
-                    XposedBridge.hookInitPackageResources(new IXposedHookInitPackageResources.Wrapper(
-                            (IXposedHookInitPackageResources) moduleInstance, apk));
+                    XposedBridge.hookInitPackageResources(new IXposedHookInitPackageResources.Wrapper((IXposedHookInitPackageResources) moduleInstance));
                     count++;
                 }
             } catch (Throwable t) {

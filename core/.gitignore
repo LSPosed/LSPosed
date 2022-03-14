@@ -1,3 +1,4 @@
 /build
 /release
-/src/main/cpp/main/api/config.cpp
+/src/main/cpp/api/config.cpp
+/.cxx
