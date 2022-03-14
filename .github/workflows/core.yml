@@ -46,6 +46,7 @@ jobs:
       with:
         path: |
           ~/.gradle/caches/build-cache-*
+          ~/.gradle/buildOutputCleanup/cache.properties
         key: gradle-builds-core-${{ github.sha }}
         restore-keys: |
           gradle-builds
@@ -115,6 +116,13 @@ jobs:
         path: |
           core/build/outputs/mapping
           app/build/outputs/mapping
+    - name: Upload symbols
+      uses: actions/upload-artifact@v2
+      with:
+        name: symbols
+        path: |
+          core/build/symbols
+          daemon/build/symbols
     - name: Post to channel
       if: ${{ github.event_name != 'pull_request' && success() && github.ref == 'refs/heads/master' }}
       env:

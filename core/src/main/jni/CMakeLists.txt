@@ -1,30 +1,7 @@
 project(lspd)
 cmake_minimum_required(VERSION 3.4.1)
 
-
-find_program(CCACHE ccache)
-
-if (CCACHE)
-    set(CMAKE_CXX_COMPILER_LAUNCHER ${CCACHE})
-    set(CMAKE_C_COMPILER_LAUNCHER ${CCACHE})
-endif ()
-
-find_package(cxx REQUIRED CONFIG)
-link_libraries(cxx::cxx)
-
-cmake_minimum_required(VERSION 3.4.1)
-
-macro(SET_OPTION option value)
-    set(${option} ${value} CACHE INTERNAL "" FORCE)
-endmacro()
-
-SET_OPTION(DOBBY_GENERATE_SHARED OFF)
-if (NOT CMAKE_BUILD_TYPE STREQUAL "Debug")
-    SET_OPTION(DOBBY_DEBUG OFF)
-endif ()
-add_subdirectory(${EXTERNAL_ROOT}/lsplant/lsplant/src/main/jni lsplant)
-add_subdirectory(${EXTERNAL_ROOT}/dobby dobby)
-
+add_subdirectory(${EXTERNAL_ROOT} external)
 
 configure_file(template/config.cpp src/config.cpp)
 
@@ -41,16 +18,16 @@ add_library(${PROJECT_NAME} SHARED ${SRC_LIST} ${CMAKE_CURRENT_BINARY_DIR}/src/c
 target_include_directories(${PROJECT_NAME} PUBLIC include)
 target_include_directories(${PROJECT_NAME} PRIVATE src)
 
+target_link_libraries(${PROJECT_NAME} dobby dex_builder_static log lsplant_static)
 
-find_package(riru REQUIRED CONFIG)
-target_link_libraries(${PROJECT_NAME} riru::riru dobby dex_builder_static log lsplant_static)
-
-if (NOT DEFINED DEBUG_SYMBOLS_PATH)
-    set(DEBUG_SYMBOLS_PATH ${CMAKE_BINARY_DIR}/symbols)
+if (DEFINED DEBUG_SYMBOLS_PATH)
+    set(DEBUG_SYMBOLS_PATH ${DEBUG_SYMBOLS_PATH}/${API})
+    message(STATUS "Debug symbols will be placed at ${DEBUG_SYMBOLS_PATH}")
+    add_custom_command(TARGET ${PROJECT_NAME} POST_BUILD
+            COMMAND ${CMAKE_COMMAND} -E make_directory ${DEBUG_SYMBOLS_PATH}/${ANDROID_ABI}
+            COMMAND ${CMAKE_OBJCOPY} --only-keep-debug $<TARGET_FILE:${PROJECT_NAME}>
+            ${DEBUG_SYMBOLS_PATH}/${ANDROID_ABI}/${PROJECT_NAME}.debug
+            COMMAND ${CMAKE_STRIP} --strip-all $<TARGET_FILE:${PROJECT_NAME}>
+            COMMAND ${CMAKE_OBJCOPY} --add-gnu-debuglink ${DEBUG_SYMBOLS_PATH}/${ANDROID_ABI}/${PROJECT_NAME}.debug
+            $<TARGET_FILE:${PROJECT_NAME}>)
 endif()
-
-add_custom_command(TARGET ${PROJECT_NAME} POST_BUILD
-        COMMAND ${CMAKE_COMMAND} -E make_directory ${DEBUG_SYMBOLS_PATH}/${ANDROID_ABI}
-        COMMAND ${CMAKE_OBJCOPY} --only-keep-debug $<TARGET_FILE:${PROJECT_NAME}>
-        ${DEBUG_SYMBOLS_PATH}/${ANDROID_ABI}/${PROJECT_NAME}
-        COMMAND ${CMAKE_STRIP} --strip-all $<TARGET_FILE:${PROJECT_NAME}>)

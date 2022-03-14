@@ -119,7 +119,8 @@ android {
                             "-DCMAKE_CXX_FLAGS_RELEASE=$configFlags",
                             "-DCMAKE_CXX_FLAGS_RELWITHDEBINFO=$configFlags",
                             "-DCMAKE_C_FLAGS_RELEASE=$configFlags",
-                            "-DCMAKE_C_FLAGS_RELWITHDEBINFO=$configFlags"
+                            "-DCMAKE_C_FLAGS_RELWITHDEBINFO=$configFlags",
+                            "-DDEBUG_SYMBOLS_PATH=${project.buildDir.absolutePath}/symbols",
                         )
                     )
                 }
@@ -217,7 +218,6 @@ afterEvaluate {
 }
 
 dependencies {
-    implementation("dev.rikka.ndk.thirdparty:cxx:1.2.0")
     implementation("com.android.tools.build:apksig:$agpVersion")
     implementation("org.apache.commons:commons-lang3:3.12.0")
     compileOnly("androidx.annotation:annotation:1.3.0")

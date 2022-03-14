@@ -28,7 +28,7 @@
 #include "symbol_cache.h"
 
 #define RIRU_MODULE
-#include <riru.h>
+#include "riru.h"
 
 namespace lspd {
     int *allowUnload = nullptr;

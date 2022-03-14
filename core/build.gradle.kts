@@ -124,7 +124,7 @@ android {
                     arguments.addAll(
                         arrayOf(
                             "-DCMAKE_CXX_FLAGS_DEBUG=-Og",
-                            "-DCMAKE_C_FLAGS_DEBUG=-Og"
+                            "-DCMAKE_C_FLAGS_DEBUG=-Og",
                         )
                     )
                 }
@@ -156,13 +156,15 @@ android {
                             "-DCMAKE_CXX_FLAGS_RELEASE=$configFlags",
                             "-DCMAKE_CXX_FLAGS_RELWITHDEBINFO=$configFlags",
                             "-DCMAKE_C_FLAGS_RELEASE=$configFlags",
-                            "-DCMAKE_C_FLAGS_RELWITHDEBINFO=$configFlags"
+                            "-DCMAKE_C_FLAGS_RELWITHDEBINFO=$configFlags",
+                            "-DDEBUG_SYMBOLS_PATH=${project.buildDir.absolutePath}/symbols",
                         )
                     )
                 }
             }
         }
     }
+
     externalNativeBuild {
         cmake {
             path("src/main/jni/CMakeLists.txt")
@@ -208,10 +210,6 @@ android {
 
 
 dependencies {
-    // keep this dep since it affects ccache
-    implementation("dev.rikka.ndk:riru:26.0.0")
-    implementation("dev.rikka.ndk.thirdparty:cxx:1.2.0")
-    implementation("io.github.vvb2060.ndk:dobby:1.2")
     implementation("org.apache.commons:commons-lang3:3.12.0")
     implementation("de.upb.cs.swt:axml:2.1.2")
     compileOnly("androidx.annotation:annotation:1.3.0")
