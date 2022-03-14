@@ -45,6 +45,10 @@ target_include_directories(${PROJECT_NAME} PRIVATE src)
 find_package(riru REQUIRED CONFIG)
 target_link_libraries(${PROJECT_NAME} riru::riru dobby dex_builder_static log lsplant_static)
 
+if (NOT DEFINED DEBUG_SYMBOLS_PATH)
+    set(DEBUG_SYMBOLS_PATH ${CMAKE_BINARY_DIR}/symbols)
+endif()
+
 add_custom_command(TARGET ${PROJECT_NAME} POST_BUILD
         COMMAND ${CMAKE_COMMAND} -E make_directory ${DEBUG_SYMBOLS_PATH}/${ANDROID_ABI}
         COMMAND ${CMAKE_OBJCOPY} --only-keep-debug $<TARGET_FILE:${PROJECT_NAME}>

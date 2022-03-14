@@ -26,6 +26,10 @@ add_subdirectory(${EXTERNAL_ROOT}/lsplant/lsplant/src/main/jni lsplant)
 
 target_link_libraries(${PROJECT_NAME} PRIVATE lsplant_static dex_builder_static android log)
 
+if (NOT DEFINED DEBUG_SYMBOLS_PATH)
+    set(DEBUG_SYMBOLS_PATH ${CMAKE_BINARY_DIR}/symbols)
+endif()
+
 add_custom_command(TARGET ${PROJECT_NAME} POST_BUILD
         COMMAND ${CMAKE_COMMAND} -E make_directory ${DEBUG_SYMBOLS_PATH}/${ANDROID_ABI}
         COMMAND ${CMAKE_OBJCOPY} --only-keep-debug $<TARGET_FILE:${PROJECT_NAME}>

@@ -66,8 +66,6 @@ jobs:
         ccache -o compiler_check='%compiler% -dumpmachine; %compiler% -dumpversion'
         ccache -zp
     - name: Build with Gradle
-      env:
-        NDK_CCACHE: ccache
       run: |
         [ $(du -s ~/.gradle/wrapper | awk '{ print $1 }') -gt 250000 ] && rm -rf ~/.gradle/wrapper/* || true
         find ~/.gradle/caches -exec touch -d "2 days ago" {} + || true
