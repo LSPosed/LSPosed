@@ -21,7 +21,6 @@
 #pragma once
 
 #include "jni.h"
-#include <unordered_set>
 #include <utility>
 #include <vector>
 
@@ -30,8 +29,6 @@ namespace lspd {
     void* isHooked(void* art_method);
 
     std::vector<std::pair<void*, void*>> getJitMovements();
-
-    const std::unordered_set<void*> &isClassHooked(void *clazz);
 
     void RegisterYahfa(JNIEnv *);
 

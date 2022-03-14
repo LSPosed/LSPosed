@@ -33,6 +33,7 @@
 #include "art/runtime/class_linker.h"
 #include "art/runtime/thread.h"
 #include "art/runtime/hidden_api.h"
+#include "art/runtime/instrumentation.h"
 #include "art/runtime/thread_list.h"
 #include "art/runtime/gc/scoped_gc_critical_section.h"
 #include "art/runtime/jit/jit_code_cache.h"
@@ -57,6 +58,7 @@ namespace lspd {
         art::ClassLinker::Setup(handle_libart);
         art::mirror::Class::Setup(handle_libart);
         art::JNIEnvExt::Setup(handle_libart);
+        art::instrumentation::DisableUpdateHookedMethodsCode(handle_libart);
         art::thread_list::ScopedSuspendAll::Setup(handle_libart);
         art::gc::ScopedGCCriticalSection::Setup(handle_libart);
         art::jit::jit_code_cache::Setup(handle_libart);
