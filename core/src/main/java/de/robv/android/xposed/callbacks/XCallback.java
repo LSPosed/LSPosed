@@ -27,7 +27,6 @@ import org.lsposed.lspd.deopt.PrebuiltMethodsDeopter;
 import java.io.Serializable;
 
 import de.robv.android.xposed.XposedBridge;
-import de.robv.android.xposed.XposedBridge.CopyOnWriteSortedSet;
 
 /**
  * Base class for Xposed callbacks.
@@ -68,7 +67,7 @@ abstract public class XCallback {
         /**
          * @hide
          */
-        public final Object[] callbacks;
+        public final XCallback[] callbacks;
         private Bundle extra;
 
         /**
@@ -82,8 +81,8 @@ abstract public class XCallback {
         /**
          * @hide
          */
-        protected Param(CopyOnWriteSortedSet<? extends XCallback> callbacks) {
-            this.callbacks = callbacks.getSnapshot();
+        protected Param(XCallback[] callbacks) {
+            this.callbacks = callbacks;
         }
 
         /**
@@ -146,7 +145,7 @@ abstract public class XCallback {
 
         for (int i = 0; i < param.callbacks.length; i++) {
             try {
-                ((XCallback) param.callbacks[i]).call(param);
+                param.callbacks[i].call(param);
             } catch (Throwable t) {
                 XposedBridge.log(t);
             }

@@ -22,8 +22,9 @@ package de.robv.android.xposed.callbacks;
 
 import android.content.res.XResources;
 
+import java.util.concurrent.CopyOnWriteArraySet;
+
 import de.robv.android.xposed.IXposedHookInitPackageResources;
-import de.robv.android.xposed.XposedBridge.CopyOnWriteSortedSet;
 
 /**
  * This class is only used for internal purposes, except for the {@link InitPackageResourcesParam}
@@ -57,8 +58,8 @@ public abstract class XC_InitPackageResources extends XCallback implements IXpos
         /**
          * @hide
          */
-        public InitPackageResourcesParam(CopyOnWriteSortedSet<XC_InitPackageResources> callbacks) {
-            super(callbacks);
+        public InitPackageResourcesParam(CopyOnWriteArraySet<XC_InitPackageResources> callbacks) {
+            super(callbacks.toArray(new XCallback[0]));
         }
 
         /**
