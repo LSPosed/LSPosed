@@ -178,8 +178,8 @@
     <string name="update_channel_stable">稳定版</string>
     <string name="update_channel_bate">测试版</string>
     <string name="update_channel_nightly">每夜版</string>
-    <string name="pref_title_restrict_classloader">只有模块classloader可以使用Xposed API</string>
-    <string name="pref_summary_restrict_classloader">这会破坏某些模块功能，但有利于安全性(实验性功能)</string>
+    <string name="pref_title_restrict_classloader">只有模块 Classloader 可以使用 Xposed API</string>
+    <string name="pref_summary_restrict_classloader">这会破坏某些模块功能，但有利于安全性（实验性功能）</string>
     <!-- Module Repo -->
     <string name="module_readme">自述文件</string>
     <string name="module_releases">版本</string>
