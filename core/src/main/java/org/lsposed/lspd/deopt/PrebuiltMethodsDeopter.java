@@ -25,6 +25,7 @@ import static org.lsposed.lspd.deopt.InlinedMethodCallers.KEY_BOOT_IMAGE_MIUI_RE
 import static org.lsposed.lspd.deopt.InlinedMethodCallers.KEY_SYSTEM_SERVER;
 
 import org.lsposed.lspd.nativebridge.HookBridge;
+import org.lsposed.lspd.util.Hookers;
 import org.lsposed.lspd.util.Utils;
 
 import java.lang.reflect.Executable;
@@ -35,18 +36,25 @@ import de.robv.android.xposed.XposedHelpers;
 public class PrebuiltMethodsDeopter {
 
     public static void deoptMethods(String where, ClassLoader cl) {
-        String[][] callers = InlinedMethodCallers.get(where);
+        Object[][] callers = InlinedMethodCallers.get(where);
         if (callers == null) {
             return;
         }
-        for (String[] caller : callers) {
+        for (Object[] caller : callers) {
             try {
-                Class clazz = XposedHelpers.findClassIfExists(caller[0], cl);
-                if (clazz == null) {
-                    continue;
+                if (caller.length < 2) continue;
+                if (!(caller[0] instanceof String)) continue;
+                if (!(caller[1] instanceof String)) continue;
+                Executable method;
+                Object[] params = new Object[caller.length - 2];
+                System.arraycopy(caller, 2, params, 0, params.length);
+                if ("<init>".equals(caller[1])) {
+                    method = XposedHelpers.findConstructorExactIfExists((String) caller[0], cl, params);
+                } else {
+                    method = XposedHelpers.findMethodExactIfExists((String) caller[0], cl, (String) caller[1], params);
                 }
-                Executable method = null;
                 if (method != null) {
+                    Hookers.logD("deoptimizing " + method);
                     HookBridge.deoptimizeMethod(method);
                 }
             } catch (Throwable throwable) {
