@@ -57,16 +57,14 @@ public class LoadedApkGetCLHooker extends XC_MethodHook {
 
     @Override
     protected void afterHookedMethod(MethodHookParam param) {
+        LoadedApk loadedApk = (LoadedApk) param.thisObject;
+
+        if (loadedApk != this.loadedApk) {
+            return;
+        }
 
         try {
-
             Hookers.logD("LoadedApk#getClassLoader starts");
-
-            LoadedApk loadedApk = (LoadedApk) param.thisObject;
-
-            if (loadedApk != this.loadedApk) {
-                return;
-            }
 
             Object mAppDir = XposedHelpers.getObjectField(loadedApk, "mAppDir");
             ClassLoader classLoader = (ClassLoader) param.getResult();
