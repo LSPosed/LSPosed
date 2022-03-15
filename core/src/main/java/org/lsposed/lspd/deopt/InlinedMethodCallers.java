@@ -20,6 +20,14 @@
 
 package org.lsposed.lspd.deopt;
 
+import android.content.Context;
+import android.content.pm.ApplicationInfo;
+import android.content.res.AssetManager;
+import android.content.res.Configuration;
+import android.content.res.Resources;
+import android.util.DisplayMetrics;
+import android.util.TypedValue;
+
 import java.util.HashMap;
 
 /**
@@ -40,38 +48,38 @@ public class InlinedMethodCallers {
      * Key should be {@link #KEY_BOOT_IMAGE}, {@link #KEY_SYSTEM_SERVER}, or a package name
      * of system apps or priv-apps i.e. com.android.systemui
      */
-    private static final HashMap<String, String[][]> CALLERS = new HashMap<>();
+    private static final HashMap<String, Object[][]> CALLERS = new HashMap<>();
 
     /**
      * format for each row: {className, methodName, methodSig}
      */
-    private static final String[][] BOOT_IMAGE = {
+    private static final Object[][] BOOT_IMAGE = {
             // callers of Application#attach(Context)
-            {"android.app.Instrumentation", "newApplication", "(Ljava/lang/ClassLoader;Ljava/lang/String;Landroid/content/Context;)Landroid/app/Application;"},
-            {"android.app.Instrumentation", "newApplication", "(Ljava/lang/ClassLoader;Landroid/content/Context;)Landroid/app/Application;"},
+            {"android.app.Instrumentation", "newApplication", ClassLoader.class, String.class, Context.class},
+            {"android.app.Instrumentation", "newApplication", ClassLoader.class, Context.class},
     };
 
     // TODO deprecate this
-    private static final String[][] BOOT_IMAGE_FOR_MIUI_RES = {
+    private static final Object[][] BOOT_IMAGE_FOR_MIUI_RES = {
             // for MIUI resources hooking
-            {"android.content.res.MiuiResources", "init", "(Ljava/lang/String;)V"},
-            {"android.content.res.MiuiResources", "updateMiuiImpl", "()V"},
-            {"android.content.res.MiuiResources", "setImpl", "(Landroid/content/res/ResourcesImpl;)V"},
-            {"android.content.res.MiuiResources", "loadOverlayValue", "(Landroid/util/TypedValue;I)V"},
-            {"android.content.res.MiuiResources", "getThemeString", "(I)Ljava/lang/CharSequence;"},
-            {"android.content.res.MiuiResources", "<init>", "(Ljava/lang/ClassLoader;)V"},
-            {"android.content.res.MiuiResources", "<init>", "()V"},
-            {"android.content.res.MiuiResources", "<init>", "(Landroid/content/res/AssetManager;Landroid/util/DisplayMetrics;Landroid/content/res/Configuration;)V"},
-            {"android.miui.ResourcesManager", "initMiuiResource", "(Landroid/content/res/Resources;Ljava/lang/String;)V"},
-            {"android.app.LoadedApk", "getResources", "()Landroid/content/res/Resources;"},
-            {"android.content.res.Resources", "getSystem", "()Landroid/content/res/Resources;"},
-            {"android.app.ApplicationPackageManager", "getResourcesForApplication", "(Landroid/content/pm/ApplicationInfo;)Landroid/content/res/Resources;"},
-            {"android.app.ContextImpl", "setResources", "(Landroid/content/res/Resources;)V"},
+            {"android.content.res.MiuiResources", "init", String.class},
+            {"android.content.res.MiuiResources", "updateMiuiImpl"},
+            {"android.content.res.MiuiResources", "setImpl", "android.content.res.ResourcesImpl"},
+            {"android.content.res.MiuiResources", "loadOverlayValue", TypedValue.class, int.class},
+            {"android.content.res.MiuiResources", "getThemeString", CharSequence.class},
+            {"android.content.res.MiuiResources", "<init>", ClassLoader.class},
+            {"android.content.res.MiuiResources", "<init>"},
+            {"android.content.res.MiuiResources", "<init>", AssetManager.class, DisplayMetrics.class, Configuration.class},
+            {"android.miui.ResourcesManager", "initMiuiResource", Resources.class, String.class},
+            {"android.app.LoadedApk", "getResources", Resources.class},
+            {"android.content.res.Resources", "getSystem", Resources.class},
+            {"android.app.ApplicationPackageManager", "getResourcesForApplication", ApplicationInfo.class},
+            {"android.app.ContextImpl", "setResources", Resources.class},
     };
 
-    private static final String[][] SYSTEM_SERVER = {};
+    private static final Object[][] SYSTEM_SERVER = {};
 
-    private static final String[][] SYSTEM_UI = {};
+    private static final Object[][] SYSTEM_UI = {};
 
     static {
         CALLERS.put(KEY_BOOT_IMAGE, BOOT_IMAGE);
@@ -80,11 +88,11 @@ public class InlinedMethodCallers {
         CALLERS.put("com.android.systemui", SYSTEM_UI);
     }
 
-    public static HashMap<String, String[][]> getAll() {
+    public static HashMap<String, Object[][]> getAll() {
         return CALLERS;
     }
 
-    public static String[][] get(String where) {
+    public static Object[][] get(String where) {
         return CALLERS.get(where);
     }
 }
