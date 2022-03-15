@@ -32,7 +32,7 @@ namespace {
 struct HookItem {
     jobject backup {nullptr};
     jobjectArray callbacks {nullptr};
-    std::multiset<jint> priorities {};
+    std::multiset<jint, std::greater<>> priorities {};
 };
 
 std::shared_mutex hooked_lock;
@@ -119,8 +119,9 @@ LSP_DEF_NATIVE_METHOD(jboolean, HookBridge, unhookMethod, jobject hookMethod, jo
         }
     }
     if (!hook_item) return JNI_FALSE;
-    env->MonitorEnter(hook_item->callbacks);
+    JNIMonitor monitor(env, hook_item->callbacks);
     auto old_array = (jobjectArray) env->GetObjectArrayElement(hook_item->callbacks, 0);
+    if (hook_item->priorities.empty()) return JNI_FALSE;
     auto new_array = env->NewObjectArray(static_cast<jint>(hook_item->priorities.size() - 1), env->FindClass("java/lang/Object"), nullptr);
     auto to_remove = hook_item->priorities.end();
     for (auto [i, current, passed] = std::make_tuple(0, hook_item->priorities.begin(), false); current != hook_item->priorities.end(); ++current, ++i) {
@@ -144,7 +145,6 @@ LSP_DEF_NATIVE_METHOD(jboolean, HookBridge, unhookMethod, jobject hookMethod, jo
     }
     env->DeleteLocalRef(old_array);
     env->DeleteLocalRef(new_array);
-    env->MonitorExit(hook_item->callbacks);
     return removed ? JNI_TRUE : JNI_FALSE;
 }
 
