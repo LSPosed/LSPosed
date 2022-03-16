@@ -18,25 +18,14 @@
  */
 
 import com.android.build.gradle.internal.dsl.BuildType
-import java.nio.file.Paths
 import java.time.Instant
 
 plugins {
-    id("com.android.application")
     id("androidx.navigation.safeargs")
     id("dev.rikka.tools.autoresconfig")
 }
 
-val androidTargetSdkVersion: Int by rootProject.extra
-val androidMinSdkVersion: Int by rootProject.extra
-val androidBuildToolsVersion: String by rootProject.extra
-val androidCompileSdkVersion: Int by rootProject.extra
-val androidCompileNdkVersion: String by rootProject.extra
-val androidSourceCompatibility: JavaVersion by rootProject.extra
-val androidTargetCompatibility: JavaVersion by rootProject.extra
 val defaultManagerPackageName: String by rootProject.extra
-val verCode: Int by rootProject.extra
-val verName: String by rootProject.extra
 
 val androidStoreFile: String? by rootProject
 val androidStorePassword: String? by rootProject
@@ -44,10 +33,6 @@ val androidKeyAlias: String? by rootProject
 val androidKeyPassword: String? by rootProject
 
 android {
-    compileSdk = androidCompileSdkVersion
-    ndkVersion = androidCompileNdkVersion
-    buildToolsVersion = androidBuildToolsVersion
-
     buildFeatures {
         viewBinding = true
         buildConfig = true
@@ -55,22 +40,7 @@ android {
 
     defaultConfig {
         applicationId = defaultManagerPackageName
-        minSdk = androidMinSdkVersion
-        targetSdk = androidTargetSdkVersion
-        versionCode = verCode
-        versionName = verName
         buildConfigField("long", "BUILD_TIME", Instant.now().epochSecond.toString())
-    }
-
-    compileOptions {
-        targetCompatibility(androidTargetCompatibility)
-        sourceCompatibility(androidSourceCompatibility)
-    }
-
-    lint {
-        disable += "MissingTranslation"
-        abortOnError = true
-        checkReleaseBuilds = false
     }
 
     packagingOptions {
@@ -126,41 +96,6 @@ autoResConfig {
     generateRes.set(false)
     generatedClassFullName.set("org.lsposed.manager.util.LangList")
     generatedArrayFirstItem.set("SYSTEM")
-}
-
-val optimizeReleaseRes = task("optimizeReleaseRes").doLast {
-    val aapt2 = File(
-        androidComponents.sdkComponents.sdkDirectory.get().asFile,
-        "build-tools/${androidBuildToolsVersion}/aapt2"
-    )
-    val zip = Paths.get(
-        project.buildDir.path,
-        "intermediates",
-        "optimized_processed_res",
-        "release",
-        "resources-release-optimize.ap_"
-    )
-    val optimized = File("${zip}.opt")
-    val cmd = exec {
-        commandLine(
-            aapt2, "optimize",
-            "--collapse-resource-names",
-            "--enable-sparse-encoding",
-            "-o", optimized,
-            zip
-        )
-        isIgnoreExitValue = false
-    }
-    if (cmd.exitValue == 0) {
-        delete(zip)
-        optimized.renameTo(zip.toFile())
-    }
-}
-
-tasks.whenTaskAdded {
-    if (name == "optimizeReleaseResources") {
-        finalizedBy(optimizeReleaseRes)
-    }
 }
 
 dependencies {
