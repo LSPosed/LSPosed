@@ -21,6 +21,7 @@ import com.android.build.gradle.internal.dsl.BuildType
 import java.time.Instant
 
 plugins {
+    id("com.android.application")
     id("androidx.navigation.safeargs")
     id("dev.rikka.tools.autoresconfig")
 }
@@ -130,7 +131,7 @@ dependencies {
     implementation("dev.rikka.rikkax.layoutinflater:layoutinflater:1.2.0")
     implementation("me.zhanghai.android.appiconloader:appiconloader:1.3.1")
     implementation("org.lsposed.hiddenapibypass:hiddenapibypass:4.3")
-    implementation(projects.managerService)
+    implementation(projects.services.managerService)
 
     val appCenter = "4.4.2"
     debugImplementation("com.microsoft.appcenter:appcenter-crashes:${appCenter}")

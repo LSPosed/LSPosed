@@ -1,5 +1,5 @@
-[submodule "service"]
-	path = service
+[submodule "services/xposed-service"]
+	path = services/xposed-service
 	url = https://github.com/libxposed/XposedService.git
 [submodule "external/cxx"]
 	path = external/cxx

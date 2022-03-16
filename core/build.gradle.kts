@@ -118,8 +118,8 @@ dependencies {
     compileOnly("androidx.annotation:annotation:1.3.0")
     compileOnly(projects.hiddenapi.stubs)
     implementation(projects.hiddenapi.bridge)
-    implementation(projects.managerService)
-    implementation(projects.daemonService)
+    implementation(projects.services.managerService)
+    implementation(projects.services.daemonService)
 }
 
 val zipAll = task("zipAll") {
