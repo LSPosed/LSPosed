@@ -130,7 +130,7 @@ dependencies {
     implementation("dev.rikka.rikkax.layoutinflater:layoutinflater:1.2.0")
     implementation("me.zhanghai.android.appiconloader:appiconloader:1.3.1")
     implementation("org.lsposed.hiddenapibypass:hiddenapibypass:4.3")
-    implementation(project(":manager-service"))
+    implementation(projects.managerService)
 
     val appCenter = "4.4.2"
     debugImplementation("com.microsoft.appcenter:appcenter-crashes:${appCenter}")
