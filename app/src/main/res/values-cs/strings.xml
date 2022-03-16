@@ -23,7 +23,7 @@
     <string name="overview">Přehled</string>
     <string name="Modules">Moduly</string>
     <plurals name="modules_enabled_count">
-        <item quantity="one">%d Modul aktivován</item>
+        <item quantity="one">%d modul povolen</item>
         <item quantity="few">%d modul povolen</item>
         <item quantity="many">%d Modul aktivován</item>
         <item quantity="other">%d Modul aktivován</item>
@@ -50,7 +50,7 @@
     <string name="not_install_summary">LSPosed není nainstalován</string>
     <string name="activated">Aktivováno</string>
     <string name="partial_activated">Částečně aktivováno</string>
-    <string name="selinux_policy_not_loaded_summary">SEPolicy není načten správně</string>
+    <string name="selinux_policy_not_loaded_summary">SEPolicy není správně načten</string>
     <string name="selinux_policy_not_loaded"><![CDATA[Moduly, které načítají System Framework nebudou fungovat.<br/>Prosím nahlaste to na <a href="https://github.com/topjohnwu/Magisk/issues"><b>Magisk</b></a> vývojáře.]]></string>
     <string name="system_inject_fail_summary">Načtení System Framework se nezdařilo</string>
     <string name="system_inject_fail"><![CDATA[Toto je vzácné a může to být způsobeno <b>Magisk</b>em nebo některými málo kvalitními moduly Magisku.<br/>Zkuste vypnout moduly Magisk jiné než Riru a LSPosed nebo odešlete kompletní log vývojářům.]]></string>
@@ -78,7 +78,7 @@
     <string name="nav_item_logs_module">Protokoly modulů</string>
     <string name="logs_save_failed2">Nepodařilo se uložit:\n%s</string>
     <string name="menuClearLog">Vymazat log</string>
-    <string name="logs_cleared">Protokol byl úspěšně vymazán.</string>
+    <string name="logs_cleared">Log byl úspěšně vymazán.</string>
     <string name="scroll_top">Přejít na začátek</string>
     <string name="loading">Načítání…</string>
     <string name="scroll_bottom">Přejít na začátek</string>
@@ -217,7 +217,7 @@
     <string name="color_blue">Modrá</string>
     <string name="color_light_blue">Světle modrá</string>
     <string name="color_cyan">Azurová</string>
-    <string name="color_teal">Modrozelený</string>
+    <string name="color_teal">Modrozelená</string>
     <string name="color_green">Zelená</string>
     <string name="color_light_green">Světle zelená</string>
     <string name="color_lime">Limetková</string>
