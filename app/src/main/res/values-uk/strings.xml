@@ -167,7 +167,7 @@
     <string name="settings_restore_failed2">Не вдалося зберегти:\n%s</string>
     <string name="group_network">Мережа</string>
     <string name="dns_over_http">DNS поверх HTTPS</string>
-    <string name="dns_over_http_summary">Вирішення проблем із погіршенням DNS у деяких країнах</string>
+    <string name="dns_over_http_summary">Обійти регіональне DNS-блокування</string>
     <string name="theme_color">Колір акценту</string>
     <string name="theme_color_system">Системний колір акценту</string>
     <string name="settings_show_hidden_icon_apps_enabled">Примусово показувати значки запуску</string>
