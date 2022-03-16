@@ -63,7 +63,7 @@
     <string name="parasitic_recommend">Manajer Parasit Direkomendasikan</string>
     <string name="parasitic_recommend_summary">LSPosed sekarang mendukung parasitisasi sistem untuk menghindari deteksi. Anda dapat menghapus instalan manajer dengan aman setelah berhasil membuat pintasan manajer parasit. Bagaimanapun, Anda dapat menginstal kembali manajer dari /data/adb/lspd/manager.apk.</string>
     <string name="create_shortcut">Buat pintasan</string>
-    <string name="never_show">Jangan tampilkan</string>
+    <string name="never_show">Jangan pernah tampilkan</string>
     <string name="update_lsposed">Perbarui LSPosed</string>
     <string name="update_lsposed_msg">Konfirmasi untuk pembaharuan LSPosed? Perangkat ini akan mulai ulang setelah pembaharuan selesai</string>
     <!-- LogsActivity -->
@@ -84,8 +84,8 @@
     <string name="disabled_verbose_log">Log verbose dinonaktifkan</string>
     <!-- ModulesActivity -->
     <string name="module_empty_description">(tidak ada deskripsi yang diberikan)</string>
-    <string name="warning_xposed_min_version">Modul ini membutuhkan versi Xposed yang lebih baru (%d) dan karenanya tidak dapat diaktifkan</string>
-    <string name="no_min_version_specified">Modul ini tidak menentukan versi Xposed yang dibutuhkannya.</string>
+    <string name="warning_xposed_min_version">Modul ini membutuhkan versi Xposed yang lebih baru (%d) dan oleh karena itu tidak dapat diaktifkan</string>
+    <string name="no_min_version_specified">Modul ini tidak menentukan versi Xposed yang dibutuhkan.</string>
     <string name="warning_min_version_too_low">Modul ini dibuat untuk Xposed versi %1$d, tetapi karena perubahan yang tidak kompatibel di versi %2$d, modul ini telah dinonaktifkan</string>
     <string name="warning_installed_on_external_storage">Modul ini tidak dapat dimuat karena terpasang di kartu SD, harap pindahkan ke penyimpanan internal</string>
     <string name="module_uninstall">Copot</string>
@@ -98,9 +98,9 @@
     <string name="module_installed">Ditambahkan %1$s ke pengguna %2$s</string>
     <string name="module_install_failed">Gagal menambahkan modul</string>
     <string name="install_to_user">Pasang ke pengguna %s</string>
-    <string name="install_to_user_message">Ingin memasang %1$s ke pengguna %2$s? Disarankan untuk menginstal secara manual, memaksa instalasi melalui LSPosed dapat menyebabkan masalah.</string>
+    <string name="install_to_user_message">Ingin memasang %1$s ke pengguna %2$s? Disarankan untuk memasang secara manual, memaksa pemasangan melalui LSPosed dapat menyebabkan masalah.</string>
     <string name="expand">perjelas</string>
-    <string name="collapse">sembunyikan</string>
+    <string name="collapse">menciutkan</string>
     <!-- AppListActivity -->
     <string name="compile_speed">Mengoptimalkan ulang</string>
     <string name="compile_speed_msg">Mengoptimalkan…</string>
@@ -120,11 +120,11 @@
     <string name="menu_show_games">Permainan</string>
     <string name="menu_show_modules">Modul</string>
     <string name="menu_show_denylist">Penyangkalan</string>
-    <string name="failed_to_save_scope_list">Gagal menyimpan daftar cakupan</string>
+    <string name="failed_to_save_scope_list">Gagal menyimpan ke daftar cakupan</string>
     <string name="app_description">%1$s\nVersi %2$s</string>
     <string name="use_recommended">Direkomendasikan</string>
-    <string name="no_scope_selected_has_recommended">Anda tidak memilih aplikasi apa pun. Pilih aplikasi yang direkomendasikan?</string>
-    <string name="use_recommended_message">Pilih aplikasi yang direkomendasikan?</string>
+    <string name="no_scope_selected_has_recommended">Anda tidak memilih aplikasi apapun. Pilih aplikasi yang disarankan?</string>
+    <string name="use_recommended_message">Pilih aplikasi yang disarankan?</string>
     <string name="module_is_not_activated_yet">Modul Xposed belum diaktifkan</string>
     <string name="requested_by_module">Direkomendasikan</string>
     <string name="update_available">Pembaruan tersedia: %1$s</string>
@@ -139,7 +139,7 @@
     <string name="reboot_required">Mulai ulang diperlukan agar perubahan ini dapat diterapkan</string>
     <string name="reboot">Mulai ulang</string>
     <string name="menu_hide">Sembunyikan</string>
-    <string name="deny_list">%s berada di daftar penyangkalan. Kemungkinan tidak akan menyebabkan apapun.</string>
+    <string name="deny_list">%s berada di daftar penyangkalan. Kemungkinan tidak akan merubah apapun.</string>
     <string name="deny_list_info">Berada di daftar penyangkalan</string>
     <!-- ModulesActivity and AppListActivity -->
     <string name="modules_other_app">Lihat di aplikasi lain</string>
