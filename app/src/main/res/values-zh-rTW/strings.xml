@@ -152,8 +152,8 @@
     <string name="pure_black_dark_theme_summary">當深色主題啟用時使用純黑色主題</string>
     <string name="settings_group_theme">主題</string>
     <string name="settings_backup_and_restore">備份與還原</string>
-    <string name="settings_backup_summery">備份模組列表和範圍清單</string>
-    <string name="settings_restore_summery">還原模組列表和範圍清單</string>
+    <string name="settings_backup_summery">備份模組列表和作用域清單</string>
+    <string name="settings_restore_summery">還原模組列表和作用域清單</string>
     <string name="settings_backup">備份</string>
     <string name="settings_backup_failed2">備份失敗：\n%s</string>
     <string name="enable_documentui">請啟用 DocumentUI</string>
