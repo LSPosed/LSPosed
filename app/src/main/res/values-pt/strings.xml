@@ -38,18 +38,18 @@
         <item quantity="one">%d módulo para atualizar</item>
         <item quantity="other">%d módulos para atualizar</item>
     </plurals>
-    <string name="about_view_source_code"><![CDATA[Veja o código fonte no %1$s<br/>Entre em nosso canal no %2$s]]></string>
-    <string name="translators" comment="Dear translators, please add your home page here following the format. There can be more than one translator. So feel free to append yourself.">VD171, PedriR19</string>
+    <string name="about_view_source_code"><![CDATA[Veja o código-fonte no %1$s<br/>Entre em nosso canal no %2$s]]></string>
+    <string name="translators" comment="Dear translators, please add your home page here following the format. There can be more than one translator. So feel free to append yourself.">VD171, Dan, Hitalo, Luiz Renato, PedriR19</string>
     <string name="install">Instalar</string>
     <string name="install_summary">Toque para instalar o LSPosed</string>
     <string name="not_installed">Não instalado</string>
     <string name="not_install_summary">O LSPosed não está instalado</string>
     <string name="activated">Ativado</string>
-    <string name="partial_activated">Parcialmente ativado</string>
+    <string name="partial_activated">Parcialmente Ativado</string>
     <string name="selinux_policy_not_loaded_summary">SEPolicy não está devidamente carregado</string>
     <string name="selinux_policy_not_loaded"><![CDATA[Módulos que aplicam hooks ao Framework do Sistema não funcionarão.<br/>Por favor, relate isso para o desenvolvedor do <a href="https://github.com/topjohnwu/Magisk/issues"><b>Magisk</b></a>.]]></string>
     <string name="system_inject_fail_summary">Falha na injeção ao Framework do Sistema</string>
-    <string name="system_inject_fail"><![CDATA[Isso é raro e pode ter sido causado pelo <b>Magisk</b> ou por algum módulo do Magisk de baixa qualidade.<br/>Por favor, tente desativar os módulos do Magisk, exceto o LSPosed (e o Riru, caso esteja em uso). Ou envie todo os registros para os desenvolvedores.]]></string>
+    <string name="system_inject_fail"><![CDATA[Isso é raro e pode ter sido causado pelo <b>Magisk</b> ou por algum módulo do Magisk de baixa qualidade.<br/>Por favor, tente desativar os módulos do Magisk, exceto o LSPosed (e o Riru, caso esteja em uso). Ou envie todos os registros para os desenvolvedores.]]></string>
     <string name="system_prop_incorrect_summary">Propriedade do sistema incorreta</string>
     <string name="system_prop_incorrect"><![CDATA[Algumas propriedades necessárias do sistema foram excluídas ou modificadas.<br/>Alguns módulos podem falhar ocasionalmente.]]></string>
     <string name="need_update">Necessário atualizar</string>
@@ -63,7 +63,7 @@
     <string name="info_system_abi">Interfaces Binárias do Sistema</string>
     <string name="info_api">Interface de Injeção</string>
     <string name="parasitic_recommend">Recomendado Gerenciador Parasita</string>
-    <string name="parasitic_recommend_summary">O LSPosed agora suporta a parasitização do sistema para evitar detecções. Você pode desinstalar o aplicativo do gerenciador com segurança depois de criar um atalho do gerenciador parasita. Caso necessário, você pode instalar o aplicativo do gerenciador novamente em /data/adb/lspd/manager.apk.</string>
+    <string name="parasitic_recommend_summary">O LSPosed agora suporta a parasitização do sistema para evitar detecções. Você pode desinstalar o aplicativo do gerenciador com segurança após criar um atalho do gerenciador parasita. Caso necessário, você pode instalar o aplicativo do gerenciador novamente em /data/adb/lspd/manager.apk.</string>
     <string name="create_shortcut">Criar Atalho</string>
     <string name="never_show">Não mostrar novamente</string>
     <string name="update_lsposed">Atualizar o LSPosed</string>
@@ -96,8 +96,8 @@
     <string name="module_uninstall_message">Você deseja desinstalar este módulo?</string>
     <string name="module_uninstalled">%1$s desinstalado</string>
     <string name="module_uninstall_failed">Falha ao desinstalar</string>
-    <string name="add_module_to_user">Adicionar módulo ao usuário</string>
-    <string name="module_installed">%1$s foi adicionado ao usuário %2$s</string>
+    <string name="add_module_to_user">Adicionar módulo no usuário</string>
+    <string name="module_installed">%1$s foi adicionado no usuário %2$s</string>
     <string name="module_install_failed">Falha ao adicionar módulo</string>
     <string name="install_to_user">Instalar no usuário %s</string>
     <string name="install_to_user_message">Deseja instalar %1$s no usuário %2$s? É recomendado instalar manualmente. Forçar a instalação via LSPosed pode causar problemas.</string>
@@ -130,7 +130,7 @@
     <string name="module_is_not_activated_yet">O módulo ainda não está ativo</string>
     <string name="requested_by_module">Recomendações</string>
     <string name="update_available">Atualização disponível: %1$s</string>
-    <string name="module_disabled_no_selection">O módulo %s foi desativado pois nenhum aplicativo foi selecionado.</string>
+    <string name="module_disabled_no_selection">O módulo %s foi desativado porque nenhum aplicativo foi selecionado.</string>
     <string name="android_framework">Framework do Sistema</string>
     <string name="menu_backup_and_restore">Fazer Backup</string>
     <string name="menu_backup">Fazer Backup</string>
@@ -166,13 +166,13 @@
     <string name="dns_over_http_summary">Solução alternativa para envenenamento de DNS em alguns países</string>
     <string name="theme_color">Cor do Tema</string>
     <string name="theme_color_system">Cor de destaque do sistema</string>
-    <string name="settings_show_hidden_icon_apps_enabled">Forçar apps à exibirem ícones do lançador</string>
-    <string name="settings_show_hidden_icon_apps_enabled_summary">Após o Android 10, alguns apps não estão autorizados à ocultarem seus ícones do lançador. Desative esta opção para desligar este recurso do sistema</string>
+    <string name="settings_show_hidden_icon_apps_enabled">Forçar apps a exibirem ícones do lançador</string>
+    <string name="settings_show_hidden_icon_apps_enabled_summary">Após o Android 10, alguns apps não estão autorizados a ocultarem seus ícones do lançador. Desative esta opção para desligar este recurso do sistema</string>
     <string name="settings_group_system">Sistema</string>
     <string name="settings_language">Idioma</string>
     <string name="settings_translation_contributors">Tradutores</string>
     <string name="settings_translation">Participar das Traduções</string>
-    <string name="settings_translation_summary">Ajude a traduzir o %s para o Português 🇵🇹</string>
+    <string name="settings_translation_summary">Ajude a traduzir o %s para o Português 🇵🇹🇧🇷</string>
     <string name="pref_title_enable_auto_add_shortcut">Adicionar um atalho automaticamente</string>
     <string name="create_shortcut_summary">Criar manualmente o atalho do gerenciador parasita</string>
     <string name="settings_enable_auto_add_shortcut_summary">Nenhum novo atalho será adicionado quando desativado no gerenciador não parasita</string>
@@ -186,8 +186,8 @@
     <string name="module_readme">Leia-me</string>
     <string name="module_releases">Versões</string>
     <string name="module_information">Informações</string>
-    <string name="module_information_homepage">Sítio</string>
-    <string name="module_information_source_url">Código Fonte</string>
+    <string name="module_information_homepage">Website</string>
+    <string name="module_information_source_url">Código-Fonte</string>
     <string name="module_information_collaborators">Colaboradores</string>
     <string name="module_release_view_assets">Conteúdos</string>
     <string name="menu_open_in_browser">Abrir no navegador</string>
@@ -209,7 +209,7 @@
     <string name="color_pink">Rosa</string>
     <string name="color_purple">Roxo</string>
     <string name="color_deep_purple">Roxo Escuro</string>
-    <string name="color_indigo">Azul Anil</string>
+    <string name="color_indigo">Azul-anil</string>
     <string name="color_blue">Azul</string>
     <string name="color_light_blue">Azul Claro</string>
     <string name="color_cyan">Ciano</string>
@@ -222,5 +222,5 @@
     <string name="color_orange">Laranja</string>
     <string name="color_deep_orange">Laranja Escuro</string>
     <string name="color_brown">Marrom</string>
-    <string name="color_blue_grey">Azul Acizentado</string>
+    <string name="color_blue_grey">Azul-acinzentado</string>
 </resources>

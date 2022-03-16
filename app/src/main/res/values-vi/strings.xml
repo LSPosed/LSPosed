@@ -36,23 +36,23 @@
     <plurals name="module_repo_upgradable">
         <item quantity="other">%d mô-đun có bản cập nhật</item>
     </plurals>
-    <string name="about_view_source_code"><![CDATA[Xem mã nguồn tại %1$s<br/>Tham gia %2$s nhóm của chúng tôi]]></string>
+    <string name="about_view_source_code"><![CDATA[Xem mã nguồn tại %1$s<br/>Tham gia kênh %2$s của chúng tôi]]></string>
     <string name="translators" comment="Dear translators, please add your home page here following the format. There can be more than one translator. So feel free to append yourself.">The Primal Pea, Tuyen Nguyen (tuyennn)</string>
     <string name="install">Cài đặt</string>
-    <string name="install_summary">Chạm để cài đặt LSPosed</string>
+    <string name="install_summary">Ấn vào đây để cài đặt LSPosed</string>
     <string name="not_installed">Chưa được cài đặt</string>
     <string name="not_install_summary">LSPosed chưa được cài đặt</string>
-    <string name="activated">Đã kích hoạt</string>
-    <string name="partial_activated">Một phần được kích hoạt</string>
-    <string name="selinux_policy_not_loaded_summary">SEPolicy không được nạp 1 cách hoàn thiện</string>
-    <string name="selinux_policy_not_loaded"><![CDATA[Những mô-đun mà can thiệp vào System Framework sẽ không làm việc.<br/>Hãy báo cáo lỗi này nhà phát triển của <a href="https://github.com/topjohnwu/Magisk/issues"><b>Magisk</b></a>.]]></string>
-    <string name="system_inject_fail_summary">Nhúng vào System Framework thất bại</string>
+    <string name="activated">Đã được kích hoạt</string>
+    <string name="partial_activated">Một phần đã được kích hoạt</string>
+    <string name="selinux_policy_not_loaded_summary">Chính sách SELinux không được nạp đúng cách</string>
+    <string name="selinux_policy_not_loaded"><![CDATA[Những mô-đun mà can thiệp vào Khung hệ thống sẽ không hoạt động.<br/>Hãy báo cáo lỗi này nhà phát triển của <a href="https://github.com/topjohnwu/Magisk/issues"><b>Magisk</b></a>.]]></string>
+    <string name="system_inject_fail_summary">Không thể nhúng vào khung hệ thống</string>
     <string name="system_inject_fail"><![CDATA[Trường hợp này khá hiếm khi xảy ra và có thể lý do bởi <b>Magisk</b> hoặc 1 số mô-đun Magisk kém chất lượng.<br/>Hãy thử vô hiệu hóa những mô-đun Magisk đó, thử chạy riêng Riru và LSPosed mà thôi hoặc thông báo nhật ký tới những nhà phát triển.]]></string>
-    <string name="system_prop_incorrect_summary">System prop không đúng</string>
-    <string name="system_prop_incorrect"><![CDATA[Một số thuộc tính hệ thống cần thiết đã bị xóa hoặc sửa đổi.<br/> Đôi khi, các mô-đun có thể mất hiệu lực.]]></string>
+    <string name="system_prop_incorrect_summary">Thông tin hệ thống không đúng</string>
+    <string name="system_prop_incorrect"><![CDATA[Một số thuộc tính hệ thống cần thiết đã bị xóa hoặc sửa đổi.<br/> Đôi khi, các mô-đun có thể sẽ mất hiệu lực.]]></string>
     <string name="need_update">Cần được cập nhật</string>
     <string name="please_update_summary">Vui lòng cài đặt phiên bản mới nhất của LSPosed</string>
-    <string name="lsposed_not_active">LSPosed hiện tại không được cài đặt hoặc được kích hoạt.</string>
+    <string name="lsposed_not_active">LSPosed hiện tại không được cài đặt hoặc chưa được kích hoạt.</string>
     <string name="info_api_version">Phiên bản API</string>
     <string name="info_framework_version">Phiên bản Framework</string>
     <string name="info_manager_version">Phiên bản trình quản lý</string>
@@ -65,12 +65,12 @@
     <string name="create_shortcut">Tạo lối tắt</string>
     <string name="never_show">Không hiện nữa</string>
     <string name="update_lsposed">Cập nhật LSPosed</string>
-    <string name="update_lsposed_msg">Xác nhận cập nhật LSPosed? Thiết bị sẽ khởi động lại sau khi cập nhật hoàn tất</string>
+    <string name="update_lsposed_msg">Xác nhận để cập nhật LSPosed? Thiết bị sẽ khởi động lại sau khi cập nhật hoàn tất</string>
     <!-- LogsActivity -->
     <string name="menuSaveToSd">Lưu lại</string>
     <string name="nav_item_logs_verbose">Nhật ký Chi tiết</string>
     <string name="nav_item_logs_module">Nhật ký các Mô-đun</string>
-    <string name="logs_save_failed2">Lưu lại thất bại:\n%s</string>
+    <string name="logs_save_failed2">Lưu thất bại:\n%s</string>
     <string name="menuClearLog">Xóa nhật ký</string>
     <string name="logs_cleared">Nhật ký đã được xoá.</string>
     <string name="scroll_top">Cuộn lên trên</string>
@@ -78,8 +78,8 @@
     <string name="scroll_bottom">Cuộn xuống dưới</string>
     <string name="logs_cannot_read">Không thể đọc nhật ký: \n</string>
     <string name="menuReload">Tải lại</string>
-    <string name="logs_clear_failed_2">Thất bại khi xoá nhật ký</string>
-    <string name="menu_enable_word_wrap">Xuống dòng tự động</string>
+    <string name="logs_clear_failed_2">Xoá nhật kí thất bại</string>
+    <string name="menu_enable_word_wrap">Tự động xuống dòng</string>
     <string name="enabled_verbose_log">Nhật ký chi tiết đã được kích hoạt</string>
     <string name="disabled_verbose_log">Nhật ký chi tiết đã được vô hiệu hoá</string>
     <!-- ModulesActivity -->
@@ -117,8 +117,8 @@
     <string name="menu_sort">Sắp xếp</string>
     <string name="enable_module">Kích hoạt mô-đun</string>
     <string name="no_scope_selected">Bạn đã không lựa chọn bất kỳ ứng dụng nào. Tiếp tục chứ?</string>
-    <string name="menu_show_games">Ứng dụng trò chơi</string>
-    <string name="menu_show_modules">Ứng dụng mô-đun</string>
+    <string name="menu_show_games">Trò chơi</string>
+    <string name="menu_show_modules">Mô-đun</string>
     <string name="menu_show_denylist">Danh sách từ chối</string>
     <string name="failed_to_save_scope_list">Lưu danh sách phạm vi thất bại</string>
     <string name="app_description">%1$s\nPhiên bản %2$s</string>

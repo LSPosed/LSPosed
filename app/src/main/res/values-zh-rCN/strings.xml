@@ -23,13 +23,13 @@
     <string name="overview">概览</string>
     <string name="Modules">模块</string>
     <plurals name="modules_enabled_count">
-        <item quantity="other">%d 模块已启用</item>
+        <item quantity="other">已启用 %d 个模块</item>
     </plurals>
     <string name="Logs">日志</string>
     <string name="Settings">设置</string>
     <string name="feedback_or_suggestion">反馈或建议</string>
     <string name="About">关于</string>
-    <string name="report_issue">报告问题</string>
+    <string name="report_issue">反馈问题</string>
     <string name="module_repo">仓库</string>
     <string name="module_repo_loading">加载中…</string>
     <string name="module_repo_up_to_date">所有模块均已最新</string>
@@ -37,17 +37,17 @@
         <item quantity="other">%d 个模块可更新</item>
     </plurals>
     <string name="about_view_source_code"><![CDATA[在 %1$s 查看源码<br/>加入我们的 %2$s 频道<br/>加入我们的 <b><a href="mqqguild://guild/share?inviteCode=Xz9dJ&from=246610">QQ 频道</a></b>]]></string>
-    <string name="translators" comment="Dear translators, please add your home page here following the format. There can be more than one translator. So feel free to append yourself.">null</string>
+    <string name="translators" comment="Dear translators, please add your home page here following the format. There can be more than one translator. So feel free to append yourself.">LSPosed</string>
     <string name="install">安装</string>
-    <string name="install_summary">点按安装 LSPosed</string>
+    <string name="install_summary">点击安装 LSPosed</string>
     <string name="not_installed">未安装</string>
     <string name="not_install_summary">LSPosed 未安装</string>
     <string name="activated">已激活</string>
     <string name="partial_activated">部分激活</string>
     <string name="selinux_policy_not_loaded_summary">SEPolicy 未被正确加载</string>
-    <string name="selinux_policy_not_loaded"><![CDATA[作用于系统框架的模块将不起作用。<br/>请将此报告给 <a href="https://github.com/topjohnwu/Magisk/issues"><b>Magisk</b></a> 开发者。]]></string>
+    <string name="selinux_policy_not_loaded"><![CDATA[作用于系统框架的模块将不起作用。<br/>请将此问题报告给 <a href="https://github.com/topjohnwu/Magisk/issues"><b>Magisk</b></a> 开发者。]]></string>
     <string name="system_inject_fail_summary">系统框架注入失败</string>
-    <string name="system_inject_fail"><![CDATA[这是极罕见的情况，可能是由 <b>Magisk</b> 或低质 Magisk 模块导致。<br/>请尝试禁用除 Riru 和 LSPosed 外的 Magisk 模块，或向开发者提供完整日志。]]></string>
+    <string name="system_inject_fail"><![CDATA[这是极罕见的情况，可能是由 <b>Magisk</b> 或低质 Magisk 模块导致。<br/>请尝试禁用除 Riru 和 LSPosed 外的其他 Magisk 模块，或向开发者提供完整日志。]]></string>
     <string name="system_prop_incorrect_summary">系统属性异常</string>
     <string name="system_prop_incorrect"><![CDATA[一些必须的系统属性被删除或被修改。<br/>模块可能会随机失效。]]></string>
     <string name="need_update">需要更新</string>
@@ -61,24 +61,24 @@
     <string name="info_system_abi">系统架构</string>
     <string name="info_api">注入接口</string>
     <string name="parasitic_recommend">推荐使用寄生管理器</string>
-    <string name="parasitic_recommend_summary">LSPosed 现在支持寄生系统以避免检测。您可以在成功创建寄生管理器图标后在系统设置中卸载管理器。 在任何情况下，您都可以从 /data/adb/lspd/manager.apk 安装管理器。</string>
+    <string name="parasitic_recommend_summary">LSPosed 现在支持寄生管理器到系统以避免检测。您可以在成功创建寄生管理器图标后卸载管理器。在任何情况下，您都可以从 /data/adb/lspd/manager.apk 安装管理器。</string>
     <string name="create_shortcut">创建快捷方式</string>
     <string name="never_show">不再显示</string>
     <string name="update_lsposed">更新 LSPosed</string>
-    <string name="update_lsposed_msg">确认更新 LSPosed? 此设备将会在完成更新后自动重启。</string>
+    <string name="update_lsposed_msg">确认更新 LSPosed? 设备将会在完成更新后自动重启。</string>
     <!-- LogsActivity -->
     <string name="menuSaveToSd">保存</string>
     <string name="nav_item_logs_verbose">详细日志</string>
     <string name="nav_item_logs_module">模块日志</string>
     <string name="logs_save_failed2">保存失败：\n%s</string>
-    <string name="menuClearLog">立即清除日志</string>
-    <string name="logs_cleared">日志清除成功</string>
+    <string name="menuClearLog">立即清空日志</string>
+    <string name="logs_cleared">成功清空日志。</string>
     <string name="scroll_top">滚动到顶部</string>
     <string name="loading">加载中…</string>
     <string name="scroll_bottom">滚动到底部</string>
     <string name="logs_cannot_read">无法读取日志：\n</string>
     <string name="menuReload">重新加载</string>
-    <string name="logs_clear_failed_2">日志清除失败</string>
+    <string name="logs_clear_failed_2">日志清空失败</string>
     <string name="menu_enable_word_wrap">自动换行</string>
     <string name="enabled_verbose_log">详细日志已启用</string>
     <string name="disabled_verbose_log">详细日志已禁用</string>
@@ -86,33 +86,33 @@
     <string name="module_empty_description">（未提供介绍）</string>
     <string name="warning_xposed_min_version">此模块需要更新的 Xposed 版本（%d），因此无法激活</string>
     <string name="no_min_version_specified">该模块未指定所需的 Xposed 版本</string>
-    <string name="warning_min_version_too_low">该模块针对 Xposed %1$d 版本构建，由于不兼容 %2$d 版本中的变更，现已被停用</string>
+    <string name="warning_min_version_too_low">由于该模块开发时所基于 Xposed %1$d 版本不再兼容 %2$d 版本中的变更，该模块现已被停用</string>
     <string name="warning_installed_on_external_storage">此模块因被安装在 SD 卡中而导致无法加载，请将其移动到内部存储</string>
     <string name="module_uninstall">卸载</string>
     <string name="module_settings">模块设置</string>
     <string name="view_in_repo">在仓库中查看</string>
     <string name="module_uninstall_message">确认卸载该模块？</string>
-    <string name="module_uninstalled">已卸载%1$s</string>
+    <string name="module_uninstalled">已卸载 %1$s</string>
     <string name="module_uninstall_failed">卸载失败</string>
     <string name="add_module_to_user">安装模块到用户</string>
     <string name="module_installed">已安装 %1$s 到用户 %2$s</string>
     <string name="module_install_failed">安装失败</string>
     <string name="install_to_user">安装到用户 %s</string>
-    <string name="install_to_user_message">确认安装 %1$s 到用户 %2$s？推荐手动用系统自带方法安装，强制通过 LSPosed 安装可能会导致未知异常。</string>
+    <string name="install_to_user_message">确认安装 %1$s 到用户 %2$s？推荐手动用系统自带方法安装，通过 LSPosed 强制安装可能会导致未知异常。</string>
     <string name="expand">展开</string>
     <string name="collapse">收起</string>
     <!-- AppListActivity -->
     <string name="compile_speed">重新优化</string>
     <string name="compile_speed_msg">优化中…</string>
     <string name="compile_done">优化完成</string>
-    <string name="app_launch">运行</string>
+    <string name="app_launch">启动</string>
     <string name="compile_failed">优化失败：返回值为空</string>
     <string name="compile_failed_with_info">优化失败：</string>
-    <string name="sort_by_name">应用名称</string>
-    <string name="sort_by_package_name">包体名称</string>
+    <string name="sort_by_name">应用名</string>
+    <string name="sort_by_package_name">包名</string>
     <string name="sort_by_install_time">安装时间</string>
     <string name="sort_by_update_time">更新时间</string>
-    <string name="sort_reverse">降序</string>
+    <string name="sort_reverse">倒序</string>
     <string name="menu_show_system_apps">系统应用</string>
     <string name="menu_sort">排序</string>
     <string name="enable_module">启用模块</string>
@@ -122,11 +122,11 @@
     <string name="menu_show_denylist">排除列表</string>
     <string name="failed_to_save_scope_list">作用域列表保存失败</string>
     <string name="app_description">%1$s\n版本：%2$s</string>
-    <string name="use_recommended">推荐应用</string>
+    <string name="use_recommended">勾选推荐</string>
     <string name="no_scope_selected_has_recommended">未选择任何应用。选择推荐的应用？</string>
     <string name="use_recommended_message">选择推荐的应用？</string>
     <string name="module_is_not_activated_yet">Xposed 模块尚未激活</string>
-    <string name="requested_by_module">推荐的应用</string>
+    <string name="requested_by_module">推荐应用</string>
     <string name="update_available">可用更新：%1$s</string>
     <string name="module_disabled_no_selection">由于未选择任何应用，模块 %s 已被禁用。</string>
     <string name="android_framework">系统框架</string>
@@ -135,9 +135,9 @@
     <string name="menu_restore">恢复</string>
     <string name="force_stop">强行停止</string>
     <string name="force_stop_dlg_title">要强行停止吗？</string>
-    <string name="force_stop_dlg_text">强行停止某个应用可能会导致其出现异常。</string>
-    <string name="reboot_required">需要重新启动才能应用此更改</string>
-    <string name="reboot">重新启动</string>
+    <string name="force_stop_dlg_text">强行停止某个应用可能会使其异常。</string>
+    <string name="reboot_required">重启以应用此更改</string>
+    <string name="reboot">重启</string>
     <string name="menu_hide">隐藏</string>
     <string name="deny_list">%s 在排除列表内。模块可能会不生效</string>
     <string name="deny_list_info">在排除列表内</string>
@@ -148,8 +148,8 @@
     <!-- SettingsActivity -->
     <string name="settings_group_framework">框架</string>
     <string name="pref_title_disable_verbose_log">禁用详细日志</string>
-    <string name="pure_black_dark_theme">黑色主题</string>
-    <string name="pure_black_dark_theme_summary">当深色主题启用时使用纯黑色主题</string>
+    <string name="pure_black_dark_theme">纯黑主题</string>
+    <string name="pure_black_dark_theme_summary">当深色主题启用时使用纯黑主题</string>
     <string name="settings_group_theme">主题</string>
     <string name="settings_backup_and_restore">备份与恢复</string>
     <string name="settings_backup_summery">备份模块列表与作用域列表</string>
@@ -163,43 +163,43 @@
     <string name="dns_over_http">安全 DNS（DoH）</string>
     <string name="dns_over_http_summary">解决某些地区的 DNS 污染问题</string>
     <string name="theme_color">主题颜色</string>
-    <string name="theme_color_system">系统主题颜色</string>
+    <string name="theme_color_system">系统主题色</string>
     <string name="settings_show_hidden_icon_apps_enabled">强制显示桌面图标</string>
     <string name="settings_show_hidden_icon_apps_enabled_summary">在 Android 10 或更高版本，应用不再允许隐藏桌面图标。关闭该选项以关闭该系统功能。</string>
     <string name="settings_group_system">系统</string>
     <string name="settings_language">语言</string>
-    <string name="settings_translation_contributors">翻译贡献者</string>
+    <string name="settings_translation_contributors">译者</string>
     <string name="settings_translation">参与翻译</string>
     <string name="settings_translation_summary">帮助我们把 %s 翻译到你的语言</string>
     <string name="pref_title_enable_auto_add_shortcut">自动添加快捷方式</string>
     <string name="create_shortcut_summary">手动创建寄生管理器快捷方式</string>
     <string name="settings_enable_auto_add_shortcut_summary">在非寄生管理器中禁用该选项将不会新建快捷方式</string>
-    <string name="settings_update_channel">更新通道</string>
+    <string name="settings_update_channel">模块更新通道</string>
     <string name="update_channel_stable">稳定版</string>
     <string name="update_channel_bate">测试版</string>
     <string name="update_channel_nightly">每夜版</string>
-    <string name="pref_title_restrict_classloader">只有模块 Classloader 可以使用 Xposed API</string>
-    <string name="pref_summary_restrict_classloader">这会破坏某些模块功能，但有利于安全性（实验性功能）</string>
+    <string name="pref_title_restrict_classloader">仅允许模块类加载器使用 Xposed API</string>
+    <string name="pref_summary_restrict_classloader">这会使某些模块失效，但有利于安全性（实验性功能）</string>
     <!-- Module Repo -->
     <string name="module_readme">自述文件</string>
     <string name="module_releases">版本</string>
     <string name="module_information">信息</string>
     <string name="module_information_homepage">主页</string>
-    <string name="module_information_source_url">源代码</string>
-    <string name="module_information_collaborators">合作者</string>
+    <string name="module_information_source_url">源码</string>
+    <string name="module_information_collaborators">协作者</string>
     <string name="module_release_view_assets">附件</string>
     <string name="menu_open_in_browser">在浏览器中打开</string>
     <string name="refresh">刷新</string>
-    <string name="module_release_load_more">显示更旧的版本</string>
-    <string name="module_release_no_more">没有更旧的版本</string>
+    <string name="module_release_load_more">显示较早版本</string>
+    <string name="module_release_no_more">无更多版本</string>
     <string name="repo_load_failed">模块仓库加载失败：%s</string>
     <string name="sort_upgradable_first">可更新优先</string>
     <!-- CrashReportActivity -->
-    <string name="version_mismatch">LSPosed 框架 (%1$d) 的版本与管理器 (%2$d)不匹配。请重新安装 LSPosed。</string>
-    <string name="manager_crashed">应用出现未知错误</string>
+    <string name="version_mismatch">LSPosed 框架 (%1$d) 的版本与管理器（%2$d）不匹配。请重新安装 LSPosed。</string>
+    <string name="manager_crashed">管理器已崩溃</string>
     <string name="manager_crashed_info">反馈该问题到 </string>
     <string name="send_crash_info">发送崩溃信息</string>
-    <string name="crash_info_copied">已将崩溃信息复制到剪贴板</string>
+    <string name="crash_info_copied">崩溃信息已复制到剪贴板</string>
     <string name="info_copied">已复制到剪贴板</string>
     <!-- Colors -->
     <string name="color_sakura">樱花</string>
