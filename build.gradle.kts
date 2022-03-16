@@ -16,6 +16,7 @@
  *
  * Copyright (C) 2021 LSPosed Contributors
  */
+import com.android.build.api.dsl.ApplicationExtension
 import com.android.build.api.variant.ApplicationAndroidComponentsExtension
 import com.android.build.gradle.BaseExtension
 import org.eclipse.jgit.api.Git
@@ -61,11 +62,7 @@ tasks.register("Delete", Delete::class) {
     delete(rootProject.buildDir)
 }
 
-subprojects {
-    when (path) {
-        ":app", ":core", ":daemon" -> apply(plugin = "com.android.application")
-        ":daemon-servie", ":manager-service", ":interface", ":service" -> apply(plugin = "com.android.library")
-    }
+fun Project.configureBaseExtension() {
     extensions.findByType(BaseExtension::class)?.run {
         compileSdkVersion(androidCompileSdkVersion)
         ndkVersion = androidCompileNdkVersion
@@ -104,13 +101,6 @@ subprojects {
                         "-DVERSION_NAME=$verName",
                     )
                 }
-            }
-        }
-
-        (this as? com.android.build.api.dsl.ApplicationExtension)?.run {
-            lint {
-                abortOnError = true
-                checkReleaseBuilds = false
             }
         }
 
@@ -165,8 +155,13 @@ subprojects {
                 }
             }
         }
-
     }
+
+    extensions.findByType(ApplicationExtension::class)?.lint {
+        abortOnError = true
+        checkReleaseBuilds = false
+    }
+
     extensions.findByType(ApplicationAndroidComponentsExtension::class)?.let { androidComponents ->
         val optimizeReleaseRes = task("optimizeReleaseRes").doLast {
             val aapt2 = File(
@@ -202,5 +197,14 @@ subprojects {
                 finalizedBy(optimizeReleaseRes)
             }
         }
+    }
+}
+
+subprojects {
+    plugins.withId("com.android.application") {
+        configureBaseExtension()
+    }
+    plugins.withId("com.android.library") {
+        configureBaseExtension()
     }
 }

@@ -21,19 +21,8 @@ plugins {
     id("com.android.library")
 }
 
-val androidTargetSdkVersion: Int by rootProject.extra
-val androidBuildToolsVersion: String by rootProject.extra
-val androidMinSdkVersion: Int by rootProject.extra
-val androidSourceCompatibility: JavaVersion by rootProject.extra
-val androidTargetCompatibility: JavaVersion by rootProject.extra
-
 android {
-    compileSdk = androidTargetSdkVersion
-    buildToolsVersion = androidBuildToolsVersion
-
     defaultConfig {
-        minSdk = androidMinSdkVersion
-        targetSdk = androidTargetSdkVersion
         consumerProguardFiles("proguard-rules.pro")
     }
 
@@ -43,12 +32,10 @@ android {
         }
     }
 
-    compileOptions {
-        sourceCompatibility = androidSourceCompatibility
-        targetCompatibility = androidTargetCompatibility
-    }
+    aidlPackagedList += "org/lsposed/lspd/models/Module.aidl"
+    aidlPackagedList += "org/lsposed/lspd/models/PreloadedApk.aidl"
 }
 
 dependencies {
-    api(project(":interface"))
+    compileOnly(projects.hiddenapi.stubs)
 }

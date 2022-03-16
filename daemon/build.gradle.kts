@@ -22,6 +22,10 @@ import com.android.ide.common.signing.KeystoreHelper
 import java.io.PrintStream
 import java.util.*
 
+plugins {
+    id("com.android.application")
+}
+
 val daemonName = "LSPosed"
 
 val injectedPackageName: String by rootProject.extra
@@ -119,6 +123,6 @@ dependencies {
     compileOnly("androidx.annotation:annotation:1.3.0")
     compileOnly(projects.hiddenapi.stubs)
     implementation(projects.hiddenapi.bridge)
-    implementation(projects.daemonService)
-    implementation(projects.managerService)
+    implementation(projects.services.daemonService)
+    implementation(projects.services.managerService)
 }

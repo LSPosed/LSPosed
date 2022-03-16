@@ -26,19 +26,14 @@ dependencyResolutionManagement {
 
 rootProject.name = "LSPosed"
 include(
+    ":app",
     ":core",
+    ":daemon",
     ":hiddenapi:stubs",
     ":hiddenapi:bridge",
-    ":app",
-    ":service",
-    ":interface",
-    ":manager-service",
-    ":daemon",
-    ":daemon-service"
+    ":services:manager-service",
+    ":services:daemon-service",
+    ":services:xposed-service:interface",
 )
-
-val serviceRoot = "service"
-project(":interface").projectDir = file("$serviceRoot${File.separator}interface")
-project(":service").projectDir = file("$serviceRoot${File.separator}service")
 
 buildCache { local { removeUnusedEntriesAfterDays = 1 } }
