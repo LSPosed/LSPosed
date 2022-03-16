@@ -19,8 +19,8 @@
   -->
 <resources xmlns:tools="http://schemas.android.com/tools" tools:keep="@string/xposed_module_updated_notification_*,@string/module_is_not_activated_*">
     <!-- MainActivity -->
-    <string name="info">Infos</string>
-    <string name="overview">Aperçu</string>
+    <string name="info">Info</string>
+    <string name="overview">Loger</string>
     <string name="Modules">Modules</string>
     <plurals name="modules_enabled_count">
         <item quantity="one">%d module actif</item>
@@ -35,7 +35,7 @@
     <string name="module_repo_loading">Chargement…</string>
     <string name="module_repo_up_to_date">Tous les modules sont à jour</string>
     <plurals name="module_repo_upgradable">
-        <item quantity="one">%d modules évolutifs</item>
+        <item quantity="one">%d module mis à jour</item>
         <item quantity="other">%d modules évolutifs</item>
     </plurals>
     <string name="about_view_source_code"><![CDATA[Voir le code source sur %1$s<br/>Rejoindre notre canal %2$s]]></string>
