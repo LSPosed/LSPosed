@@ -36,6 +36,6 @@ public class Main {
             Utils.logI("Loaded manager, skipping next steps");
             return;
         }
-        Startup.bootstrapXposed(isSystem, niceName);
+        Startup.bootstrapXposed(niceName);
     }
 }

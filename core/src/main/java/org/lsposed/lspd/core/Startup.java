@@ -58,10 +58,10 @@ public class Startup {
                 new LoadedApkCstrHooker());
     }
 
-    public static void bootstrapXposed(boolean isSystem, String niceName) {
+    public static void bootstrapXposed(String niceName) {
         // Initialize the Xposed framework
         try {
-            startBootstrapHook(isSystem);
+            startBootstrapHook(XposedInit.startsSystemServer);
             Utils.logI("Loading modules for " + niceName + "/" + Process.myUid());
             XposedInit.loadModules();
         } catch (Throwable t) {
