@@ -109,15 +109,15 @@ namespace lspd {
             }
             jmethodID mid = lsplant::JNI_GetStaticMethodID(env, entry_class_, method_name, method_sig);
             if (mid) [[likely]] {
-                JNI_CallStaticVoidMethod(env, entry_class_, mid, std::forward<Args>(args)...);
+                lsplant::JNI_CallStaticVoidMethod(env, entry_class_, mid, std::forward<Args>(args)...);
             } else {
                 LOGE("method %s id is null", method_name.data());
             }
         }
 
-        virtual void LoadDex(JNIEnv *env, PreloadedDex &&dex) = 0;
-
         virtual void InitHooks(JNIEnv *env, const lsplant::InitInfo &initInfo);
+
+        virtual void LoadDex(JNIEnv *env, PreloadedDex &&dex) = 0;
 
         virtual void SetupEntryClass(JNIEnv *env) = 0;
 
