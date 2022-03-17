@@ -97,10 +97,6 @@ namespace lspd {
 
         Context() {}
 
-        virtual void LoadDex(JNIEnv *env, PreloadedDex &&dex) = 0;
-
-        virtual void InitHooks(JNIEnv *env, const lsplant::InitInfo &initInfo);
-
         static lsplant::ScopedLocalRef<jclass> FindClassFromLoader(JNIEnv *env, jobject class_loader,
                                                                    std::string_view class_name);
 
@@ -118,6 +114,12 @@ namespace lspd {
                 LOGE("method %s id is null", method_name.data());
             }
         }
+
+        virtual void LoadDex(JNIEnv *env, PreloadedDex &&dex) = 0;
+
+        virtual void InitHooks(JNIEnv *env, const lsplant::InitInfo &initInfo);
+
+        virtual void SetupEntryClass(JNIEnv *env) = 0;
 
     private:
         friend std::unique_ptr<Context> std::make_unique<Context>();

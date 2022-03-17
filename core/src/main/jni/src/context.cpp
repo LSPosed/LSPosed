@@ -52,10 +52,6 @@ namespace lspd {
         if (!lsplant::Init(env, initInfo)) {
             return;
         }
-        if (auto entry_class = FindClassFromLoader(env, GetCurrentClassLoader(),
-                                                   kEntryClassName)) {
-            entry_class_ = JNI_NewGlobalRef(env, entry_class);
-        }
 
         RegisterResourcesHook(env);
         RegisterHookBridge(env);

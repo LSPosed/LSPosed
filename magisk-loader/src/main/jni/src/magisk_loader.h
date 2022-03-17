@@ -48,6 +48,8 @@ namespace lspd {
     protected:
         void LoadDex(JNIEnv *env, PreloadedDex &&dex) override;
 
+        void SetupEntryClass(JNIEnv *env) override;
+
     private:
         bool skip_ = false;
 

@@ -59,8 +59,6 @@ namespace lspd {
 # define LP_SELECT(lp32, lp64) lp32
 #endif
 
-    inline static constexpr auto kEntryClassName = "org.lsposed.lspd.core.Main"_tstr;
-
     inline static constexpr auto kLibArtName = "libart.so"_tstr;
     inline static constexpr auto kLibFwName = "libandroidfw.so"_tstr;
 

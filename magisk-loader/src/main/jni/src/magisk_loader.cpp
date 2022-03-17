@@ -23,6 +23,7 @@
 #include <sys/mman.h>
 
 #include "elf_util.h"
+#include "loader.h"
 #include "magisk_loader.h"
 #include "native_hook.h"
 #include "native_util.h"
@@ -72,6 +73,13 @@ namespace lspd {
         env->DeleteLocalRef(dex_buffer);
     }
 
+    void MagiskLoader::SetupEntryClass(JNIEnv *env) {
+        if (auto entry_class = FindClassFromLoader(env, GetCurrentClassLoader(),
+                                                   kEntryClassName)) {
+            entry_class_ = JNI_NewGlobalRef(env, entry_class);
+        }
+    }
+
     void
     MagiskLoader::OnNativeForkSystemServerPre(JNIEnv *env) {
         Service::instance()->InitService(env);
@@ -116,6 +124,7 @@ namespace lspd {
                 };
                 InstallInlineHooks(initInfo);
                 InitHooks(env, initInfo);
+                SetupEntryClass(env);
                 FindAndCall(env, "forkCommon",
                             "(ZLjava/lang/String;Landroid/os/IBinder;)V",
                             JNI_TRUE, JNI_NewStringUTF(env, "android"), application_binder);
@@ -190,6 +199,7 @@ namespace lspd {
             LoadDex(env, PreloadedDex(dex_fd, size));
             close(dex_fd);
             InitHooks(env, initInfo);
+            SetupEntryClass(env);
             LOGD("Done prepare");
             FindAndCall(env, "forkCommon",
                         "(ZLjava/lang/String;Landroid/os/IBinder;)V",
