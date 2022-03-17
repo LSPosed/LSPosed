@@ -14,8 +14,9 @@
  * You should have received a copy of the GNU General Public License
  * along with LSPosed.  If not, see <https://www.gnu.org/licenses/>.
  *
- * Copyright (C) 2021 LSPosed Contributors
+ * Copyright (C) 2021 - 2022 LSPosed Contributors
  */
+
 import com.android.build.api.dsl.ApplicationExtension
 import com.android.build.api.variant.ApplicationAndroidComponentsExtension
 import com.android.build.gradle.BaseExtension
@@ -77,6 +78,7 @@ fun Project.configureBaseExtension() {
             externalNativeBuild {
                 cmake {
                     arguments += "-DEXTERNAL_ROOT=${File(rootDir.absolutePath, "external")}"
+                    arguments += "-DCORE_ROOT=${File(rootDir.absolutePath, "core/src/main/jni")}"
                     abiFilters("arm64-v8a", "armeabi-v7a", "x86", "x86_64")
                     val flags = arrayOf(
                         "-Wall",

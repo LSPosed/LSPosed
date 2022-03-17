@@ -15,7 +15,7 @@
  * along with LSPosed.  If not, see <https://www.gnu.org/licenses/>.
  *
  * Copyright (C) 2020 EdXposed Contributors
- * Copyright (C) 2021 LSPosed Contributors
+ * Copyright (C) 2021 - 2022 LSPosed Contributors
  */
 
 package org.lsposed.lspd.hooker;
@@ -35,11 +35,6 @@ import de.robv.android.xposed.XposedInit;
 
 // normal process initialization (for new Activity, Service, BroadcastReceiver etc.)
 public class HandleBindAppHooker extends XC_MethodHook {
-    String appDataDir;
-
-    public HandleBindAppHooker(String appDataDir) {
-        this.appDataDir = appDataDir;
-    }
 
     @Override
     protected void beforeHookedMethod(MethodHookParam param) {
@@ -54,8 +49,7 @@ public class HandleBindAppHooker extends XC_MethodHook {
 
             // Note: packageName="android" -> system_server process, ams pms etc;
             //       packageName="system"  -> android pkg, system dialogues.
-            Utils.logD("processName=" + appProcessName +
-                    ", packageName=" + reportedPackageName + ", appDataDir=" + appDataDir);
+            Utils.logD("processName=" + appProcessName + ", packageName=" + reportedPackageName);
 
             CompatibilityInfo compatInfo = (CompatibilityInfo) XposedHelpers.getObjectField(bindData, "compatInfo");
             if (appInfo.sourceDir == null) {

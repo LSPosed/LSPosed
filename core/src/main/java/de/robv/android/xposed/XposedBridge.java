@@ -15,7 +15,7 @@
  * along with LSPosed.  If not, see <https://www.gnu.org/licenses/>.
  *
  * Copyright (C) 2020 EdXposed Contributors
- * Copyright (C) 2021 LSPosed Contributors
+ * Copyright (C) 2021 - 2022 LSPosed Contributors
  */
 
 package de.robv.android.xposed;
@@ -27,7 +27,7 @@ import android.content.res.Resources;
 import android.content.res.TypedArray;
 import android.util.Log;
 
-import org.lsposed.lspd.BuildConfig;
+import org.lsposed.lspd.core.BuildConfig;
 import org.lsposed.lspd.nativebridge.HookBridge;
 import org.lsposed.lspd.nativebridge.ResourcesHook;
 
