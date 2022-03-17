@@ -1,5 +1,4 @@
-<?xml version="1.0" encoding="utf-8"?>
-<!--
+<?xml version="1.0" encoding="utf-8"?><!--
   ~ This file is part of LSPosed.
   ~
   ~ LSPosed is free software: you can redistribute it and/or modify
@@ -20,91 +19,79 @@
   -->
 
 <menu xmlns:android="http://schemas.android.com/apk/res/android"
-    xmlns:app="http://schemas.android.com/apk/res-auto">
+    xmlns:tools="http://schemas.android.com/tools">
 
     <item
         android:id="@+id/menu_search"
-        app:actionViewClass="androidx.appcompat.widget.SearchView"
-        app:showAsAction="ifRoom" />
-
-    <item
-        android:id="@+id/menu_launch"
-        android:title="@string/module_settings"
-        android:icon="@drawable/ic_settings"
-        app:showAsAction="ifRoom" />
-
-    <item
-        android:id="@+id/menu_refresh"
-        android:title="@string/refresh"
-        android:icon="@drawable/ic_refresh"
-        app:showAsAction="ifRoom" />
+        android:actionViewClass="androidx.appcompat.widget.SearchView"
+        android:icon="@drawable/ic_baseline_search_24"
+        android:showAsAction="always|collapseActionView"
+        tools:ignore="AlwaysShowAction" />
 
     <item
         android:id="@+id/use_recommended"
         android:title="@string/use_recommended" />
 
     <item
-        android:id="@+id/item_show_games"
-        android:checkable="true"
-        android:checked="true"
-        android:title="@string/menu_show_games" />
+        android:showAsAction="never"
+        android:title="@string/menu_hide">
+        <menu>
+
+            <item
+                android:id="@+id/item_filter_games"
+                android:checkable="true"
+                android:checked="true"
+                android:title="@string/menu_show_games" />
+
+            <item
+                android:id="@+id/item_filter_modules"
+                android:checkable="true"
+                android:checked="true"
+                android:title="@string/menu_show_modules" />
+
+            <item
+                android:id="@+id/item_filter_system"
+                android:checkable="true"
+                android:checked="true"
+                android:title="@string/menu_show_system_apps" />
+
+            <item
+                android:id="@+id/item_filter_denylist"
+                android:checkable="true"
+                android:checked="true"
+                android:title="@string/menu_show_denylist" />
+        </menu>
+    </item>
 
     <item
-        android:id="@+id/item_show_modules"
-        android:checkable="true"
-        android:checked="true"
-        android:title="@string/menu_show_modules" />
-
-    <item
-        android:id="@+id/item_show_system"
-        android:checkable="true"
-        android:checked="true"
-        android:title="@string/menu_show_system_apps" />
-
-    <item
-        android:id="@+id/item_list_sort"
-        android:title="@string/menu_sort"
-        app:showAsAction="never">
+        android:showAsAction="never"
+        android:title="@string/menu_sort">
         <menu>
             <group android:checkableBehavior="single">
                 <item
                     android:id="@+id/item_sort_by_name"
                     android:checked="true"
                     android:title="@string/sort_by_name" />
-
-                <item
-                    android:id="@+id/item_sort_by_name_reverse"
-                    android:title="@string/sort_by_name_reverse" />
-
                 <item
                     android:id="@+id/item_sort_by_package_name"
                     android:title="@string/sort_by_package_name" />
-
-                <item
-                    android:id="@+id/item_sort_by_package_name_reverse"
-                    android:title="@string/sort_by_package_name_reverse" />
-
                 <item
                     android:id="@+id/item_sort_by_install_time"
                     android:title="@string/sort_by_install_time" />
-
-                <item
-                    android:id="@+id/item_sort_by_install_time_reverse"
-                    android:title="@string/sort_by_install_time_reverse" />
                 <item
                     android:id="@+id/item_sort_by_update_time"
                     android:title="@string/sort_by_update_time" />
-
-                <item
-                    android:id="@+id/item_sort_by_update_time_reverse"
-                    android:title="@string/sort_by_update_time_reverse" />
             </group>
+            <item
+                android:id="@+id/reverse"
+                android:checkable="true"
+                android:title="@string/sort_reverse" />
         </menu>
     </item>
 
     <item
-        android:title="@string/menu_backup_and_restore"
-        app:showAsAction="never">
+        android:showAsAction="never"
+        android:title="@string/menu_backup_and_restore">
         <menu>
             <item
                 android:id="@+id/backup"

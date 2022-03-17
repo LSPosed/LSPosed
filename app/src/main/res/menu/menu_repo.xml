@@ -19,23 +19,19 @@
   -->
 
 <menu xmlns:android="http://schemas.android.com/apk/res/android"
-    xmlns:app="http://schemas.android.com/apk/res-auto">
+    xmlns:tools="http://schemas.android.com/tools">
 
     <item
         android:id="@+id/menu_search"
-        app:actionViewClass="androidx.appcompat.widget.SearchView"
-        app:showAsAction="ifRoom" />
-
-    <item
-        android:id="@+id/menu_refresh"
-        android:title="@string/refresh"
-        android:icon="@drawable/ic_refresh"
-        app:showAsAction="ifRoom" />
+        android:actionViewClass="androidx.appcompat.widget.SearchView"
+        android:icon="@drawable/ic_baseline_search_24"
+        android:showAsAction="always|collapseActionView"
+        tools:ignore="AlwaysShowAction" />
 
     <item
         android:id="@+id/item_list_sort"
-        android:title="@string/menu_sort"
-        app:showAsAction="never">
+        android:showAsAction="never"
+        android:title="@string/menu_sort">
         <menu>
             <group android:checkableBehavior="single">
                 <item
@@ -47,6 +43,10 @@
                     android:id="@+id/item_sort_by_update_time"
                     android:title="@string/sort_by_update_time" />
             </group>
+            <item
+                android:id="@+id/item_upgradable_first"
+                android:checkable="true"
+                android:title="@string/sort_upgradable_first" />
         </menu>
     </item>
 </menu>

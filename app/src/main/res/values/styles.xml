@@ -21,4 +21,18 @@
 <resources>
 
     <style name="AppTheme" parent="Theme.Light" />
+
+    <!-- SubtitleCollapsingToolbarLayout styles -->
+    <style name="Widget.Design.SubtitleCollapsingToolbar" parent="Widget.Design.CollapsingToolbar" />
+
+    <style name="TextAppearance.Design.SubtitleCollapsingToolbar.ExpandedTitle" parent="TextAppearance.Design.CollapsingToolbar.Expanded" />
+
+    <style name="TextAppearance.Design.SubtitleCollapsingToolbar.ExpandedSubtitle" parent="TextAppearance.AppCompat.Title">
+        <item name="android:textColor">?android:attr/textColorSecondary</item>
+    </style>
+
+    <style name="language_menu_style" parent="ThemeOverlay.Preference.SimpleMenuPreference.PopupMenu">
+        <item name="android:textAlignment">textStart</item>
+    </style>
+
 </resources>

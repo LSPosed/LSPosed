@@ -22,7 +22,7 @@
     android:layout_width="match_parent"
     android:layout_height="64dp"
     xmlns:app="http://schemas.android.com/apk/res-auto"
-    android:background="@drawable/item_background"
+    android:background="?selectableItemBackground"
     android:clickable="true"
     android:focusable="true">
 
@@ -36,7 +36,7 @@
         app:showAnimationBehavior="outward"
         app:hideAnimationBehavior="inward" />
 
-    <TextView
+    <com.google.android.material.textview.MaterialTextView
         android:id="@+id/title"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"

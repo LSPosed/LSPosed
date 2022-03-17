@@ -1,5 +1,4 @@
-<?xml version="1.0" encoding="utf-8"?>
-<!--
+<?xml version="1.0" encoding="utf-8"?><!--
   ~ This file is part of LSPosed.
   ~
   ~ LSPosed is free software: you can redistribute it and/or modify
@@ -25,14 +24,17 @@
         android:id="@+id/menu_launch"
         android:title="@string/module_settings" />
     <item
-        android:id="@+id/menu_app_store"
-        android:title="@string/modules_app_store" />
+        android:id="@+id/menu_other_app"
+        android:title="@string/modules_other_app" />
     <item
         android:id="@+id/menu_repo"
         android:title="@string/view_in_repo" />
     <item
         android:id="@+id/menu_app_info"
         android:title="@string/module_app_info" />
+    <item
+        android:id="@+id/menu_compile_speed"
+        android:title="@string/compile_speed" />
     <item
         android:id="@+id/menu_uninstall"
         android:title="@string/module_uninstall" />

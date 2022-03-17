@@ -1,0 +1,10 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <!-- Notification -->
+    <string name="module_is_not_activated_yet">Le module LSPosed n\’est pas encore actif</string>
+    <string name="module_is_not_activated_yet_detailed">%s a été installé, mais n\'est pas encore actif</string>
+    <string name="xposed_module_updated_notification_title">Module Xposed mis à jour</string>
+    <string name="xposed_module_updated_notification_content">%s a été mis à jour, merci de forcer l\’arrêt ou de redémarrer les applis dans leurs champs d\’application</string>
+    <string name="xposed_module_updated_notification_title_system">Module Xposed mis à jour, redémarrage du système requis</string>
+    <string name="xposed_module_updated_notification_content_system">%s a été mis à jour, étant donné que le champ d\'application est étendu au sous système, un redémarrage est nécessaire pour appliquer les changements</string>
+</resources>

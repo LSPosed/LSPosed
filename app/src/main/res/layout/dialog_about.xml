@@ -17,79 +17,45 @@
   ~ Copyright (C) 2020 EdXposed Contributors
   ~ Copyright (C) 2021 LSPosed Contributors
   -->
-
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
-    xmlns:tools="http://schemas.android.com/tools"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:orientation="horizontal"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    xmlns:app="http://schemas.android.com/apk/res-auto"
-    android:orientation="vertical">
+    android:padding="24dp">
 
-    <com.google.android.material.card.MaterialCardView
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        app:cardBackgroundColor="#000"
-        app:cardCornerRadius="0dp"
-        app:cardElevation="4dp">
-
-        <LinearLayout
-            android:layout_width="match_parent"
-            android:layout_height="match_parent"
-            android:gravity="center"
-            android:padding="20dp"
-            android:orientation="horizontal">
-
-            <TextView
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:textColor="#fff"
-                android:textSize="48sp"
-                android:paddingHorizontal="10dp"
-                android:textStyle="bold"
-                android:text="LS"
-                tools:ignore="HardcodedText" />
-
-            <FrameLayout
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:paddingHorizontal="5dp"
-                android:background="@drawable/ph_drawable"
-                android:paddingVertical="7dp">
-
-                <TextView
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:textColor="#000"
-                    android:textSize="48sp"
-                    android:textStyle="bold"
-                    android:text="Posed"
-                    tools:ignore="HardcodedText" />
-            </FrameLayout>
-        </LinearLayout>
-    </com.google.android.material.card.MaterialCardView>
+    <ImageView
+        android:id="@+id/design_about_icon"
+        android:layout_width="48dp"
+        android:layout_height="48dp"
+        app:srcCompat="@drawable/ic_launcher" />
 
     <LinearLayout
+        android:orientation="vertical"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:orientation="vertical"
-        android:paddingHorizontal="?android:dialogPreferredPadding"
-        android:paddingTop="16dp"
-        android:paddingBottom="?android:dialogPreferredPadding">
+        android:layout_marginStart="16dp">
 
-        <TextView
+        <com.google.android.material.textview.MaterialTextView
+            android:id="@+id/design_about_title"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:text="@string/versionName"
+            android:textSize="18sp"
+            android:textAppearance="@android:style/TextAppearance.Material.Body1" />
+
+        <com.google.android.material.textview.MaterialTextView
+            android:id="@+id/design_about_version"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
             android:textSize="14sp" />
 
-        <TextView
-            android:id="@+id/source_code"
+        <com.google.android.material.textview.MaterialTextView
+            android:id="@+id/design_about_info"
+            android:layout_marginTop="24dp"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_marginTop="8dp"
-            android:textColor="?android:textColorSecondary"
             android:textSize="14sp"
-            tools:text="@string/about_view_source_code" />
+            android:textColor="?android:textColorSecondary" />
 
     </LinearLayout>
 

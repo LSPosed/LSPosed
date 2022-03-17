@@ -5,14 +5,3 @@
 .DS_Store
 /build
 /captures
-/release
-.externalNativeBuild
-elf-cleaner.sh
-
-# vscode
-.project
-.classpath
-.settings/
-.vscode/
-
-.cxx

@@ -19,10 +19,12 @@
   -->
 
 <resources>
-    <color name="rippleTransparency_light">#34ffffff</color>
-    <color name="rippleTransparency_dark">#cbffffff</color>
+    <color name="home_secondary_outline_ambient_shadow_color">@color/material_grey_500</color>
+    <color name="home_secondary_outline_spot_shadow_color">@color/material_grey_300</color>
 
-    <color name="color_primary_light">@color/google_blue_600</color>
-    <color name="color_primary_dark">@color/google_blue_300</color>
-    <color name="color_primary">@color/color_primary_light</color>
+    <color name="primary_text_material_inverse">@color/abc_primary_text_material_dark</color>
+    <color name="secondary_text_material_inverse">@color/abc_secondary_text_material_dark</color>
+
+    <color name="primary_text_material">@color/abc_primary_text_material_light</color>
+    <color name="secondary_text_material">@color/abc_secondary_text_material_light</color>
 </resources>

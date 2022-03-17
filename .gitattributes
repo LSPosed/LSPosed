@@ -8,3 +8,5 @@
 # Denote all files that are truly binary and should not be modified.
 *.so binary
 *.dex binary
+*.jar binary
+*.png binary

@@ -1,0 +1,38 @@
+#!/system/bin/sh
+
+dir=${0%/*}
+tmpLspdApk="/data/local/tmp/daemon.apk"
+debug="false"
+
+if [ -r $tmpLspdApk ]; then
+  java_options="-Djava.class.path=$tmpLspdApk"
+  java_options="$java_options -Dlsp.library.path=/data/local/tmp"
+  debug="true"
+else
+  java_options="-Djava.class.path=$dir/daemon.apk"
+  java_options="$java_options -Dlsp.library.path=$dir"
+fi
+
+if [ $debug = "true" ]; then
+  os_version=$(getprop ro.build.version.sdk)
+  if [ "$os_version" -eq "27" ]; then
+    java_options="$java_options -Xrunjdwp:transport=dt_android_adb,suspend=n,server=y -Xcompiler-option --debuggable"
+  elif [ "$os_version" -eq "28" ]; then
+    java_options="$java_options -XjdwpProvider:adbconnection -XjdwpOptions:suspend=n,server=y -Xcompiler-option --debuggable"
+  else
+    java_options="$java_options -XjdwpProvider:adbconnection -XjdwpOptions:suspend=n,server=y"
+  fi
+fi
+
+mount tmpfs -t tmpfs /data/resource-cache
+
+if [ ! -S "/dev/socket/zygote" ]; then
+  timeout 1 inotifyd - /dev/socket:near | while read -r; do
+    if [ -S "/dev/socket/zygote" ]; then
+      touch /dev/socket&
+      exit
+    fi
+  done
+fi
+# shellcheck disable=SC2086
+exec /system/bin/app_process $java_options /system/bin --nice-name=lspd org.lsposed.lspd.Main "$@" >/dev/null 2>&1

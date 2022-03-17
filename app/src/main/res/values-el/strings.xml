@@ -1,0 +1,226 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!--
+  ~ This file is part of LSPosed.
+  ~
+  ~ LSPosed is free software: you can redistribute it and/or modify
+  ~ it under the terms of the GNU General Public License as published by
+  ~ the Free Software Foundation, either version 3 of the License, or
+  ~ (at your option) any later version.
+  ~
+  ~ LSPosed is distributed in the hope that it will be useful,
+  ~ but WITHOUT ANY WARRANTY; without even the implied warranty of
+  ~ MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+  ~ GNU General Public License for more details.
+  ~
+  ~ You should have received a copy of the GNU General Public License
+  ~ along with LSPosed.  If not, see <https://www.gnu.org/licenses/>.
+  ~
+  ~ Copyright (C) 2021 LSPosed Contributors
+  -->
+<resources xmlns:tools="http://schemas.android.com/tools" tools:keep="@string/xposed_module_updated_notification_*,@string/module_is_not_activated_*">
+    <!-- MainActivity -->
+    <string name="info">Πληροφορίες</string>
+    <string name="overview">Επισκόπηση</string>
+    <string name="Modules">Πρόσθετα</string>
+    <plurals name="modules_enabled_count">
+        <item quantity="one">%d  πρόσθετο ενεργοποιημένο</item>
+        <item quantity="other">%d ενθέματα ενεργοποιήθηκαν</item>
+    </plurals>
+    <string name="Logs">Αρχεία καταγραφής</string>
+    <string name="Settings">Ρυθμίσεις</string>
+    <string name="feedback_or_suggestion">Σχόλια ή πρόταση</string>
+    <string name="About">Πληροφορίες</string>
+    <string name="report_issue">Αναφορά προβλήματος</string>
+    <string name="module_repo">Αποθετήριο</string>
+    <string name="module_repo_loading">Φόρτωση…</string>
+    <string name="module_repo_up_to_date">Όλα τα πρόσθετα είναι ενημερωμένα</string>
+    <plurals name="module_repo_upgradable">
+        <item quantity="one">%d ένθεμα αναβαθμίσιμο</item>
+        <item quantity="other">%d πρόσθετα μπορούν να ενημερωθούν</item>
+    </plurals>
+    <string name="about_view_source_code"><![CDATA[Δείτε τον πηγαίο κώδικα στο %1$s<br/>Εγγραφείτε στο %2$s κανάλι μας]]></string>
+    <string name="translators" comment="Dear translators, please add your home page here following the format. There can be more than one translator. So feel free to append yourself.">null</string>
+    <string name="install">Εγκατάσταση</string>
+    <string name="install_summary">Πατήστε για εγκατάσταση του LSPosed</string>
+    <string name="not_installed">Μη εγκατεστημένο</string>
+    <string name="not_install_summary">Το LSPosed δεν είναι εγκατεστημένο</string>
+    <string name="activated">Ενεργοποιημένο</string>
+    <string name="partial_activated">Μερικώς ενεργοποιημένο</string>
+    <string name="selinux_policy_not_loaded_summary">Το SEPolicy δεν φορτώθηκε σωστά</string>
+    <string name="selinux_policy_not_loaded"><![CDATA[Πρόσθετα που το πλαίσιο συστήματος άγκιστρου δεν θα λειτουργήσει.<br/>Παρακαλώ αναφέρετε αυτό στο <a href="https://github.com/topjohnwu/Magisk/issues"><b>Magisk</b></a> προγραμματιστή.]]></string>
+    <string name="system_inject_fail_summary">Η έγχυση στο πλαίσιο συστήματος απέτυχε</string>
+    <string name="system_inject_fail"><![CDATA[Αυτό είναι σπάνιο και μπορεί να προκληθεί από το <b>Magisk</b> ή από κάποια χαμηλής ποιότητας πρόσθετα τουMagisk.<br/>Παρακαλώ προσπαθήστε να απενεργοποιήσετε όλα τα πρόσθετα του Magisk εκτός από το Riru και το LSPosed ή να υποβάλετε το πλήρες αρχείο καταγραφής στους προγραμματιστές.]]></string>
+    <string name="system_prop_incorrect_summary">Λανθασμένο στήριγμα συστήματος</string>
+    <string name="system_prop_incorrect"><![CDATA[Ορισμένες απαραίτητες ιδιότητες συστήματος διαγράφηκαν ή τροποποιήθηκαν.<br/>Τα πρόσθετα μπορεί να ακυρωθούν περιστασιακά.]]></string>
+    <string name="need_update">Απαιτείται ενημέρωση</string>
+    <string name="please_update_summary">Παρακαλώ εγκαταστήστε την τελευταία έκδοση του LSPosed</string>
+    <string name="lsposed_not_active">Το LSPosed δεν είναι εγκατεστημένο ή ενεργό.</string>
+    <string name="info_api_version">Έκδοση API</string>
+    <string name="info_framework_version">Έκδοση πλαισίου</string>
+    <string name="info_manager_version">Έκδοση διαχειριστή</string>
+    <string name="info_system_version">Έκδοση συστήματος</string>
+    <string name="info_device">Συσκευή</string>
+    <string name="info_system_abi">Σύστημα ABI</string>
+    <string name="info_api">Διεπαφή Έγχυσης</string>
+    <string name="parasitic_recommend">Προτεινόμενος Παρασιτικός Διαχειριστής</string>
+    <string name="parasitic_recommend_summary">Το LSPosed τώρα υποστηρίζει παρασιτισμό συστήματος για την αποφυγή ανίχνευσης. Μπορείτε να απεγκαταστήσετε με ασφάλεια τον διαχειριστή μετά την επιτυχή δημιουργία μιας συντόμευσης του παρασιτικού διαχειριστή. Σε κάθε περίπτωση μπορείτε να εγκαταστήσετε το διαχειριστή ξανά από το /data/adb/lspd/manager.apk.</string>
+    <string name="create_shortcut">Δημιουργία συντόμευσης</string>
+    <string name="never_show">Να μην εμφανίζεται ποτέ</string>
+    <string name="update_lsposed">Ενημέρωση LSPosed</string>
+    <string name="update_lsposed_msg">Επιβεβαίωση ενημέρωσης του LSPosed? Αυτή η συσκευή θα επανεκκινηθεί μετά την ολοκλήρωση της ενημέρωσης</string>
+    <!-- LogsActivity -->
+    <string name="menuSaveToSd">Αποθήκευση</string>
+    <string name="nav_item_logs_verbose">Λεπτομερείς Καταγραφές</string>
+    <string name="nav_item_logs_module">Αρχείο Καταγραφής Πρόσθετων</string>
+    <string name="logs_save_failed2">Αποτυχία αποθήκευσης:\n%s</string>
+    <string name="menuClearLog">Καθαρισμός αρχείου καταγραφής τώρα</string>
+    <string name="logs_cleared">Το αρχείο καταγραφής εκκαθαρίστηκε επιτυχώς.</string>
+    <string name="scroll_top">Κύλιση στην κορυφή</string>
+    <string name="loading">Φόρτωση…</string>
+    <string name="scroll_bottom">Κύλιση προς τα κάτω</string>
+    <string name="logs_cannot_read">Αδυναμία ανάγνωσης αρχείου καταγραφής: \n</string>
+    <string name="menuReload">Φόρτωση ξανά</string>
+    <string name="logs_clear_failed_2">Αποτυχία εκκαθάρισης του αρχείου καταγραφής</string>
+    <string name="menu_enable_word_wrap">Αναδίπλωση Λέξεων</string>
+    <string name="enabled_verbose_log">Ενεργοποίηση λεπτομερούς καταγραφής</string>
+    <string name="disabled_verbose_log">Λεπτομερής καταγραφή απενεργοποιημένη</string>
+    <!-- ModulesActivity -->
+    <string name="module_empty_description">(δεν παρέχεται περιγραφή)</string>
+    <string name="warning_xposed_min_version">Αυτό το ένθεμα απαιτεί μια νεότερη έκδοση του Xposed (%d) και επομένως δεν μπορεί να ενεργοποιηθεί</string>
+    <string name="no_min_version_specified">Αυτό το ένθεμα δεν καθορίζει την έκδοση Xposed που χρειάζεται.</string>
+    <string name="warning_min_version_too_low">Αυτό το ένθεμα δημιουργήθηκε για την έκδοση Xposed %1$d, αλλά λόγω μη συμβατών αλλαγών στην έκδοση %2$d, έχει απενεργοποιηθεί</string>
+    <string name="warning_installed_on_external_storage">Αυτό το πρόσθετο δεν μπορεί να φορτωθεί επειδή είναι εγκατεστημένο στην κάρτα SD, παρακαλώ μετακινήστε το στον εσωτερικό αποθηκευτικό χώρο</string>
+    <string name="module_uninstall">Απεγκατάσταση</string>
+    <string name="module_settings">Ρυθμίσεις πρόσθετου</string>
+    <string name="view_in_repo">Προβολή στο Repo</string>
+    <string name="module_uninstall_message">Θέλετε να απεγκαταστήσετε αυτό το πρόσθετο?</string>
+    <string name="module_uninstalled">Απεγκαταστάθηκε %1$s</string>
+    <string name="module_uninstall_failed">Απεγκατάσταση ανεπιτυχής</string>
+    <string name="add_module_to_user">Προσθήκη module στο χρήστη</string>
+    <string name="module_installed">Προστέθηκε %1$s στον χρήστη %2$s</string>
+    <string name="module_install_failed">Η προσθήκη module απέτυχε</string>
+    <string name="install_to_user">Εγκατάσταση σε χρήστη %s</string>
+    <string name="install_to_user_message">Θέλετε να εγκαταστήσετε %1$s στο χρήστη %2$s? Συνιστάται η χειροκίνητη εγκατάσταση, αναγκάζοντας την εγκατάσταση μέσω LSPosed μπορεί να προκαλέσει προβλήματα.</string>
+    <string name="expand">επέκταση</string>
+    <string name="collapse">σύμπτυξη</string>
+    <!-- AppListActivity -->
+    <string name="compile_speed">Επαναβελτιστοποίηση</string>
+    <string name="compile_speed_msg">Βελτιστοποίηση…</string>
+    <string name="compile_done">Η βελτιστοποίηση ολοκληρώθηκε</string>
+    <string name="app_launch">Εκκίνηση</string>
+    <string name="compile_failed">Η βελτιστοποίηση απέτυχε: η τιμή επιστροφής είναι κενή</string>
+    <string name="compile_failed_with_info">Η βελτιστοποίηση απέτυχε: </string>
+    <string name="sort_by_name">Όνομα εφαρμογής</string>
+    <string name="sort_by_package_name">Όνομα πακέτου</string>
+    <string name="sort_by_install_time">Χρόνος εγκατάστασης</string>
+    <string name="sort_by_update_time">Χρόνος ενημέρωσης</string>
+    <string name="sort_reverse">Αντίστροφη</string>
+    <string name="menu_show_system_apps">Εφαρμογές συστήματος</string>
+    <string name="menu_sort">Ταξινόμηση</string>
+    <string name="enable_module">Ενεργοποίηση module</string>
+    <string name="no_scope_selected">Δεν έχετε επιλέξει καμία εφαρμογή. Συνέχεια?</string>
+    <string name="menu_show_games">Παιχνίδια</string>
+    <string name="menu_show_modules">Πρόσθετα</string>
+    <string name="menu_show_denylist">Denylist</string>
+    <string name="failed_to_save_scope_list">Αποτυχία αποθήκευσης της λίστας πεδίου</string>
+    <string name="app_description">%1$s\nΈκδοση %2$s</string>
+    <string name="use_recommended">Προτεινόμενο</string>
+    <string name="no_scope_selected_has_recommended">Δεν έχετε επιλέξει καμία εφαρμογή. Επιλέξτε τις προτεινόμενες εφαρμογές?</string>
+    <string name="use_recommended_message">Επιλέξτε προτεινόμενες εφαρμογές?</string>
+    <string name="module_is_not_activated_yet">Το Xposed πρόσθετο δεν έχει ενεργοποιηθεί ακόμα</string>
+    <string name="requested_by_module">Προτεινόμενο</string>
+    <string name="update_available">Διαθέσιμη ενημέρωση: %1$s</string>
+    <string name="module_disabled_no_selection">Το ένθεμα %s έχει απενεργοποιηθεί δεδομένου ότι δεν έχει επιλεγεί εφαρμογή.</string>
+    <string name="android_framework">Πλαίσιο Συστήματος</string>
+    <string name="menu_backup_and_restore">Αντίγραφα Ασφαλείας</string>
+    <string name="menu_backup">Αντίγραφα Ασφαλείας</string>
+    <string name="menu_restore">Επαναφορά</string>
+    <string name="force_stop">Αναγκαστική διακοπή</string>
+    <string name="force_stop_dlg_title">Αναγκαστική διακοπή?</string>
+    <string name="force_stop_dlg_text">Αν επιβάλετε τη διακοπή μιας εφαρμογής, ενδέχεται να μην λειτουργήσει σωστά.</string>
+    <string name="reboot_required">Απαιτείται επανεκκίνηση για να εφαρμοστεί αυτή η αλλαγή</string>
+    <string name="reboot">Reboot</string>
+    <string name="menu_hide">Απόκρυψη</string>
+    <string name="deny_list">%s είναι σε denylist. Μπορεί να μην τεθεί σε ισχύ.</string>
+    <string name="deny_list_info">Κατά την denylist</string>
+    <!-- ModulesActivity and AppListActivity -->
+    <string name="modules_other_app">Προβολή σε άλλη εφαρμογή</string>
+    <string name="module_app_info">Πληροφορίες εφαρμογής</string>
+    <string name="list_empty">◆ \\\\_(\")_\/ \"\nΤίποτα εδώ</string>
+    <!-- SettingsActivity -->
+    <string name="settings_group_framework">Framework</string>
+    <string name="pref_title_disable_verbose_log">Απενεργοποίηση λεπτομερειακών αρχείων καταγραφής</string>
+    <string name="pure_black_dark_theme">Μαύρο σκούρο θέμα</string>
+    <string name="pure_black_dark_theme_summary">Χρησιμοποιήστε το καθαρό μαύρο θέμα αν το σκούρο θέμα είναι ενεργοποιημένο</string>
+    <string name="settings_group_theme">Θέμα</string>
+    <string name="settings_backup_and_restore">Αντίγραφα ασφαλείας και επαναφορά</string>
+    <string name="settings_backup_summery">Λίστα module αντιγράφων ασφαλείας και λίστες εμβέλειας.</string>
+    <string name="settings_restore_summery">Επαναφορά λίστας ενθεμάτων και πεδίου εφαρμογής.</string>
+    <string name="settings_backup">Αντίγραφα Ασφαλείας</string>
+    <string name="settings_backup_failed2">Αποτυχία δημιουργίας αντιγράφων ασφαλείας:\n%s</string>
+    <string name="enable_documentui">Ενεργοποιήστε το DocumentUI</string>
+    <string name="settings_restore">Επαναφορά</string>
+    <string name="settings_restore_failed2">Αποτυχία επαναφοράς:\n%s</string>
+    <string name="group_network">Δίκτυο</string>
+    <string name="dns_over_http">DNS μέσω HTTPS</string>
+    <string name="dns_over_http_summary">Εργαστείτε γύρω από τη δηλητηρίαση DNS σε ορισμένες χώρες</string>
+    <string name="theme_color">Χρώμα θέματος</string>
+    <string name="theme_color_system">Χρώμα θέματος συστήματος</string>
+    <string name="settings_show_hidden_icon_apps_enabled">Εξαναγκασμός των εφαρμογών να εμφανίζουν εικονίδια εκκίνησης</string>
+    <string name="settings_show_hidden_icon_apps_enabled_summary">Μετά το Android 10, οι εφαρμογές δεν επιτρέπεται να αποκρύψουν τα εικονίδια εκτοξευτή τους. Απενεργοποιήστε την εναλλαγή για να απενεργοποιήσετε αυτήν τη λειτουργία συστήματος.</string>
+    <string name="settings_group_system">Σύστημα</string>
+    <string name="settings_language">Γλώσσα</string>
+    <string name="settings_translation_contributors">Συντελεστές μετάφρασης</string>
+    <string name="settings_translation">Συμμετοχή στη μετάφραση</string>
+    <string name="settings_translation_summary">Βοηθήστε μας να μεταφράσουμε το %s στη γλώσσα σας</string>
+    <string name="pref_title_enable_auto_add_shortcut">Αυτόματη προσθήκη συντόμευσης</string>
+    <string name="create_shortcut_summary">Χειροκίνητη δημιουργία συντόμευσης παρασιτικού διαχειριστή</string>
+    <string name="settings_enable_auto_add_shortcut_summary">Δεν θα προστεθούν νέες συντομεύσεις όταν απενεργοποιηθεί στον μη-παρασιτικό διαχειριστή</string>
+    <string name="settings_update_channel">Ενημέρωση καναλιού</string>
+    <string name="update_channel_stable">Σταθερό</string>
+    <string name="update_channel_bate">Βήτα</string>
+    <string name="update_channel_nightly">Νυχτερινή κατασκευή</string>
+    <string name="pref_title_restrict_classloader">Μόνο ο φορτωτής κλάσεων της μονάδας μπορεί να χρησιμοποιήσει το Xposed API</string>
+    <string name="pref_summary_restrict_classloader">Αυτό μπορεί να σπάσει κάποιες ενότητες αλλά να ωφελήσει την ασφάλεια (πειραματικό χαρακτηριστικό)</string>
+    <!-- Module Repo -->
+    <string name="module_readme">Έτοιμο</string>
+    <string name="module_releases">Εκδόσεις</string>
+    <string name="module_information">Πληροφορίες</string>
+    <string name="module_information_homepage">Αρχική</string>
+    <string name="module_information_source_url">Πηγαίος κώδικας</string>
+    <string name="module_information_collaborators">Συνεργάτες</string>
+    <string name="module_release_view_assets">Ενεργητικό</string>
+    <string name="menu_open_in_browser">Άνοιγμα σε πρόγραμμα περιήγησης</string>
+    <string name="refresh">Ανανέωση</string>
+    <string name="module_release_load_more">Εμφάνιση παλαιότερων εκδόσεων</string>
+    <string name="module_release_no_more">Δεν υπάρχει πλέον έκδοση</string>
+    <string name="repo_load_failed">Αποτυχία φόρτωσης πρόσθετου repo: %s</string>
+    <string name="sort_upgradable_first">Αναβαθμίσιμο πρώτα</string>
+    <!-- CrashReportActivity -->
+    <string name="version_mismatch">The version of the LSPosed framework (%1$d) does not match manager (%2$d). Please reinstall LSPosed.</string>
+    <string name="manager_crashed">Ο διαχειριστής συνετρίβη</string>
+    <string name="manager_crashed_info">αναφορά σε </string>
+    <string name="send_crash_info">Αποστολή πληροφοριών κατάρρευσης</string>
+    <string name="crash_info_copied">Οι πληροφορίες κατάρρευσης αντιγράφηκαν στο πρόχειρο</string>
+    <string name="info_copied">Αντιγραφή στο πρόχειρο</string>
+    <!-- Colors -->
+    <string name="color_sakura">Sakura</string>
+    <string name="color_red">Κόκκινο</string>
+    <string name="color_pink">Ροζ</string>
+    <string name="color_purple">Μωβ</string>
+    <string name="color_deep_purple">Βαθύ μωβ</string>
+    <string name="color_indigo">Indigo</string>
+    <string name="color_blue">Μπλε</string>
+    <string name="color_light_blue">Ανοιχτό μπλε</string>
+    <string name="color_cyan">Κυανό</string>
+    <string name="color_teal">Τιρκουάζ</string>
+    <string name="color_green">Πράσινο</string>
+    <string name="color_light_green">Ανοιχτό πράσινο</string>
+    <string name="color_lime">Άσβεστος</string>
+    <string name="color_yellow">Κίτρινο</string>
+    <string name="color_amber">Κεχριμπάρι</string>
+    <string name="color_orange">Πορτοκαλί</string>
+    <string name="color_deep_orange">Βαθύ πορτοκαλί</string>
+    <string name="color_brown">Καφέ</string>
+    <string name="color_blue_grey">Μπλε γκρι</string>
+</resources>

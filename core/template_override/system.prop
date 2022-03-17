@@ -1,4 +1,0 @@
-# TODO ensure quicken is not essential
-#dalvik.vm.dex2oat-filter=quicken
-dalvik.vm.dex2oat-flags=--inline-max-code-units=0
-#dalvik.vm.image-dex2oat-flags=--inline-max-code-units=0 --compiler-filter=speed

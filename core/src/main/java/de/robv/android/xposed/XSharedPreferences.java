@@ -20,6 +20,8 @@
 
 package de.robv.android.xposed;
 
+import static org.lsposed.lspd.config.LSPApplicationServiceClient.serviceClient;
+
 import android.annotation.SuppressLint;
 import android.content.Context;
 import android.content.SharedPreferences;
@@ -28,9 +30,9 @@ import android.preference.PreferenceManager;
 import android.util.Log;
 
 import com.android.internal.util.XmlUtils;
-import io.github.lsposed.lspd.BuildConfig;
-import io.github.lsposed.lspd.util.MetaDataReader;
 
+import org.lsposed.lspd.BuildConfig;
+import org.lsposed.lspd.util.MetaDataReader;
 import org.xmlpull.v1.XmlPullParserException;
 
 import java.io.File;
@@ -51,8 +53,6 @@ import java.util.Map;
 import java.util.Set;
 
 import de.robv.android.xposed.services.FileResult;
-
-import static io.github.lsposed.lspd.config.LSPApplicationServiceClient.serviceClient;
 
 /**
  * This class is basically the same as SharedPreferencesImpl from AOSP, but
@@ -99,7 +99,8 @@ public final class XSharedPreferences implements SharedPreferences {
                         Path dir = (Path) key.watchable();
                         Path path = dir.resolve((Path) event.context());
                         String pathStr = path.toString();
-                        if (BuildConfig.DEBUG) Log.v(TAG, "File " + path.toString() + " event: " + kind.name());
+                        if (BuildConfig.DEBUG)
+                            Log.v(TAG, "File " + path.toString() + " event: " + kind.name());
                         // We react to both real and backup files due to rare race conditions
                         if (pathStr.endsWith(".bak")) {
                             if (kind != StandardWatchEventKinds.ENTRY_DELETE) {
@@ -114,7 +115,8 @@ public final class XSharedPreferences implements SharedPreferences {
                                 try {
                                     l.onSharedPreferenceChanged(data.mPrefs, null);
                                 } catch (Throwable t) {
-                                    if (BuildConfig.DEBUG) Log.e(TAG, "Fail in preference change listener", t);
+                                    if (BuildConfig.DEBUG)
+                                        Log.e(TAG, "Fail in preference change listener", t);
                                 }
                             }
                         }
@@ -166,7 +168,7 @@ public final class XSharedPreferences implements SharedPreferences {
                 boolean xposedsharedprefs = false;
                 try {
                     Map<String, Object> metaData = MetaDataReader.getMetaData(new File(m));
-                    isModule = metaData.containsKey("xposedmodule");
+                    isModule = metaData.containsKey("xposedminversion");
                     if (isModule) {
                         Object minVersionRaw = metaData.get("xposedminversion");
                         if (minVersionRaw instanceof Integer) {
@@ -183,7 +185,7 @@ public final class XSharedPreferences implements SharedPreferences {
             }
         }
         if (newModule) {
-            mFile = new File(serviceClient.getPrefsPath( packageName ), prefFileName + ".xml");
+            mFile = new File(serviceClient.getPrefsPath(packageName), prefFileName + ".xml");
         } else {
             mFile = new File(Environment.getDataDirectory(), "data/" + packageName + "/shared_prefs/" + prefFileName + ".xml");
         }
@@ -209,7 +211,8 @@ public final class XSharedPreferences implements SharedPreferences {
                 if (sWatcherDaemon == null || !sWatcherDaemon.isAlive()) {
                     initWatcherDaemon();
                 }
-                if (BuildConfig.DEBUG) Log.d(TAG, "tryRegisterWatcher: registered file watcher for " + path);
+                if (BuildConfig.DEBUG)
+                    Log.d(TAG, "tryRegisterWatcher: registered file watcher for " + path);
             } catch (AccessDeniedException accDeniedEx) {
                 if (BuildConfig.DEBUG) Log.e(TAG, "tryRegisterWatcher: access denied to " + path);
             } catch (Exception e) {
@@ -232,7 +235,8 @@ public final class XSharedPreferences implements SharedPreferences {
             if (!atLeastOneValid) {
                 try {
                     sWatcher.close();
-                } catch (Exception ignore) { }
+                } catch (Exception ignore) {
+                }
             }
         }
     }
@@ -522,7 +526,7 @@ public final class XSharedPreferences implements SharedPreferences {
         if (listener == null)
             throw new IllegalArgumentException("listener cannot be null");
 
-        synchronized(this) {
+        synchronized (this) {
             if (mListeners.put(listener, sContent) == null) {
                 tryRegisterWatcher();
             }
@@ -537,7 +541,7 @@ public final class XSharedPreferences implements SharedPreferences {
      */
     @Override
     public void unregisterOnSharedPreferenceChangeListener(OnSharedPreferenceChangeListener listener) {
-        synchronized(this) {
+        synchronized (this) {
             if (mListeners.remove(listener) != null && mListeners.isEmpty()) {
                 tryUnregisterWatcher();
             }

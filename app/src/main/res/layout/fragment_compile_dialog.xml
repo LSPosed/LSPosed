@@ -1,5 +1,4 @@
-<?xml version="1.0" encoding="utf-8"?>
-<!--
+<?xml version="1.0" encoding="utf-8"?><!--
   ~ This file is part of LSPosed.
   ~
   ~ LSPosed is free software: you can redistribute it and/or modify
@@ -37,7 +36,7 @@
         android:layout_marginEnd="?attr/dialogPreferredPadding"
         android:max="10000" />
 
-    <TextView
+    <com.google.android.material.textview.MaterialTextView
         android:id="@+id/message"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"

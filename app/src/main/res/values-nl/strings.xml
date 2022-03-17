@@ -1,3 +1,4 @@
+<?xml version="1.0" encoding="utf-8"?>
 <!--
   ~ This file is part of LSPosed.
   ~
@@ -14,156 +15,212 @@
   ~ You should have received a copy of the GNU General Public License
   ~ along with LSPosed.  If not, see <https://www.gnu.org/licenses/>.
   ~
-  ~ Copyright (C) 2020 EdXposed Contributors
   ~ Copyright (C) 2021 LSPosed Contributors
   -->
-
-<resources>
-    <string name="app_name" translatable="false">LSPosed</string>
-    <string name="Activated">%s Geactiveerd</string>
-    <string name="Install">Installeer</string>
-    <string name="InstallDetail">Tik om LSPosed te installeren</string>
+<resources xmlns:tools="http://schemas.android.com/tools" tools:keep="@string/xposed_module_updated_notification_*,@string/module_is_not_activated_*">
+    <!-- MainActivity -->
+    <string name="info">info</string>
+    <string name="overview">Overzicht</string>
     <string name="Modules">Modules</string>
+    <plurals name="modules_enabled_count">
+        <item quantity="one">%d module ingeschakeld</item>
+        <item quantity="other">%d modules ingeschakeld</item>
+    </plurals>
     <string name="Logs">Logboeken</string>
     <string name="Settings">Instellingen</string>
+    <string name="feedback_or_suggestion">Feedback en suggestie</string>
     <string name="About">Over</string>
-
-    <!-- General/various strings -->
-    <string name="menuSend">versturen</string>
+    <string name="report_issue">Probleem melden</string>
+    <string name="module_repo">Opslagplaats</string>
+    <string name="module_repo_loading">Laden…</string>
+    <string name="module_repo_up_to_date">Alle modules zijn up-to-date</string>
+    <plurals name="module_repo_upgradable">
+        <item quantity="one">%d module te upgraden</item>
+        <item quantity="other">%d modules te upgraden</item>
+    </plurals>
+    <string name="about_view_source_code"><![CDATA[Bekijk de broncode op %1$s<br/>Sluit je aan bij onze %2$s kanaal]]></string>
+    <string name="translators" comment="Dear translators, please add your home page here following the format. There can be more than one translator. So feel free to append yourself.">Pandemic-XDA</string>
+    <string name="install">Installeren</string>
+    <string name="install_summary">Tik om LSPosed te installeren</string>
+    <string name="not_installed">Niet geïnstalleerd</string>
+    <string name="not_install_summary">LSPosed is niet geinstalleerd</string>
+    <string name="activated">Geactiveerd</string>
+    <string name="partial_activated">Gedeeltelijk geactiveerd</string>
+    <string name="selinux_policy_not_loaded_summary">SEPolicy is niet correct geladen</string>
+    <string name="selinux_policy_not_loaded"><![CDATA[&lt;b&gt;WAARSCHUWING:&lt;\/b&gt; SEPolicy is niet correct geladen, modules die System Framework haken zullen niet werken.]]></string>
+    <string name="system_inject_fail_summary">Systeem Framework injectie is mislukt</string>
+    <string name="system_inject_fail"><![CDATA[Systeem Framework injectie mislukt.<br/>Dit is zeldzaam en kan worden veroorzaakt door <b>Magisk</b> of sommige Magisk-modules van lage kwaliteit.<br/>Probeer andere Magisk-modules dan Riru en LSPosed uit te schakelen of stuur een volledig logboek naar de ontwikkelaars.]]></string>
+    <string name="system_prop_incorrect_summary">Systeem prop incorrect</string>
+    <string name="system_prop_incorrect"><![CDATA[Enkele noodzakelijke systeemeigenschappen verwijderd of gewijzigd.<br/>Modules kunnen af en toe ongeldig worden.]]></string>
+    <string name="need_update">Bijwerken is nodig</string>
+    <string name="please_update_summary">Installeer de laatste versie van LSPosed</string>
+    <string name="lsposed_not_active">LSPosed is momenteel niet geïnstalleerd of actief.</string>
+    <string name="info_api_version">API versie</string>
+    <string name="info_framework_version">Framework versie</string>
+    <string name="info_manager_version">Manager versie</string>
+    <string name="info_system_version">Systeem versie</string>
+    <string name="info_device">Apparaat</string>
+    <string name="info_system_abi">Systeem ABI</string>
+    <string name="info_api">Injectie interface</string>
+    <string name="parasitic_recommend">Parasitaire manager aanbevolen</string>
+    <string name="parasitic_recommend_summary">LSPosed ondersteunt nu parasitisering van het systeem om detectie te voorkomen. U kunt de manager veilig deïnstalleren na het maken van een snelkoppeling van de parastische manager. In elk geval kunt u de manager installeren vanuit /data/adb/lspd/manager.apk.</string>
+    <string name="create_shortcut">Snelkoppeling maken</string>
+    <string name="never_show">Nooit tonen</string>
+    <string name="update_lsposed">Update LSPosed</string>
+    <string name="update_lsposed_msg">Bevestig bijwerken van LSPosed? Dit apparaat zal opnieuw opstarten nadat de update is voltooid</string>
+    <!-- LogsActivity -->
     <string name="menuSaveToSd">Opslaan</string>
-
-    <!-- Welcome screen / main sections -->
-
-    <!-- navigation view items -->
-    <string name="nav_item_logs">Uitgebreide logboeken</string>
-    <string name="nav_item_logs_err">Modules Logboeken</string>
-
-    <!-- Installer tab -->
-    <string name="dont_show_again">Laat dit niet meer zien</string>
-
-    <!-- File operations -->
-
-    <!-- Modules tab -->
-    <string name="module_is_not_activated_yet">LSPosed module is nog niet geactiveerd</string>
-    <string name="module_is_not_activated_yet_detailed">%s is geïnstalleerd, maar is nog niet geactiveerd</string>
-    <string name="module_empty_description">(geen beschrijving gegeven)</string>
-    <string name="module_no_ui">Deze module biedt geen gebruikersinterface</string>
-    <string name="xposed_module_updated_notification_title">LSPosed module bijgewerkt</string>
-    <string name="warning_xposed_min_version">Deze module vereist een nieuwere versie van LSPosed (%d) en dit kan niet worden geactiveerd</string>
-    <string name="no_min_version_specified">Deze module specificeert niet de LSPosed-versie die het nodig heeft.</string>
-    <string name="warning_min_version_too_low">Deze module is gemaakt voor de LSPosed-versie %1$d, maar vanwege onverenigbare wijzigingen in de versie %2$d, het is uitgeschakeld</string>
-    <string name="modules_app_store">Bekijk in App winkel</string>
-    <string name="module_app_info">App info</string>
-    <string name="module_uninstall">Verwijderen</string>
-
-    <!-- Download tab -->
-    <string name="menuReload">Herlaad</string>
-
-    <!-- Settings tab -->
-    <string name="settings_group_framework">Framework</string>
-    <string name="settings_enable_resources">Schakel resource-hooks in</string>
-    <string name="settings_enable_resources_summary"><b>Waarschuwing:</b> Resource-hooks zijn verouderd</string>
-
-    <!-- Support tab -->
-
-    <!-- Logs tab  -->
-    <string name="logs_save_failed">Opslaan mislukt:</string>
-    <string name="menuClearLog">Log nu wissen</string>
+    <string name="nav_item_logs_verbose">Uitgebreide logs</string>
+    <string name="nav_item_logs_module">Modules Logbestanden</string>
+    <string name="logs_save_failed2">Opslaan mislukt:\n%s</string>
+    <string name="menuClearLog">Wis het logboek nu</string>
     <string name="logs_cleared">Log succesvol gewist.</string>
-    <string name="log_is_empty">Log is leeg.</string>
-
-    <!-- About tab -->
-
-    <!-- DownloadView -->
-
-    <!-- DownloadUtils -->
-
-    <!-- RepoLoader -->
-
-    <string name="warning_installed_on_external_storage">Deze module kan niet worden geladen omdat het geïnstalleerd is op de SD-kaart, verplaats deze dan naar de interne opslag</string>
-
-    <string name="info">Info</string>
-
     <string name="scroll_top">Scroll naar boven</string>
     <string name="loading">Laden…</string>
-    <string name="scroll_bottom">Scroll naaar beneden</string>
-
-    <string name="android_sdk" translatable="false">Android %2$s (%1$s, API %3$d)</string>
-
-    <!-- LSPd related -->
+    <string name="scroll_bottom">Scroll naar beneden</string>
+    <string name="logs_cannot_read">Kan logboek niet lezen: \n</string>
+    <string name="menuReload">Herlaad</string>
+    <string name="logs_clear_failed_2">Het logboek kan niet worden gewist</string>
+    <string name="menu_enable_word_wrap">Woord Omslag</string>
+    <string name="enabled_verbose_log">Uitgebreide logboek ingeschakeld</string>
+    <string name="disabled_verbose_log">Verbose logboek uitgeschakeld</string>
+    <!-- ModulesActivity -->
+    <string name="module_empty_description">(geen beschrijving gegeven)</string>
+    <string name="warning_xposed_min_version">Deze module vereist een nieuwere versie van Lsposed (%d) en kan dus niet worden geactiveerd</string>
+    <string name="no_min_version_specified">Deze module heeft geen vereiste versie voor Xposed opgegeven.</string>
+    <string name="warning_min_version_too_low">Deze module is gemaakt voor de Lsposed-versie %1$d, maar vanwege onverenigbare wijzigingen in de versie %2$d, is het uitgeschakeld</string>
+    <string name="warning_installed_on_external_storage">Deze module kan niet worden geladen omdat deze op de SD-kaart is geïnstalleerd. Verplaats deze naar de interne opslag</string>
+    <string name="module_uninstall">Verwijderen</string>
+    <string name="module_settings">Module instellingen</string>
+    <string name="view_in_repo">Bekijk in Repo</string>
+    <string name="module_uninstall_message">Wilt u deze module verwijderen?</string>
+    <string name="module_uninstalled">Gedeïnstalleerd %1$s</string>
+    <string name="module_uninstall_failed">Verwijderen mislukt</string>
+    <string name="add_module_to_user">Module toevoegen aan gebruiker</string>
+    <string name="module_installed">Toegevoegd %1$s naar gebruiker %2$s</string>
+    <string name="module_install_failed">Het toevoegen van de module is mislukt</string>
+    <string name="install_to_user">Installeer naar gebruiker %s</string>
+    <string name="install_to_user_message">Wil je installeren %1$s naar gebruiker %2$s? Het wordt aanbevolen om handmatig te installeren, het forceren van installatie via LSPosed kan problemen veroorzaken.</string>
+    <string name="expand">uitbreiden</string>
+    <string name="collapse">samenvouwen</string>
+    <!-- AppListActivity -->
+    <string name="compile_speed">Opnieuw optimaliseren</string>
     <string name="compile_speed_msg">Optimaliseren…</string>
     <string name="compile_done">Optimalisatie voltooid.</string>
-
-    <string name="about_source" translatable="false">https://github.com/LSPosed/LSPosed/</string>
-
-    <string name="pref_title_disable_verbose_log">Schakel uitgebreide logboeken uit</string>
-    <string name="logs_cannot_read">Kan logboek niet lezen: \n</string>
     <string name="app_launch">Lanceer het</string>
-    <string name="compile_failed">Optimalisatie mislukt of retourwaarde is leeg.</string>
+    <string name="compile_failed">Optimalisatie mislukt of geretourneerde waarde is leeg.</string>
     <string name="compile_failed_with_info">Optimalisatie is mislukt: </string>
-    <string name="not_installed">Niet geïnstalleerd</string>
-    <string name="pure_black_dark_theme">Gebruik het pure zwart donkere thema</string>
-    <string name="sort_by_name">Sorteer op toepassingsnaam</string>
-    <string name="sort_by_name_reverse">Sorteren op applicatienaam (omgekeerd)</string>
+    <string name="sort_by_name">Sorteer op applicatienaam</string>
     <string name="sort_by_package_name">Sorteer op pakketnaam</string>
-    <string name="sort_by_package_name_reverse">Sorteren op pakketnaam (omgekeerd)</string>
     <string name="sort_by_install_time">Sorteer op installatietijd</string>
-    <string name="sort_by_install_time_reverse">Sorteer op installatietijd (omgekeerd)</string>
     <string name="sort_by_update_time">Sorteer op updatetijd</string>
-    <string name="sort_by_update_time_reverse">Sorteer op updatetijd (omgekeerd)</string>
-    <string name="settings_group_theme">Thema</string>
-    <string name="settings_variant">Variant</string>
+    <string name="sort_reverse">Omkeren</string>
     <string name="menu_show_system_apps">Systeem apps</string>
-    <string name="menu_sort">Sorteren…</string>
+    <string name="menu_sort">Sorteren</string>
     <string name="enable_module">Schakel module in</string>
-    <string name="no_scope_selected">U heeft geen app geselecteerd. Verder gaan?</string>
+    <string name="no_scope_selected">U heeft geen app geselecteerd. Doorgaan?</string>
     <string name="menu_show_games">Games</string>
     <string name="menu_show_modules">Modules</string>
-    <string name="failed_to_save_scope_list">Scope-lijst opslaan is mislukt</string>
-    <string name="module_settings">Module instellingen</string>
-    <string name="app_description">%s\nVersie: %s</string>
+    <string name="menu_show_denylist">Weigerlijst</string>
+    <string name="failed_to_save_scope_list">Scopelijst opslaan is mislukt</string>
+    <string name="app_description">%1$s\nVersie %2$s</string>
     <string name="use_recommended">Aanbevolen</string>
-    <string name="no_scope_selected_has_recommended">U heeft geen app geselecteerd. Selecteer aanbevolen apps?</string>
-    <string name="use_recommended_message">Selecteer aanbevolen apps?</string>
+    <string name="no_scope_selected_has_recommended">U heeft geen app geselecteerd. Aanbevolen apps selecteren?</string>
+    <string name="use_recommended_message">Aanbevolen apps selecteren?</string>
+    <string name="module_is_not_activated_yet">LSPosed module is nog niet geactiveerd</string>
     <string name="requested_by_module">Aanbevolen</string>
-    <string name="module_disabled_no_selection">Module %s is uitgeschakeld omdat er geen app is geselecteerd.</string>
+    <string name="update_available">Update beschikbaar: %1$s</string>
+    <string name="module_disabled_no_selection">Module %1$s is uitgeschakeld omdat er geen app is geselecteerd.</string>
     <string name="android_framework">Systeem Framework</string>
-    <string name="app_destroyed">Deze applicatie is vernietigd, zorg ervoor dat u deze downloadt vanaf de officiële bron.</string>
-    <string name="compile_speed">Optimaliseer opnieuw</string>
-    <string name="selinux_permissive">&lt;b&gt;Waarschuwing:&lt;\/b&gt; SELinux dwingt niet af! het kwaadaardige programma dat dit aanvalt, kan uw apparaat volledig beheersen en kan uw eigendommen beschadigen en juridische aansprakelijkheid veroorzaken.</string>
-    <string name="selinux_permissive_summary">SELinux dwingt niet af!</string>
-    <string name="outdated_manager">De versie van LSPosed Manager en LSPosed Core zijn niet consistent. Installeer de overeenkomstige versie opnieuw.</string>
-    <string name="lsposed_not_active">LSPosed is momenteel niet geïnstalleerd of actief.</string>
-    <string name="settings_backup_and_restore">Backup en herstellen</string>
-    <string name="settings_backup_and_restore_summery">Back-up of herstel modulelijst en scooplijsten.</string>
-    <string name="settings_backup">Backup</string>
-    <string name="settings_backuping">Back up maken…</string>
-    <string name="settings_backup_success">Back-up voltooid!</string>
-    <string name="settings_backup_failed">Back-up maken mislukt</string>
-    <string name="settings_restore">Herstellen</string>
-    <string name="settings_restoring">Herstellen…</string>
-    <string name="settings_restore_success">Herstel voltooid!</string>
-    <string name="settings_restore_failed">Herstellen mislukt</string>
-    <string name="menu_backup_and_restore">Back-up…</string>
-    <string name="menu_backup">Back-up</string>
+    <string name="menu_backup_and_restore">Backup</string>
+    <string name="menu_backup">Backup</string>
     <string name="menu_restore">Herstellen</string>
-    <string name="xposed_module_updated_notification_content">%s is geupdate</string>
-    <string name="module_repo">Opslagplaats</string>
-    <string name="module_repo_summary">Module opslagplaats (Alpha)</string>
+    <string name="force_stop">Forceer stop</string>
+    <string name="force_stop_dlg_title">Gedwongen stoppen?</string>
+    <string name="force_stop_dlg_text">Als je een app gedwongen stopt, kan deze onverwacht gedrag vertonen.</string>
+    <string name="reboot_required">Opnieuw opstarten is vereist om deze wijziging door te voeren</string>
+    <string name="reboot">Herstart</string>
+    <string name="menu_hide">Verbergen</string>
+    <string name="deny_list">%s staat op de weigerlijst en kan geen effect hebben.</string>
+    <string name="deny_list_info">Op weigerlijst</string>
+    <!-- ModulesActivity and AppListActivity -->
+    <string name="modules_other_app">Bekijk in andere app</string>
+    <string name="module_app_info">App informatie</string>
+    <string name="list_empty">¯\\\\_(ツ)_\/¯\nNiets hier</string>
+    <!-- SettingsActivity -->
+    <string name="settings_group_framework">Framework</string>
+    <string name="pref_title_disable_verbose_log">Schakel uitgebreide logboeken uit</string>
+    <string name="pure_black_dark_theme">Zwarte donkere thema</string>
+    <string name="pure_black_dark_theme_summary">Gebruik het pure zwarte thema als het donkere thema is ingeschakeld</string>
+    <string name="settings_group_theme">Thema</string>
+    <string name="settings_backup_and_restore">Backup en herstellen</string>
+    <string name="settings_backup_summery">Backup of herstel de modulelijst en scooplijsten.</string>
+    <string name="settings_restore_summery">Herstel de modulelijst en scooplijsten.</string>
+    <string name="settings_backup">Backup</string>
+    <string name="settings_backup_failed2">Opslaan mislukt:\n%s</string>
+    <string name="enable_documentui">Schakel DocumentUI in</string>
+    <string name="settings_restore">Herstellen</string>
+    <string name="settings_restore_failed2">Herstellen mislukt:\n%s</string>
+    <string name="group_network">Netwerk</string>
+    <string name="dns_over_http">DNS via HTTPS</string>
+    <string name="dns_over_http_summary">Tijdelijke oplossing voor DNS-vergiftiging in sommige landen</string>
+    <string name="theme_color">Thema kleur</string>
+    <string name="theme_color_system">Systeem thema kleur</string>
+    <string name="settings_show_hidden_icon_apps_enabled">Forceer apps om launcher-pictogrammen weer te geven</string>
+    <string name="settings_show_hidden_icon_apps_enabled_summary">Na Android 10 mogen apps de launcher pictogrammen niet verbergen. Schakel de schakelaar uit om deze functie uit te schakelen.</string>
+    <string name="settings_group_system">Systeem</string>
+    <string name="settings_language">Taal</string>
+    <string name="settings_translation_contributors">Bijdragers van vertalingen</string>
+    <string name="settings_translation">Deelnemen aan vertaling</string>
+    <string name="settings_translation_summary">Help ons %s te vertalen in uw taal</string>
+    <string name="pref_title_enable_auto_add_shortcut">Snelkoppeling automatisch toevoegen</string>
+    <string name="create_shortcut_summary">Maak handmatig een snelkoppeling naar parasitic manager</string>
+    <string name="settings_enable_auto_add_shortcut_summary">Er zullen geen nieuwe snelkoppelingen worden toegevoegd wanneer uitgeschakeld in de niet-parasitaire manager</string>
+    <string name="settings_update_channel">Kanaal bijwerken</string>
+    <string name="update_channel_stable">Stabiel</string>
+    <string name="update_channel_bate">Bèta</string>
+    <string name="update_channel_nightly">Nachtelijke bouw</string>
+    <string name="pref_title_restrict_classloader">Alleen module classloader kan Xposed API gebruiken</string>
+    <string name="pref_summary_restrict_classloader">Dit kan sommige modules breken maar de veiligheid ten goede komen (experimentele functie)</string>
+    <!-- Module Repo -->
     <string name="module_readme">Leesmij</string>
-    <string name="module_releases">Releases</string>
-    <string name="module_information">Info</string>
+    <string name="module_releases">Publicaties</string>
+    <string name="module_information">Informatie</string>
     <string name="module_information_homepage">Startpagina</string>
     <string name="module_information_source_url">Broncode</string>
     <string name="module_information_collaborators">Medewerkers</string>
     <string name="module_release_view_assets">Middelen</string>
     <string name="menu_open_in_browser">Open in de browser</string>
     <string name="refresh">Vernieuwen</string>
-    <string name="group_network">Netwerk</string>
-    <string name="dns_over_http">DNS via HTTPS</string>
-    <string name="dns_over_http_summary">Tijdelijke oplossing voor DNS-vergiftiging in sommige landen</string>
-    <string name="about_view_source_code"><![CDATA[Bekijk de broncode op %s<br/>Word lid van ons %s-kanaal]]></string>
-    <string name="module_release_load_more">Toon oudere versies</string>
+    <string name="module_release_load_more">Laat oudere versies zien</string>
     <string name="module_release_no_more">Geen release meer</string>
-    <string name="theme_color">Thema kleur</string>
+    <string name="repo_load_failed">Kan moduleopslagplaats niet laden: %1$s</string>
+    <string name="sort_upgradable_first">Eerst te upgraden</string>
+    <!-- CrashReportActivity -->
+    <string name="version_mismatch">De versie van het LSPosed framework (%1$d) komt niet overeen met manager (%2$d). Herinstalleer LSPosed.</string>
+    <string name="manager_crashed">Manager gecrasht</string>
+    <string name="manager_crashed_info">meld dit aan </string>
+    <string name="send_crash_info">Stuur crash informatie</string>
+    <string name="crash_info_copied">Crash informatie naar klembord gekopieerd</string>
+    <string name="info_copied">Gekopieerd naar klembord</string>
+    <!-- Colors -->
+    <string name="color_sakura">Sakura</string>
+    <string name="color_red">Rood</string>
+    <string name="color_pink">Roze</string>
+    <string name="color_purple">Paars</string>
+    <string name="color_deep_purple">Donker paars</string>
+    <string name="color_indigo">Indigo</string>
+    <string name="color_blue">Blauw</string>
+    <string name="color_light_blue">Licht blauw</string>
+    <string name="color_cyan">Turquoise</string>
+    <string name="color_teal">Groenblauw</string>
+    <string name="color_green">Groen</string>
+    <string name="color_light_green">Licht groen</string>
+    <string name="color_lime">Limoen</string>
+    <string name="color_yellow">Geel</string>
+    <string name="color_amber">Amber</string>
+    <string name="color_orange">Oranje</string>
+    <string name="color_deep_orange">Diep oranje</string>
+    <string name="color_brown">Bruin</string>
+    <string name="color_blue_grey">Blauw grijs</string>
 </resources>

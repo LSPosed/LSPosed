@@ -1,12 +1,4 @@
-/.externalNativeBuild
 /build
-/libs
-/obj
 /release
-/template_override/module.prop
-/template_override/en_US.sh
-/template_override/system
-/template_override/system_x86
-/template_override/riru/module.prop.new
-*.iml
+/src/main/cpp/api/config.cpp
 /.cxx

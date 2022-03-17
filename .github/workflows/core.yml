@@ -1,65 +1,144 @@
 name: Core
 
 on:
+  workflow_dispatch:
   push:
     branches: [ master ]
-    paths-ignore:
-    - 'app/**'
-    - '**.md'
   pull_request:
-    paths-ignore:
-    - 'app/**'
-    - '**.md'
 
 jobs:
   build:
-    runs-on: ubuntu-latest
+    runs-on: ubuntu-20.04
     if: ${{ !startsWith(github.event.head_commit.message, '[skip ci]') }}
 
     steps:
-    - uses: actions/checkout@v2
+    - name: Checkout
+      uses: actions/checkout@v2
       with:
         submodules: 'recursive'
         fetch-depth: 0
+    - name: Write key
+      if: github.event_name != 'pull_request' && github.ref == 'refs/heads/master'
+      run: |
+        if [ ! -z "${{ secrets.KEY_STORE }}" ]; then
+          echo androidStorePassword='${{ secrets.KEY_STORE_PASSWORD }}' >> gradle.properties
+          echo androidKeyAlias='${{ secrets.ALIAS }}' >> gradle.properties
+          echo androidKeyPassword='${{ secrets.KEY_PASSWORD }}' >> gradle.properties
+          echo androidStoreFile='key.jks' >> gradle.properties
+          echo ${{ secrets.KEY_STORE }} | base64 --decode > key.jks
+        fi
     - name: set up JDK 11
       uses: actions/setup-java@v1
       with:
         java-version: 11
+    - name: Cache Gradle Dependencies
+      uses: actions/cache@v2
+      with:
+        path: |
+          ~/.gradle/caches
+          ~/.gradle/wrapper
+          !~/.gradle/caches/build-cache-*
+        key: gradle-deps-core-${{ hashFiles('**/build.gradle.kts') }}
+        restore-keys: |
+          gradle-deps
+    - name: Cache Gradle Build
+      uses: actions/cache@v2
+      with:
+        path: |
+          ~/.gradle/caches/build-cache-*
+          ~/.gradle/buildOutputCleanup/cache.properties
+        key: gradle-builds-core-${{ github.sha }}
+        restore-keys: |
+          gradle-builds
+    - name: Cache native build
+      uses: actions/cache@v2
+      with:
+        path: |
+          ~/.ccache
+          core/build/.lto-cache
+          daemon/build/.lto-cache
+        key: native-cache-${{ github.sha }}
+        restore-keys: native-cache-
+    - name: Install dep
+      run: |
+        sudo apt-get install -y ccache ninja-build
+        ccache -o max_size=1G
+        ccache -o hash_dir=false
+        ccache -o compiler_check='%compiler% -dumpmachine; %compiler% -dumpversion'
+        ccache -zp
     - name: Build with Gradle
-      run:  bash ./gradlew zipRelease zipDebug
+      run: |
+        [ $(du -s ~/.gradle/wrapper | awk '{ print $1 }') -gt 250000 ] && rm -rf ~/.gradle/wrapper/* || true
+        find ~/.gradle/caches -exec touch -d "2 days ago" {} + || true
+        echo 'org.gradle.caching=true' >> gradle.properties
+        echo 'org.gradle.parallel=true' >> gradle.properties
+        echo 'org.gradle.vfs.watch=true' >> gradle.properties
+        echo 'org.gradle.jvmargs=-Xmx2048m' >> gradle.properties
+        echo 'android.native.buildOutput=verbose' >> gradle.properties
+        ln -s $(which ninja) $(dirname $(which cmake)) # https://issuetracker.google.com/issues/206099937
+        echo "cmake.dir=$(dirname $(dirname $(which cmake)))" >> local.properties
+        ./gradlew zipAll
+        ccache -s
     - name: Prepare artifact
       if: success()
       id: prepareArtifact
       run: |
-        releaseName=`ls core/release/LSPosed-v*-release.zip | awk -F '(/|.zip)' '{print $3}'` && echo "::set-output name=releaseName::$releaseName"
-        debugName=`ls core/release/LSPosed-v*-debug.zip | awk -F '(/|.zip)' '{print $3}'` && echo "::set-output name=debugName::$debugName"
-        unzip core/release/LSPosed-v*-release.zip -d LSPosed-release
-        unzip core/release/LSPosed-v*-debug.zip -d LSPosed-debug
-    - name: Upload release
+        riruReleaseName=`ls core/release/LSPosed-v*-riru-release.zip | awk -F '(/|.zip)' '{print $3}'` && echo "::set-output name=riruReleaseName::$riruReleaseName"
+        riruDebugName=`ls core/release/LSPosed-v*-riru-debug.zip | awk -F '(/|.zip)' '{print $3}'` && echo "::set-output name=riruDebugName::$riruDebugName"
+        zygiskReleaseName=`ls core/release/LSPosed-v*-zygisk-release.zip | awk -F '(/|.zip)' '{print $3}'` && echo "::set-output name=zygiskReleaseName::$zygiskReleaseName"
+        zygiskDebugName=`ls core/release/LSPosed-v*-zygisk-debug.zip | awk -F '(/|.zip)' '{print $3}'` && echo "::set-output name=zygiskDebugName::$zygiskDebugName"
+        unzip core/release/LSPosed-v*-riru-release.zip -d LSPosed-riru-release
+        unzip core/release/LSPosed-v*-riru-debug.zip -d LSPosed-riru-debug
+        unzip core/release/LSPosed-v*-zygisk-release.zip -d LSPosed-zygisk-release
+        unzip core/release/LSPosed-v*-zygisk-debug.zip -d LSPosed-zygisk-debug
+    - name: Upload riru release
       uses: actions/upload-artifact@v2
       with:
-        name: ${{ steps.prepareArtifact.outputs.releaseName }}
-        path: './LSPosed-release/*'
-    - name: Upload debug
-#      if: ${{ github.event_name == 'pull_request' && success() }}
+        name: ${{ steps.prepareArtifact.outputs.riruReleaseName }}
+        path: './LSPosed-riru-release/*'
+    - name: Upload riru debug
       uses: actions/upload-artifact@v2
       with:
-        name: ${{ steps.prepareArtifact.outputs.debugName }}
-        path: './LSPosed-debug/*'
+        name: ${{ steps.prepareArtifact.outputs.riruDebugName }}
+        path: './LSPosed-riru-debug/*'
+    - name: Upload zygisk release
+      uses: actions/upload-artifact@v2
+      with:
+        name: ${{ steps.prepareArtifact.outputs.zygiskReleaseName }}
+        path: './LSPosed-zygisk-release/*'
+    - name: Upload zygisk debug
+      uses: actions/upload-artifact@v2
+      with:
+        name: ${{ steps.prepareArtifact.outputs.zygiskDebugName }}
+        path: './LSPosed-zygisk-debug/*'
     - name: Upload mappings
       uses: actions/upload-artifact@v2
       with:
         name: mappings
-        path: "core/build/outputs/mapping"
+        path: |
+          core/build/outputs/mapping
+          app/build/outputs/mapping
+    - name: Upload symbols
+      uses: actions/upload-artifact@v2
+      with:
+        name: symbols
+        path: |
+          core/build/symbols
+          daemon/build/symbols
     - name: Post to channel
       if: ${{ github.event_name != 'pull_request' && success() && github.ref == 'refs/heads/master' }}
       env:
         CHANNEL_ID: ${{ secrets.CHANNEL_ID }}
         BOT_TOKEN: ${{ secrets.BOT_TOKEN }}
         COMMIT_MESSAGE: ${{ github.event.head_commit.message }}
+        COMMIT_URL: ${{ github.event.head_commit.url }}
       run: |
-        OUTPUT="core/release/"
-        export release=$(find $OUTPUT -name "LSPosed-v*-release.zip")
-        export debug=$(find $OUTPUT -name "LSPosed-v*-debug.zip")
-        ESCAPED=`python3 -c 'import json,os,urllib.parse; print(urllib.parse.quote(json.dumps(os.environ["COMMIT_MESSAGE"])))'`
-        curl -v "https://api.telegram.org/bot${BOT_TOKEN}/sendMediaGroup?chat_id=${CHANNEL_ID}&media=%5B%7B%22type%22:%22document%22,%20%22media%22:%22attach://release%22%7D,%7B%22type%22:%22document%22,%20%22media%22:%22attach://debug%22,%22caption%22:${ESCAPED}%7D%5D"  -F release="@$release" -F debug="@$debug"
+        if [ ! -z "${{ secrets.BOT_TOKEN }}" ]; then
+          OUTPUT="core/release/"
+          export riruRelease=$(find $OUTPUT -name "LSPosed-v*-riru-release.zip")
+          export riruDebug=$(find $OUTPUT -name "LSPosed-v*-riru-debug.zip")
+          export zygiskRelease=$(find $OUTPUT -name "LSPosed-v*-zygisk-release.zip")
+          export zygiskDebug=$(find $OUTPUT -name "LSPosed-v*-zygisk-debug.zip")
+          ESCAPED=`python3 -c 'import json,os,urllib.parse; msg = json.dumps(os.environ["COMMIT_MESSAGE"]); print(urllib.parse.quote(msg if len(msg) <= 1024 else json.dumps(os.environ["COMMIT_URL"])))'`
+          curl -v "https://api.telegram.org/bot${BOT_TOKEN}/sendMediaGroup?chat_id=${CHANNEL_ID}&media=%5B%7B%22type%22%3A%22document%22%2C%20%22media%22%3A%22attach%3A%2F%2FriruRelease%22%7D%2C%7B%22type%22%3A%22document%22%2C%20%22media%22%3A%22attach%3A%2F%2FzygiskRelease%22%7D%2C%7B%22type%22%3A%22document%22%2C%20%22media%22%3A%22attach%3A%2F%2FriruDebug%22%7D%2C%7B%22type%22%3A%22document%22%2C%20%22media%22%3A%22attach%3A%2F%2FzygiskDebug%22%2C%22caption%22:${ESCAPED}%7D%5D" -F riruRelease="@$riruRelease" -F riruDebug="@$riruDebug" -F zygiskRelease="@$zygiskRelease" -F zygiskDebug="@$zygiskDebug"
+        fi

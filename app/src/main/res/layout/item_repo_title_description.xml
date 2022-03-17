@@ -23,7 +23,7 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
-    android:background="@drawable/item_background"
+    android:background="?selectableItemBackground"
     android:clickable="true"
     android:focusable="true"
     android:minHeight="?attr/listPreferredItemHeight"
@@ -38,7 +38,7 @@
         android:layout_height="wrap_content"
         tools:ignore="RtlSymmetry">
 
-        <TextView
+        <com.google.android.material.textview.MaterialTextView
             android:id="@+id/title"
             android:layout_width="0dp"
             android:layout_height="wrap_content"
@@ -50,7 +50,7 @@
             app:layout_constraintBottom_toBottomOf="parent"
             tools:text="@tools:sample/lorem" />
 
-        <io.github.lsposed.manager.ui.widget.LinkifyTextView
+        <org.lsposed.manager.ui.widget.LinkifyTextView
             android:id="@+id/description"
             android:layout_width="0dp"
             android:layout_height="wrap_content"

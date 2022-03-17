@@ -1,0 +1,10 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <!-- Notification -->
+    <string name="module_is_not_activated_yet">Xposed-module is nog nie geaktiveer nie</string>
+    <string name="module_is_not_activated_yet_detailed">%s is geïnstalleer, maar is nog nie geaktiveer nie</string>
+    <string name="xposed_module_updated_notification_title">%d module enabled</string>
+    <string name="xposed_module_updated_notification_content">%s is opgedateer, forseer asseblief stop en herbegin programme binne die omvang daarvan</string>
+    <string name="xposed_module_updated_notification_title_system">Xposed-module is opgedateer, stelselherlaai vereis</string>
+    <string name="xposed_module_updated_notification_content_system">%s is opgedateer, aangesien die omvang System Framework bevat, vereis herlaai om veranderinge toe te pas</string>
+</resources>

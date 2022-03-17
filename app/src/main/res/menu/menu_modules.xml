@@ -1,5 +1,4 @@
-<?xml version="1.0" encoding="utf-8"?>
-<!--
+<?xml version="1.0" encoding="utf-8"?><!--
   ~ This file is part of LSPosed.
   ~
   ~ LSPosed is free software: you can redistribute it and/or modify
@@ -19,18 +18,12 @@
   ~ Copyright (C) 2021 LSPosed Contributors
   -->
 
-<menu xmlns:android="http://schemas.android.com/apk/res/android"
-    xmlns:app="http://schemas.android.com/apk/res-auto">
+<menu xmlns:android="http://schemas.android.com/apk/res/android">
 
     <item
         android:id="@+id/menu_search"
-        app:actionViewClass="androidx.appcompat.widget.SearchView"
-        app:showAsAction="ifRoom" />
-
-    <item
-        android:id="@+id/menu_refresh"
-        android:title="@string/refresh"
-        android:icon="@drawable/ic_refresh"
-        app:showAsAction="ifRoom" />
+        android:actionViewClass="androidx.appcompat.widget.SearchView"
+        android:icon="@drawable/ic_baseline_search_24"
+        android:showAsAction="ifRoom|collapseActionView" />
 
 </menu>

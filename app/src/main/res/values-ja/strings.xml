@@ -1,0 +1,224 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!--
+  ~ This file is part of LSPosed.
+  ~
+  ~ LSPosed is free software: you can redistribute it and/or modify
+  ~ it under the terms of the GNU General Public License as published by
+  ~ the Free Software Foundation, either version 3 of the License, or
+  ~ (at your option) any later version.
+  ~
+  ~ LSPosed is distributed in the hope that it will be useful,
+  ~ but WITHOUT ANY WARRANTY; without even the implied warranty of
+  ~ MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+  ~ GNU General Public License for more details.
+  ~
+  ~ You should have received a copy of the GNU General Public License
+  ~ along with LSPosed.  If not, see <https://www.gnu.org/licenses/>.
+  ~
+  ~ Copyright (C) 2021 LSPosed Contributors
+  -->
+<resources xmlns:tools="http://schemas.android.com/tools" tools:keep="@string/xposed_module_updated_notification_*,@string/module_is_not_activated_*">
+    <!-- MainActivity -->
+    <string name="info">情報</string>
+    <string name="overview">概要</string>
+    <string name="Modules">モジュール</string>
+    <plurals name="modules_enabled_count">
+        <item quantity="other">%d 個のモジュールが有効化済み</item>
+    </plurals>
+    <string name="Logs">ログ</string>
+    <string name="Settings">設定</string>
+    <string name="feedback_or_suggestion">ご意見・ご提案</string>
+    <string name="About">本アプリについて</string>
+    <string name="report_issue">問題を報告</string>
+    <string name="module_repo">リポジトリ</string>
+    <string name="module_repo_loading">読み込み中…</string>
+    <string name="module_repo_up_to_date">全てのモジュールが最新です</string>
+    <plurals name="module_repo_upgradable">
+        <item quantity="other">%d 個のモジュールがアップグレード可能</item>
+    </plurals>
+    <string name="about_view_source_code"><![CDATA[%1$s でソースコードを閲覧<br/>%2$s チャンネルに参加]]></string>
+    <string name="translators" comment="Dear translators, please add your home page here following the format. There can be more than one translator. So feel free to append yourself.">yoshi818, a1678991</string>
+    <string name="install">インストール</string>
+    <string name="install_summary">タップして LSPosed をインストールする</string>
+    <string name="not_installed">未インストール</string>
+    <string name="not_install_summary">LSPosedはインストールされていません</string>
+    <string name="activated">有効化済み</string>
+    <string name="partial_activated">部分的に有効化済み</string>
+    <string name="selinux_policy_not_loaded_summary">SEPolicyが正しく読み込まれていません</string>
+    <string name="selinux_policy_not_loaded"><![CDATA[システムフレームワークをフックするモジュールは動作しません。<br/>この問題について<a href="https://github.com/topjohnwu/Magisk/issues"><b>Magisk</b></a>開発者に報告して下さい。]]></string>
+    <string name="system_inject_fail_summary">システムフレームワークへのパッチに失敗しました</string>
+    <string name="system_inject_fail"><![CDATA[本現象はごく稀に発生し、<b>Magisk</b>もしくは低品質な Magiskモジュールが原因で発生します。<br/>RiruとLSPosed以外のMagiskモジュールを一時的に無効化してみるか、開発者へすべてのログを提出して下さい。]]></string>
+    <string name="system_prop_incorrect_summary">誤ったシステム設定</string>
+    <string name="system_prop_incorrect"><![CDATA[必須のシステム設定が変更もしくは削除されています。<br/>モジュールが無効化される場合があります。]]></string>
+    <string name="need_update">更新が必要です</string>
+    <string name="please_update_summary">最新バージョンの LSPosedをインストールして下さい</string>
+    <string name="lsposed_not_active">LSPosedが未インストールか、有効化されていません。</string>
+    <string name="info_api_version">APIバージョン</string>
+    <string name="info_framework_version">フレームワークバージョン</string>
+    <string name="info_manager_version">マネージャーバージョン</string>
+    <string name="info_system_version">システムバージョン</string>
+    <string name="info_device">デバイス</string>
+    <string name="info_system_abi">システムABI</string>
+    <string name="info_api">インジェクションインターフェイス</string>
+    <string name="parasitic_recommend">寄生マネージャーがおすすめです</string>
+    <string name="parasitic_recommend_summary">LSPosedは、検出を回避するために、システムへの寄生をサポートするようになりました。寄生されたマネージャーのショートカットを作成したら、マネージャーをアンインストールしても問題ありません。何かあった場合は、/data/adb/lspd/manager.apkからマネージャーを再インストールできます。</string>
+    <string name="create_shortcut">ショートカットを作成</string>
+    <string name="never_show">表示しない</string>
+    <string name="update_lsposed">LSPossedをアップデート</string>
+    <string name="update_lsposed_msg">LSPosedをアップデートしてもよろしいですか？アップデート完了後、このデバイスは再起動します</string>
+    <!-- LogsActivity -->
+    <string name="menuSaveToSd">保存</string>
+    <string name="nav_item_logs_verbose">詳細ログ</string>
+    <string name="nav_item_logs_module">モジュールログ</string>
+    <string name="logs_save_failed2">保存に失敗しました:\n%s</string>
+    <string name="menuClearLog">直ちにログを消去</string>
+    <string name="logs_cleared">ログの消去に成功しました。</string>
+    <string name="scroll_top">ログの先頭行にスクロール</string>
+    <string name="loading">読み込み中…</string>
+    <string name="scroll_bottom">ログの最下行にスクロール</string>
+    <string name="logs_cannot_read">ログの読み込みに失敗: \n</string>
+    <string name="menuReload">再読込</string>
+    <string name="logs_clear_failed_2">ログの消去に失敗</string>
+    <string name="menu_enable_word_wrap">単語を折り返す</string>
+    <string name="enabled_verbose_log">詳細ログは有効です</string>
+    <string name="disabled_verbose_log">詳細ログは無効です</string>
+    <!-- ModulesActivity -->
+    <string name="module_empty_description">(詳細説明なし)</string>
+    <string name="warning_xposed_min_version">このモジュールは新しいバージョンのXposed(%d)が必要なので有効化できません</string>
+    <string name="no_min_version_specified">このモジュールは必要なXposedのバージョンを指定していません。</string>
+    <string name="warning_min_version_too_low">この モジュールはXposedバージョン%1$d向けに開発されましたが、%2$dでの互換性のない変更により無効化されています</string>
+    <string name="warning_installed_on_external_storage">このモジュールは SD カード上にインストールされているため読込できません。内部ストレージに移動して下さい</string>
+    <string name="module_uninstall">アンインストール</string>
+    <string name="module_settings">モジュール設定</string>
+    <string name="view_in_repo">リポジトリで表示</string>
+    <string name="module_uninstall_message">このモジュールをアンインストールしますか？</string>
+    <string name="module_uninstalled">%1$sをアンインインストールしました</string>
+    <string name="module_uninstall_failed">アンインストールに成功</string>
+    <string name="add_module_to_user">ユーザへモジュールを追加</string>
+    <string name="module_installed">ユーザ %2$s へ %1$s を追加</string>
+    <string name="module_install_failed">モジュールの追加に失敗</string>
+    <string name="install_to_user">ユーザー %s へインストール</string>
+    <string name="install_to_user_message">ユーザ %2$s へ %1$s をインストールしますか？LSPosed経由での強制インストールは問題が発生する場合があるので、手動でインストールすることをおすすめします。</string>
+    <string name="expand">開く</string>
+    <string name="collapse">閉じる</string>
+    <!-- AppListActivity -->
+    <string name="compile_speed">最適化</string>
+    <string name="compile_speed_msg">最適化中…</string>
+    <string name="compile_done">最適化が完了しました</string>
+    <string name="app_launch">起動する</string>
+    <string name="compile_failed">最適化に失敗: return value is empty</string>
+    <string name="compile_failed_with_info">最適化に失敗: </string>
+    <string name="sort_by_name">アプリ名</string>
+    <string name="sort_by_package_name">パッケージ名</string>
+    <string name="sort_by_install_time">インストール日時</string>
+    <string name="sort_by_update_time">更新日時</string>
+    <string name="sort_reverse">逆順</string>
+    <string name="menu_show_system_apps">システムアプリ</string>
+    <string name="menu_sort">並び順</string>
+    <string name="enable_module">モジュールを有効化</string>
+    <string name="no_scope_selected">アプリが選択されていません。よろしいですか？</string>
+    <string name="menu_show_games">ゲーム</string>
+    <string name="menu_show_modules">モジュール</string>
+    <string name="menu_show_denylist">拒否リスト</string>
+    <string name="failed_to_save_scope_list">スコープリストの保存に失敗</string>
+    <string name="app_description">%1$s\nバージョン %2$s</string>
+    <string name="use_recommended">おすすめ</string>
+    <string name="no_scope_selected_has_recommended">アプリが選択されていません。おすすめのアプリを選択しますか？</string>
+    <string name="use_recommended_message">おすすめのアプリを選択しますか？</string>
+    <string name="module_is_not_activated_yet">Xposedモジュールが有効化されていません</string>
+    <string name="requested_by_module">おすすめ</string>
+    <string name="update_available">アップデート可能: %1$s</string>
+    <string name="module_disabled_no_selection">アプリが選択されていないのでモジュール %s を無効化しました。</string>
+    <string name="android_framework">システムフレームワーク</string>
+    <string name="menu_backup_and_restore">バックアップ</string>
+    <string name="menu_backup">バックアップ</string>
+    <string name="menu_restore">復元</string>
+    <string name="force_stop">強制停止</string>
+    <string name="force_stop_dlg_title">強制停止しますか？</string>
+    <string name="force_stop_dlg_text">アプリを強制停止すると、アプリが動作しなくなる可能性があります。</string>
+    <string name="reboot_required">この設定を適用するには再起動が必要です</string>
+    <string name="reboot">再起動</string>
+    <string name="menu_hide">非表示</string>
+    <string name="deny_list">%s が DenyList に登録されています。効果がないかもしれません。</string>
+    <string name="deny_list_info">DenyList にあります</string>
+    <!-- ModulesActivity and AppListActivity -->
+    <string name="modules_other_app">他のアプリで表示</string>
+    <string name="module_app_info">アプリ情報</string>
+    <string name="list_empty">¯\\\\_(ツ)_\/¯\nリストは空です</string>
+    <!-- SettingsActivity -->
+    <string name="settings_group_framework">フレームワーク</string>
+    <string name="pref_title_disable_verbose_log">詳細ログの無効化</string>
+    <string name="pure_black_dark_theme">ブラックダークテーマ</string>
+    <string name="pure_black_dark_theme_summary">ダークテーマ有効時にピュアブラックのテーマを使用</string>
+    <string name="settings_group_theme">テーマ</string>
+    <string name="settings_backup_and_restore">バックアップと復元</string>
+    <string name="settings_backup_summery">モジュールリストとスコープリストのバックアップ</string>
+    <string name="settings_restore_summery">モジュールリストとスコープリストの復元</string>
+    <string name="settings_backup">バックアップ</string>
+    <string name="settings_backup_failed2">バックアップに失敗しました:\n%s</string>
+    <string name="enable_documentui">DocumentUIを有効にしてください。</string>
+    <string name="settings_restore">復元</string>
+    <string name="settings_restore_failed2">復元に失敗しました:\n%s</string>
+    <string name="group_network">ネットワーク</string>
+    <string name="dns_over_http">DNS over HTTPS</string>
+    <string name="dns_over_http_summary">一部の国向けの DNS ポイズニング 回避策</string>
+    <string name="theme_color">テーマカラー</string>
+    <string name="theme_color_system">システムアクセントカラー</string>
+    <string name="settings_show_hidden_icon_apps_enabled">ランチャーアイコンを強制的に表示</string>
+    <string name="settings_show_hidden_icon_apps_enabled_summary">Android10以降ではアプリアイコンを隠すことが禁止されています。オフにするとシステムのその機能を停止します。</string>
+    <string name="settings_group_system">システム</string>
+    <string name="settings_language">言語</string>
+    <string name="settings_translation_contributors">翻訳貢献者</string>
+    <string name="settings_translation">翻訳に参加する</string>
+    <string name="settings_translation_summary">%s をあなたの言語に翻訳するのを手伝ってください</string>
+    <string name="pref_title_enable_auto_add_shortcut">ショートカットを自動的に追加する</string>
+    <string name="create_shortcut_summary">寄生マネージャーのショートカットを手動で作成する</string>
+    <string name="settings_enable_auto_add_shortcut_summary">無効にした場合、寄生マネージャーの新しいショートカットは追加されません</string>
+    <string name="settings_update_channel">更新チャンネル</string>
+    <string name="update_channel_stable">安定版</string>
+    <string name="update_channel_bate">ベータ版</string>
+    <string name="update_channel_nightly">ナイトリービルド</string>
+    <string name="pref_title_restrict_classloader">モジュールのクラスローダのみがXposed APIを使用可能</string>
+    <string name="pref_summary_restrict_classloader">セキュリティ上のメリットがありますが、一部のモジュールが正しく動作しない可能性があります(実験的機能)</string>
+    <!-- Module Repo -->
+    <string name="module_readme">Readme</string>
+    <string name="module_releases">リリース</string>
+    <string name="module_information">情報</string>
+    <string name="module_information_homepage">ホームページ</string>
+    <string name="module_information_source_url">ソースコード</string>
+    <string name="module_information_collaborators">コラボレーター</string>
+    <string name="module_release_view_assets">アセット</string>
+    <string name="menu_open_in_browser">ブラウザで表示</string>
+    <string name="refresh">更新</string>
+    <string name="module_release_load_more">以前のバージョンを表示</string>
+    <string name="module_release_no_more">これ以上のリリースはありません</string>
+    <string name="repo_load_failed">モジュールリポジトリの読み込みに失敗: %s</string>
+    <string name="sort_upgradable_first">更新があるモジュールを先頭に表示</string>
+    <!-- CrashReportActivity -->
+    <string name="version_mismatch">LSPosedフレームワークのバージョン(%1$d)とマネージャー(%2$d)が合っていません。LSPosedを再インストールしてください。</string>
+    <string name="manager_crashed">マネージャーがクラッシュしました</string>
+    <string name="manager_crashed_info">これを報告する </string>
+    <string name="send_crash_info">クラッシュ情報を送信する</string>
+    <string name="crash_info_copied">クラッシュ情報がクリップボードにコピーされました</string>
+    <string name="info_copied">クリップボードへコピーされました</string>
+    <!-- Colors -->
+    <string name="color_sakura">桜色</string>
+    <string name="color_red">赤色</string>
+    <string name="color_pink">ピンク色</string>
+    <string name="color_purple">紫色</string>
+    <string name="color_deep_purple">深紫色</string>
+    <string name="color_indigo">藍色</string>
+    <string name="color_blue">青色</string>
+    <string name="color_light_blue">ライト ブルー</string>
+    <string name="color_cyan">水色</string>
+    <string name="color_teal">青緑色</string>
+    <string name="color_green">緑色</string>
+    <string name="color_light_green">ライトグリーン</string>
+    <string name="color_lime">黄緑色</string>
+    <string name="color_yellow">黄色</string>
+    <string name="color_amber">琥珀色</string>
+    <string name="color_orange">オレンジ色</string>
+    <string name="color_deep_orange">深いオレンジ</string>
+    <string name="color_brown">茶色</string>
+    <string name="color_blue_grey">ブルーグレー</string>
+</resources>

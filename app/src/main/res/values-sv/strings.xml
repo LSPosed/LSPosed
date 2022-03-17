@@ -1,0 +1,226 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!--
+  ~ This file is part of LSPosed.
+  ~
+  ~ LSPosed is free software: you can redistribute it and/or modify
+  ~ it under the terms of the GNU General Public License as published by
+  ~ the Free Software Foundation, either version 3 of the License, or
+  ~ (at your option) any later version.
+  ~
+  ~ LSPosed is distributed in the hope that it will be useful,
+  ~ but WITHOUT ANY WARRANTY; without even the implied warranty of
+  ~ MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+  ~ GNU General Public License for more details.
+  ~
+  ~ You should have received a copy of the GNU General Public License
+  ~ along with LSPosed.  If not, see <https://www.gnu.org/licenses/>.
+  ~
+  ~ Copyright (C) 2021 LSPosed Contributors
+  -->
+<resources xmlns:tools="http://schemas.android.com/tools" tools:keep="@string/xposed_module_updated_notification_*,@string/module_is_not_activated_*">
+    <!-- MainActivity -->
+    <string name="info">Information</string>
+    <string name="overview">Översikt</string>
+    <string name="Modules">Moduler</string>
+    <plurals name="modules_enabled_count">
+        <item quantity="one">%d moduler aktiverade</item>
+        <item quantity="other">%d moduler aktiverade</item>
+    </plurals>
+    <string name="Logs">Loggar</string>
+    <string name="Settings">Inställningar</string>
+    <string name="feedback_or_suggestion">Återkoppling eller förslag</string>
+    <string name="About">Om</string>
+    <string name="report_issue">Rapportera problem</string>
+    <string name="module_repo">Förvar</string>
+    <string name="module_repo_loading">Laddar…</string>
+    <string name="module_repo_up_to_date">Alla moduler uppdaterade</string>
+    <plurals name="module_repo_upgradable">
+        <item quantity="one">%d modul uppgraderbar</item>
+        <item quantity="other">%d moduler uppgraderbara</item>
+    </plurals>
+    <string name="about_view_source_code"><![CDATA[Visa källkod på %1$s<br/>Gå med i vår %2$s kanal]]></string>
+    <string name="translators" comment="Dear translators, please add your home page here following the format. There can be more than one translator. So feel free to append yourself.">null</string>
+    <string name="install">Installera</string>
+    <string name="install_summary">Tryck för att installera LSPosed</string>
+    <string name="not_installed">Inte installerad</string>
+    <string name="not_install_summary">LSPosed är inte installerat</string>
+    <string name="activated">Aktiverad</string>
+    <string name="partial_activated">Delvis aktiverad</string>
+    <string name="selinux_policy_not_loaded_summary">SEPolicy är inte korrekt laddat</string>
+    <string name="selinux_policy_not_loaded"><![CDATA[Moduler som hakar i System Framework inte kommer att fungera.<br/>Vänligen rapportera detta till <a href="https://github.com/topjohnwu/Magisk/issues"><b>Magisk</b></a> utvecklare.]]></string>
+    <string name="system_inject_fail_summary">Injektion i System Framework misslyckades</string>
+    <string name="system_inject_fail"><![CDATA[Detta är sällsynt och kan orsakas av <b>Magisk</b> eller några Magisk-moduler av låg kvalitet.<br/>Försök att inaktivera andra Magisk-moduler än Riru och LSPosed eller skicka fullständig logg till utvecklare.]]></string>
+    <string name="system_prop_incorrect_summary">Felaktig System prop</string>
+    <string name="system_prop_incorrect"><![CDATA[Vissa nödvändiga systemegenskaper är raderade eller ändrade.<br/>Moduler kan komma att ogiltigförklara.]]></string>
+    <string name="need_update">Behöver uppdateras</string>
+    <string name="please_update_summary">Vänligen installera den senaste versionen av LSPosed</string>
+    <string name="lsposed_not_active">LSPosed är för närvarande inte installerat eller aktivt.</string>
+    <string name="info_api_version">API version</string>
+    <string name="info_framework_version">Ramverk version</string>
+    <string name="info_manager_version">Version av hanterare</string>
+    <string name="info_system_version">Systemversion</string>
+    <string name="info_device">Enhet</string>
+    <string name="info_system_abi">System ABI</string>
+    <string name="info_api">Injektionsgränssnitt</string>
+    <string name="parasitic_recommend">Parasitic Manager rekommenderas</string>
+    <string name="parasitic_recommend_summary">LSPosed stöder nu systemparasitering för att undvika upptäckt. Du kan tryggt avinstallera hanteraren efter att ha skapat en genväg till den parasiterande hanteraren. Du kan i vilket fall installera hanteraren från /data/adb/lspd/manager.apk.</string>
+    <string name="create_shortcut">Skapa genväg</string>
+    <string name="never_show">Visa aldrig</string>
+    <string name="update_lsposed">Uppdatera LSPosed</string>
+    <string name="update_lsposed_msg">Bekräfta att uppdatera LSPosed? Denna enhet kommer att starta om efter att uppdateringen är slutförd</string>
+    <!-- LogsActivity -->
+    <string name="menuSaveToSd">Spara</string>
+    <string name="nav_item_logs_verbose">Utförliga Loggar</string>
+    <string name="nav_item_logs_module">Modul-loggar</string>
+    <string name="logs_save_failed2">Det gick inte att spara:\n%s</string>
+    <string name="menuClearLog">Rensa loggen nu</string>
+    <string name="logs_cleared">Loggen har rensats.</string>
+    <string name="scroll_top">Rulla till toppen</string>
+    <string name="loading">Laddar…</string>
+    <string name="scroll_bottom">Rulla till botten</string>
+    <string name="logs_cannot_read">Kan inte läsa loggen: \n</string>
+    <string name="menuReload">Reload</string>
+    <string name="logs_clear_failed_2">Det gick inte att rensa loggen</string>
+    <string name="menu_enable_word_wrap">Ord Wrap</string>
+    <string name="enabled_verbose_log">Verbose logg aktiverad</string>
+    <string name="disabled_verbose_log">Verbose logg inaktiverad</string>
+    <!-- ModulesActivity -->
+    <string name="module_empty_description">(ingen beskrivning anges)</string>
+    <string name="warning_xposed_min_version">Denna modul kräver en nyare Xposed version (%d) och kan därför inte aktiveras</string>
+    <string name="no_min_version_specified">Modulen anger inte den Xposed version som den behöver.</string>
+    <string name="warning_min_version_too_low">Denna modul skapades för Xposed version %1$d, men på grund av inkompatibla förändringar i version %2$dhar den inaktiverats</string>
+    <string name="warning_installed_on_external_storage">Modulen kan inte laddas eftersom den är installerad på SD-kortet, vänligen flytta den till internt lagringsutrymme</string>
+    <string name="module_uninstall">Avinstallera</string>
+    <string name="module_settings">Inställningar för modul</string>
+    <string name="view_in_repo">Visa i Repo</string>
+    <string name="module_uninstall_message">Vill du avinstallera denna modul?</string>
+    <string name="module_uninstalled">Avinstallerade %1$s</string>
+    <string name="module_uninstall_failed">Avinstallationen misslyckades</string>
+    <string name="add_module_to_user">Lägg till modul till användare</string>
+    <string name="module_installed">Lade till %1$s till användare %2$s</string>
+    <string name="module_install_failed">Det gick inte att lägga till modul</string>
+    <string name="install_to_user">Installera till användare %s</string>
+    <string name="install_to_user_message">Vill du installera %1$s till användare %2$s? Det rekommenderas att installera manuellt, tvinga installation via LSPosed kan orsaka problem.</string>
+    <string name="expand">expandera</string>
+    <string name="collapse">kollapsa</string>
+    <!-- AppListActivity -->
+    <string name="compile_speed">Återoptimera</string>
+    <string name="compile_speed_msg">Optimerar…</string>
+    <string name="compile_done">Optimering slutförd</string>
+    <string name="app_launch">Starta den</string>
+    <string name="compile_failed">Optimering misslyckades: returvärdet är tomt</string>
+    <string name="compile_failed_with_info">Optimering misslyckades: </string>
+    <string name="sort_by_name">Programmets namn</string>
+    <string name="sort_by_package_name">Paketets namn</string>
+    <string name="sort_by_install_time">Installera tid</string>
+    <string name="sort_by_update_time">Uppdatera tid</string>
+    <string name="sort_reverse">Omvänd</string>
+    <string name="menu_show_system_apps">System appar</string>
+    <string name="menu_sort">Sortering</string>
+    <string name="enable_module">Aktivera modul</string>
+    <string name="no_scope_selected">Du valde inte någon app. Fortsätt?</string>
+    <string name="menu_show_games">Spel</string>
+    <string name="menu_show_modules">Moduler</string>
+    <string name="menu_show_denylist">Neka</string>
+    <string name="failed_to_save_scope_list">Det gick inte att spara omfattningslistan</string>
+    <string name="app_description">%1$s\nVersion %2$s</string>
+    <string name="use_recommended">Rekommenderad</string>
+    <string name="no_scope_selected_has_recommended">Du valde inte någon app. Välj rekommenderade appar?</string>
+    <string name="use_recommended_message">Välj rekommenderade appar?</string>
+    <string name="module_is_not_activated_yet">Xposed modul är inte aktiverad än</string>
+    <string name="requested_by_module">Rekommenderad</string>
+    <string name="update_available">Uppdatering tillgänglig: %1$s</string>
+    <string name="module_disabled_no_selection">Modulen %s har inaktiverats sedan ingen app har valts.</string>
+    <string name="android_framework">System ramverk</string>
+    <string name="menu_backup_and_restore">Säkerhetskopiera</string>
+    <string name="menu_backup">Säkerhetskopiera</string>
+    <string name="menu_restore">Återställ</string>
+    <string name="force_stop">Tvinga avslutad</string>
+    <string name="force_stop_dlg_title">Tvinga avslut?</string>
+    <string name="force_stop_dlg_text">Om du tvingar en app att sluta fungerar det inte.</string>
+    <string name="reboot_required">Omstart krävs för att denna ändring ska gälla</string>
+    <string name="reboot">Reboot</string>
+    <string name="menu_hide">Dölj</string>
+    <string name="deny_list">%s finns på förnekarlistan. Det kan inte börja gälla.</string>
+    <string name="deny_list_info">På förnekelselista</string>
+    <!-- ModulesActivity and AppListActivity -->
+    <string name="modules_other_app">Visa i annan app</string>
+    <string name="module_app_info">Information om appen</string>
+    <string name="list_empty">&lt;unk&gt; \\\\_(&lt;unk&gt; )_\/ &lt;unk&gt;\nIngenting här</string>
+    <!-- SettingsActivity -->
+    <string name="settings_group_framework">Framework</string>
+    <string name="pref_title_disable_verbose_log">Inaktivera verbose loggar</string>
+    <string name="pure_black_dark_theme">Svart mörkt tema</string>
+    <string name="pure_black_dark_theme_summary">Använd det rena svarta temat om mörkt tema är aktiverat</string>
+    <string name="settings_group_theme">Tema</string>
+    <string name="settings_backup_and_restore">Säkerhetskopiera och återställ</string>
+    <string name="settings_backup_summery">Säkerhetskopiera modullista och omfattningslistor.</string>
+    <string name="settings_restore_summery">Återställ modullista och omfattningslistor.</string>
+    <string name="settings_backup">Säkerhetskopiera</string>
+    <string name="settings_backup_failed2">Det gick inte att säkerhetskopiera:\n%s</string>
+    <string name="enable_documentui">Aktivera DocumentUI</string>
+    <string name="settings_restore">Återställ</string>
+    <string name="settings_restore_failed2">Det gick inte att återställa:\n%s</string>
+    <string name="group_network">Nätverk</string>
+    <string name="dns_over_http">DNS över HTTPS</string>
+    <string name="dns_over_http_summary">Workaround DNS-förgiftning i vissa nationer</string>
+    <string name="theme_color">Tema färg</string>
+    <string name="theme_color_system">Färg på systemtema</string>
+    <string name="settings_show_hidden_icon_apps_enabled">Tvinga appar att visa launcher-ikoner</string>
+    <string name="settings_show_hidden_icon_apps_enabled_summary">Efter Android 10, appar är inte tillåtet att dölja sina launcher ikoner. Stäng av växla för att inaktivera den här systemfunktionen.</string>
+    <string name="settings_group_system">System</string>
+    <string name="settings_language">Språk</string>
+    <string name="settings_translation_contributors">Bidragande översättare</string>
+    <string name="settings_translation">Delta i översättning</string>
+    <string name="settings_translation_summary">Hjälp oss att översätta %s till ditt språk</string>
+    <string name="pref_title_enable_auto_add_shortcut">Lägg automatiskt till en genväg</string>
+    <string name="create_shortcut_summary">Skapa manuellt en genväg för parasitansvarig</string>
+    <string name="settings_enable_auto_add_shortcut_summary">Inga nya genvägar kommer att läggas till när inaktiverad i den icke-parasiterande hanteraren</string>
+    <string name="settings_update_channel">Uppdatera kanal</string>
+    <string name="update_channel_stable">Stabil</string>
+    <string name="update_channel_bate">Beta</string>
+    <string name="update_channel_nightly">Nattligt bygg</string>
+    <string name="pref_title_restrict_classloader">Endast modul classloader kan använda Xposed API</string>
+    <string name="pref_summary_restrict_classloader">Detta kan förstöra vissa moduler men gynnar säkerheten (experimentell funktion)</string>
+    <!-- Module Repo -->
+    <string name="module_readme">Läsa</string>
+    <string name="module_releases">Släpp</string>
+    <string name="module_information">Information</string>
+    <string name="module_information_homepage">Hemsida</string>
+    <string name="module_information_source_url">Källkod</string>
+    <string name="module_information_collaborators">Medarbetare</string>
+    <string name="module_release_view_assets">Tillgångar</string>
+    <string name="menu_open_in_browser">Öppna i webbläsare</string>
+    <string name="refresh">Uppdatera</string>
+    <string name="module_release_load_more">Visa äldre versioner</string>
+    <string name="module_release_no_more">Ingen mer utgåva</string>
+    <string name="repo_load_failed">Misslyckades att ladda modul rapo: %s</string>
+    <string name="sort_upgradable_first">Uppgraderingsbar först</string>
+    <!-- CrashReportActivity -->
+    <string name="version_mismatch">Versionen av det LSPosed ramverket (%1$d) matchar inte hanteraren (%2$d). Installera om LSPosed.</string>
+    <string name="manager_crashed">Hanteraren kraschade</string>
+    <string name="manager_crashed_info">rapportera detta till </string>
+    <string name="send_crash_info">Skicka kraschinformation</string>
+    <string name="crash_info_copied">Kraschinformation kopierad till urklipp</string>
+    <string name="info_copied">Kopieras till urklipp</string>
+    <!-- Colors -->
+    <string name="color_sakura">Sakura</string>
+    <string name="color_red">Röd</string>
+    <string name="color_pink">Rosa</string>
+    <string name="color_purple">Lila</string>
+    <string name="color_deep_purple">Djup lila</string>
+    <string name="color_indigo">Indigo</string>
+    <string name="color_blue">Blå</string>
+    <string name="color_light_blue">Ljusblå</string>
+    <string name="color_cyan">Turkos</string>
+    <string name="color_teal">Kricka</string>
+    <string name="color_green">Grön</string>
+    <string name="color_light_green">Ljusgrön</string>
+    <string name="color_lime">Limegrön</string>
+    <string name="color_yellow">Gul</string>
+    <string name="color_amber">Bärnsten</string>
+    <string name="color_orange">Orange</string>
+    <string name="color_deep_orange">Djup orange</string>
+    <string name="color_brown">Brun</string>
+    <string name="color_blue_grey">Blå grå</string>
+</resources>

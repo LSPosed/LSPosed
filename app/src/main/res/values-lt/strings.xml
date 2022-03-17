@@ -1,0 +1,230 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!--
+  ~ This file is part of LSPosed.
+  ~
+  ~ LSPosed is free software: you can redistribute it and/or modify
+  ~ it under the terms of the GNU General Public License as published by
+  ~ the Free Software Foundation, either version 3 of the License, or
+  ~ (at your option) any later version.
+  ~
+  ~ LSPosed is distributed in the hope that it will be useful,
+  ~ but WITHOUT ANY WARRANTY; without even the implied warranty of
+  ~ MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+  ~ GNU General Public License for more details.
+  ~
+  ~ You should have received a copy of the GNU General Public License
+  ~ along with LSPosed.  If not, see <https://www.gnu.org/licenses/>.
+  ~
+  ~ Copyright (C) 2021 LSPosed Contributors
+  -->
+<resources xmlns:tools="http://schemas.android.com/tools" tools:keep="@string/xposed_module_updated_notification_*,@string/module_is_not_activated_*">
+    <!-- MainActivity -->
+    <string name="info">Informacija</string>
+    <string name="overview">Apžvalga</string>
+    <string name="Modules">Moduliai</string>
+    <plurals name="modules_enabled_count">
+        <item quantity="one">%d modulis įjungtas</item>
+        <item quantity="few">%d įjungti moduliai</item>
+        <item quantity="many">%d įjungti moduliai</item>
+        <item quantity="other">%d įjungti moduliai</item>
+    </plurals>
+    <string name="Logs">Žurnalai</string>
+    <string name="Settings">Nustatymai</string>
+    <string name="feedback_or_suggestion">Atsiliepimai arba pasiūlymas</string>
+    <string name="About">Apie</string>
+    <string name="report_issue">Pranešti apie problemą</string>
+    <string name="module_repo">Saugykla</string>
+    <string name="module_repo_loading">Įkrovimas…</string>
+    <string name="module_repo_up_to_date">Visi moduliai atnaujinti</string>
+    <plurals name="module_repo_upgradable">
+        <item quantity="one">%d modulis atnaujinamas</item>
+        <item quantity="few">%d atnaujinami moduliai</item>
+        <item quantity="many">%d atnaujinami moduliai</item>
+        <item quantity="other">%d atnaujinami moduliai</item>
+    </plurals>
+    <string name="about_view_source_code"><![CDATA[Peržiūrėkite šaltinio kodą adresu %1$s<br/>Prisijunkite prie mūsų %2$s kanalo]]></string>
+    <string name="translators" comment="Dear translators, please add your home page here following the format. There can be more than one translator. So feel free to append yourself.">null</string>
+    <string name="install">Įdiekite</string>
+    <string name="install_summary">Bakstelėkite, jei norite įdiegti LSPosed</string>
+    <string name="not_installed">Neįdiegta</string>
+    <string name="not_install_summary">\"LSPosed\" nėra įdiegta</string>
+    <string name="activated">Aktyvuota</string>
+    <string name="partial_activated">Iš dalies aktyvuota</string>
+    <string name="selinux_policy_not_loaded_summary">\"SEPolicy\" nėra tinkamai įkelta</string>
+    <string name="selinux_policy_not_loaded"><![CDATA[Moduliai, kurie užkabina System Framework, neveiks.<br/>Praneškite apie tai <a href="https://github.com/topjohnwu/Magisk/issues"><b>Magisk</b></a> kūrėjui.]]></string>
+    <string name="system_inject_fail_summary">Nepavyko įšvirkšti sistemos pagrindo</string>
+    <string name="system_inject_fail"><![CDATA[Tai pasitaiko retai ir gali būti dėl <b>"Magisk"</b> arba kai kurių nekokybiškų "Magisk" modulių.<br/>Pabandykite išjungti kitus "Magisk" modulius, išskyrus "Riru" ir "LSPosed", arba pateikite visą žurnalą kūrėjams.]]></string>
+    <string name="system_prop_incorrect_summary">Neteisingas sistemos rekvizitas</string>
+    <string name="system_prop_incorrect"><![CDATA[Ištrintos arba pakeistos kai kurios būtinos sistemos savybės.<br/>Moduliai kartais gali būti pripažinti negaliojančiais.]]></string>
+    <string name="need_update">Reikia atnaujinti</string>
+    <string name="please_update_summary">Įdiekite naujausią \"LSPosed\" versiją</string>
+    <string name="lsposed_not_active">Šiuo metu \"LSPosed\" nėra įdiegta arba aktyvi.</string>
+    <string name="info_api_version">API versija</string>
+    <string name="info_framework_version">Pagrindų versija</string>
+    <string name="info_manager_version">Valdytojo versija</string>
+    <string name="info_system_version">Sistemos versija</string>
+    <string name="info_device">Įrenginys</string>
+    <string name="info_system_abi">Sistemos ABI</string>
+    <string name="info_api">Injekcijos sąsaja</string>
+    <string name="parasitic_recommend">Rekomenduojama parazitinė vadybininkė</string>
+    <string name="parasitic_recommend_summary">\"LSPosed\" dabar palaiko sistemos parazitavimą siekiant išvengti aptikimo. Sėkmingai sukūrę parazituojančio tvarkytuvo nuorodą, galite saugiai pašalinti tvarkytuvą. Bet kuriuo atveju valdytoją galite vėl įdiegti iš /data/adb/lspd/manager.apk.</string>
+    <string name="create_shortcut">Sukurti nuorodą</string>
+    <string name="never_show">Niekada nerodykite</string>
+    <string name="update_lsposed">Atnaujinti LSPosed</string>
+    <string name="update_lsposed_msg">Patvirtinkite, kad atnaujintumėte LSPosed? Baigus atnaujinimą šis prietaisas bus perkrautas</string>
+    <!-- LogsActivity -->
+    <string name="menuSaveToSd">Išsaugoti</string>
+    <string name="nav_item_logs_verbose">Žurnalai su verbaline informacija</string>
+    <string name="nav_item_logs_module">Modulių žurnalai</string>
+    <string name="logs_save_failed2">Nepavyko išsaugoti:\n%s</string>
+    <string name="menuClearLog">Išvalyti žurnalą dabar</string>
+    <string name="logs_cleared">Žurnalas sėkmingai išvalytas.</string>
+    <string name="scroll_top">Slinkti į viršų</string>
+    <string name="loading">Įkrovimas…</string>
+    <string name="scroll_bottom">Slinkite į apačią</string>
+    <string name="logs_cannot_read">Negalima skaityti žurnalo: \n</string>
+    <string name="menuReload">Perkrauti</string>
+    <string name="logs_clear_failed_2">Nepavyko išvalyti žurnalo</string>
+    <string name="menu_enable_word_wrap">Žodžių apvyniojimas</string>
+    <string name="enabled_verbose_log">Įjungtas verstinis žurnalas</string>
+    <string name="disabled_verbose_log">Išjungtas verstinis žurnalas</string>
+    <!-- ModulesActivity -->
+    <string name="module_empty_description">(aprašymas nepateiktas)</string>
+    <string name="warning_xposed_min_version">Šis modulis reikalauja naujesnės \"Xposed\" versijos (%d), todėl negali būti aktyvuotas</string>
+    <string name="no_min_version_specified">Šis modulis nenurodo jam reikalingos \"Xposed\" versijos.</string>
+    <string name="warning_min_version_too_low">Šis modulis buvo sukurtas \"Xposed\" versijai %1$d, tačiau dėl nesuderinamų pakeitimų versijoje %2$d, jis buvo išjungtas.</string>
+    <string name="warning_installed_on_external_storage">Šio modulio negalima įkelti, nes jis įdiegtas SD kortelėje, perkelkite jį į vidinę saugyklą</string>
+    <string name="module_uninstall">Pašalinti</string>
+    <string name="module_settings">Modulio nustatymai</string>
+    <string name="view_in_repo">Peržiūrėti Repo</string>
+    <string name="module_uninstall_message">Ar norite pašalinti šį modulį?</string>
+    <string name="module_uninstalled">Išmontuota %1$s</string>
+    <string name="module_uninstall_failed">Nesėkmingas pašalinimas</string>
+    <string name="add_module_to_user">Pridėti modulį prie naudotojo</string>
+    <string name="module_installed">Pridėta %1$s naudotojui %2$s</string>
+    <string name="module_install_failed">Nepavyko pridėti modulio</string>
+    <string name="install_to_user">Įdiegti naudotojui %s</string>
+    <string name="install_to_user_message">Norite įdiegti %1$s naudotojui %2$s? Rekomenduojama įdiegti rankiniu būdu, priverstinis diegimas per LSPosed gali sukelti problemų.</string>
+    <string name="expand">išplėsti</string>
+    <string name="collapse">žlugimas</string>
+    <!-- AppListActivity -->
+    <string name="compile_speed">Iš naujo optimizuoti</string>
+    <string name="compile_speed_msg">Optimizavimas…</string>
+    <string name="compile_done">Optimizavimas baigtas</string>
+    <string name="app_launch">Paleiskite jį</string>
+    <string name="compile_failed">Optimizavimas nepavyko: grąžinama vertė yra tuščia</string>
+    <string name="compile_failed_with_info">Optimizavimas nepavyko: </string>
+    <string name="sort_by_name">Programos pavadinimas</string>
+    <string name="sort_by_package_name">Paketo pavadinimas</string>
+    <string name="sort_by_install_time">Diegimo laikas</string>
+    <string name="sort_by_update_time">Atnaujinimo laikas</string>
+    <string name="sort_reverse">Atvirkštinis</string>
+    <string name="menu_show_system_apps">Sistemos programos</string>
+    <string name="menu_sort">Rūšiavimas</string>
+    <string name="enable_module">Įjungti modulį</string>
+    <string name="no_scope_selected">Nepasirinkote jokios programos. Tęsti?</string>
+    <string name="menu_show_games">Žaidimai</string>
+    <string name="menu_show_modules">Moduliai</string>
+    <string name="menu_show_denylist">Denylist</string>
+    <string name="failed_to_save_scope_list">Nepavyko išsaugoti srities sąrašo</string>
+    <string name="app_description">%1$s\nVersija %2$s</string>
+    <string name="use_recommended">Rekomenduojama</string>
+    <string name="no_scope_selected_has_recommended">Nepasirinkote jokios programos. Pasirinkti rekomenduojamas programas?</string>
+    <string name="use_recommended_message">Pasirinkite rekomenduojamas programas?</string>
+    <string name="module_is_not_activated_yet">Xposed modulis dar nėra aktyvuotas</string>
+    <string name="requested_by_module">Rekomenduojama</string>
+    <string name="update_available">Galimas atnaujinimas: %1$s</string>
+    <string name="module_disabled_no_selection">Modulis %s buvo išjungtas, nes nebuvo pasirinkta jokia programa.</string>
+    <string name="android_framework">Sistemos sistema</string>
+    <string name="menu_backup_and_restore">Atsarginė kopija</string>
+    <string name="menu_backup">Atsarginė kopija</string>
+    <string name="menu_restore">Atkurti</string>
+    <string name="force_stop">Priverstinis sustabdymas</string>
+    <string name="force_stop_dlg_title">Priverstinis sustojimas?</string>
+    <string name="force_stop_dlg_text">Jei priverstinai sustabdysite programą, ji gali elgtis netinkamai.</string>
+    <string name="reboot_required">Kad šis pakeitimas būtų pritaikytas, reikia perkrauti kompiuterį</string>
+    <string name="reboot">Perkraukite</string>
+    <string name="menu_hide">Paslėpti</string>
+    <string name="deny_list">%s yra denylist. Jis gali neįsigalioti.</string>
+    <string name="deny_list_info">Dėl denylist</string>
+    <!-- ModulesActivity and AppListActivity -->
+    <string name="modules_other_app">Peržiūrėti kitoje programoje</string>
+    <string name="module_app_info">Programėlės informacija</string>
+    <string name="list_empty">\\\\_(ツ)_\/¯\nČia nieko nėra</string>
+    <!-- SettingsActivity -->
+    <string name="settings_group_framework">Sistema</string>
+    <string name="pref_title_disable_verbose_log">Išjungti verbalinius žurnalus</string>
+    <string name="pure_black_dark_theme">Juoda tamsi tema</string>
+    <string name="pure_black_dark_theme_summary">Naudokite grynai juodą temą, jei įjungta tamsi tema</string>
+    <string name="settings_group_theme">Tema</string>
+    <string name="settings_backup_and_restore">Atsarginės kopijos kūrimas ir atkūrimas</string>
+    <string name="settings_backup_summery">Atsarginės kopijos modulių ir sričių sąrašai.</string>
+    <string name="settings_restore_summery">Atkurti modulių ir sričių sąrašus.</string>
+    <string name="settings_backup">Atsarginė kopija</string>
+    <string name="settings_backup_failed2">Nepavyko sukurti atsarginės kopijos:\n%s</string>
+    <string name="enable_documentui">Įjunkite DocumentUI</string>
+    <string name="settings_restore">Atkurti</string>
+    <string name="settings_restore_failed2">Nepavyko atkurti:\n%s</string>
+    <string name="group_network">Tinklas</string>
+    <string name="dns_over_http">DNS per HTTPS</string>
+    <string name="dns_over_http_summary">Apėjimas DNS apsinuodijimas kai kuriose šalyse</string>
+    <string name="theme_color">Temos spalva</string>
+    <string name="theme_color_system">Sistemos temos spalva</string>
+    <string name="settings_show_hidden_icon_apps_enabled">Priversti programas rodyti paleidiklio piktogramas</string>
+    <string name="settings_show_hidden_icon_apps_enabled_summary">Po \"Android 10\" programėlėms neleidžiama slėpti paleidimo programos piktogramų. Norėdami išjungti šią sistemos funkciją, išjunkite perjungiklį.</string>
+    <string name="settings_group_system">Sistema</string>
+    <string name="settings_language">Kalba</string>
+    <string name="settings_translation_contributors">Vertimo paslaugų teikėjai</string>
+    <string name="settings_translation">Dalyvaukite vertimo procese</string>
+    <string name="settings_translation_summary">Padėkite mums išversti %s į savo kalbą</string>
+    <string name="pref_title_enable_auto_add_shortcut">Automatiškai pridėkite nuorodą</string>
+    <string name="create_shortcut_summary">Rankiniu būdu sukurkite parazitinio tvarkytuvo nuorodą</string>
+    <string name="settings_enable_auto_add_shortcut_summary">Neparazitiniame tvarkytuve išjungus spartųjį klavišą, naujų spartieji klavišai nepridedami.</string>
+    <string name="settings_update_channel">Atnaujinti kanalą</string>
+    <string name="update_channel_stable">Stabilus</string>
+    <string name="update_channel_bate">Beta</string>
+    <string name="update_channel_nightly">Naktinis kūrimas</string>
+    <string name="pref_title_restrict_classloader">Tik modulio klasių įkroviklis gali naudoti \"Xposed API</string>
+    <string name="pref_summary_restrict_classloader">Tai gali sugadinti kai kuriuos modulius, tačiau bus naudinga saugumui (eksperimentinė funkcija)</string>
+    <!-- Module Repo -->
+    <string name="module_readme">Readme</string>
+    <string name="module_releases">Leidiniai</string>
+    <string name="module_information">Informacija</string>
+    <string name="module_information_homepage">Pradžia</string>
+    <string name="module_information_source_url">Šaltinio kodas</string>
+    <string name="module_information_collaborators">Bendradarbiai</string>
+    <string name="module_release_view_assets">Turtas</string>
+    <string name="menu_open_in_browser">Atidaryti naršyklėje</string>
+    <string name="refresh">Atnaujinti</string>
+    <string name="module_release_load_more">Rodyti senesnes versijas</string>
+    <string name="module_release_no_more">Jokio išleidimo</string>
+    <string name="repo_load_failed">Nepavyko įkelti modulio atramos: %s</string>
+    <string name="sort_upgradable_first">Pirmiausia atnaujinamas</string>
+    <!-- CrashReportActivity -->
+    <string name="version_mismatch">LSPosed sistemos versija (%1$d) neatitinka valdytojo (%2$d). Iš naujo įdiekite \"LSPosed\".</string>
+    <string name="manager_crashed">Vadybininkas patyrė avariją</string>
+    <string name="manager_crashed_info">praneškite apie tai </string>
+    <string name="send_crash_info">Siųsti informaciją apie avariją</string>
+    <string name="crash_info_copied">Į iškarpinę nukopijuota informacija apie avariją</string>
+    <string name="info_copied">Nukopijuota į iškarpinę</string>
+    <!-- Colors -->
+    <string name="color_sakura">Sakura</string>
+    <string name="color_red">Raudona</string>
+    <string name="color_pink">Rožinis</string>
+    <string name="color_purple">Violetinė</string>
+    <string name="color_deep_purple">Tamsiai violetinė</string>
+    <string name="color_indigo">Indigo</string>
+    <string name="color_blue">Mėlyna</string>
+    <string name="color_light_blue">Šviesiai mėlyna</string>
+    <string name="color_cyan">Cyan</string>
+    <string name="color_teal">Teal</string>
+    <string name="color_green">Žalioji</string>
+    <string name="color_light_green">Šviesiai žalia</string>
+    <string name="color_lime">Lime</string>
+    <string name="color_yellow">Geltona</string>
+    <string name="color_amber">Amber</string>
+    <string name="color_orange">Oranžinė</string>
+    <string name="color_deep_orange">Tamsiai oranžinė</string>
+    <string name="color_brown">Ruda</string>
+    <string name="color_blue_grey">Mėlyna pilka</string>
+</resources>

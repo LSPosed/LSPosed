@@ -1,0 +1,10 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <!-- Notification -->
+    <string name="module_is_not_activated_yet">El módulo Xposed no se encuentra activo</string>
+    <string name="module_is_not_activated_yet_detailed">%s ha sido instalado, pero no está activado aún</string>
+    <string name="xposed_module_updated_notification_title">Módulo Xposed actualizado</string>
+    <string name="xposed_module_updated_notification_content">%s ha sido actualizado, por favor fuerza el cierre y reinicia las apps que le afectan</string>
+    <string name="xposed_module_updated_notification_title_system">Módulo de Xposed actualizado, es necesario reiniciar el sistema</string>
+    <string name="xposed_module_updated_notification_content_system">%s ha sido actualizado, ya que afecta al System Framework, es necesario reiniciar para aplicar cambios</string>
+</resources>

@@ -1,9 +1,12 @@
-[submodule "core/src/main/cpp/external/Dobby"]
-	path = core/src/main/cpp/external/Dobby
-	url = https://github.com/jmpews/Dobby.git
-[submodule "service"]
-	path = service
-	url = https://github.com/Xposed-Modules-Repo/XposedService.git
-[submodule "core/src/main/cpp/external/DexBuilder"]
-	path = core/src/main/cpp/external/DexBuilder
-	url = https://github.com/LSPosed/DexBuilder.git
+[submodule "services/xposed-service"]
+	path = services/xposed-service
+	url = https://github.com/libxposed/XposedService.git
+[submodule "external/cxx"]
+	path = external/cxx
+	url = https://github.com/LSPosed/libcxx.git
+[submodule "external/lsplant"]
+	path = external/lsplant
+	url = https://github.com/LSPosed/LSPlant.git
+[submodule "external/dobby"]
+	path = external/dobby
+	url = https://github.com/LSPosed/Dobby.git

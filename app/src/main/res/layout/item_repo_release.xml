@@ -23,40 +23,41 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
-    android:background="@drawable/item_background"
+    android:background="?selectableItemBackground"
     android:clickable="true"
+    android:clipChildren="false"
+    android:clipToPadding="false"
     android:focusable="true"
     android:minHeight="?attr/listPreferredItemHeight"
     android:paddingVertical="16dp"
     android:paddingStart="16dp"
-    android:paddingEnd="24dp"
-    android:clipToPadding="false"
-    android:clipChildren="false">
+    android:paddingEnd="24dp">
 
     <androidx.constraintlayout.widget.ConstraintLayout
         android:id="@+id/item_root"
-        android:layout_gravity="center"
         android:layout_width="match_parent"
-        android:layout_height="wrap_content"
+        android:layout_height="match_parent"
+        android:layout_gravity="center"
         tools:ignore="RtlSymmetry">
 
-        <TextView
+        <com.google.android.material.textview.MaterialTextView
             android:id="@+id/title"
             android:layout_width="0dp"
             android:layout_height="wrap_content"
             android:textAppearance="?android:attr/textAppearanceListItem"
             android:textSize="16sp"
-            app:layout_constraintBottom_toTopOf="@id/description"
-            app:layout_constraintTop_toTopOf="parent"
-            app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintBottom_toTopOf="@id/description"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="parent"
             tools:text="@tools:sample/lorem" />
 
-        <io.github.lsposed.manager.ui.widget.LinkifyTextView
+        <org.lsposed.manager.ui.widget.ScrollWebView
             android:id="@+id/description"
             android:layout_width="0dp"
             android:layout_height="wrap_content"
             android:layout_gravity="center_vertical"
+            android:scrollbars="none"
             android:textAppearance="?android:attr/textAppearanceSmall"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintHorizontal_bias="1.0"
@@ -66,27 +67,31 @@
 
         <com.google.android.material.button.MaterialButton
             android:id="@+id/view_assets"
+            style="@style/Widget.MaterialComponents.Button.Icon"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:text="@string/module_release_view_assets"
             android:layout_marginTop="4dp"
+            android:text="@string/module_release_view_assets"
+            android:textAlignment="center"
+            android:tooltipText="@string/module_release_view_assets"
             app:icon="@drawable/ic_attach_file"
             app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintStart_toStartOf="@id/description"
-            app:layout_constraintTop_toBottomOf="@id/description"
-            style="@style/Widget.MaterialComponents.Button" />
+            app:layout_constraintTop_toBottomOf="@id/description" />
 
         <com.google.android.material.button.MaterialButton
             android:id="@+id/open_in_browser"
+            style="@style/Widget.App.Button.OutlinedButton.IconOnly"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_marginStart="6dp"
             android:layout_marginTop="4dp"
+            android:textAlignment="center"
+            android:tooltipText="@string/menu_open_in_browser"
             app:icon="@drawable/ic_open_in_browser"
             app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintStart_toEndOf="@+id/view_assets"
-            app:layout_constraintTop_toBottomOf="@id/description"
-            style="@style/Widget.App.Button.OutlinedButton.IconOnly" />
+            app:layout_constraintTop_toBottomOf="@id/description" />
 
     </androidx.constraintlayout.widget.ConstraintLayout>
 </FrameLayout>

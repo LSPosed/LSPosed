@@ -1,0 +1,10 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <!-- Notification -->
+    <string name="module_is_not_activated_yet">Mô-đun Xposed chưa được kích hoạt</string>
+    <string name="module_is_not_activated_yet_detailed">%s đã được cài đặt, nhưng chưa được kích hoạt</string>
+    <string name="xposed_module_updated_notification_title">Mô-đun Xposed đã được cập nhật</string>
+    <string name="xposed_module_updated_notification_content">%s đã được cập nhật, xin hãy buộc dừng và khởi động lại ứng dụng liên quan</string>
+    <string name="xposed_module_updated_notification_title_system">Mô-đun Xposed đã được cập nhật, yêu cầu khởi động lại hệ thống</string>
+    <string name="xposed_module_updated_notification_content_system">%s đã được cập nhật, vì phạm vi bao gồm Framework Hệ thống, thì khởi động lại là cần thiết để áp dụng các thay đổi</string>
+</resources>

@@ -1,5 +1,4 @@
-<?xml version="1.0" encoding="utf-8"?>
-<!--
+<?xml version="1.0" encoding="utf-8"?><!--
   ~ This file is part of LSPosed.
   ~
   ~ LSPosed is free software: you can redistribute it and/or modify
@@ -19,66 +18,100 @@
   ~ Copyright (C) 2021 LSPosed Contributors
   -->
 
-<androidx.coordinatorlayout.widget.CoordinatorLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<FrameLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
-    xmlns:tools="http://schemas.android.com/tools"
-    android:id="@+id/snackbar"
     android:layout_width="match_parent"
-    android:layout_height="match_parent">
+    android:layout_height="wrap_content"
+    android:clipChildren="false">
 
-    <LinearLayout
-        android:layout_width="wrap_content"
+    <com.google.android.material.card.MaterialCardView
+        style="?materialCardViewElevatedStyle"
+        android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:layout_centerInParent="true"
-        android:orientation="vertical">
+        android:layout_gravity="center"
+        android:layout_margin="16dp"
+        android:minHeight="148dp"
+        android:outlineAmbientShadowColor="@color/home_secondary_outline_ambient_shadow_color"
+        android:outlineSpotShadowColor="@color/home_secondary_outline_spot_shadow_color"
+        app:cardElevation="@dimen/home_secondary_elevation">
 
-        <com.google.android.material.card.MaterialCardView
-            android:id="@+id/warning_crash"
-            android:layout_width="wrap_content"
+        <LinearLayout
+            android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:layout_margin="16dp"
-            android:orientation="horizontal"
-            app:cardBackgroundColor="@color/material_amber_500">
+            android:orientation="vertical">
 
-            <RelativeLayout
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:padding="16dp"
+                android:paddingBottom="8dp">
+
+                <LinearLayout
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
+                    android:layout_marginEnd="8dp"
+                    android:layout_weight="1.0"
+                    android:orientation="vertical"
+                    android:paddingTop="8dp">
+
+                    <com.google.android.material.textview.MaterialTextView
+                        style="?attr/textAppearanceHeadline5"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:text="@string/manager_crashed" />
+
+                    <com.google.android.material.textview.MaterialTextView
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_marginTop="8dp"
+                        android:ellipsize="end"
+                        android:maxLines="2"
+                        android:text="@string/manager_crashed_info" />
+                </LinearLayout>
+
+                <androidx.appcompat.widget.AppCompatImageView
+                    android:layout_width="80dp"
+                    android:layout_height="80dp"
+                    android:layout_marginStart="8dp"
+                    android:background="@android:color/transparent"
+                    android:tint="@color/material_amber_500"
+                    app:srcCompat="@drawable/ic_round_warning_24" />
+            </LinearLayout>
+
+            <LinearLayout
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                tools:ignore="UseCompoundDrawables">
+                android:orientation="vertical"
+                android:padding="8dp">
 
-                <ImageView
-                    android:id="@+id/warning"
-                    android:layout_width="128dp"
-                    android:layout_height="128dp"
-                    android:layout_centerHorizontal="true"
-                    android:layout_margin="8dp"
-                    app:srcCompat="@drawable/ic_warning"
-                    tools:ignore="ContentDescription" />
-
-                <TextView
-                    android:layout_width="match_parent"
+                <com.google.android.material.button.MaterialButton
+                    android:id="@+id/send_logs"
+                    style="?attr/borderlessButtonStyle"
+                    android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:layout_below="@+id/warning"
-                    android:layout_centerHorizontal="true"
-                    android:layout_marginBottom="16dp"
-                    android:text="Manager crashed"
+                    android:layout_marginEnd="8dp"
+                    android:minWidth="0dp"
+                    android:text="@string/send_crash_info"
                     android:textAlignment="center"
-                    android:textAllCaps="true"
-                    android:textSize="36sp"
-                    android:textStyle="bold" />
+                    android:tooltipText="@string/send_crash_info"
+                    app:icon="@drawable/ic_round_send_24" />
 
-            </RelativeLayout>
+                <com.google.android.material.button.MaterialButton
+                    android:id="@+id/report_issue"
+                    style="?attr/borderlessButtonStyle"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginEnd="8dp"
+                    android:minWidth="0dp"
+                    android:text="@string/report_issue"
+                    android:textAlignment="center"
+                    android:tooltipText="@string/report_issue"
+                    app:icon="@drawable/ic_round_bug_report_24" />
 
-        </com.google.android.material.card.MaterialCardView>
+            </LinearLayout>
 
-        <com.google.android.material.button.MaterialButton
-            android:id="@+id/copyLogs"
-            style="@style/Widget.MaterialComponents.Button"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_gravity="center_horizontal"
-            android:layout_marginTop="4dp"
-            android:text="Copy logs"
-            android:theme="@style/Widget.AppCompat.Button.Colored" />
-    </LinearLayout>
+        </LinearLayout>
 
-</androidx.coordinatorlayout.widget.CoordinatorLayout>
+    </com.google.android.material.card.MaterialCardView>
+
+</FrameLayout>

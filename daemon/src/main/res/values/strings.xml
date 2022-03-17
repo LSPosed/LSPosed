@@ -1,0 +1,9 @@
+<resources>
+    <!-- Notification -->
+    <string name="module_is_not_activated_yet">Xposed module is not activated yet</string>
+    <string name="module_is_not_activated_yet_detailed">%s has been installed, but is not activated yet</string>
+    <string name="xposed_module_updated_notification_title">Xposed module updated</string>
+    <string name="xposed_module_updated_notification_content">%s has been updated, please force stop and restart apps in its scope</string>
+    <string name="xposed_module_updated_notification_title_system">Xposed module updated, system reboot required</string>
+    <string name="xposed_module_updated_notification_content_system">%s has been updated, since the scope contains System Framework, required reboot to apply changes</string>
+</resources>

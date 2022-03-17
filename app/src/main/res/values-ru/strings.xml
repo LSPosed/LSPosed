@@ -1,4 +1,5 @@
-<?xml version="1.0" encoding="utf-8"?><!--
+<?xml version="1.0" encoding="utf-8"?>
+<!--
   ~ This file is part of LSPosed.
   ~
   ~ LSPosed is free software: you can redistribute it and/or modify
@@ -14,157 +15,216 @@
   ~ You should have received a copy of the GNU General Public License
   ~ along with LSPosed.  If not, see <https://www.gnu.org/licenses/>.
   ~
-  ~ Copyright (C) 2020 EdXposed Contributors
   ~ Copyright (C) 2021 LSPosed Contributors
   -->
-
-<resources xmlns:tools="http://schemas.android.com/tools" tools:ignore="MissingTranslation">
-    <string name="app_name" translatable="false">LSPosed</string>
-    <string name="Activated">%s Активирован</string>
-    <string name="Install">Установить</string>
-    <string name="InstallDetail">Нажмите, чтобы установить LSPosed</string>
-    <string name="Modules">Модули</string>
+<resources xmlns:tools="http://schemas.android.com/tools" tools:keep="@string/xposed_module_updated_notification_*,@string/module_is_not_activated_*">
+    <!-- MainActivity -->
+    <string name="info">Информация</string>
+    <string name="overview">LSPosed</string>
+    <string name="Modules">Мои модули</string>
+    <plurals name="modules_enabled_count">
+        <item quantity="one">Включен %d модуль</item>
+        <item quantity="few">Включены %d модуля</item>
+        <item quantity="many">Включено %d модулей</item>
+        <item quantity="other">Включено %d модулей</item>
+    </plurals>
     <string name="Logs">Логи</string>
     <string name="Settings">Настройки</string>
-    <string name="About">О модификации</string>
-
-    <!-- General/various strings -->
-    <string name="menuSend">Отправить</string>
+    <string name="feedback_or_suggestion">Обратная связь</string>
+    <string name="About">О приложении</string>
+    <string name="report_issue">Сообщить о проблеме</string>
+    <string name="module_repo">Репозиторий</string>
+    <string name="module_repo_loading">Загрузка…</string>
+    <string name="module_repo_up_to_date">Все модули в актуальном состоянии</string>
+    <plurals name="module_repo_upgradable">
+        <item quantity="one">Найдено обновление %d модуля</item>
+        <item quantity="few">Найдены обновления %d модулей</item>
+        <item quantity="many">Найдены обновления %d модулей</item>
+        <item quantity="other">Найдены обновления %d модулей</item>
+    </plurals>
+    <string name="about_view_source_code"><![CDATA[Просмотреть исходный код на %1$s<br/>Присоединяйтесь к нашему %2$s каналу]]></string>
+    <string name="translators" comment="Dear translators, please add your home page here following the format. There can be more than one translator. So feel free to append yourself.">Alеxеy</string>
+    <string name="install">Установить</string>
+    <string name="install_summary">Нажмите, чтобы установить LSPosed</string>
+    <string name="not_installed">Не установлен</string>
+    <string name="not_install_summary">LSPosed не установлен!</string>
+    <string name="activated">Активирован</string>
+    <string name="partial_activated">Частично активирован</string>
+    <string name="selinux_policy_not_loaded_summary">SEPolicy неправильно загружен</string>
+    <string name="selinux_policy_not_loaded"><![CDATA[Модули которым нужен системный фреймворк, не будут работать.<br/>Пожалуйста, сообщите об этом разработчику <a href="https://github.com/topjohnwu/Magisk/issues"><b>Magisk</b></a>]]></string>
+    <string name="system_inject_fail_summary">Ошибка внедрения системного фреймворка</string>
+    <string name="system_inject_fail"><![CDATA[Это редкость и может быть вызвано <b>Magisk</b> или несовместимыми модулями Magisk.<br/>Пожалуйста, попробуйте отключить модули Magisk кроме Riru и LSPosed или пришлите полные логи разработчику]]></string>
+    <string name="system_prop_incorrect_summary">Неправильные системные настройки</string>
+    <string name="system_prop_incorrect"><![CDATA[Неправильные системные настройки.<br/>Некоторые системные настройки нужные для работы удалены или изменены.<br/>Модули могут не работать должным образом]]></string>
+    <string name="need_update">Требуется обновление</string>
+    <string name="please_update_summary">Установите последнюю версию LSPosed!</string>
+    <string name="lsposed_not_active">LSPosed не установлен или не активирован!</string>
+    <string name="info_api_version">Версия API</string>
+    <string name="info_framework_version">Версия фреймворк</string>
+    <string name="info_manager_version">Версия приложения</string>
+    <string name="info_system_version">Версия Android</string>
+    <string name="info_device">Устройство</string>
+    <string name="info_system_abi">Разрядность системы ABI</string>
+    <string name="info_api">Способ внедрения</string>
+    <string name="parasitic_recommend">Скрытие приложения LSPosed</string>
+    <string name="parasitic_recommend_summary">Рекомендуется скрыть приложение LSPosed от различных обнаружений в системе. Для этого создайте ярлык и безопасно удалите само приложение LSPosed. В любой момент можно вернуть приложение установив его из \"/data/adb/lspd/manager.apk\"</string>
+    <string name="create_shortcut">Создать ярлык</string>
+    <string name="never_show">Больше не показывать</string>
+    <string name="update_lsposed">Обновление LSPosed</string>
+    <string name="update_lsposed_msg">Вы точно хотите обновить LSPosed?\nУстройство перезагрузится после завершения обновления</string>
+    <!-- LogsActivity -->
     <string name="menuSaveToSd">Сохранить</string>
-
-    <!-- Welcome screen / main sections -->
-
-    <!-- navigation view items -->
-    <string name="nav_item_logs">Детальные логи</string>
-    <string name="nav_item_logs_err">Логи модулей</string>
-
-    <!-- Installer tab -->
-    <string name="dont_show_again">Больше не показывать</string>
-
-    <!-- File operations -->
-
-    <!-- Modules tab -->
-    <string name="module_is_not_activated_yet">Модуль LSPosed еще не активирован</string>
-    <string name="module_is_not_activated_yet_detailed">%s установлен, но еще не активирован</string>
-    <string name="module_empty_description">(описание не представлено)</string>
-    <string name="module_no_ui">Этот модуль не предоставляет интерфейса пользователя</string>
-    <string name="xposed_module_updated_notification_title">Модуль LSPosed обновлен</string>
-    <string name="warning_xposed_min_version">Этот модуль требует более новой версии LSPosed (%d), поэтому его невозможно активировать</string>
-    <string name="no_min_version_specified">Этот модуль не определяет нужную ему версию LSPosed.</string>
-    <string name="warning_min_version_too_low">Этот модуль был создан для версии LSPosed %1$d, но из-за несовместимых изменений в версии %2$d был отключен</string>
-    <string name="modules_app_store">Просмотреть в Play Store</string>
-    <string name="module_app_info">Информация о приложении</string>
-    <string name="module_uninstall">Удалить</string>
-
-    <!-- Download tab -->
-    <string name="menuReload">Перезагрузить</string>
-
-    <!-- Settings tab -->
-    <string name="settings_group_framework">Структура</string>
-    <string name="settings_enable_resources">Включить хуки ресурсов</string>
-    <string name="settings_enable_resources_summary">ВНИМАНИЕ: хуки ресурсов устарели</string>
-
-    <!-- Support tab -->
-
-    <!-- Logs tab  -->
-    <string name="logs_save_failed">Не удалось сохранить:</string>
-    <string name="menuClearLog">Очистить логи сейчас</string>
-    <string name="logs_cleared">Логи успешно очищены.</string>
-    <string name="log_is_empty">Пусто.</string>
-
-    <!-- About tab -->
-
-    <!-- DownloadView -->
-
-    <!-- DownloadUtils -->
-
-    <!-- RepoLoader -->
-
-    <string name="warning_installed_on_external_storage">Этот модуль нельзя загрузить, поскольку он установлен на SD-карте, перенесите его во внутреннюю память</string>
-
-    <string name="info">Информация</string>
-
+    <string name="nav_item_logs_verbose">Подробные логи</string>
+    <string name="nav_item_logs_module">Логи модулей</string>
+    <string name="logs_save_failed2">Ошибка сохранения:\n%s</string>
+    <string name="menuClearLog">Очистить логи</string>
+    <string name="logs_cleared">Логи успешно очищены</string>
     <string name="scroll_top">Прокрутить вверх</string>
     <string name="loading">Загрузка…</string>
     <string name="scroll_bottom">Прокрутить вниз</string>
-
-    <string name="android_sdk" translatable="false">Android %2$s (%1$s, API %3$d)</string>
-    <string name="android_sdk_preview" translatable="false">Android %1$s Preview</string>
-
-    <!-- LSPd related -->
+    <string name="logs_cannot_read">Невозможно прочитать логи: \n</string>
+    <string name="menuReload">Обновить</string>
+    <string name="logs_clear_failed_2">Не удалось очистить логи</string>
+    <string name="menu_enable_word_wrap">Переносить текст</string>
+    <string name="enabled_verbose_log">Подробные логи включены</string>
+    <string name="disabled_verbose_log">Подробные логи выключены</string>
+    <!-- ModulesActivity -->
+    <string name="module_empty_description">(описание отсутствует)</string>
+    <string name="warning_xposed_min_version">Этот модуль требует более новой версии LSPosed (%d) и не может быть включен</string>
+    <string name="no_min_version_specified">Этот модуль не указал версию LSPosed, в которой он нуждается</string>
+    <string name="warning_min_version_too_low">Этот модуль был создан для LSPosed версии %1$d, но из-за несовместимых изменений в версии %2$d, он был выключен</string>
+    <string name="warning_installed_on_external_storage">Этот модуль не может быть загружен, потому что он установлен на SD-карте, переместите его во внутреннюю память</string>
+    <string name="module_uninstall">Удалить</string>
+    <string name="module_settings">Открыть настройки</string>
+    <string name="view_in_repo">Просмотр в репозитории</string>
+    <string name="module_uninstall_message">Вы точно хотите удалить это модуль?</string>
+    <string name="module_uninstalled">Модуль %1$s удален!</string>
+    <string name="module_uninstall_failed">Удаление прервано</string>
+    <string name="add_module_to_user">Добавить модуль пользователю</string>
+    <string name="module_installed">Добавить %1$s для пользователя %2$s</string>
+    <string name="module_install_failed">Добавление модуля не удалось</string>
+    <string name="install_to_user">Установить пользователю %s</string>
+    <string name="install_to_user_message">Хотите установить %1$s пользователю %2$s? Рекомендуется устанавливать вручную, принудительная установка через LSPosed может вызвать проблемы</string>
+    <string name="expand">развернуть</string>
+    <string name="collapse">свернуть</string>
+    <!-- AppListActivity -->
+    <string name="compile_speed">Повторная оптимизация</string>
     <string name="compile_speed_msg">Оптимизация…</string>
-    <string name="compile_done">Оптимизация завершена.</string>
-
-    <string name="about_source" translatable="false">https://github.com/LSPosed/LSPosed/</string>
-
-    <string name="pref_title_disable_verbose_log">Отключить подробные логи</string>
-    <string name="logs_cannot_read">Невозможно прочитать логи:</string>
+    <string name="compile_done">Оптимизация завершена!</string>
     <string name="app_launch">Запустить</string>
-    <string name="compile_failed">Ошибка оптимизации или возвращено пустое значение</string>
-    <string name="compile_failed_with_info">Ошибка оптимизации:</string>
-    <string name="not_installed">Не установлено</string>
-    <string name="pure_black_dark_theme">Использовать черную тему</string>
-    <string name="sort_by_name">Сортировать по названию приложения</string>
-    <string name="sort_by_name_reverse">Сортировать по названию приложения (обратный)</string>
-    <string name="sort_by_package_name">Сортировать по названию пакета</string>
-    <string name="sort_by_package_name_reverse">Сортировать по названию пакета (обратный)</string>
-    <string name="sort_by_install_time">Сортировать по времени установки</string>
-    <string name="sort_by_install_time_reverse">Сортировать по времени установки (обратный)</string>
-    <string name="sort_by_update_time">Сортировать по времени обновления</string>
-    <string name="sort_by_update_time_reverse">Сортировать по времени обновления (обратный)</string>
-    <string name="settings_group_theme">Тема</string>
-    <string name="settings_variant">Вариант</string>
-    <string name="menu_show_system_apps">Системные приложения</string>
-    <string name="menu_sort">Сортировка…</string>
+    <string name="compile_failed">Ошибка оптимизации: возвращено пустое значение!</string>
+    <string name="compile_failed_with_info">Ошибка оптимизации: </string>
+    <string name="sort_by_name">По названию приложения</string>
+    <string name="sort_by_package_name">По названию пакета</string>
+    <string name="sort_by_install_time">По времени установки</string>
+    <string name="sort_by_update_time">По времени обновления</string>
+    <string name="sort_reverse">Обратная сортировка</string>
+    <string name="menu_show_system_apps">Системные</string>
+    <string name="menu_sort">Сортировать</string>
     <string name="enable_module">Включить модуль</string>
     <string name="no_scope_selected">Вы не выбрали ни одного приложения. Продолжить?</string>
     <string name="menu_show_games">Игры</string>
-    <string name="menu_show_modules">Модули</string>
-    <string name="failed_to_save_scope_list">Не удалось сохранить список областей</string>
-    <string name="module_settings">Настройки модуля</string>
-    <string name="app_description">%s\nВерсия %s</string>
-    <string name="use_recommended">Рекомендуется</string>
+    <string name="menu_show_modules">Мои модули</string>
+    <string name="menu_show_denylist">DenyList</string>
+    <string name="failed_to_save_scope_list">Не удалось сохранить список выбранных приложений для модуля</string>
+    <string name="app_description">%1$s\nВерсия: %2$s</string>
+    <string name="use_recommended">Рекомендуемые</string>
     <string name="no_scope_selected_has_recommended">Вы не выбрали ни одного приложения. Выбрать рекомендуемые приложения?</string>
     <string name="use_recommended_message">Выбрать рекомендуемые приложения?</string>
-    <string name="requested_by_module">Рекомендуется</string>
-    <string name="module_disabled_no_selection">Модуль %s отключен, так как ни одна программа не выбрана.</string>
-    <string name="android_framework">Системная Структура</string>
-    <string name="app_destroyed">Эта программа прекратила работу, пожалуйста, убедитесь, что загрузили ее из официального источника.</string>
-    <string name="compile_speed">Повторная оптимизация</string>
-    <string name="selinux_permissive">&lt;b&gt;ВНИМАНИЕ:&lt;\/b&gt; Статус SELinux не Enforcing! Вредоносные приложения, которые пользуются этим, смогут полностью управлять вашим устройством и нанести ущерб вашим данным.</string>
-    <string name="selinux_permissive_summary">Статус SELinux не принудительные!</string>
-    <string name="outdated_manager">Версия LSPosed Manager и LSPosed Core не согласуются. Пожалуйста, установите соответствующую версию.</string>
-    <string name="lsposed_not_active">LSPosed пока не установлен или не активен.</string>
-    <string name="settings_backup_and_restore">Резервное копирование и восстановление</string>
-    <string name="settings_backup_and_restore_summery">Резервное копирование или восстановление списка модулей и списков областей.</string>
-    <string name="settings_backup">Сделать резервное копирование</string>
-    <string name="settings_backuping">Резервное копирование…</string>
-    <string name="settings_backup_success">Резервное копирование завершено!</string>
-    <string name="settings_backup_failed">Не удалось сделать резервную копию</string>
-    <string name="settings_restore">Восстанавливать</string>
-    <string name="settings_restoring">Восстановление…</string>
-    <string name="settings_restore_success">Восстановление завершено!</string>
-    <string name="settings_restore_failed">Не удалось восстановить</string>
-    <string name="menu_backup_and_restore">Создание резервной копии…</string>
-    <string name="menu_backup">Создать резервную копию</string>
+    <string name="module_is_not_activated_yet">Модуль установлен</string>
+    <string name="requested_by_module">Рекомендуемые</string>
+    <string name="update_available">Доступно обновление: %1$s</string>
+    <string name="module_disabled_no_selection">Модуль %s выключен, так как ни одно приложение не выбрано</string>
+    <string name="android_framework">Системный фреймворк</string>
+    <string name="menu_backup_and_restore">Резервная копия</string>
+    <string name="menu_backup">Создать</string>
     <string name="menu_restore">Восстановить</string>
-    <string name="xposed_module_updated_notification_content">%s обновлён</string>
-    <string name="module_repo">Репозиторий</string>
-    <string name="module_repo_summary">Репозиторий модулей (Альфа)</string>
-    <string name="module_readme">Readme</string>
-    <string name="module_releases">Релизаты</string>
+    <string name="force_stop">Остановить</string>
+    <string name="force_stop_dlg_title">Остановить приложение?</string>
+    <string name="force_stop_dlg_text">Принудительная остановка приложения выгружает его из запущенных</string>
+    <string name="reboot_required">Для применения требуется перезагрузка</string>
+    <string name="reboot">Перезагрузить</string>
+    <string name="menu_hide">Скрывать</string>
+    <string name="deny_list">%s находится в DenyList и может не работать</string>
+    <string name="deny_list_info">В DenyList</string>
+    <!-- ModulesActivity and AppListActivity -->
+    <string name="modules_other_app">Магазин приложений</string>
+    <string name="module_app_info">О приложении</string>
+    <string name="list_empty">¯\\\\_(ツ)_\/¯\nЗдесь ничего нет</string>
+    <!-- SettingsActivity -->
+    <string name="settings_group_framework">Фреймворк</string>
+    <string name="pref_title_disable_verbose_log">Выключить подробные логи</string>
+    <string name="pure_black_dark_theme">Черная тема</string>
+    <string name="pure_black_dark_theme_summary">Использовать черную тему, когда включена темная тема</string>
+    <string name="settings_group_theme">Тема</string>
+    <string name="settings_backup_and_restore">Резервное копирование и восстановление</string>
+    <string name="settings_backup_summery">Сохранить список модулей и выбранных приложений для модулей</string>
+    <string name="settings_restore_summery">Восстановить список модулей и выбранных приложений для модулей</string>
+    <string name="settings_backup">Создать</string>
+    <string name="settings_backup_failed2">Не удалось сделать резервную копию:\n%s</string>
+    <string name="enable_documentui">Пожалуйста, включите DocumentUI</string>
+    <string name="settings_restore">Восстановить</string>
+    <string name="settings_restore_failed2">Не удалось восстановить:\n%s</string>
+    <string name="group_network">Сеть</string>
+    <string name="dns_over_http">DNS через HTTPS</string>
+    <string name="dns_over_http_summary">Шифрование DNS-трафика помогающее усилить конфиденциальность пользователя в сети</string>
+    <string name="theme_color">Акцент темы</string>
+    <string name="theme_color_system">Системный цвет акцента</string>
+    <string name="settings_show_hidden_icon_apps_enabled">Принудительно показывать иконку модуля</string>
+    <string name="settings_show_hidden_icon_apps_enabled_summary">После Android 10, модули не могут скрывать иконку в лаунчер. Выключите переключатель, чтобы отключить эту системную функцию</string>
+    <string name="settings_group_system">Система</string>
+    <string name="settings_language">Язык приложения</string>
+    <string name="settings_translation_contributors">Автор перевода</string>
+    <string name="settings_translation">Принять участие в переводе</string>
+    <string name="settings_translation_summary">Помогите нам перевести %s на ваш язык</string>
+    <string name="pref_title_enable_auto_add_shortcut">Автоматически добавлять ярлык</string>
+    <string name="create_shortcut_summary">Вручную создать ярлык LSPosed</string>
+    <string name="settings_enable_auto_add_shortcut_summary">Новый ярлык LSPosed не будет добавляться автоматически, если выключить этот переключатель</string>
+    <string name="settings_update_channel">Источник обновлений</string>
+    <string name="update_channel_stable">Стабильные версии</string>
+    <string name="update_channel_bate">Бета-версии</string>
+    <string name="update_channel_nightly">Ночные версии</string>
+    <string name="pref_title_restrict_classloader">Только модуль classloader может использовать Xposed API</string>
+    <string name="pref_summary_restrict_classloader">Это может сломать некоторые модули, но повысит безопасность (экспериментальная функция)</string>
+    <!-- Module Repo -->
+    <string name="module_readme">Описание</string>
+    <string name="module_releases">Версии</string>
     <string name="module_information">Информация</string>
     <string name="module_information_homepage">Домашняя страница</string>
     <string name="module_information_source_url">Исходный код</string>
-    <string name="module_information_collaborators">Коллекционеры</string>
-    <string name="module_release_view_assets">Вложения</string>
+    <string name="module_information_collaborators">Разработчик</string>
+    <string name="module_release_view_assets">Установить</string>
     <string name="menu_open_in_browser">Открыть в браузере</string>
     <string name="refresh">Обновить</string>
-    <string name="group_network">Сеть</string>
-    <string name="dns_over_http">DNS поверх HTTPS</string>
-    <string name="dns_over_http_summary">Обходное DNS-травление в некоторых странах</string>
-    <string name="about_view_source_code"><![CDATA[Просмотреть исходный код по %s<br/>Присоединяйтесь к нашему %s каналу]]></string>
     <string name="module_release_load_more">Показать старые версии</string>
-    <string name="module_release_no_more">Больше нет выпуска</string>
-    <string name="theme_color">Цвет темы</string>
+    <string name="module_release_no_more">Больше нет других версий</string>
+    <string name="repo_load_failed">Не удалось загрузить репозиторий модуля: %s</string>
+    <string name="sort_upgradable_first">Сначала обновляемые</string>
+    <!-- CrashReportActivity -->
+    <string name="version_mismatch">Версия LSPosed фреймворк (%1$d) не соответствует версии приложения (%2$d). Пожалуйста, переустановите LSPosed</string>
+    <string name="manager_crashed">Сбой приложения LSPosed</string>
+    <string name="manager_crashed_info">сообщить об этом </string>
+    <string name="send_crash_info">Отправить информацию о сбое</string>
+    <string name="crash_info_copied">Информация о сбое скопирована в буфер обмена</string>
+    <string name="info_copied">Скопировано в буфер обмена</string>
+    <!-- Colors -->
+    <string name="color_sakura">Сакура</string>
+    <string name="color_red">Красный</string>
+    <string name="color_pink">Розовый</string>
+    <string name="color_purple">Фиолетовый</string>
+    <string name="color_deep_purple">Насыщенный фиолетовый</string>
+    <string name="color_indigo">Индиго</string>
+    <string name="color_blue">Синий</string>
+    <string name="color_light_blue">Голубой</string>
+    <string name="color_cyan">Бирюзово-голубой</string>
+    <string name="color_teal">Сине-зеленый</string>
+    <string name="color_green">Зеленый</string>
+    <string name="color_light_green">Светло-зеленый</string>
+    <string name="color_lime">Желто-зеленый</string>
+    <string name="color_yellow">Желтый</string>
+    <string name="color_amber">Янтарный</string>
+    <string name="color_orange">Оранжевый</string>
+    <string name="color_deep_orange">Насыщенный оранжевый</string>
+    <string name="color_brown">Коричневый</string>
+    <string name="color_blue_grey">Серо-голубой</string>
 </resources>

@@ -1,0 +1,34 @@
+<?xml version="1.0" encoding="utf-8"?><!--
+  ~ This file is part of LSPosed.
+  ~
+  ~ LSPosed is free software: you can redistribute it and/or modify
+  ~ it under the terms of the GNU General Public License as published by
+  ~ the Free Software Foundation, either version 3 of the License, or
+  ~ (at your option) any later version.
+  ~
+  ~ LSPosed is distributed in the hope that it will be useful,
+  ~ but WITHOUT ANY WARRANTY; without even the implied warranty of
+  ~ MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+  ~ GNU General Public License for more details.
+  ~
+  ~ You should have received a copy of the GNU General Public License
+  ~ along with LSPosed.  If not, see <https://www.gnu.org/licenses/>.
+  ~
+  ~ Copyright (C) 2021 LSPosed Contributors
+  -->
+
+<menu xmlns:android="http://schemas.android.com/apk/res/android">
+    <item
+        android:id="@+id/menu_issue"
+        android:actionViewClass="androidx.appcompat.widget.SearchView"
+        android:icon="@drawable/ic_baseline_chat_24"
+        android:showAsAction="never"
+        android:title="@string/feedback_or_suggestion" />
+
+    <item
+        android:id="@+id/menu_about"
+        android:actionViewClass="androidx.appcompat.widget.SearchView"
+        android:icon="@drawable/ic_baseline_info_24"
+        android:showAsAction="never"
+        android:title="@string/About" />
+</menu>

@@ -20,11 +20,20 @@
 
 package android.content.res;
 
+import static org.lsposed.lspd.nativebridge.ResourcesHook.rewriteXmlReferencesNative;
+import static de.robv.android.xposed.XposedHelpers.decrementMethodDepth;
+import static de.robv.android.xposed.XposedHelpers.findAndHookMethod;
+import static de.robv.android.xposed.XposedHelpers.getBooleanField;
+import static de.robv.android.xposed.XposedHelpers.getLongField;
+import static de.robv.android.xposed.XposedHelpers.getObjectField;
+import static de.robv.android.xposed.XposedHelpers.incrementMethodDepth;
+
 import android.content.Context;
 import android.content.pm.PackageParser;
 import android.content.pm.PackageParser.PackageParserException;
 import android.graphics.Color;
 import android.graphics.Movie;
+import android.graphics.Typeface;
 import android.graphics.drawable.ColorDrawable;
 import android.graphics.drawable.Drawable;
 import android.os.Build;
@@ -37,6 +46,8 @@ import android.util.TypedValue;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+
+import androidx.annotation.RequiresApi;
 
 import org.xmlpull.v1.XmlPullParser;
 
@@ -51,18 +62,12 @@ import de.robv.android.xposed.XC_MethodHook;
 import de.robv.android.xposed.XC_MethodHook.MethodHookParam;
 import de.robv.android.xposed.XposedBridge;
 import de.robv.android.xposed.XposedBridge.CopyOnWriteSortedSet;
+import de.robv.android.xposed.XposedInit;
 import de.robv.android.xposed.callbacks.XC_LayoutInflated;
 import de.robv.android.xposed.callbacks.XC_LayoutInflated.LayoutInflatedParam;
 import de.robv.android.xposed.callbacks.XCallback;
 import xposed.dummy.XResourcesSuperClass;
 import xposed.dummy.XTypedArraySuperClass;
-
-import static de.robv.android.xposed.XposedHelpers.decrementMethodDepth;
-import static de.robv.android.xposed.XposedHelpers.findAndHookMethod;
-import static de.robv.android.xposed.XposedHelpers.getIntField;
-import static de.robv.android.xposed.XposedHelpers.getLongField;
-import static de.robv.android.xposed.XposedHelpers.getObjectField;
-import static de.robv.android.xposed.XposedHelpers.incrementMethodDepth;
 
 /**
  * {@link android.content.res.Resources} subclass that allows replacing individual resources.
@@ -568,6 +573,13 @@ public class XResources extends XResourcesSuperClass {
 
 	private static void setReplacement(int id, Object replacement, XResources res) {
 		String resDir = (res != null) ? res.mResDir : null;
+		if (res == null) {
+			try {
+				XposedInit.hookResources();
+			} catch (Throwable throwable) {
+				throw new IllegalStateException("Failed to initialize resources hook");
+			}
+		}
 		if (id == 0)
 			throw new IllegalArgumentException("id 0 is not an allowed resource identifier");
 		else if (resDir == null && id >= 0x7f000000)
@@ -854,6 +866,35 @@ public class XResources extends XResourcesSuperClass {
 	}
 
 	/** @hide */
+	@RequiresApi(Build.VERSION_CODES.Q)
+	@Override
+	public float getFloat(int id) {
+		Object replacement = getReplacement(id);
+		if (replacement instanceof Float) {
+			return (Float) replacement;
+		} else if (replacement instanceof XResForwarder) {
+			Resources repRes = ((XResForwarder) replacement).getResources();
+			int repId = ((XResForwarder) replacement).getId();
+			return repRes.getFloat(repId);
+		}
+		return super.getFloat(id);
+	}
+
+	/** @hide */
+	@Override
+	public Typeface getFont(int id) {
+		Object replacement = getReplacement(id);
+		if (replacement instanceof Typeface) {
+			return (Typeface) replacement;
+		} else if (replacement instanceof XResForwarder) {
+			Resources repRes = ((XResForwarder) replacement).getResources();
+			int repId = ((XResForwarder) replacement).getId();
+			return repRes.getFont(repId);
+		}
+		return super.getFont(id);
+	}
+
+	/** @hide */
 	@Override
 	public float getFraction(int id, int base, int pbase) {
 		Object replacement = getReplacement(id);
@@ -1050,6 +1091,38 @@ public class XResources extends XResourcesSuperClass {
 
 	/** @hide */
 	@Override
+	public void getValue(int id, TypedValue outValue, boolean resolveRefs) throws NotFoundException {
+		Object replacement = getReplacement(id);
+		if (replacement instanceof XResForwarder) {
+			Resources repRes = ((XResForwarder) replacement).getResources();
+			int repId = ((XResForwarder) replacement).getId();
+			repRes.getValue(repId, outValue, resolveRefs);
+		} else {
+			if (replacement != null) {
+				XposedBridge.log("Replacement of resource ID #0x" + Integer.toHexString(id) + " escaped because of deprecated replacement. Please use XResForwarder instead.");
+			}
+			super.getValue(id, outValue, resolveRefs);
+		}
+	}
+
+	/** @hide */
+	@Override
+	public void getValueForDensity(int id, int density, TypedValue outValue, boolean resolveRefs) throws NotFoundException {
+		Object replacement = getReplacement(id);
+		if (replacement instanceof XResForwarder) {
+			Resources repRes = ((XResForwarder) replacement).getResources();
+			int repId = ((XResForwarder) replacement).getId();
+			repRes.getValueForDensity(repId, density, outValue, resolveRefs);
+		} else {
+			if (replacement != null) {
+				XposedBridge.log("Replacement of resource ID #0x" + Integer.toHexString(id) + " escaped because of deprecated replacement. Please use XResForwarder instead.");
+			}
+			super.getValueForDensity(id, density, outValue, resolveRefs);
+		}
+	}
+
+	/** @hide */
+	@Override
 	public XmlResourceParser getXml(int id) throws NotFoundException {
 		Object replacement = getReplacement(id);
 		if (replacement instanceof XResForwarder) {
@@ -1079,8 +1152,6 @@ public class XResources extends XResourcesSuperClass {
 		}
 		return false;
 	}
-
-	private static native void rewriteXmlReferencesNative(long parserPtr, XResources origRes, Resources repRes);
 
 	/**
 	 * Used to replace reference IDs in XMLs.
@@ -1333,6 +1404,19 @@ public class XResources extends XResourcesSuperClass {
 		}
 
 		@Override
+		public Typeface getFont(int index) {
+			Object replacement = ((XResources) getResources()).getReplacement(getResourceId(index, 0));
+			if (replacement instanceof Typeface) {
+				return (Typeface) replacement;
+			} else if (replacement instanceof XResForwarder) {
+				Resources repRes = ((XResForwarder) replacement).getResources();
+				int repId = ((XResForwarder) replacement).getId();
+				return repRes.getFont(repId);
+			}
+			return super.getFont(index);
+		}
+
+		@Override
 		public float getFraction(int index, int base, int pbase, float defValue) {
 			Object replacement = ((XResources) getResources()).getReplacement(getResourceId(index, 0));
 			if (replacement instanceof XResForwarder) {
@@ -1429,6 +1513,44 @@ public class XResources extends XResourcesSuperClass {
 				return repRes.getTextArray(repId);
 			}
 			return super.getTextArray(index);
+		}
+
+		@Override
+		public boolean getValue(int index, TypedValue outValue) {
+			var id = getResourceId(index, 0);
+			Object replacement = ((XResources) getResources()).getReplacement(id);
+			if (replacement instanceof XResForwarder) {
+				Resources repRes = ((XResForwarder) replacement).getResources();
+				int repId = ((XResForwarder) replacement).getId();
+				repRes.getValue(repId, outValue, true);
+				return outValue.type != TypedValue.TYPE_NULL;
+			} else {
+				if (replacement != null) {
+					XposedBridge.log("Replacement of resource ID #0x" + Integer.toHexString(id) + " escaped because of deprecated replacement. Please use XResForwarder instead.");
+				}
+				return super.getValue(index, outValue);
+			}
+		}
+
+		@Override
+		public TypedValue peekValue(int index) {
+			var id = getResourceId(index, 0);
+			Object replacement = ((XResources) getResources()).getReplacement(id);
+			if (replacement instanceof XResForwarder) {
+				if (getBooleanField(this, "mRecycled")) {
+					throw new RuntimeException("Cannot make calls to a recycled instance!");
+				}
+				final TypedValue value = (TypedValue) getObjectField(this, "mValue");
+				Resources repRes = ((XResForwarder) replacement).getResources();
+				int repId = ((XResForwarder) replacement).getId();
+				repRes.getValue(repId, value, true);
+				return value;
+			} else {
+				if (replacement != null) {
+					XposedBridge.log("Replacement of resource ID #0x" + Integer.toHexString(id) + " escaped because of deprecated replacement. Please use XResForwarder instead.");
+				}
+				return super.peekValue(index);
+			}
 		}
 	}
 

@@ -1,5 +1,4 @@
-<?xml version="1.0" encoding="utf-8"?>
-<!--
+<?xml version="1.0" encoding="utf-8"?><!--
   ~ This file is part of LSPosed.
   ~
   ~ LSPosed is free software: you can redistribute it and/or modify
@@ -19,39 +18,31 @@
   ~ Copyright (C) 2021 LSPosed Contributors
   -->
 
-<menu xmlns:android="http://schemas.android.com/apk/res/android"
-    xmlns:app="http://schemas.android.com/apk/res-auto">
+<menu xmlns:android="http://schemas.android.com/apk/res/android">
     <item
         android:id="@+id/menu_save"
         android:icon="@drawable/ic_save"
-        android:title="@string/menuSaveToSd"
-        app:showAsAction="ifRoom" />
-
-    <item
-        android:id="@+id/menu_send"
-        android:icon="@drawable/ic_send"
-        android:title="@string/menuSend"
-        app:showAsAction="ifRoom" />
-
-    <item
-        android:id="@+id/menu_refresh"
-        android:icon="@drawable/ic_refresh"
-        android:title="@string/menuReload"
-        app:showAsAction="ifRoom" />
+        android:showAsAction="ifRoom"
+        android:title="@string/menuSaveToSd" />
 
     <item
         android:id="@+id/menu_scroll_top"
-        android:title="@string/scroll_top"
-        app:showAsAction="never" />
+        android:showAsAction="never"
+        android:title="@string/scroll_top" />
 
     <item
         android:id="@+id/menu_scroll_down"
-        android:title="@string/scroll_bottom"
-        app:showAsAction="never" />
+        android:showAsAction="never"
+        android:title="@string/scroll_bottom" />
 
     <item
         android:id="@+id/menu_clear"
-        android:title="@string/menuClearLog"
-        app:showAsAction="never" />
+        android:showAsAction="never"
+        android:title="@string/menuClearLog" />
 
+    <item
+        android:id="@+id/menu_word_wrap"
+        android:checkable="true"
+        android:checked="false"
+        android:title="@string/menu_enable_word_wrap" />
 </menu>

@@ -1,0 +1,234 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!--
+  ~ This file is part of LSPosed.
+  ~
+  ~ LSPosed is free software: you can redistribute it and/or modify
+  ~ it under the terms of the GNU General Public License as published by
+  ~ the Free Software Foundation, either version 3 of the License, or
+  ~ (at your option) any later version.
+  ~
+  ~ LSPosed is distributed in the hope that it will be useful,
+  ~ but WITHOUT ANY WARRANTY; without even the implied warranty of
+  ~ MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+  ~ GNU General Public License for more details.
+  ~
+  ~ You should have received a copy of the GNU General Public License
+  ~ along with LSPosed.  If not, see <https://www.gnu.org/licenses/>.
+  ~
+  ~ Copyright (C) 2021 LSPosed Contributors
+  -->
+<resources xmlns:tools="http://schemas.android.com/tools" tools:keep="@string/xposed_module_updated_notification_*,@string/module_is_not_activated_*">
+    <!-- MainActivity -->
+    <string name="info">معلومات</string>
+    <string name="overview">نظرة عامة</string>
+    <string name="Modules">الوحدات</string>
+    <plurals name="modules_enabled_count">
+        <item quantity="zero">%d وحدة مفعلة</item>
+        <item quantity="one">%d وحدة مفعلة</item>
+        <item quantity="two">%d وحدة مفعلة</item>
+        <item quantity="few">%d وحدات مفعلة</item>
+        <item quantity="many">%d وحدة مفعلة</item>
+        <item quantity="other">%d وحدة مفعلة</item>
+    </plurals>
+    <string name="Logs">السجلات</string>
+    <string name="Settings">الإعدادات</string>
+    <string name="feedback_or_suggestion">ملاحظات أو اقتراحات</string>
+    <string name="About">عنّ</string>
+    <string name="report_issue">الإبلاغ عن مشكلة</string>
+    <string name="module_repo">المُستودع</string>
+    <string name="module_repo_loading">جارٍ التحميل…</string>
+    <string name="module_repo_up_to_date">جميع الوحدات محدثة</string>
+    <plurals name="module_repo_upgradable">
+        <item quantity="zero">%d وحدة قابلة للترقية</item>
+        <item quantity="one">%d وحدة قابلة للترقية</item>
+        <item quantity="two">%d وحدة قابلة للترقية</item>
+        <item quantity="few">%d وحدات قابلة للترقية</item>
+        <item quantity="many">%d وحدة قابلة للترقية</item>
+        <item quantity="other">%d وحدة قابلة للترقية</item>
+    </plurals>
+    <string name="about_view_source_code"><![CDATA[عرض كود المصدر في %1$s<br/>انضم إلى قناتنا %2$s]]></string>
+    <string name="translators" comment="Dear translators, please add your home page here following the format. There can be more than one translator. So feel free to append yourself.">Mahmoud Abd El-Hamed (7TM)</string>
+    <string name="install">تثبيت</string>
+    <string name="install_summary">انقر لتثبيت LSPosed</string>
+    <string name="not_installed">غير مثبت</string>
+    <string name="not_install_summary">LSPosed غير مثبت</string>
+    <string name="activated">مُفعّل</string>
+    <string name="partial_activated">مفعل جزئياً</string>
+    <string name="selinux_policy_not_loaded_summary">لم يتم تحميل SEPolicy بشكل صحيح</string>
+    <string name="selinux_policy_not_loaded"><![CDATA[لن تعمل الوحدات النمطية التي تربط إطار عمل النظام.<br/>الرجاء الإبلاغ عن هذا إلى <a href="https://github.com/topjohnwu/Magisk/issues"><b>ماجيسك</b></a> مطور النظام.]]></string>
+    <string name="system_inject_fail_summary">فشل حقن إطار عمل النظام</string>
+    <string name="system_inject_fail"><![CDATA[هذا نادر وقد يكون بسبب <b>Magisk</b> أو بعض وحدات Magisk منخفضة الجودة.<br/>الرجاء محاولة تعطيل وحدات Magisk خلاف Riru وLSPosed أو إرسال سجل كامل للمطورين.]]></string>
+    <string name="system_prop_incorrect_summary">نظام prop غير صحيح</string>
+    <string name="system_prop_incorrect"><![CDATA[بعض خصائص النظام الضرورية تم حذفها أو تعديلها.<br/>قد تبطل الوحدات أحيانا.]]></string>
+    <string name="need_update">تحتاج إلى التحديث</string>
+    <string name="please_update_summary">يرجى تثبيت أحدث إصدار من LSPosed</string>
+    <string name="lsposed_not_active">LSPosed غير مثبت او نشط حاليا.</string>
+    <string name="info_api_version">إصدار API</string>
+    <string name="info_framework_version">إصدار إطار العمل</string>
+    <string name="info_manager_version">إصدار المدير</string>
+    <string name="info_system_version">إصدار النظام</string>
+    <string name="info_device">الجهاز</string>
+    <string name="info_system_abi">نظام ABI</string>
+    <string name="info_api">واجهة الحقن</string>
+    <string name="parasitic_recommend">مدير طفيلي موصي به</string>
+    <string name="parasitic_recommend_summary">يدعم LSPosed الآن تطهير النظام لتجنب الكشف. يمكنك إلغاء تثبيت المدير بأمان بعد إنشاء اختصار للمدير الطفيلي. على أي حال يمكنك تثبيت المدير مرة أخرى من /data/adb/lspd/manager.apk.</string>
+    <string name="create_shortcut">إنشاء إختصار</string>
+    <string name="never_show">لا تظهر أبداً</string>
+    <string name="update_lsposed">تحديث LSPosed</string>
+    <string name="update_lsposed_msg">تأكيد تحديث LSPosed؟ سيتم إعـادة تشغيل هذا الجهاز بعد اكتمال التحديث</string>
+    <!-- LogsActivity -->
+    <string name="menuSaveToSd">احفظ</string>
+    <string name="nav_item_logs_verbose">سجلات مفصّلة</string>
+    <string name="nav_item_logs_module">سجلات الوحدات</string>
+    <string name="logs_save_failed2">فشل الحفظ:\n%s</string>
+    <string name="menuClearLog">مسح السجل الآن</string>
+    <string name="logs_cleared">تم مسح السجل بنجاح.</string>
+    <string name="scroll_top">التمرير لأعلى</string>
+    <string name="loading">جارٍ التحميل…</string>
+    <string name="scroll_bottom">التمرير لأسفل</string>
+    <string name="logs_cannot_read">تعذر قراءة السجل: \n</string>
+    <string name="menuReload">إعادة التحميل</string>
+    <string name="logs_clear_failed_2">فشل مسح السجل</string>
+    <string name="menu_enable_word_wrap">التفاف الكلمات</string>
+    <string name="enabled_verbose_log">تم تفعيل السجل المفصّل</string>
+    <string name="disabled_verbose_log">تم تعطيل السجل المفصّل</string>
+    <!-- ModulesActivity -->
+    <string name="module_empty_description">(لم يتم تقديم وصف)</string>
+    <string name="warning_xposed_min_version">هذه الوحدة تتطلب إصدار Xposed الأحدث (%d) لذا لا يمكن تفعيلها</string>
+    <string name="no_min_version_specified">لا تحدد هذه الوحدة إصدار Xposed الذي تحتاجه.</string>
+    <string name="warning_min_version_too_low">تم إنشاء هذه الوحدة لإصدار Xposed %1$d ، ولكن بسبب التغييرات غير المتوافقة في الإصدار %2$d، فقد تم تعطيلها</string>
+    <string name="warning_installed_on_external_storage">لا يمكن تحميل هذه الوحدة لأنها مثبتة على بطاقة الذاكرة، يرجى نقلها إلى مساحة التخزين الداخلية</string>
+    <string name="module_uninstall">إلغاء التثبيت</string>
+    <string name="module_settings">إعدادات الوحدة</string>
+    <string name="view_in_repo">عرض في المستودع</string>
+    <string name="module_uninstall_message">هل تريد إلغاء تثبيت هذه الوحدة؟</string>
+    <string name="module_uninstalled">تم إلغاء تثبيت %1$s</string>
+    <string name="module_uninstall_failed">فشل إلغاء التثبيت</string>
+    <string name="add_module_to_user">إضافة وحدة للمستخدم</string>
+    <string name="module_installed">تم إضافة %1$s للمستخدم %2$s</string>
+    <string name="module_install_failed">فشل إضافة الوحدة</string>
+    <string name="install_to_user">تثبيت للمستخدم %s</string>
+    <string name="install_to_user_message">هل ترغب في تثبيت %1$s للمستخدم %2$s؟ ينصح بالتثبيت يدوياً، قد يسبب إجبار التثبيت عبر LSPosed مشكلات.</string>
+    <string name="expand">توسّع</string>
+    <string name="collapse">انهيار</string>
+    <!-- AppListActivity -->
+    <string name="compile_speed">إعادة تحسين</string>
+    <string name="compile_speed_msg">تحسين…</string>
+    <string name="compile_done">اكتمل التحسين</string>
+    <string name="app_launch">تشغيله</string>
+    <string name="compile_failed">فشل التحسين: قيمة الإرجاع فارغة</string>
+    <string name="compile_failed_with_info">فشل التحسين: </string>
+    <string name="sort_by_name">أسم التطبيق</string>
+    <string name="sort_by_package_name">أسم الحُزْمَة</string>
+    <string name="sort_by_install_time">وقت التثبيت</string>
+    <string name="sort_by_update_time">وقت التحديث</string>
+    <string name="sort_reverse">عكسي</string>
+    <string name="menu_show_system_apps">تطبيقات النظام</string>
+    <string name="menu_sort">ترتيب</string>
+    <string name="enable_module">تفعيل الوحدة</string>
+    <string name="no_scope_selected">أنت لم تحدد أي تطبيق. المتابعة؟</string>
+    <string name="menu_show_games">ألعاب</string>
+    <string name="menu_show_modules">وحدات</string>
+    <string name="menu_show_denylist">قائمة الرفض</string>
+    <string name="failed_to_save_scope_list">فشل في حفظ قائمة النطاق</string>
+    <string name="app_description">%1$s\nإصدار %2$s</string>
+    <string name="use_recommended">مُوصى به</string>
+    <string name="no_scope_selected_has_recommended">أنت لم تحدد أي تطبيق. تحديد التطبيقات الموصى بها؟</string>
+    <string name="use_recommended_message">تحديد التطبيقات الموصى بها؟</string>
+    <string name="module_is_not_activated_yet">وحدة Xposed لم يتم تفعيلها بعد</string>
+    <string name="requested_by_module">مُوصى به</string>
+    <string name="update_available">تحديث متاح: %1$s</string>
+    <string name="module_disabled_no_selection">الوحدة %s تم تعطيلها لعدم تحديد أي تطبيق.</string>
+    <string name="android_framework">إطار النظام</string>
+    <string name="menu_backup_and_restore">نسخ احتياطي</string>
+    <string name="menu_backup">نسخ احتياطي</string>
+    <string name="menu_restore">استعادة</string>
+    <string name="force_stop">إيقاف إجباري</string>
+    <string name="force_stop_dlg_title">إيقاف إجباري؟</string>
+    <string name="force_stop_dlg_text">إذا أغلقت التطبيق إجبارياً، قد يتصرف بشكل خاطئ.</string>
+    <string name="reboot_required">إعادة التشغيل مطلوبة لتطبيق هذا التغيير</string>
+    <string name="reboot">إعادة تشغيل</string>
+    <string name="menu_hide">إخفاء</string>
+    <string name="deny_list">%s على قائمة الرفض. قد لا يكون ساري المفعول.</string>
+    <string name="deny_list_info">في قائمة الرفض</string>
+    <!-- ModulesActivity and AppListActivity -->
+    <string name="modules_other_app">عرض في تطبيق آخر</string>
+    <string name="module_app_info">معلومات التطبيق</string>
+    <string name="list_empty">¯\\\\_(ツ)_\/¯\n لا شيء هنا</string>
+    <!-- SettingsActivity -->
+    <string name="settings_group_framework">إطار العمل</string>
+    <string name="pref_title_disable_verbose_log">تعطيل السجلات المفصّلة</string>
+    <string name="pure_black_dark_theme">السمة السوداء المظلمة</string>
+    <string name="pure_black_dark_theme_summary">استخدام السمة السوداء الخالصة إذا تم تمكين السمة المظلمة</string>
+    <string name="settings_group_theme">السمة</string>
+    <string name="settings_backup_and_restore">النسخ الاحتياطي والاستعادة</string>
+    <string name="settings_backup_summery">نسخ احتياطي لقائمة الوحدات وقوائم النطاق.</string>
+    <string name="settings_restore_summery">استعادة قائمة الوحدات وقوائم النطاق.</string>
+    <string name="settings_backup">نسخ احتياطي</string>
+    <string name="settings_backup_failed2">فشل في النسخ الاحتياطي:\n%s</string>
+    <string name="enable_documentui">الرجاء تمكين DocumentUI</string>
+    <string name="settings_restore">استعادة</string>
+    <string name="settings_restore_failed2">فشل في الاستعادة:\n%s</string>
+    <string name="group_network">شبكة</string>
+    <string name="dns_over_http">DNS عبر HTTPS</string>
+    <string name="dns_over_http_summary">حل بديل لتسمم DNS في بعض الدول</string>
+    <string name="theme_color">لون السمة</string>
+    <string name="theme_color_system">لون سمة النظام</string>
+    <string name="settings_show_hidden_icon_apps_enabled">إجبار التطبيقات على إظهار أيقونات المشغل</string>
+    <string name="settings_show_hidden_icon_apps_enabled_summary">بعد أندرويد 10، لا يسمح للتطبيقات بإخفاء أيقونات المشغل. قم بإيقاف تشغيل التبديل لتعطيل مِيزة النظام هذه.</string>
+    <string name="settings_group_system">نظام</string>
+    <string name="settings_language">اللغة</string>
+    <string name="settings_translation_contributors">المساهمون بالترجمة</string>
+    <string name="settings_translation">المشاركة في الترجمة</string>
+    <string name="settings_translation_summary">ساعدنا في ترجمة %s إلى لغتك</string>
+    <string name="pref_title_enable_auto_add_shortcut">إضافة اختصار تلقائياً</string>
+    <string name="create_shortcut_summary">إنشاء اختصار المدير الطفيلي يدويًا</string>
+    <string name="settings_enable_auto_add_shortcut_summary">لن تضاف اختصارات جديدة عند تعطيلها في المدير غير الطفيلي</string>
+    <string name="settings_update_channel">قناة التحديث</string>
+    <string name="update_channel_stable">مستقر</string>
+    <string name="update_channel_bate">تجريبي</string>
+    <string name="update_channel_nightly">البناء الليلي</string>
+    <string name="pref_title_restrict_classloader">يمكن فقط لمحمل فئة الوحدة استخدام Xposed API</string>
+    <string name="pref_summary_restrict_classloader">قد يؤدي هذا إلى كسر بعض الوحدات ولكنه يفيد الأمان (ميزة تجريبية)</string>
+    <!-- Module Repo -->
+    <string name="module_readme">اقرأني</string>
+    <string name="module_releases">إصدارات</string>
+    <string name="module_information">معلومات</string>
+    <string name="module_information_homepage">الصفحة الرئيسية</string>
+    <string name="module_information_source_url">كود المصدر</string>
+    <string name="module_information_collaborators">المتعاونين</string>
+    <string name="module_release_view_assets">الأصول</string>
+    <string name="menu_open_in_browser">فتح في المتصفح</string>
+    <string name="refresh">تحديث</string>
+    <string name="module_release_load_more">إظهار الإصدارات الأقدم</string>
+    <string name="module_release_no_more">لا مزيد من الإصدار</string>
+    <string name="repo_load_failed">فشل تحميل مستودع الوحدة: %s</string>
+    <string name="sort_upgradable_first">قابل للترقية أولاً</string>
+    <!-- CrashReportActivity -->
+    <string name="version_mismatch">إصدار إطار LSPosed (%1$d) لا يتطابق مع المدير (%2$d). يرجى إعادة تثبيت LSPosed.</string>
+    <string name="manager_crashed">تعطل المدير</string>
+    <string name="manager_crashed_info">أبلغ عن هذا إلى </string>
+    <string name="send_crash_info">إرسال معلومات العطل</string>
+    <string name="crash_info_copied">تم نسخ معلومات العطل إلى الحافظة</string>
+    <string name="info_copied">تم النسخ إلى الحافظة</string>
+    <!-- Colors -->
+    <string name="color_sakura">ساكورا</string>
+    <string name="color_red">أحمر</string>
+    <string name="color_pink">وردي</string>
+    <string name="color_purple">بنفسجي</string>
+    <string name="color_deep_purple">بنفسجي عميق</string>
+    <string name="color_indigo">نيلي</string>
+    <string name="color_blue">أزرق</string>
+    <string name="color_light_blue">أزرق فاتح</string>
+    <string name="color_cyan">سماوي</string>
+    <string name="color_teal">أزرق مخضرّ</string>
+    <string name="color_green">أخضر</string>
+    <string name="color_light_green">أخضر فاتح</string>
+    <string name="color_lime">ليموني</string>
+    <string name="color_yellow">أصفر</string>
+    <string name="color_amber">كهرماني</string>
+    <string name="color_orange">برتقالي</string>
+    <string name="color_deep_orange">برتقالي عميق</string>
+    <string name="color_brown">بني</string>
+    <string name="color_blue_grey">أزرق رمادي</string>
+</resources>

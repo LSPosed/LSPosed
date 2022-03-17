@@ -1,3 +1,4 @@
+<?xml version="1.0" encoding="utf-8"?>
 <!--
   ~ This file is part of LSPosed.
   ~
@@ -14,155 +15,213 @@
   ~ You should have received a copy of the GNU General Public License
   ~ along with LSPosed.  If not, see <https://www.gnu.org/licenses/>.
   ~
-  ~ Copyright (C) 2020 EdXposed Contributors
   ~ Copyright (C) 2021 LSPosed Contributors
   -->
-
-<resources>
-    <string name="app_name" translatable="false">LSPosed</string>
-
+<resources xmlns:tools="http://schemas.android.com/tools" tools:keep="@string/xposed_module_updated_notification_*,@string/module_is_not_activated_*">
     <!-- MainActivity -->
     <string name="info">Info</string>
-    <string name="Activated">Activé %s</string>
-    <string name="Install">Installer</string>
-    <string name="InstallDetail">Appuyez pour installer LSPosed</string>
+    <string name="overview">Loger</string>
     <string name="Modules">Modules</string>
     <plurals name="modules_enabled_count">
-        <item quantity="one">%d module activé</item>
-        <item quantity="other">%d modules activés</item>
+        <item quantity="one">%d module actif</item>
+        <item quantity="other">%d modules actifs</item>
     </plurals>
     <string name="Logs">Journaux</string>
     <string name="Settings">Réglages</string>
-    <string name="About">A propos</string>
+    <string name="feedback_or_suggestion">Réaction ou suggestion</string>
+    <string name="About">À propos</string>
+    <string name="report_issue">Signaler un problème</string>
     <string name="module_repo">Dépôt</string>
-    <string name="module_repo_summary">Dépôts de modules (Alpha)</string>
-    <string name="about_view_source_code"><![CDATA[Voir le code source à %s<br/>Rejoindre notre canal %s]]></string>
-
+    <string name="module_repo_loading">Chargement…</string>
+    <string name="module_repo_up_to_date">Tous les modules sont à jour</string>
+    <plurals name="module_repo_upgradable">
+        <item quantity="one">%d module mis à jour</item>
+        <item quantity="other">%d modules évolutifs</item>
+    </plurals>
+    <string name="about_view_source_code"><![CDATA[Voir le code source sur %1$s<br/>Rejoindre notre canal %2$s]]></string>
+    <string name="translators" comment="Dear translators, please add your home page here following the format. There can be more than one translator. So feel free to append yourself.">https://github.com/xerta555
+https://github.com/tclement0922</string>
+    <string name="install">Installer</string>
+    <string name="install_summary">Appuyer pour installer LSPosed</string>
     <string name="not_installed">Non installé</string>
-    <string name="selinux_permissive">&lt;b&gt;AVERTISSEMENT:&lt;\/b&gt; SELinux n\est pas renforcé! Le programme malveillant qui attaque peut contrôler complètement votre appareil et peut causer des dommages matériels et engager votre responsabilité légale.</string>
-    <string name="selinux_permissive_summary">SELinux n\'est pas renforcé!</string>
-    <string name="android_sdk" translatable="false">Android %2$s (%1$s, API %3$d)</string>
-    <string name="android_sdk_preview" translatable="false">Android %1$s Preview</string>
-
+    <string name="not_install_summary">LSPosed n\'est pas installé</string>
+    <string name="activated">Activé</string>
+    <string name="partial_activated">Partiellement activé</string>
+    <string name="selinux_policy_not_loaded_summary">SEPolicy n\’est pas chargé correctement</string>
+    <string name="selinux_policy_not_loaded"><![CDATA[Les modules qui modifient le sous-système ne fonctionneront pas.<br/>Merci de le signaler au développeur de <a href="https://github.com/topjohnwu/Magisk/issues"><b>Magisk</b></a>.]]></string>
+    <string name="system_inject_fail_summary">Échec de l\’injection du sous système</string>
+    <string name="system_inject_fail"><![CDATA[Ceci est rare et peut être causé par <b>Magisk</b> ou certains modules Magisk de basse qualité.<br/>Essayez de désactiver les modules Magisk autres que Riru et LSPosed ou envoyez le journal complet aux développeurs.]]></string>
+    <string name="system_prop_incorrect_summary">Propriétés système incorrectes</string>
+    <string name="system_prop_incorrect"><![CDATA[Certaines propriétés nécessaires au système ont été supprimées ou modifiées.<br/>Des modules peuvent s\'invalider occasionnellement.]]></string>
+    <string name="need_update">Mise à jour nécessaire</string>
+    <string name="please_update_summary">Merci d\’installer la dernière version de LSPosed</string>
+    <string name="lsposed_not_active">LSPosed n\’est actuellement pas installé ou activé.</string>
+    <string name="info_api_version">Version de l\’API</string>
+    <string name="info_framework_version">Version du framework</string>
+    <string name="info_manager_version">Version du gestionnaire</string>
+    <string name="info_system_version">Version du système</string>
+    <string name="info_device">Périphérique</string>
+    <string name="info_system_abi">Architecture du système</string>
+    <string name="info_api">Interface d\'injection</string>
+    <string name="parasitic_recommend">Gestionnaire parasitaire recommandé</string>
+    <string name="parasitic_recommend_summary">LSPosed supporte maintenant la parasitation du système afin d\'éviter la détection. Vous pouvez désinstaller le gestionnaire en toute sécurité et après avoir créé un raccourci du gestionnaire parasitaire avec succès. Dans n\'importe quel cas vous pouvez installer à nouveau le gestionnaire depuis /data/adb/lspd/manager.apk.</string>
+    <string name="create_shortcut">Créer le raccourci</string>
+    <string name="never_show">Ne jamais afficher</string>
+    <string name="update_lsposed">Mettre à jour LSPosed</string>
+    <string name="update_lsposed_msg">Vous confirmez la mise à jour LSPosed ? Ce périphérique redémarrera après la mise à jour effectuée</string>
     <!-- LogsActivity -->
-    <string name="menuSend">Envoyer</string>
     <string name="menuSaveToSd">Sauvegarder</string>
-    <string name="nav_item_logs">Journaux détaillés</string>
-    <string name="nav_item_logs_err">Journeaux Modules</string>
-    <string name="dont_show_again">Ne plus afficher</string>
-    <string name="logs_save_failed">Échec de la sauvegarde:</string>
-    <string name="menuClearLog">Éffacer le journal maintenant</string>
-    <string name="logs_cleared">Journal éffacé avec succès.</string>
-    <string name="log_is_empty">Le journal est vide.</string>
+    <string name="nav_item_logs_verbose">Journaux détaillés</string>
+    <string name="nav_item_logs_module">Journaux des modules</string>
+    <string name="logs_save_failed2">Échec de la sauvegarde :\n%s</string>
+    <string name="menuClearLog">Effacer le journal maintenant</string>
+    <string name="logs_cleared">Journal effacé avec succès.</string>
     <string name="scroll_top">Haut de page</string>
     <string name="loading">Chargement…</string>
     <string name="scroll_bottom">Pied de page</string>
-    <string name="logs_cannot_read">Lecture du journal impossible: \n</string>
+    <string name="logs_cannot_read">Lecture du journal impossible : \n</string>
     <string name="menuReload">Recharger</string>
-    <string name="logs_clear_failed_2">Échec d\’effacement du journal</string>
-    <string name="not_logcat_2">Si on vous a demandé un Logcat Android, alors vous êtes dans la mauvaise section. Ici c\’est le journal LSPosed; si vous avez besoin d\’un logcat, sur XDA vous pouvez trouver ce dont vous avez besoin.</string>
-
-    <!-- Notification -->
-    <string name="module_is_not_activated_yet">Le module LSPosed n\’est pas encore actif</string>
-    <string name="module_is_not_activated_yet_detailed">%s à été installé, mais il n\’est pas encore installé</string>
-    <string name="xposed_module_updated_notification_content">%s à été mis à jour</string>
-
+    <string name="logs_clear_failed_2">Échec de l\'effacement du journal</string>
+    <string name="menu_enable_word_wrap">Retour à la ligne</string>
+    <string name="enabled_verbose_log">Journaux détaillés activés</string>
+    <string name="disabled_verbose_log">Journaux détaillés désactivés</string>
     <!-- ModulesActivity -->
     <string name="module_empty_description">(aucune description fournie)</string>
-    <string name="module_no_ui">Ce module ne fournit pas d\’interface utilisateur</string>
-    <string name="xposed_module_updated_notification_title">Module LSPosedmis à jour</string>
-    <string name="warning_xposed_min_version">Ce module requière une nouvelle version de LSPosed (%d) et n\’a donc pas pue être activé</string>
-    <string name="no_min_version_specified">Ce module ne spécifie la version de LSPosed qu\’il a besoin.</string>
-    <string name="warning_min_version_too_low">Ce module à été créé pour la version %1$d de LSPosed, mais à cause de changements incompatibles dans la version %2$d, il à été désactivé</string>
-    <string name="warning_installed_on_external_storage">Ce module ne peut pas être chargé parce qu\’il à été installé sur la carte microSD, Merci de la déplacer dans la stockage interne</string>
-    <string name="module_uninstall">Désinstallation</string>
+    <string name="warning_xposed_min_version">Ce module requière une nouvelle version d\'Xposed (%d) et n\'a donc pas pu être activé</string>
+    <string name="no_min_version_specified">Ce module ne spécifie pas la version d\'Xposed nécessaire.</string>
+    <string name="warning_min_version_too_low">Ce module à été créé pour la version Xposed %1$d, mais due à des changements incompatibles dans la version %2$d, il à été désactivé</string>
+    <string name="warning_installed_on_external_storage">Ce module ne peut pas être chargé car il est installé sur la carte SD, merci de le déplacer sur le stockage interne</string>
+    <string name="module_uninstall">Désinstaller</string>
     <string name="module_settings">Réglages du module</string>
-    <string name="view_in_repo">Voir dans le dépôt</string>
-
+    <string name="view_in_repo">Afficher dans le dépôt</string>
+    <string name="module_uninstall_message">Voulez-vous désinstaller ce module ?</string>
+    <string name="module_uninstalled">Désinstallation de %1$s</string>
+    <string name="module_uninstall_failed">Échec de la désinstallation</string>
+    <string name="add_module_to_user">Ajouter le module à l\’utilisateur</string>
+    <string name="module_installed">%1$s ajouté à l’utilisateur %2$s</string>
+    <string name="module_install_failed">Échec de l\’ajout du module</string>
+    <string name="install_to_user">Installer dans l\'utilisateur %s</string>
+    <string name="install_to_user_message">Vous voulez installer %1$s dans l\'utilisateur %2$s ? Il est recommandé de l\'installer manuellement, forcer l\'installation via LSPosed pourrait causer des problèmes.</string>
+    <string name="expand">développer</string>
+    <string name="collapse">réduire</string>
     <!-- AppListActivity -->
     <string name="compile_speed">Ré-optimiser</string>
     <string name="compile_speed_msg">Optimisation…</string>
-    <string name="compile_done">Optimisation terminée.</string>
+    <string name="compile_done">Optimisation terminée</string>
     <string name="app_launch">Démarrer</string>
-    <string name="compile_failed">Échec de l\’optimisation ou la valeure de retour est vide..</string>
-    <string name="compile_failed_with_info">Échec de l\’optimisation: </string>
+    <string name="compile_failed">Échec de l\’optimisation : la valeur renvoyée est vide</string>
+    <string name="compile_failed_with_info">Échec de l\’optimisation : </string>
     <string name="sort_by_name">Trier par nom d\’application</string>
-    <string name="sort_by_name_reverse">Trier par nom d\’application (inversé)</string>
     <string name="sort_by_package_name">Trier par nom de paquet</string>
-    <string name="sort_by_package_name_reverse">Trier par nom de paquet (inversé)</string>
     <string name="sort_by_install_time">Trier par date d\’installation</string>
-    <string name="sort_by_install_time_reverse">Trier par date d\’installation (inversé)</string>
     <string name="sort_by_update_time">Trier par heure de mise à jour</string>
-    <string name="sort_by_update_time_reverse">Trier par heure de mise à jour (inversé)</string>
+    <string name="sort_reverse">Inversé</string>
     <string name="menu_show_system_apps">Applications système</string>
-    <string name="menu_sort">Trie…</string>
-    <string name="enable_module">Activer module</string>
-    <string name="no_scope_selected">Vous n\’avez sélectionné aucune application. Continuer?</string>
+    <string name="menu_sort">Trier</string>
+    <string name="enable_module">Activer le module</string>
+    <string name="no_scope_selected">Vous n\'avez sélectionné aucune application. Continuer ?</string>
     <string name="menu_show_games">Jeux</string>
     <string name="menu_show_modules">Modules</string>
-    <string name="failed_to_save_scope_list">Échec de la sauvegarde de la liste des champs d\’application</string>
-    <string name="app_description">%s\nVersion %s</string>
-    <string name="use_recommended">Recommendé</string>
-    <string name="no_scope_selected_has_recommended">Vous n\’avez sélectionné aucune application. Sélectionner les applications recommandées?</string>
-    <string name="use_recommended_message">Sélectionner les applications recommandées?</string>
-    <string name="requested_by_module">Recommendé</string>
-    <string name="module_disabled_no_selection">Le module %s à été désactivé étant donné qu\’aucune application n\’a été sélectionné.</string>
+    <string name="menu_show_denylist">Liste de refus</string>
+    <string name="failed_to_save_scope_list">Échec de l\'enregistrement de la liste des périmètres d\'applications</string>
+    <string name="app_description">%1$s\nVersion %2$s</string>
+    <string name="use_recommended">Recommandé</string>
+    <string name="no_scope_selected_has_recommended">Vous n\'avez sélectionné aucune application. Sélectionner les applications recommandées ?</string>
+    <string name="use_recommended_message">Sélectionner les applications recommandées ?</string>
+    <string name="module_is_not_activated_yet">Le module Xposed n\’est pas encore activé</string>
+    <string name="requested_by_module">Recommandé</string>
+    <string name="update_available">Mise à jour disponible : %1$s</string>
+    <string name="module_disabled_no_selection">Le module %s a été désactivé étant donné qu\’aucune application n\’ai été sélectionné.</string>
     <string name="android_framework">Cadre du sous-système</string>
-    <string name="menu_backup_and_restore">Sauvegarder…</string>
+    <string name="menu_backup_and_restore">Sauvegarde</string>
     <string name="menu_backup">Sauvegarder</string>
     <string name="menu_restore">Restaurer</string>
     <string name="force_stop">Forcer l\’arrêt</string>
-    <string name="force_stop_dlg_title">Forcer l\’arrêt?</string>
-    <string name="force_stop_dlg_text">Si vous forcez l\'arrêt d\’une application, elle peut mal se comporter.</string>
-    <string name="reboot_required">Redémarrage requis pour les changements prennent effet</string>
-    <string name="reboot">Redémarrage</string>
-
+    <string name="force_stop_dlg_title">Forcer l\'arrêt ?</string>
+    <string name="force_stop_dlg_text">Si vous forcez l\'arrêt d\'une application, celle-ci pourrait mal fonctionner.</string>
+    <string name="reboot_required">Un redémarrage est requis pour appliquer les changements</string>
+    <string name="reboot">Redémarrer</string>
+    <string name="menu_hide">Masquage</string>
+    <string name="deny_list">%s est sur la liste de refus. Cela pourrait ne pas avoir d\'effet.</string>
+    <string name="deny_list_info">Sur liste de refus</string>
     <!-- ModulesActivity and AppListActivity -->
-    <string name="modules_app_store">Voir dans le magasin d\’applications</string>
+    <string name="modules_other_app">Afficher dans une autre application</string>
     <string name="module_app_info">Informations d\’application</string>
-
+    <string name="list_empty">¯\\\\_(ツ)_\/¯\nIl n\’y a rien ici</string>
     <!-- SettingsActivity -->
     <string name="settings_group_framework">Sous-système</string>
-    <string name="settings_enable_resources">Activer les crochets de ressources</string>
-    <string name="settings_enable_resources_summary"><b>AVERTISSEMENT:</b> Les crochets de ressources sont dépréciés</string>
     <string name="pref_title_disable_verbose_log">Désactiver les journaux détaillés</string>
     <string name="pure_black_dark_theme">Thème noir et sombre</string>
-    <string name="pure_black_dark_theme_summary">Utiliser le thème noir pûre si le thème noir est activé</string>
+    <string name="pure_black_dark_theme_summary">Utiliser le thème noir pur si le thème noir est activé</string>
     <string name="settings_group_theme">Thème</string>
-    <string name="settings_variant">Variant</string>
     <string name="settings_backup_and_restore">Sauvegarder et restaurer</string>
-    <string name="settings_backup_and_restore_summery">Sauvegarder ou restaurer la liste d\’applications et leurs listes de champs.</string>
-    <string name="settings_backup">Sauvegarde</string>
-    <string name="settings_backuping">Sauvegarde des données…</string>
-    <string name="settings_backup_success">Sauvegarde terminée!</string>
-    <string name="settings_backup_failed">Failed to backup</string>
+    <string name="settings_backup_summery">Sauvegarder la liste des modules ainsi que leurs champs d\'applications.</string>
+    <string name="settings_restore_summery">Restaurer la liste des modules ainsi que leurs champs d\'applications.</string>
+    <string name="settings_backup">Sauvegarder</string>
+    <string name="settings_backup_failed2">Échec de la sauvegarde :\n%s</string>
+    <string name="enable_documentui">Merci d\'activer le gestionnaire de fichiers</string>
     <string name="settings_restore">Restaurer</string>
-    <string name="settings_restoring">Restauration…</string>
-    <string name="settings_restore_success">Restauration terminée!</string>
-    <string name="settings_restore_failed">Échec de la restauration</string>
+    <string name="settings_restore_failed2">Échec de la restauration :\n%s</string>
     <string name="group_network">Réseau</string>
     <string name="dns_over_http">DNS sur HTTPS</string>
     <string name="dns_over_http_summary">Contourner la censure DNS dans certains pays</string>
-    <string name="theme_color">Couleure du thème</string>
-
+    <string name="theme_color">Couleur du thème</string>
+    <string name="theme_color_system">Couleur d\'accentuation du système</string>
+    <string name="settings_show_hidden_icon_apps_enabled">Forcer les applications à afficher leurs icônes dans le lanceur</string>
+    <string name="settings_show_hidden_icon_apps_enabled_summary">Après Android 10, les applications ne sont pas autorisées à masquer leurs icônes dans le lanceur. Désactiver ce commutateur pour désactiver cette fonctionnalité du système.</string>
+    <string name="settings_group_system">Système</string>
+    <string name="settings_language">Langage</string>
+    <string name="settings_translation_contributors">Contributeurs de traduction</string>
+    <string name="settings_translation">Participer à la traduction</string>
+    <string name="settings_translation_summary">Aidez-nous à traduire %s dans votre langue</string>
+    <string name="pref_title_enable_auto_add_shortcut">Ajouter automatiquement un raccourci</string>
+    <string name="create_shortcut_summary">Créer le raccourci du gestionnaire parasitaire manuellement</string>
+    <string name="settings_enable_auto_add_shortcut_summary">Aucun nouveau raccourci ne sera ajouté si désactivé dans le gestionnaire non parasitaire</string>
+    <string name="settings_update_channel">Canal de mise à jour</string>
+    <string name="update_channel_stable">Stable</string>
+    <string name="update_channel_bate">Bêta</string>
+    <string name="update_channel_nightly">Version alpha</string>
+    <string name="pref_title_restrict_classloader">Seul le module classloader peut utiliser l\'API Xposed</string>
+    <string name="pref_summary_restrict_classloader">Ceci pourrait casser certains modules mais être bénéfique à la sécurité (fonction expérimentale)</string>
     <!-- Module Repo -->
-    <string name="module_readme">Lisez moi</string>
+    <string name="module_readme">Lisez-moi</string>
     <string name="module_releases">Versions</string>
-    <string name="module_information">Informations</string>
-    <string name="module_information_homepage">Page d\'accueil</string>
+    <string name="module_information">Infos</string>
+    <string name="module_information_homepage">Page d\’accueil</string>
     <string name="module_information_source_url">Code source</string>
     <string name="module_information_collaborators">Collaborateurs</string>
     <string name="module_release_view_assets">Actifs</string>
     <string name="menu_open_in_browser">Ouvrir dans le navigateur</string>
     <string name="refresh">Rafraîchir</string>
     <string name="module_release_load_more">Afficher les anciennes versions</string>
-    <string name="module_release_no_more">Pas d\'autres versions</string>
-
-
-    <string name="about_source" translatable="false">https://github.com/LSPosed/LSPosed/</string>
-
-    <string name="app_destroyed">Cette application à été détruite, merci de vous assurer que vous l\'avez bien téléchargé depuis la source officielle.</string>
-    <string name="outdated_manager">Version du Gestionnaire LSPosed et du noyau LSPosed ne sont pas cohérents. Merci de réinstaller la version correspondante.</string>
-    <string name="lsposed_not_active">LSPosed n\'est pas installé ou n\'est pas actif.</string>
-    <string name="verbose_log_not_avaliable">Journal détaillé indisponible, si vous l\'avez juste activé sans redémarrer, essayez à nouveau après avoir redémarré.</string>
+    <string name="module_release_no_more">Pas d\’autres versions</string>
+    <string name="repo_load_failed">Échec de chargement du dépôt des modules : %s</string>
+    <string name="sort_upgradable_first">Évolutif d\'abord</string>
+    <!-- CrashReportActivity -->
+    <string name="version_mismatch">La version du sous système LSPosed (%1$d) ne correspond pas à celle du gestionnaire (%2$d). Merci de réinstaller LSPosed.</string>
+    <string name="manager_crashed">Le gestionnaire a planté</string>
+    <string name="manager_crashed_info">rapporter cela à </string>
+    <string name="send_crash_info">Envoyer les infos de plantage</string>
+    <string name="crash_info_copied">Infos de plantage copiées dans le presse-papier</string>
+    <string name="info_copied">Copié dans le presse-papier</string>
+    <!-- Colors -->
+    <string name="color_sakura">Sakura</string>
+    <string name="color_red">Rouge</string>
+    <string name="color_pink">Rose</string>
+    <string name="color_purple">Violet</string>
+    <string name="color_deep_purple">Violet foncé</string>
+    <string name="color_indigo">Indigo</string>
+    <string name="color_blue">Bleu</string>
+    <string name="color_light_blue">Bleu clair</string>
+    <string name="color_cyan">Cyan</string>
+    <string name="color_teal">Turquoise</string>
+    <string name="color_green">Vert</string>
+    <string name="color_light_green">Vert clair</string>
+    <string name="color_lime">Vert citron</string>
+    <string name="color_yellow">Jaune</string>
+    <string name="color_amber">Ambre</string>
+    <string name="color_orange">Orange</string>
+    <string name="color_deep_orange">Orange foncé</string>
+    <string name="color_brown">Marron</string>
+    <string name="color_blue_grey">Bleu grisâtre</string>
 </resources>

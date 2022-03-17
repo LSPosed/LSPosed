@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="utf-8"?>
-<!--
+  <!--
   ~ This file is part of LSPosed.
   ~
   ~ LSPosed is free software: you can redistribute it and/or modify
@@ -21,84 +21,43 @@
 
 <manifest xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:tools="http://schemas.android.com/tools"
-    package="io.github.lsposed.manager">
+    package="org.lsposed.manager">
 
     <uses-permission android:name="android.permission.INTERNET" />
-    <uses-permission android:name="android.permission.REQUEST_DELETE_PACKAGES" />
-    <uses-permission android:name="android.permission.INTERACT_ACROSS_USERS" />
-
-    <queries>
-        <intent>
-            <action android:name="android.intent.action.MAIN" />
-        </intent>
-    </queries>
 
     <application
         android:name=".App"
         android:allowBackup="true"
+        android:hasFragileUserData="true"
         android:icon="@mipmap/ic_launcher"
         android:label="@string/app_name"
         android:supportsRtl="true"
         android:theme="@style/AppTheme"
-        tools:ignore="AllowBackup,GoogleAppIndexingWarning">
-        <activity
-            android:name=".ui.activity.CrashReportActivity"
-            android:process=":error_activity" />
-        <activity
-            android:name=".ui.activity.LogsActivity"
-            android:label="@string/Logs" />
-        <activity android:name=".ui.activity.AppListActivity" />
-        <activity android:name=".ui.activity.RepoActivity"
-            android:label="@string/module_repo"/>
-        <activity android:name=".ui.activity.RepoItemActivity" />
+        tools:ignore="AllowBackup,GoogleAppIndexingWarning"
+        tools:targetApi="q">
         <activity
             android:name=".ui.activity.MainActivity"
-            android:label="@string/app_name"
+            android:exported="true"
             android:launchMode="singleTop">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
+                <action android:name="android.intent.action.APPLICATION_PREFERENCES" />
 
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
-
             <meta-data
                 android:name="android.app.shortcuts"
                 android:resource="@xml/shortcuts" />
         </activity>
         <activity
-            android:name=".ui.activity.ModulesActivity"
-            android:label="@string/Modules" />
-        <activity
-            android:name=".ui.activity.SettingsActivity"
-            android:label="@string/Settings">
-            <intent-filter>
-                <action android:name="android.intent.action.APPLICATION_PREFERENCES" />
-
-                <category android:name="android.intent.category.DEFAULT" />
-            </intent-filter>
-        </activity>
-
-        <receiver
-            android:name=".receivers.EdServiceReceiver"
-            android:exported="true"
-            android:permission="android.permission.INTERACT_ACROSS_USERS_FULL">
-            <intent-filter>
-                <action android:name="io.github.lsposed.action.MODULE_UPDATED" />
-                <action android:name="io.github.lsposed.action.MODULE_NOT_ACTIVATAED" />
-
-                <data android:scheme="package" />
-            </intent-filter>
-        </receiver>
+            android:name=".ui.activity.CrashReportActivity"
+            android:process=":error" />
 
         <provider
-            android:name="androidx.core.content.FileProvider"
-            android:authorities="${applicationId}.fileprovider"
+            android:name="androidx.startup.InitializationProvider"
+            android:authorities="${applicationId}.androidx-startup"
             android:exported="false"
-            android:grantUriPermissions="true">
-            <meta-data
-                android:name="android.support.FILE_PROVIDER_PATHS"
-                android:resource="@xml/file_paths" />
-        </provider>
+            tools:node="remove" />
     </application>
 
 </manifest>

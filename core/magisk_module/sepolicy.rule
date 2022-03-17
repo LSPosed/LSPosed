@@ -1,0 +1,1 @@
+allow system_server system_server process execmem

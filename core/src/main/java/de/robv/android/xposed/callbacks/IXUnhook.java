@@ -33,13 +33,13 @@ import de.robv.android.xposed.IXposedHookZygoteInit;
  * @param <T> The class of the callback.
  */
 public interface IXUnhook<T> {
-	/**
-	 * Returns the callback that has been registered.
-	 */
-	T getCallback();
+    /**
+     * Returns the callback that has been registered.
+     */
+    T getCallback();
 
-	/**
-	 * Removes the callback.
-	 */
-	void unhook();
+    /**
+     * Removes the callback.
+     */
+    void unhook();
 }

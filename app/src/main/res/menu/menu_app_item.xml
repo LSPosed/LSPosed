@@ -29,8 +29,8 @@
         android:id="@+id/menu_compile_speed"
         android:title="@string/compile_speed" />
     <item
-        android:id="@+id/menu_app_store"
-        android:title="@string/modules_app_store" />
+        android:id="@+id/menu_other_app"
+        android:title="@string/modules_other_app" />
     <item
         android:id="@+id/menu_app_info"
         android:title="@string/module_app_info" />

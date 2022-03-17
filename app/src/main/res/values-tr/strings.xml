@@ -1,0 +1,226 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!--
+  ~ This file is part of LSPosed.
+  ~
+  ~ LSPosed is free software: you can redistribute it and/or modify
+  ~ it under the terms of the GNU General Public License as published by
+  ~ the Free Software Foundation, either version 3 of the License, or
+  ~ (at your option) any later version.
+  ~
+  ~ LSPosed is distributed in the hope that it will be useful,
+  ~ but WITHOUT ANY WARRANTY; without even the implied warranty of
+  ~ MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+  ~ GNU General Public License for more details.
+  ~
+  ~ You should have received a copy of the GNU General Public License
+  ~ along with LSPosed.  If not, see <https://www.gnu.org/licenses/>.
+  ~
+  ~ Copyright (C) 2021 LSPosed Contributors
+  -->
+<resources xmlns:tools="http://schemas.android.com/tools" tools:keep="@string/xposed_module_updated_notification_*,@string/module_is_not_activated_*">
+    <!-- MainActivity -->
+    <string name="info">Bilgi</string>
+    <string name="overview">Genel bakış</string>
+    <string name="Modules">Modüller</string>
+    <plurals name="modules_enabled_count">
+        <item quantity="one">%d modül etkin</item>
+        <item quantity="other">%d modül etkin</item>
+    </plurals>
+    <string name="Logs">Günlükler</string>
+    <string name="Settings">Ayarlar</string>
+    <string name="feedback_or_suggestion">Geri bildirim veya öneri</string>
+    <string name="About">Hakkında</string>
+    <string name="report_issue">Hata raporla</string>
+    <string name="module_repo">Modül deposu</string>
+    <string name="module_repo_loading">Yükleniyor…</string>
+    <string name="module_repo_up_to_date">Bütün modüller güncel</string>
+    <plurals name="module_repo_upgradable">
+        <item quantity="one">%d modül güncellenebilir</item>
+        <item quantity="other">%d modül güncellenebilir</item>
+    </plurals>
+    <string name="about_view_source_code"><![CDATA[%1$s adresindeki kaynak kodunu görüntüle<br/>%2$s kanalımıza katılın]]></string>
+    <string name="translators" comment="Dear translators, please add your home page here following the format. There can be more than one translator. So feel free to append yourself.">Bedircan AYAYDIN, Furkan KARCIOĞLU, Ahmet AÇIKGÖZ</string>
+    <string name="install">Yükle</string>
+    <string name="install_summary">LSPosed\'i yüklemek için dokunun</string>
+    <string name="not_installed">Yüklenmedi</string>
+    <string name="not_install_summary">LSPosed Kurulu değil</string>
+    <string name="activated">Aktif edildi</string>
+    <string name="partial_activated">Kısmen etkinleştirildi</string>
+    <string name="selinux_policy_not_loaded_summary">SEPolicy düzgün yüklenmemiş</string>
+    <string name="selinux_policy_not_loaded"><![CDATA[SEPolicy düzgün yüklenmemiş, System Framework\'u bağlayan modüller çalışmayacaktır.<br/>Lütfen bunu <a href="https://github.com/topjohnwu/Magisk/issues"><b>Magisk</b></a> geliştiricisine rapor edin.]]></string>
+    <string name="system_inject_fail_summary">Sistem Çerçevesi enjeksiyonu başarısız oldu</string>
+    <string name="system_inject_fail"><![CDATA[Bu nadiren yaşanır ve <b>Magisk</b> veya düşük kaliteli modüller yüzünden olabilir.<br/>Lütfen Riru ve LSPosed dışında bütün modülleri devre dışı bırakmayı deneyin veya geliştiricilere tam bir hata kaydı gönderin.]]></string>
+    <string name="system_prop_incorrect_summary">Sistem desteği yanlış</string>
+    <string name="system_prop_incorrect"><![CDATA[Bazı gerekli sistem özellikleri silindi veya değiştirildi.<br/>Modüller zaman zaman düzgün çalışmayabilir.]]></string>
+    <string name="need_update">Güncelleme gerekiyor</string>
+    <string name="please_update_summary">Lütfen LSPosed\'in en son sürümünü yükleyin</string>
+    <string name="lsposed_not_active">LSPosed şu anda yüklü veya etkin değil.</string>
+    <string name="info_api_version">API sürümü</string>
+    <string name="info_framework_version">Çerçeve sürümü</string>
+    <string name="info_manager_version">Yönetici sürümü</string>
+    <string name="info_system_version">Sistem sürümü</string>
+    <string name="info_device">Cihaz</string>
+    <string name="info_system_abi">Sistem ABI\'si</string>
+    <string name="info_api">Enjeksiyon Arayüzü</string>
+    <string name="parasitic_recommend">Parazit Yönetici Önerilir</string>
+    <string name="parasitic_recommend_summary">LSPosed şu an sisteme parazit olarak yerleşip denetlemeleri önlemeyi destekliyor. Parazit yönetici kısayolunu ana ekrana ekledikten sonra güvenle bu yöneticiyi kaldırabilirsiniz. Eğer eski yöneticiyi geri isterseniz /data/adb/lspd/manager.apk konumunda bulabilirsiniz.</string>
+    <string name="create_shortcut">Kısayol oluştur</string>
+    <string name="never_show">Asla gösterme</string>
+    <string name="update_lsposed">LSPosed\'ı güncelle</string>
+    <string name="update_lsposed_msg">LSPosed\'ı güncellemek istediğinize emin misiniz? Bu cihaz güncelleme tamamlandıktan sonra yeniden başlatılacak</string>
+    <!-- LogsActivity -->
+    <string name="menuSaveToSd">Kaydet</string>
+    <string name="nav_item_logs_verbose">Ayrıntılı Günlükler</string>
+    <string name="nav_item_logs_module">Modül Günlükleri</string>
+    <string name="logs_save_failed2">Kaydedilemedi:\n%s</string>
+    <string name="menuClearLog">Günlüğü şimdi temizle</string>
+    <string name="logs_cleared">Günlük başarıyla temizlendi.</string>
+    <string name="scroll_top">Yukarı kaydır</string>
+    <string name="loading">Yükleniyor…</string>
+    <string name="scroll_bottom">Aşağı kaydır</string>
+    <string name="logs_cannot_read">Günlük okunamıyor: \n</string>
+    <string name="menuReload">Tekrar yükle</string>
+    <string name="logs_clear_failed_2">Günlük temizlenemedi</string>
+    <string name="menu_enable_word_wrap">Yeni Satıra Geç</string>
+    <string name="enabled_verbose_log">Ayrıntılı Günlükler Aktif</string>
+    <string name="disabled_verbose_log">Ayrıntılı Günlükler Deaktif</string>
+    <!-- ModulesActivity -->
+    <string name="module_empty_description">(açıklama yapılmadı)</string>
+    <string name="warning_xposed_min_version">Bu modül daha yeni bir Xposed sürümü gerektiriyor (%d) ve bu nedenle etkinleştirilemez</string>
+    <string name="no_min_version_specified">Bu modül, ihtiyaç duyduğu Xposed sürümünü belirtmiyor.</string>
+    <string name="warning_min_version_too_low">Bu modül Xposed sürümü için oluşturuldu %1$d, ancak sürümdeki uyumsuz değişiklikler nedeniyle %2$d, devre dışı bırakıldı</string>
+    <string name="warning_installed_on_external_storage">Bu modül yüklenemiyor çünkü SD kartta yüklü, lütfen dahili depolama birimine taşıyın veya SD kart erişimine izin verin</string>
+    <string name="module_uninstall">Kaldır</string>
+    <string name="module_settings">Modül ayarları</string>
+    <string name="view_in_repo">Repo\'da görüntüle</string>
+    <string name="module_uninstall_message">Bu modülü kaldırmak istiyor musunuz?</string>
+    <string name="module_uninstalled">%1$s kaldırıldı</string>
+    <string name="module_uninstall_failed">Kaldırma başarısız</string>
+    <string name="add_module_to_user">Kullanıcıya modül ekle</string>
+    <string name="module_installed">Kullanıcıya %1$s eklendi %2$s</string>
+    <string name="module_install_failed">Modül eklenemedi</string>
+    <string name="install_to_user">Kullanıcıya yükle %s</string>
+    <string name="install_to_user_message">%2$s kullanıcısına %1$s yüklemek ister misiniz? Elle kurulum yapılması tavsiye edilir, LSPosed ile kurulumu zorlamak sorunlara neden olabilir.</string>
+    <string name="expand">genişlet</string>
+    <string name="collapse">daralt</string>
+    <!-- AppListActivity -->
+    <string name="compile_speed">Yeniden optimize et</string>
+    <string name="compile_speed_msg">Optimize ediliyor…</string>
+    <string name="compile_done">Optimizasyon tamamlandı</string>
+    <string name="app_launch">Başlat</string>
+    <string name="compile_failed">Optimizasyon başarısız oldu: dönüş değeri boş</string>
+    <string name="compile_failed_with_info">Optimizasyon başarısız oldu: </string>
+    <string name="sort_by_name">Uygulama Adı</string>
+    <string name="sort_by_package_name">Paket ismi</string>
+    <string name="sort_by_install_time">Yükleme zamanı</string>
+    <string name="sort_by_update_time">Güncelleme zamanı</string>
+    <string name="sort_reverse">Ters</string>
+    <string name="menu_show_system_apps">Sistem uygulamaları</string>
+    <string name="menu_sort">Sıralama</string>
+    <string name="enable_module">Modülü etkinleştirin</string>
+    <string name="no_scope_selected">Herhangi bir uygulama seçmediniz. Devam et?</string>
+    <string name="menu_show_games">Oyunlar</string>
+    <string name="menu_show_modules">Modüller</string>
+    <string name="menu_show_denylist">Reddetme Listesi</string>
+    <string name="failed_to_save_scope_list">Kapsam listesi kaydedilemedi</string>
+    <string name="app_description">%1$s\nSürüm %2$s</string>
+    <string name="use_recommended">Önerilen</string>
+    <string name="no_scope_selected_has_recommended">Herhangi bir uygulama seçmediniz. Önerilen uygulamalar seçilsin mi?</string>
+    <string name="use_recommended_message">Önerilen uygulamalar seçilsin mi?</string>
+    <string name="module_is_not_activated_yet">Xposed modülü henüz etkinleştirilmedi</string>
+    <string name="requested_by_module">Önerilen</string>
+    <string name="update_available">Güncelleme uygun: %1$s</string>
+    <string name="module_disabled_no_selection">Hiçbir uygulama seçilmediği için %s modülü devre dışı bırakıldı.</string>
+    <string name="android_framework">Sistem Çerçevesi</string>
+    <string name="menu_backup_and_restore">Yedekleme</string>
+    <string name="menu_backup">Yedekleme</string>
+    <string name="menu_restore">Geri yükle</string>
+    <string name="force_stop">Durmaya zorla</string>
+    <string name="force_stop_dlg_title">Zorla durdurulsun mu?</string>
+    <string name="force_stop_dlg_text">Bir uygulamayı durdurmaya zorlarsanız, hatalı davranabilir.</string>
+    <string name="reboot_required">Bu değişikliğin geçerli olması için yeniden başlatma gerekiyor</string>
+    <string name="reboot">Yeniden başlat</string>
+    <string name="menu_hide">Gizle</string>
+    <string name="deny_list">%s reddetme listesinde olduğundan hiçbir etkisi olmayacak.</string>
+    <string name="deny_list_info">Reddetme listesinde</string>
+    <!-- ModulesActivity and AppListActivity -->
+    <string name="modules_other_app">Diğer uygulamada görüntüle</string>
+    <string name="module_app_info">Uygulama bilgisi</string>
+    <string name="list_empty">¯\\\\_(ツ)_\/¯\nModül bulunamadı</string>
+    <!-- SettingsActivity -->
+    <string name="settings_group_framework">Çerçeve</string>
+    <string name="pref_title_disable_verbose_log">Ayrıntılı günlükleri devre dışı bırak</string>
+    <string name="pure_black_dark_theme">Siyah koyu tema</string>
+    <string name="pure_black_dark_theme_summary">Koyu tema etkinse saf siyah temayı kullanın</string>
+    <string name="settings_group_theme">Tema</string>
+    <string name="settings_backup_and_restore">Yedekle</string>
+    <string name="settings_backup_summery">Modül ve kapsam listelerini yedekle.</string>
+    <string name="settings_restore_summery">Modül ve kapsam listelerini geri yükle.</string>
+    <string name="settings_backup">Yedek</string>
+    <string name="settings_backup_failed2">Yedekleme başarısız oldu:\n%s</string>
+    <string name="enable_documentui">Lütfen DocumentUI\'yi etkinleştirin</string>
+    <string name="settings_restore">Geri yükle</string>
+    <string name="settings_restore_failed2">Geri yüklenemedi:\n%s</string>
+    <string name="group_network">Ağ</string>
+    <string name="dns_over_http">HTTPS üzerinden DNS</string>
+    <string name="dns_over_http_summary">Bazı ülkelerde DNS zehirlenmesi için geçici çözümdür</string>
+    <string name="theme_color">Tema rengi</string>
+    <string name="theme_color_system">Sistem tema rengi</string>
+    <string name="settings_show_hidden_icon_apps_enabled">Uygulamaları başlatıcı simgelerini göstermeye zorla</string>
+    <string name="settings_show_hidden_icon_apps_enabled_summary">Android 10\'dan sonra, uygulamaların başlatıcı simgelerini gizlenmesine izin verilmez. Bu sistem özelliğini devre dışı bırakmak için düğmeyi kapatın.</string>
+    <string name="settings_group_system">Sistem</string>
+    <string name="settings_language">Dil</string>
+    <string name="settings_translation_contributors">Çeviri katılımcıları</string>
+    <string name="settings_translation">Çeviriye katılın</string>
+    <string name="settings_translation_summary">%s yazılımını çevirmemize yardım edin</string>
+    <string name="pref_title_enable_auto_add_shortcut">Otomatik olarak bir kısayol ekle</string>
+    <string name="create_shortcut_summary">Parazit yönetici kısayolunu manuel olarak oluşturun</string>
+    <string name="settings_enable_auto_add_shortcut_summary">Parazit olmayan yöneticilerde devre dışı bırakılınca yeni kısayol eklenmez</string>
+    <string name="settings_update_channel">Güncelleme kanalı</string>
+    <string name="update_channel_stable">Stabil</string>
+    <string name="update_channel_bate">Beta</string>
+    <string name="update_channel_nightly">Gecelik</string>
+    <string name="pref_title_restrict_classloader">Yalnızca modül sınıf yükleyicisi Xposed API\'yi kullanabilir</string>
+    <string name="pref_summary_restrict_classloader">Bu, bazı modülleri bozabilir ancak güvenlikten faydalanabilir (deneysel özellik)</string>
+    <!-- Module Repo -->
+    <string name="module_readme">Beni oku</string>
+    <string name="module_releases">Sürümler</string>
+    <string name="module_information">Bilgi</string>
+    <string name="module_information_homepage">Ana Sayfa</string>
+    <string name="module_information_source_url">Kaynak kodu</string>
+    <string name="module_information_collaborators">Ortak çalışanlar</string>
+    <string name="module_release_view_assets">Dosyalar</string>
+    <string name="menu_open_in_browser">Tarayıcıda aç</string>
+    <string name="refresh">Yenile</string>
+    <string name="module_release_load_more">Eski sürümleri göster</string>
+    <string name="module_release_no_more">Daha fazla sürüm yok</string>
+    <string name="repo_load_failed">Modül deposu yüklenemedi: %s</string>
+    <string name="sort_upgradable_first">Önce yükseltilebilir</string>
+    <!-- CrashReportActivity -->
+    <string name="version_mismatch">LSPosed çerçevesinin sürümü (%1$d) yöneticininkiyle eşleşmiyor (%2$d). Lütfen LSPosed\'ı tekrar kurun.</string>
+    <string name="manager_crashed">Yönetici çöktü</string>
+    <string name="manager_crashed_info">bunu şuraya rapor et </string>
+    <string name="send_crash_info">Çökme bilgisi gönder</string>
+    <string name="crash_info_copied">Çökme bilgisi panoya kopyalandı</string>
+    <string name="info_copied">Panoya kopyalandı</string>
+    <!-- Colors -->
+    <string name="color_sakura">Kiraz çiçeği</string>
+    <string name="color_red">Kırmızı</string>
+    <string name="color_pink">Pembe</string>
+    <string name="color_purple">Mor</string>
+    <string name="color_deep_purple">Koyu mor</string>
+    <string name="color_indigo">Çivit</string>
+    <string name="color_blue">Mavi</string>
+    <string name="color_light_blue">Açık mavi</string>
+    <string name="color_cyan">Cam göbeği</string>
+    <string name="color_teal">Turkuaz</string>
+    <string name="color_green">Yeşil</string>
+    <string name="color_light_green">Açık yeşil</string>
+    <string name="color_lime">Limon</string>
+    <string name="color_yellow">Sarı</string>
+    <string name="color_amber">Kehribar</string>
+    <string name="color_orange">Turuncu</string>
+    <string name="color_deep_orange">Koyu turuncu</string>
+    <string name="color_brown">Kahverengi</string>
+    <string name="color_blue_grey">Mavi gri</string>
+</resources>

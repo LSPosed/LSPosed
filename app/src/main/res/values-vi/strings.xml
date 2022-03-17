@@ -1,0 +1,224 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!--
+  ~ This file is part of LSPosed.
+  ~
+  ~ LSPosed is free software: you can redistribute it and/or modify
+  ~ it under the terms of the GNU General Public License as published by
+  ~ the Free Software Foundation, either version 3 of the License, or
+  ~ (at your option) any later version.
+  ~
+  ~ LSPosed is distributed in the hope that it will be useful,
+  ~ but WITHOUT ANY WARRANTY; without even the implied warranty of
+  ~ MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+  ~ GNU General Public License for more details.
+  ~
+  ~ You should have received a copy of the GNU General Public License
+  ~ along with LSPosed.  If not, see <https://www.gnu.org/licenses/>.
+  ~
+  ~ Copyright (C) 2021 LSPosed Contributors
+  -->
+<resources xmlns:tools="http://schemas.android.com/tools" tools:keep="@string/xposed_module_updated_notification_*,@string/module_is_not_activated_*">
+    <!-- MainActivity -->
+    <string name="info">Thông tin</string>
+    <string name="overview">Tổng quát</string>
+    <string name="Modules">Mô-đun</string>
+    <plurals name="modules_enabled_count">
+        <item quantity="other">%d mô-đun đã được kích hoạt</item>
+    </plurals>
+    <string name="Logs">Nhật ký</string>
+    <string name="Settings">Cài đặt</string>
+    <string name="feedback_or_suggestion">Phản hồi hoặc góp ý</string>
+    <string name="About">Về chúng tôi</string>
+    <string name="report_issue">Báo cáo sự cố</string>
+    <string name="module_repo">Kho</string>
+    <string name="module_repo_loading">Đang tải…</string>
+    <string name="module_repo_up_to_date">Tất cả các mô-đun đã được cập nhật</string>
+    <plurals name="module_repo_upgradable">
+        <item quantity="other">%d mô-đun có bản cập nhật</item>
+    </plurals>
+    <string name="about_view_source_code"><![CDATA[Xem mã nguồn tại %1$s<br/>Tham gia kênh %2$s của chúng tôi]]></string>
+    <string name="translators" comment="Dear translators, please add your home page here following the format. There can be more than one translator. So feel free to append yourself.">The Primal Pea, Tuyen Nguyen (tuyennn)</string>
+    <string name="install">Cài đặt</string>
+    <string name="install_summary">Ấn vào đây để cài đặt LSPosed</string>
+    <string name="not_installed">Chưa được cài đặt</string>
+    <string name="not_install_summary">LSPosed chưa được cài đặt</string>
+    <string name="activated">Đã được kích hoạt</string>
+    <string name="partial_activated">Một phần đã được kích hoạt</string>
+    <string name="selinux_policy_not_loaded_summary">Chính sách SELinux không được nạp đúng cách</string>
+    <string name="selinux_policy_not_loaded"><![CDATA[Những mô-đun mà can thiệp vào Khung hệ thống sẽ không hoạt động.<br/>Hãy báo cáo lỗi này nhà phát triển của <a href="https://github.com/topjohnwu/Magisk/issues"><b>Magisk</b></a>.]]></string>
+    <string name="system_inject_fail_summary">Không thể nhúng vào khung hệ thống</string>
+    <string name="system_inject_fail"><![CDATA[Trường hợp này khá hiếm khi xảy ra và có thể lý do bởi <b>Magisk</b> hoặc 1 số mô-đun Magisk kém chất lượng.<br/>Hãy thử vô hiệu hóa những mô-đun Magisk đó, thử chạy riêng Riru và LSPosed mà thôi hoặc thông báo nhật ký tới những nhà phát triển.]]></string>
+    <string name="system_prop_incorrect_summary">Thông tin hệ thống không đúng</string>
+    <string name="system_prop_incorrect"><![CDATA[Một số thuộc tính hệ thống cần thiết đã bị xóa hoặc sửa đổi.<br/> Đôi khi, các mô-đun có thể sẽ mất hiệu lực.]]></string>
+    <string name="need_update">Cần được cập nhật</string>
+    <string name="please_update_summary">Vui lòng cài đặt phiên bản mới nhất của LSPosed</string>
+    <string name="lsposed_not_active">LSPosed hiện tại không được cài đặt hoặc chưa được kích hoạt.</string>
+    <string name="info_api_version">Phiên bản API</string>
+    <string name="info_framework_version">Phiên bản Framework</string>
+    <string name="info_manager_version">Phiên bản trình quản lý</string>
+    <string name="info_system_version">Phiên bản hệ thống</string>
+    <string name="info_device">Thiết bị</string>
+    <string name="info_system_abi">Hệ thống ABI</string>
+    <string name="info_api">Giao diện nhúng</string>
+    <string name="parasitic_recommend">Quản lý ký sinh khuyến nghị</string>
+    <string name="parasitic_recommend_summary">LSPosed giờ đã hỗ trợ hệ thống ký sinh để tránh bị phát hiện. Bạn có thể thoải mái gỡ bỏ trình quản lý nếu đã có lối tắt của trình quản lý ký sinh. Trong bất cứ điều gì ngoài mong muốn bạn vẫn có thể cài đặt lại nó ở đường dẫn /data/adb/lspd/manager.apk.</string>
+    <string name="create_shortcut">Tạo lối tắt</string>
+    <string name="never_show">Không hiện nữa</string>
+    <string name="update_lsposed">Cập nhật LSPosed</string>
+    <string name="update_lsposed_msg">Xác nhận để cập nhật LSPosed? Thiết bị sẽ khởi động lại sau khi cập nhật hoàn tất</string>
+    <!-- LogsActivity -->
+    <string name="menuSaveToSd">Lưu lại</string>
+    <string name="nav_item_logs_verbose">Nhật ký Chi tiết</string>
+    <string name="nav_item_logs_module">Nhật ký các Mô-đun</string>
+    <string name="logs_save_failed2">Lưu thất bại:\n%s</string>
+    <string name="menuClearLog">Xóa nhật ký</string>
+    <string name="logs_cleared">Nhật ký đã được xoá.</string>
+    <string name="scroll_top">Cuộn lên trên</string>
+    <string name="loading">Đang tải…</string>
+    <string name="scroll_bottom">Cuộn xuống dưới</string>
+    <string name="logs_cannot_read">Không thể đọc nhật ký: \n</string>
+    <string name="menuReload">Tải lại</string>
+    <string name="logs_clear_failed_2">Xoá nhật kí thất bại</string>
+    <string name="menu_enable_word_wrap">Tự động xuống dòng</string>
+    <string name="enabled_verbose_log">Nhật ký chi tiết đã được kích hoạt</string>
+    <string name="disabled_verbose_log">Nhật ký chi tiết đã được vô hiệu hoá</string>
+    <!-- ModulesActivity -->
+    <string name="module_empty_description">(chưa có mô tả)</string>
+    <string name="warning_xposed_min_version">Mô-đun này yêu cầu một phiên bản Xposed mới hơn (%d) và đó là lý do không thể được kích hoạt</string>
+    <string name="no_min_version_specified">Mô-đun này không chỉ định phiên bản Xposed cần thiết để khởi chạy.</string>
+    <string name="warning_min_version_too_low">Mô-đun này được tạo bởi phiên bản Xposed %1$d, nhưng vì lý do không tương thích với phiên bản %2$d, nên nó đã bị vô hiệu hóa</string>
+    <string name="warning_installed_on_external_storage">Mô-đun này không được nạp vì nó được cài đặt trên thẻ nhớ SD, vui lòng chuyển nó vào bộ nhớ trong</string>
+    <string name="module_uninstall">Gỡ cài đặt</string>
+    <string name="module_settings">Thiết lập Mô-đun</string>
+    <string name="view_in_repo">Xem ở trên Kho</string>
+    <string name="module_uninstall_message">Bạn có muốn gỡ cài đặt mô-đun này?</string>
+    <string name="module_uninstalled">Đã gỡ cài đặt %1$s</string>
+    <string name="module_uninstall_failed">Gỡ cài đặt không thành công</string>
+    <string name="add_module_to_user">Thêm mô-đun tới người dùng</string>
+    <string name="module_installed">Đã thêm %1$s tới người dùng %2$s</string>
+    <string name="module_install_failed">Thêm mô-đun thất bại</string>
+    <string name="install_to_user">Cài đặt tới người dùng %s</string>
+    <string name="install_to_user_message">Muốn cài %1$s tới người dùng %2$s? Khuyến cáo bạn nên cài đặt thủ công, buộc cài đặt qua LSPosed có thể xảy ra vấn đề không mong muốn.</string>
+    <string name="expand">mở</string>
+    <string name="collapse">đóng</string>
+    <!-- AppListActivity -->
+    <string name="compile_speed">Tối ưu lại</string>
+    <string name="compile_speed_msg">Đang tối ưu…</string>
+    <string name="compile_done">Tối ưu hoàn tất</string>
+    <string name="app_launch">Khởi chạy</string>
+    <string name="compile_failed">Tối ưu thất bại: trả về giá trị trống</string>
+    <string name="compile_failed_with_info">Tôi ưu thất bại: </string>
+    <string name="sort_by_name">Tên ứng dụng</string>
+    <string name="sort_by_package_name">Tên gói ứng dụng</string>
+    <string name="sort_by_install_time">Thời gian cài đặt</string>
+    <string name="sort_by_update_time">Thời gian cập nhật</string>
+    <string name="sort_reverse">Đảo ngược</string>
+    <string name="menu_show_system_apps">Ứng dụng hệ thống</string>
+    <string name="menu_sort">Sắp xếp</string>
+    <string name="enable_module">Kích hoạt mô-đun</string>
+    <string name="no_scope_selected">Bạn đã không lựa chọn bất kỳ ứng dụng nào. Tiếp tục chứ?</string>
+    <string name="menu_show_games">Trò chơi</string>
+    <string name="menu_show_modules">Mô-đun</string>
+    <string name="menu_show_denylist">Danh sách từ chối</string>
+    <string name="failed_to_save_scope_list">Lưu danh sách phạm vi thất bại</string>
+    <string name="app_description">%1$s\nPhiên bản %2$s</string>
+    <string name="use_recommended">Được khuyến cáo</string>
+    <string name="no_scope_selected_has_recommended">Bạn đã không lựa chọn bất kỳ ứng dụng nào. Lựa chọn những ứng dụng được khuyến nghị?</string>
+    <string name="use_recommended_message">Lựa chọn những ứng dụng được khuyến cáo?</string>
+    <string name="module_is_not_activated_yet">Mô-đun Xposed chưa được kích hoạt</string>
+    <string name="requested_by_module">Được khuyến cáo</string>
+    <string name="update_available">Cập nhật khả dụng: %1$s</string>
+    <string name="module_disabled_no_selection">Mô-đun %s đã bị vô hiệu hoá do không có ứng dụng nào được lựa chọn.</string>
+    <string name="android_framework">Framework Hệ thống</string>
+    <string name="menu_backup_and_restore">Sao lưu</string>
+    <string name="menu_backup">Sao lưu</string>
+    <string name="menu_restore">Phục hồi</string>
+    <string name="force_stop">Buộc dừng</string>
+    <string name="force_stop_dlg_title">Buộc dừng?</string>
+    <string name="force_stop_dlg_text">Nếu bạn buộc dừng một ứng dụng, nó có thể gặp lỗi.</string>
+    <string name="reboot_required">Khởi động lại là bắt buộc cho thay đổi này</string>
+    <string name="reboot">Khởi động lại</string>
+    <string name="menu_hide">Ẩn</string>
+    <string name="deny_list">%s đã trong danh sách từ chối. Nó có thể không có hiệu lực.</string>
+    <string name="deny_list_info">Trong danh sách từ chối</string>
+    <!-- ModulesActivity and AppListActivity -->
+    <string name="modules_other_app">Xem trong ứng dụng khác</string>
+    <string name="module_app_info">Thông tin ứng dụng</string>
+    <string name="list_empty">¯\\\\_(ツ)_\/¯\nKhông có gì ở đây cả</string>
+    <!-- SettingsActivity -->
+    <string name="settings_group_framework">Framework</string>
+    <string name="pref_title_disable_verbose_log">Vô hiệu hoá nhật ký chi tiết</string>
+    <string name="pure_black_dark_theme">Chủ đề Đen - Tối</string>
+    <string name="pure_black_dark_theme_summary">Sử dụng chủ đề đen nếu chủ đề tối được bật</string>
+    <string name="settings_group_theme">Chủ đề</string>
+    <string name="settings_backup_and_restore">Sao lưu và khôi phục</string>
+    <string name="settings_backup_summery">Sao lưu danh sách mô-đun và danh sách phạm vi.</string>
+    <string name="settings_restore_summery">Khôi phục danh sách mô-đun và danh sách phạm vi.</string>
+    <string name="settings_backup">Sao lưu</string>
+    <string name="settings_backup_failed2">Sao lưu thất bại:\n%s</string>
+    <string name="enable_documentui">Vui lòng kích hoạt DocumentUI</string>
+    <string name="settings_restore">Phục hồi</string>
+    <string name="settings_restore_failed2">Phục hồi thất bại:\n%s</string>
+    <string name="group_network">Mạng</string>
+    <string name="dns_over_http">DNS qua HTTPS</string>
+    <string name="dns_over_http_summary">Giải pháp khắc phục tình trạng giả mạo DNS ở một số quốc gia</string>
+    <string name="theme_color">Màu chủ đề</string>
+    <string name="theme_color_system">Màu chủ đề hệ thống</string>
+    <string name="settings_show_hidden_icon_apps_enabled">Buộc các ứng dụng hiển thị biểu tượng trên trình khởi chạy</string>
+    <string name="settings_show_hidden_icon_apps_enabled_summary">Sau Android 10, các ứng dụng không được phép ẩn biểu tượng trên trình khởi chạy. Tắt lựa chọn này để vô hiệu tính năng này của hệ thống.</string>
+    <string name="settings_group_system">Hệ thống</string>
+    <string name="settings_language">Ngôn ngữ</string>
+    <string name="settings_translation_contributors">Cộng tác viên phiên dịch</string>
+    <string name="settings_translation">Tham gia phiên dịch</string>
+    <string name="settings_translation_summary">Giúp chúng tôi dịch %s sang ngôn ngữ của bạn</string>
+    <string name="pref_title_enable_auto_add_shortcut">Tự động thêm một lối tắt</string>
+    <string name="create_shortcut_summary">Tạo lối tắt trình quản lý ký sinh theo cách thủ công</string>
+    <string name="settings_enable_auto_add_shortcut_summary">Sẽ không có lối tắt mới nào được thêm khi vô hiệu trong trình quản lý không cộng sinh</string>
+    <string name="settings_update_channel">Kênh cập nhật</string>
+    <string name="update_channel_stable">Ổn định</string>
+    <string name="update_channel_bate">Beta</string>
+    <string name="update_channel_nightly">Bản dựng hàng đêm</string>
+    <string name="pref_title_restrict_classloader">Chỉ trình tải lớp mô-đun mới có thể sử dụng Xposed API</string>
+    <string name="pref_summary_restrict_classloader">Điều này có thể phá vỡ một số mô-đun nhưng có lợi cho bảo mật (tính năng thử nghiệm)</string>
+    <!-- Module Repo -->
+    <string name="module_readme">Readme</string>
+    <string name="module_releases">Bản phát hành</string>
+    <string name="module_information">Thông tin</string>
+    <string name="module_information_homepage">Trang chủ</string>
+    <string name="module_information_source_url">Mã nguồn</string>
+    <string name="module_information_collaborators">Cộng tác viên</string>
+    <string name="module_release_view_assets">Tài sản</string>
+    <string name="menu_open_in_browser">Mở trong trình duyệt</string>
+    <string name="refresh">Làm mới</string>
+    <string name="module_release_load_more">Hiển thị các phiên bản cũ hơn</string>
+    <string name="module_release_no_more">Không có phiên bản nào</string>
+    <string name="repo_load_failed">Tải kho lưu trữ mô-đun thất bại: %s</string>
+    <string name="sort_upgradable_first">Có thể nâng cấp trước</string>
+    <!-- CrashReportActivity -->
+    <string name="version_mismatch">Phiên bản của LSPosed framework (%1$d) không trùng khớp với phiên bản quản lý (%2$d). Hãy cài đặt lại LSPosed.</string>
+    <string name="manager_crashed">Trình quản lí gặp sự cố</string>
+    <string name="manager_crashed_info">báo cáo đến </string>
+    <string name="send_crash_info">Gửi thông tin sự cố</string>
+    <string name="crash_info_copied">Đã sao chép thông tin sự cố vào bộ nhớ tạm</string>
+    <string name="info_copied">Đã sao chép vào bảng nhớ tạm</string>
+    <!-- Colors -->
+    <string name="color_sakura">Hoa anh đào</string>
+    <string name="color_red">Đỏ</string>
+    <string name="color_pink">Hồng</string>
+    <string name="color_purple">Tím</string>
+    <string name="color_deep_purple">Tím đậm</string>
+    <string name="color_indigo">Xanh đậm</string>
+    <string name="color_blue">Xanh</string>
+    <string name="color_light_blue">Xanh sáng</string>
+    <string name="color_cyan">Lục lam</string>
+    <string name="color_teal">Mòng két</string>
+    <string name="color_green">Xanh lá</string>
+    <string name="color_light_green">Xanh lá sáng</string>
+    <string name="color_lime">Xanh chanh</string>
+    <string name="color_yellow">Vàng</string>
+    <string name="color_amber">Hổ phách</string>
+    <string name="color_orange">Cam</string>
+    <string name="color_deep_orange">Cam sâu</string>
+    <string name="color_brown">Nâu</string>
+    <string name="color_blue_grey">Xanh xám</string>
+</resources>

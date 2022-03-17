@@ -18,5 +18,12 @@
   -->
 
 <resources>
-    <color name="color_primary">@color/color_primary_dark</color>
+    <color name="home_secondary_outline_ambient_shadow_color">@color/material_grey_700</color>
+    <color name="home_secondary_outline_spot_shadow_color">@color/material_grey_600</color>
+
+    <color name="primary_text_material_inverse">@color/abc_primary_text_material_light</color>
+    <color name="secondary_text_material_inverse">@color/abc_secondary_text_material_light</color>
+
+    <color name="primary_text_material">@color/abc_primary_text_material_dark</color>
+    <color name="secondary_text_material">@color/abc_secondary_text_material_dark</color>
 </resources>

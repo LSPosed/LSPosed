@@ -1,5 +1,4 @@
-<?xml version="1.0" encoding="utf-8"?>
-<!--
+<?xml version="1.0" encoding="utf-8"?><!--
   ~ This file is part of LSPosed.
   ~
   ~ LSPosed is free software: you can redistribute it and/or modify
@@ -32,4 +31,61 @@
         <item>MODE_NIGHT_YES</item>
         <item>MODE_NIGHT_FOLLOW_SYSTEM</item>
     </string-array>
+
+    <string-array name="color_values" translatable="false">
+        <item>SAKURA</item>
+        <item>MATERIAL_RED</item>
+        <item>MATERIAL_PINK</item>
+        <item>MATERIAL_PURPLE</item>
+        <item>MATERIAL_DEEP_PURPLE</item>
+        <item>MATERIAL_INDIGO</item>
+        <item>MATERIAL_BLUE</item>
+        <item>MATERIAL_LIGHT_BLUE</item>
+        <item>MATERIAL_CYAN</item>
+        <item>MATERIAL_TEAL</item>
+        <item>MATERIAL_GREEN</item>
+        <item>MATERIAL_LIGHT_GREEN</item>
+        <item>MATERIAL_LIME</item>
+        <item>MATERIAL_YELLOW</item>
+        <item>MATERIAL_AMBER</item>
+        <item>MATERIAL_ORANGE</item>
+        <item>MATERIAL_DEEP_ORANGE</item>
+        <item>MATERIAL_BROWN</item>
+        <item>MATERIAL_BLUE_GREY</item>
+    </string-array>
+
+    <string-array name="color_texts" translatable="false">
+        <item>@string/color_sakura</item>
+        <item>@string/color_red</item>
+        <item>@string/color_pink</item>
+        <item>@string/color_purple</item>
+        <item>@string/color_deep_purple</item>
+        <item>@string/color_indigo</item>
+        <item>@string/color_blue</item>
+        <item>@string/color_light_blue</item>
+        <item>@string/color_cyan</item>
+        <item>@string/color_teal</item>
+        <item>@string/color_green</item>
+        <item>@string/color_light_green</item>
+        <item>@string/color_lime</item>
+        <item>@string/color_yellow</item>
+        <item>@string/color_amber</item>
+        <item>@string/color_orange</item>
+        <item>@string/color_deep_orange</item>
+        <item>@string/color_brown</item>
+        <item>@string/color_blue_grey</item>
+    </string-array>
+
+    <string-array name="update_channel_texts" translatable="false">
+        <item>@string/update_channel_stable</item>
+        <item>@string/update_channel_bate</item>
+        <item>@string/update_channel_nightly</item>
+    </string-array>
+
+    <string-array name="update_channel_values" translatable="false">
+        <item>CHANNEL_STABLE</item>
+        <item>CHANNEL_BETA</item>
+        <item>CHANNEL_NIGHTLY</item>
+    </string-array>
+
 </resources>

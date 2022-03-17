@@ -23,7 +23,7 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
-    android:background="@drawable/item_background"
+    android:background="?selectableItemBackground"
     android:clickable="true"
     android:focusable="true"
     android:minHeight="?attr/listPreferredItemHeight"
@@ -33,33 +33,50 @@
 
     <androidx.constraintlayout.widget.ConstraintLayout
         android:id="@+id/item_root"
-        android:layout_gravity="center"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
+        android:layout_gravity="center"
         tools:ignore="RtlSymmetry">
 
-        <TextView
+        <com.google.android.material.textview.MaterialTextView
             android:id="@+id/app_name"
             android:layout_width="0dp"
             android:layout_height="wrap_content"
+            android:ellipsize="marquee"
+            android:maxLines="1"
+            android:scrollbars="none"
             android:textAppearance="?android:attr/textAppearanceListItem"
             android:textSize="16sp"
-            app:layout_constraintBottom_toTopOf="@id/description"
-            app:layout_constraintTop_toTopOf="parent"
-            app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintBottom_toTopOf="@id/description"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="parent"
             tools:text="@tools:sample/lorem" />
 
-        <TextView
+        <org.lsposed.manager.ui.widget.ExpandableTextView
             android:id="@+id/description"
             android:layout_width="0dp"
             android:layout_height="wrap_content"
             android:layout_gravity="center_vertical"
+            android:maxLines="6"
             android:textAppearance="?android:attr/textAppearanceSmall"
-            app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="@+id/app_name"
             app:layout_constraintTop_toBottomOf="@id/app_name"
+            tools:text="@tools:sample/lorem" />
+
+        <com.google.android.material.textview.MaterialTextView
+            android:id="@+id/hint"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_gravity="center_vertical"
+            android:textAppearance="?android:attr/textAppearanceListItemSecondary"
+            android:textColor="?android:attr/textColorPrimary"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintHorizontal_bias="0.0"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@id/description"
             tools:text="@tools:sample/lorem" />
 
     </androidx.constraintlayout.widget.ConstraintLayout>

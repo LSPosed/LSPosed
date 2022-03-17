@@ -1,0 +1,227 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!--
+  ~ This file is part of LSPosed.
+  ~
+  ~ LSPosed is free software: you can redistribute it and/or modify
+  ~ it under the terms of the GNU General Public License as published by
+  ~ the Free Software Foundation, either version 3 of the License, or
+  ~ (at your option) any later version.
+  ~
+  ~ LSPosed is distributed in the hope that it will be useful,
+  ~ but WITHOUT ANY WARRANTY; without even the implied warranty of
+  ~ MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+  ~ GNU General Public License for more details.
+  ~
+  ~ You should have received a copy of the GNU General Public License
+  ~ along with LSPosed.  If not, see <https://www.gnu.org/licenses/>.
+  ~
+  ~ Copyright (C) 2021 LSPosed Contributors
+  -->
+<resources xmlns:tools="http://schemas.android.com/tools" tools:keep="@string/xposed_module_updated_notification_*,@string/module_is_not_activated_*">
+    <!-- MainActivity -->
+    <string name="info">Információ</string>
+    <string name="overview">Áttekintés</string>
+    <string name="Modules">Modulok</string>
+    <plurals name="modules_enabled_count">
+        <item quantity="one">%d modul aktiválva</item>
+        <item quantity="other">%d modulok aktiválva</item>
+    </plurals>
+    <string name="Logs">Log fileok</string>
+    <string name="Settings">Beállítások</string>
+    <string name="feedback_or_suggestion">Visszajelzés vagy javaslat</string>
+    <string name="About">Névjegy</string>
+    <string name="report_issue">Hiba bejelentés</string>
+    <string name="module_repo">Modulok</string>
+    <string name="module_repo_loading">Loading…</string>
+    <string name="module_repo_up_to_date">Todos los modulos actualizados</string>
+    <plurals name="module_repo_upgradable">
+        <item quantity="one">%d module upgradable</item>
+        <item quantity="other">%d bővíthető modulok</item>
+    </plurals>
+    <string name="about_view_source_code"><![CDATA[A forráskódot megnézheted itt: %1$s<br/> Iratkozz fel a %2$s csatornánkra]]></string>
+    <string name="translators" comment="Dear translators, please add your home page here following the format. There can be more than one translator. So feel free to append yourself.">null</string>
+    <string name="install">Telepítés</string>
+    <string name="install_summary">Koppints az LSPosed telepítéséhez</string>
+    <string name="not_installed">Nincs telepítve</string>
+    <string name="not_install_summary">LSPosed nincs telepítve</string>
+    <string name="activated">Aktiválva</string>
+    <string name="partial_activated">Részben aktiválva</string>
+    <string name="selinux_policy_not_loaded_summary">SEPolicy betöltése nem megfelelő</string>
+    <string name="selinux_policy_not_loaded"><![CDATA[A System Framework-t érintő modulok lehetséges, hogy nem fognak működni. <br/>Kérlek jelentsd az esetet a <a href="https://github.com/topjohnwu/Magisk/issues"><b>Magisk</b></a> fejlesztőjének.]]></string>
+    <string name="system_inject_fail_summary">A System Framework injektálás sikertelen</string>
+    <string name="system_inject_fail"><![CDATA[Ez sajnos gyakori probléma, amit lehet, hogy a
+<b>Magisk</b> vagy néhány Magisk modul okozott.<br/> Kérlek próbálj meg dekativálni néhány Magisk modult, vagy akár a Riru-t vagy az LSPosed-et vagy küldj el egy teljes napló filet a fejlesztőknek.]]></string>
+    <string name="system_prop_incorrect_summary">Hibás rendszer prop file</string>
+    <string name="system_prop_incorrect"><![CDATA[Néhány szükséges rendszertulajdonság törlése vagy módosítása.<br/>A modulok időnként érvénytelenné válhatnak.]]></string>
+    <string name="need_update">Frissítésre van szükség</string>
+    <string name="please_update_summary">Kérjük, telepítse az LSPosed legújabb verzióját</string>
+    <string name="lsposed_not_active">Az LSPosed jelenleg nincs telepítve vagy aktív.</string>
+    <string name="info_api_version">API verzió</string>
+    <string name="info_framework_version">Keretrendszer verzió</string>
+    <string name="info_manager_version">Manager verzió</string>
+    <string name="info_system_version">Rendszer verzió</string>
+    <string name="info_device">Eszköz</string>
+    <string name="info_system_abi">Rendszer ABI</string>
+    <string name="info_api">Befecskendező interfész</string>
+    <string name="parasitic_recommend">Parazita menedzser Ajánlott</string>
+    <string name="parasitic_recommend_summary">Az LSPosed mostantól támogatja a rendszer parazitizálását a felderítés elkerülése érdekében. A parazita menedzser sikeres parancsikonjának létrehozása után biztonságosan eltávolíthatja a menedzsert. A menedzsert minden esetben visszatelepítheti a /data/adb/lspd/manager.apk fájlból.</string>
+    <string name="create_shortcut">Létrehozás parancsikon</string>
+    <string name="never_show">Soha ne mutasd</string>
+    <string name="update_lsposed">LSPosed frissítése</string>
+    <string name="update_lsposed_msg">Megerősítés az LSPosed frissítéséhez? Ez a készülék a frissítés befejezése után újraindul</string>
+    <!-- LogsActivity -->
+    <string name="menuSaveToSd">Mentés</string>
+    <string name="nav_item_logs_verbose">Szöveges naplók</string>
+    <string name="nav_item_logs_module">Modulok Naplók</string>
+    <string name="logs_save_failed2">Nem sikerült menteni:\n%s</string>
+    <string name="menuClearLog">Törölje a naplót most</string>
+    <string name="logs_cleared">A napló sikeresen törlődött.</string>
+    <string name="scroll_top">Görgessen a tetejére</string>
+    <string name="loading">Betöltés…</string>
+    <string name="scroll_bottom">Görgessen az aljára</string>
+    <string name="logs_cannot_read">Nem lehet naplót olvasni: \n</string>
+    <string name="menuReload">Újratöltés</string>
+    <string name="logs_clear_failed_2">Nem sikerült törölni a naplót</string>
+    <string name="menu_enable_word_wrap">Word Wrap</string>
+    <string name="enabled_verbose_log">Szöveges napló engedélyezve</string>
+    <string name="disabled_verbose_log">Verbózus napló letiltva</string>
+    <!-- ModulesActivity -->
+    <string name="module_empty_description">(nincs leírás megadva)</string>
+    <string name="warning_xposed_min_version">Ez a modul egy újabb Xposed verziót igényel (%d), ezért nem aktiválható.</string>
+    <string name="no_min_version_specified">Ez a modul nem adja meg a szükséges Xposed verziót.</string>
+    <string name="warning_min_version_too_low">Ez a modul az Xposed %1$dverziójához készült, de a %2$dverzióban bekövetkezett inkompatibilis változások miatt letiltásra került.</string>
+    <string name="warning_installed_on_external_storage">Ez a modul nem tölthető be, mert az SD-kártyára van telepítve, kérjük, helyezze át a belső tárhelyre.</string>
+    <string name="module_uninstall">A  eltávolítása</string>
+    <string name="module_settings">Modul beállítások</string>
+    <string name="view_in_repo">Megtekintés Repo</string>
+    <string name="module_uninstall_message">Szeretné eltávolítani ezt a modult?</string>
+    <string name="module_uninstalled">Eltávolított %1$s</string>
+    <string name="module_uninstall_failed">Eltávolítás sikertelen</string>
+    <string name="add_module_to_user">Modul hozzáadása a felhasználóhoz</string>
+    <string name="module_installed">Hozzáadva %1$s a felhasználóhoz %2$s</string>
+    <string name="module_install_failed">A modul hozzáadása sikertelen</string>
+    <string name="install_to_user">Telepítés a felhasználóhoz %s</string>
+    <string name="install_to_user_message">Szeretné telepíteni a %1$s -t a %2$sfelhasználóhoz ? Javasoljuk a manuális telepítést, az LSPosed-en keresztül történő kényszerített telepítés problémákat okozhat.</string>
+    <string name="expand">bővítsd a  oldalt.</string>
+    <string name="collapse">összeomlás</string>
+    <!-- AppListActivity -->
+    <string name="compile_speed">A  újraoptimalizálása</string>
+    <string name="compile_speed_msg">Optimalizálás…</string>
+    <string name="compile_done">Optimalizálás befejezve</string>
+    <string name="app_launch">Indítsd el</string>
+    <string name="compile_failed">Optimalizálás sikertelen: a visszatérési érték üres</string>
+    <string name="compile_failed_with_info">Az optimalizálás nem sikerült: </string>
+    <string name="sort_by_name">Alkalmazás neve</string>
+    <string name="sort_by_package_name">Csomag neve</string>
+    <string name="sort_by_install_time">Telepítési idő</string>
+    <string name="sort_by_update_time">Frissítési idő</string>
+    <string name="sort_reverse">Fordított</string>
+    <string name="menu_show_system_apps">Rendszeralkalmazások</string>
+    <string name="menu_sort">Rendezés</string>
+    <string name="enable_module">Modul engedélyezése</string>
+    <string name="no_scope_selected">Nem választott ki egyetlen alkalmazást sem. Folytassa?</string>
+    <string name="menu_show_games">Játékok</string>
+    <string name="menu_show_modules">Modulok</string>
+    <string name="menu_show_denylist">Denylist</string>
+    <string name="failed_to_save_scope_list">Nem sikerült elmenteni a hatókör listát</string>
+    <string name="app_description">%1$s\nVerzió %2$s</string>
+    <string name="use_recommended">Ajánlott</string>
+    <string name="no_scope_selected_has_recommended">Nem választott ki egyetlen alkalmazást sem. Válassza ki az ajánlott alkalmazásokat?</string>
+    <string name="use_recommended_message">Válassza ki az ajánlott alkalmazásokat?</string>
+    <string name="module_is_not_activated_yet">Az Xposed modul még nincs aktiválva</string>
+    <string name="requested_by_module">Ajánlott</string>
+    <string name="update_available">Frissítés elérhető: %1$s</string>
+    <string name="module_disabled_no_selection">A %s modul le lett tiltva, mivel nincs kiválasztott alkalmazás.</string>
+    <string name="android_framework">Rendszer keretrendszer</string>
+    <string name="menu_backup_and_restore">Biztonsági mentés</string>
+    <string name="menu_backup">Biztonsági mentés</string>
+    <string name="menu_restore">Visszaállítás</string>
+    <string name="force_stop">Erőszakos megállás</string>
+    <string name="force_stop_dlg_title">Erőszakos megállás?</string>
+    <string name="force_stop_dlg_text">Ha egy alkalmazást erőltetett leállítással állít le, az rosszul viselkedhet.</string>
+    <string name="reboot_required">A módosítás érvényesítéséhez újraindítás szükséges</string>
+    <string name="reboot">Újraindítás</string>
+    <string name="menu_hide">Rejtsd el</string>
+    <string name="deny_list">%s a denyliston van. Lehet, hogy nem lép hatályba.</string>
+    <string name="deny_list_info">A denylistán</string>
+    <!-- ModulesActivity and AppListActivity -->
+    <string name="modules_other_app">Megtekintés más alkalmazásban</string>
+    <string name="module_app_info">App info</string>
+    <string name="list_empty">¯\\\\_(ツ)_\/¯\nItt nincs semmi.</string>
+    <!-- SettingsActivity -->
+    <string name="settings_group_framework">Keretrendszer</string>
+    <string name="pref_title_disable_verbose_log">A szóbeli naplózás kikapcsolása</string>
+    <string name="pure_black_dark_theme">Fekete sötét téma</string>
+    <string name="pure_black_dark_theme_summary">A tiszta fekete téma használata, ha a sötét téma engedélyezve van</string>
+    <string name="settings_group_theme">Téma</string>
+    <string name="settings_backup_and_restore">Biztonsági mentés és visszaállítás</string>
+    <string name="settings_backup_summery">Modullista és hatókör listák biztonsági mentése.</string>
+    <string name="settings_restore_summery">Modullista és hatókörlisták visszaállítása.</string>
+    <string name="settings_backup">Biztonsági mentés</string>
+    <string name="settings_backup_failed2">A biztonsági mentés sikertelen:\n%s</string>
+    <string name="enable_documentui">Kérjük, engedélyezze a DocumentUI-t</string>
+    <string name="settings_restore">Visszaállítás</string>
+    <string name="settings_restore_failed2">Nem sikerült helyreállítani:\n%s</string>
+    <string name="group_network">Hálózat</string>
+    <string name="dns_over_http">DNS HTTPS-en keresztül</string>
+    <string name="dns_over_http_summary">A DNS-mérgezés megkerülése egyes nemzeteknél</string>
+    <string name="theme_color">Téma színe</string>
+    <string name="theme_color_system">Rendszer téma színe</string>
+    <string name="settings_show_hidden_icon_apps_enabled">Alkalmazások kényszerítése az indító ikonok megjelenítésére</string>
+    <string name="settings_show_hidden_icon_apps_enabled_summary">Az Android 10 után az alkalmazások nem rejthetik el az indítóikonjaikat. Kapcsolja ki a kapcsolót ennek a rendszerfunkciónak a letiltásához.</string>
+    <string name="settings_group_system">Rendszer</string>
+    <string name="settings_language">Nyelv</string>
+    <string name="settings_translation_contributors">A fordításban közreműködők</string>
+    <string name="settings_translation">Részvétel a fordításban</string>
+    <string name="settings_translation_summary">Segítsen nekünk lefordítani a %s az Ön nyelvére</string>
+    <string name="pref_title_enable_auto_add_shortcut">Automatikusan hozzáad egy parancsikon</string>
+    <string name="create_shortcut_summary">Kézzel hozzon létre parazita menedzser parancsikon</string>
+    <string name="settings_enable_auto_add_shortcut_summary">Nem lesznek új parancsikonok hozzáadva, ha a nem parazita menedzserben le van tiltva.</string>
+    <string name="settings_update_channel">Frissítési csatorna</string>
+    <string name="update_channel_stable">Stabil</string>
+    <string name="update_channel_bate">Béta</string>
+    <string name="update_channel_nightly">Éjszakai építés</string>
+    <string name="pref_title_restrict_classloader">Csak a modul classloader használhatja az Xposed API-t</string>
+    <string name="pref_summary_restrict_classloader">Ez megtörhet néhány modult, de a biztonság javára válik (kísérleti funkció).</string>
+    <!-- Module Repo -->
+    <string name="module_readme">Readme</string>
+    <string name="module_releases">Kiadványok</string>
+    <string name="module_information">Információ</string>
+    <string name="module_information_homepage">Honlap</string>
+    <string name="module_information_source_url">Forráskód</string>
+    <string name="module_information_collaborators">Együttműködők</string>
+    <string name="module_release_view_assets">Eszközök</string>
+    <string name="menu_open_in_browser">Megnyitás a böngészőben</string>
+    <string name="refresh">Frissítés</string>
+    <string name="module_release_load_more">Régebbi verziók megjelenítése</string>
+    <string name="module_release_no_more">Nincs több felszabadítás</string>
+    <string name="repo_load_failed">Nem sikerült betölteni a modul repo-t: %s</string>
+    <string name="sort_upgradable_first">Először fejleszthető</string>
+    <!-- CrashReportActivity -->
+    <string name="version_mismatch">Az LSPosed keretrendszer verziója (%1$d) nem egyezik a manager (%2$d) verziójával. Kérjük, telepítse újra az LSPosed-et.</string>
+    <string name="manager_crashed">A menedzser lezuhant</string>
+    <string name="manager_crashed_info">jelentse ezt a </string>
+    <string name="send_crash_info">Küldj baleseti információt</string>
+    <string name="crash_info_copied">Az ütközésről szóló információ a vágólapra másolva</string>
+    <string name="info_copied">Vágólapra másolva</string>
+    <!-- Colors -->
+    <string name="color_sakura">Sakura</string>
+    <string name="color_red">Red</string>
+    <string name="color_pink">Rózsaszín</string>
+    <string name="color_purple">Lila</string>
+    <string name="color_deep_purple">Mély lila</string>
+    <string name="color_indigo">Indigo</string>
+    <string name="color_blue">Kék</string>
+    <string name="color_light_blue">Világoskék</string>
+    <string name="color_cyan">Cyan</string>
+    <string name="color_teal">Teal</string>
+    <string name="color_green">Zöld</string>
+    <string name="color_light_green">Világoszöld</string>
+    <string name="color_lime">Mész</string>
+    <string name="color_yellow">Sárga</string>
+    <string name="color_amber">Amber</string>
+    <string name="color_orange">Narancs</string>
+    <string name="color_deep_orange">Mély narancssárga</string>
+    <string name="color_brown">Barna</string>
+    <string name="color_blue_grey">Kék szürke</string>
+</resources>
