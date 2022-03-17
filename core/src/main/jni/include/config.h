@@ -15,7 +15,7 @@
  * along with LSPosed.  If not, see <https://www.gnu.org/licenses/>.
  *
  * Copyright (C) 2020 EdXposed Contributors
- * Copyright (C) 2021 LSPosed Contributors
+ * Copyright (C) 2021 - 2022 LSPosed Contributors
  */
 
 #pragma once
@@ -60,7 +60,6 @@ namespace lspd {
 #endif
 
     inline static constexpr auto kEntryClassName = "org.lsposed.lspd.core.Main"_tstr;
-    inline static constexpr auto kBridgeServiceClassName = "org.lsposed.lspd.service.BridgeService"_tstr;
 
     inline static constexpr auto kLibArtName = "libart.so"_tstr;
     inline static constexpr auto kLibFwName = "libandroidfw.so"_tstr;
@@ -70,7 +69,5 @@ namespace lspd {
     }
 
     extern const int versionCode;
-    extern const int apiVersion;
     extern const char* const versionName;
-    extern const char* const moduleName;
 }

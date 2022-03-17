@@ -15,7 +15,7 @@
  * along with LSPosed.  If not, see <https://www.gnu.org/licenses/>.
  *
  * Copyright (C) 2020 EdXposed Contributors
- * Copyright (C) 2021 LSPosed Contributors
+ * Copyright (C) 2021 - 2022 LSPosed Contributors
  */
 
 package de.robv.android.xposed;
@@ -31,7 +31,7 @@ import android.util.Log;
 
 import com.android.internal.util.XmlUtils;
 
-import org.lsposed.lspd.BuildConfig;
+import org.lsposed.lspd.core.BuildConfig;
 import org.lsposed.lspd.util.MetaDataReader;
 import org.xmlpull.v1.XmlPullParserException;
 

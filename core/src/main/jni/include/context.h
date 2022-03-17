@@ -49,22 +49,12 @@ namespace lspd {
             return FindClassFromLoader(env, GetCurrentClassLoader(), className);
         };
 
-        void OnNativeForkAndSpecializePre(JNIEnv *env, jint uid, jintArray &gids, jstring nice_name,
-                                          jboolean is_child_zygote, jstring app_data_dir);
+        virtual ~Context() = default;
 
-        void OnNativeForkAndSpecializePost(JNIEnv *env, jstring nice_name, jstring app_data_dir);
-
-        void OnNativeForkSystemServerPost(JNIEnv *env);
-
-        void OnNativeForkSystemServerPre(JNIEnv *env);
-
-        void Init();
-
-    private:
-        inline static std::unique_ptr<Context> instance_ = std::make_unique<Context>();
+    protected:
+        inline static std::unique_ptr<Context> instance_;
         jobject inject_class_loader_ = nullptr;
         jclass entry_class_ = nullptr;
-        bool skip_ = false;
 
         struct PreloadedDex {
 
@@ -90,7 +80,7 @@ namespace lspd {
             };
 
             // Use with caution!
-            PreloadedDex(void* addr, size_t size) : addr_(addr), size_(size) {};
+            PreloadedDex(void *addr, size_t size) : addr_(addr), size_(size) {};
 
             operator bool() const { return addr_ && size_; }
 
@@ -107,19 +97,29 @@ namespace lspd {
 
         Context() {}
 
-        void LoadDex(JNIEnv *env, int fd, size_t size);
+        virtual void LoadDex(JNIEnv *env, PreloadedDex &&dex) = 0;
 
-        void Init(JNIEnv *env, const lsplant::InitInfo& initInfo);
+        virtual void InitHooks(JNIEnv *env, const lsplant::InitInfo &initInfo);
 
         static lsplant::ScopedLocalRef<jclass> FindClassFromLoader(JNIEnv *env, jobject class_loader,
-                                                          std::string_view class_name);
-
-        static void setAllowUnload(bool unload);
+                                                                   std::string_view class_name);
 
         template<typename ...Args>
-        void FindAndCall(JNIEnv *env, std::string_view method_name, std::string_view method_sig,
-                         Args &&... args) const;
+        inline void FindAndCall(JNIEnv *env, std::string_view method_name, std::string_view method_sig,
+                                Args &&... args) const {
+            if (!entry_class_) [[unlikely]] {
+                LOGE("cannot call method %s, entry class is null", method_name.data());
+                return;
+            }
+            jmethodID mid = lsplant::JNI_GetStaticMethodID(env, entry_class_, method_name, method_sig);
+            if (mid) [[likely]] {
+                JNI_CallStaticVoidMethod(env, entry_class_, mid, std::forward<Args>(args)...);
+            } else {
+                LOGE("method %s id is null", method_name.data());
+            }
+        }
 
+    private:
         friend std::unique_ptr<Context> std::make_unique<Context>();
     };
 
