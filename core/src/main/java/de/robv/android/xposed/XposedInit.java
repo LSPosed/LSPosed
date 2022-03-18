@@ -227,7 +227,9 @@ public final class XposedInit {
             var name = module.packageName;
             var file = module.file;
             loadedModules.add(apk); // temporarily add it for XSharedPreference
-            loadModule(name, apk, file);
+            if (!loadModule(name, apk, file)) {
+                loadedModules.remove(apk);
+            }
         });
     }
 
