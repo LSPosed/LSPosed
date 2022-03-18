@@ -37,7 +37,6 @@ import android.content.res.XResources;
 import android.os.Build;
 import android.os.IBinder;
 import android.os.Process;
-import android.util.ArraySet;
 import android.util.Log;
 
 import org.lsposed.lspd.models.PreLoadedApk;
@@ -52,6 +51,7 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Set;
 import java.util.concurrent.ConcurrentHashMap;
+import java.util.concurrent.CopyOnWriteArraySet;
 import java.util.concurrent.atomic.AtomicBoolean;
 
 import de.robv.android.xposed.callbacks.XC_InitPackageResources;
@@ -214,21 +214,20 @@ public final class XposedInit {
         return newRes;
     }
 
-    private static final ArraySet<String> loadedModules = new ArraySet<>();
+    private static final Set<String> loadedModules = new CopyOnWriteArraySet<>();
 
-    synchronized public static ArraySet<String> getLoadedModules() {
+    public static Set<String> getLoadedModules() {
         return loadedModules;
     }
 
-    synchronized public static void loadModules() {
+    public static void loadModules() {
         var moduleList = serviceClient.getModulesList();
         moduleList.forEach(module -> {
             var apk = module.apkPath;
             var name = module.packageName;
             var file = module.file;
-            if (loadModule(name, apk, file)) {
-                loadedModules.add(apk); // temporarily add it for XSharedPreference
-            }
+            loadedModules.add(apk); // temporarily add it for XSharedPreference
+            loadModule(name, apk, file);
         });
     }
 
