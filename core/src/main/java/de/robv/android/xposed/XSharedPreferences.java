@@ -20,7 +20,7 @@
 
 package de.robv.android.xposed;
 
-import static org.lsposed.lspd.config.LSPApplicationServiceClient.serviceClient;
+import static org.lsposed.lspd.core.ApplicationServiceClient.serviceClient;
 
 import android.annotation.SuppressLint;
 import android.content.Context;

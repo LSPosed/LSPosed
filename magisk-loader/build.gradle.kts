@@ -148,7 +148,7 @@ fun afterEval() = android.applicationVariants.forEach { variant ->
         into(magiskDir)
         from("${rootProject.projectDir}/README.md")
         from("$projectDir/magisk_module") {
-            exclude("riru.sh", "module.prop", "customize.sh", "sepolicy.rule", "post-fs-data.sh")
+            exclude("riru.sh", "module.prop", "customize.sh", "sepolicy.rule", "daemon")
         }
         from("$projectDir/magisk_module") {
             include("module.prop")
@@ -163,13 +163,16 @@ fun afterEval() = android.applicationVariants.forEach { variant ->
                     "zygisk" -> "Requires Magisk 24.0+ and Zygisk enabled"
                     else -> "No further requirements"
                 },
-                "api" to flavorCapped
+                "api" to flavorCapped,
             )
             filter<FixCrLfFilter>("eol" to FixCrLfFilter.CrLf.newInstance("lf"))
         }
         from("$projectDir/magisk_module") {
-            include("customize.sh", "post-fs-data.sh")
-            val tokens = mapOf("FLAVOR" to flavorLowered)
+            include("customize.sh", "daemon")
+            val tokens = mapOf(
+                "FLAVOR" to flavorLowered,
+                "DEBUG" to if (buildTypeLowered == "debug") "true" else "false"
+            )
             filter<ReplaceTokens>("tokens" to tokens)
             filter<FixCrLfFilter>("eol" to FixCrLfFilter.CrLf.newInstance("lf"))
         }
@@ -181,7 +184,6 @@ fun afterEval() = android.applicationVariants.forEach { variant ->
                     "RIRU_MODULE_API_VERSION" to moduleMaxRiruApiVersion.toString(),
                     "RIRU_MODULE_MIN_API_VERSION" to moduleMinRiruApiVersion.toString(),
                     "RIRU_MODULE_MIN_RIRU_VERSION_NAME" to moduleMinRiruVersionName,
-                    "RIRU_MODULE_DEBUG" to if (buildTypeLowered == "debug") "true" else "false",
                 )
                 filter<ReplaceTokens>("tokens" to tokens)
                 filter<FixCrLfFilter>("eol" to FixCrLfFilter.CrLf.newInstance("lf"))

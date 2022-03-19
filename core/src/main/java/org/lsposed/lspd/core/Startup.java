@@ -24,7 +24,6 @@ import android.app.ActivityThread;
 import android.app.LoadedApk;
 import android.content.pm.ApplicationInfo;
 import android.content.res.CompatibilityInfo;
-import android.os.Process;
 
 import com.android.internal.os.ZygoteInit;
 
@@ -33,6 +32,7 @@ import org.lsposed.lspd.hooker.CrashDumpHooker;
 import org.lsposed.lspd.hooker.HandleBindAppHooker;
 import org.lsposed.lspd.hooker.HandleSystemServerProcessHooker;
 import org.lsposed.lspd.hooker.LoadedApkCstrHooker;
+import org.lsposed.lspd.service.ILSPApplicationService;
 import org.lsposed.lspd.util.Utils;
 
 import de.robv.android.xposed.XposedBridge;
@@ -58,19 +58,19 @@ public class Startup {
                 new LoadedApkCstrHooker());
     }
 
-    public static void bootstrapXposed(String niceName) {
+    public static void bootstrapXposed() {
         // Initialize the Xposed framework
         try {
             startBootstrapHook(XposedInit.startsSystemServer);
-            Utils.logI("Loading modules for " + niceName + "/" + Process.myUid());
             XposedInit.loadModules();
         } catch (Throwable t) {
             Utils.logE("error during Xposed initialization", t);
         }
     }
 
-    public static void initXposed(boolean isSystem) {
+    public static void initXposed(boolean isSystem, String processName, ILSPApplicationService service) {
         // init logger
+        ApplicationServiceClient.Init(service, processName);
         XposedBridge.initXResources();
         XposedInit.startsSystemServer = isSystem;
         PrebuiltMethodsDeopter.deoptBootMethods(); // do it once for secondary zygote

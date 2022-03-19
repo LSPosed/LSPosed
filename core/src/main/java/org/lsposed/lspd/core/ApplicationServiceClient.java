@@ -17,12 +17,14 @@
  * Copyright (C) 2021 LSPosed Contributors
  */
 
-package org.lsposed.lspd.config;
+package org.lsposed.lspd.core;
 
 import android.os.Bundle;
 import android.os.IBinder;
 import android.os.ParcelFileDescriptor;
 import android.os.RemoteException;
+
+import androidx.annotation.NonNull;
 
 import org.lsposed.lspd.models.Module;
 import org.lsposed.lspd.service.ILSPApplicationService;
@@ -31,32 +33,27 @@ import org.lsposed.lspd.util.Utils;
 import java.util.Collections;
 import java.util.List;
 
-public class LSPApplicationServiceClient extends ApplicationServiceClient {
-    static ILSPApplicationService service = null;
-    static IBinder serviceBinder = null;
+public class ApplicationServiceClient implements ILSPApplicationService, IBinder.DeathRecipient {
+    public static ApplicationServiceClient serviceClient = null;
 
-    static String processName = null;
+    final ILSPApplicationService service;
 
-    private static final IBinder.DeathRecipient recipient = new IBinder.DeathRecipient() {
-        @Override
-        public void binderDied() {
-            serviceBinder.unlinkToDeath(this, 0);
-            serviceBinder = null;
-            service = null;
-        }
-    };
+    final String processName;
 
-    public static void Init(IBinder binder, String niceName) {
-        if (serviceClient == null && binder != null && serviceBinder == null && service == null) {
-            serviceBinder = binder;
-            processName = niceName;
+    private ApplicationServiceClient(@NonNull ILSPApplicationService service, @NonNull String processName) throws RemoteException {
+        this.service = service;
+        this.processName = processName;
+        this.service.asBinder().linkToDeath(this, 0);
+    }
+
+    synchronized static void Init(ILSPApplicationService service, String niceName) {
+        var binder = service.asBinder();
+        if (serviceClient == null && binder != null) {
             try {
-                serviceBinder.linkToDeath(recipient, 0);
+                serviceClient = new ApplicationServiceClient(service, niceName);
             } catch (RemoteException e) {
                 Utils.logE("link to death error: ", e);
             }
-            service = ILSPApplicationService.Stub.asInterface(binder);
-            serviceClient = new LSPApplicationServiceClient();
         }
     }
 
@@ -70,16 +67,12 @@ public class LSPApplicationServiceClient extends ApplicationServiceClient {
     }
 
     @Override
-    public List<Module> getModulesList(String processName) {
+    public List<Module> getModulesList() {
         try {
-            return service.getModulesList(processName);
+            return service.getModulesList();
         } catch (RemoteException | NullPointerException ignored) {
         }
         return Collections.emptyList();
-    }
-
-    public List<Module> getModulesList() {
-        return getModulesList(processName);
     }
 
     @Override
@@ -107,6 +100,12 @@ public class LSPApplicationServiceClient extends ApplicationServiceClient {
 
     @Override
     public IBinder asBinder() {
-        return serviceBinder;
+        return service.asBinder();
+    }
+
+    @Override
+    public void binderDied() {
+        service.asBinder().unlinkToDeath(this, 0);
+        serviceClient = null;
     }
 }
