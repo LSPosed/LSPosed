@@ -20,7 +20,7 @@
 
 package de.robv.android.xposed;
 
-import static org.lsposed.lspd.config.LSPApplicationServiceClient.serviceClient;
+import static org.lsposed.lspd.core.ApplicationServiceClient.serviceClient;
 import static org.lsposed.lspd.deopt.PrebuiltMethodsDeopter.deoptResourceMethods;
 import static de.robv.android.xposed.XposedBridge.hookAllMethods;
 import static de.robv.android.xposed.XposedHelpers.callMethod;
