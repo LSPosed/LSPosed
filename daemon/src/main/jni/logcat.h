@@ -51,13 +51,13 @@ struct log_msg {
 struct logger;
 struct logger_list;
 
-[[gnu::weak]] long android_logger_get_log_size(struct logger* logger);
-[[gnu::weak]] int android_logger_set_log_size(struct logger *logger, unsigned long size);
-[[gnu::weak]] struct logger_list *android_logger_list_alloc(int mode, unsigned int tail, pid_t pid);
-[[gnu::weak]] void android_logger_list_free(struct logger_list *logger_list);
-[[gnu::weak]] int android_logger_list_read(struct logger_list *logger_list, struct log_msg *log_msg);
-[[gnu::weak]] struct logger *android_logger_open(struct logger_list *logger_list, log_id_t id);
-[[gnu::weak]] int android_log_processLogBuffer(struct logger_entry *buf, AndroidLogEntry *entry);
+long android_logger_get_log_size(struct logger* logger);
+int android_logger_set_log_size(struct logger *logger, unsigned long size);
+struct logger_list *android_logger_list_alloc(int mode, unsigned int tail, pid_t pid);
+void android_logger_list_free(struct logger_list *logger_list);
+int android_logger_list_read(struct logger_list *logger_list, struct log_msg *log_msg);
+struct logger *android_logger_open(struct logger_list *logger_list, log_id_t id);
+int android_log_processLogBuffer(struct logger_entry *buf, AndroidLogEntry *entry);
 #ifdef __cplusplus
 }
 #endif
