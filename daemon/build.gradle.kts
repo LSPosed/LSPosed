@@ -55,6 +55,13 @@ android {
     }
 
     buildTypes {
+        all {
+            externalNativeBuild {
+                cmake {
+                    arguments += "-DANDROID_ALLOW_UNDEFINED_SYMBOLS=true"
+                }
+            }
+        }
         release {
             isMinifyEnabled = true
             proguardFiles("proguard-rules.pro")

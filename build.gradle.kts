@@ -55,7 +55,7 @@ val androidTargetSdkVersion by extra(32)
 val androidMinSdkVersion by extra(27)
 val androidBuildToolsVersion by extra("32.0.0")
 val androidCompileSdkVersion by extra(32)
-val androidCompileNdkVersion by extra("23.1.7779620")
+val androidCompileNdkVersion by extra("24.0.8215888")
 val androidSourceCompatibility by extra(JavaVersion.VERSION_11)
 val androidTargetCompatibility by extra(JavaVersion.VERSION_11)
 
