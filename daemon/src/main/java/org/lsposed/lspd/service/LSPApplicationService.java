@@ -29,20 +29,54 @@ import android.os.RemoteException;
 import android.util.Log;
 import android.util.Pair;
 
+import androidx.annotation.NonNull;
+
 import org.lsposed.lspd.models.Module;
 
 import java.util.Collections;
 import java.util.List;
 import java.util.Map;
-import java.util.Set;
 import java.util.concurrent.ConcurrentHashMap;
 
 public class LSPApplicationService extends ILSPApplicationService.Stub {
     final static int DEX_TRANSACTION_CODE = 1310096052;
-    // <uid, pid>
-    private final static Set<Pair<Integer, Integer>> cache = ConcurrentHashMap.newKeySet();
-    private final static Map<Integer, IBinder> handles = new ConcurrentHashMap<>();
-    private final static Set<IBinder.DeathRecipient> recipients = ConcurrentHashMap.newKeySet();
+    // key: <uid, pid>
+    private final static Map<Pair<Integer, Integer>, ProcessInfo> processes = new ConcurrentHashMap<>();
+
+    static class ProcessInfo implements DeathRecipient {
+        int uid;
+        int pid;
+        String processName;
+        IBinder heartBeat;
+
+        ProcessInfo(int uid, int pid, String processName, IBinder heartBeat) throws RemoteException {
+            this.uid = uid;
+            this.pid = pid;
+            this.processName = processName;
+            this.heartBeat = heartBeat;
+            heartBeat.linkToDeath(this, 0);
+            Log.d(TAG, "register " + this);
+            processes.put(new Pair<>(uid, pid), this);
+        }
+
+        @Override
+        public void binderDied() {
+            Log.d(TAG, this + " is dead");
+            heartBeat.unlinkToDeath(this, 0);
+            processes.remove(new Pair<>(uid, pid), this);
+        }
+
+        @NonNull
+        @Override
+        public String toString() {
+            return "ProcessInfo{" +
+                    "uid=" + uid +
+                    ", pid=" + pid +
+                    ", processName='" + processName + '\'' +
+                    ", heartBeat=" + heartBeat +
+                    '}';
+        }
+    }
 
     @Override
     public boolean onTransact(int code, Parcel data, Parcel reply, int flags) throws RemoteException {
@@ -57,40 +91,24 @@ public class LSPApplicationService extends ILSPApplicationService.Stub {
         return super.onTransact(code, data, reply, flags);
     }
 
-    public boolean registerHeartBeat(int uid, int pid, IBinder handle) {
+    public boolean registerHeartBeat(int uid, int pid, String processName, IBinder heartBeat) {
         try {
-            var recipient = new DeathRecipient() {
-                @Override
-                public void binderDied() {
-                    Log.d(TAG, "pid=" + pid + " uid=" + uid + " is dead.");
-                    cache.remove(new Pair<>(uid, pid));
-                    handles.remove(pid, handle);
-                    handle.unlinkToDeath(this, 0);
-                    recipients.remove(this);
-                }
-            };
-            recipients.add(recipient);
-            handle.linkToDeath(recipient, 0);
-            handles.put(pid, handle);
-            cache.add(new Pair<>(uid, pid));
+            new ProcessInfo(uid, pid, processName, heartBeat);
             return true;
         } catch (RemoteException e) {
-            Log.e(TAG, Log.getStackTraceString(e));
             return false;
         }
     }
 
     @Override
-    public List<Module> getModulesList(String processName) throws RemoteException {
-        ensureRegistered();
-        int pid = getCallingPid();
-        int uid = getCallingUid();
-        if (uid == 1000 && processName.equals("android")) {
+    public List<Module> getModulesList() throws RemoteException {
+        var processInfo = ensureRegistered();
+        if (processInfo.uid == 1000 && processInfo.processName.equals("android")) {
             return ConfigManager.getInstance().getModulesForSystemServer();
         }
-        if (ServiceManager.getManagerService().isRunningManager(pid, uid))
+        if (ServiceManager.getManagerService().isRunningManager(processInfo.pid, processInfo.uid))
             return Collections.emptyList();
-        return ConfigManager.getInstance().getModulesForProcess(processName, uid);
+        return ConfigManager.getInstance().getModulesForProcess(processInfo.processName, processInfo.uid);
     }
 
     @Override
@@ -107,35 +125,38 @@ public class LSPApplicationService extends ILSPApplicationService.Stub {
 
     @Override
     public IBinder requestModuleBinder(String name) throws RemoteException {
-        ensureRegistered();
-        if (ConfigManager.getInstance().isModule(getCallingUid(), name)) {
-            ConfigManager.getInstance().ensureModulePrefsPermission(getCallingUid(), name);
+        var processInfo = ensureRegistered();
+        if (ConfigManager.getInstance().isModule(processInfo.uid, name)) {
+            ConfigManager.getInstance().ensureModulePrefsPermission(processInfo.pid, name);
             return ServiceManager.getModuleService(name);
         } else return null;
     }
 
     @Override
     public ParcelFileDescriptor requestInjectedManagerBinder(List<IBinder> binder) throws RemoteException {
-        ensureRegistered();
-        var pid = getCallingPid();
-        var uid = getCallingUid();
-        if (ServiceManager.getManagerService().postStartManager(pid, uid) ||
-                ConfigManager.getInstance().isManager(uid)) {
-            var heartbeat = handles.get(pid);
-            if (heartbeat != null) {
-                binder.add(ServiceManager.getManagerService().obtainManagerBinder(heartbeat, pid, uid));
-            }
-
+        var processInfo = ensureRegistered();
+        if (ServiceManager.getManagerService().postStartManager(processInfo.pid, processInfo.uid) ||
+                ConfigManager.getInstance().isManager(processInfo.uid)) {
+            binder.add(ServiceManager.getManagerService().obtainManagerBinder(processInfo.heartBeat, processInfo.pid, processInfo.uid));
         }
         return ConfigManager.getInstance().getManagerApk();
     }
 
     public boolean hasRegister(int uid, int pid) {
-        return cache.contains(new Pair<>(uid, pid));
+        return processes.containsKey(new Pair<>(uid, pid));
     }
 
-    private void ensureRegistered() throws RemoteException {
-        if (!hasRegister(getCallingUid(), getCallingPid()))
+    @NonNull
+    private ProcessInfo ensureRegistered() throws RemoteException {
+        var uid = getCallingUid();
+        var pid = getCallingPid();
+        var key = new Pair<>(uid, pid);
+        ProcessInfo processInfo = processes.getOrDefault(key, null);
+        if (processInfo == null || uid != processInfo.uid || pid != processInfo.pid) {
+            processes.remove(key, processInfo);
+            Log.w(TAG, "non-authorized: info=" + processInfo + " uid=" + uid + " pid=" + pid);
             throw new RemoteException("Not registered");
+        }
+        return processInfo;
     }
 }

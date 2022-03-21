@@ -14,24 +14,21 @@
  * You should have received a copy of the GNU General Public License
  * along with LSPosed.  If not, see <https://www.gnu.org/licenses/>.
  *
- * Copyright (C) 2020 EdXposed Contributors
- * Copyright (C) 2021 LSPosed Contributors
+ * Copyright (C) 2022 LSPosed Contributors
  */
 
-package org.lsposed.lspd.nativebridge;
+//
+// Created by Nullptr on 2022/3/16.
+//
 
-import android.content.res.Resources;
-import android.content.res.XResources;
+#pragma once
 
-import java.lang.reflect.Constructor;
+#include "config.h"
 
-public class ResourcesHook {
+namespace lspd {
+    inline static constexpr auto kEntryClassName = "org.lsposed.lspd.core.Main"_tstr;
+    inline static constexpr auto kBridgeServiceClassName = "org.lsposed.lspd.service.BridgeService"_tstr;
 
-    public static native boolean initXResourcesNative();
-
-    public static native boolean makeInheritable(Class<?> clazz);
-
-    public static native ClassLoader buildDummyClassLoader(ClassLoader parent, String resourceSuperClass, String typedArraySuperClass);
-
-    public static native void rewriteXmlReferencesNative(long parserPtr, XResources origRes, Resources repRes);
+    extern const int apiVersion;
+    extern const char* const moduleName;
 }

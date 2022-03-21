@@ -31,6 +31,7 @@ include(
     ":daemon",
     ":hiddenapi:stubs",
     ":hiddenapi:bridge",
+    ":magisk-loader",
     ":services:manager-service",
     ":services:daemon-service",
     ":services:xposed-service:interface",
