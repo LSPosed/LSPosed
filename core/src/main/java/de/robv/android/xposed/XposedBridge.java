@@ -372,6 +372,11 @@ public final class XposedBridge {
             return elements;
         }
 
+        public <T> T[] getSnapshot(T[] a) {
+            var snapshot = getSnapshot();
+            return (T[]) Arrays.copyOf(snapshot, snapshot.length, a.getClass());
+        }
+
         public synchronized void clear() {
             elements = EMPTY_ARRAY;
         }
