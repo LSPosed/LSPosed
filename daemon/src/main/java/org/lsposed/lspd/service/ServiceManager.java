@@ -166,8 +166,8 @@ public class ServiceManager {
         return applicationService;
     }
 
-    public static LSPApplicationService requestApplicationService(int uid, int pid, String processName, IBinder heartBeat) {
-        if (applicationService.registerHeartBeat(uid, pid, processName, heartBeat))
+    public static LSPApplicationService requestApplicationService(int uid, int pid, IBinder heartBeat) {
+        if (applicationService.registerHeartBeat(uid, pid, heartBeat))
             return applicationService;
         else return null;
     }

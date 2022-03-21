@@ -1,6 +1,6 @@
 package org.lsposed.lspd.util;
 
-import static org.lsposed.lspd.core.ApplicationServiceClient.serviceClient;
+import static org.lsposed.lspd.config.ApplicationServiceClient.serviceClient;
 
 import android.app.ActivityThread;
 import android.app.LoadedApk;
@@ -24,8 +24,8 @@ import android.webkit.WebViewDelegate;
 import android.webkit.WebViewFactory;
 import android.webkit.WebViewFactoryProvider;
 
-import org.lsposed.lspd.ILSPManagerService;
 import org.lsposed.lspd.BuildConfig;
+import org.lsposed.lspd.ILSPManagerService;
 
 import java.io.FileInputStream;
 import java.io.FileOutputStream;

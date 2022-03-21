@@ -24,8 +24,8 @@
 
 #include "zygisk.h"
 #include "logging.h"
-#include "loader.h"
-#include "magisk_loader.h"
+#include "context.h"
+#include "config.h"
 #include "symbol_cache.h"
 
 namespace lspd {
@@ -281,7 +281,7 @@ namespace lspd {
         void onLoad(zygisk::Api *api, JNIEnv *env) override {
             env_ = env;
             api_ = api;
-            MagiskLoader::Init();
+            Context::GetInstance()->Init();
 
             auto companion = api->connectCompanion();
             if (companion == -1) {
@@ -308,18 +308,19 @@ namespace lspd {
         }
 
         void preAppSpecialize(zygisk::AppSpecializeArgs *args) override {
-            MagiskLoader::GetInstance()->OnNativeForkAndSpecializePre(
+            Context::GetInstance()->OnNativeForkAndSpecializePre(
                     env_, args->uid, args->gids, args->nice_name,
                     args->is_child_zygote ? *args->is_child_zygote : false, args->app_data_dir);
         }
 
         void postAppSpecialize(const zygisk::AppSpecializeArgs *args) override {
-            MagiskLoader::GetInstance()->OnNativeForkAndSpecializePost(env_, args->nice_name);
+            Context::GetInstance()->OnNativeForkAndSpecializePost(env_, args->nice_name,
+                                                                  args->app_data_dir);
             if (*allowUnload) api_->setOption(zygisk::DLCLOSE_MODULE_LIBRARY);
         }
 
         void preServerSpecialize([[maybe_unused]] zygisk::ServerSpecializeArgs *args) override {
-            MagiskLoader::GetInstance()->OnNativeForkSystemServerPre(env_);
+            Context::GetInstance()->OnNativeForkSystemServerPre(env_);
         }
 
         void postServerSpecialize([[maybe_unused]] const zygisk::ServerSpecializeArgs *args) override {
@@ -332,7 +333,7 @@ namespace lspd {
                 env_->DeleteLocalRef(name);
                 env_->DeleteLocalRef(process);
             }
-            MagiskLoader::GetInstance()->OnNativeForkSystemServerPost(env_);
+            Context::GetInstance()->OnNativeForkSystemServerPost(env_);
             if (*allowUnload) api_->setOption(zygisk::DLCLOSE_MODULE_LIBRARY);
         }
     };

@@ -63,7 +63,7 @@ public class LSPosedService extends ILSPosedService.Stub {
             return null;
         }
         Log.d(TAG, "returned service");
-        return ServiceManager.requestApplicationService(uid, pid, processName, heartBeat);
+        return ServiceManager.requestApplicationService(uid, pid, heartBeat);
     }
 
     /**

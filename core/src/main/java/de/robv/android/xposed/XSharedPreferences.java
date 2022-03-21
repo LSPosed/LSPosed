@@ -15,12 +15,12 @@
  * along with LSPosed.  If not, see <https://www.gnu.org/licenses/>.
  *
  * Copyright (C) 2020 EdXposed Contributors
- * Copyright (C) 2021 - 2022 LSPosed Contributors
+ * Copyright (C) 2021 LSPosed Contributors
  */
 
 package de.robv.android.xposed;
 
-import static org.lsposed.lspd.core.ApplicationServiceClient.serviceClient;
+import static org.lsposed.lspd.config.LSPApplicationServiceClient.serviceClient;
 
 import android.annotation.SuppressLint;
 import android.content.Context;
@@ -31,7 +31,7 @@ import android.util.Log;
 
 import com.android.internal.util.XmlUtils;
 
-import org.lsposed.lspd.core.BuildConfig;
+import org.lsposed.lspd.BuildConfig;
 import org.lsposed.lspd.util.MetaDataReader;
 import org.xmlpull.v1.XmlPullParserException;
 

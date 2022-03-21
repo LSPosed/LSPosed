@@ -98,7 +98,8 @@ namespace lspd {
     }
 
     // @ApiSensitive(Level.MIDDLE)
-    LSP_DEF_NATIVE_METHOD(jboolean, ResourcesHook, makeInheritable, jclass target_class) {
+    LSP_DEF_NATIVE_METHOD(jboolean, ResourcesHook, makeInheritable, jclass target_class,
+                          jobjectArray constructors) {
         if (lsplant::MakeClassInheritable(env, target_class)) {
             return JNI_TRUE;
         }
@@ -202,7 +203,8 @@ namespace lspd {
 
     static JNINativeMethod gMethods[] = {
             LSP_NATIVE_METHOD(ResourcesHook, initXResourcesNative, "()Z"),
-            LSP_NATIVE_METHOD(ResourcesHook, makeInheritable,"(Ljava/lang/Class;)Z"),
+            LSP_NATIVE_METHOD(ResourcesHook, makeInheritable,
+                              "(Ljava/lang/Class;[Ljava/lang/reflect/Constructor;)Z"),
             LSP_NATIVE_METHOD(ResourcesHook, buildDummyClassLoader,
                               "(Ljava/lang/ClassLoader;Ljava/lang/String;Ljava/lang/String;)Ljava/lang/ClassLoader;"),
             LSP_NATIVE_METHOD(ResourcesHook, rewriteXmlReferencesNative,

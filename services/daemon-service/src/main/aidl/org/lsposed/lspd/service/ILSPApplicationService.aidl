@@ -5,7 +5,7 @@ import org.lsposed.lspd.models.Module;
 interface ILSPApplicationService {
     IBinder requestModuleBinder(String name);
 
-    List<Module> getModulesList();
+    List<Module> getModulesList(String processName);
 
     String getPrefsPath(String packageName);
 

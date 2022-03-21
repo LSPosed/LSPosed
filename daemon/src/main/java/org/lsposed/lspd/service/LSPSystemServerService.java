@@ -83,7 +83,7 @@ public class LSPSystemServerService extends ILSPSystemServerService.Stub impleme
         if (ConfigManager.getInstance().shouldSkipSystemServer() || uid != 1000 || heartBeat == null || !"android".equals(processName))
             return null;
         else
-            return ServiceManager.requestApplicationService(uid, pid, processName, heartBeat);
+            return ServiceManager.requestApplicationService(uid, pid, heartBeat);
     }
 
     @Override

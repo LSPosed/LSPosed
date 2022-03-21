@@ -1,6 +1,6 @@
 package de.robv.android.xposed;
 
-import static org.lsposed.lspd.core.ApplicationServiceClient.serviceClient;
+import static org.lsposed.lspd.config.LSPApplicationServiceClient.serviceClient;
 import android.content.SharedPreferences;
 import android.os.Bundle;
 import android.os.RemoteException;
