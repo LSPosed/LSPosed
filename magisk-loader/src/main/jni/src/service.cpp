@@ -23,7 +23,7 @@
 
 #include <dobby.h>
 #include <thread>
-#include "config.h"
+#include "loader.h"
 #include "service.h"
 #include "context.h"
 #include "utils/jni_helper.hpp"

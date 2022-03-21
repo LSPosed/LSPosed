@@ -23,8 +23,8 @@
 #include <cstdlib>
 #include <array>
 #include "logging.h"
-#include "config.h"
-#include "context.h"
+#include "loader.h"
+#include "magisk_loader.h"
 #include "symbol_cache.h"
 
 #define RIRU_MODULE
@@ -36,13 +36,12 @@ namespace lspd {
         std::string magiskPath;
 
         jstring nice_name = nullptr;
-        jstring app_data_dir = nullptr;
 
         void onModuleLoaded() {
             LOGI("onModuleLoaded: welcome to LSPosed!");
             LOGI("onModuleLoaded: version v%s (%d)", versionName, versionCode);
             InitSymbolCache(nullptr);
-            Context::GetInstance()->Init();
+            MagiskLoader::Init();
         }
 
         void nativeForkAndSpecializePre(JNIEnv *env, jclass, jint *_uid, jint *,
@@ -57,28 +56,27 @@ namespace lspd {
                                         jboolean *,
                                         jboolean *) {
             nice_name = *_nice_name;
-            app_data_dir = *_app_data_dir;
-            Context::GetInstance()->OnNativeForkAndSpecializePre(env, *_uid, *gids,
+            MagiskLoader::GetInstance()->OnNativeForkAndSpecializePre(env, *_uid, *gids,
                                                                  nice_name,
                                                                  *start_child_zygote,
-                                                                 app_data_dir);
+                                                                 *_app_data_dir);
         }
 
         void nativeForkAndSpecializePost(JNIEnv *env, jclass, jint res) {
             if (res == 0)
-                Context::GetInstance()->OnNativeForkAndSpecializePost(env, nice_name, app_data_dir);
+                MagiskLoader::GetInstance()->OnNativeForkAndSpecializePost(env, nice_name);
         }
 
         void nativeForkSystemServerPre(JNIEnv *env, jclass, uid_t *, gid_t *,
                                        jintArray *, jint *,
                                        jobjectArray *, jlong *,
                                        jlong *) {
-            Context::GetInstance()->OnNativeForkSystemServerPre(env);
+            MagiskLoader::GetInstance()->OnNativeForkSystemServerPre(env);
         }
 
         void nativeForkSystemServerPost(JNIEnv *env, jclass, jint res) {
             if (res == 0)
-                Context::GetInstance()->OnNativeForkSystemServerPost(env);
+                MagiskLoader::GetInstance()->OnNativeForkSystemServerPost(env);
         }
 
         /* method added in Android Q */
@@ -93,15 +91,14 @@ namespace lspd {
                                      jboolean *,
                                      jboolean *) {
             nice_name = *_nice_name;
-            app_data_dir = *_app_data_dir;
-            Context::GetInstance()->OnNativeForkAndSpecializePre(env, *_uid, *gids,
+            MagiskLoader::GetInstance()->OnNativeForkAndSpecializePre(env, *_uid, *gids,
                                                                  nice_name,
                                                                  *start_child_zygote,
-                                                                 app_data_dir);
+                                                                 *_app_data_dir);
         }
 
         void specializeAppProcessPost(JNIEnv *env, jclass) {
-            Context::GetInstance()->OnNativeForkAndSpecializePost(env, nice_name, app_data_dir);
+            MagiskLoader::GetInstance()->OnNativeForkAndSpecializePost(env, nice_name);
         }
     }
 

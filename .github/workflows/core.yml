@@ -55,7 +55,7 @@ jobs:
       with:
         path: |
           ~/.ccache
-          core/build/.lto-cache
+          magisk-loader/build/.lto-cache
           daemon/build/.lto-cache
         key: native-cache-${{ github.sha }}
         restore-keys: native-cache-
@@ -83,14 +83,14 @@ jobs:
       if: success()
       id: prepareArtifact
       run: |
-        riruReleaseName=`ls core/release/LSPosed-v*-riru-release.zip | awk -F '(/|.zip)' '{print $3}'` && echo "::set-output name=riruReleaseName::$riruReleaseName"
-        riruDebugName=`ls core/release/LSPosed-v*-riru-debug.zip | awk -F '(/|.zip)' '{print $3}'` && echo "::set-output name=riruDebugName::$riruDebugName"
-        zygiskReleaseName=`ls core/release/LSPosed-v*-zygisk-release.zip | awk -F '(/|.zip)' '{print $3}'` && echo "::set-output name=zygiskReleaseName::$zygiskReleaseName"
-        zygiskDebugName=`ls core/release/LSPosed-v*-zygisk-debug.zip | awk -F '(/|.zip)' '{print $3}'` && echo "::set-output name=zygiskDebugName::$zygiskDebugName"
-        unzip core/release/LSPosed-v*-riru-release.zip -d LSPosed-riru-release
-        unzip core/release/LSPosed-v*-riru-debug.zip -d LSPosed-riru-debug
-        unzip core/release/LSPosed-v*-zygisk-release.zip -d LSPosed-zygisk-release
-        unzip core/release/LSPosed-v*-zygisk-debug.zip -d LSPosed-zygisk-debug
+        riruReleaseName=`ls magisk-loader/release/LSPosed-v*-riru-release.zip | awk -F '(/|.zip)' '{print $3}'` && echo "::set-output name=riruReleaseName::$riruReleaseName"
+        riruDebugName=`ls magisk-loader/release/LSPosed-v*-riru-debug.zip | awk -F '(/|.zip)' '{print $3}'` && echo "::set-output name=riruDebugName::$riruDebugName"
+        zygiskReleaseName=`ls magisk-loader/release/LSPosed-v*-zygisk-release.zip | awk -F '(/|.zip)' '{print $3}'` && echo "::set-output name=zygiskReleaseName::$zygiskReleaseName"
+        zygiskDebugName=`ls magisk-loader/release/LSPosed-v*-zygisk-debug.zip | awk -F '(/|.zip)' '{print $3}'` && echo "::set-output name=zygiskDebugName::$zygiskDebugName"
+        unzip magisk-loader/release/LSPosed-v*-riru-release.zip -d LSPosed-riru-release
+        unzip magisk-loader/release/LSPosed-v*-riru-debug.zip -d LSPosed-riru-debug
+        unzip magisk-loader/release/LSPosed-v*-zygisk-release.zip -d LSPosed-zygisk-release
+        unzip magisk-loader/release/LSPosed-v*-zygisk-debug.zip -d LSPosed-zygisk-debug
     - name: Upload riru release
       uses: actions/upload-artifact@v2
       with:
@@ -116,14 +116,14 @@ jobs:
       with:
         name: mappings
         path: |
-          core/build/outputs/mapping
+          magisk-loader/build/outputs/mapping
           app/build/outputs/mapping
     - name: Upload symbols
       uses: actions/upload-artifact@v2
       with:
         name: symbols
         path: |
-          core/build/symbols
+          magisk-loader/build/symbols
           daemon/build/symbols
     - name: Post to channel
       if: ${{ github.event_name != 'pull_request' && success() && github.ref == 'refs/heads/master' }}
@@ -134,7 +134,7 @@ jobs:
         COMMIT_URL: ${{ github.event.head_commit.url }}
       run: |
         if [ ! -z "${{ secrets.BOT_TOKEN }}" ]; then
-          OUTPUT="core/release/"
+          OUTPUT="magisk-loader/release/"
           export riruRelease=$(find $OUTPUT -name "LSPosed-v*-riru-release.zip")
           export riruDebug=$(find $OUTPUT -name "LSPosed-v*-riru-debug.zip")
           export zygiskRelease=$(find $OUTPUT -name "LSPosed-v*-zygisk-release.zip")

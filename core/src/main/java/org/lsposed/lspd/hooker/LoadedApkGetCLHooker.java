@@ -20,7 +20,7 @@
 
 package org.lsposed.lspd.hooker;
 
-import static org.lsposed.lspd.config.LSPApplicationServiceClient.serviceClient;
+import static org.lsposed.lspd.core.ApplicationServiceClient.serviceClient;
 
 import android.app.LoadedApk;
 import android.os.IBinder;
