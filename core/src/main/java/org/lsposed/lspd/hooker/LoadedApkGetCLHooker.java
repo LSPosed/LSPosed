@@ -99,11 +99,11 @@ public class LoadedApkGetCLHooker extends XC_MethodHook {
     }
 
     private void hookNewXSP(XC_LoadPackage.LoadPackageParam lpparam) {
-        int xposedminversion = -1;
+        int sqdminversion = -1;
         boolean xposedsharedprefs = false;
         try {
             Map<String, Object> metaData = MetaDataReader.getMetaData(new File(lpparam.appInfo.sourceDir));
-            Object minVersionRaw = metaData.get("xposedminversion");
+            Object minVersionRaw = metaData.get("sqdminversion");
             if (minVersionRaw instanceof Integer) {
                 xposedminversion = (Integer) minVersionRaw;
             } else if (minVersionRaw instanceof String) {
