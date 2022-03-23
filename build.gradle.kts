@@ -22,6 +22,8 @@ import com.android.build.api.variant.ApplicationAndroidComponentsExtension
 import com.android.build.gradle.BaseExtension
 import org.eclipse.jgit.api.Git
 import org.eclipse.jgit.internal.storage.file.FileRepository
+import java.nio.file.Paths
+import org.gradle.internal.os.OperatingSystem
 
 plugins {
     id("com.android.application") apply false
@@ -63,6 +65,16 @@ tasks.register("Delete", Delete::class) {
     delete(rootProject.buildDir)
 }
 
+fun findInPath(executable: String): String? {
+    val pathEnv = System.getenv("PATH")
+    return pathEnv.split(File.pathSeparator).map { folder ->
+        Paths.get("${folder}${File.separator}${executable}${if (OperatingSystem.current().isWindows) ".exe" else ""}")
+            .toFile()
+    }.firstOrNull { path ->
+        path.exists()
+    }?.absolutePath
+}
+
 fun Project.configureBaseExtension() {
     extensions.findByType(BaseExtension::class)?.run {
         compileSdkVersion(androidCompileSdkVersion)
@@ -102,6 +114,10 @@ fun Project.configureBaseExtension() {
                         "-DVERSION_CODE=$verCode",
                         "-DVERSION_NAME=$verName",
                     )
+                    findInPath("ccache")?.let {
+                        println("Using ccache $it")
+                        arguments += "-DANDROID_CCACHE=$it"
+                    }
                 }
             }
         }
