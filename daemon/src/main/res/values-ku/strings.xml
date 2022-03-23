@@ -1,0 +1,10 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <!-- Notification -->
+    <string name="module_is_not_activated_yet">Modula Xposed hîn nehatiye çalak kirin</string>
+    <string name="module_is_not_activated_yet_detailed">%s hatiye saz kirin, lê hîn nehatiye aktîfkirin</string>
+    <string name="xposed_module_updated_notification_title">Modula Xposed hate nûve kirin</string>
+    <string name="xposed_module_updated_notification_content">%s hate nûve kirin, ji kerema xwe bi zorê sepanan rawestînin û di çarçoveya wê de ji nû ve bidin destpêkirin</string>
+    <string name="xposed_module_updated_notification_title_system">Modula Xposed hate nûve kirin, pêdivî ye ku pergalê ji nû ve dest pê bike</string>
+    <string name="xposed_module_updated_notification_content_system">%s hate nûve kirin, ji ber ku çarçove Çarçoveya Pergalê dihewîne, ji bo sepandina guhertinan ji nû ve destpêkirinê hewce dike</string>
+</resources>
