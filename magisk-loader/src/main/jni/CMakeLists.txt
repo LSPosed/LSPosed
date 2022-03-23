@@ -1,6 +1,12 @@
 project(lspd)
 cmake_minimum_required(VERSION 3.4.1)
 
+find_program(CCACHE ccache)
+if (CCACHE)
+    set(CMAKE_CXX_COMPILER_LAUNCHER ${CCACHE})
+    set(CMAKE_C_COMPILER_LAUNCHER ${CCACHE})
+endif ()
+
 add_subdirectory(${CORE_ROOT} core)
 
 configure_file(template/loader.cpp src/loader.cpp)
