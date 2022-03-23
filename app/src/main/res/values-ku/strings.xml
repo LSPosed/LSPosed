@@ -1,0 +1,226 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!--
+  ~ This file is part of LSPosed.
+  ~
+  ~ LSPosed is free software: you can redistribute it and/or modify
+  ~ it under the terms of the GNU General Public License as published by
+  ~ the Free Software Foundation, either version 3 of the License, or
+  ~ (at your option) any later version.
+  ~
+  ~ LSPosed is distributed in the hope that it will be useful,
+  ~ but WITHOUT ANY WARRANTY; without even the implied warranty of
+  ~ MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+  ~ GNU General Public License for more details.
+  ~
+  ~ You should have received a copy of the GNU General Public License
+  ~ along with LSPosed.  If not, see <https://www.gnu.org/licenses/>.
+  ~
+  ~ Copyright (C) 2021 LSPosed Contributors
+  -->
+<resources xmlns:tools="http://schemas.android.com/tools" tools:keep="@string/xposed_module_updated_notification_*,@string/module_is_not_activated_*">
+    <!-- MainActivity -->
+    <string name="info">Info</string>
+    <string name="overview">Têgihiştinî</string>
+    <string name="Modules">Modules</string>
+    <plurals name="modules_enabled_count">
+        <item quantity="one">%d modul çalak kirin</item>
+        <item quantity="other">%d modul çalak kirin</item>
+    </plurals>
+    <string name="Logs">Logs</string>
+    <string name="Settings">Settings</string>
+    <string name="feedback_or_suggestion">Feedback an pêşniyar</string>
+    <string name="About">Ji dor</string>
+    <string name="report_issue">Pirsgirêka rapor bikin</string>
+    <string name="module_repo">Depo</string>
+    <string name="module_repo_loading">Barkirin…</string>
+    <string name="module_repo_up_to_date">Hemî modulên nûjen</string>
+    <plurals name="module_repo_upgradable">
+        <item quantity="one">%d module nûvekirin</item>
+        <item quantity="other">%d modulên nûvekirî</item>
+    </plurals>
+    <string name="about_view_source_code"><![CDATA[Koda çavkaniyê li %1$s<br/>bibînin Tevlî %2$s kanala me bibin]]></string>
+    <string name="translators" comment="Dear translators, please add your home page here following the format. There can be more than one translator. So feel free to append yourself.">null</string>
+    <string name="install">Lêkirin</string>
+    <string name="install_summary">Ji bo sazkirina LSPosed bikirtînin</string>
+    <string name="not_installed">Ne hatiye sazkirin</string>
+    <string name="not_install_summary">LSPosed nayê Sazkirin</string>
+    <string name="activated">Çalak kirin</string>
+    <string name="partial_activated">Qismî aktîf kirin</string>
+    <string name="selinux_policy_not_loaded_summary">SEPolicy bi rêkûpêk nayê barkirin</string>
+    <string name="selinux_policy_not_loaded"><![CDATA[Modulên ku Çarçoveya Pergalê girêdidin dê nexebitin.<br/>Ji kerema xwe vê yekê ji <a href="https://github.com/topjohnwu/Magisk/issues"><b>Magisk</b></a> pêşdebir re ragihînin.]]></string>
+    <string name="system_inject_fail_summary">Derzkirina Çarçoveya Pergalê têk çû</string>
+    <string name="system_inject_fail"><![CDATA[Ev kêm e û dibe ku ji hêla <b>Magisk</b> an hin modulên Magisk-a kêm-kalîteyê ve çêbibe.<br/>Ji kerema xwe hewl bidin ku modulên Magisk ji bilî Riru û LSPosed neçalak bikin an jî têketinek tevahî ji pêşdebiran re bişînin.]]></string>
+    <string name="system_prop_incorrect_summary">Pêşniyara pergalê xelet e</string>
+    <string name="system_prop_incorrect"><![CDATA[Hin taybetmendiyên pergalê yên pêwîst jêbirin an guherandin.<br/>Dibe ku modul carinan betal bibin.]]></string>
+    <string name="need_update">Pêdivî ye ku nûve bike</string>
+    <string name="please_update_summary">Ji kerema xwe guhertoya herî dawî ya LSPosed saz bikin</string>
+    <string name="lsposed_not_active">LSPosed niha nehatiye sazkirin an çalak e.</string>
+    <string name="info_api_version">Guhertoya API</string>
+    <string name="info_framework_version">Guhertoya çarçoveyê</string>
+    <string name="info_manager_version">Guhertoya rêveberê</string>
+    <string name="info_system_version">Guhertoya pergalê</string>
+    <string name="info_device">Sazî</string>
+    <string name="info_system_abi">Pergala ABI</string>
+    <string name="info_api">Interface derzîlêdanê</string>
+    <string name="parasitic_recommend">Rêvebirê Parazît Pêşniyar kirin</string>
+    <string name="parasitic_recommend_summary">LSPosed naha parazîtkirina pergalê piştgirî dike da ku ji tespîtê dûr bixe. Piştî ku hûn bi serfirazî kurtebirek rêveberê parazît biafirînin, hûn dikarin bi ewlehî rêveberê rakin. Di her rewşê de hûn dikarin rêveberê ji /data/adb/lspd/manager.apk vegere saz bikin.</string>
+    <string name="create_shortcut">Kurtenivîsê çêbikin</string>
+    <string name="never_show">Qet nîşan nedin</string>
+    <string name="update_lsposed">LSPosed nûve bikin</string>
+    <string name="update_lsposed_msg">Piştrast bike ku LSPosed nûve bike? Ev cîhaz dê piştî qedandina nûvekirinê ji nû ve dest pê bike</string>
+    <!-- LogsActivity -->
+    <string name="menuSaveToSd">Rizgarkirin</string>
+    <string name="nav_item_logs_verbose">Têketinên Verbose</string>
+    <string name="nav_item_logs_module">Têketinên Modulan</string>
+    <string name="logs_save_failed2">Sazkirin bi ser neket:\n%s</string>
+    <string name="menuClearLog">Naha têketinê paqij bike</string>
+    <string name="logs_cleared">Têketin bi serkeftî hate paqij kirin.</string>
+    <string name="scroll_top">Scroll to top</string>
+    <string name="loading">Barkirin…</string>
+    <string name="scroll_bottom">Scroll to bottom</string>
+    <string name="logs_cannot_read">Têketin nayê xwendin: \n</string>
+    <string name="menuReload">Ji nû ve barkirin</string>
+    <string name="logs_clear_failed_2">Paqijkirina têketinê bi ser neket</string>
+    <string name="menu_enable_word_wrap">Peyv Wrap</string>
+    <string name="enabled_verbose_log">Têketinê bi lêker vekir</string>
+    <string name="disabled_verbose_log">Têketinê bi devkî neçalak bû</string>
+    <!-- ModulesActivity -->
+    <string name="module_empty_description">(bê şirove nehat dayîn)</string>
+    <string name="warning_xposed_min_version">Vê modulê guhertoyek nû ya Xposed (%d) hewce dike û ji ber vê yekê nayê çalak kirin</string>
+    <string name="no_min_version_specified">Ev modul guhertoya Xposed ya ku jê re hewce dike diyar nake.</string>
+    <string name="warning_min_version_too_low">Ev modul ji bo guhertoya Xposed %1$dhate afirandin, lê ji ber guheztinên nelihev ên di guhertoya %2$d-ê de, ew hate asteng kirin.</string>
+    <string name="warning_installed_on_external_storage">Ev modul nikare were barkirin ji ber ku ew li ser qerta SD-ê hatî saz kirin, ji kerema xwe wê biguhezînin hilana hundurîn</string>
+    <string name="module_uninstall">Rakirin</string>
+    <string name="module_settings">Mîhengên Modulê</string>
+    <string name="view_in_repo">Di Repo de bibînin</string>
+    <string name="module_uninstall_message">Ma hûn dixwazin vê modulê rakin?</string>
+    <string name="module_uninstalled">Rakir %1$s</string>
+    <string name="module_uninstall_failed">Rakirina neserketî ye</string>
+    <string name="add_module_to_user">Modulê li bikarhênerê zêde bikin</string>
+    <string name="module_installed">%1$s ji bikarhêner %2$sre zêde kirin</string>
+    <string name="module_install_failed">Zêdekirina modulê têk çû</string>
+    <string name="install_to_user">Ji bikarhêner %sre saz bike</string>
+    <string name="install_to_user_message">Dixwazin %1$s ji bikarhêner %2$sre saz bikin? Tête pêşniyar kirin ku bi destan saz bikin, zordariya sazkirinê bi riya LSPosed dibe ku bibe sedema pirsgirêkan.</string>
+    <string name="expand">firehkirin</string>
+    <string name="collapse">jiberhevketin</string>
+    <!-- AppListActivity -->
+    <string name="compile_speed">Ji nû ve xweşbîn bikin</string>
+    <string name="compile_speed_msg">Optimîzekirin…</string>
+    <string name="compile_done">Optimîzasyon qediya</string>
+    <string name="app_launch">Dest pê bike</string>
+    <string name="compile_failed">Optimîzasyon têk çû: nirxa vegerê vala ye</string>
+    <string name="compile_failed_with_info">Optimîzasyon têk çû: </string>
+    <string name="sort_by_name">Navê serîlêdanê</string>
+    <string name="sort_by_package_name">Navê pakêtê</string>
+    <string name="sort_by_install_time">Dema sazkirinê</string>
+    <string name="sort_by_update_time">Wextê nûve bike</string>
+    <string name="sort_reverse">Gara paşî</string>
+    <string name="menu_show_system_apps">Sepanên pergalê</string>
+    <string name="menu_sort">Rêzkirin</string>
+    <string name="enable_module">Modulê çalak bike</string>
+    <string name="no_scope_selected">Te tu sepanê hilnebijart. Berdewamkirin?</string>
+    <string name="menu_show_games">Games</string>
+    <string name="menu_show_modules">Modules</string>
+    <string name="menu_show_denylist">Denylist</string>
+    <string name="failed_to_save_scope_list">Hilbijartina navnîşa çarçovê bi ser neket</string>
+    <string name="app_description">%1$s\nGuhertoya %2$s</string>
+    <string name="use_recommended">Pêşniyar kirin</string>
+    <string name="no_scope_selected_has_recommended">Te tu sepanê hilnebijart. Serlêdanên pêşniyarkirî hilbijêrin?</string>
+    <string name="use_recommended_message">Serlêdanên pêşniyarkirî hilbijêrin?</string>
+    <string name="module_is_not_activated_yet">Modula Xposed hîn nehatiye çalak kirin</string>
+    <string name="requested_by_module">Pêşniyar kirin</string>
+    <string name="update_available">Nûvekirin heye: %1$s</string>
+    <string name="module_disabled_no_selection">Modula %s ji ber ku tu sepan nehat hilbijartî hate neçalak kirin.</string>
+    <string name="android_framework">Çarçoveya Sîstemê</string>
+    <string name="menu_backup_and_restore">Backup</string>
+    <string name="menu_backup">Backup</string>
+    <string name="menu_restore">Nûvdekirin</string>
+    <string name="force_stop">Bi zorê rawestandin</string>
+    <string name="force_stop_dlg_title">Rawestandina zorê?</string>
+    <string name="force_stop_dlg_text">Ger hûn bi zorê sepanek rawestînin, dibe ku ew xelet tevbigere.</string>
+    <string name="reboot_required">Ji bo sepandina vê guherînê ji nû ve destpêkirinê hewce ye</string>
+    <string name="reboot">Reboot</string>
+    <string name="menu_hide">Veşartin</string>
+    <string name="deny_list">%s di lîsteya redkirinê de ye. Dibe ku bandor neke.</string>
+    <string name="deny_list_info">Li ser redkirina</string>
+    <!-- ModulesActivity and AppListActivity -->
+    <string name="modules_other_app">Di sepana din de bibînin</string>
+    <string name="module_app_info">Agahdariya Appê</string>
+    <string name="list_empty">¯\\\\_(ツ)_\/¯\nLi vir tiştek tune</string>
+    <!-- SettingsActivity -->
+    <string name="settings_group_framework">Çarçove</string>
+    <string name="pref_title_disable_verbose_log">Têketinên devkî neçalak bike</string>
+    <string name="pure_black_dark_theme">Mijara reş reş</string>
+    <string name="pure_black_dark_theme_summary">Ger mijara tarî çalak be, mijara reş a paqij bikar bînin</string>
+    <string name="settings_group_theme">Mijad</string>
+    <string name="settings_backup_and_restore">Backup û restore</string>
+    <string name="settings_backup_summery">Lîsteya modulê paşvekêşîn û navnîşên çarçovê.</string>
+    <string name="settings_restore_summery">Lîsteya modul û navnîşên çarçovê vegerînin.</string>
+    <string name="settings_backup">Backup</string>
+    <string name="settings_backup_failed2">Piştgiriya bi ser neket:\n%s</string>
+    <string name="enable_documentui">Ji kerema xwe DocumentUI çalak bike</string>
+    <string name="settings_restore">Nûvdekirin</string>
+    <string name="settings_restore_failed2">Vegerandin bi ser neket:\n%s</string>
+    <string name="group_network">Network</string>
+    <string name="dns_over_http">DNS li ser HTTPS</string>
+    <string name="dns_over_http_summary">Li hin welatan jehrîkirina DNS-ê çareser bikin</string>
+    <string name="theme_color">Rengê mijarê</string>
+    <string name="theme_color_system">Rengê mijara pergalê</string>
+    <string name="settings_show_hidden_icon_apps_enabled">Bi zorê serlêdanan bikin ku îkonên destpêker nîşan bidin</string>
+    <string name="settings_show_hidden_icon_apps_enabled_summary">Piştî Android 10, serîlêdan destûr nayê dayîn ku îkonên xwe yên destpêker veşêrin. Ji bo neçalakkirina vê taybetmendiya pergalê, guheztinê vekin.</string>
+    <string name="settings_group_system">Sîstem</string>
+    <string name="settings_language">Ziman</string>
+    <string name="settings_translation_contributors">Beşdarên wergerê</string>
+    <string name="settings_translation">Beşdarî wergerê bibin</string>
+    <string name="settings_translation_summary">Alîkariya me bikin ku %s wergerînin zimanê we</string>
+    <string name="pref_title_enable_auto_add_shortcut">Bixweber kurtebirrek lê zêde bike</string>
+    <string name="create_shortcut_summary">Bi destan kurteya rêveberê parazît biafirînin</string>
+    <string name="settings_enable_auto_add_shortcut_summary">Dema ku di rêvebirê ne-parazît de neçalak bibe dê kurtebirên nû werin zêdekirin</string>
+    <string name="settings_update_channel">Kanalê nûve bikin</string>
+    <string name="update_channel_stable">Stewr</string>
+    <string name="update_channel_bate">Beta</string>
+    <string name="update_channel_nightly">Avakirina şevê</string>
+    <string name="pref_title_restrict_classloader">Tenê classloader module dikare Xposed API bikar bîne</string>
+    <string name="pref_summary_restrict_classloader">Dibe ku ev hin modulan bişkîne lê ji ewlehiyê sûd werdigire (taybetmendiya ezmûnî)</string>
+    <!-- Module Repo -->
+    <string name="module_readme">Readme</string>
+    <string name="module_releases">Releases</string>
+    <string name="module_information">Info</string>
+    <string name="module_information_homepage">Homepage</string>
+    <string name="module_information_source_url">Koda çavkaniyê</string>
+    <string name="module_information_collaborators">Hevkar</string>
+    <string name="module_release_view_assets">Tiştan</string>
+    <string name="menu_open_in_browser">Di gerokê de vekin</string>
+    <string name="refresh">Hênikkirin</string>
+    <string name="module_release_load_more">Guhertoyên kevntir nîşan bide</string>
+    <string name="module_release_no_more">Bêtir berdan</string>
+    <string name="repo_load_failed">Barkirina depoya modulê têk çû: %s</string>
+    <string name="sort_upgradable_first">Pêşî nûvekirin</string>
+    <!-- CrashReportActivity -->
+    <string name="version_mismatch">Guhertoya çarçoveya LSPosed (%1$d) bi rêveberê (%2$d) re nagire. Ji kerema xwe LSPosed ji nû ve saz bikin.</string>
+    <string name="manager_crashed">Rêveber qeza kir</string>
+    <string name="manager_crashed_info">vê yekê rapor bikin </string>
+    <string name="send_crash_info">Agahdariya qezayê bişînin</string>
+    <string name="crash_info_copied">Agahdariya qezayê li clipboardê hate kopî kirin</string>
+    <string name="info_copied">Li clipboardê hate kopî kirin</string>
+    <!-- Colors -->
+    <string name="color_sakura">Sakura</string>
+    <string name="color_red">sor</string>
+    <string name="color_pink">Pembe</string>
+    <string name="color_purple">Mor</string>
+    <string name="color_deep_purple">binefşî ya kûr</string>
+    <string name="color_indigo">Indigo</string>
+    <string name="color_blue">Şîn</string>
+    <string name="color_light_blue">Şînê vebûyî</string>
+    <string name="color_cyan">Cyan</string>
+    <string name="color_teal">Teal</string>
+    <string name="color_green">Kesk</string>
+    <string name="color_light_green">Kesk ronî</string>
+    <string name="color_lime">Lime</string>
+    <string name="color_yellow">Zer</string>
+    <string name="color_amber">Aqût</string>
+    <string name="color_orange">porteqalî</string>
+    <string name="color_deep_orange">porteqala kûr</string>
+    <string name="color_brown">qehweyî</string>
+    <string name="color_blue_grey">Şîn gewr</string>
+</resources>
