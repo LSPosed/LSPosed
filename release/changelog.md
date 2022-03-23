@@ -1,17 +1,23 @@
 ### Changelog
-- Fix black theme when using customized color
-- Show `pm hide`-ed modules in the module list
-- Suppress notification of `pm unhide`-ing modules
-- Fix updating in-app may update to an older version
-- Fix daemon crash if any overlay Magisk module is used
-- Dynamic color shortcut for Android 12+
-- Machine translation for incomplete translation
+- Add a new feature to only allow module classloaders to access Xposed API
+- Fix language switch
+- Support Android 13 DP1 and DP2
+- Fix icon creation and resource hooks on ZUI devices
+- Improve cache performance in `XposedHelpers` (Thanks @RinOrz)
+- Fix parasitic manager in Android 8.1
+- Fix module deactivation after reboot in rare cases
+- Fix resource cache since Android 11
+- Fix the first invoke invalid of hooked static methods since Android 12
+- Refactor to use [LSPlant](https://github.com/LSPosed/LSPlant) as ART hook framework
 
 ### 更新日志
-- 修复自定义主题色下的纯黑主题
-- 模块列表显示被 `pm hide` 的模块
-- 不显示 `pm unhide` 模块时的通知
-- 修复应用内更新可能更新到旧版本的问题
-- 修复使用了 overlay 的 Magisk 模块时候守护进程的崩溃
-- Android 12+ 的快捷方式使用动态颜色
-- 未完成翻译使用机器翻译补全
+- 添加只允许模块类加载器使用 Xposed API 的新特性
+- 修复语言切换
+- 支持 安卓 13 DP1 和 DP2
+- 修复 ZUI 设备上的图标创建和资源挂钩
+- 提升 `XposedHelpers` 的缓存性能 (感谢 @RinOrz)
+- 修复安卓 8.1 的寄生管理器
+- 修复罕见情况下重启后模块取消激活
+- 修复自 Android 11 以来的资源缓存
+- 修复自 Android 12 以来的被 hook 静态方法第一次调用失效的问题
+- 重构以使用 [LSPlant](https://github.com/LSPosed/LSPlant) 作为 ART hook 框架
