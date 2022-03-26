@@ -62,6 +62,7 @@ import java.nio.file.Path;
 import java.nio.file.Paths;
 import java.nio.file.SimpleFileVisitor;
 import java.nio.file.attribute.BasicFileAttributes;
+import java.nio.file.attribute.PosixFilePermissions;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Collections;
@@ -242,8 +243,9 @@ public class ConfigManager {
         }
         try {
             Path p = Paths.get(miscPath);
-            Files.createDirectories(p);
-            walkFileTree(p, f -> SELinux.setFileContext(f.toString(), "u:object_r:magisk_file:s0"));
+            var perms = PosixFilePermissions.fromString("rwx--x--x");
+            Files.createDirectories(p, PosixFilePermissions.asFileAttribute(perms));
+            walkFileTree(p, true, f -> SELinux.setFileContext(f.toString(), "u:object_r:magisk_file:s0"));
         } catch (IOException e) {
             Log.e(TAG, Log.getStackTraceString(e));
         }
@@ -973,11 +975,14 @@ public class ConfigManager {
         return module != null && module.appId == uid % PER_USER_RANGE;
     }
 
-    private void walkFileTree(Path dir, Consumer<Path> action) throws IOException {
-        if (Files.notExists(dir)) return;
-        Files.walkFileTree(dir, new SimpleFileVisitor<>() {
+    private void walkFileTree(Path rootDir, boolean skipRoot, Consumer<Path> action) throws IOException {
+        if (Files.notExists(rootDir)) return;
+        Files.walkFileTree(rootDir, new SimpleFileVisitor<>() {
             @Override
             public FileVisitResult preVisitDirectory(Path dir, BasicFileAttributes attrs) {
+                if (skipRoot && dir.equals(rootDir)) {
+                    return FileVisitResult.CONTINUE;
+                }
                 action.accept(dir);
                 return FileVisitResult.CONTINUE;
             }
@@ -995,7 +1000,7 @@ public class ConfigManager {
         var path = Paths.get(getPrefsPath(packageName, uid));
         try {
             Files.createDirectories(path);
-            walkFileTree(path, p -> {
+            walkFileTree(path, false, p -> {
                 try {
                     Os.chown(p.toString(), uid, 1000);
                 } catch (ErrnoException e) {
