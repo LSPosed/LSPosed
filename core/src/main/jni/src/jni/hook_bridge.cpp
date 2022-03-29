@@ -53,7 +53,7 @@ LSP_DEF_NATIVE_METHOD(jboolean, HookBridge, hookMethod, jobject hookMethod,
         ~finally() {
             auto finish = std::chrono::steady_clock::now();
             if (newHook) {
-                LOGV("New hook took %lldus",
+                LOGV("New hook took {}us",
                      std::chrono::duration_cast<std::chrono::microseconds>(finish - start).count());
             }
         }

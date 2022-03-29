@@ -39,7 +39,7 @@ namespace lspd {
 
         void onModuleLoaded() {
             LOGI("onModuleLoaded: welcome to LSPosed!");
-            LOGI("onModuleLoaded: version v%s (%d)", versionName, versionCode);
+            LOGI("onModuleLoaded: version v{} ({})", versionName, versionCode);
             InitSymbolCache(nullptr);
             MagiskLoader::Init();
         }
@@ -120,8 +120,8 @@ namespace lspd {
 }
 
 RIRU_EXPORT RiruVersionedModuleInfo *init(Riru *riru) {
-    LOGD("using riru %d", riru->riruApiVersion);
-    LOGD("module path: %s", riru->magiskModulePath);
+    LOGD("using riru {}", riru->riruApiVersion);
+    LOGD("module path: {}", riru->magiskModulePath);
     lspd::magiskPath = riru->magiskModulePath;
     if (!lspd::isDebug && lspd::magiskPath.find(lspd::moduleName) == std::string::npos) {
         LOGE("who am i");

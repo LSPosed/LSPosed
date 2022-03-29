@@ -96,7 +96,7 @@ namespace lspd {
             auto *instance = Service::instance();
             auto system_server_binder = instance->RequestSystemServerBinder(env);
             if (!system_server_binder) {
-                LOGF("Failed to get system server binder, system server initialization failed. ");
+                LOGF("Failed to get system server binder, system server initialization failed.");
                 return;
             }
 
@@ -157,12 +157,12 @@ namespace lspd {
         JUTFString process_name(env, nice_name);
         skip_ = !symbol_cache->initialized.test(std::memory_order_acquire);
         if (!skip_ && !app_data_dir) {
-            LOGD("skip injecting into %s because it has no data dir", process_name.get());
+            LOGD("skip injecting into {} because it has no data dir", process_name.get());
             skip_ = true;
         }
         if (!skip_ && is_child_zygote) {
             skip_ = true;
-            LOGD("skip injecting into %s because it's a child zygote", process_name.get());
+            LOGD("skip injecting into {} because it's a child zygote", process_name.get());
         }
 
         if (!skip_ && ((app_id >= FIRST_ISOLATED_UID && app_id <= LAST_ISOLATED_UID) ||
@@ -170,7 +170,7 @@ namespace lspd {
                         app_id <= LAST_APP_ZYGOTE_ISOLATED_UID) ||
                        app_id == SHARED_RELRO_UID)) {
             skip_ = true;
-            LOGI("skip injecting into %s because it's isolated", process_name.get());
+            LOGI("skip injecting into {} because it's isolated", process_name.get());
         }
         setAllowUnload(skip_);
     }
@@ -204,14 +204,14 @@ namespace lspd {
             FindAndCall(env, "forkCommon",
                         "(ZLjava/lang/String;Landroid/os/IBinder;)V",
                         JNI_FALSE, nice_name, binder);
-            LOGD("injected xposed into %s", process_name.get());
+            LOGD("injected xposed into {}", process_name.get());
             setAllowUnload(false);
             GetArt(true);
         } else {
             auto context = Context::ReleaseInstance();
             auto service = Service::ReleaseInstance();
             GetArt(true);
-            LOGD("skipped %s", process_name.get());
+            LOGD("skipped {}", process_name.get());
             setAllowUnload(true);
         }
     }
