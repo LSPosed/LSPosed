@@ -21,4 +21,24 @@
 <resources>
 
     <style name="AppTheme" parent="Theme" />
+
+    <style name="ThemeOverlay.MaterialRed" parent="ThemeOverlay.Dark.MaterialRed"/>
+    <style name="ThemeOverlay.MaterialPink" parent="ThemeOverlay.Dark.MaterialPink"/>
+    <style name="ThemeOverlay.MaterialPurple" parent="ThemeOverlay.Dark.MaterialPurple"/>
+    <style name="ThemeOverlay.MaterialDeepPurple" parent="ThemeOverlay.Dark.MaterialDeepPurple"/>
+    <style name="ThemeOverlay.MaterialIndigo" parent="ThemeOverlay.Dark.MaterialIndigo"/>
+    <style name="ThemeOverlay.MaterialBlue" parent="ThemeOverlay.Dark.MaterialBlue"/>
+    <style name="ThemeOverlay.MaterialLightBlue" parent="ThemeOverlay.Dark.MaterialLightBlue"/>
+    <style name="ThemeOverlay.MaterialCyan" parent="ThemeOverlay.Dark.MaterialCyan"/>
+    <style name="ThemeOverlay.MaterialTeal" parent="ThemeOverlay.Dark.MaterialTeal"/>
+    <style name="ThemeOverlay.MaterialGreen" parent="ThemeOverlay.Dark.MaterialGreen"/>
+    <style name="ThemeOverlay.MaterialLightGreen" parent="ThemeOverlay.Dark.MaterialLightGreen"/>
+    <style name="ThemeOverlay.MaterialLime" parent="ThemeOverlay.Dark.MaterialLime"/>
+    <style name="ThemeOverlay.MaterialYellow" parent="ThemeOverlay.Dark.MaterialYellow"/>
+    <style name="ThemeOverlay.MaterialAmber" parent="ThemeOverlay.Dark.MaterialAmber"/>
+    <style name="ThemeOverlay.MaterialOrange" parent="ThemeOverlay.Dark.MaterialOrange"/>
+    <style name="ThemeOverlay.MaterialDeepOrange" parent="ThemeOverlay.Dark.MaterialDeepOrange"/>
+    <style name="ThemeOverlay.MaterialBrown" parent="ThemeOverlay.Dark.MaterialBrown"/>
+    <style name="ThemeOverlay.MaterialBlueGrey" parent="ThemeOverlay.Dark.MaterialBlueGrey"/>
+    <style name="ThemeOverlay.MaterialSakura" parent="ThemeOverlay.Dark.MaterialSakura"/>
 </resources>
