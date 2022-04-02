@@ -43,6 +43,9 @@ public class Dex2OatService {
     private static final String DEX2OAT_64 = "/apex/com.android.art/bin/dex2oat64";
 
     private Thread thread = null;
+    private LocalSocket serverSocket = null;
+    private LocalServerSocket server = null;
+    private FileDescriptor stockFd32 = null, stockFd64 = null;
 
     public void start() {
         thread = new Thread(() -> {
@@ -58,11 +61,10 @@ public class Dex2OatService {
                 Files.createDirectories(Paths.get(devPath));
                 Log.d(TAG, "dev path: " + devPath);
 
-                var serverSocket = new LocalSocket(LocalSocket.SOCKET_STREAM);
+                serverSocket = new LocalSocket(LocalSocket.SOCKET_STREAM);
                 serverSocket.bind(new LocalSocketAddress(sockPath, LocalSocketAddress.Namespace.FILESYSTEM));
-                var server = new LocalServerSocket(serverSocket.getFileDescriptor());
+                server = new LocalServerSocket(serverSocket.getFileDescriptor());
                 SELinux.setFileContext(sockPath, "u:object_r:magisk_file:s0");
-                FileDescriptor stockFd32 = null, stockFd64 = null;
                 if (new File(DEX2OAT_32).exists()) stockFd32 = Os.open(DEX2OAT_32, OsConstants.O_RDONLY, 0);
                 if (new File(DEX2OAT_64).exists()) stockFd64 = Os.open(DEX2OAT_64, OsConstants.O_RDONLY, 0);
 
