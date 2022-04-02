@@ -79,7 +79,6 @@ fi
 ui_print "- Extracting module files"
 
 extract "$ZIPFILE" 'module.prop'        "$MODPATH"
-extract "$ZIPFILE" 'system.prop'        "$MODPATH"
 extract "$ZIPFILE" 'post-fs-data.sh'    "$MODPATH"
 extract "$ZIPFILE" 'service.sh'         "$MODPATH"
 extract "$ZIPFILE" 'uninstall.sh'       "$MODPATH"
@@ -88,6 +87,31 @@ extract "$ZIPFILE" 'daemon.apk'         "$MODPATH"
 extract "$ZIPFILE" 'daemon'             "$MODPATH"
 rm -f /data/adb/lspd/manager.apk
 extract "$ZIPFILE" 'manager.apk'        '/data/adb/lspd'
+
+if [ "$API" -ge 29 ]; then
+  ui_print "- Extracting dex2oat binaries"
+  mkdir "$MODPATH/bin"
+
+  if [ "$ARCH" = "arm" ] || [ "$ARCH" = "arm64" ]; then
+    extract "$ZIPFILE" "bin/armeabi-v7a/dex2oat" "$MODPATH/bin" true
+    mv "$MODPATH/bin/dex2oat" "$MODPATH/bin/dex2oat32"
+
+    if [ "$IS64BIT" = true ]; then
+      extract "$ZIPFILE" "bin/arm64-v8a/dex2oat" "$MODPATH/bin" true
+      mv "$MODPATH/bin/dex2oat" "$MODPATH/bin/dex2oat64"
+    fi
+  elif [ "$ARCH" == "x86" ] || [ "$ARCH" == "x64" ]; then
+    extract "$ZIPFILE" "bin/x86/dex2oat" "$MODPATH/bin" true
+    mv "$MODPATH/bin/dex2oat" "$MODPATH/bin/dex2oat32"
+
+    if [ "$IS64BIT" = true ]; then
+      extract "$ZIPFILE" "bin/x86_64/dex2oat" "$MODPATH/bin" true
+      mv "$MODPATH/bin/dex2oat" "$MODPATH/bin/dex2oat64"
+    fi
+  fi
+else
+  extract "$ZIPFILE" 'system.prop' "$MODPATH"
+fi
 
 ui_print "- Extracting daemon libraries"
 if [ "$ARCH" = "arm" ] ; then
@@ -161,6 +185,7 @@ elif [ "$FLAVOR" == "riru" ]; then
 fi
 
 set_perm_recursive "$MODPATH" 0 0 0755 0644
+set_perm_recursive "$MODPATH/bin" 0 0 0755 0755 u:object_r:dex2oat_exec:s0
 chmod 0744 "$MODPATH/daemon"
 
 if [ "$(grep_prop ro.maple.enable)" == "1" ] && [ "$FLAVOR" == "zygisk" ]; then

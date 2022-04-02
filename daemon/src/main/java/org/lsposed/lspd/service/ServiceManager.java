@@ -22,6 +22,7 @@ package org.lsposed.lspd.service;
 import android.app.ActivityThread;
 import android.content.Context;
 import android.ddm.DdmHandleAppName;
+import android.os.Build;
 import android.os.IBinder;
 import android.os.IServiceManager;
 import android.os.Looper;
@@ -49,8 +50,13 @@ public class ServiceManager {
     private static LSPManagerService managerService = null;
     private static LSPSystemServerService systemServerService = null;
     private static LogcatService logcatService = null;
+    private static Dex2OatService dex2OatService = null;
 
     private static final ExecutorService executorService = Executors.newCachedThreadPool();
+
+    public static Dex2OatService getDex2OatService() {
+        return dex2OatService;
+    }
 
     public static ExecutorService getExecutorService() {
         return executorService;
@@ -97,6 +103,11 @@ public class ServiceManager {
 
         logcatService = new LogcatService();
         logcatService.start();
+
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.Q) {
+            dex2OatService = new Dex2OatService();
+            dex2OatService.start();
+        }
 
         Process.setThreadPriority(Process.THREAD_PRIORITY_FOREGROUND);
         Looper.prepareMainLooper();

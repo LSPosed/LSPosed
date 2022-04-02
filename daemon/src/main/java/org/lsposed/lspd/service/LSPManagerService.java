@@ -688,7 +688,11 @@ public class LSPManagerService extends ILSPManagerService.Stub {
 
     @Override
     public boolean dex2oatFlagsLoaded() {
-        return SystemProperties.get(PROP_NAME).contains(PROP_VALUE);
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.Q) {
+            return ServiceManager.getDex2OatService().isAlive();
+        } else {
+            return SystemProperties.get(PROP_NAME).contains(PROP_VALUE);
+        }
     }
 
     @Override
