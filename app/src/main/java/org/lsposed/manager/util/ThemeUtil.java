@@ -45,25 +45,25 @@ public class ThemeUtil {
 
     static {
         preferences = App.getPreferences();
-        colorThemeMap.put("SAKURA", R.style.ThemeOverlay_sakura);
-        colorThemeMap.put("MATERIAL_RED", R.style.ThemeOverlay_material_red);
-        colorThemeMap.put("MATERIAL_PINK", R.style.ThemeOverlay_material_pink);
-        colorThemeMap.put("MATERIAL_PURPLE", R.style.ThemeOverlay_material_purple);
-        colorThemeMap.put("MATERIAL_DEEP_PURPLE", R.style.ThemeOverlay_material_deep_purple);
-        colorThemeMap.put("MATERIAL_INDIGO", R.style.ThemeOverlay_material_indigo);
-        colorThemeMap.put("MATERIAL_BLUE", R.style.ThemeOverlay_material_blue);
-        colorThemeMap.put("MATERIAL_LIGHT_BLUE", R.style.ThemeOverlay_material_light_blue);
-        colorThemeMap.put("MATERIAL_CYAN", R.style.ThemeOverlay_material_cyan);
-        colorThemeMap.put("MATERIAL_TEAL", R.style.ThemeOverlay_material_teal);
-        colorThemeMap.put("MATERIAL_GREEN", R.style.ThemeOverlay_material_green);
-        colorThemeMap.put("MATERIAL_LIGHT_GREEN", R.style.ThemeOverlay_material_light_green);
-        colorThemeMap.put("MATERIAL_LIME", R.style.ThemeOverlay_material_lime);
-        colorThemeMap.put("MATERIAL_YELLOW", R.style.ThemeOverlay_material_yellow);
-        colorThemeMap.put("MATERIAL_AMBER", R.style.ThemeOverlay_material_amber);
-        colorThemeMap.put("MATERIAL_ORANGE", R.style.ThemeOverlay_material_orange);
-        colorThemeMap.put("MATERIAL_DEEP_ORANGE", R.style.ThemeOverlay_material_deep_orange);
-        colorThemeMap.put("MATERIAL_BROWN", R.style.ThemeOverlay_material_brown);
-        colorThemeMap.put("MATERIAL_BLUE_GREY", R.style.ThemeOverlay_material_blue_grey);
+        colorThemeMap.put("SAKURA", R.style.ThemeOverlay_MaterialSakura);
+        colorThemeMap.put("MATERIAL_RED", R.style.ThemeOverlay_MaterialRed);
+        colorThemeMap.put("MATERIAL_PINK", R.style.ThemeOverlay_MaterialPink);
+        colorThemeMap.put("MATERIAL_PURPLE", R.style.ThemeOverlay_MaterialPurple);
+        colorThemeMap.put("MATERIAL_DEEP_PURPLE", R.style.ThemeOverlay_MaterialDeepPurple);
+        colorThemeMap.put("MATERIAL_INDIGO", R.style.ThemeOverlay_MaterialIndigo);
+        colorThemeMap.put("MATERIAL_BLUE", R.style.ThemeOverlay_MaterialBlue);
+        colorThemeMap.put("MATERIAL_LIGHT_BLUE", R.style.ThemeOverlay_MaterialLightBlue);
+        colorThemeMap.put("MATERIAL_CYAN", R.style.ThemeOverlay_MaterialCyan);
+        colorThemeMap.put("MATERIAL_TEAL", R.style.ThemeOverlay_MaterialTeal);
+        colorThemeMap.put("MATERIAL_GREEN", R.style.ThemeOverlay_MaterialGreen);
+        colorThemeMap.put("MATERIAL_LIGHT_GREEN", R.style.ThemeOverlay_MaterialLightGreen);
+        colorThemeMap.put("MATERIAL_LIME", R.style.ThemeOverlay_MaterialLime);
+        colorThemeMap.put("MATERIAL_YELLOW", R.style.ThemeOverlay_MaterialYellow);
+        colorThemeMap.put("MATERIAL_AMBER", R.style.ThemeOverlay_MaterialAmber);
+        colorThemeMap.put("MATERIAL_ORANGE", R.style.ThemeOverlay_MaterialOrange);
+        colorThemeMap.put("MATERIAL_DEEP_ORANGE", R.style.ThemeOverlay_MaterialDeepOrange);
+        colorThemeMap.put("MATERIAL_BROWN", R.style.ThemeOverlay_MaterialBrown);
+        colorThemeMap.put("MATERIAL_BLUE_GREY", R.style.ThemeOverlay_MaterialBlueGrey);
     }
 
     private static final String THEME_DEFAULT = "DEFAULT";
@@ -107,7 +107,7 @@ public class ThemeUtil {
     public static int getColorThemeStyleRes() {
         Integer theme = colorThemeMap.get(getColorTheme());
         if (theme == null) {
-            return R.style.ThemeOverlay_material_blue;
+            return R.style.ThemeOverlay_MaterialBlue;
         }
         return theme;
     }
