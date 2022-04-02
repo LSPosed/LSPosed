@@ -18,7 +18,6 @@
  */
 
 import com.android.build.gradle.internal.dsl.BuildType
-import dev.rikka.tools.materialthemebuilder.MaterialThemeBuilderExtension.Theme
 import java.time.Instant
 
 plugins {
