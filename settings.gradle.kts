@@ -13,7 +13,7 @@ pluginManagement {
         id("com.android.application") version agpVersion
         id("androidx.navigation.safeargs") version navVersion
         id("dev.rikka.tools.autoresconfig") version "1.1.0"
-        id("dev.rikka.tools.materialthemebuilder") version "1.0.0"
+        id("dev.rikka.tools.materialthemebuilder") version "1.1.0"
     }
 }
 
