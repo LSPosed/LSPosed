@@ -36,7 +36,7 @@
 # define LP_SELECT(lp32, lp64) lp32
 #endif
 
-char kTmpDir[] = "placeholder_/dev/12345678";
+char kTmpDir[] = "placeholder_/dev/0123456789abcdef";
 
 static ssize_t xrecvmsg(int sockfd, struct msghdr *msg, int flags) {
     int rec = recvmsg(sockfd, msg, flags);
@@ -72,6 +72,11 @@ static void *recv_fds(int sockfd, char *cmsgbuf, size_t bufsz, int cnt) {
     return CMSG_DATA(cmsg);
 }
 
+static void write_int(int fd, int val) {
+    if (fd < 0) return;
+    write(fd, &val, sizeof(val));
+}
+
 static int recv_fd(int sockfd) {
     char cmsgbuf[CMSG_SPACE(sizeof(int))];
 
@@ -88,12 +93,13 @@ int main(int argc, char **argv) {
     LOGI("dex2oat wrapper");
     struct sockaddr_un sock;
     sock.sun_family = AF_UNIX;
-    snprintf(sock.sun_path, sizeof(sock.sun_path), "%s/dex2oat" LP_SELECT("32", "64") ".sock", kTmpDir + 12);
+    snprintf(sock.sun_path, sizeof(sock.sun_path), "%s/dex2oat.sock", kTmpDir + 12);
     int sock_fd = socket(AF_UNIX, SOCK_STREAM, 0);
     if (-1 == connect(sock_fd, (struct sockaddr *) &sock, sizeof(sock))) {
         PLOGE("failed to connect to %s", sock.sun_path);
         return 1;
     }
+    write_int(sock_fd, LP_SELECT(32, 64));
     int stock_fd = recv_fd(sock_fd);
     close(sock_fd);
     LOGD("sock: %s %d", sock.sun_path, stock_fd);

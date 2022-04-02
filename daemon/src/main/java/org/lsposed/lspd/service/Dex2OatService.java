@@ -22,7 +22,6 @@ package org.lsposed.lspd.service;
 import android.net.LocalServerSocket;
 import android.net.LocalSocket;
 import android.net.LocalSocketAddress;
-import android.os.Process;
 import android.os.SELinux;
 import android.system.ErrnoException;
 import android.system.Os;
@@ -30,67 +29,68 @@ import android.system.OsConstants;
 import android.text.TextUtils;
 import android.util.Log;
 
+import java.io.File;
 import java.io.FileDescriptor;
 import java.io.IOException;
 import java.io.InterruptedIOException;
 import java.nio.file.Files;
 import java.nio.file.Paths;
-import java.util.ArrayList;
-import java.util.List;
 import java.util.Locale;
 
 public class Dex2OatService {
 
     private static final String TAG = "Dex2OatService";
+    private static final String DEX2OAT_32 = "/apex/com.android.art/bin/dex2oat32";
+    private static final String DEX2OAT_64 = "/apex/com.android.art/bin/dex2oat64";
 
-    private final List<Thread> mThreads = new ArrayList<>();
+    private Thread thread = null;
 
     public void start() {
         try {
             var devPath = Files.readAllLines(Paths.get("/data/adb/lspd/dev_path")).get(0);
             Log.d(TAG, "dev path: " + devPath);
-            daemon(devPath, "32");
-            if (Process.is64Bit()) daemon(devPath, "64");
+            daemon(devPath);
         } catch (IOException e) {
             Log.e(TAG, "dex2oat daemon failed to start", e);
         }
     }
 
     public boolean isAlive() {
-        for (Thread thread: mThreads) {
-            if (!thread.isAlive()) return false;
-        }
-        return true;
+        return thread.isAlive();
     }
 
-    private void daemon(String devPath, String lp) {
-        var thread = new Thread(() -> {
+    private void daemon(String devPath) {
+        thread = new Thread(() -> {
             try {
-                Log.i(TAG, "dex2oat" + lp + " daemon start");
+                Log.i(TAG, "dex2oat daemon start");
                 if (setSocketCreateContext("u:r:dex2oat:s0")) {
                     Log.d(TAG, "set socket context to u:r:dex2oat:s0");
                 } else {
                     Log.e(TAG, "failed to set socket context");
                 }
-                var sockPath = devPath + "/dex2oat" + lp + ".sock";
+                var sockPath = devPath + "/dex2oat.sock";
                 var serverSocket = new LocalSocket(LocalSocket.SOCKET_STREAM);
                 serverSocket.bind(new LocalSocketAddress(sockPath, LocalSocketAddress.Namespace.FILESYSTEM));
                 var server = new LocalServerSocket(serverSocket.getFileDescriptor());
                 SELinux.setFileContext(sockPath, "u:object_r:magisk_file:s0");
-                var stockFd = Os.open("/apex/com.android.art/bin/dex2oat" + lp, OsConstants.O_RDONLY, 0);
+                FileDescriptor stockFd32 = null, stockFd64 = null;
+                if (new File(DEX2OAT_32).exists()) stockFd32 = Os.open(DEX2OAT_32, OsConstants.O_RDONLY, 0);
+                if (new File(DEX2OAT_64).exists()) stockFd64 = Os.open(DEX2OAT_64, OsConstants.O_RDONLY, 0);
                 while (true) {
                     var client = server.accept();
-                    try (var os = client.getOutputStream()) {
-                        client.setFileDescriptorsForSend(new FileDescriptor[]{stockFd});
+                    try (var is = client.getInputStream();
+                         var os = client.getOutputStream()) {
+                        var lp = is.read();
+                        if (lp == 32) client.setFileDescriptorsForSend(new FileDescriptor[]{stockFd32});
+                        else client.setFileDescriptorsForSend(new FileDescriptor[]{stockFd64});
                         os.write(1);
+                        Log.d(TAG, "sent fd" + lp);
                     }
-                    Log.d(TAG, "sent fd");
                 }
             } catch (Exception e) {
                 Log.e(TAG, "dex2oat daemon crashed", e);
             }
         });
-        mThreads.add(thread);
         thread.start();
     }
 
