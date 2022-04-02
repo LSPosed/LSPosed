@@ -30,6 +30,7 @@ include(
     ":app",
     ":core",
     ":daemon",
+    ":dex2oat",
     ":hiddenapi:stubs",
     ":hiddenapi:bridge",
     ":magisk-loader",
