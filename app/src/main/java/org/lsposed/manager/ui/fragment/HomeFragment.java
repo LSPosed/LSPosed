@@ -120,8 +120,13 @@ public class HomeFragment extends BaseFragment {
                     binding.warningSummary.setText(HtmlCompat.fromHtml(getString(R.string.system_inject_fail), HtmlCompat.FROM_HTML_MODE_LEGACY));
                 }
                 if (!ConfigManager.dex2oatFlagsLoaded()) {
-                    binding.warningTitle.setText(R.string.system_prop_incorrect_summary);
-                    binding.warningSummary.setText(HtmlCompat.fromHtml(getString(R.string.system_prop_incorrect), HtmlCompat.FROM_HTML_MODE_LEGACY));
+                    if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.Q) {
+                        binding.warningTitle.setText(R.string.dex2oat_service_crashed_summary);
+                        binding.warningSummary.setText(HtmlCompat.fromHtml(getString(R.string.dex2oat_service_crashed), HtmlCompat.FROM_HTML_MODE_LEGACY));
+                    } else {
+                        binding.warningTitle.setText(R.string.system_prop_incorrect_summary);
+                        binding.warningSummary.setText(HtmlCompat.fromHtml(getString(R.string.system_prop_incorrect), HtmlCompat.FROM_HTML_MODE_LEGACY));
+                    }
                 }
             } else {
                 binding.warningCard.setVisibility(View.GONE);
