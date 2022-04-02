@@ -57,6 +57,7 @@ jobs:
           ~/.ccache
           magisk-loader/build/.lto-cache
           daemon/build/.lto-cache
+          dex2oat/build/.lto-cache
         key: native-cache-${{ github.sha }}
         restore-keys: native-cache-
     - name: Install dep
@@ -125,6 +126,7 @@ jobs:
         path: |
           magisk-loader/build/symbols
           daemon/build/symbols
+          dex2oat/build/symbols
     - name: Post to channel
       if: ${{ github.event_name != 'pull_request' && success() && github.ref == 'refs/heads/master' }}
       env:
