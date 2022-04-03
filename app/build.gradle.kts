@@ -17,7 +17,6 @@
  * Copyright (C) 2021 LSPosed Contributors
  */
 
-import com.android.build.gradle.internal.dsl.BuildType
 import java.time.Instant
 
 plugins {
@@ -78,7 +77,7 @@ android {
                 signingConfig = if (it.storeFile?.exists() == true) it
                 else signingConfigs.named("debug").get()
                 isMinifyEnabled = true
-                (this as BuildType).isShrinkResources = true
+                isShrinkResources = true
                 proguardFiles("proguard-rules.pro")
             }
         }
@@ -101,12 +100,6 @@ autoResConfig {
 }
 
 materialThemeBuilder {
-//    fun Theme.emplace() {
-//        lightThemeFormat.set("ThemeOverlay.Light.%s")
-//        darkThemeFormat.set("ThemeOverlay.Dark.%s")
-//
-//        themes.add(this)
-//    }
     themes {
         for ((name, color) in listOf(
             "Red" to "F44336",
