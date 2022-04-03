@@ -23,6 +23,6 @@
 #include "utils/hook_helper.hpp"
 
 namespace lspd {
-    void InstallInlineHooks(const lsplant::HookHandler &handler);
+    void InstallInlineHooks(JNIEnv* env, const lsplant::HookHandler &handler);
 
 }
