@@ -51,6 +51,8 @@
     <string name="selinux_policy_not_loaded"><![CDATA[Modules that hook System Framework will not work.<br/>Please report this to <a href="https://github.com/topjohnwu/Magisk/issues"><b>Magisk</b></a> developer.]]></string>
     <string name="system_inject_fail_summary">System Framework injection failed</string>
     <string name="system_inject_fail"><![CDATA[This is rare and may be caused by <b>Magisk</b> or some low-quality Magisk modules.<br/>Please try to disable Magisk modules other than Riru and LSPosed or submit full log to developers.]]></string>
+    <string name="dex2oat_service_crashed_summary">Dex optimizer service crashed</string>
+    <string name="dex2oat_service_crashed"><![CDATA[LSPosed dex2oat wrapper crashed.<br/>Modules may invalidate occasionally or applications may become laggy.]]></string>
     <string name="system_prop_incorrect_summary">System prop incorrect</string>
     <string name="system_prop_incorrect"><![CDATA[Some necessary system properties deleted or modified.<br/>Modules may invalidate occasionally.]]></string>
     <string name="need_update">Need to update</string>

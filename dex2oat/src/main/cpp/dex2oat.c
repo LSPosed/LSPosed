@@ -72,11 +72,6 @@ static void *recv_fds(int sockfd, char *cmsgbuf, size_t bufsz, int cnt) {
     return CMSG_DATA(cmsg);
 }
 
-static void write_int(int fd, int val) {
-    if (fd < 0) return;
-    write(fd, &val, sizeof(val));
-}
-
 static int recv_fd(int sockfd) {
     char cmsgbuf[CMSG_SPACE(sizeof(int))];
 
@@ -87,6 +82,18 @@ static int recv_fd(int sockfd) {
     int result;
     memcpy(&result, data, sizeof(int));
     return result;
+}
+
+static int read_int(int fd) {
+    int val;
+    if (read(fd, &val, sizeof(val)) != sizeof(val))
+        return -1;
+    return val;
+}
+
+static void write_int(int fd, int val) {
+    if (fd < 0) return;
+    write(fd, &val, sizeof(val));
 }
 
 int main(int argc, char **argv) {
@@ -101,6 +108,7 @@ int main(int argc, char **argv) {
     }
     write_int(sock_fd, LP_SELECT(32, 64));
     int stock_fd = recv_fd(sock_fd);
+    read_int(sock_fd);
     close(sock_fd);
     LOGD("sock: %s %d", sock.sun_path, stock_fd);
 

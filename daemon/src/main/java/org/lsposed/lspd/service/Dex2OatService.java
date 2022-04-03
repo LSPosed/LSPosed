@@ -31,7 +31,6 @@ import android.util.Log;
 
 import java.io.File;
 import java.io.FileDescriptor;
-import java.io.IOException;
 import java.io.InterruptedIOException;
 import java.nio.file.Files;
 import java.nio.file.Paths;
@@ -44,22 +43,11 @@ public class Dex2OatService {
     private static final String DEX2OAT_64 = "/apex/com.android.art/bin/dex2oat64";
 
     private Thread thread = null;
+    private LocalSocket serverSocket = null;
+    private LocalServerSocket server = null;
+    private FileDescriptor stockFd32 = null, stockFd64 = null;
 
     public void start() {
-        try {
-            var devPath = Files.readAllLines(Paths.get("/data/adb/lspd/dev_path")).get(0);
-            Log.d(TAG, "dev path: " + devPath);
-            daemon(devPath);
-        } catch (IOException e) {
-            Log.e(TAG, "dex2oat daemon failed to start", e);
-        }
-    }
-
-    public boolean isAlive() {
-        return thread.isAlive();
-    }
-
-    private void daemon(String devPath) {
         thread = new Thread(() -> {
             try {
                 Log.i(TAG, "dex2oat daemon start");
@@ -68,14 +56,18 @@ public class Dex2OatService {
                 } else {
                     Log.e(TAG, "failed to set socket context");
                 }
+                var devPath = getDevPath();
                 var sockPath = devPath + "/dex2oat.sock";
-                var serverSocket = new LocalSocket(LocalSocket.SOCKET_STREAM);
+                Files.createDirectories(Paths.get(devPath));
+                Log.d(TAG, "dev path: " + devPath);
+
+                serverSocket = new LocalSocket(LocalSocket.SOCKET_STREAM);
                 serverSocket.bind(new LocalSocketAddress(sockPath, LocalSocketAddress.Namespace.FILESYSTEM));
-                var server = new LocalServerSocket(serverSocket.getFileDescriptor());
+                server = new LocalServerSocket(serverSocket.getFileDescriptor());
                 SELinux.setFileContext(sockPath, "u:object_r:magisk_file:s0");
-                FileDescriptor stockFd32 = null, stockFd64 = null;
                 if (new File(DEX2OAT_32).exists()) stockFd32 = Os.open(DEX2OAT_32, OsConstants.O_RDONLY, 0);
                 if (new File(DEX2OAT_64).exists()) stockFd64 = Os.open(DEX2OAT_64, OsConstants.O_RDONLY, 0);
+
                 while (true) {
                     var client = server.accept();
                     try (var is = client.getInputStream();
@@ -93,6 +85,12 @@ public class Dex2OatService {
         });
         thread.start();
     }
+
+    public boolean isAlive() {
+        return thread.isAlive();
+    }
+
+    private static native String getDevPath();
 
     private boolean setSocketCreateContext(String context) {
         FileDescriptor fd = null;

@@ -25,14 +25,6 @@ rm -f "/data/local/tmp/daemon.apk"
 cd "$MODDIR"
 
 if [ "$(getprop ro.build.version.sdk)" -ge 29 ]; then
-  TMP=$($RANDOM | md5sum | head -c 16)
-  while [ -d "/dev/$TMP" ]; do
-      TMP=$($RANDOM | md5sum | head -c 16)
-  done
-  mkdir "/dev/$TMP"
-  echo "/dev/$TMP" > "/data/adb/lspd/dev_path"
-  sed -i "s/placeholder_\/dev\/................/placeholder_\/dev\/$TMP/" "$MODDIR/bin/dex2oat32"
-  sed -i "s/placeholder_\/dev\/................/placeholder_\/dev\/$TMP/" "$MODDIR/bin/dex2oat64"
   mount --bind "$MAGISK_PATH/.magisk/modules/$MODNAME/bin/dex2oat32" "/apex/com.android.art/bin/dex2oat32"
   mount --bind "$MAGISK_PATH/.magisk/modules/$MODNAME/bin/dex2oat64" "/apex/com.android.art/bin/dex2oat64"
 fi

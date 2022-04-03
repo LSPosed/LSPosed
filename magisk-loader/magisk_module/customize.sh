@@ -88,31 +88,6 @@ extract "$ZIPFILE" 'daemon'             "$MODPATH"
 rm -f /data/adb/lspd/manager.apk
 extract "$ZIPFILE" 'manager.apk'        '/data/adb/lspd'
 
-if [ "$API" -ge 29 ]; then
-  ui_print "- Extracting dex2oat binaries"
-  mkdir "$MODPATH/bin"
-
-  if [ "$ARCH" = "arm" ] || [ "$ARCH" = "arm64" ]; then
-    extract "$ZIPFILE" "bin/armeabi-v7a/dex2oat" "$MODPATH/bin" true
-    mv "$MODPATH/bin/dex2oat" "$MODPATH/bin/dex2oat32"
-
-    if [ "$IS64BIT" = true ]; then
-      extract "$ZIPFILE" "bin/arm64-v8a/dex2oat" "$MODPATH/bin" true
-      mv "$MODPATH/bin/dex2oat" "$MODPATH/bin/dex2oat64"
-    fi
-  elif [ "$ARCH" == "x86" ] || [ "$ARCH" == "x64" ]; then
-    extract "$ZIPFILE" "bin/x86/dex2oat" "$MODPATH/bin" true
-    mv "$MODPATH/bin/dex2oat" "$MODPATH/bin/dex2oat32"
-
-    if [ "$IS64BIT" = true ]; then
-      extract "$ZIPFILE" "bin/x86_64/dex2oat" "$MODPATH/bin" true
-      mv "$MODPATH/bin/dex2oat" "$MODPATH/bin/dex2oat64"
-    fi
-  fi
-else
-  extract "$ZIPFILE" 'system.prop' "$MODPATH"
-fi
-
 ui_print "- Extracting daemon libraries"
 if [ "$ARCH" = "arm" ] ; then
   extract "$ZIPFILE" 'lib/armeabi-v7a/libdaemon.so' "$MODPATH" true
@@ -182,6 +157,40 @@ elif [ "$FLAVOR" == "riru" ]; then
       mkdir -p "/data/adb/riru/modules/$RIRU_MODULE_LIB_NAME"
     fi
   fi
+fi
+
+if [ "$API" -ge 29 ]; then
+  ui_print "- Extracting dex2oat binaries"
+  mkdir "$MODPATH/bin"
+
+  if [ "$ARCH" = "arm" ] || [ "$ARCH" = "arm64" ]; then
+    extract "$ZIPFILE" "bin/armeabi-v7a/dex2oat" "$MODPATH/bin" true
+    mv "$MODPATH/bin/dex2oat" "$MODPATH/bin/dex2oat32"
+
+    if [ "$IS64BIT" = true ]; then
+      extract "$ZIPFILE" "bin/arm64-v8a/dex2oat" "$MODPATH/bin" true
+      mv "$MODPATH/bin/dex2oat" "$MODPATH/bin/dex2oat64"
+    fi
+  elif [ "$ARCH" == "x86" ] || [ "$ARCH" == "x64" ]; then
+    extract "$ZIPFILE" "bin/x86/dex2oat" "$MODPATH/bin" true
+    mv "$MODPATH/bin/dex2oat" "$MODPATH/bin/dex2oat32"
+
+    if [ "$IS64BIT" = true ]; then
+      extract "$ZIPFILE" "bin/x86_64/dex2oat" "$MODPATH/bin" true
+      mv "$MODPATH/bin/dex2oat" "$MODPATH/bin/dex2oat64"
+    fi
+  fi
+
+  ui_print "- Patching binaries"
+  DEV_PATH=$(tr -dc 'a-f0-9' < /dev/urandom | head -c 16)
+  while [ -d "/dev/$DEV_PATH" ]; do
+    DEV_PATH=$(tr -dc 'a-f0-9' < /dev/urandom | head -c 16)
+  done
+  sed -i "s/placeholder_\/dev\/................/placeholder_\/dev\/$DEV_PATH/" "$MODPATH/libdaemon.so"
+  sed -i "s/placeholder_\/dev\/................/placeholder_\/dev\/$DEV_PATH/" "$MODPATH/bin/dex2oat32"
+  sed -i "s/placeholder_\/dev\/................/placeholder_\/dev\/$DEV_PATH/" "$MODPATH/bin/dex2oat64"
+else
+  extract "$ZIPFILE" 'system.prop' "$MODPATH"
 fi
 
 set_perm_recursive "$MODPATH" 0 0 0755 0644
