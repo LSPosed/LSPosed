@@ -88,7 +88,7 @@ public class Dex2OatService {
                         Log.d(TAG, "sent fd" + lp);
                     }
                 }
-            } catch (Exception e) {
+            } catch (Throwable e) {
                 Log.e(TAG, "dex2oat daemon crashed", e);
                 try {
                     server.close();
