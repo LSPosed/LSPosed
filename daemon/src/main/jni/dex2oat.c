@@ -38,8 +38,6 @@ Java_org_lsposed_lspd_service_Dex2OatService_getDevPath(JNIEnv *env, jclass claz
 JNIEXPORT void JNICALL
 Java_org_lsposed_lspd_service_Dex2OatService_fallback(JNIEnv *env, jclass clazz) {
     LOGI("do fallback");
-    seteuid(0);
     system("nsenter -m -t 1 umount /apex/com.android.art/bin/dex2oat*");
     __system_property_set("dalvik.vm.dex2oat-flags", "--inline-max-code-units=0");
-    seteuid(1000);
 }
