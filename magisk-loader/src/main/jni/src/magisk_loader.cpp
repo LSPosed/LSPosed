@@ -122,7 +122,7 @@ namespace lspd {
                         return GetArt()->getSymbAddress<void*>(symbol);
                     },
                 };
-                InstallInlineHooks(initInfo);
+                InstallInlineHooks(env, initInfo);
                 InitHooks(env, initInfo);
                 SetupEntryClass(env);
                 FindAndCall(env, "forkCommon",
@@ -194,7 +194,7 @@ namespace lspd {
                         return GetArt()->getSymbAddress<void*>(symbol);
                     },
             };
-            InstallInlineHooks(initInfo);
+            InstallInlineHooks(env, initInfo);
             auto [dex_fd, size] = instance->RequestLSPDex(env, binder);
             LoadDex(env, PreloadedDex(dex_fd, size));
             close(dex_fd);
