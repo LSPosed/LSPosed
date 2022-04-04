@@ -257,6 +257,19 @@
                             style="@style/DeviceInfoDialogLabel"
                             android:layout_width="match_parent"
                             android:layout_height="wrap_content"
+                            android:text="@string/info_dex2oat_wrapper" />
+
+                        <com.google.android.material.textview.MaterialTextView
+                            android:id="@+id/dex2oat_wrapper"
+                            style="@style/DeviceInfoDialogValue"
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:text="@string/not_installed" />
+
+                        <com.google.android.material.textview.MaterialTextView
+                            style="@style/DeviceInfoDialogLabel"
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
                             android:text="@string/info_framework_version" />
 
                         <com.google.android.material.textview.MaterialTextView

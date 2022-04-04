@@ -22,10 +22,24 @@
 //
 
 #include <jni.h>
+#include <sys/system_properties.h>
+#include <unistd.h>
+#include <stdlib.h>
+
+#include "logging.h"
 
 char kTmpDir[] = "placeholder_/dev/0123456789abcdef";
 
 JNIEXPORT jstring JNICALL
 Java_org_lsposed_lspd_service_Dex2OatService_getDevPath(JNIEnv *env, jclass clazz) {
     return (*env)->NewStringUTF(env, kTmpDir + 12);
+}
+
+JNIEXPORT void JNICALL
+Java_org_lsposed_lspd_service_Dex2OatService_fallback(JNIEnv *env, jclass clazz) {
+    LOGI("do fallback");
+    seteuid(0);
+    system("nsenter -m -t 1 umount /apex/com.android.art/bin/dex2oat*");
+    __system_property_set("dalvik.vm.dex2oat-flags", "--inline-max-code-units=0");
+    seteuid(1000);
 }
