@@ -373,6 +373,18 @@ public class ConfigFileManager {
         }
         if (preLoadedDexes.isEmpty()) return null;
         if (moduleClassNames.isEmpty()) return null;
+
+        if (obfuscate) {
+            for (int i = 0; i < moduleClassNames.size(); i++) {
+                var s = moduleClassNames.get(i);
+                var original = ObfuscationManager.getOriginalSignature();
+                if (s.startsWith(original)) {
+                    var obfuscated = ObfuscationManager.getObfuscatedSignature();
+                    moduleClassNames.add(i, s.replace(original, obfuscated));
+                }
+            }
+        }
+
         file.preLoadedDexes = preLoadedDexes;
         file.moduleClassNames = moduleClassNames;
         file.moduleLibraryNames = moduleLibraryNames;

@@ -8,4 +8,6 @@ public class ObfuscationManager {
 
     // generates signature
     static native String getObfuscatedSignature();
+
+    static native String getOriginalSignature();
 }

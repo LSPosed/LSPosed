@@ -40,7 +40,7 @@ using namespace lsplant;
 namespace {
 std::mutex init_lock{};
 std::string obfuscated_signature;
-const std::string old_signature = "Lde/robv/android/xposed";
+const std::string original_signature = "Lde/robv/android/xposed/";
 
 jclass class_file_descriptor;
 jmethodID method_file_descriptor_ctor;
@@ -76,11 +76,11 @@ void maybeInit(JNIEnv *env) {
         thread_local static std::uniform_int_distribution<std::string::size_type> choose_slash(0, 10);
 
         std::string out;
-        size_t length = old_signature.size();
+        size_t length = original_signature.size();
         out.reserve(length);
         out += "L";
 
-        for (size_t i = 1; i < length; i++) {
+        for (size_t i = 1; i < length - 1; i++) {
             if (choose_slash(rg) > 8 &&                         // 80% alphabet + 20% slashes
                 out[i - 1] != '/' &&                                // slashes could not stick together
                 i != 1 &&                                           // the first character should not be slash
@@ -90,6 +90,8 @@ void maybeInit(JNIEnv *env) {
                 out += chrs[pick(rg)];
             }
         }
+
+        out += "/";
         return out;
     };
 
@@ -120,7 +122,17 @@ extern "C"
 JNIEXPORT jstring JNICALL
 Java_org_lsposed_lspd_service_ObfuscationManager_getObfuscatedSignature(JNIEnv *env, [[maybe_unused]] jclass obfuscation_manager) {
     maybeInit(env);
-    return env->NewStringUTF(obfuscated_signature.c_str());
+    std::string obfuscated_signature_java(obfuscated_signature, 1);
+    replace(obfuscated_signature_java.begin(), obfuscated_signature_java.end(), '/', '.');
+    return env->NewStringUTF(obfuscated_signature_java.c_str());
+}
+
+extern "C"
+JNIEXPORT jstring JNICALL
+Java_org_lsposed_lspd_service_ObfuscationManager_getOriginalSignature(JNIEnv *env, [[maybe_unused]] jclass obfuscation_manager) {
+    std::string original_signature_java(original_signature, 1);
+    replace(original_signature_java.begin(), original_signature_java.end(), '/', '.');
+    return env->NewStringUTF(original_signature_java.c_str());
 }
 
 static int obfuscateDex(const void *dex, size_t size) {
@@ -131,7 +143,7 @@ static int obfuscateDex(const void *dex, size_t size) {
     auto ir = reader.GetIr();
     for (auto &i: ir->strings) {
         const char *s = i->c_str();
-        char* p = const_cast<char *>(strstr(s, old_signature.c_str()));
+        char* p = const_cast<char *>(strstr(s, original_signature.c_str()));
         if (p) {
             // NOLINTNEXTLINE bugprone-not-null-terminated-result
             memcpy(p, new_sig, strlen(new_sig));
