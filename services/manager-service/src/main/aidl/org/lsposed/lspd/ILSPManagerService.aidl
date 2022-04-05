@@ -79,4 +79,6 @@ interface ILSPManagerService {
     boolean getDexObfuscate() = 42;
 
     void setDexObfuscate(boolean enable) = 43;
+
+    boolean dex2oatWrapperAlive() = 44;
 }

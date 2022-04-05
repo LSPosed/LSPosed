@@ -359,4 +359,13 @@ public class ConfigManager {
             return false;
         }
     }
+
+    public static boolean dex2oatWrapperAlive() {
+        try {
+            return LSPManagerServiceHolder.getService().dex2oatWrapperAlive();
+        } catch (RemoteException e) {
+            Log.e(App.TAG, Log.getStackTraceString(e));
+            return false;
+        }
+    }
 }

@@ -107,7 +107,8 @@ public class HomeFragment extends BaseFragment {
             } else {
                 binding.updateCard.setVisibility(View.GONE);
             }
-            if (!ConfigManager.isSepolicyLoaded() || !ConfigManager.systemServerRequested() || !ConfigManager.dex2oatFlagsLoaded()) {
+            boolean dex2oatAbnormal = !ConfigManager.dex2oatWrapperAlive() && !ConfigManager.dex2oatFlagsLoaded();
+            if (!ConfigManager.isSepolicyLoaded() || !ConfigManager.systemServerRequested() || dex2oatAbnormal) {
                 binding.statusTitle.setText(R.string.partial_activated);
                 binding.statusIcon.setImageResource(R.drawable.ic_round_warning_24);
                 binding.warningCard.setVisibility(View.VISIBLE);
@@ -119,14 +120,9 @@ public class HomeFragment extends BaseFragment {
                     binding.warningTitle.setText(R.string.system_inject_fail_summary);
                     binding.warningSummary.setText(HtmlCompat.fromHtml(getString(R.string.system_inject_fail), HtmlCompat.FROM_HTML_MODE_LEGACY));
                 }
-                if (!ConfigManager.dex2oatFlagsLoaded()) {
-                    if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.Q) {
-                        binding.warningTitle.setText(R.string.dex2oat_service_crashed_summary);
-                        binding.warningSummary.setText(HtmlCompat.fromHtml(getString(R.string.dex2oat_service_crashed), HtmlCompat.FROM_HTML_MODE_LEGACY));
-                    } else {
-                        binding.warningTitle.setText(R.string.system_prop_incorrect_summary);
-                        binding.warningSummary.setText(HtmlCompat.fromHtml(getString(R.string.system_prop_incorrect), HtmlCompat.FROM_HTML_MODE_LEGACY));
-                    }
+                if (dex2oatAbnormal) {
+                    binding.warningTitle.setText(R.string.system_prop_incorrect_summary);
+                    binding.warningSummary.setText(HtmlCompat.fromHtml(getString(R.string.system_prop_incorrect), HtmlCompat.FROM_HTML_MODE_LEGACY));
                 }
             } else {
                 binding.warningCard.setVisibility(View.GONE);
@@ -161,6 +157,13 @@ public class HomeFragment extends BaseFragment {
             binding.apiVersion.setText(String.valueOf(ConfigManager.getXposedApiVersion()));
             binding.api.setText(ConfigManager.getApi());
             binding.frameworkVersion.setText(String.format(LocaleDelegate.getDefaultLocale(), "%1$s (%2$d)", ConfigManager.getXposedVersionName(), ConfigManager.getXposedVersionCode()));
+            if (Build.VERSION.SDK_INT < Build.VERSION_CODES.Q) {
+                binding.dex2oatWrapper.setText(R.string.unsupported_android_version);
+            } else if (ConfigManager.dex2oatWrapperAlive()) {
+                binding.dex2oatWrapper.setText(R.string.supported);
+            } else {
+                binding.dex2oatWrapper.setText(R.string.unsupported_crashed);
+            }
         } else {
             binding.apiVersion.setText(R.string.not_installed);
             binding.api.setText(R.string.not_installed);

@@ -3,7 +3,7 @@
 #include <android/log.h>
 
 #ifndef LOG_TAG
-#define LOG_TAG "dex2oat-wrapper"
+#define LOG_TAG "LSPosedDex2Oat"
 #endif
 
 #ifdef LOG_DISABLED
