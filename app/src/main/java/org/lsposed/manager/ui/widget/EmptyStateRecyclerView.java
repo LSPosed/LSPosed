@@ -29,6 +29,7 @@ import android.util.AttributeSet;
 import android.util.DisplayMetrics;
 
 import androidx.annotation.Nullable;
+import androidx.recyclerview.widget.ConcatAdapter;
 
 import org.lsposed.manager.R;
 import org.lsposed.manager.util.SimpleStatefulAdaptor;
@@ -61,6 +62,14 @@ public class EmptyStateRecyclerView extends StatefulRecyclerView {
     protected void dispatchDraw(Canvas canvas) {
         super.dispatchDraw(canvas);
         var adapter = getAdapter();
+        if (adapter instanceof ConcatAdapter) {
+            for (var a : ((ConcatAdapter) adapter).getAdapters()) {
+                if (a instanceof EmptyStateAdapter) {
+                    adapter = a;
+                    break;
+                }
+            }
+        }
         if (adapter instanceof EmptyStateAdapter && ((EmptyStateAdapter<?>) adapter).isLoaded() && adapter.getItemCount() == 0) {
             final int width = getMeasuredWidth() - getPaddingLeft() - getPaddingRight();
             final int height = getMeasuredHeight() - getPaddingTop() - getPaddingBottom();
