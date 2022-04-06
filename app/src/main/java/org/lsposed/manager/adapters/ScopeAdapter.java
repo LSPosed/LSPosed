@@ -48,6 +48,7 @@ import android.widget.CompoundButton;
 import android.widget.Filter;
 import android.widget.Filterable;
 import android.widget.ImageView;
+import android.widget.Switch;
 import android.widget.TextView;
 import android.widget.Toast;
 
@@ -85,7 +86,7 @@ import java.util.stream.Collectors;
 
 import rikka.core.util.ResourceUtils;
 import rikka.material.app.LocaleDelegate;
-import rikka.widget.switchbar.SwitchBar;
+import rikka.widget.mainswitchbar.OnMainSwitchChangeListener;
 
 @SuppressLint("NotifyDataSetChanged")
 public class ScopeAdapter extends EmptyStateRecyclerView.EmptyStateAdapter<ScopeAdapter.ViewHolder> implements Filterable {
@@ -104,19 +105,18 @@ public class ScopeAdapter extends EmptyStateRecyclerView.EmptyStateAdapter<Scope
     private List<AppInfo> showList = new ArrayList<>();
     private List<String> denyList = new ArrayList<>();
 
-    private final SwitchBar.OnCheckedChangeListener switchBarOnCheckedChangeListener = new SwitchBar.OnCheckedChangeListener() {
+    private final OnMainSwitchChangeListener switchBarOnCheckedChangeListener = new OnMainSwitchChangeListener() {
         @Override
-        public boolean onCheckedChanged(SwitchBar view, boolean isChecked) {
+        public void onSwitchChanged(Switch view, boolean isChecked) {
             if (!moduleUtil.setModuleEnabled(module.packageName, isChecked)) {
-                return false;
+                view.setChecked(!isChecked);
             }
             var tmpChkList = new HashSet<>(checkedList);
             if (isChecked && !tmpChkList.isEmpty() && !ConfigManager.setModuleScope(module.packageName, tmpChkList)) {
-                return false;
+                view.setChecked(false);
             }
             enabled = isChecked;
             notifyDataSetChanged();
-            return true;
         }
     };
 
@@ -480,9 +480,9 @@ public class ScopeAdapter extends EmptyStateRecyclerView.EmptyStateAdapter<Scope
     public void refresh(boolean force) {
         setLoaded(null, false);
         enabled = moduleUtil.isModuleEnabled(module.packageName);
-        fragment.binding.masterSwitch.setOnCheckedChangeListener(null);
+        fragment.binding.masterSwitch.addOnSwitchChangeListener(null);
         fragment.binding.masterSwitch.setChecked(enabled);
-        fragment.binding.masterSwitch.setOnCheckedChangeListener(switchBarOnCheckedChangeListener);
+        fragment.binding.masterSwitch.addOnSwitchChangeListener(switchBarOnCheckedChangeListener);
         fragment.runAsync(() -> {
             List<PackageInfo> appList = AppHelper.getAppList(force);
             denyList = AppHelper.getDenyList(force);

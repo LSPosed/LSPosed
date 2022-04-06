@@ -54,7 +54,7 @@ public class BaseActivity extends MaterialActivity {
     public void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         if (ThemeUtil.isSystemAccent()) {
-            DynamicColors.applyIfAvailable(this);
+            DynamicColors.applyToActivityIfAvailable(this);
         }
         // make sure the versions are consistent
         if (BuildConfig.DEBUG) return;
@@ -107,6 +107,7 @@ public class BaseActivity extends MaterialActivity {
             theme.applyStyle(ThemeUtil.getColorThemeStyleRes(), true);
         }
         theme.applyStyle(ThemeUtil.getNightThemeStyleRes(this), true);
+        theme.applyStyle(rikka.material.preference.R.style.ThemeOverlay_Rikka_Material3_Preference, true);
     }
 
     @Override
