@@ -67,6 +67,7 @@ import org.lsposed.manager.App;
 import org.lsposed.manager.BuildConfig;
 import org.lsposed.manager.ConfigManager;
 import org.lsposed.manager.R;
+import org.lsposed.manager.databinding.ItemMasterSwitchBinding;
 import org.lsposed.manager.databinding.ItemModuleBinding;
 import org.lsposed.manager.ui.dialog.BlurBehindDialogBuilder;
 import org.lsposed.manager.ui.fragment.AppListFragment;
@@ -86,6 +87,7 @@ import java.util.stream.Collectors;
 
 import rikka.core.util.ResourceUtils;
 import rikka.material.app.LocaleDelegate;
+import rikka.widget.mainswitchbar.MainSwitchBar;
 import rikka.widget.mainswitchbar.OnMainSwitchChangeListener;
 
 @SuppressLint("NotifyDataSetChanged")
@@ -105,18 +107,43 @@ public class ScopeAdapter extends EmptyStateRecyclerView.EmptyStateAdapter<Scope
     private List<AppInfo> showList = new ArrayList<>();
     private List<String> denyList = new ArrayList<>();
 
+    public RecyclerView.Adapter<RecyclerView.ViewHolder> switchAdaptor = new RecyclerView.Adapter<>() {
+        @NonNull
+        @Override
+        public RecyclerView.ViewHolder onCreateViewHolder(@NonNull ViewGroup parent, int viewType) {
+            return new RecyclerView.ViewHolder(ItemMasterSwitchBinding.inflate(activity.getLayoutInflater(), parent, false).masterSwitch) {
+            };
+        }
+
+        @Override
+        public void onBindViewHolder(@NonNull RecyclerView.ViewHolder holder, int position) {
+            var mainSwitchBar = (MainSwitchBar) holder.itemView;
+            mainSwitchBar.setChecked(enabled);
+            mainSwitchBar.addOnSwitchChangeListener(switchBarOnCheckedChangeListener);
+            // bug of MainSwitchBar, force set the checkedChangeListener
+            fragment.runOnUiThread(mainSwitchBar::show);
+        }
+
+        @Override
+        public int getItemCount() {
+            return 1;
+        }
+    };
+
     private final OnMainSwitchChangeListener switchBarOnCheckedChangeListener = new OnMainSwitchChangeListener() {
         @Override
         public void onSwitchChanged(Switch view, boolean isChecked) {
+            enabled = isChecked;
             if (!moduleUtil.setModuleEnabled(module.packageName, isChecked)) {
                 view.setChecked(!isChecked);
+                enabled = !isChecked;
             }
             var tmpChkList = new HashSet<>(checkedList);
             if (isChecked && !tmpChkList.isEmpty() && !ConfigManager.setModuleScope(module.packageName, tmpChkList)) {
                 view.setChecked(false);
+                enabled = false;
             }
-            enabled = isChecked;
-            notifyDataSetChanged();
+            fragment.runOnUiThread(ScopeAdapter.this::notifyDataSetChanged);
         }
     };
 
@@ -205,7 +232,7 @@ public class ScopeAdapter extends EmptyStateRecyclerView.EmptyStateAdapter<Scope
     }
 
     private void checkRecommended() {
-        if (!fragment.binding.masterSwitch.isChecked()) {
+        if (!enabled) {
             fragment.showHint(R.string.module_is_not_activated_yet, false);
             return;
         }
@@ -359,7 +386,9 @@ public class ScopeAdapter extends EmptyStateRecyclerView.EmptyStateAdapter<Scope
 
     @Override
     public void onViewRecycled(@NonNull ViewHolder holder) {
-        holder.checkbox.setOnCheckedChangeListener(null);
+        if (holder.checkbox != null) {
+            holder.checkbox.setOnCheckedChangeListener(null);
+        }
         super.onViewRecycled(holder);
     }
 
@@ -480,9 +509,6 @@ public class ScopeAdapter extends EmptyStateRecyclerView.EmptyStateAdapter<Scope
     public void refresh(boolean force) {
         setLoaded(null, false);
         enabled = moduleUtil.isModuleEnabled(module.packageName);
-        fragment.binding.masterSwitch.addOnSwitchChangeListener(null);
-        fragment.binding.masterSwitch.setChecked(enabled);
-        fragment.binding.masterSwitch.addOnSwitchChangeListener(switchBarOnCheckedChangeListener);
         fragment.runAsync(() -> {
             List<PackageInfo> appList = AppHelper.getAppList(force);
             denyList = AppHelper.getDenyList(force);
@@ -640,7 +666,7 @@ public class ScopeAdapter extends EmptyStateRecyclerView.EmptyStateAdapter<Scope
 
     public void onBackPressed() {
         fragment.searchView.clearFocus();
-        if (isLoaded && fragment.binding.masterSwitch.isChecked() && checkedList.isEmpty()) {
+        if (isLoaded && enabled && checkedList.isEmpty()) {
             var builder = new BlurBehindDialogBuilder(activity);
             builder.setMessage(!recommendedList.isEmpty() ? R.string.no_scope_selected_has_recommended : R.string.no_scope_selected);
             if (!recommendedList.isEmpty()) {
