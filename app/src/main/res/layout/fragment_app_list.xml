@@ -20,7 +20,6 @@
 
 <androidx.coordinatorlayout.widget.CoordinatorLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
-    xmlns:tools="http://schemas.android.com/tools"
     android:id="@+id/fragment_container"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
@@ -58,13 +57,6 @@
                 app:layout_collapseMode="pin" />
         </com.google.android.material.appbar.SubtitleCollapsingToolbarLayout>
 
-        <rikka.widget.switchbar.SwitchBar
-            android:id="@+id/master_switch"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            app:switchOffText="@string/enable_module"
-            app:switchOnText="@string/enable_module" />
-
     </com.google.android.material.appbar.AppBarLayout>
 
     <com.google.android.material.floatingactionbutton.FloatingActionButton
@@ -82,30 +74,41 @@
         app:layout_fitsSystemWindowsInsets="@integer/internal_fragment_bottom_insets"
         app:tint="?attr/colorOnPrimary" />
 
-    <LinearLayout
+    <androidx.swiperefreshlayout.widget.SwipeRefreshLayout
+        android:id="@+id/swipe_refresh_layout"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        android:orientation="vertical"
-        app:layout_behavior="@string/appbar_scrolling_view_behavior"
-        tools:ignore="MissingPrefix">
+        app:layout_behavior="@string/appbar_scrolling_view_behavior">
 
-        <androidx.swiperefreshlayout.widget.SwipeRefreshLayout
-            android:id="@+id/swipe_refresh_layout"
+        <androidx.core.widget.NestedScrollView
             android:layout_width="match_parent"
             android:layout_height="match_parent">
 
-            <org.lsposed.manager.ui.widget.EmptyStateRecyclerView
-                android:id="@+id/recycler_view"
+            <LinearLayout
                 android:layout_width="match_parent"
                 android:layout_height="match_parent"
-                android:clipToPadding="false"
-                android:fadeScrollbars="true"
-                android:scrollbarStyle="insideOverlay"
-                android:scrollbars="vertical"
-                app:borderBottomVisibility="never"
-                app:borderTopDrawable="@null"
-                app:borderTopVisibility="whenTop"
-                app:fitsSystemWindowsInsets="@integer/internal_fragment_bottom_insets" />
-        </androidx.swiperefreshlayout.widget.SwipeRefreshLayout>
-    </LinearLayout>
+                android:orientation="vertical">
+
+                <rikka.widget.mainswitchbar.MainSwitchBar
+                    android:id="@+id/master_switch"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:fillViewport="true"
+                    android:text="@string/enable_module" />
+
+                <org.lsposed.manager.ui.widget.EmptyStateRecyclerView
+                    android:id="@+id/recycler_view"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:clipToPadding="false"
+                    android:fadeScrollbars="true"
+                    android:scrollbarStyle="insideOverlay"
+                    android:scrollbars="vertical"
+                    app:borderBottomVisibility="never"
+                    app:borderTopDrawable="@null"
+                    app:borderTopVisibility="whenTop"
+                    app:fitsSystemWindowsInsets="@integer/internal_fragment_bottom_insets" />
+            </LinearLayout>
+        </androidx.core.widget.NestedScrollView>
+    </androidx.swiperefreshlayout.widget.SwipeRefreshLayout>
 </androidx.coordinatorlayout.widget.CoordinatorLayout>
