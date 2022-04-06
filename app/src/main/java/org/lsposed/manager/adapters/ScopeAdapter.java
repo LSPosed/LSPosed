@@ -120,8 +120,6 @@ public class ScopeAdapter extends EmptyStateRecyclerView.EmptyStateAdapter<Scope
             var mainSwitchBar = (MainSwitchBar) holder.itemView;
             mainSwitchBar.setChecked(enabled);
             mainSwitchBar.addOnSwitchChangeListener(switchBarOnCheckedChangeListener);
-            // bug of MainSwitchBar, force set the checkedChangeListener
-            fragment.runOnUiThread(mainSwitchBar::show);
         }
 
         @Override
