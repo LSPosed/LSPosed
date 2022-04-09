@@ -60,6 +60,10 @@
     <string name="info_device">裝置版本</string>
     <string name="info_system_abi">系統架構</string>
     <string name="info_api">注入介面</string>
+    <string name="info_dex2oat_wrapper">優化器包裝器</string>
+    <string name="supported">支援</string>
+    <string name="unsupported_android_version">不支援（Android 版本不符合要求）</string>
+    <string name="unsupported_crashed">不支援（已當機）</string>
     <string name="parasitic_recommend">推薦使用寄生管理器</string>
     <string name="parasitic_recommend_summary">LSPosed 現在支援系統寄生以繞過偵測。您可以在成功建立寄生管理器圖示後從系統設定中移除 LSPosed 管理器。您隨時可以從 /data/adb/lspd/manager.apk 重新安裝管理器。</string>
     <string name="create_shortcut">建立捷徑</string>
