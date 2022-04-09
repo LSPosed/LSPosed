@@ -62,6 +62,10 @@
     <string name="info_device">Enhet</string>
     <string name="info_system_abi">System ABI</string>
     <string name="info_api">Grensesnitt</string>
+    <string name="info_dex2oat_wrapper">Optimizer-innpakning</string>
+    <string name="supported">Støttes</string>
+    <string name="unsupported_android_version">Støttes ikke (Android-versjonen er ikke fornøyd)</string>
+    <string name="unsupported_crashed">Støttes ikke (krasj)</string>
     <string name="parasitic_recommend">Parasittisk leder anbefales</string>
     <string name="parasitic_recommend_summary">LSPidet støtter nå systemparasitisering for å unngå deteksjon. Du kan trygt avinstallere håndtereren etter å ha lykkes med å lage en snarvei til den parasittiske behandleren. Du kan i alle tilfeller installere koordinatoren tilbake fra /data/adb/lspd/manager.apk.</string>
     <string name="create_shortcut">Opprett snarvei</string>
