@@ -14,6 +14,7 @@ import java.nio.file.Files;
 import java.nio.file.LinkOption;
 import java.nio.file.Path;
 import java.nio.file.Paths;
+import java.util.LinkedHashMap;
 
 public class LogcatService implements Runnable {
     private static final String TAG = "LSPosedLogcat";
@@ -24,6 +25,28 @@ public class LogcatService implements Runnable {
     private int modulesFd = -1;
     private int verboseFd = -1;
     private Thread thread = null;
+
+    static class LogLRU extends LinkedHashMap<File, Object> {
+        private static final int MAX_ENTRIES = 10;
+
+        public LogLRU() {
+            super(MAX_ENTRIES, 1f, false);
+        }
+
+        @Override
+        synchronized protected boolean removeEldestEntry(Entry<File, Object> eldest) {
+            if (size() > MAX_ENTRIES && eldest.getKey().delete()) {
+                Log.d(TAG, "Deleted old log " + eldest.getKey().getAbsolutePath());
+                return true;
+            }
+            return false;
+        }
+    }
+
+    @SuppressWarnings("MismatchedQueryAndUpdateOfCollection")
+    private final LinkedHashMap<File, Object> moduleLogs = new LogLRU();
+    @SuppressWarnings("MismatchedQueryAndUpdateOfCollection")
+    private final LinkedHashMap<File, Object> verboseLogs = new LogLRU();
 
     @SuppressLint("UnsafeDynamicallyLoadedCode")
     public LogcatService() {
@@ -89,8 +112,17 @@ public class LogcatService implements Runnable {
             Log.i(TAG, "New log file: " + log);
             ConfigFileManager.chattr0(log.toPath().getParent());
             int fd = ParcelFileDescriptor.open(log, mode).detachFd();
-            if (isVerboseLog) verboseFd = fd;
-            else modulesFd = fd;
+            if (isVerboseLog) {
+                synchronized (verboseLogs) {
+                    verboseLogs.put(log, new Object());
+                }
+                verboseFd = fd;
+            } else {
+                synchronized (moduleLogs) {
+                    moduleLogs.put(log, new Object());
+                }
+                modulesFd = fd;
+            }
             return fd;
         } catch (IOException e) {
             if (isVerboseLog) verboseFd = -1;
