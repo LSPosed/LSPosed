@@ -28,7 +28,7 @@
     <string name="Logs">紀錄檔</string>
     <string name="Settings">設定</string>
     <string name="feedback_or_suggestion">反饋或建議</string>
-    <string name="About">關於</string>
+    <string name="About">About</string>
     <string name="report_issue">回報問題</string>
     <string name="module_repo">倉庫</string>
     <string name="module_repo_loading">正在載入…</string>
@@ -60,6 +60,10 @@
     <string name="info_device">設備</string>
     <string name="info_system_abi">系統ABI</string>
     <string name="info_api">注入介面</string>
+    <string name="info_dex2oat_wrapper">優化器包裝器</string>
+    <string name="supported">支援</string>
+    <string name="unsupported_android_version">不支援（Android 版本不符合要求）</string>
+    <string name="unsupported_crashed">不支援（已當機）</string>
     <string name="parasitic_recommend">推薦使用寄生管理器</string>
     <string name="parasitic_recommend_summary">LSPosed 現在支援寄生到系統以避免檢測。
 在成功建立寄生管理器的捷徑後你可以安全地移除管理器。

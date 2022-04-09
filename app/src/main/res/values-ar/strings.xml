@@ -47,7 +47,8 @@
         <item quantity="other">%d وحدة قابلة للترقية</item>
     </plurals>
     <string name="about_view_source_code"><![CDATA[عرض كود المصدر في %1$s<br/>انضم إلى قناتنا %2$s]]></string>
-    <string name="translators" comment="Dear translators, please add your home page here following the format. There can be more than one translator. So feel free to append yourself.">Mahmoud Abd El-Hamed (7TM)</string>
+    <string name="translators" comment="Dear translators, please add your home page here following the format. There can be more than one translator. So feel free to append yourself.">Mahmoud Abd El-Hamed (7TM)
+Ali Samir</string>
     <string name="install">تثبيت</string>
     <string name="install_summary">انقر لتثبيت LSPosed</string>
     <string name="not_installed">غير مثبت</string>
@@ -70,6 +71,10 @@
     <string name="info_device">الجهاز</string>
     <string name="info_system_abi">نظام ABI</string>
     <string name="info_api">واجهة الحقن</string>
+    <string name="info_dex2oat_wrapper">غلاف محسّن</string>
+    <string name="supported">مدعوم</string>
+    <string name="unsupported_android_version">غير مدعوم (إصدار اندرويد غير راضٍ)</string>
+    <string name="unsupported_crashed">غير مدعوم (تَعـطّل)</string>
     <string name="parasitic_recommend">مدير طفيلي موصي به</string>
     <string name="parasitic_recommend_summary">يدعم LSPosed الآن تطهير النظام لتجنب الكشف. يمكنك إلغاء تثبيت المدير بأمان بعد إنشاء اختصار للمدير الطفيلي. على أي حال يمكنك تثبيت المدير مرة أخرى من /data/adb/lspd/manager.apk.</string>
     <string name="create_shortcut">إنشاء إختصار</string>
