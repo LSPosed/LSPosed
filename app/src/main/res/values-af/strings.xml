@@ -19,15 +19,15 @@
   -->
 <resources xmlns:tools="http://schemas.android.com/tools" tools:keep="@string/xposed_module_updated_notification_*,@string/module_is_not_activated_*">
     <!-- MainActivity -->
-    <string name="info">Info</string>
+    <string name="info">Inligting</string>
     <string name="overview">Oorsig</string>
     <string name="Modules">Modules</string>
     <plurals name="modules_enabled_count">
         <item quantity="one">%d module enabled</item>
-        <item quantity="other">%d modules enabled</item>
+        <item quantity="other">%d module enabled</item>
     </plurals>
     <string name="Logs">Logs</string>
-    <string name="Settings">Instellings</string>
+    <string name="Settings">Settings</string>
     <string name="feedback_or_suggestion">Terugvoer of voorstel</string>
     <string name="About">Oor</string>
     <string name="report_issue">Rapporteer probleem</string>
@@ -39,29 +39,33 @@
         <item quantity="other">%d modules enabled</item>
     </plurals>
     <string name="about_view_source_code"><![CDATA[Bekyk bronkode by %1$s<br/>Sluit aan by ons %2$s -kanaal]]></string>
-    <string name="translators" comment="Dear translators, please add your home page here following the format. There can be more than one translator. So feel free to append yourself.">null</string>
-    <string name="install">Installeer</string>
+    <string name="translators" comment="Dear translators, please add your home page here following the format. There can be more than one translator. So feel free to append yourself.">nul</string>
+    <string name="install">Install</string>
     <string name="install_summary">Tik om LSPosed te installeer</string>
-    <string name="not_installed">Nie geïnstalleer nie</string>
+    <string name="not_installed">Not installed</string>
     <string name="not_install_summary">LSPosed is nie geïnstalleer nie</string>
-    <string name="activated">Geaktiveer</string>
-    <string name="partial_activated">Gedeeltelik geaktiveer</string>
+    <string name="activated">Activated</string>
+    <string name="partial_activated">Partially activated</string>
     <string name="selinux_policy_not_loaded_summary">SEPolicy is nie behoorlik gelaai nie</string>
     <string name="selinux_policy_not_loaded"><![CDATA[Modules wat System Framework aanhaak, sal nie werk nie.<br/>Rapporteer dit asseblief aan <a href="https://github.com/topjohnwu/Magisk/issues"><b>Magisk</b></a> ontwikkelaar.]]></string>
     <string name="system_inject_fail_summary">Stelselraamwerk-inspuiting het misluk</string>
     <string name="system_inject_fail"><![CDATA[Dit is skaars en kan veroorsaak word deur <b>Magisk</b> of sommige Magisk-modules van lae gehalte.<br/>Probeer asseblief om Magisk-modules anders as Riru en LSPosed te deaktiveer of dien volledige log aan ontwikkelaars in.]]></string>
     <string name="system_prop_incorrect_summary">Stelselstut is verkeerd</string>
     <string name="system_prop_incorrect"><![CDATA[Sommige nodige stelseleienskappe is uitgevee of gewysig.<br/>Modules kan soms ongeldig word.]]></string>
-    <string name="need_update">Moet opdateer</string>
-    <string name="please_update_summary">Installeer asseblief die nuutste weergawe van LSPosed</string>
-    <string name="lsposed_not_active">LSPosed is nie tans geïnstalleer of aktief nie.</string>
-    <string name="info_api_version">API weergawe</string>
-    <string name="info_framework_version">Raamwerk weergawe</string>
+    <string name="need_update">Need to update</string>
+    <string name="please_update_summary">Please install the latest version of LSPosed</string>
+    <string name="lsposed_not_active">LSPosed is not currently installed or active.</string>
+    <string name="info_api_version">API version</string>
+    <string name="info_framework_version">Framework version</string>
     <string name="info_manager_version">Bestuurder weergawe</string>
     <string name="info_system_version">Stelsel weergawe</string>
     <string name="info_device">Toestel</string>
     <string name="info_system_abi">Stelsel ABI</string>
     <string name="info_api">Inspuitingskoppelvlak</string>
+    <string name="info_dex2oat_wrapper">Optimaliseerder-omhulsel</string>
+    <string name="supported">Ondersteun</string>
+    <string name="unsupported_android_version">Nie ondersteun nie (Android-weergawe is nie tevrede nie)</string>
+    <string name="unsupported_crashed">Ongesteun (Omgeval)</string>
     <string name="parasitic_recommend">Parasitiese Bestuurder Aanbeveel</string>
     <string name="parasitic_recommend_summary">LSPosed ondersteun nou stelselparasitering om opsporing te vermy. U kan die bestuurder veilig deïnstalleer nadat u \'n kortpad van die parasitiese bestuurder suksesvol geskep het. In elk geval kan jy die bestuurder terug installeer vanaf /data/adb/lspd/manager.apk.</string>
     <string name="create_shortcut">Skep kortpad</string>
