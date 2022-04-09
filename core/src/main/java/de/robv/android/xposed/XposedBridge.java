@@ -168,7 +168,7 @@ public final class XposedBridge {
      */
     public static void deoptimizeMethod(Member deoptimizedMethod) {
         if (!(deoptimizedMethod instanceof Executable)) {
-            throw new IllegalArgumentException("Only methods and constructors can be deoptimized: " + deoptimizedMethod.toString());
+            throw new IllegalArgumentException("Only methods and constructors can be deoptimized: " + deoptimizedMethod);
         } else if (Modifier.isAbstract(deoptimizedMethod.getModifiers())) {
             throw new IllegalArgumentException("Cannot deoptimize abstract methods: " + deoptimizedMethod);
         } else if (Proxy.isProxyClass(deoptimizedMethod.getDeclaringClass())) {
@@ -193,16 +193,18 @@ public final class XposedBridge {
      */
     public static XC_MethodHook.Unhook hookMethod(Member hookMethod, XC_MethodHook callback) {
         if (!(hookMethod instanceof Executable)) {
-            throw new IllegalArgumentException("Only methods and constructors can be hooked: " + hookMethod.toString());
+            throw new IllegalArgumentException("Only methods and constructors can be hooked: " + hookMethod);
         }
         // No check interface because there may be default methods
  		/*else if (hookMethod.getDeclaringClass().isInterface()) {
-			throw new IllegalArgumentException("Cannot hook interfaces: " + hookMethod.toString());
+			throw new IllegalArgumentException("Cannot hook interfaces: " + hookMethod);
 		}*/
         else if (Modifier.isAbstract(hookMethod.getModifiers())) {
-            throw new IllegalArgumentException("Cannot hook abstract methods: " + hookMethod.toString());
+            throw new IllegalArgumentException("Cannot hook abstract methods: " + hookMethod);
         } else if (hookMethod.getDeclaringClass().getClassLoader() == XposedBridge.class.getClassLoader()) {
             throw new IllegalArgumentException("Do not allow hooking inner methods");
+        } else if (hookMethod.getDeclaringClass() == Method.class && hookMethod.getName().equals("invoke")) {
+            throw new IllegalArgumentException("Cannot hook Method.invoke");
         }
 
         if (callback == null) {
@@ -383,26 +385,51 @@ public final class XposedBridge {
     }
 
     public static class AdditionalHookInfo {
-        final Executable method;
-        final Object[][] callbacks;
+        private static final ClassCastException castException = new ClassCastException("Return value's type from hook callback does not match the hooked method");
+        private static final Method getCause;
+        private final Executable method;
+        private final Object[][] callbacks;
+        private final Class<?> returnType;
+        private final boolean isStatic;
+
+        static {
+            Method tmp;
+            try {
+                tmp = InvocationTargetException.class.getMethod("getCause");
+            } catch (Throwable e) {
+                tmp = null;
+            }
+            getCause = tmp;
+        }
 
         private AdditionalHookInfo(Executable method, Object[][] callbacks) {
             this.method = method;
+            isStatic = Modifier.isStatic(method.getModifiers());
+            if (method instanceof Method) {
+                returnType = ((Method) method).getReturnType();
+            } else {
+                returnType = null;
+            }
             this.callbacks = callbacks;
         }
 
+        // This method is quite critical. We should try not to use system methods to avoid
+        // endless recursive
         public Object callback(Object[] args) throws Throwable {
             XC_MethodHook.MethodHookParam param = new XC_MethodHook.MethodHookParam();
 
             param.method = method;
 
-            if (Modifier.isStatic(method.getModifiers())) {
+            if (isStatic) {
                 param.thisObject = null;
                 param.args = args;
             } else {
                 param.thisObject = args[0];
                 param.args = new Object[args.length - 1];
-                System.arraycopy(args, 1, param.args, 0, args.length - 1);
+                //noinspection ManualArrayCopy
+                for (int i = 0; i < args.length - 1; ++i) {
+                    param.args[i] = args[i + 1];
+                }
             }
 
             Object[] callbacksSnapshot = callbacks[0];
@@ -411,7 +438,7 @@ public final class XposedBridge {
                 try {
                     return HookBridge.invokeOriginalMethod(method, param.thisObject, param.args);
                 } catch (InvocationTargetException ite) {
-                    throw ite.getCause();
+                    throw (Throwable) HookBridge.invokeOriginalMethod(getCause, ite);
                 }
             }
 
@@ -441,7 +468,7 @@ public final class XposedBridge {
                 try {
                     param.setResult(HookBridge.invokeOriginalMethod(method, param.thisObject, param.args));
                 } catch (InvocationTargetException e) {
-                    param.setThrowable(e.getCause());
+                    param.setThrowable((Throwable) HookBridge.invokeOriginalMethod(getCause, e));
                 }
             }
 
@@ -469,10 +496,8 @@ public final class XposedBridge {
                 throw param.getThrowable();
             else {
                 var result = param.getResult();
-                if (method instanceof Method) {
-                    var returnType = ((Method) method).getReturnType();
-                    if (!returnType.isPrimitive())
-                        return returnType.cast(result);
+                if (returnType != null && !returnType.isPrimitive() && !HookBridge.instanceOf(result, returnType)) {
+                    throw castException;
                 }
                 return result;
             }
