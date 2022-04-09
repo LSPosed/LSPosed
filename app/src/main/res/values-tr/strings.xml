@@ -62,6 +62,10 @@
     <string name="info_device">Cihaz</string>
     <string name="info_system_abi">Sistem ABI\'si</string>
     <string name="info_api">Enjeksiyon Arayüzü</string>
+    <string name="info_dex2oat_wrapper">Optimize Edici Sarıcı</string>
+    <string name="supported">Desteklenen</string>
+    <string name="unsupported_android_version">Desteklenmiyor (Android sürümü tatmin edici değil)</string>
+    <string name="unsupported_crashed">Desteklenmiyor (Çöktü)</string>
     <string name="parasitic_recommend">Parazit Yönetici Önerilir</string>
     <string name="parasitic_recommend_summary">LSPosed şu an sisteme parazit olarak yerleşip denetlemeleri önlemeyi destekliyor. Parazit yönetici kısayolunu ana ekrana ekledikten sonra güvenle bu yöneticiyi kaldırabilirsiniz. Eğer eski yöneticiyi geri isterseniz /data/adb/lspd/manager.apk konumunda bulabilirsiniz.</string>
     <string name="create_shortcut">Kısayol oluştur</string>
