@@ -60,6 +60,7 @@ public class RecyclerViewDialogFragment extends AppCompatDialogFragment {
                 binding.swipeRefreshLayout.setRefreshing(!pickAdaptor.isLoaded());
             }
         });
+        binding.swipeRefreshLayout.setProgressViewEndTarget(true, binding.swipeRefreshLayout.getProgressViewEndOffset());
         binding.swipeRefreshLayout.setOnRefreshListener(pickAdaptor::fullRefresh);
         pickAdaptor.refresh();
         var title = DialogTitleBinding.inflate(getLayoutInflater()).getRoot();
