@@ -60,6 +60,10 @@
     <string name="info_device">デバイス</string>
     <string name="info_system_abi">システムABI</string>
     <string name="info_api">インジェクションインターフェイス</string>
+    <string name="info_dex2oat_wrapper">最適化ラッパー</string>
+    <string name="supported">サポートされています</string>
+    <string name="unsupported_android_version">サポートされていません(Androidのバージョンが古い)</string>
+    <string name="unsupported_crashed">サポートされていません (クラッシュしました)</string>
     <string name="parasitic_recommend">寄生マネージャーがおすすめです</string>
     <string name="parasitic_recommend_summary">LSPosedは、検出を回避するために、システムへの寄生をサポートするようになりました。寄生されたマネージャーのショートカットを作成したら、マネージャーをアンインストールしても問題ありません。何かあった場合は、/data/adb/lspd/manager.apkからマネージャーを再インストールできます。</string>
     <string name="create_shortcut">ショートカットを作成</string>
@@ -163,7 +167,7 @@
     <string name="dns_over_http">DNS over HTTPS</string>
     <string name="dns_over_http_summary">一部の国向けの DNS ポイズニング 回避策</string>
     <string name="theme_color">テーマカラー</string>
-    <string name="theme_color_system">システムアクセントカラー</string>
+    <string name="theme_color_system">システムテーマカラー</string>
     <string name="settings_show_hidden_icon_apps_enabled">ランチャーアイコンを強制的に表示</string>
     <string name="settings_show_hidden_icon_apps_enabled_summary">Android10以降ではアプリアイコンを隠すことが禁止されています。オフにするとシステムのその機能を停止します。</string>
     <string name="settings_group_system">システム</string>
@@ -178,7 +182,7 @@
     <string name="update_channel_stable">安定版</string>
     <string name="update_channel_bate">ベータ版</string>
     <string name="update_channel_nightly">ナイトリービルド</string>
-    <string name="pref_title_restrict_classloader">モジュールのクラスローダのみがXposed APIを使用可能</string>
+    <string name="pref_title_restrict_classloader">モジュールクラスローダーのみがXposedAPIを使用できます</string>
     <string name="pref_summary_restrict_classloader">セキュリティ上のメリットがありますが、一部のモジュールが正しく動作しない可能性があります(実験的機能)</string>
     <!-- Module Repo -->
     <string name="module_readme">Readme</string>
