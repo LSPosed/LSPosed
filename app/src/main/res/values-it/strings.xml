@@ -62,6 +62,10 @@
     <string name="info_device">Dispositivo</string>
     <string name="info_system_abi">ABI del sistema</string>
     <string name="info_api">Interfaccia di iniezione</string>
+    <string name="info_dex2oat_wrapper">Ottimizzatore Wrapper</string>
+    <string name="supported">Supportato</string>
+    <string name="unsupported_android_version">Non supportato (versione di Android non soddisfatta)</string>
+    <string name="unsupported_crashed">Non supportato (arresto anomalo)</string>
     <string name="parasitic_recommend">Manager parassitario consigliato</string>
     <string name="parasitic_recommend_summary">LSPosed ora supporta la parassitizzazione del sistema per evitare il rilevamento. Puoi disinstallare in modo sicuro il manager dopo aver creato con successo una scorciatoia del manager parassitario. In ogni caso è possibile installare il manager da /data/adb/lspd/manager.apk.</string>
     <string name="create_shortcut">Crea scorciatoia</string>
@@ -128,7 +132,7 @@
     <string name="no_scope_selected_has_recommended">Non hai selezionato nessuna app. Selezionare le app consigliate?</string>
     <string name="use_recommended_message">Selezionare le app consigliate?</string>
     <string name="module_is_not_activated_yet">Il modulo Xposed non è ancora attivo</string>
-    <string name="requested_by_module">Seleziona consigliate</string>
+    <string name="requested_by_module">Consigliato</string>
     <string name="update_available">Aggiornamento disponibile: %1$s</string>
     <string name="module_disabled_no_selection">Il modulo %s è stato disabilitato poiché nessuna app è stata selezionata.</string>
     <string name="android_framework">Framework di sistema</string>
@@ -163,7 +167,7 @@
     <string name="settings_restore_failed2">Ripristino fallito:\n%s</string>
     <string name="group_network">Rete</string>
     <string name="dns_over_http">DNS over HTTPS</string>
-    <string name="dns_over_http_summary">Soluzione alternativa all\'avvelenamento della cache DNS in alcune nazioni</string>
+    <string name="dns_over_http_summary">Aggira l\'avvelenamento della cache DNS in alcune nazioni</string>
     <string name="theme_color">Colore del tema</string>
     <string name="theme_color_system">Colore del tema del sistema</string>
     <string name="settings_show_hidden_icon_apps_enabled">Forza le app a mostrare le icone nel launcher</string>
@@ -180,7 +184,7 @@
     <string name="update_channel_stable">Stabile</string>
     <string name="update_channel_bate">Beta</string>
     <string name="update_channel_nightly">Nightly</string>
-    <string name="pref_title_restrict_classloader">Solo il modulo classloader può utilizzare le API Xposed</string>
+    <string name="pref_title_restrict_classloader">Solo il classloader del modulo può utilizzare le API Xposed</string>
     <string name="pref_summary_restrict_classloader">Questo potrebbe causare il malfunzionamento di alcuni moduli, ma a vantaggio della sicurezza (funzione sperimentale)</string>
     <!-- Module Repo -->
     <string name="module_readme">Leggimi</string>
