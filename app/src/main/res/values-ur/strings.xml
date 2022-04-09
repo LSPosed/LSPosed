@@ -62,6 +62,10 @@
     <string name="info_device">ڈیوائس۔</string>
     <string name="info_system_abi">ABI سسٹم۔</string>
     <string name="info_api">انجیکشن انٹرفیس</string>
+    <string name="info_dex2oat_wrapper">آپٹیمائزر ریپر</string>
+    <string name="supported">حمایت یافتہ</string>
+    <string name="unsupported_android_version">غیر تعاون یافتہ (Android ورژن غیر مطمئن)</string>
+    <string name="unsupported_crashed">غیر تعاون یافتہ (کریش ہو گیا)</string>
     <string name="parasitic_recommend">پرجیوی مینیجر کی سفارش</string>
     <string name="parasitic_recommend_summary">LSPosed اب سراغ لگانے سے بچنے کے لیے سسٹم پیراجیٹائزیشن کی حمایت کرتا ہے۔ پرجیوی مینیجر کا شارٹ کٹ کامیابی سے بنانے کے بعد آپ منیجر کو محفوظ طریقے سے انسٹال کر سکتے ہیں۔ کسی بھی صورت میں آپ آدمی کو انسٹال کر سکتے ہیں.</string>
     <string name="create_shortcut">شارٹ کٹ بنانا</string>

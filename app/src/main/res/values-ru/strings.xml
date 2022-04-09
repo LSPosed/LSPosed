@@ -66,6 +66,10 @@
     <string name="info_device">Устройство</string>
     <string name="info_system_abi">Разрядность системы ABI</string>
     <string name="info_api">Способ внедрения</string>
+    <string name="info_dex2oat_wrapper">Оболочка оптимизатора</string>
+    <string name="supported">Поддерживается</string>
+    <string name="unsupported_android_version">Не поддерживается (версия Android не подходит)</string>
+    <string name="unsupported_crashed">Не поддерживается (Сбой)</string>
     <string name="parasitic_recommend">Скрытие приложения LSPosed</string>
     <string name="parasitic_recommend_summary">Рекомендуется скрыть приложение LSPosed от различных обнаружений в системе. Для этого создайте ярлык и безопасно удалите само приложение LSPosed. В любой момент можно вернуть приложение установив его из \"/data/adb/lspd/manager.apk\"</string>
     <string name="create_shortcut">Создать ярлык</string>

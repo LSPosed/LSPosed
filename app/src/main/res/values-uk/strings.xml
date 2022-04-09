@@ -66,6 +66,10 @@
     <string name="info_device">Пристрій</string>
     <string name="info_system_abi">Розрядність процесора</string>
     <string name="info_api">Метод ін\'єкції</string>
+    <string name="info_dex2oat_wrapper">Обгортка оптимізатора</string>
+    <string name="supported">Підтримується</string>
+    <string name="unsupported_android_version">Не підтримується (версія Android незадоволена)</string>
+    <string name="unsupported_crashed">Не підтримується (збій)</string>
     <string name="parasitic_recommend">Рекомендується менеджер-паразит</string>
     <string name="parasitic_recommend_summary">LSPosed тепер підтримує системний паразитизм, щоб уникнути виявлення. Ви можете безпечно видалити менеджер після успішного створення ярлика менеджера-паразита. У разі необхідності ви можете встановити менеджер назад з /data/adb/lspd/manager.apk.</string>
     <string name="create_shortcut">Створити ярлик</string>
