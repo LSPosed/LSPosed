@@ -37,6 +37,8 @@ import org.lsposed.manager.databinding.SwiperefreshRecyclerviewBinding;
 import org.lsposed.manager.ui.dialog.BlurBehindDialogBuilder;
 import org.lsposed.manager.util.ModuleUtil;
 
+import rikka.recyclerview.RecyclerViewKt;
+
 public class RecyclerViewDialogFragment extends AppCompatDialogFragment {
     @Override
     @NonNull
@@ -60,6 +62,8 @@ public class RecyclerViewDialogFragment extends AppCompatDialogFragment {
                 binding.swipeRefreshLayout.setRefreshing(!pickAdaptor.isLoaded());
             }
         });
+        binding.swipeRefreshLayout.setProgressViewEndTarget(true, binding.swipeRefreshLayout.getProgressViewEndOffset());
+        RecyclerViewKt.fixEdgeEffect(binding.recyclerView, false, true);
         binding.swipeRefreshLayout.setOnRefreshListener(pickAdaptor::fullRefresh);
         pickAdaptor.refresh();
         var title = DialogTitleBinding.inflate(getLayoutInflater()).getRoot();
