@@ -33,6 +33,7 @@ import androidx.activity.result.contract.ActivityResultContracts;
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.appcompat.widget.SearchView;
+import androidx.recyclerview.widget.ConcatAdapter;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
@@ -87,7 +88,10 @@ public class AppListFragment extends BaseFragment {
         scopeAdapter = new ScopeAdapter(this, module);
         scopeAdapter.setHasStableIds(true);
         scopeAdapter.registerAdapterDataObserver(observer);
-        binding.recyclerView.setAdapter(scopeAdapter);
+        var concatAdapter = new ConcatAdapter();
+        concatAdapter.addAdapter(scopeAdapter.switchAdaptor);
+        concatAdapter.addAdapter(scopeAdapter);
+        binding.recyclerView.setAdapter(concatAdapter);
         binding.recyclerView.setHasFixedSize(true);
         binding.recyclerView.setLayoutManager(new LinearLayoutManager(requireActivity()));
         binding.recyclerView.getBorderViewDelegate().setBorderVisibilityChangedListener((top, oldTop, bottom, oldBottom) -> binding.appBar.setLifted(!top));

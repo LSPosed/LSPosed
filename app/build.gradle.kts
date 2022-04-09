@@ -131,7 +131,7 @@ materialThemeBuilder {
     }
     // Add Material Design 3 color tokens (such as palettePrimary100) in generated theme
     // rikka.material >= 2.0.0 provides such attributes
-    generatePalette = false
+    generatePalette = true
 }
 
 dependencies {
@@ -158,11 +158,12 @@ dependencies {
     implementation("dev.rikka.rikkax.appcompat:appcompat:1.4.1")
     implementation("dev.rikka.rikkax.core:core:1.3.4")
     implementation("dev.rikka.rikkax.insets:insets:1.2.0")
-    implementation("dev.rikka.rikkax.material:material:1.6.6")
+    implementation("dev.rikka.rikkax.material:material:2.1.1")
+    implementation("dev.rikka.rikkax.material:material-preference:1.0.0")
     implementation("dev.rikka.rikkax.preference:simplemenu-preference:1.0.3")
     implementation("dev.rikka.rikkax.recyclerview:recyclerview-ktx:1.3.1")
     implementation("dev.rikka.rikkax.widget:borderview:1.1.0")
-    implementation("dev.rikka.rikkax.widget:switchbar:1.0.2")
+    implementation("dev.rikka.rikkax.widget:mainswitchbar:1.0.1")
     implementation("dev.rikka.rikkax.layoutinflater:layoutinflater:1.2.0")
     implementation("me.zhanghai.android.appiconloader:appiconloader:1.3.1")
     implementation("org.lsposed.hiddenapibypass:hiddenapibypass:4.3")
