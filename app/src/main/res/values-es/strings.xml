@@ -24,7 +24,7 @@
     <string name="Modules">Módulos</string>
     <plurals name="modules_enabled_count">
         <item quantity="one">%d módulo activado</item>
-        <item quantity="other">%d módulos activados</item>
+        <item quantity="other">%d modules enabled</item>
     </plurals>
     <string name="Logs">Trozas</string>
     <string name="Settings">Configuración</string>
@@ -62,6 +62,10 @@
     <string name="info_device">Dispositivo</string>
     <string name="info_system_abi">ABI del Sistema</string>
     <string name="info_api">Interfaz de inyección</string>
+    <string name="info_dex2oat_wrapper">Envoltura del optimizador</string>
+    <string name="supported">Apoyado</string>
+    <string name="unsupported_android_version">No compatible (versión de Android no satisfecha)</string>
+    <string name="unsupported_crashed">No soportado (estrellado)</string>
     <string name="parasitic_recommend">Se recomienda Parasitic Manager</string>
     <string name="parasitic_recommend_summary">LSPosed ahora soporta la parasitización del sistema para evitar ser detectado. Puede desinstalar el Manager de forma segura después de crear con éxito un acceso directo al Parasitic Manager. En cualquier caso, puedes instalar el Manager desde /data/adb/lspd/manager.apk.</string>
     <string name="create_shortcut">Crear acceso directo</string>
