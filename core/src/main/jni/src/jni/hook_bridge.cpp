@@ -166,7 +166,7 @@ LSP_DEF_NATIVE_METHOD(jobject, HookBridge, invokeOriginalMethod, jobject hookMet
     if (hook_item && hook_item->backup) {
         to_call = hook_item->backup;
     }
-    return native_invoke(env, to_call, thiz, args);
+    return env->CallObjectMethod(to_call, invoke, thiz, args);
 }
 
 LSP_DEF_NATIVE_METHOD(jboolean, HookBridge, instanceOf, jobject object, jclass expected_class) {
