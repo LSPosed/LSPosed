@@ -13,5 +13,6 @@ public class HookBridge {
 
     public static native Object invokeOriginalMethod(Executable method, Object thisObject, Object... args) throws IllegalAccessException, IllegalArgumentException, InvocationTargetException;
 
+    @FastNative
     public static native boolean instanceOf(Object obj, Class<?> clazz);
 }
