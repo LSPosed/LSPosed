@@ -194,12 +194,7 @@ public final class XposedBridge {
     public static XC_MethodHook.Unhook hookMethod(Member hookMethod, XC_MethodHook callback) {
         if (!(hookMethod instanceof Executable)) {
             throw new IllegalArgumentException("Only methods and constructors can be hooked: " + hookMethod);
-        }
-        // No check interface because there may be default methods
- 		/*else if (hookMethod.getDeclaringClass().isInterface()) {
-			throw new IllegalArgumentException("Cannot hook interfaces: " + hookMethod);
-		}*/
-        else if (Modifier.isAbstract(hookMethod.getModifiers())) {
+        } else if (Modifier.isAbstract(hookMethod.getModifiers())) {
             throw new IllegalArgumentException("Cannot hook abstract methods: " + hookMethod);
         } else if (hookMethod.getDeclaringClass().getClassLoader() == XposedBridge.class.getClassLoader()) {
             throw new IllegalArgumentException("Do not allow hooking inner methods");
