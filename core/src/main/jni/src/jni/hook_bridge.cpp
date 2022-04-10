@@ -38,8 +38,7 @@ std::shared_mutex hooked_lock;
 // Rehashing invalidates iterators, changes ordering between elements, and changes which buckets elements appear in, but does not invalidate pointers or references to elements.
 std::unordered_map<jmethodID, HookItem> hooked_methods;
 
-jobject (*native_invoke)(JNIEnv* env, jobject javaMethod, jobject javaReceiver,
-                          jobjectArray javaArgs);
+jmethodID invoke = nullptr;
 }
 
 namespace lspd {
@@ -184,11 +183,9 @@ static JNINativeMethod gMethods[] = {
 
 void RegisterHookBridge(JNIEnv *env) {
     auto method = env->FindClass("java/lang/reflect/Method");
-    auto invoke = env->GetMethodID(
+    invoke = env->GetMethodID(
             method, "invoke",
             "(Ljava/lang/Object;[Ljava/lang/Object;)Ljava/lang/Object;");
-    native_invoke = reinterpret_cast<decltype(native_invoke)>(
-            lsplant::GetNativeFunction(env, env->ToReflectedMethod(method, invoke, false)));
     env->DeleteLocalRef(method);
     REGISTER_LSP_NATIVE_METHODS(HookBridge);
 }
