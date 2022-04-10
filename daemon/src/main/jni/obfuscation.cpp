@@ -51,6 +51,12 @@ jmethodID method_shared_memory_ctor;
 bool inited = false;
 }
 
+static std::string to_java(const std::string &signature) {
+    std::string java(signature, 1);
+    replace(java.begin(), java.end(), '/', '.');
+    return java;
+}
+
 void maybeInit(JNIEnv *env) {
     if (inited) [[likely]] return;
     std::lock_guard l(init_lock);
@@ -84,7 +90,7 @@ void maybeInit(JNIEnv *env) {
             if (choose_slash(rg) > 8 &&                         // 80% alphabet + 20% slashes
                 out[i - 1] != '/' &&                                // slashes could not stick together
                 i != 1 &&                                           // the first character should not be slash
-                i != length - 1) {                                  // and the last character
+                i != length - 2) {                                  // and the last character
                 out += "/";
             } else {
                 out += chrs[pick(rg)];
@@ -95,23 +101,7 @@ void maybeInit(JNIEnv *env) {
         return out;
     };
 
-    auto contains_keyword = [](std::string_view s) -> bool {
-        for (const auto &i: {
-                "abstract", "assert", "boolean", "break", "byte", "case", "catch", "char", "class",
-                "continue", "const", "default", "do", "double", "else", "enum", "exports", "extends",
-                "final", "finally", "float", "for", "goto", "if", "implements", "import", "instanceof",
-                "int", "interface", "long", "module", "native", "new", "package", "private", "protected",
-                "public", "requires", "return", "short", "static", "strictfp", "super", "switch",
-                "synchronized", "this", "throw", "throws", "transient", "try", "var", "void", "volatile",
-                "while"}) {
-            if (s.find(i) != std::string::npos) return true;
-        }
-        return false;
-    };
-
-    [[unlikely]] do {
-        obfuscated_signature = regen();
-    } while (contains_keyword(obfuscated_signature));
+    obfuscated_signature = regen();
 
     LOGD("ObfuscationManager.getObfuscatedSignature: %s", obfuscated_signature.c_str());
     LOGD("ObfuscationManager init successfully");
@@ -122,16 +112,14 @@ extern "C"
 JNIEXPORT jstring JNICALL
 Java_org_lsposed_lspd_service_ObfuscationManager_getObfuscatedSignature(JNIEnv *env, [[maybe_unused]] jclass obfuscation_manager) {
     maybeInit(env);
-    std::string obfuscated_signature_java(obfuscated_signature, 1);
-    replace(obfuscated_signature_java.begin(), obfuscated_signature_java.end(), '/', '.');
+    static std::string obfuscated_signature_java = to_java(obfuscated_signature);
     return env->NewStringUTF(obfuscated_signature_java.c_str());
 }
 
 extern "C"
 JNIEXPORT jstring JNICALL
 Java_org_lsposed_lspd_service_ObfuscationManager_getOriginalSignature(JNIEnv *env, [[maybe_unused]] jclass obfuscation_manager) {
-    std::string original_signature_java(original_signature, 1);
-    replace(original_signature_java.begin(), original_signature_java.end(), '/', '.');
+    static std::string original_signature_java = to_java(original_signature);
     return env->NewStringUTF(original_signature_java.c_str());
 }
 
