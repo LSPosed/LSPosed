@@ -11,7 +11,6 @@ public class HookBridge {
 
     public static native boolean deoptimizeMethod(Executable method);
 
-    @FastNative
     public static native Object invokeOriginalMethod(Executable method, Object thisObject, Object... args) throws IllegalAccessException, IllegalArgumentException, InvocationTargetException;
 
     @FastNative
