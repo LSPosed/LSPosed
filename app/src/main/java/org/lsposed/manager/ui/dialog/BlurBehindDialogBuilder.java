@@ -30,7 +30,6 @@ import android.view.animation.DecelerateInterpolator;
 
 import androidx.annotation.NonNull;
 import androidx.appcompat.app.AlertDialog;
-import androidx.core.os.BuildCompat;
 
 import com.google.android.material.dialog.MaterialAlertDialogBuilder;
 
@@ -59,9 +58,10 @@ public class BlurBehindDialogBuilder extends MaterialAlertDialogBuilder {
             animator.setDuration(150);
             Window window = dialog.getWindow();
             View view = window.getDecorView();
-            if (BuildCompat.isAtLeastS()) {
+            if (Build.VERSION.SDK_INT >= 31) {
                 window.addFlags(WindowManager.LayoutParams.FLAG_BLUR_BEHIND);
-                animator.addUpdateListener(animation -> window.getAttributes().setBlurBehindRadius((Integer) animation.getAnimatedValue()));
+                window.getAttributes().setBlurBehindRadius(50);
+                window.setDimAmount(0.1f);
             } else if (supportBlur) {
                 try {
                     Object viewRootImpl = view.getClass().getMethod("getViewRootImpl").invoke(view);
@@ -69,7 +69,6 @@ public class BlurBehindDialogBuilder extends MaterialAlertDialogBuilder {
                         return;
                     }
                     SurfaceControl surfaceControl = (SurfaceControl) viewRootImpl.getClass().getMethod("getSurfaceControl").invoke(viewRootImpl);
-
 
                     Method setBackgroundBlurRadius = SurfaceControl.Transaction.class.getDeclaredMethod("setBackgroundBlurRadius", SurfaceControl.class, int.class);
                     animator.addUpdateListener(animation -> {
