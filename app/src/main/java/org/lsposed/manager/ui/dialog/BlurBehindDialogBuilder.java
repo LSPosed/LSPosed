@@ -20,8 +20,10 @@
 package org.lsposed.manager.ui.dialog;
 
 import android.animation.ValueAnimator;
+import android.annotation.SuppressLint;
 import android.content.Context;
 import android.os.Build;
+import android.util.Log;
 import android.view.SurfaceControl;
 import android.view.View;
 import android.view.Window;
@@ -30,9 +32,10 @@ import android.view.animation.DecelerateInterpolator;
 
 import androidx.annotation.NonNull;
 import androidx.appcompat.app.AlertDialog;
-import androidx.core.os.BuildCompat;
 
 import com.google.android.material.dialog.MaterialAlertDialogBuilder;
+
+import org.lsposed.manager.App;
 
 import java.lang.reflect.Method;
 
@@ -59,9 +62,10 @@ public class BlurBehindDialogBuilder extends MaterialAlertDialogBuilder {
             animator.setDuration(150);
             Window window = dialog.getWindow();
             View view = window.getDecorView();
-            if (BuildCompat.isAtLeastS()) {
+            if (Build.VERSION.SDK_INT >= 31) {
                 window.addFlags(WindowManager.LayoutParams.FLAG_BLUR_BEHIND);
-                animator.addUpdateListener(animation -> window.getAttributes().setBlurBehindRadius((Integer) animation.getAnimatedValue()));
+                window.getAttributes().setBlurBehindRadius(50);
+                window.addFlags(WindowManager.LayoutParams.FLAG_DIM_BEHIND);
             } else if (supportBlur) {
                 try {
                     Object viewRootImpl = view.getClass().getMethod("getViewRootImpl").invoke(view);
@@ -70,19 +74,18 @@ public class BlurBehindDialogBuilder extends MaterialAlertDialogBuilder {
                     }
                     SurfaceControl surfaceControl = (SurfaceControl) viewRootImpl.getClass().getMethod("getSurfaceControl").invoke(viewRootImpl);
 
-
-                    Method setBackgroundBlurRadius = SurfaceControl.Transaction.class.getDeclaredMethod("setBackgroundBlurRadius", SurfaceControl.class, int.class);
+                    @SuppressLint("BlockedPrivateApi") Method setBackgroundBlurRadius = SurfaceControl.Transaction.class.getDeclaredMethod("setBackgroundBlurRadius", SurfaceControl.class, int.class);
                     animator.addUpdateListener(animation -> {
                         try {
                             SurfaceControl.Transaction transaction = new SurfaceControl.Transaction();
                             setBackgroundBlurRadius.invoke(transaction, surfaceControl, animation.getAnimatedValue());
                             transaction.apply();
                         } catch (Throwable t) {
-                            t.printStackTrace();
+                            Log.e(App.TAG, "Blur behind dialog builder", t);
                         }
                     });
                 } catch (Throwable t) {
-                    t.printStackTrace();
+                    Log.e(App.TAG, "Blur behind dialog builder", t);
                 }
             }
             view.addOnAttachStateChangeListener(new View.OnAttachStateChangeListener() {
@@ -107,7 +110,7 @@ public class BlurBehindDialogBuilder extends MaterialAlertDialogBuilder {
             Method get = c.getMethod("getBoolean", String.class, boolean.class);
             value = (boolean) get.invoke(c, key, defaultValue);
         } catch (Exception e) {
-            e.printStackTrace();
+            Log.e(App.TAG, "Blur behind dialog builder get system property", e);
         }
         return value;
     }
