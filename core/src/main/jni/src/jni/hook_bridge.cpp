@@ -38,7 +38,8 @@ std::shared_mutex hooked_lock;
 // Rehashing invalidates iterators, changes ordering between elements, and changes which buckets elements appear in, but does not invalidate pointers or references to elements.
 std::unordered_map<jmethodID, HookItem> hooked_methods;
 
-jmethodID invoke = nullptr;
+jobject (*native_invoke)(JNIEnv* env, jobject javaMethod, jobject javaReceiver,
+                          jobjectArray javaArgs);
 }
 
 namespace lspd {
@@ -166,7 +167,11 @@ LSP_DEF_NATIVE_METHOD(jobject, HookBridge, invokeOriginalMethod, jobject hookMet
     if (hook_item && hook_item->backup) {
         to_call = hook_item->backup;
     }
-    return env->CallObjectMethod(to_call, invoke, thiz, args);
+    return native_invoke(env, to_call, thiz, args);
+}
+
+LSP_DEF_NATIVE_METHOD(jboolean, HookBridge, instanceOf, jobject object, jclass expected_class) {
+    return env->IsInstanceOf(object, expected_class);
 }
 
 static JNINativeMethod gMethods[] = {
@@ -174,13 +179,16 @@ static JNINativeMethod gMethods[] = {
     LSP_NATIVE_METHOD(HookBridge, unhookMethod, "(Ljava/lang/reflect/Executable;Ljava/lang/Object;)Z"),
     LSP_NATIVE_METHOD(HookBridge, deoptimizeMethod, "(Ljava/lang/reflect/Executable;)Z"),
     LSP_NATIVE_METHOD(HookBridge, invokeOriginalMethod, "(Ljava/lang/reflect/Executable;Ljava/lang/Object;[Ljava/lang/Object;)Ljava/lang/Object;"),
+    LSP_NATIVE_METHOD(HookBridge, instanceOf, "(Ljava/lang/Object;Ljava/lang/Class;)Z"),
 };
 
 void RegisterHookBridge(JNIEnv *env) {
     auto method = env->FindClass("java/lang/reflect/Method");
-    invoke = env->GetMethodID(
+    auto invoke = env->GetMethodID(
             method, "invoke",
             "(Ljava/lang/Object;[Ljava/lang/Object;)Ljava/lang/Object;");
+    native_invoke = reinterpret_cast<decltype(native_invoke)>(
+            lsplant::GetNativeFunction(env, env->ToReflectedMethod(method, invoke, false)));
     env->DeleteLocalRef(method);
     REGISTER_LSP_NATIVE_METHODS(HookBridge);
 }
