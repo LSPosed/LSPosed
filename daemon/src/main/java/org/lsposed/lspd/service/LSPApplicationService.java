@@ -83,6 +83,7 @@ public class LSPApplicationService extends ILSPApplicationService.Stub {
         Log.d(TAG, "LSPApplicationService.onTransact: code=" + code);
         if (code == DEX_TRANSACTION_CODE) {
             var shm = ConfigManager.getInstance().getPreloadDex();
+            if (shm == null) return false;
             // assume that write only a fd
             shm.writeToParcel(reply, 0);
             reply.writeLong(shm.getSize());
