@@ -40,7 +40,7 @@
 
         <com.google.android.material.textview.MaterialTextView
             android:id="@+id/app_name"
-            android:layout_width="0dp"
+            android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:ellipsize="marquee"
             android:maxLines="1"
@@ -55,7 +55,7 @@
 
         <org.lsposed.manager.ui.widget.ExpandableTextView
             android:id="@+id/description"
-            android:layout_width="0dp"
+            android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_gravity="center_vertical"
             android:maxLines="6"
@@ -67,7 +67,7 @@
 
         <com.google.android.material.textview.MaterialTextView
             android:id="@+id/hint"
-            android:layout_width="0dp"
+            android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_gravity="center_vertical"
             android:textAppearance="?android:attr/textAppearanceListItemSecondary"
