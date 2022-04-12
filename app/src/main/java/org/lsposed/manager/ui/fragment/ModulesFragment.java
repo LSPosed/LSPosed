@@ -36,7 +36,6 @@ import android.text.TextUtils;
 import android.text.style.ForegroundColorSpan;
 import android.text.style.StyleSpan;
 import android.text.style.TypefaceSpan;
-import android.util.Log;
 import android.util.SparseArray;
 import android.view.LayoutInflater;
 import android.view.Menu;
@@ -309,24 +308,20 @@ public class ModulesFragment extends BaseFragment implements ModuleUtil.ModuleLi
             ConfigManager.startActivityAsUserWithFeature(new Intent(ACTION_APPLICATION_DETAILS_SETTINGS, Uri.fromParts("package", selectedModule.packageName, null)), selectedModule.userId);
             return true;
         } else if (itemId == R.id.menu_uninstall) {
-            try {
-                new BlurBehindDialogBuilder(requireActivity())
-                        .setIcon(pm.getApplicationIcon(selectedModule.packageName))
-                        .setTitle(selectedModule.getAppName())
-                        .setMessage(R.string.module_uninstall_message)
-                        .setPositiveButton(android.R.string.ok, (dialog, which) ->
-                                runAsync(() -> {
-                                    boolean success = ConfigManager.uninstallPackage(selectedModule.packageName, selectedModule.userId);
-                                    String text = success ? getString(R.string.module_uninstalled, selectedModule.getAppName()) : getString(R.string.module_uninstall_failed);
-                                    showHint(text, false);
-                                    if (success)
-                                        moduleUtil.reloadSingleModule(selectedModule.packageName, selectedModule.userId);
-                                }))
-                        .setNegativeButton(android.R.string.cancel, null)
-                        .show();
-            } catch (PackageManager.NameNotFoundException e) {
-                Log.e(App.TAG,"Module uninstall load icon",e);
-            }
+            new BlurBehindDialogBuilder(requireActivity())
+                    .setIcon(selectedModule.app.loadIcon(pm))
+                    .setTitle(selectedModule.getAppName())
+                    .setMessage(R.string.module_uninstall_message)
+                    .setPositiveButton(android.R.string.ok, (dialog, which) ->
+                            runAsync(() -> {
+                                boolean success = ConfigManager.uninstallPackage(selectedModule.packageName, selectedModule.userId);
+                                String text = success ? getString(R.string.module_uninstalled, selectedModule.getAppName()) : getString(R.string.module_uninstall_failed);
+                                showHint(text, false);
+                                if (success)
+                                    moduleUtil.reloadSingleModule(selectedModule.packageName, selectedModule.userId);
+                            }))
+                    .setNegativeButton(android.R.string.cancel, null)
+                    .show();
             return true;
         } else if (itemId == R.id.menu_repo) {
             var navController = getNavController();
