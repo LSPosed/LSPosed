@@ -44,7 +44,11 @@ public class BlurBehindDialogBuilder extends MaterialAlertDialogBuilder {
     private static final boolean supportBlur = getSystemProperty("ro.surface_flinger.supports_background_blur", false) && !getSystemProperty("persist.sys.sf.disable_blurs", false);
 
     public BlurBehindDialogBuilder(@NonNull Context context) {
-        super(context, com.google.android.material.R.style.ThemeOverlay_Material3_MaterialAlertDialog_Centered);
+        super(context);
+    }
+
+    public BlurBehindDialogBuilder(@NonNull Context context, int overrideThemeResId) {
+        super(context, overrideThemeResId);
     }
 
     @NonNull
@@ -57,16 +61,15 @@ public class BlurBehindDialogBuilder extends MaterialAlertDialogBuilder {
 
     private void setBackgroundBlurRadius(AlertDialog dialog) {
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.R) {
-            ValueAnimator animator = ValueAnimator.ofInt(1, 150);
-            animator.setInterpolator(new DecelerateInterpolator());
-            animator.setDuration(150);
             Window window = dialog.getWindow();
-            View view = window.getDecorView();
             if (Build.VERSION.SDK_INT >= 31) {
                 window.addFlags(WindowManager.LayoutParams.FLAG_BLUR_BEHIND);
-                window.getAttributes().setBlurBehindRadius(50);
+                window.getAttributes().setBlurBehindRadius(53); //android.R.styleable.Window_windowBlurBehindRadius
                 window.addFlags(WindowManager.LayoutParams.FLAG_DIM_BEHIND);
             } else if (supportBlur) {
+                View view = window.getDecorView();
+                ValueAnimator animator = ValueAnimator.ofInt(1, 153);
+                animator.setInterpolator(new DecelerateInterpolator());
                 try {
                     Object viewRootImpl = view.getClass().getMethod("getViewRootImpl").invoke(view);
                     if (viewRootImpl == null) {
@@ -87,19 +90,18 @@ public class BlurBehindDialogBuilder extends MaterialAlertDialogBuilder {
                 } catch (Throwable t) {
                     Log.e(App.TAG, "Blur behind dialog builder", t);
                 }
+                view.addOnAttachStateChangeListener(new View.OnAttachStateChangeListener() {
+                    @Override
+                    public void onViewAttachedToWindow(View v) {
+                    }
+
+                    @Override
+                    public void onViewDetachedFromWindow(View v) {
+                        animator.cancel();
+                    }
+                });
+                animator.start();
             }
-            view.addOnAttachStateChangeListener(new View.OnAttachStateChangeListener() {
-                @Override
-                public void onViewAttachedToWindow(View v) {
-
-                }
-
-                @Override
-                public void onViewDetachedFromWindow(View v) {
-                    animator.cancel();
-                }
-            });
-            animator.start();
         }
     }
 

@@ -34,8 +34,7 @@
     <androidx.constraintlayout.widget.ConstraintLayout
         android:id="@+id/item_root"
         android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        tools:ignore="RtlSymmetry">
+        android:layout_height="wrap_content">
 
         <ImageView
             android:id="@+id/app_icon"
@@ -49,7 +48,7 @@
 
         <com.google.android.material.textview.MaterialTextView
             android:id="@+id/app_name"
-            android:layout_width="0dp"
+            android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_marginStart="20dp"
             android:ellipsize="marquee"
@@ -57,39 +56,87 @@
             android:textAppearance="?android:attr/textAppearanceListItem"
             android:textIsSelectable="false"
             android:textSize="16sp"
-            app:layout_constraintBottom_toTopOf="@id/description"
+            app:layout_constrainedWidth="true"
+            app:layout_constraintBottom_toTopOf="@id/app_Package_Name"
             app:layout_constraintStart_toEndOf="@id/app_icon"
             app:layout_constraintTop_toTopOf="parent"
-            tools:text="@tools:sample/first_names" />
+            app:layout_constraintWidth_max="wrap"
+            tools:text="LSPosed Manager" />
 
-        <org.lsposed.manager.ui.widget.ExpandableTextView
-            android:id="@+id/description"
-            android:layout_width="0dp"
+        <com.google.android.material.textview.MaterialTextView
+            android:id="@+id/app_Package_Name"
+            android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_gravity="center_vertical"
-            android:maxLines="5"
+            android:ellipsize="marquee"
+            android:maxLines="1"
             android:scrollbars="none"
             android:textAppearance="?android:attr/textAppearanceListItemSecondary"
-            android:textColor="?android:attr/textColorSecondary"
-            app:layout_constraintBottom_toBottomOf="@id/hint"
+            android:visibility="gone"
+            app:layout_constrainedWidth="true"
+            app:layout_constraintBottom_toTopOf="@id/app_Version_Name"
             app:layout_constraintEnd_toStartOf="@id/checkbox"
             app:layout_constraintHorizontal_bias="0.0"
             app:layout_constraintStart_toStartOf="@id/app_name"
             app:layout_constraintTop_toBottomOf="@id/app_name"
-            tools:text="@tools:sample/lorem" />
+            app:layout_constraintWidth_max="wrap"
+            tools:text="com.lsposed.manager" />
+
+        <com.google.android.material.textview.MaterialTextView
+            android:id="@+id/app_Version_Name"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:ellipsize="marquee"
+            android:maxLines="1"
+            android:scrollbars="none"
+            android:textAppearance="?android:attr/textAppearanceListItemSecondary"
+            android:visibility="gone"
+            app:layout_constrainedWidth="true"
+            app:layout_constraintBottom_toTopOf="@id/description"
+            app:layout_constraintEnd_toStartOf="@id/checkbox"
+            app:layout_constraintHorizontal_bias="0.0"
+            app:layout_constraintStart_toStartOf="@id/app_Package_Name"
+            app:layout_constraintTop_toBottomOf="@id/app_Package_Name"
+            app:layout_constraintWidth_max="wrap"
+            tools:text="Version :1.8.1" />
+
+        <org.lsposed.manager.ui.widget.ExpandableTextView
+            android:id="@+id/description"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_gravity="center_vertical"
+            android:maxLines="5"
+            android:scrollbars="none"
+            android:textAlignment="viewStart"
+            android:textAppearance="?android:attr/textAppearanceListItemSecondary"
+            android:textColor="?android:attr/textColorSecondary"
+            android:visibility="gone"
+            app:layout_constrainedWidth="true"
+            app:layout_constraintBottom_toBottomOf="@id/hint"
+            app:layout_constraintEnd_toStartOf="@id/checkbox"
+            app:layout_constraintHorizontal_bias="0.0"
+            app:layout_constraintStart_toStartOf="@id/app_Version_Name"
+            app:layout_constraintTop_toBottomOf="@id/app_Version_Name"
+            app:layout_constraintWidth_max="wrap"
+            tools:ignore="RtlCompat"
+            tools:text="A very very very very very very very very very very very very long string" />
 
         <com.google.android.material.textview.MaterialTextView
             android:id="@+id/hint"
-            android:layout_width="0dp"
+            android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_gravity="center_vertical"
+            android:textAlignment="viewStart"
             android:textAppearance="?android:attr/textAppearanceListItemSecondary"
             android:textColor="?android:attr/textColorPrimary"
+            android:visibility="gone"
+            app:layout_constrainedWidth="true"
             app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintEnd_toStartOf="@id/checkbox"
             app:layout_constraintHorizontal_bias="0.0"
             app:layout_constraintStart_toStartOf="@id/description"
             app:layout_constraintTop_toBottomOf="@id/description"
+            app:layout_constraintWidth_max="wrap"
+            tools:ignore="RtlCompat"
             tools:text="@tools:sample/lorem" />
 
         <com.google.android.material.textview.MaterialTextView
@@ -105,11 +152,12 @@
             android:textColor="?android:attr/textColorSecondary"
             android:textIsSelectable="false"
             android:visibility="gone"
+            app:layout_constrainedWidth="true"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintHorizontal_bias="1.0"
             app:layout_constraintStart_toEndOf="@id/app_name"
             app:layout_constraintTop_toTopOf="parent"
-            tools:ignore="RtlHardcoded"
+            app:layout_constraintWidth_max="wrap"
             tools:text="@tools:sample/last_names" />
 
         <com.google.android.material.checkbox.MaterialCheckBox

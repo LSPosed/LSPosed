@@ -125,7 +125,6 @@
     <string name="menu_show_modules">Mô-đun</string>
     <string name="menu_show_denylist">Danh sách từ chối</string>
     <string name="failed_to_save_scope_list">Lưu danh sách phạm vi thất bại</string>
-    <string name="app_description">%1$s\nPhiên bản %2$s</string>
     <string name="use_recommended">Được khuyến cáo</string>
     <string name="no_scope_selected_has_recommended">Bạn đã không lựa chọn bất kỳ ứng dụng nào. Lựa chọn những ứng dụng được khuyến nghị?</string>
     <string name="use_recommended_message">Lựa chọn những ứng dụng được khuyến cáo?</string>

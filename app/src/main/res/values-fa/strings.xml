@@ -127,7 +127,6 @@
     <string name="menu_show_modules">ماژول ها</string>
     <string name="menu_show_denylist">انکار کننده</string>
     <string name="failed_to_save_scope_list">ناموفق در ذخیره لیست محدوده</string>
-    <string name="app_description">%1$s\n نسخه %2$s</string>
     <string name="use_recommended">نیازمنده</string>
     <string name="no_scope_selected_has_recommended">شما هیچ برنامه ای را انتخاب نکردید. انتخاب برنامه های نیازمند؟</string>
     <string name="use_recommended_message">انتخاب برنامه های نیازمند؟</string>

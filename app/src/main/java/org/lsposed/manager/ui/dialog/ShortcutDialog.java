@@ -39,7 +39,7 @@ public class ShortcutDialog extends DialogFragment {
     @NonNull
     @Override
     public Dialog onCreateDialog(@Nullable Bundle savedInstanceState) {
-        return new BlurBehindDialogBuilder(requireContext())
+        return new BlurBehindDialogBuilder(requireContext(), R.style.ThemeOverlay_MaterialAlertDialog_Centered_FullWidthButtons)
                 .setTitle(R.string.parasitic_recommend)
                 .setMessage(R.string.parasitic_recommend_summary)
                 .setNegativeButton(R.string.never_show, (dialog, which) ->

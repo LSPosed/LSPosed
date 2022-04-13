@@ -127,7 +127,6 @@
     <string name="menu_show_modules">Moduler</string>
     <string name="menu_show_denylist">Denylist</string>
     <string name="failed_to_save_scope_list">Kunne ikke gemme scope-liste</string>
-    <string name="app_description">%1$s\nVersion %2$s</string>
     <string name="use_recommended">Anbefalet</string>
     <string name="no_scope_selected_has_recommended">Du valgte ikke nogen app. Vælg anbefalede apps?</string>
     <string name="use_recommended_message">Vælg anbefalede apps?</string>

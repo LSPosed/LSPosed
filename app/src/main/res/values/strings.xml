@@ -131,7 +131,7 @@
     <string name="menu_show_modules">Modules</string>
     <string name="menu_show_denylist">Denylist</string>
     <string name="failed_to_save_scope_list">Failed to save scope list</string>
-    <string name="app_description">%1$s\nVersion %2$s</string>
+    <string name="app_version">Version: %1$s</string>
     <string name="use_recommended">Recommended</string>
     <string name="no_scope_selected_has_recommended">You did not select any app. Select recommended apps?</string>
     <string name="use_recommended_message">Select recommended apps?</string>

@@ -282,12 +282,12 @@ public class RepoFragment extends BaseFragment implements RepoLoader.RepoListene
         public void onBindViewHolder(@NonNull RepoAdapter.ViewHolder holder, int position) {
             OnlineModule module = showList.get(position);
             holder.appName.setText(module.getDescription());
+            holder.appPackageName.setText(module.getName());
 
-            SpannableStringBuilder sb = new SpannableStringBuilder(module.getName());
+            SpannableStringBuilder sb = new SpannableStringBuilder();
 
             String summary = module.getSummary();
             if (summary != null) {
-                sb.append("\n");
                 sb.append(summary);
             }
             holder.appDescription.setVisibility(View.VISIBLE);
@@ -389,6 +389,7 @@ public class RepoFragment extends BaseFragment implements RepoLoader.RepoListene
         class ViewHolder extends RecyclerView.ViewHolder {
             ConstraintLayout root;
             TextView appName;
+            TextView appPackageName;
             TextView appDescription;
             TextView hint;
 
@@ -396,6 +397,7 @@ public class RepoFragment extends BaseFragment implements RepoLoader.RepoListene
                 super(binding.getRoot());
                 root = binding.itemRoot;
                 appName = binding.appName;
+                appPackageName=binding.appPackageName;
                 appDescription = binding.description;
                 hint = binding.hint;
             }

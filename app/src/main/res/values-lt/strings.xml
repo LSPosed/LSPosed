@@ -131,7 +131,6 @@
     <string name="menu_show_modules">Moduliai</string>
     <string name="menu_show_denylist">Denylist</string>
     <string name="failed_to_save_scope_list">Nepavyko išsaugoti srities sąrašo</string>
-    <string name="app_description">%1$s\nVersija %2$s</string>
     <string name="use_recommended">Rekomenduojama</string>
     <string name="no_scope_selected_has_recommended">Nepasirinkote jokios programos. Pasirinkti rekomenduojamas programas?</string>
     <string name="use_recommended_message">Pasirinkite rekomenduojamas programas?</string>

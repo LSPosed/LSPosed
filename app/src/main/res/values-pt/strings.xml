@@ -127,7 +127,6 @@
     <string name="menu_show_modules">Módulos</string>
     <string name="menu_show_denylist">Lista de Negação</string>
     <string name="failed_to_save_scope_list">Falha ao salvar lista de escopos</string>
-    <string name="app_description">%1$s\nVersão %2$s</string>
     <string name="use_recommended">Recomendações</string>
     <string name="no_scope_selected_has_recommended">Você não selecionou nenhum aplicativo. Deseja selecionar os aplicativos recomendados?</string>
     <string name="use_recommended_message">Selecionar os aplicativos recomendados?</string>
