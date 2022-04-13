@@ -308,7 +308,7 @@ public class ModulesFragment extends BaseFragment implements ModuleUtil.ModuleLi
             ConfigManager.startActivityAsUserWithFeature(new Intent(ACTION_APPLICATION_DETAILS_SETTINGS, Uri.fromParts("package", selectedModule.packageName, null)), selectedModule.userId);
             return true;
         } else if (itemId == R.id.menu_uninstall) {
-            new BlurBehindDialogBuilder(requireActivity())
+            new BlurBehindDialogBuilder(requireActivity(), R.style.ThemeOverlay_MaterialAlertDialog_FullWidthButtons)
                     .setIcon(selectedModule.app.loadIcon(pm))
                     .setTitle(selectedModule.getAppName())
                     .setMessage(R.string.module_uninstall_message)

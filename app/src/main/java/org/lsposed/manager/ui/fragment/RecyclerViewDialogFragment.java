@@ -65,7 +65,7 @@ public class RecyclerViewDialogFragment extends AppCompatDialogFragment {
         pickAdaptor.refresh();
         var title = DialogTitleBinding.inflate(getLayoutInflater()).getRoot();
         title.setText(getString(R.string.install_to_user, user.name));
-        var dialog = new BlurBehindDialogBuilder(requireActivity())
+        var dialog = new BlurBehindDialogBuilder(requireActivity(), R.style.ThemeOverlay_MaterialAlertDialog_FullWidthButtons)
                 .setCustomTitle(title)
                 .setView(binding.getRoot())
                 .setNegativeButton(android.R.string.cancel, null)
