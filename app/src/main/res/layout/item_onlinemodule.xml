@@ -35,8 +35,7 @@
         android:id="@+id/item_root"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:layout_gravity="center"
-        tools:ignore="RtlSymmetry">
+        android:layout_gravity="center">
 
         <com.google.android.material.textview.MaterialTextView
             android:id="@+id/app_name"

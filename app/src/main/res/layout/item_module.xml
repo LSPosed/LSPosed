@@ -34,8 +34,7 @@
     <androidx.constraintlayout.widget.ConstraintLayout
         android:id="@+id/item_root"
         android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        tools:ignore="RtlSymmetry">
+        android:layout_height="wrap_content">
 
         <ImageView
             android:id="@+id/app_icon"
@@ -159,7 +158,6 @@
             app:layout_constraintStart_toEndOf="@id/app_name"
             app:layout_constraintTop_toTopOf="parent"
             app:layout_constraintWidth_max="wrap"
-            tools:ignore="RtlHardcoded"
             tools:text="@tools:sample/last_names" />
 
         <com.google.android.material.checkbox.MaterialCheckBox
