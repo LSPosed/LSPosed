@@ -57,9 +57,11 @@
             android:textAppearance="?android:attr/textAppearanceListItem"
             android:textIsSelectable="false"
             android:textSize="16sp"
+            app:layout_constrainedWidth="true"
             app:layout_constraintBottom_toTopOf="@id/description"
             app:layout_constraintStart_toEndOf="@id/app_icon"
             app:layout_constraintTop_toTopOf="parent"
+            app:layout_constraintWidth_max="wrap"
             tools:text="@tools:sample/first_names" />
 
         <org.lsposed.manager.ui.widget.ExpandableTextView
@@ -71,11 +73,13 @@
             android:scrollbars="none"
             android:textAppearance="?android:attr/textAppearanceListItemSecondary"
             android:textColor="?android:attr/textColorSecondary"
+            app:layout_constrainedWidth="true"
             app:layout_constraintBottom_toBottomOf="@id/hint"
             app:layout_constraintEnd_toStartOf="@id/checkbox"
             app:layout_constraintHorizontal_bias="0.0"
             app:layout_constraintStart_toStartOf="@id/app_name"
             app:layout_constraintTop_toBottomOf="@id/app_name"
+            app:layout_constraintWidth_max="wrap"
             tools:text="@tools:sample/lorem" />
 
         <com.google.android.material.textview.MaterialTextView
@@ -85,11 +89,13 @@
             android:layout_gravity="center_vertical"
             android:textAppearance="?android:attr/textAppearanceListItemSecondary"
             android:textColor="?android:attr/textColorPrimary"
+            app:layout_constrainedWidth="true"
             app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintEnd_toStartOf="@id/checkbox"
             app:layout_constraintHorizontal_bias="0.0"
             app:layout_constraintStart_toStartOf="@id/description"
             app:layout_constraintTop_toBottomOf="@id/description"
+            app:layout_constraintWidth_max="wrap"
             tools:text="@tools:sample/lorem" />
 
         <com.google.android.material.textview.MaterialTextView
@@ -105,10 +111,12 @@
             android:textColor="?android:attr/textColorSecondary"
             android:textIsSelectable="false"
             android:visibility="gone"
+            app:layout_constrainedWidth="true"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintHorizontal_bias="1.0"
             app:layout_constraintStart_toEndOf="@id/app_name"
             app:layout_constraintTop_toTopOf="parent"
+            app:layout_constraintWidth_max="wrap"
             tools:ignore="RtlHardcoded"
             tools:text="@tools:sample/last_names" />
 
