@@ -127,7 +127,6 @@
     <string name="menu_show_modules">模組</string>
     <string name="menu_show_denylist">拒絕名單</string>
     <string name="failed_to_save_scope_list">作用域名單保存失敗</string>
-    <string name="app_description">%1$s\n版本：%2$s</string>
     <string name="use_recommended">推薦應用程式</string>
     <string name="no_scope_selected_has_recommended">未選擇任何應用程式。選擇推薦的？</string>
     <string name="use_recommended_message">選擇推薦的應用程式?</string>

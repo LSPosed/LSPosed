@@ -127,7 +127,6 @@
     <string name="menu_show_modules">Modüller</string>
     <string name="menu_show_denylist">Reddetme Listesi</string>
     <string name="failed_to_save_scope_list">Kapsam listesi kaydedilemedi</string>
-    <string name="app_description">%1$s\nSürüm %2$s</string>
     <string name="use_recommended">Önerilen</string>
     <string name="no_scope_selected_has_recommended">Herhangi bir uygulama seçmediniz. Önerilen uygulamalar seçilsin mi?</string>
     <string name="use_recommended_message">Önerilen uygulamalar seçilsin mi?</string>

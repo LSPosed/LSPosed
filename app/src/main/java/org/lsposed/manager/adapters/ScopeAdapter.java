@@ -416,12 +416,15 @@ public class ScopeAdapter extends EmptyStateRecyclerView.EmptyStateAdapter<Scope
                 holder.appIcon.setImageDrawable(pm.getDefaultActivityIcon());
             }
         });
-        SpannableStringBuilder sb = new SpannableStringBuilder(android ? "" : activity.getString(R.string.app_description, appInfo.packageName, appInfo.packageInfo.versionName));
-        if (android) holder.appDescription.setVisibility(View.GONE);
-        else {
-            holder.appDescription.setVisibility(View.VISIBLE);
-            holder.appDescription.setText(sb);
-            sb = new SpannableStringBuilder();
+        SpannableStringBuilder sb = new SpannableStringBuilder();
+        if (android) {
+            holder.appPackageName.setVisibility(View.GONE);
+            holder.appVersionName.setVisibility(View.GONE);
+        } else {
+            holder.appPackageName.setVisibility(View.VISIBLE);
+            holder.appVersionName.setVisibility(View.VISIBLE);
+            holder.appPackageName.setText(appInfo.packageName);
+            holder.appVersionName.setText(activity.getString(R.string.app_version, appInfo.packageInfo.versionName));
         }
         if (!recommendedList.isEmpty() && recommendedList.contains(appInfo.application)) {
             String recommended = activity.getString(R.string.requested_by_module);
@@ -601,7 +604,8 @@ public class ScopeAdapter extends EmptyStateRecyclerView.EmptyStateAdapter<Scope
         ConstraintLayout root;
         ImageView appIcon;
         TextView appName;
-        TextView appDescription;
+        TextView appPackageName;
+        TextView appVersionName;
         TextView hint;
         MaterialCheckBox checkbox;
 
@@ -610,7 +614,8 @@ public class ScopeAdapter extends EmptyStateRecyclerView.EmptyStateAdapter<Scope
             root = binding.itemRoot;
             appIcon = binding.appIcon;
             appName = binding.appName;
-            appDescription = binding.description;
+            appPackageName = binding.appPackageName;
+            appVersionName = binding.appVersionName;
             checkbox = binding.checkbox;
             hint = binding.hint;
             checkbox.setVisibility(View.VISIBLE);

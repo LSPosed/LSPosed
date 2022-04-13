@@ -131,7 +131,6 @@
     <string name="menu_show_modules">Мои модули</string>
     <string name="menu_show_denylist">DenyList</string>
     <string name="failed_to_save_scope_list">Не удалось сохранить список выбранных приложений для модуля</string>
-    <string name="app_description">%1$s\nВерсия: %2$s</string>
     <string name="use_recommended">Рекомендуемые</string>
     <string name="no_scope_selected_has_recommended">Вы не выбрали ни одного приложения. Выбрать рекомендуемые приложения?</string>
     <string name="use_recommended_message">Выбрать рекомендуемые приложения?</string>

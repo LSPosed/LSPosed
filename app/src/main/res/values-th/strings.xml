@@ -125,7 +125,6 @@
     <string name="menu_show_modules">โมดูล</string>
     <string name="menu_show_denylist">ปฏิเสธ</string>
     <string name="failed_to_save_scope_list">ไม่สามารถบันทึกรายการขอบเขต</string>
-    <string name="app_description">%1$s\nเวอร์ชัน %2$s</string>
     <string name="use_recommended">ที่แนะนำ</string>
     <string name="no_scope_selected_has_recommended">คุณไม่ได้เลือกแอพใด ๆ เลือกแอพที่แนะนำ?</string>
     <string name="use_recommended_message">เลือกแอพที่แนะนำ?</string>

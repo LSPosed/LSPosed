@@ -127,7 +127,6 @@
     <string name="menu_show_modules">Moduler</string>
     <string name="menu_show_denylist">Denylist</string>
     <string name="failed_to_save_scope_list">Kan ikke lagre områdeliste</string>
-    <string name="app_description">%1$s\nVersjon %2$s</string>
     <string name="use_recommended">Anbefalt</string>
     <string name="no_scope_selected_has_recommended">Du valgte ingen applikasjoner. Velg anbefalte apper?</string>
     <string name="use_recommended_message">Velg anbefalte apper?</string>

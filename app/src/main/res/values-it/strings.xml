@@ -127,7 +127,6 @@
     <string name="menu_show_modules">Moduli</string>
     <string name="menu_show_denylist">Lista di blocco</string>
     <string name="failed_to_save_scope_list">Impossibile salvare l\'elenco delle attivazioni</string>
-    <string name="app_description">%1$s\nVersione %2$s</string>
     <string name="use_recommended">Seleziona consigliate</string>
     <string name="no_scope_selected_has_recommended">Non hai selezionato nessuna app. Selezionare le app consigliate?</string>
     <string name="use_recommended_message">Selezionare le app consigliate?</string>

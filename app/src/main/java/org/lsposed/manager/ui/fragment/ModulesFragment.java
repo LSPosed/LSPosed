@@ -542,7 +542,7 @@ public class ModulesFragment extends BaseFragment implements ModuleUtil.ModuleLi
                 sb.append(getString(R.string.module_empty_description));
             }
             holder.appDescription.setText(sb);
-
+            holder.appDescription.setVisibility(View.VISIBLE);
             sb = new SpannableStringBuilder();
 
             int installXposedVersion = ConfigManager.getXposedApiVersion();

@@ -79,6 +79,7 @@
             android:layout_gravity="center_vertical"
             android:maxLines="6"
             android:scrollbars="none"
+            android:textAlignment="viewStart"
             android:textAppearance="?android:attr/textAppearanceSmall"
             app:layout_constrainedWidth="true"
             app:layout_constraintBottom_toTopOf="@id/hint"
@@ -87,7 +88,8 @@
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toBottomOf="@id/app_Package_Name"
             app:layout_constraintWidth_max="wrap"
-            tools:text="@tools:sample/lorem" />
+            tools:ignore="RtlCompat"
+            tools:text="A very very very very very very very very very very very very \n long string" />
 
         <com.google.android.material.textview.MaterialTextView
             android:id="@+id/hint"
