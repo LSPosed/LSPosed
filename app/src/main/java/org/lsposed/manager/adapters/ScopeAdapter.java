@@ -679,7 +679,6 @@ public class ScopeAdapter extends EmptyStateRecyclerView.EmptyStateAdapter<Scope
             }
             builder.setNegativeButton(!recommendedList.isEmpty() ? android.R.string.cancel : android.R.string.ok, (dialog, which) -> {
                 moduleUtil.setModuleEnabled(module.packageName, false);
-//                fragment.showHint(activity.getString(R.string.module_disabled_no_selection, module.getAppName()), false);
                 Toast.makeText(activity, activity.getString(R.string.module_disabled_no_selection, module.getAppName()), Toast.LENGTH_LONG).show();
                 fragment.getNavController().navigateUp();
             });
