@@ -604,6 +604,7 @@ public class ConfigManager {
                         continue;
                     }
                     var module = cachedModule.get(modulePackageName);
+                    assert module != null;
                     for (ProcessScope processScope : processesScope) {
                         cachedScope.computeIfAbsent(processScope,
                                 ignored -> new LinkedList<>()).add(module);
@@ -612,6 +613,7 @@ public class ConfigManager {
                             var appId = processScope.uid % PER_USER_RANGE;
                             for (var user : UserService.getUsers()) {
                                 var moduleUid = user.id * PER_USER_RANGE + appId;
+                                if (moduleUid == processScope.uid) continue; // skip duplicate
                                 var moduleSelf = new ProcessScope(processScope.processName, moduleUid);
                                 cachedScope.computeIfAbsent(moduleSelf,
                                         ignored -> new LinkedList<>()).add(module);
@@ -637,7 +639,7 @@ public class ConfigManager {
                 return;
             }
         }
-        Log.d(TAG, "cached Scope");
+        Log.d(TAG, "cached scope");
         cachedScope.forEach((ps, modules) -> {
             Log.d(TAG, ps.processName + "/" + ps.uid);
             modules.forEach(module -> Log.d(TAG, "\t" + module.packageName));
