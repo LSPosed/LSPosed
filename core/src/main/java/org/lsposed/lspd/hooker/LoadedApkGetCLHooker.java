@@ -40,7 +40,6 @@ import de.robv.android.xposed.XposedHelpers;
 import de.robv.android.xposed.callbacks.XC_LoadPackage;
 
 public class LoadedApkGetCLHooker extends XC_MethodHook {
-
     private final LoadedApk loadedApk;
     private final String packageName;
     private final String processName;
@@ -64,7 +63,7 @@ public class LoadedApkGetCLHooker extends XC_MethodHook {
         }
 
         try {
-            Hookers.logD("LoadedApk#getClassLoader starts");
+            Hookers.logD("LoadedApk#getClassLoader starts: isFirst=" + isFirstApplication);
 
             Object mAppDir = XposedHelpers.getObjectField(loadedApk, "mAppDir");
             ClassLoader classLoader = (ClassLoader) param.getResult();
@@ -76,11 +75,11 @@ public class LoadedApkGetCLHooker extends XC_MethodHook {
 
             XC_LoadPackage.LoadPackageParam lpparam = new XC_LoadPackage.LoadPackageParam(
                     XposedBridge.sLoadedPackageCallbacks);
-            lpparam.packageName = this.packageName;
-            lpparam.processName = this.processName;
+            lpparam.packageName = packageName;
+            lpparam.processName = processName;
             lpparam.classLoader = classLoader;
             lpparam.appInfo = loadedApk.getApplicationInfo();
-            lpparam.isFirstApplication = this.isFirstApplication;
+            lpparam.isFirstApplication = isFirstApplication;
 
             IBinder moduleBinder = serviceClient.requestModuleBinder(lpparam.packageName);
             if (moduleBinder != null) {
@@ -94,6 +93,7 @@ public class LoadedApkGetCLHooker extends XC_MethodHook {
         } finally {
             if (unhook != null) {
                 unhook.unhook();
+                unhook = null;
             }
         }
     }
