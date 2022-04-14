@@ -108,6 +108,7 @@ namespace lspd {
         if (auto parcel_class = JNI_FindClass(env, "android/os/Parcel")) {
             parcel_class_ = JNI_NewGlobalRef(env, parcel_class);
         } else return;
+        data_size_method_ = JNI_GetStaticMethodID(env, parcel_class_, "dataSize","()I");
         obtain_method_ = JNI_GetStaticMethodID(env, parcel_class_, "obtain",
                                                "()Landroid/os/Parcel;");
         recycleMethod_ = JNI_GetMethodID(env, parcel_class_, "recycle", "()V");
@@ -284,26 +285,20 @@ namespace lspd {
 
     ScopedLocalRef<jobject> Service::RequestApplicationBinderFromSystemServer(JNIEnv *env, const ScopedLocalRef<jobject> &system_server_binder) {
         auto heart_beat_binder = JNI_NewObject(env, binder_class_, binder_ctor_);
-        auto data = JNI_CallStaticObjectMethod(env, parcel_class_, obtain_method_);
-        auto reply = JNI_CallStaticObjectMethod(env, parcel_class_, obtain_method_);
+        Wrapper wrapper{env, this};
 
-        JNI_CallVoidMethod(env, data, write_int_method_, getuid());
-        JNI_CallVoidMethod(env, data, write_int_method_, getpid());
-        JNI_CallVoidMethod(env, data, write_string_method_, JNI_NewStringUTF(env, "android"));
-        JNI_CallVoidMethod(env, data, write_strong_binder_method_, heart_beat_binder);
+        JNI_CallVoidMethod(env, wrapper.data, write_int_method_, getuid());
+        JNI_CallVoidMethod(env, wrapper.data, write_int_method_, getpid());
+        JNI_CallVoidMethod(env, wrapper.data, write_string_method_, JNI_NewStringUTF(env, "android"));
+        JNI_CallVoidMethod(env, wrapper.data, write_strong_binder_method_, heart_beat_binder);
 
-        auto res = JNI_CallBooleanMethod(env, system_server_binder, transact_method_,
-                                         BRIDGE_TRANSACTION_CODE,
-                                         data,
-                                         reply, 0);
+        auto res = wrapper.transact(system_server_binder, BRIDGE_TRANSACTION_CODE);
 
         ScopedLocalRef<jobject> app_binder = {env, nullptr};
         if (res) {
-            JNI_CallVoidMethod(env, reply, read_exception_method_);
-            app_binder = JNI_CallObjectMethod(env, reply, read_strong_binder_method_);
+            JNI_CallVoidMethod(env, wrapper.reply, read_exception_method_);
+            app_binder = JNI_CallObjectMethod(env, wrapper.reply, read_strong_binder_method_);
         }
-        JNI_CallVoidMethod(env, data, recycleMethod_);
-        JNI_CallVoidMethod(env, reply, recycleMethod_);
         if (app_binder) {
             JNI_NewGlobalRef(env, heart_beat_binder);
         }
@@ -312,23 +307,48 @@ namespace lspd {
     }
 
     std::tuple<int, size_t> Service::RequestLSPDex(JNIEnv *env, const ScopedLocalRef<jobject> &binder) {
-        auto data = JNI_CallStaticObjectMethod(env, parcel_class_, obtain_method_);
-        auto reply = JNI_CallStaticObjectMethod(env, parcel_class_, obtain_method_);
-        auto res = JNI_CallBooleanMethod(env, binder, transact_method_,
-                                         DEX_TRANSACTION_CODE,
-                                         data,
-                                         reply, 0);
+        Wrapper wrapper{env, this};
+        bool res = wrapper.transact(binder, DEX_TRANSACTION_CODE);
         if (!res) {
             LOGE("Service::RequestLSPDex: transaction failed?");
             return {-1, 0};
         }
-        auto parcel_fd = JNI_CallObjectMethod(env, reply, read_file_descriptor_method_);
+        auto parcel_fd = JNI_CallObjectMethod(env, wrapper.reply, read_file_descriptor_method_);
         int fd = JNI_CallIntMethod(env, parcel_fd, detach_fd_method_);
-        auto size = static_cast<size_t>(JNI_CallLongMethod(env, reply, read_long_method_));
-        JNI_CallVoidMethod(env, data, recycleMethod_);
-        JNI_CallVoidMethod(env, reply, recycleMethod_);
+        auto size = static_cast<size_t>(JNI_CallLongMethod(env, wrapper.reply, read_long_method_));
 
-        LOGD("Service::RequestLSPDex fd=%d, size=%zu", fd, size);
+        LOGD("fd=%d, size=%zu", fd, size);
         return {fd, size};
+    }
+
+    std::map<std::string, std::string>
+    Service::RequestObfuscationMap(JNIEnv *env, const ScopedLocalRef<jobject> &binder) {
+        std::map<std::string, std::string> ret;
+        Wrapper wrapper{env, this};
+        bool res = wrapper.transact(binder, OBFUSCATION_MAP_TRANSACTION_CODE);
+
+        if (!res) {
+            LOGE("Service::RequestObfuscationMap: transaction failed?");
+            return ret;
+        }
+        auto size = JNI_CallIntMethod(env, wrapper.reply, data_size_method_);
+        if (!size || (size & 1) == 1) {
+            LOGW("Service::RequestObfuscationMap: invalid parcel size");
+        }
+
+        auto get_string = [this, &wrapper, &env]() -> std::string {
+            auto s = JNI_Cast<jstring>(JNI_CallObjectMethod(env, wrapper.reply, read_string_method_));
+            return JUTFString(s);
+        };
+        for (auto i = 0; i < size / 2; i++) {
+            ret[get_string()] = get_string();
+        }
+#ifndef NDEBUG
+        for (const auto &i: ret) {
+            LOGD("%s => %s", i.first.c_str(), i.second.c_str());
+        }
+#endif
+
+        return ret;
     }
 }  // namespace lspd

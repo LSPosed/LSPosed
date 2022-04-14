@@ -25,6 +25,7 @@
 #include "zygisk.h"
 #include "logging.h"
 #include "loader.h"
+#include "ConfigImpl.h"
 #include "magisk_loader.h"
 #include "symbol_cache.h"
 
@@ -282,6 +283,7 @@ namespace lspd {
             env_ = env;
             api_ = api;
             MagiskLoader::Init();
+            ConfigImpl::Init();
 
             auto companion = api->connectCompanion();
             if (companion == -1) {

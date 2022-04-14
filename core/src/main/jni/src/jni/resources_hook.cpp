@@ -24,12 +24,11 @@
 #include "elf_util.h"
 #include "native_util.h"
 #include "resources_hook.h"
+#include "ConfigBridge.h"
 
 using namespace lsplant;
 
 namespace lspd {
-    static constexpr const char *kXResourcesClassName = "android/content/res/XResources";
-
     using TYPE_GET_ATTR_NAME_ID = int32_t (*)(void *, int);
 
     using TYPE_STRING_AT = char16_t *(*)(const void *, int32_t, size_t *);
@@ -45,6 +44,17 @@ namespace lspd {
     static TYPE_NEXT ResXMLParser_next = nullptr;
     static TYPE_RESTART ResXMLParser_restart = nullptr;
     static TYPE_GET_ATTR_NAME_ID ResXMLParser_getAttributeNameID = nullptr;
+
+    static std::string GetXResourcesClassName() {
+        if (ConfigBridge::GetInstance()->obfuscation_map().empty()) {
+            LOGW("GetXResourcesClassName: obfuscation_map empty?????");
+        }
+        static auto name = ConfigBridge::GetInstance()->obfuscation_map()
+                .at("Landroid/content/res/X")  // TODO: kill this hardcoded name
+                .substr(1) + "Resources";
+        LOGD("%s", name.c_str());
+        return name;
+    }
 
     static bool PrepareSymbols() {
         SandHook::ElfImg fw(kLibFwName);
@@ -72,22 +82,24 @@ namespace lspd {
     }
 
     LSP_DEF_NATIVE_METHOD(jboolean, ResourcesHook, initXResourcesNative) {
+        const auto x_resources_class_name = GetXResourcesClassName();
         if (auto classXResources_ = Context::GetInstance()->FindClassFromCurrentLoader(env,
-                                                                                       kXResourcesClassName)) {
+                                                                                       x_resources_class_name)) {
             classXResources = JNI_NewGlobalRef(env, classXResources_);
         } else {
-            LOGE("Error while loading XResources class '%s':", kXResourcesClassName);
+            LOGE("Error while loading XResources class '%s':", x_resources_class_name.c_str());
             return JNI_FALSE;
         }
+        char buf[100];  // TODO: Replace with fmtlib / std::format
+        sprintf(buf, "(IL%s;Landroid/content/res/Resources;)I", x_resources_class_name.c_str());
         methodXResourcesTranslateResId = JNI_GetStaticMethodID(
-                env, classXResources, "translateResId",
-                "(ILandroid/content/res/XResources;Landroid/content/res/Resources;)I");
+                env, classXResources, "translateResId", buf);
         if (!methodXResourcesTranslateResId) {
             return JNI_FALSE;
         }
+        sprintf(buf, "(Ljava/lang/String;L%s;)I", x_resources_class_name.c_str());
         methodXResourcesTranslateAttrId = JNI_GetStaticMethodID(
-                env, classXResources, "translateAttrId",
-                "(Ljava/lang/String;Landroid/content/res/XResources;)I");
+                env, classXResources, "translateAttrId",buf);
         if (!methodXResourcesTranslateAttrId) {
             return JNI_FALSE;
         }

@@ -106,7 +106,7 @@ void maybeInit(JNIEnv *env) {
 
     for (auto &i: signatures) {
         i.second = regen(i.first);
-        LOGD("ObfuscationManager.getObfuscatedSignature: %s => %s", i.first.c_str(), i.second.c_str());
+        LOGD("%s => %s", i.first.c_str(), i.second.c_str());
     }
 
     LOGD("ObfuscationManager init successfully");

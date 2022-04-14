@@ -14,15 +14,33 @@
  * You should have received a copy of the GNU General Public License
  * along with LSPosed.  If not, see <https://www.gnu.org/licenses/>.
  *
- * Copyright (C) 2020 EdXposed Contributors
- * Copyright (C) 2021 - 2022 LSPosed Contributors
+ * Copyright (C) 2022 LSPosed Contributors
  */
 
-#pragma once
+//
+// Created by Kotori0 on 2022/4/14.
+//
 
-#include "jni.h"
+#ifndef LSPOSED_CONFIGBRIDGE_H
+#define LSPOSED_CONFIGBRIDGE_H
+#include <map>
 
-namespace lspd {
-    void RegisterResourcesHook(JNIEnv *);
+using obfuscation_map_t = std::map<std::string, std::string>;
+class ConfigBridge {
+public:
+    inline static ConfigBridge *GetInstance() {
+        return instance_.get();
+    }
 
-} // namespace lspd
+    inline static std::unique_ptr<ConfigBridge> ReleaseInstance() {
+        return std::move(instance_);
+    }
+
+    virtual obfuscation_map_t& obfuscation_map() = 0;
+    virtual void obfuscation_map(obfuscation_map_t) = 0;
+
+protected:
+    inline static std::unique_ptr<ConfigBridge> instance_ = nullptr;
+};
+
+#endif //LSPOSED_CONFIGBRIDGE_H
