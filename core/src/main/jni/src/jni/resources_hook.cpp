@@ -49,9 +49,12 @@ namespace lspd {
         if (ConfigBridge::GetInstance()->obfuscation_map().empty()) {
             LOGW("GetXResourcesClassName: obfuscation_map empty?????");
         }
-        static auto name = ConfigBridge::GetInstance()->obfuscation_map()
-                .at("Landroid/content/res/X")  // TODO: kill this hardcoded name
-                .substr(1) + "Resources";
+        for (const auto &i: ConfigBridge::GetInstance()->obfuscation_map()) {
+            LOGD("%s => %s", i.first.c_str(), i.second.c_str());
+        }
+        static auto name = lspd::JavaNameToSignature(
+                    ConfigBridge::GetInstance()->obfuscation_map().at("android.content.res.X"))  // TODO: kill this hardcoded name
+                    .substr(1) + "Resources";
         LOGD("%s", name.c_str());
         return name;
     }
@@ -222,6 +225,10 @@ namespace lspd {
     };
 
     void RegisterResourcesHook(JNIEnv *env) {
+        char buf[100];  // TODO: Replace with fmtlib / std::format
+        sprintf(buf, "(JL%s;Landroid/content/res/Resources;)V", GetXResourcesClassName().c_str());
+        gMethods[3].signature = buf;
+
         REGISTER_LSP_NATIVE_METHODS(ResourcesHook);
     }
 }

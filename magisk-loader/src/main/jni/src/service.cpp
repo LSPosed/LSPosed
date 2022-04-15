@@ -108,7 +108,7 @@ namespace lspd {
         if (auto parcel_class = JNI_FindClass(env, "android/os/Parcel")) {
             parcel_class_ = JNI_NewGlobalRef(env, parcel_class);
         } else return;
-        data_size_method_ = JNI_GetStaticMethodID(env, parcel_class_, "dataSize","()I");
+        data_size_method_ = JNI_GetMethodID(env, parcel_class_, "dataSize","()I");
         obtain_method_ = JNI_GetStaticMethodID(env, parcel_class_, "obtain",
                                                "()Landroid/os/Parcel;");
         recycleMethod_ = JNI_GetMethodID(env, parcel_class_, "recycle", "()V");
@@ -120,6 +120,7 @@ namespace lspd {
         write_strong_binder_method_ = JNI_GetMethodID(env, parcel_class_, "writeStrongBinder",
                                                       "(Landroid/os/IBinder;)V");
         read_exception_method_ = JNI_GetMethodID(env, parcel_class_, "readException", "()V");
+        read_int_method_ = JNI_GetMethodID(env, parcel_class_, "readInt", "()I");
         read_long_method_ = JNI_GetMethodID(env, parcel_class_, "readLong", "()J");
         read_strong_binder_method_ = JNI_GetMethodID(env, parcel_class_, "readStrongBinder",
                                                      "()Landroid/os/IBinder;");
@@ -331,7 +332,7 @@ namespace lspd {
             LOGE("Service::RequestObfuscationMap: transaction failed?");
             return ret;
         }
-        auto size = JNI_CallIntMethod(env, wrapper.reply, data_size_method_);
+        auto size = JNI_CallIntMethod(env, wrapper.reply, read_int_method_);
         if (!size || (size & 1) == 1) {
             LOGW("Service::RequestObfuscationMap: invalid parcel size");
         }
@@ -341,7 +342,9 @@ namespace lspd {
             return JUTFString(s);
         };
         for (auto i = 0; i < size / 2; i++) {
-            ret[get_string()] = get_string();
+            // DO NOT TOUCH, or value evaluates before key.
+            auto &&key = get_string();
+            ret[key] = get_string();
         }
 #ifndef NDEBUG
         for (const auto &i: ret) {

@@ -129,6 +129,7 @@ namespace lspd {
         jmethodID read_strong_binder_method_ = nullptr;
         jmethodID write_strong_binder_method_ = nullptr;
         jmethodID read_file_descriptor_method_ = nullptr;
+        jmethodID read_int_method_ = nullptr;
         jmethodID read_long_method_ = nullptr;
         jmethodID read_string_method_ = nullptr;
 
