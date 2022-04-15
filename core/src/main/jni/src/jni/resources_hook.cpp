@@ -46,14 +46,12 @@ namespace lspd {
     static TYPE_GET_ATTR_NAME_ID ResXMLParser_getAttributeNameID = nullptr;
 
     static std::string GetXResourcesClassName() {
-        if (ConfigBridge::GetInstance()->obfuscation_map().empty()) {
+        auto &obfs_map = ConfigBridge::GetInstance()->obfuscation_map();
+        if (obfs_map.empty()) {
             LOGW("GetXResourcesClassName: obfuscation_map empty?????");
         }
-        for (const auto &i: ConfigBridge::GetInstance()->obfuscation_map()) {
-            LOGD("%s => %s", i.first.c_str(), i.second.c_str());
-        }
         static auto name = lspd::JavaNameToSignature(
-                    ConfigBridge::GetInstance()->obfuscation_map().at("android.content.res.X"))  // TODO: kill this hardcoded name
+                obfs_map.at("android.content.res.X"))  // TODO: kill this hardcoded name
                     .substr(1) + "Resources";
         LOGD("%s", name.c_str());
         return name;
