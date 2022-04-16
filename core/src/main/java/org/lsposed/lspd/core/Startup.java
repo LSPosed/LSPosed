@@ -29,9 +29,8 @@ import com.android.internal.os.ZygoteInit;
 
 import org.lsposed.lspd.deopt.PrebuiltMethodsDeopter;
 import org.lsposed.lspd.hooker.CrashDumpHooker;
-import org.lsposed.lspd.hooker.HandleBindAppHooker;
 import org.lsposed.lspd.hooker.HandleSystemServerProcessHooker;
-import org.lsposed.lspd.hooker.LoadedApkCstrHooker;
+import org.lsposed.lspd.hooker.LoadedApkCtorHooker;
 import org.lsposed.lspd.service.ILSPApplicationService;
 import org.lsposed.lspd.util.Utils;
 
@@ -48,14 +47,10 @@ public class Startup {
             XposedBridge.hookAllMethods(ZygoteInit.class,
                     "handleSystemServerProcess", new HandleSystemServerProcessHooker());
         }
-        XposedHelpers.findAndHookMethod(ActivityThread.class,
-                "handleBindApplication",
-                "android.app.ActivityThread$AppBindData",
-                new HandleBindAppHooker());
         XposedHelpers.findAndHookConstructor(LoadedApk.class,
                 ActivityThread.class, ApplicationInfo.class, CompatibilityInfo.class,
                 ClassLoader.class, boolean.class, boolean.class, boolean.class,
-                new LoadedApkCstrHooker());
+                new LoadedApkCtorHooker());
     }
 
     public static void bootstrapXposed() {

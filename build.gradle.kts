@@ -28,8 +28,6 @@ import org.gradle.internal.os.OperatingSystem
 plugins {
     id("com.android.application") apply false
     id("com.android.library") apply false
-    id("androidx.navigation.safeargs") apply false
-    id("dev.rikka.tools.autoresconfig") apply false
 }
 
 buildscript {
@@ -52,7 +50,7 @@ val injectedPackageUid by extra(2000)
 val defaultManagerPackageName by extra("org.lsposed.manager")
 val apiCode by extra(93)
 val verCode by extra(commitCount + 4200)
-val verName by extra("1.8.0")
+val verName by extra("1.8.1")
 val androidTargetSdkVersion by extra(32)
 val androidMinSdkVersion by extra(27)
 val androidBuildToolsVersion by extra("32.0.0")
@@ -186,7 +184,7 @@ fun Project.configureBaseExtension() {
                 androidComponents.sdkComponents.sdkDirectory.get().asFile,
                 "build-tools/${androidBuildToolsVersion}/aapt2"
             )
-            val zip = java.nio.file.Paths.get(
+            val zip = Paths.get(
                 project.buildDir.path,
                 "intermediates",
                 "optimized_processed_res",

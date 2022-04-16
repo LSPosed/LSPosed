@@ -20,7 +20,7 @@
 <resources xmlns:tools="http://schemas.android.com/tools" tools:keep="@string/xposed_module_updated_notification_*,@string/module_is_not_activated_*">
     <!-- MainActivity -->
     <string name="info">Info</string>
-    <string name="overview">Loger</string>
+    <string name="overview">Aperçu</string>
     <string name="Modules">Modules</string>
     <plurals name="modules_enabled_count">
         <item quantity="one">%d module actif</item>
@@ -35,7 +35,7 @@
     <string name="module_repo_loading">Chargement…</string>
     <string name="module_repo_up_to_date">Tous les modules sont à jour</string>
     <plurals name="module_repo_upgradable">
-        <item quantity="one">%d module mis à jour</item>
+        <item quantity="one">%d modules évolutifs</item>
         <item quantity="other">%d modules évolutifs</item>
     </plurals>
     <string name="about_view_source_code"><![CDATA[Voir le code source sur %1$s<br/>Rejoindre notre canal %2$s]]></string>
@@ -63,6 +63,10 @@ https://github.com/tclement0922</string>
     <string name="info_device">Périphérique</string>
     <string name="info_system_abi">Architecture du système</string>
     <string name="info_api">Interface d\'injection</string>
+    <string name="info_dex2oat_wrapper">Optimiseur de Conteneur</string>
+    <string name="supported">Supporté</string>
+    <string name="unsupported_android_version">Non supporté (version Android non-satisfaisante)</string>
+    <string name="unsupported_crashed">Non supporté (Plantée)</string>
     <string name="parasitic_recommend">Gestionnaire parasitaire recommandé</string>
     <string name="parasitic_recommend_summary">LSPosed supporte maintenant la parasitation du système afin d\'éviter la détection. Vous pouvez désinstaller le gestionnaire en toute sécurité et après avoir créé un raccourci du gestionnaire parasitaire avec succès. Dans n\'importe quel cas vous pouvez installer à nouveau le gestionnaire depuis /data/adb/lspd/manager.apk.</string>
     <string name="create_shortcut">Créer le raccourci</string>
@@ -124,7 +128,7 @@ https://github.com/tclement0922</string>
     <string name="menu_show_modules">Modules</string>
     <string name="menu_show_denylist">Liste de refus</string>
     <string name="failed_to_save_scope_list">Échec de l\'enregistrement de la liste des périmètres d\'applications</string>
-    <string name="app_description">%1$s\nVersion %2$s</string>
+    <string name="app_version">Version: %1$s</string>
     <string name="use_recommended">Recommandé</string>
     <string name="no_scope_selected_has_recommended">Vous n\'avez sélectionné aucune application. Sélectionner les applications recommandées ?</string>
     <string name="use_recommended_message">Sélectionner les applications recommandées ?</string>
@@ -181,7 +185,7 @@ https://github.com/tclement0922</string>
     <string name="update_channel_stable">Stable</string>
     <string name="update_channel_bate">Bêta</string>
     <string name="update_channel_nightly">Version alpha</string>
-    <string name="pref_title_restrict_classloader">Seul le module classloader peut utiliser l\'API Xposed</string>
+    <string name="pref_title_restrict_classloader">Seul le classloader du module peut utiliser l\'API Xposed</string>
     <string name="pref_summary_restrict_classloader">Ceci pourrait casser certains modules mais être bénéfique à la sécurité (fonction expérimentale)</string>
     <!-- Module Repo -->
     <string name="module_readme">Lisez-moi</string>

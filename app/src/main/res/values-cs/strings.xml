@@ -23,7 +23,7 @@
     <string name="overview">Přehled</string>
     <string name="Modules">Moduly</string>
     <plurals name="modules_enabled_count">
-        <item quantity="one">%d modul povolen</item>
+        <item quantity="one">%d modul aktivován</item>
         <item quantity="few">%d modul povolen</item>
         <item quantity="many">%d Modul aktivován</item>
         <item quantity="other">%d Modul aktivován</item>
@@ -66,6 +66,10 @@
     <string name="info_device">Zařízení</string>
     <string name="info_system_abi">Systémové ABI (architektura)</string>
     <string name="info_api">Závislost modulu</string>
+    <string name="info_dex2oat_wrapper">Optimizer Wrapper</string>
+    <string name="supported">Podporováno</string>
+    <string name="unsupported_android_version">Nepodporováno (verze Androidu není spokojena)</string>
+    <string name="unsupported_crashed">Nepodporováno (selhání)</string>
     <string name="parasitic_recommend">Doporučený parazitický správce</string>
     <string name="parasitic_recommend_summary">LSPosed nyní podporuje parazitizaci systému, aby se zabránilo detekci. Správce můžete bezpečně odinstalovat po úspěšném vytvoření zástupce parazitického manažera. V jakémkoli případě můžete správce nainstalovat zpět z /data/adb/lspd/manager.apk.</string>
     <string name="create_shortcut">Vytvořit zástupce</string>
@@ -127,7 +131,7 @@
     <string name="menu_show_modules">Moduly</string>
     <string name="menu_show_denylist">Seznam zakázaných</string>
     <string name="failed_to_save_scope_list">Nepodařilo se uložit seznam</string>
-    <string name="app_description">%1$s\nVerze %2$s</string>
+    <string name="app_version">Verze: %1$s</string>
     <string name="use_recommended">Zvolit doporučené</string>
     <string name="no_scope_selected_has_recommended">Nevybrali jste žádnou aplikaci. Vybrat doporučené aplikace?</string>
     <string name="use_recommended_message">Vybrat doporučené aplikace?</string>

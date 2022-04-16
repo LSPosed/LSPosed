@@ -62,6 +62,10 @@
     <string name="info_device">Συσκευή</string>
     <string name="info_system_abi">Σύστημα ABI</string>
     <string name="info_api">Διεπαφή Έγχυσης</string>
+    <string name="info_dex2oat_wrapper">Βελτιστοποιητής Wrapper</string>
+    <string name="supported">Υποστηριζόμενο</string>
+    <string name="unsupported_android_version">Μη υποστηριζόμενη (έκδοση Android που δεν ικανοποιείται)</string>
+    <string name="unsupported_crashed">Μη υποστηριζόμενο (συνετρίβη)</string>
     <string name="parasitic_recommend">Προτεινόμενος Παρασιτικός Διαχειριστής</string>
     <string name="parasitic_recommend_summary">Το LSPosed τώρα υποστηρίζει παρασιτισμό συστήματος για την αποφυγή ανίχνευσης. Μπορείτε να απεγκαταστήσετε με ασφάλεια τον διαχειριστή μετά την επιτυχή δημιουργία μιας συντόμευσης του παρασιτικού διαχειριστή. Σε κάθε περίπτωση μπορείτε να εγκαταστήσετε το διαχειριστή ξανά από το /data/adb/lspd/manager.apk.</string>
     <string name="create_shortcut">Δημιουργία συντόμευσης</string>
@@ -123,7 +127,7 @@
     <string name="menu_show_modules">Πρόσθετα</string>
     <string name="menu_show_denylist">Denylist</string>
     <string name="failed_to_save_scope_list">Αποτυχία αποθήκευσης της λίστας πεδίου</string>
-    <string name="app_description">%1$s\nΈκδοση %2$s</string>
+    <string name="app_version">Έκδοση: %1$s</string>
     <string name="use_recommended">Προτεινόμενο</string>
     <string name="no_scope_selected_has_recommended">Δεν έχετε επιλέξει καμία εφαρμογή. Επιλέξτε τις προτεινόμενες εφαρμογές?</string>
     <string name="use_recommended_message">Επιλέξτε προτεινόμενες εφαρμογές?</string>

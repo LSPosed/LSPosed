@@ -63,6 +63,10 @@
     <string name="info_device">Device</string>
     <string name="info_system_abi">System ABI</string>
     <string name="info_api">Injection Interface</string>
+    <string name="info_dex2oat_wrapper">Optimizer Wrapper</string>
+    <string name="supported">Supported</string>
+    <string name="unsupported_android_version">Unsupported (Android version unsatisfied)</string>
+    <string name="unsupported_crashed">Unsupported (Crashed)</string>
     <string name="parasitic_recommend">Parasitic Manager Recommended</string>
     <string name="parasitic_recommend_summary">LSPosed now supports system parasitization to avoid detection. You can safely uninstall the manager after successfully creating a shortcut of the parasitic manager. In any case you can install the manager back from /data/adb/lspd/manager.apk.</string>
     <string name="create_shortcut">Create shortcut</string>
@@ -127,7 +131,7 @@
     <string name="menu_show_modules">Modules</string>
     <string name="menu_show_denylist">Denylist</string>
     <string name="failed_to_save_scope_list">Failed to save scope list</string>
-    <string name="app_description">%1$s\nVersion %2$s</string>
+    <string name="app_version">Version: %1$s</string>
     <string name="use_recommended">Recommended</string>
     <string name="no_scope_selected_has_recommended">You did not select any app. Select recommended apps?</string>
     <string name="use_recommended_message">Select recommended apps?</string>

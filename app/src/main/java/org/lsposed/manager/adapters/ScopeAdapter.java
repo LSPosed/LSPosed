@@ -48,6 +48,7 @@ import android.widget.CompoundButton;
 import android.widget.Filter;
 import android.widget.Filterable;
 import android.widget.ImageView;
+import android.widget.Switch;
 import android.widget.TextView;
 import android.widget.Toast;
 
@@ -66,6 +67,7 @@ import org.lsposed.manager.App;
 import org.lsposed.manager.BuildConfig;
 import org.lsposed.manager.ConfigManager;
 import org.lsposed.manager.R;
+import org.lsposed.manager.databinding.ItemMasterSwitchBinding;
 import org.lsposed.manager.databinding.ItemModuleBinding;
 import org.lsposed.manager.ui.dialog.BlurBehindDialogBuilder;
 import org.lsposed.manager.ui.fragment.AppListFragment;
@@ -85,7 +87,8 @@ import java.util.stream.Collectors;
 
 import rikka.core.util.ResourceUtils;
 import rikka.material.app.LocaleDelegate;
-import rikka.widget.switchbar.SwitchBar;
+import rikka.widget.mainswitchbar.MainSwitchBar;
+import rikka.widget.mainswitchbar.OnMainSwitchChangeListener;
 
 @SuppressLint("NotifyDataSetChanged")
 public class ScopeAdapter extends EmptyStateRecyclerView.EmptyStateAdapter<ScopeAdapter.ViewHolder> implements Filterable {
@@ -104,19 +107,41 @@ public class ScopeAdapter extends EmptyStateRecyclerView.EmptyStateAdapter<Scope
     private List<AppInfo> showList = new ArrayList<>();
     private List<String> denyList = new ArrayList<>();
 
-    private final SwitchBar.OnCheckedChangeListener switchBarOnCheckedChangeListener = new SwitchBar.OnCheckedChangeListener() {
+    public RecyclerView.Adapter<RecyclerView.ViewHolder> switchAdaptor = new RecyclerView.Adapter<>() {
+        @NonNull
         @Override
-        public boolean onCheckedChanged(SwitchBar view, boolean isChecked) {
+        public RecyclerView.ViewHolder onCreateViewHolder(@NonNull ViewGroup parent, int viewType) {
+            return new RecyclerView.ViewHolder(ItemMasterSwitchBinding.inflate(activity.getLayoutInflater(), parent, false).masterSwitch) {
+            };
+        }
+
+        @Override
+        public void onBindViewHolder(@NonNull RecyclerView.ViewHolder holder, int position) {
+            var mainSwitchBar = (MainSwitchBar) holder.itemView;
+            mainSwitchBar.setChecked(enabled);
+            mainSwitchBar.addOnSwitchChangeListener(switchBarOnCheckedChangeListener);
+        }
+
+        @Override
+        public int getItemCount() {
+            return 1;
+        }
+    };
+
+    private final OnMainSwitchChangeListener switchBarOnCheckedChangeListener = new OnMainSwitchChangeListener() {
+        @Override
+        public void onSwitchChanged(Switch view, boolean isChecked) {
+            enabled = isChecked;
             if (!moduleUtil.setModuleEnabled(module.packageName, isChecked)) {
-                return false;
+                view.setChecked(!isChecked);
+                enabled = !isChecked;
             }
             var tmpChkList = new HashSet<>(checkedList);
             if (isChecked && !tmpChkList.isEmpty() && !ConfigManager.setModuleScope(module.packageName, tmpChkList)) {
-                return false;
+                view.setChecked(false);
+                enabled = false;
             }
-            enabled = isChecked;
-            notifyDataSetChanged();
-            return true;
+            fragment.runOnUiThread(ScopeAdapter.this::notifyDataSetChanged);
         }
     };
 
@@ -205,7 +230,7 @@ public class ScopeAdapter extends EmptyStateRecyclerView.EmptyStateAdapter<Scope
     }
 
     private void checkRecommended() {
-        if (!fragment.binding.masterSwitch.isChecked()) {
+        if (!enabled) {
             fragment.showHint(R.string.module_is_not_activated_yet, false);
             return;
         }
@@ -232,7 +257,7 @@ public class ScopeAdapter extends EmptyStateRecyclerView.EmptyStateAdapter<Scope
         int itemId = item.getItemId();
         if (itemId == R.id.use_recommended) {
             if (!checkedList.isEmpty()) {
-                new BlurBehindDialogBuilder(activity)
+                new BlurBehindDialogBuilder(activity, R.style.ThemeOverlay_MaterialAlertDialog_Centered_FullWidthButtons)
                         .setMessage(R.string.use_recommended_message)
                         .setPositiveButton(android.R.string.ok, (dialog, which) -> checkRecommended())
                         .setNegativeButton(android.R.string.cancel, null)
@@ -303,7 +328,7 @@ public class ScopeAdapter extends EmptyStateRecyclerView.EmptyStateAdapter<Scope
             if (info.packageName.equals("android")) {
                 ConfigManager.reboot(false);
             } else {
-                new BlurBehindDialogBuilder(activity)
+                new BlurBehindDialogBuilder(activity, R.style.ThemeOverlay_MaterialAlertDialog_Centered_FullWidthButtons)
                         .setTitle(R.string.force_stop_dlg_title)
                         .setMessage(R.string.force_stop_dlg_text)
                         .setPositiveButton(android.R.string.ok, (dialog, which) -> ConfigManager.forceStopPackage(info.packageName, info.uid / 100000))
@@ -359,7 +384,9 @@ public class ScopeAdapter extends EmptyStateRecyclerView.EmptyStateAdapter<Scope
 
     @Override
     public void onViewRecycled(@NonNull ViewHolder holder) {
-        holder.checkbox.setOnCheckedChangeListener(null);
+        if (holder.checkbox != null) {
+            holder.checkbox.setOnCheckedChangeListener(null);
+        }
         super.onViewRecycled(holder);
     }
 
@@ -389,12 +416,15 @@ public class ScopeAdapter extends EmptyStateRecyclerView.EmptyStateAdapter<Scope
                 holder.appIcon.setImageDrawable(pm.getDefaultActivityIcon());
             }
         });
-        SpannableStringBuilder sb = new SpannableStringBuilder(android ? "" : activity.getString(R.string.app_description, appInfo.packageName, appInfo.packageInfo.versionName));
-        if (android) holder.appDescription.setVisibility(View.GONE);
-        else {
-            holder.appDescription.setVisibility(View.VISIBLE);
-            holder.appDescription.setText(sb);
-            sb = new SpannableStringBuilder();
+        SpannableStringBuilder sb = new SpannableStringBuilder();
+        if (android) {
+            holder.appPackageName.setVisibility(View.GONE);
+            holder.appVersionName.setVisibility(View.GONE);
+        } else {
+            holder.appPackageName.setVisibility(View.VISIBLE);
+            holder.appVersionName.setVisibility(View.VISIBLE);
+            holder.appPackageName.setText(appInfo.packageName);
+            holder.appVersionName.setText(activity.getString(R.string.app_version, appInfo.packageInfo.versionName));
         }
         if (!recommendedList.isEmpty() && recommendedList.contains(appInfo.application)) {
             String recommended = activity.getString(R.string.requested_by_module);
@@ -480,9 +510,6 @@ public class ScopeAdapter extends EmptyStateRecyclerView.EmptyStateAdapter<Scope
     public void refresh(boolean force) {
         setLoaded(null, false);
         enabled = moduleUtil.isModuleEnabled(module.packageName);
-        fragment.binding.masterSwitch.setOnCheckedChangeListener(null);
-        fragment.binding.masterSwitch.setChecked(enabled);
-        fragment.binding.masterSwitch.setOnCheckedChangeListener(switchBarOnCheckedChangeListener);
         fragment.runAsync(() -> {
             List<PackageInfo> appList = AppHelper.getAppList(force);
             denyList = AppHelper.getDenyList(force);
@@ -577,7 +604,8 @@ public class ScopeAdapter extends EmptyStateRecyclerView.EmptyStateAdapter<Scope
         ConstraintLayout root;
         ImageView appIcon;
         TextView appName;
-        TextView appDescription;
+        TextView appPackageName;
+        TextView appVersionName;
         TextView hint;
         MaterialCheckBox checkbox;
 
@@ -586,7 +614,8 @@ public class ScopeAdapter extends EmptyStateRecyclerView.EmptyStateAdapter<Scope
             root = binding.itemRoot;
             appIcon = binding.appIcon;
             appName = binding.appName;
-            appDescription = binding.description;
+            appPackageName = binding.appPackageName;
+            appVersionName = binding.appVersionName;
             checkbox = binding.checkbox;
             hint = binding.hint;
             checkbox.setVisibility(View.VISIBLE);
@@ -640,8 +669,8 @@ public class ScopeAdapter extends EmptyStateRecyclerView.EmptyStateAdapter<Scope
 
     public void onBackPressed() {
         fragment.searchView.clearFocus();
-        if (isLoaded && fragment.binding.masterSwitch.isChecked() && checkedList.isEmpty()) {
-            var builder = new BlurBehindDialogBuilder(activity);
+        if (isLoaded && enabled && checkedList.isEmpty()) {
+            var builder = new BlurBehindDialogBuilder(activity, R.style.ThemeOverlay_MaterialAlertDialog_Centered_FullWidthButtons);
             builder.setMessage(!recommendedList.isEmpty() ? R.string.no_scope_selected_has_recommended : R.string.no_scope_selected);
             if (!recommendedList.isEmpty()) {
                 builder.setPositiveButton(android.R.string.ok, (dialog, which) -> checkRecommended());

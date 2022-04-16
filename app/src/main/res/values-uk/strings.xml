@@ -66,6 +66,10 @@
     <string name="info_device">Пристрій</string>
     <string name="info_system_abi">Розрядність процесора</string>
     <string name="info_api">Метод ін\'єкції</string>
+    <string name="info_dex2oat_wrapper">Обгортка оптимізатора</string>
+    <string name="supported">Підтримується</string>
+    <string name="unsupported_android_version">Не підтримується (версія Android незадоволена)</string>
+    <string name="unsupported_crashed">Не підтримується (збій)</string>
     <string name="parasitic_recommend">Рекомендується менеджер-паразит</string>
     <string name="parasitic_recommend_summary">LSPosed тепер підтримує системний паразитизм, щоб уникнути виявлення. Ви можете безпечно видалити менеджер після успішного створення ярлика менеджера-паразита. У разі необхідності ви можете встановити менеджер назад з /data/adb/lspd/manager.apk.</string>
     <string name="create_shortcut">Створити ярлик</string>
@@ -127,7 +131,7 @@
     <string name="menu_show_modules">Модулі</string>
     <string name="menu_show_denylist">Показати чорний список</string>
     <string name="failed_to_save_scope_list">Не вдалося зберегти список областей</string>
-    <string name="app_description">%1$s\nВерсія %2$s</string>
+    <string name="app_version">Версія: %1$s</string>
     <string name="use_recommended">Рекомендовано</string>
     <string name="no_scope_selected_has_recommended">Ви не вибрали жодної програми. Вибрати рекомендовані програми?</string>
     <string name="use_recommended_message">Вибрати рекомендовані програми?</string>

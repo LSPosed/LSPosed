@@ -63,6 +63,10 @@
     <string name="info_device">Eszköz</string>
     <string name="info_system_abi">Rendszer ABI</string>
     <string name="info_api">Befecskendező interfész</string>
+    <string name="info_dex2oat_wrapper">Optimalizáló Wrapper</string>
+    <string name="supported">Támogatott</string>
+    <string name="unsupported_android_version">Nem támogatott (Android verzió nem elégedett)</string>
+    <string name="unsupported_crashed">Nem támogatott (lezuhant)</string>
     <string name="parasitic_recommend">Parazita menedzser Ajánlott</string>
     <string name="parasitic_recommend_summary">Az LSPosed mostantól támogatja a rendszer parazitizálását a felderítés elkerülése érdekében. A parazita menedzser sikeres parancsikonjának létrehozása után biztonságosan eltávolíthatja a menedzsert. A menedzsert minden esetben visszatelepítheti a /data/adb/lspd/manager.apk fájlból.</string>
     <string name="create_shortcut">Létrehozás parancsikon</string>
@@ -124,7 +128,7 @@
     <string name="menu_show_modules">Modulok</string>
     <string name="menu_show_denylist">Denylist</string>
     <string name="failed_to_save_scope_list">Nem sikerült elmenteni a hatókör listát</string>
-    <string name="app_description">%1$s\nVerzió %2$s</string>
+    <string name="app_version">Változat: %1$s</string>
     <string name="use_recommended">Ajánlott</string>
     <string name="no_scope_selected_has_recommended">Nem választott ki egyetlen alkalmazást sem. Válassza ki az ajánlott alkalmazásokat?</string>
     <string name="use_recommended_message">Válassza ki az ajánlott alkalmazásokat?</string>

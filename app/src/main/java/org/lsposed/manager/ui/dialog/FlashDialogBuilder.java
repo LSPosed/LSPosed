@@ -36,7 +36,7 @@ public class FlashDialogBuilder extends BlurBehindDialogBuilder {
     private final BorderNestedScrollView rootView;
 
     public FlashDialogBuilder(@NonNull Context context, DialogInterface.OnClickListener cancel) {
-        super(context);
+        super(context, R.style.ThemeOverlay_MaterialAlertDialog_Centered_FullWidthButtons);
         var pref = App.getPreferences();
         var notes = pref.getString("release_notes", "");
         this.zipPath = pref.getString("zip_file", null);

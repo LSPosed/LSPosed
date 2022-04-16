@@ -31,14 +31,14 @@
 namespace lspd {
     static std::atomic_bool installed = false;
 
-    void InstallInlineHooks(const lsplant::HookHandler& handler) {
+    void InstallInlineHooks(JNIEnv* env, const lsplant::HookHandler& handler) {
         if (installed.exchange(true)) [[unlikely]] {
             LOGD("Inline hooks have been installed, skip");
             return;
         }
         LOGD("Start to install inline hooks");
         art::Runtime::Setup(handler);
-        art::hidden_api::DisableHiddenApi(handler);
+        art::hidden_api::DisableHiddenApi(env, handler);
         LOGD("Inline hooks installed");
     }
 }  // namespace lspd

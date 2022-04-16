@@ -337,8 +337,11 @@ public class RepoItemFragment extends BaseFragment implements RepoLoader.RepoLis
         public Dialog onCreateDialog(@Nullable Bundle savedInstanceState) {
             var args = getArguments();
             if (args == null) throw new IllegalArgumentException();
-            return new BlurBehindDialogBuilder(requireActivity())
-                    .setItems(args.getCharSequenceArray("names"), (dialog, which) -> NavUtil.startURL(requireActivity(), args.getStringArrayList("urls").get(which)))
+            return new BlurBehindDialogBuilder(requireActivity(), R.style.ThemeOverlay_MaterialAlertDialog_Centered_FullWidthButtons)
+                    .setTitle(R.string.module_release_view_assets)
+                    .setPositiveButton(android.R.string.cancel, null)
+                    .setItems(args.getCharSequenceArray("names"),
+                            (dialog, which) -> NavUtil.startURL(requireActivity(), args.getStringArrayList("urls").get(which)))
                     .create();
         }
 

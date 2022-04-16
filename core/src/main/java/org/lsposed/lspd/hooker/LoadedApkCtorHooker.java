@@ -20,7 +20,6 @@
 
 package org.lsposed.lspd.hooker;
 
-import android.app.AndroidAppHelper;
 import android.app.LoadedApk;
 import android.content.res.XResources;
 import android.util.Log;
@@ -32,7 +31,7 @@ import de.robv.android.xposed.XposedHelpers;
 import de.robv.android.xposed.XposedInit;
 
 // when a package is loaded for an existing process, trigger the callbacks as well
-public class LoadedApkCstrHooker extends XC_MethodHook {
+public class LoadedApkCtorHooker extends XC_MethodHook {
 
     @Override
     protected void afterHookedMethod(MethodHookParam param) {
@@ -49,18 +48,17 @@ public class LoadedApkCstrHooker extends XC_MethodHook {
             }
 
             if (packageName.equals("android")) {
-                Hookers.logD("LoadedApk#<init> is android, skip: " + mAppDir);
-                return;
+                if (XposedInit.startsSystemServer) {
+                    Hookers.logD("LoadedApk#<init> is android, skip: " + mAppDir);
+                    return;
+                } else {
+                    packageName = "system";
+                }
             }
 
             // mIncludeCode checking should go ahead of loadedPackagesInProcess added checking
             if (!XposedHelpers.getBooleanField(loadedApk, "mIncludeCode")) {
                 Hookers.logD("LoadedApk#<init> mIncludeCode == false: " + mAppDir);
-                return;
-            }
-
-            if (XposedInit.loadedPackagesInProcess.isEmpty()) {
-                Hookers.logD("First LoadedApk should be called by handleBindApplication, skip: " + mAppDir);
                 return;
             }
 
@@ -76,11 +74,7 @@ public class LoadedApkCstrHooker extends XC_MethodHook {
                 return;
             }
 
-            LoadedApkGetCLHooker hook = new LoadedApkGetCLHooker(loadedApk, packageName,
-                    AndroidAppHelper.currentProcessName(), false);
-            hook.setUnhook(XposedHelpers.findAndHookMethod(
-                    LoadedApk.class, "getClassLoader", hook));
-
+            new LoadedApkGetCLHooker(loadedApk);
         } catch (Throwable t) {
             Hookers.logE("error when hooking LoadedApk.<init>", t);
         }

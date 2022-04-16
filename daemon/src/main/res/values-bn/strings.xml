@@ -1,0 +1,10 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <!-- Notification -->
+    <string name="module_is_not_activated_yet">Xposed মডিউল এখনও সক্রিয় করা হয় নি</string>
+    <string name="module_is_not_activated_yet_detailed">%s ইনস্টল করা হয়েছে, কিন্তু এখনও সক্রিয় করা হয়নি</string>
+    <string name="xposed_module_updated_notification_title">এক্সপোজড মডিউল আপডেট করা হয়েছে</string>
+    <string name="xposed_module_updated_notification_content">%s আপডেট করা হয়েছে, অনুগ্রহ করে এর সুযোগে অ্যাপগুলিকে জোর করে থামান এবং পুনরায় চালু করুন</string>
+    <string name="xposed_module_updated_notification_title_system">Xposed মডিউল আপডেট করা হয়েছে, সিস্টেম রিবুট প্রয়োজন</string>
+    <string name="xposed_module_updated_notification_content_system">%s আপডেট করা হয়েছে, যেহেতু সুযোগে সিস্টেম ফ্রেমওয়ার্ক রয়েছে, পরিবর্তনগুলি প্রয়োগ করার জন্য রিবুট প্রয়োজন</string>
+</resources>

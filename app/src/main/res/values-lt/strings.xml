@@ -31,7 +31,7 @@
     <string name="Logs">Žurnalai</string>
     <string name="Settings">Nustatymai</string>
     <string name="feedback_or_suggestion">Atsiliepimai arba pasiūlymas</string>
-    <string name="About">Apie</string>
+    <string name="About">About-face</string>
     <string name="report_issue">Pranešti apie problemą</string>
     <string name="module_repo">Saugykla</string>
     <string name="module_repo_loading">Įkrovimas…</string>
@@ -66,6 +66,10 @@
     <string name="info_device">Įrenginys</string>
     <string name="info_system_abi">Sistemos ABI</string>
     <string name="info_api">Injekcijos sąsaja</string>
+    <string name="info_dex2oat_wrapper">Optimizatoriaus apvalkalas</string>
+    <string name="supported">Palaikomas</string>
+    <string name="unsupported_android_version">Nepalaikomas (nepatenkinta \"Android\" versija)</string>
+    <string name="unsupported_crashed">Nepalaikomas (sugedo)</string>
     <string name="parasitic_recommend">Rekomenduojama parazitinė vadybininkė</string>
     <string name="parasitic_recommend_summary">\"LSPosed\" dabar palaiko sistemos parazitavimą siekiant išvengti aptikimo. Sėkmingai sukūrę parazituojančio tvarkytuvo nuorodą, galite saugiai pašalinti tvarkytuvą. Bet kuriuo atveju valdytoją galite vėl įdiegti iš /data/adb/lspd/manager.apk.</string>
     <string name="create_shortcut">Sukurti nuorodą</string>
@@ -127,7 +131,7 @@
     <string name="menu_show_modules">Moduliai</string>
     <string name="menu_show_denylist">Denylist</string>
     <string name="failed_to_save_scope_list">Nepavyko išsaugoti srities sąrašo</string>
-    <string name="app_description">%1$s\nVersija %2$s</string>
+    <string name="app_version">Versija: %1$s</string>
     <string name="use_recommended">Rekomenduojama</string>
     <string name="no_scope_selected_has_recommended">Nepasirinkote jokios programos. Pasirinkti rekomenduojamas programas?</string>
     <string name="use_recommended_message">Pasirinkite rekomenduojamas programas?</string>

@@ -62,6 +62,10 @@
     <string name="info_device">دستگاه</string>
     <string name="info_system_abi">سیستم ABI</string>
     <string name="info_api">رابط کاربری نصب</string>
+    <string name="info_dex2oat_wrapper">بسته بندی بهینه ساز</string>
+    <string name="supported">پشتیبانی</string>
+    <string name="unsupported_android_version">پشتیبانی نشده (نسخه اندروید ناراضی)</string>
+    <string name="unsupported_crashed">پشتیبانی نشده (خراب شده)</string>
     <string name="parasitic_recommend">مدیر انگلی توصیه می شود</string>
     <string name="parasitic_recommend_summary">LSPosed اکنون از انگلی شدن سیستم برای جلوگیری از شناسایی پشتیبانی می کند. پس از ایجاد موفقیت آمیز میانبر مدیر انگلی، می توانید با خیال راحت مدیر را حذف نصب کنید. در هر صورت می توانید مدیر را از /data/adb/lspd/manager.apk نصب کنید.</string>
     <string name="create_shortcut">ایجاد میان‌بر</string>
@@ -123,7 +127,7 @@
     <string name="menu_show_modules">ماژول ها</string>
     <string name="menu_show_denylist">انکار کننده</string>
     <string name="failed_to_save_scope_list">ناموفق در ذخیره لیست محدوده</string>
-    <string name="app_description">%1$s\n نسخه %2$s</string>
+    <string name="app_version">نسخه: %1$s</string>
     <string name="use_recommended">نیازمنده</string>
     <string name="no_scope_selected_has_recommended">شما هیچ برنامه ای را انتخاب نکردید. انتخاب برنامه های نیازمند؟</string>
     <string name="use_recommended_message">انتخاب برنامه های نیازمند؟</string>

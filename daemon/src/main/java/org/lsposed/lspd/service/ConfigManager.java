@@ -242,10 +242,10 @@ public class ConfigManager {
             miscPath = string;
         }
         try {
-            Path p = Paths.get(miscPath);
+            Path prefs = Paths.get(miscPath + "/prefs");
             var perms = PosixFilePermissions.fromString("rwx--x--x");
-            Files.createDirectories(p, PosixFilePermissions.asFileAttribute(perms));
-            walkFileTree(p, true, f -> SELinux.setFileContext(f.toString(), "u:object_r:magisk_file:s0"));
+            Files.createDirectories(prefs, PosixFilePermissions.asFileAttribute(perms));
+            walkFileTree(prefs, f -> SELinux.setFileContext(f.toString(), "u:object_r:magisk_file:s0"));
         } catch (IOException e) {
             Log.e(TAG, Log.getStackTraceString(e));
         }
@@ -604,6 +604,7 @@ public class ConfigManager {
                         continue;
                     }
                     var module = cachedModule.get(modulePackageName);
+                    assert module != null;
                     for (ProcessScope processScope : processesScope) {
                         cachedScope.computeIfAbsent(processScope,
                                 ignored -> new LinkedList<>()).add(module);
@@ -612,6 +613,7 @@ public class ConfigManager {
                             var appId = processScope.uid % PER_USER_RANGE;
                             for (var user : UserService.getUsers()) {
                                 var moduleUid = user.id * PER_USER_RANGE + appId;
+                                if (moduleUid == processScope.uid) continue; // skip duplicate
                                 var moduleSelf = new ProcessScope(processScope.processName, moduleUid);
                                 cachedScope.computeIfAbsent(moduleSelf,
                                         ignored -> new LinkedList<>()).add(module);
@@ -637,7 +639,7 @@ public class ConfigManager {
                 return;
             }
         }
-        Log.d(TAG, "cached Scope");
+        Log.d(TAG, "cached scope");
         cachedScope.forEach((ps, modules) -> {
             Log.d(TAG, ps.processName + "/" + ps.uid);
             modules.forEach(module -> Log.d(TAG, "\t" + module.packageName));
@@ -975,14 +977,11 @@ public class ConfigManager {
         return module != null && module.appId == uid % PER_USER_RANGE;
     }
 
-    private void walkFileTree(Path rootDir, boolean skipRoot, Consumer<Path> action) throws IOException {
+    private void walkFileTree(Path rootDir, Consumer<Path> action) throws IOException {
         if (Files.notExists(rootDir)) return;
         Files.walkFileTree(rootDir, new SimpleFileVisitor<>() {
             @Override
             public FileVisitResult preVisitDirectory(Path dir, BasicFileAttributes attrs) {
-                if (skipRoot && dir.equals(rootDir)) {
-                    return FileVisitResult.CONTINUE;
-                }
                 action.accept(dir);
                 return FileVisitResult.CONTINUE;
             }
@@ -999,10 +998,11 @@ public class ConfigManager {
         if (packageName == null) return;
         var path = Paths.get(getPrefsPath(packageName, uid));
         try {
-            Files.createDirectories(path);
-            walkFileTree(path, false, p -> {
+            var perms = PosixFilePermissions.fromString("rwx--x--x");
+            Files.createDirectories(path, PosixFilePermissions.asFileAttribute(perms));
+            walkFileTree(path, p -> {
                 try {
-                    Os.chown(p.toString(), uid, 1000);
+                    Os.chown(p.toString(), uid, uid);
                 } catch (ErrnoException e) {
                     Log.e(TAG, Log.getStackTraceString(e));
                 }

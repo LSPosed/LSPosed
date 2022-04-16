@@ -19,7 +19,10 @@
 
 <resources>
 
-    <style name="Base.AppTheme.Light" parent="Theme.Material.Light.LightStatusBar">
+    <style name="Base.AppTheme.Light" parent="Theme.Material3.DynamicColors.Light.Rikka">
+        <item name="android:windowLightStatusBar">true</item>
+        <item name="colorPrimaryVariant">@color/primary_dark_light_light_status_bar</item>
+
         <item name="android:statusBarColor">?android:colorBackground</item>
         <item name="android:windowActionBar">false</item>
         <item name="android:windowNoTitle">true</item>
@@ -32,12 +35,11 @@
         <item name="android:colorAccent">?colorPrimary</item>
         <!-- Preference switch -->
         <item name="android:colorControlActivated">?colorPrimary</item>
-        <item name="android:textAlignment">viewStart</item>
     </style>
 
     <style name="Theme.Light" parent="Base.AppTheme.Light" />
 
-    <style name="Base.AppTheme" parent="Theme.Material">
+    <style name="Base.AppTheme" parent="Theme.Material3.DynamicColors.Dark.Rikka">
         <item name="android:windowActionBar">false</item>
         <item name="android:windowNoTitle">true</item>
         <item name="windowActionBar">false</item>
@@ -49,7 +51,6 @@
         <item name="android:colorAccent">?colorPrimary</item>
         <!-- Preference switch -->
         <item name="android:colorControlActivated">?colorPrimary</item>
-        <item name="android:textAlignment">viewStart</item>
     </style>
 
     <style name="Theme" parent="Base.AppTheme" />

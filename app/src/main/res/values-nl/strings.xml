@@ -62,6 +62,10 @@
     <string name="info_device">Apparaat</string>
     <string name="info_system_abi">Systeem ABI</string>
     <string name="info_api">Injectie interface</string>
+    <string name="info_dex2oat_wrapper">Optimizer Wrapper</string>
+    <string name="supported">Ondersteund</string>
+    <string name="unsupported_android_version">Unsupported (Android versie onbevredigd)</string>
+    <string name="unsupported_crashed">Niet ondersteund (gecrasht)</string>
     <string name="parasitic_recommend">Parasitaire manager aanbevolen</string>
     <string name="parasitic_recommend_summary">LSPosed ondersteunt nu parasitisering van het systeem om detectie te voorkomen. U kunt de manager veilig deïnstalleren na het maken van een snelkoppeling van de parastische manager. In elk geval kunt u de manager installeren vanuit /data/adb/lspd/manager.apk.</string>
     <string name="create_shortcut">Snelkoppeling maken</string>
@@ -123,7 +127,7 @@
     <string name="menu_show_modules">Modules</string>
     <string name="menu_show_denylist">Weigerlijst</string>
     <string name="failed_to_save_scope_list">Scopelijst opslaan is mislukt</string>
-    <string name="app_description">%1$s\nVersie %2$s</string>
+    <string name="app_version">Versie: %1$s</string>
     <string name="use_recommended">Aanbevolen</string>
     <string name="no_scope_selected_has_recommended">U heeft geen app geselecteerd. Aanbevolen apps selecteren?</string>
     <string name="use_recommended_message">Aanbevolen apps selecteren?</string>

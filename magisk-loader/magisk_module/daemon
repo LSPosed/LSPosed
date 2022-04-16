@@ -1,6 +1,7 @@
 #!/system/bin/sh
 
 dir=${0%/*}
+magiskPath=$(magisk --path)
 tmpLspdApk="/data/local/tmp/daemon.apk"
 debug=@DEBUG@
 flavor=@FLAVOR@
@@ -38,5 +39,16 @@ if [ ! -S "/dev/socket/zygote" ]; then
   done
 fi
 $debug && log -p d -t "LSPosed" "start $flavor daemon $*"
+
+if [ "$(getprop ro.build.version.sdk)" -ge 29 ]; then
+  umount /apex/com.android.art/bin/dex2oat*
+  mkdir "$magiskPath/dex2oat"
+  cp -p /apex/com.android.art/bin/dex2oat32 "$magiskPath/dex2oat/dex2oat32"
+  cp -p /apex/com.android.art/bin/dex2oat64 "$magiskPath/dex2oat/dex2oat64"
+  chcon -R u:object_r:magisk_file:s0 "$magiskPath/dex2oat"
+  mount --bind "$magiskPath/dex2oat/dex2oat32" /apex/com.android.art/bin/dex2oat32
+  mount --bind "$magiskPath/dex2oat/dex2oat64" /apex/com.android.art/bin/dex2oat64
+fi
+
 # shellcheck disable=SC2086
 exec /system/bin/app_process $java_options /system/bin --nice-name=lspd org.lsposed.lspd.Main "$@" >/dev/null 2>&1

@@ -63,6 +63,10 @@ JJ108</string>
     <string name="info_device">Gerät</string>
     <string name="info_system_abi">System ABI</string>
     <string name="info_api">Injektionsschnittstelle</string>
+    <string name="info_dex2oat_wrapper">Optimierer-Wrapper</string>
+    <string name="supported">Unterstützt</string>
+    <string name="unsupported_android_version">Nicht unterstützt (Android-Version nicht erfüllt)</string>
+    <string name="unsupported_crashed">Nicht unterstützt (abgestürzt)</string>
     <string name="parasitic_recommend">Parasitärer Manager empfohlen</string>
     <string name="parasitic_recommend_summary">LSPosed unterstützt nun eine Systemparasitierung, um die Erkennung zu vermeiden. Sie können den Manager sicher deinstallieren, nachdem Sie erfolgreich eine Verknüpfung des parasitären Managers erstellt haben. In jedem Fall können Sie den Manager von /data/adb/lspd/manager.apk wieder erneut installieren.</string>
     <string name="create_shortcut">Verknüpfung erstellen</string>
@@ -124,7 +128,7 @@ JJ108</string>
     <string name="menu_show_modules">Module</string>
     <string name="menu_show_denylist">Verweigerungsliste</string>
     <string name="failed_to_save_scope_list">Das Speichern der Scope-Liste ist fehlgeschlagen</string>
-    <string name="app_description">%1$s\nVersion %2$s</string>
+    <string name="app_version">Version: %1$s</string>
     <string name="use_recommended">Empfohlen</string>
     <string name="no_scope_selected_has_recommended">Sie haben keine App ausgewählt. Empfohlene Apps auswählen?</string>
     <string name="use_recommended_message">Empfohlene Apps auswählen?</string>

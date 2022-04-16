@@ -60,6 +60,10 @@
     <string name="info_device">设备</string>
     <string name="info_system_abi">系统架构</string>
     <string name="info_api">注入接口</string>
+    <string name="info_dex2oat_wrapper">优化器包装</string>
+    <string name="supported">支持</string>
+    <string name="unsupported_android_version">不支持（系统版本不满足要求）</string>
+    <string name="unsupported_crashed">不支持（已崩溃）</string>
     <string name="parasitic_recommend">推荐使用寄生管理器</string>
     <string name="parasitic_recommend_summary">LSPosed 现在支持寄生管理器到系统以避免检测。您可以在成功创建寄生管理器图标后卸载管理器。在任何情况下，您都可以从 /data/adb/lspd/manager.apk 安装管理器。</string>
     <string name="create_shortcut">创建快捷方式</string>
@@ -121,7 +125,7 @@
     <string name="menu_show_modules">模块</string>
     <string name="menu_show_denylist">排除列表</string>
     <string name="failed_to_save_scope_list">作用域列表保存失败</string>
-    <string name="app_description">%1$s\n版本：%2$s</string>
+    <string name="app_version">版本。 %1$s</string>
     <string name="use_recommended">勾选推荐</string>
     <string name="no_scope_selected_has_recommended">未选择任何应用。选择推荐的应用？</string>
     <string name="use_recommended_message">选择推荐的应用？</string>

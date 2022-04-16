@@ -84,8 +84,6 @@ import hidden.HiddenApiBridge;
 import io.github.xposed.xposedservice.utils.ParceledListSlice;
 
 public class LSPManagerService extends ILSPManagerService.Stub {
-    private static final String PROP_NAME = "dalvik.vm.dex2oat-flags";
-    private static final String PROP_VALUE = "--inline-max-code-units=0";
     // this maybe useful when obtaining the manager binder
     private static String RANDOM_UUID = null;
     private static final String SHORTCUT_ID = "org.lsposed.manager.shortcut";
@@ -688,7 +686,7 @@ public class LSPManagerService extends ILSPManagerService.Stub {
 
     @Override
     public boolean dex2oatFlagsLoaded() {
-        return SystemProperties.get(PROP_NAME).contains(PROP_VALUE);
+        return SystemProperties.get(Dex2OatService.PROP_NAME).contains(Dex2OatService.PROP_VALUE);
     }
 
     @Override
@@ -778,5 +776,14 @@ public class LSPManagerService extends ILSPManagerService.Stub {
     @Override
     public void setDexObfuscate(boolean enabled) {
         ConfigManager.getInstance().setDexObfuscate(enabled);
+    }
+
+    @Override
+    public boolean dex2oatWrapperAlive() {
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.Q) {
+            return ServiceManager.getDex2OatService().isAlive();
+        } else {
+            return false;
+        }
     }
 }

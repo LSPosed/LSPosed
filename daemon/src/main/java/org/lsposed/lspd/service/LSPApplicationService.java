@@ -83,6 +83,7 @@ public class LSPApplicationService extends ILSPApplicationService.Stub {
         Log.d(TAG, "LSPApplicationService.onTransact: code=" + code);
         if (code == DEX_TRANSACTION_CODE) {
             var shm = ConfigManager.getInstance().getPreloadDex();
+            if (shm == null) return false;
             // assume that write only a fd
             shm.writeToParcel(reply, 0);
             reply.writeLong(shm.getSize());
@@ -127,7 +128,7 @@ public class LSPApplicationService extends ILSPApplicationService.Stub {
     public IBinder requestModuleBinder(String name) throws RemoteException {
         var processInfo = ensureRegistered();
         if (ConfigManager.getInstance().isModule(processInfo.uid, name)) {
-            ConfigManager.getInstance().ensureModulePrefsPermission(processInfo.pid, name);
+            ConfigManager.getInstance().ensureModulePrefsPermission(processInfo.uid, name);
             return ServiceManager.getModuleService(name);
         } else return null;
     }

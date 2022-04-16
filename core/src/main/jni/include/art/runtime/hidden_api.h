@@ -28,13 +28,15 @@
 namespace art {
 
     namespace hidden_api {
+        inline static bool is_debuggable = false;
+
         using lsplant::operator""_tstr;
         CREATE_FUNC_SYMBOL_ENTRY(void, DexFile_setTrusted, JNIEnv *env, jclass clazz,
                                  jobject j_cookie) {
             if (DexFile_setTrustedSym != nullptr) [[likely]] {
-                Runtime::Current()->SetJavaDebuggable(true);
+                if (!is_debuggable) Runtime::Current()->SetJavaDebuggable(true);
                 DexFile_setTrustedSym(env, clazz, j_cookie);
-                Runtime::Current()->SetJavaDebuggable(false);
+                if (!is_debuggable) Runtime::Current()->SetJavaDebuggable(false);
             }
         }
 
@@ -115,12 +117,20 @@ namespace art {
                 }
         );
 
-        inline void DisableHiddenApi(const lsplant::HookHandler &handler) {
-
+        inline void DisableHiddenApi(JNIEnv* env, const lsplant::HookHandler &handler) {
             const int api_level = lspd::GetAndroidApiLevel();
             if (api_level < __ANDROID_API_P__) {
                 return;
             }
+
+            auto runtime_class = lsplant::JNI_FindClass(env, "dalvik/system/VMRuntime");
+            auto get_runtime_method = lsplant::JNI_GetStaticMethodID(env, runtime_class, "getRuntime", "()Ldalvik/system/VMRuntime;");
+            auto is_debuggable_method = lsplant::JNI_GetMethodID(env, runtime_class, "isJavaDebuggable", "()Z");
+            auto runtime = lsplant::JNI_CallStaticObjectMethod(env, runtime_class, get_runtime_method);
+            is_debuggable = lsplant::JNI_CallBooleanMethod(env, runtime, is_debuggable_method);
+
+            LOGD("java runtime debuggable %s", is_debuggable ? "true" : "false");
+
             DexFile_setTrustedSym = reinterpret_cast<decltype(DexFile_setTrustedSym)>(lspd::symbol_cache->setTrusted);
             lsplant::HookSymNoHandle(handler, lspd::symbol_cache->openDexFileNative, DexFile_openDexFileNative);
             lsplant::HookSymNoHandle(handler, lspd::symbol_cache->openInMemoryDexFilesNative,

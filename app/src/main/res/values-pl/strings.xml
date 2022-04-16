@@ -66,6 +66,10 @@
     <string name="info_device">Urządzenie</string>
     <string name="info_system_abi">System ABI</string>
     <string name="info_api">Interfejs wstrzykiwania</string>
+    <string name="info_dex2oat_wrapper">Optymalizator Wrapper</string>
+    <string name="supported">Obsługiwana strona</string>
+    <string name="unsupported_android_version">Nieobsługiwana (niezadowalająca wersja systemu Android)</string>
+    <string name="unsupported_crashed">Nieobsługiwane (zawieszone)</string>
     <string name="parasitic_recommend">Rekomendowany menadżer Parasitic</string>
     <string name="parasitic_recommend_summary">LSPosed wspiera teraz pasożyty systemowe, aby uniknąć wykrycia. Możesz odinstalować menadżer po pomyśłnym utworzeniu skrótu w parastic manager. W każdym wypadku możesz zainstalować menadżer spowrotem z pliku /data/adb/lspd/manager.apk.</string>
     <string name="create_shortcut">Utwórz skrót</string>
@@ -127,7 +131,7 @@
     <string name="menu_show_modules">Moduły</string>
     <string name="menu_show_denylist">Lista zabronionych</string>
     <string name="failed_to_save_scope_list">Nie udało się zapisać listy zakresu</string>
-    <string name="app_description">%1$s\nWersja %2$s</string>
+    <string name="app_version">Wersja: %1$s</string>
     <string name="use_recommended">Rekomendowane</string>
     <string name="no_scope_selected_has_recommended">Nie wybrałeś żadnej aplikacji. Wybrać rekomendowane aplikacje?</string>
     <string name="use_recommended_message">Wybrać rekomendowane aplikacje?</string>

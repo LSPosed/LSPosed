@@ -45,21 +45,6 @@
 
     <style name="ThemeOverlay.Material.Dialog.ColorPicker" parent="@style/ThemeOverlay.Material3.MaterialAlertDialog.Centered" tools:override="true" />
 
-    <style name="PreferenceSummaryTextStyle" tools:override="true">
-        <item name="android:fontFamily">sans-serif</item>
-        <item name="android:textStyle">normal</item>
-        <item name="android:textAllCaps">false</item>
-        <item name="android:textSize">14sp</item>
-        <item name="android:letterSpacing">0.0178571429</item>
-    </style>
-
-    <style name="Preference.Category.Material" tools:override="true">
-        <item name="android:layout">@layout/preference_category_material</item>
-        <item name="iconSpaceReserved">false</item>
-        <item name="allowDividerAbove">false</item>
-        <item name="allowDividerBelow">false</item>
-    </style>
-
     <!-- Base themes -->
     <style name="Base.Light" parent="Theme.Material3.Light" tools:override="true">
         <item name="android:statusBarColor">?android:colorBackground</item>
@@ -76,12 +61,6 @@
         <item name="colorInactive" tools:ignore="PrivateResource">@color/material_grey_600</item>
 
         <item name="navigationBarDividerColor">@android:color/transparent</item>
-
-        <!-- SwitchBar -->
-        <item name="switchBarStyle">@style/Widget.SwitchBar.Light</item>
-        <item name="switchBarTheme">@style/ThemeOverlay.SwitchBar</item>
-        <item name="switchBarBackgroundNormal">@color/switchbar_background_light</item>
-        <item name="switchBarBackgroundDisabled">@color/switchbar_background_light</item>
     </style>
 
     <style name="Base" parent="Theme.Material3.Dark" tools:override="true">
@@ -96,18 +75,7 @@
         <item name="colorAlert">@color/material_red_A100</item>
         <item name="colorSafe">@color/material_green_A100</item>
         <item name="colorWarning">@color/material_orange_A100</item>
-        <item name="colorInactive">@color/material_grey_500</item>
 
         <item name="navigationBarDividerColor">@android:color/transparent</item>
-
-        <!-- SwitchBar -->
-        <item name="switchBarStyle">@style/Widget.SwitchBar</item>
-        <item name="switchBarTheme">@style/ThemeOverlay.SwitchBar</item>
-        <item name="switchBarBackgroundNormal">@color/switchbar_background_dark</item>
-        <item name="switchBarBackgroundDisabled">@color/switchbar_background_dark</item>
-    </style>
-
-    <style name="ThemeOverlay.SwitchBar" parent="android:Widget" tools:override="true">
-        <item name="android:colorControlActivated">@color/primary_text_material_inverse</item>
     </style>
 </resources>

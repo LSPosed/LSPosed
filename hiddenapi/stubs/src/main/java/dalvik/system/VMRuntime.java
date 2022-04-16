@@ -10,4 +10,6 @@ public class VMRuntime {
     public native boolean is64Bit();
 
     public native String vmInstructionSet();
+
+    public native boolean isJavaDebuggable();
 }

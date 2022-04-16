@@ -17,13 +17,13 @@
  * Copyright (C) 2021 LSPosed Contributors
  */
 
-import com.android.build.gradle.internal.dsl.BuildType
 import java.time.Instant
 
 plugins {
     id("com.android.application")
     id("androidx.navigation.safeargs")
     id("dev.rikka.tools.autoresconfig")
+    id("dev.rikka.tools.materialthemebuilder")
 }
 
 val defaultManagerPackageName: String by rootProject.extra
@@ -77,7 +77,7 @@ android {
                 signingConfig = if (it.storeFile?.exists() == true) it
                 else signingConfigs.named("debug").get()
                 isMinifyEnabled = true
-                (this as BuildType).isShrinkResources = true
+                isShrinkResources = true
                 proguardFiles("proguard-rules.pro")
             }
         }
@@ -99,6 +99,41 @@ autoResConfig {
     generatedArrayFirstItem.set("SYSTEM")
 }
 
+materialThemeBuilder {
+    themes {
+        for ((name, color) in listOf(
+            "Red" to "F44336",
+            "Pink" to "E91E63",
+            "Purple" to "9C27B0",
+            "DeepPurple" to "673AB7",
+            "Indigo" to "3F51B5",
+            "Blue" to "2196F3",
+            "LightBlue" to "03A9F4",
+            "Cyan" to "00BCD4",
+            "Teal" to "009688",
+            "Green" to "4FAF50",
+            "LightGreen" to "8BC3A4",
+            "Lime" to "CDDC39",
+            "Yellow" to "FFEB3B",
+            "Amber" to "FFC107",
+            "Orange" to "FF9800",
+            "DeepOrange" to "FF5722",
+            "Brown" to "795548",
+            "BlueGrey" to "607D8F",
+            "Sakura" to "FF9CA8"
+        )) {
+            create("Material$name") {
+                lightThemeFormat = "ThemeOverlay.Light.%s"
+                darkThemeFormat = "ThemeOverlay.Dark.%s"
+                primaryColor = "#$color"
+            }
+        }
+    }
+    // Add Material Design 3 color tokens (such as palettePrimary100) in generated theme
+    // rikka.material >= 2.0.0 provides such attributes
+    generatePalette = true
+}
+
 dependencies {
     val glideVersion = "4.13.1"
     val navVersion: String by project
@@ -114,20 +149,21 @@ dependencies {
     implementation("androidx.recyclerview:recyclerview:1.2.1")
     implementation("androidx.swiperefreshlayout:swiperefreshlayout:1.2.0-alpha01")
     implementation("com.github.bumptech.glide:glide:$glideVersion")
-    implementation("com.google.android.material:material:1.6.0-alpha03")
+    implementation("com.google.android.material:material:1.6.0-beta01")
     implementation("com.google.code.gson:gson:2.9.0")
     implementation(platform("com.squareup.okhttp3:okhttp-bom:4.9.3"))
     implementation("com.squareup.okhttp3:okhttp")
     implementation("com.squareup.okhttp3:okhttp-dnsoverhttps")
     implementation("com.squareup.okhttp3:logging-interceptor")
     implementation("dev.rikka.rikkax.appcompat:appcompat:1.4.1")
-    implementation("dev.rikka.rikkax.core:core:1.3.4")
+    implementation("dev.rikka.rikkax.core:core:1.4.0")
     implementation("dev.rikka.rikkax.insets:insets:1.2.0")
-    implementation("dev.rikka.rikkax.material:material:1.6.6")
+    implementation("dev.rikka.rikkax.material:material:2.1.1")
+    implementation("dev.rikka.rikkax.material:material-preference:1.0.0")
     implementation("dev.rikka.rikkax.preference:simplemenu-preference:1.0.3")
     implementation("dev.rikka.rikkax.recyclerview:recyclerview-ktx:1.3.1")
     implementation("dev.rikka.rikkax.widget:borderview:1.1.0")
-    implementation("dev.rikka.rikkax.widget:switchbar:1.0.2")
+    implementation("dev.rikka.rikkax.widget:mainswitchbar:1.0.1")
     implementation("dev.rikka.rikkax.layoutinflater:layoutinflater:1.2.0")
     implementation("me.zhanghai.android.appiconloader:appiconloader:1.3.1")
     implementation("org.lsposed.hiddenapibypass:hiddenapibypass:4.3")

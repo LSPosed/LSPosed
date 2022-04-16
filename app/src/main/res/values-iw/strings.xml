@@ -67,6 +67,10 @@
     <string name="info_device">מכשיר</string>
     <string name="info_system_abi">ABI מערכת</string>
     <string name="info_api">ממשק הזרקה</string>
+    <string name="info_dex2oat_wrapper">מעטפת אופטימיזציה</string>
+    <string name="supported">נתמך</string>
+    <string name="unsupported_android_version">לא נתמך (גרסת אנדרואיד לא מרוצה)</string>
+    <string name="unsupported_crashed">לא נתמך (קרס)</string>
     <string name="parasitic_recommend">מנהל טפילים מומלץ</string>
     <string name="parasitic_recommend_summary">LSPosed תומך כעת בטפילת מערכת כדי למנוע זיהוי. אתה יכול להסיר בבטחה את המנהל לאחר יצירת קיצור מוצלח של המנהל הטפילי. בכל מקרה אתה יכול להתקין את המנהל בחזרה מ /data/adb/lspd/manager.apk.</string>
     <string name="create_shortcut">צור קיצור דרך</string>
@@ -128,7 +132,7 @@
     <string name="menu_show_modules">מודולים</string>
     <string name="menu_show_denylist">רשימת דחיה</string>
     <string name="failed_to_save_scope_list">נכשל לשמור רשימת תחומים</string>
-    <string name="app_description">%1$s\nגרסה %2$s</string>
+    <string name="app_version">גרסה: %1$s</string>
     <string name="use_recommended">מומלץ</string>
     <string name="no_scope_selected_has_recommended">אתה לא בחרת שום אפליקציה. לבחור אפליקציות מומלצות?</string>
     <string name="use_recommended_message">בחר אפליקציות מומלצות?</string>

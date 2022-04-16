@@ -62,6 +62,10 @@
     <string name="info_device">Dispositiu</string>
     <string name="info_system_abi">Sistema ABI</string>
     <string name="info_api">Interfície d\'injecció</string>
+    <string name="info_dex2oat_wrapper">Embolcall de l\'optimitzador</string>
+    <string name="supported">Admet</string>
+    <string name="unsupported_android_version">No és compatible (la versió d\'Android no està satisfeta)</string>
+    <string name="unsupported_crashed">No s\'admet (bloquejat)</string>
     <string name="parasitic_recommend">Administrador de paràsits recomanat</string>
     <string name="parasitic_recommend_summary">LSPosed ara admet la parasitització del sistema per evitar la detecció. Podeu desinstal·lar el gestor amb seguretat després de crear correctament una drecera del gestor de paràsits. En qualsevol cas, podeu tornar a instal·lar el gestor des de /data/adb/lspd/manager.apk.</string>
     <string name="create_shortcut">Crear accès directe</string>
@@ -123,7 +127,7 @@
     <string name="menu_show_modules">Mòduls</string>
     <string name="menu_show_denylist">Llista de denegació</string>
     <string name="failed_to_save_scope_list">No s\'ha pogut desar la llista d\'àmbits</string>
-    <string name="app_description">%1$s\nVersió %2$s</string>
+    <string name="app_version">Versió: %1$s</string>
     <string name="use_recommended">Recomanat</string>
     <string name="no_scope_selected_has_recommended">No heu seleccionat cap aplicació. Seleccioneu aplicacions recomanades?</string>
     <string name="use_recommended_message">Vols seleccionar aplicacions recomanades?</string>

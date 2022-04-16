@@ -25,6 +25,8 @@ import android.content.res.XResources;
 
 import java.lang.reflect.Constructor;
 
+import dalvik.annotation.optimization.FastNative;
+
 public class ResourcesHook {
 
     public static native boolean initXResourcesNative();
@@ -33,5 +35,6 @@ public class ResourcesHook {
 
     public static native ClassLoader buildDummyClassLoader(ClassLoader parent, String resourceSuperClass, String typedArraySuperClass);
 
+    @FastNative
     public static native void rewriteXmlReferencesNative(long parserPtr, XResources origRes, Resources repRes);
 }

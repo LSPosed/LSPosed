@@ -64,6 +64,10 @@
     <string name="info_device">Dispozitiv</string>
     <string name="info_system_abi">Sistem ABI</string>
     <string name="info_api">Interfaţă de injectare</string>
+    <string name="info_dex2oat_wrapper">Optimizator Wrapper</string>
+    <string name="supported">Suportă</string>
+    <string name="unsupported_android_version">Neacceptat (versiune Android nesatisfăcută)</string>
+    <string name="unsupported_crashed">Neacceptat (prăbușit)</string>
     <string name="parasitic_recommend">Manager parazitar recomandat</string>
     <string name="parasitic_recommend_summary">LSPosed acceptă acum parazitizarea sistemului pentru a evita detectarea. Puteți dezinstala managerul în siguranță după crearea cu succes a unei comenzi rapide a managerului parazitar. În orice caz, puteți instala managerul înapoi din /data/adb/lspd/manager.apk.</string>
     <string name="create_shortcut">Crează scurtătură</string>
@@ -125,7 +129,7 @@
     <string name="menu_show_modules">Module</string>
     <string name="menu_show_denylist">Denylist</string>
     <string name="failed_to_save_scope_list">Salvare eșuată listă de scop</string>
-    <string name="app_description">%1$s\nVersiunea %2$s</string>
+    <string name="app_version">Versiunea: %1$s</string>
     <string name="use_recommended">Recomandate</string>
     <string name="no_scope_selected_has_recommended">Nu ați selectat nicio aplicație. Selectați aplicațiile recomandate?</string>
     <string name="use_recommended_message">Selectaţi aplicaţiile recomandate?</string>

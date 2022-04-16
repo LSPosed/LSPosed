@@ -30,7 +30,7 @@ import de.robv.android.xposed.XposedBridge.CopyOnWriteSortedSet;
  * Callback for hooking layouts. Such callbacks can be passed to {@link XResources#hookLayout}
  * and its variants.
  */
-public abstract class XC_LayoutInflated extends XCallback {
+public abstract class XC_LayoutInflated extends XCallback implements Comparable<XC_LayoutInflated> {
     /**
      * Creates a new callback with default priority.
      */
@@ -78,6 +78,22 @@ public abstract class XC_LayoutInflated extends XCallback {
          * Resources containing the layout.
          */
         public XResources res;
+    }
+
+    /** @hide */
+    @Override
+    public int compareTo(XC_LayoutInflated other) {
+        if (this == other)
+            return 0;
+
+        // order descending by priority
+        if (other.priority != this.priority)
+            return other.priority - this.priority;
+            // then randomly
+        else if (System.identityHashCode(this) < System.identityHashCode(other))
+            return -1;
+        else
+            return 1;
     }
 
     /**
