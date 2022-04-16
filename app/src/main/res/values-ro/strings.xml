@@ -129,6 +129,7 @@
     <string name="menu_show_modules">Module</string>
     <string name="menu_show_denylist">Denylist</string>
     <string name="failed_to_save_scope_list">Salvare eșuată listă de scop</string>
+    <string name="app_version">Versiunea: %1$s</string>
     <string name="use_recommended">Recomandate</string>
     <string name="no_scope_selected_has_recommended">Nu ați selectat nicio aplicație. Selectați aplicațiile recomandate?</string>
     <string name="use_recommended_message">Selectaţi aplicaţiile recomandate?</string>

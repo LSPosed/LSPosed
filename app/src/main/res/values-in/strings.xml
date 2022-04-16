@@ -125,6 +125,7 @@
     <string name="menu_show_modules">Modul</string>
     <string name="menu_show_denylist">Penyangkalan</string>
     <string name="failed_to_save_scope_list">Gagal menyimpan ke daftar cakupan</string>
+    <string name="app_version">Versi: %1$s</string>
     <string name="use_recommended">Direkomendasikan</string>
     <string name="no_scope_selected_has_recommended">Anda tidak memilih aplikasi apapun. Pilih aplikasi yang disarankan?</string>
     <string name="use_recommended_message">Pilih aplikasi yang disarankan?</string>

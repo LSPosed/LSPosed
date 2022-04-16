@@ -132,6 +132,7 @@
     <string name="menu_show_modules">מודולים</string>
     <string name="menu_show_denylist">רשימת דחיה</string>
     <string name="failed_to_save_scope_list">נכשל לשמור רשימת תחומים</string>
+    <string name="app_version">גרסה: %1$s</string>
     <string name="use_recommended">מומלץ</string>
     <string name="no_scope_selected_has_recommended">אתה לא בחרת שום אפליקציה. לבחור אפליקציות מומלצות?</string>
     <string name="use_recommended_message">בחר אפליקציות מומלצות?</string>

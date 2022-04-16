@@ -127,6 +127,7 @@
     <string name="menu_show_modules">Πρόσθετα</string>
     <string name="menu_show_denylist">Denylist</string>
     <string name="failed_to_save_scope_list">Αποτυχία αποθήκευσης της λίστας πεδίου</string>
+    <string name="app_version">Έκδοση: %1$s</string>
     <string name="use_recommended">Προτεινόμενο</string>
     <string name="no_scope_selected_has_recommended">Δεν έχετε επιλέξει καμία εφαρμογή. Επιλέξτε τις προτεινόμενες εφαρμογές?</string>
     <string name="use_recommended_message">Επιλέξτε προτεινόμενες εφαρμογές?</string>

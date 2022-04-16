@@ -128,6 +128,7 @@ https://github.com/tclement0922</string>
     <string name="menu_show_modules">Modules</string>
     <string name="menu_show_denylist">Liste de refus</string>
     <string name="failed_to_save_scope_list">Échec de l\'enregistrement de la liste des périmètres d\'applications</string>
+    <string name="app_version">Version: %1$s</string>
     <string name="use_recommended">Recommandé</string>
     <string name="no_scope_selected_has_recommended">Vous n\'avez sélectionné aucune application. Sélectionner les applications recommandées ?</string>
     <string name="use_recommended_message">Sélectionner les applications recommandées ?</string>

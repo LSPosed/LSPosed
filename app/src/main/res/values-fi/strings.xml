@@ -127,6 +127,7 @@
     <string name="menu_show_modules">Moduulit</string>
     <string name="menu_show_denylist">Denylist</string>
     <string name="failed_to_save_scope_list">Valmistelulistan tallentaminen epäonnistui</string>
+    <string name="app_version">Versio: %1$s</string>
     <string name="use_recommended">Suositeltu</string>
     <string name="no_scope_selected_has_recommended">Et valinnut yhtään sovellusta. Valitse suositellut sovellukset?</string>
     <string name="use_recommended_message">Valitse suositellut sovellukset?</string>

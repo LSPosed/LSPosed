@@ -131,6 +131,7 @@
     <string name="menu_show_modules">Moduły</string>
     <string name="menu_show_denylist">Lista zabronionych</string>
     <string name="failed_to_save_scope_list">Nie udało się zapisać listy zakresu</string>
+    <string name="app_version">Wersja: %1$s</string>
     <string name="use_recommended">Rekomendowane</string>
     <string name="no_scope_selected_has_recommended">Nie wybrałeś żadnej aplikacji. Wybrać rekomendowane aplikacje?</string>
     <string name="use_recommended_message">Wybrać rekomendowane aplikacje?</string>
