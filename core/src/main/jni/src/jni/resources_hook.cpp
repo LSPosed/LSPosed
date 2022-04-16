@@ -76,7 +76,7 @@ namespace lspd {
                                                                                        kXResourcesClassName)) {
             classXResources = JNI_NewGlobalRef(env, classXResources_);
         } else {
-            LOGE("Error while loading XResources class '%s':", kXResourcesClassName);
+            LOGE("Error while loading XResources class '{}':", kXResourcesClassName);
             return JNI_FALSE;
         }
         methodXResourcesTranslateResId = JNI_GetStaticMethodID(

@@ -53,7 +53,7 @@ inline bool RegisterNativeMethodsInternal(JNIEnv *env,
 
     auto clazz = Context::GetInstance()->FindClassFromCurrentLoader(env, class_name);
     if (clazz.get() == nullptr) {
-        LOGF("Couldn't find class: %s", class_name);
+        LOGF("Couldn't find class: {}", class_name);
         return false;
     }
     return JNI_RegisterNatives(env, clazz, methods, method_count);
@@ -90,7 +90,7 @@ inline int HookFunction(void *original, void *replace, void **backup) {
     if constexpr (isDebug) {
         Dl_info info;
         if (dladdr(original, &info))
-        LOGD("Hooking %s (%p) from %s (%p)",
+        LOGD("Hooking {} ({}) from {} ({})",
              info.dli_sname ? info.dli_sname : "(unknown symbol)", info.dli_saddr,
              info.dli_fname ? info.dli_fname : "(unknown file)", info.dli_fbase);
     }
@@ -101,7 +101,7 @@ inline int UnhookFunction(void *original) {
     if constexpr (isDebug) {
         Dl_info info;
         if (dladdr(original, &info))
-        LOGD("Unhooking %s (%p) from %s (%p)",
+        LOGD("Unhooking {} ({}) from {} ({})",
              info.dli_sname ? info.dli_sname : "(unknown symbol)", info.dli_saddr,
              info.dli_fname ? info.dli_fname : "(unknown file)", info.dli_fbase);
     }

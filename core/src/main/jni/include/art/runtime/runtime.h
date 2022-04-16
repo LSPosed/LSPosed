@@ -48,7 +48,7 @@ namespace art {
             RETRIEVE_FIELD_SYMBOL(instance, "_ZN3art7Runtime9instance_E");
             RETRIEVE_MEM_FUNC_SYMBOL(SetJavaDebuggable, "_ZN3art7Runtime17SetJavaDebuggableEb");
             void *thiz = *instance;
-            LOGD("_ZN3art7Runtime9instance_E = %p", thiz);
+            LOGD("_ZN3art7Runtime9instance_E = {}", thiz);
             instance_ = reinterpret_cast<Runtime*>(thiz);
         }
     };
