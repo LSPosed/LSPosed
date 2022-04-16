@@ -127,6 +127,7 @@
     <string name="menu_show_modules">Modüller</string>
     <string name="menu_show_denylist">Reddetme Listesi</string>
     <string name="failed_to_save_scope_list">Kapsam listesi kaydedilemedi</string>
+    <string name="app_version">Sürüm: %1$s</string>
     <string name="use_recommended">Önerilen</string>
     <string name="no_scope_selected_has_recommended">Herhangi bir uygulama seçmediniz. Önerilen uygulamalar seçilsin mi?</string>
     <string name="use_recommended_message">Önerilen uygulamalar seçilsin mi?</string>
@@ -207,7 +208,7 @@
     <string name="crash_info_copied">Çökme bilgisi panoya kopyalandı</string>
     <string name="info_copied">Panoya kopyalandı</string>
     <!-- Colors -->
-    <string name="color_sakura">Kiraz çiçeği</string>
+    <string name="color_sakura">sakura</string>
     <string name="color_red">Kırmızı</string>
     <string name="color_pink">Pembe</string>
     <string name="color_purple">Mor</string>
