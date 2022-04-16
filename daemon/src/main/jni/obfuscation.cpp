@@ -42,7 +42,9 @@ std::mutex init_lock{};
 std::map<const std::string, std::string> signatures = {
         {"Lde/robv/android/xposed/", ""},
         { "Landroid/app/AndroidApp", ""},
-        { "Landroid/content/res/X", ""}
+        { "Landroid/content/res/X", ""},
+        { "Lorg/lsposed/lspd/core/", ""},
+        { "Lorg/lsposed/lspd/nativebridge/", ""},
 };
 
 jclass class_file_descriptor;

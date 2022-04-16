@@ -15,7 +15,7 @@
  * along with LSPosed.  If not, see <https://www.gnu.org/licenses/>.
  *
  * Copyright (C) 2020 EdXposed Contributors
- * Copyright (C) 2021 LSPosed Contributors
+ * Copyright (C) 2021 - 2022 LSPosed Contributors
  */
 
 #include <jni.h>
@@ -99,7 +99,7 @@ namespace lspd {
         }
         methodXResourcesTranslateAttrId = JNI_GetStaticMethodID(
                 env, classXResources, "translateAttrId",
-                fmt::format("(Ljava/lang/String;L%s;)I", x_resources_class_name));
+                fmt::format("(Ljava/lang/String;L{};)I", x_resources_class_name));
         if (!methodXResourcesTranslateAttrId) {
             return JNI_FALSE;
         }
@@ -222,7 +222,7 @@ namespace lspd {
     };
 
     void RegisterResourcesHook(JNIEnv *env) {
-        auto sign = fmt::format("(JL%s;Landroid/content/res/Resources;)V", GetXResourcesClassName());
+        auto sign = fmt::format("(JL{};Landroid/content/res/Resources;)V", GetXResourcesClassName());
         gMethods[3].signature = sign.c_str();
 
         REGISTER_LSP_NATIVE_METHODS(ResourcesHook);

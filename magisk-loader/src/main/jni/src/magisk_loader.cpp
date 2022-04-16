@@ -74,9 +74,15 @@ namespace lspd {
         env->DeleteLocalRef(dex_buffer);
     }
 
+    std::string GetEntryClassName() {
+        const auto &obfs_map = ConfigBridge::GetInstance()->obfuscation_map();
+        static auto signature = obfs_map.at("org.lsposed.lspd.core.") + "Main";
+        return signature;
+    }
+
     void MagiskLoader::SetupEntryClass(JNIEnv *env) {
         if (auto entry_class = FindClassFromLoader(env, GetCurrentClassLoader(),
-                                                   kEntryClassName)) {
+                                                   GetEntryClassName())) {
             entry_class_ = JNI_NewGlobalRef(env, entry_class);
         }
     }

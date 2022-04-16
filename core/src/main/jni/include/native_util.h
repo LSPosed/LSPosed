@@ -15,7 +15,7 @@
  * along with LSPosed.  If not, see <https://www.gnu.org/licenses/>.
  *
  * Copyright (C) 2020 EdXposed Contributors
- * Copyright (C) 2021 LSPosed Contributors
+ * Copyright (C) 2021 - 2022 LSPosed Contributors
  */
 
 #include <dlfcn.h>
@@ -31,6 +31,7 @@
 #include "logging.h"
 #include "config.h"
 #include <cassert>
+#include "ConfigBridge.h"
 
 #define _uintval(p)               reinterpret_cast<uintptr_t>(p)
 #define _ptr(p)                   reinterpret_cast<void *>(p)
@@ -47,13 +48,13 @@ namespace lspd {
 
 [[gnu::always_inline]]
 inline bool RegisterNativeMethodsInternal(JNIEnv *env,
-                                          const char *class_name,
+                                          std::string_view class_name,
                                           const JNINativeMethod *methods,
                                           jint method_count) {
 
-    auto clazz = Context::GetInstance()->FindClassFromCurrentLoader(env, class_name);
+    auto clazz = Context::GetInstance()->FindClassFromCurrentLoader(env, class_name.data());
     if (clazz.get() == nullptr) {
-        LOGF("Couldn't find class: {}", class_name);
+        LOGF("Couldn't find class: {}", class_name.data());
         return false;
     }
     return JNI_RegisterNatives(env, clazz, methods, method_count);
@@ -83,7 +84,7 @@ inline bool RegisterNativeMethodsInternal(JNIEnv *env,
 #endif
 
 #define REGISTER_LSP_NATIVE_METHODS(class_name) \
-  RegisterNativeMethodsInternal(env, "org.lsposed.lspd.nativebridge." #class_name, gMethods, arraysize(gMethods))
+  RegisterNativeMethodsInternal(env, GetNativeBridgeSignature() + #class_name, gMethods, arraysize(gMethods))
 
 inline int HookFunction(void *original, void *replace, void **backup) {
     _make_rwx(original, _page_size);
@@ -106,6 +107,12 @@ inline int UnhookFunction(void *original) {
              info.dli_fname ? info.dli_fname : "(unknown file)", info.dli_fbase);
     }
     return DobbyDestroy(original);
+}
+
+static std::string GetNativeBridgeSignature() {
+    const auto &obfs_map = ConfigBridge::GetInstance()->obfuscation_map();
+    static auto signature = obfs_map.at("org.lsposed.lspd.nativebridge.");
+    return signature;
 }
 
 } // namespace lspd
