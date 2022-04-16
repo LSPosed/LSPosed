@@ -62,7 +62,7 @@ namespace lspd {
                 read_sz += ret;
             } while (read_sz != count && ret != 0);
             if (read_sz != count) {
-                PLOGE("read (%zu != %zu)", count, read_sz);
+                PLOGE("read ({} != {})", count, read_sz);
             }
             return read_sz;
         }
@@ -82,7 +82,7 @@ namespace lspd {
                 write_sz += ret;
             } while (write_sz != count && ret != 0);
             if (write_sz != count) {
-                PLOGE("write (%zu != %zu)", count, write_sz);
+                PLOGE("write ({} != {})", count, write_sz);
             }
             return write_sz;
         }
@@ -341,7 +341,7 @@ namespace lspd {
 
     SharedMem InitCompanion() {
         LOGI("ZygiskCompanion: welcome to LSPosed!");
-        LOGI("ZygiskCompanion: version v%s (%d)", versionName, versionCode);
+        LOGI("ZygiskCompanion: version v{} ({})", versionName, versionCode);
 
         SharedMem symbol{"symbol", sizeof(lspd::SymbolCache)};
 
@@ -359,7 +359,7 @@ namespace lspd {
     void CompanionEntry(int client) {
         using namespace std::string_literals;
         static auto symbol = InitCompanion();
-        LOGD("Got cache with fd=%d size=%d", symbol.get(), (int) symbol.size());
+        LOGD("Got cache with fd={} size={}", symbol.get(), symbol.size());
         if (symbol.ok()) {
             write_int(client, symbol.size());
             send_fd(client, symbol.get());

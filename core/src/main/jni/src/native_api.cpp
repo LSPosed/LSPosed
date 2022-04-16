@@ -78,7 +78,7 @@ namespace lspd {
             });
         }();
         if (!initialized) [[unlikely]] return;
-        LOGD("native_api: Registered %s", library_name.c_str());
+        LOGD("native_api: Registered {}", library_name);
         moduleNativeLibs.push_back(library_name);
     }
 
@@ -101,18 +101,18 @@ namespace lspd {
                 } else {
                     ns = "NULL";
                 }
-                LOGD("native_api: do_dlopen(%s)", name);
+                LOGD("native_api: do_dlopen({})", name);
                 if (handle == nullptr) {
                     return nullptr;
                 }
                 for (std::string_view module_lib: moduleNativeLibs) {
                     // the so is a module so
                     if (hasEnding(ns, module_lib)) [[unlikely]] {
-                        LOGD("Loading module native library %s", module_lib.data());
+                        LOGD("Loading module native library {}", module_lib);
                         void *native_init_sym = dlsym(handle, "native_init");
                         if (native_init_sym == nullptr) [[unlikely]] {
-                            LOGD("Failed to get symbol \"native_init\" from library %s",
-                                 module_lib.data());
+                            LOGD("Failed to get symbol \"native_init\" from library {}",
+                                 module_lib);
                             break;
                         }
                         auto native_init = reinterpret_cast<NativeInit>(native_init_sym);
@@ -133,7 +133,7 @@ namespace lspd {
             });
 
     bool InstallNativeAPI(const lsplant::HookHandler & handler) {
-        LOGD("InstallNativeAPI: %p", symbol_cache->do_dlopen);
+        LOGD("InstallNativeAPI: {}", symbol_cache->do_dlopen);
         if (symbol_cache->do_dlopen) [[likely]] {
             HookSymNoHandle(handler, symbol_cache->do_dlopen, do_dlopen);
             return true;

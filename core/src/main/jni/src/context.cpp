@@ -33,7 +33,7 @@ using namespace lsplant;
 
 namespace lspd {
     Context::PreloadedDex::PreloadedDex(int fd, std::size_t size) {
-        LOGD("Context::PreloadedDex::PreloadedDex: fd=%d, size=%zu", fd, size);
+        LOGD("Context::PreloadedDex::PreloadedDex: fd={}, size={}", fd, size);
         auto *addr = mmap(nullptr, size, PROT_READ, MAP_SHARED, fd, 0);
 
         if (addr != MAP_FAILED) {
@@ -79,7 +79,7 @@ namespace lspd {
         } else {
             LOGE("No loadClass/findClass method found");
         }
-        LOGE("Class %s not found", class_name.data());
+        LOGE("Class {} not found", class_name);
         return {env, nullptr};
     }
 }  // namespace lspd

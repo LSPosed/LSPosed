@@ -13,5 +13,5 @@ add_library(${PROJECT_NAME} STATIC ${SRC_LIST} ${CMAKE_CURRENT_BINARY_DIR}/src/c
 target_include_directories(${PROJECT_NAME} PUBLIC include)
 target_include_directories(${PROJECT_NAME} PRIVATE src)
 
-target_link_libraries(${PROJECT_NAME} PUBLIC dobby lsplant_static log)
+target_link_libraries(${PROJECT_NAME} PUBLIC dobby lsplant_static log fmt-header-only)
 target_link_libraries(${PROJECT_NAME} PRIVATE dex_builder_static)

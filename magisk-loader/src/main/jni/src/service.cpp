@@ -223,7 +223,7 @@ namespace lspd {
         auto bridge_service = JNI_CallStaticObjectMethod(env, service_manager_class_,
                                                          get_service_method_, bridge_service_name);
         if (!bridge_service) {
-            LOGD("can't get %s", BRIDGE_SERVICE_NAME.data());
+            LOGD("can't get {}", BRIDGE_SERVICE_NAME);
             return {env, nullptr};
         }
 
@@ -303,7 +303,7 @@ namespace lspd {
         if (app_binder) {
             JNI_NewGlobalRef(env, heart_beat_binder);
         }
-        LOGD("Service::RequestSystemServerBinder app_binder: %p", app_binder.get());
+        LOGD("Service::RequestSystemServerBinder app_binder: {}", static_cast<void*>(app_binder.get()));
         return app_binder;
     }
 
@@ -317,8 +317,7 @@ namespace lspd {
         auto parcel_fd = JNI_CallObjectMethod(env, wrapper.reply, read_file_descriptor_method_);
         int fd = JNI_CallIntMethod(env, parcel_fd, detach_fd_method_);
         auto size = static_cast<size_t>(JNI_CallLongMethod(env, wrapper.reply, read_long_method_));
-
-        LOGD("fd=%d, size=%zu", fd, size);
+        LOGD("fd={}, size={}", fd, size);
         return {fd, size};
     }
 

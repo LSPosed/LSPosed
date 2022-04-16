@@ -88,7 +88,7 @@ namespace lspd {
                                                                                        x_resources_class_name)) {
             classXResources = JNI_NewGlobalRef(env, classXResources_);
         } else {
-            LOGE("Error while loading XResources class '%s':", x_resources_class_name.c_str());
+            LOGE("Error while loading XResources class '{}':", x_resources_class_name);
             return JNI_FALSE;
         }
         char buf[100];  // TODO: Replace with fmtlib / std::format
