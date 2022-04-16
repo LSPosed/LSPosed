@@ -22,6 +22,8 @@
 #define _LOGGING_H
 
 #include <android/log.h>
+#include <fmt/format.h>
+#include <array>
 
 #ifndef LOG_TAG
 #define LOG_TAG    "LSPosed"
@@ -34,18 +36,25 @@
 #define LOGW(...)
 #define LOGE(...)
 #else
+template <typename... T>
+constexpr inline void LOG(int prio, const char* tag, fmt::format_string<T...> fmt, T&&... args) {
+    std::array<char, 1024> buf{};
+    auto s = fmt::format_to_n(buf.data(), buf.size(), fmt, std::forward<T>(args)...).size;
+    buf[s] = '\0';
+    __android_log_write(prio, tag, buf.data());
+}
 #ifndef NDEBUG
-#define LOGD(fmt, ...) __android_log_print(ANDROID_LOG_DEBUG, LOG_TAG, "%s:%d#%s" ": " fmt, __FILE_NAME__, __LINE__, __PRETTY_FUNCTION__ __VA_OPT__(,) __VA_ARGS__)
-#define LOGV(fmt, ...) __android_log_print(ANDROID_LOG_VERBOSE, LOG_TAG, "%s:%d#%s" ": " fmt, __FILE_NAME__, __LINE__, __PRETTY_FUNCTION__ __VA_OPT__(,) __VA_ARGS__)
+#define LOGD(fmt, ...) LOG(ANDROID_LOG_DEBUG, LOG_TAG, "{}:{}#{}" ": " fmt, __FILE_NAME__, __LINE__, __PRETTY_FUNCTION__ __VA_OPT__(,) __VA_ARGS__)
+#define LOGV(fmt, ...) LOG(ANDROID_LOG_VERBOSE, LOG_TAG, "{}:{}#{}" ": " fmt, __FILE_NAME__, __LINE__, __PRETTY_FUNCTION__ __VA_OPT__(,) __VA_ARGS__)
 #else
 #define LOGD(...)
 #define LOGV(...)
 #endif
-#define LOGI(...)  __android_log_print(ANDROID_LOG_INFO, LOG_TAG, __VA_ARGS__)
-#define LOGW(...)  __android_log_print(ANDROID_LOG_WARN, LOG_TAG, __VA_ARGS__)
-#define LOGE(...)  __android_log_print(ANDROID_LOG_ERROR, LOG_TAG, __VA_ARGS__)
-#define LOGF(...)  __android_log_print(ANDROID_LOG_FATAL, LOG_TAG, __VA_ARGS__)
-#define PLOGE(fmt, args...) LOGE(fmt " failed with %d: %s", ##args, errno, strerror(errno))
+#define LOGI(...)  LOG(ANDROID_LOG_INFO, LOG_TAG, __VA_ARGS__)
+#define LOGW(...)  LOG(ANDROID_LOG_WARN, LOG_TAG, __VA_ARGS__)
+#define LOGE(...)  LOG(ANDROID_LOG_ERROR, LOG_TAG, __VA_ARGS__)
+#define LOGF(...)  LOG(ANDROID_LOG_FATAL, LOG_TAG, __VA_ARGS__)
+#define PLOGE(fmt, args...) LOGE(fmt " failed with {}: {}", ##args, errno, strerror(errno))
 #endif
 
 #endif // _LOGGING_H
