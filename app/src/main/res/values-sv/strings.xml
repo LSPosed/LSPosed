@@ -127,6 +127,7 @@
     <string name="menu_show_modules">Moduler</string>
     <string name="menu_show_denylist">Neka</string>
     <string name="failed_to_save_scope_list">Det gick inte att spara omfattningslistan</string>
+    <string name="app_version">Version: %1$s</string>
     <string name="use_recommended">Rekommenderad</string>
     <string name="no_scope_selected_has_recommended">Du valde inte någon app. Välj rekommenderade appar?</string>
     <string name="use_recommended_message">Välj rekommenderade appar?</string>
