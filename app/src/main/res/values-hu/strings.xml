@@ -128,6 +128,7 @@
     <string name="menu_show_modules">Modulok</string>
     <string name="menu_show_denylist">Denylist</string>
     <string name="failed_to_save_scope_list">Nem sikerült elmenteni a hatókör listát</string>
+    <string name="app_version">Változat: %1$s</string>
     <string name="use_recommended">Ajánlott</string>
     <string name="no_scope_selected_has_recommended">Nem választott ki egyetlen alkalmazást sem. Válassza ki az ajánlott alkalmazásokat?</string>
     <string name="use_recommended_message">Válassza ki az ajánlott alkalmazásokat?</string>

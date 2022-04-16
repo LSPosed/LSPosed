@@ -22,6 +22,8 @@ package org.lsposed.lspd.hooker;
 
 import static org.lsposed.lspd.core.ApplicationServiceClient.serviceClient;
 
+import android.app.ActivityThread;
+import android.app.AndroidAppHelper;
 import android.app.LoadedApk;
 import android.os.IBinder;
 
@@ -41,17 +43,11 @@ import de.robv.android.xposed.callbacks.XC_LoadPackage;
 
 public class LoadedApkGetCLHooker extends XC_MethodHook {
     private final LoadedApk loadedApk;
-    private final String packageName;
-    private final String processName;
-    private final boolean isFirstApplication;
-    private Unhook unhook;
+    private final Unhook unhook;
 
-    public LoadedApkGetCLHooker(LoadedApk loadedApk, String packageName, String processName,
-                                boolean isFirstApplication) {
+    public LoadedApkGetCLHooker(LoadedApk loadedApk) {
         this.loadedApk = loadedApk;
-        this.packageName = packageName;
-        this.processName = processName;
-        this.isFirstApplication = isFirstApplication;
+        unhook = XposedHelpers.findAndHookMethod(LoadedApk.class, "getClassLoader", this);
     }
 
     @Override
@@ -63,7 +59,17 @@ public class LoadedApkGetCLHooker extends XC_MethodHook {
         }
 
         try {
-            Hookers.logD("LoadedApk#getClassLoader starts: isFirst=" + isFirstApplication);
+            Hookers.logD("LoadedApk#getClassLoader starts");
+
+            String packageName = ActivityThread.currentPackageName();
+            String processName = ActivityThread.currentProcessName();
+            boolean isFirstApplication = packageName != null && processName != null && packageName.equals(loadedApk.getPackageName());
+            if (!isFirstApplication) {
+                packageName = loadedApk.getPackageName();
+                processName = AndroidAppHelper.currentProcessName();
+            } else if (packageName.equals("android")) {
+                packageName = "system";
+            }
 
             Object mAppDir = XposedHelpers.getObjectField(loadedApk, "mAppDir");
             ClassLoader classLoader = (ClassLoader) param.getResult();
@@ -86,15 +92,13 @@ public class LoadedApkGetCLHooker extends XC_MethodHook {
                 hookNewXSP(lpparam);
             }
 
+            Hookers.logD("Call handleLoadedPackage: packageName=" + lpparam.packageName + " processName=" + lpparam.processName + " isFirstApplication=" + isFirstApplication + " classLoader=" + lpparam.classLoader + " appInfo=" + lpparam.appInfo);
             XC_LoadPackage.callAll(lpparam);
 
         } catch (Throwable t) {
             Hookers.logE("error when hooking LoadedApk#getClassLoader", t);
         } finally {
-            if (unhook != null) {
-                unhook.unhook();
-                unhook = null;
-            }
+            unhook.unhook();
         }
     }
 
@@ -131,9 +135,5 @@ public class LoadedApkGetCLHooker extends XC_MethodHook {
                 }
             });
         }
-    }
-
-    public void setUnhook(Unhook unhook) {
-        this.unhook = unhook;
     }
 }

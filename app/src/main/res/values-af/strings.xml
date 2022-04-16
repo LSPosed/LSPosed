@@ -127,6 +127,7 @@
     <string name="menu_show_modules">Modules</string>
     <string name="menu_show_denylist">Ontkenlys</string>
     <string name="failed_to_save_scope_list">Kon nie omvanglys stoor nie</string>
+    <string name="app_version">weergawe: %1$s</string>
     <string name="use_recommended">Aanbeveel</string>
     <string name="no_scope_selected_has_recommended">Jy het geen toepassing gekies nie. Kies aanbevole programme?</string>
     <string name="use_recommended_message">Kies aanbevole programme?</string>

@@ -136,6 +136,7 @@ Ali Samir</string>
     <string name="menu_show_modules">وحدات</string>
     <string name="menu_show_denylist">قائمة الرفض</string>
     <string name="failed_to_save_scope_list">فشل في حفظ قائمة النطاق</string>
+    <string name="app_version">الإصدار: s$1%</string>
     <string name="use_recommended">مُوصى به</string>
     <string name="no_scope_selected_has_recommended">أنت لم تحدد أي تطبيق. تحديد التطبيقات الموصى بها؟</string>
     <string name="use_recommended_message">تحديد التطبيقات الموصى بها؟</string>

@@ -1,0 +1,10 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <!-- Notification -->
+    <string name="module_is_not_activated_yet">एक्सपोज़ड मॉड्यूल अभी तक सक्रिय नहीं है</string>
+    <string name="module_is_not_activated_yet_detailed">%s स्थापित किया गया है, लेकिन अभी तक सक्रिय नहीं हुआ है</string>
+    <string name="xposed_module_updated_notification_title">एक्सपोज़ड मॉड्यूल अपडेट किया गया</string>
+    <string name="xposed_module_updated_notification_content">%s अपडेट कर दिया गया है, कृपया बलपूर्वक रोकें और इसके दायरे में ऐप्स को पुनरारंभ करें</string>
+    <string name="xposed_module_updated_notification_title_system">एक्सपोज़ड मॉड्यूल अपडेट किया गया, सिस्टम रीबूट की आवश्यकता है</string>
+    <string name="xposed_module_updated_notification_content_system">%s को अपडेट कर दिया गया है, क्योंकि स्कोप में सिस्टम फ्रेमवर्क है, परिवर्तनों को लागू करने के लिए रीबूट की आवश्यकता है</string>
+</resources>

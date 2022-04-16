@@ -127,6 +127,7 @@
     <string name="menu_show_modules">Mòduls</string>
     <string name="menu_show_denylist">Llista de denegació</string>
     <string name="failed_to_save_scope_list">No s\'ha pogut desar la llista d\'àmbits</string>
+    <string name="app_version">Versió: %1$s</string>
     <string name="use_recommended">Recomanat</string>
     <string name="no_scope_selected_has_recommended">No heu seleccionat cap aplicació. Seleccioneu aplicacions recomanades?</string>
     <string name="use_recommended_message">Vols seleccionar aplicacions recomanades?</string>

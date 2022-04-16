@@ -27,7 +27,7 @@
     </plurals>
     <string name="Logs">บันทึก</string>
     <string name="Settings">การตั้งค่า</string>
-    <string name="feedback_or_suggestion">ข้อเสนอแนะหรือข้อเสนอแนะ</string>
+    <string name="feedback_or_suggestion">ข้อเสนอแนะ หรือ คำแนะนำ</string>
     <string name="About">เกี่ยวกับ</string>
     <string name="report_issue">รายงานปัญหา</string>
     <string name="module_repo">ที่เก็บ</string>
@@ -55,16 +55,16 @@
     <string name="lsposed_not_active">LSPosed ยังไม่ได้ติดตั้งหรือใช้งานอยู่</string>
     <string name="info_api_version">เวอร์ชัน API</string>
     <string name="info_framework_version">เวอร์ชันกรอบงาน</string>
-    <string name="info_manager_version">เวอร์ชันผู้จัดการ</string>
+    <string name="info_manager_version">การจัดการเวอร์ชัน</string>
     <string name="info_system_version">เวอร์ชันของระบบ</string>
     <string name="info_device">อุปกรณ์</string>
     <string name="info_system_abi">ระบบ ABI</string>
     <string name="info_api">ส่วนต่อประสานการฉีด</string>
     <string name="info_dex2oat_wrapper">Wrapper ของเครื่องมือเพิ่มประสิทธิภาพ</string>
     <string name="supported">ได้รับการสนับสนุน</string>
-    <string name="unsupported_android_version">ไม่รองรับ (เวอร์ชัน Android ไม่พอใจ)</string>
+    <string name="unsupported_android_version">ไม่รองรับ (เวอร์ชัน Android ปัจจุบัน)</string>
     <string name="unsupported_crashed">ไม่รองรับ (ขัดข้อง)</string>
-    <string name="parasitic_recommend">ผู้จัดการปรสิตแนะนำ</string>
+    <string name="parasitic_recommend">แนะนำ กำจัดไวรัส</string>
     <string name="parasitic_recommend_summary">ตอนนี้ LSPosed รองรับการทำให้เป็นกาฝากของระบบเพื่อหลีกเลี่ยงการตรวจจับ คุณสามารถถอนการติดตั้งตัวจัดการได้อย่างปลอดภัยหลังจากสร้างทางลัดของตัวจัดการปรสิตเรียบร้อยแล้ว ไม่ว่าในกรณีใด คุณสามารถติดตั้งตัวจัดการกลับจาก /data/adb/lspd/manager.apk</string>
     <string name="create_shortcut">สร้างทางลัด</string>
     <string name="never_show">ไม่ต้องแสดง</string>
@@ -125,6 +125,7 @@
     <string name="menu_show_modules">โมดูล</string>
     <string name="menu_show_denylist">ปฏิเสธ</string>
     <string name="failed_to_save_scope_list">ไม่สามารถบันทึกรายการขอบเขต</string>
+    <string name="app_version">เวอร์ชั่น: %1$s</string>
     <string name="use_recommended">ที่แนะนำ</string>
     <string name="no_scope_selected_has_recommended">คุณไม่ได้เลือกแอพใด ๆ เลือกแอพที่แนะนำ?</string>
     <string name="use_recommended_message">เลือกแอพที่แนะนำ?</string>
@@ -164,7 +165,7 @@
     <string name="settings_restore_failed2">ไม่สามารถกู้คืนได้:\n%s</string>
     <string name="group_network">เครือข่าย</string>
     <string name="dns_over_http">DNS ผ่าน HTTPS</string>
-    <string name="dns_over_http_summary">วิธีแก้ปัญหา DNS เป็นพิษในบางประเทศ</string>
+    <string name="dns_over_http_summary">วิธีแก้ปัญหา DNS เป็นขัดข้องในบางประเทศ</string>
     <string name="theme_color">สีของธีม</string>
     <string name="theme_color_system">สีของชุดรูปแบบของระบบ</string>
     <string name="settings_show_hidden_icon_apps_enabled">บังคับให้แอปแสดงไอคอนตัวเรียกใช้</string>
@@ -184,13 +185,13 @@
     <string name="pref_title_restrict_classloader">เฉพาะโมดูล classloader เท่านั้นที่สามารถใช้ Xposed API</string>
     <string name="pref_summary_restrict_classloader">การดำเนินการนี้อาจทำลายโมดูลบางส่วน แต่ให้ประโยชน์ด้านความปลอดภัย (คุณลักษณะทดลอง)</string>
     <!-- Module Repo -->
-    <string name="module_readme">Readme</string>
+    <string name="module_readme">ต้องอ่าน</string>
     <string name="module_releases">เผยแพร่</string>
     <string name="module_information">ข้อมูล</string>
     <string name="module_information_homepage">หน้าแรก</string>
     <string name="module_information_source_url">รหัสแหล่งที่มา</string>
     <string name="module_information_collaborators">ผู้ร่วมงาน</string>
-    <string name="module_release_view_assets">ทรัพย์สิน</string>
+    <string name="module_release_view_assets">คลัง</string>
     <string name="menu_open_in_browser">เปิดในเบราว์เซอร์</string>
     <string name="refresh">รีเฟรช</string>
     <string name="module_release_load_more">แสดงเวอร์ชันเก่า</string>

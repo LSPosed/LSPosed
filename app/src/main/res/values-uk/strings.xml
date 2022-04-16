@@ -131,6 +131,7 @@
     <string name="menu_show_modules">Модулі</string>
     <string name="menu_show_denylist">Показати чорний список</string>
     <string name="failed_to_save_scope_list">Не вдалося зберегти список областей</string>
+    <string name="app_version">Версія: %1$s</string>
     <string name="use_recommended">Рекомендовано</string>
     <string name="no_scope_selected_has_recommended">Ви не вибрали жодної програми. Вибрати рекомендовані програми?</string>
     <string name="use_recommended_message">Вибрати рекомендовані програми?</string>

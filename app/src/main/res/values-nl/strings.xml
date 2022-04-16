@@ -127,6 +127,7 @@
     <string name="menu_show_modules">Modules</string>
     <string name="menu_show_denylist">Weigerlijst</string>
     <string name="failed_to_save_scope_list">Scopelijst opslaan is mislukt</string>
+    <string name="app_version">Versie: %1$s</string>
     <string name="use_recommended">Aanbevolen</string>
     <string name="no_scope_selected_has_recommended">U heeft geen app geselecteerd. Aanbevolen apps selecteren?</string>
     <string name="use_recommended_message">Aanbevolen apps selecteren?</string>

@@ -127,6 +127,7 @@
     <string name="menu_show_modules">Módulos</string>
     <string name="menu_show_denylist">Lista de denegación</string>
     <string name="failed_to_save_scope_list">Fallo al guardar la lista de scopes</string>
+    <string name="app_version">Versión: %1$s</string>
     <string name="use_recommended">Recomendado</string>
     <string name="no_scope_selected_has_recommended">No seleccionaste ninguna aplicación. ¿Quieres seleccionar las aplicaciones recomendadas?</string>
     <string name="use_recommended_message">¿Quieres seleccionar las aplicaciones recomendadas?</string>
