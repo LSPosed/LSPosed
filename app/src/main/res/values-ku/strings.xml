@@ -127,6 +127,7 @@
     <string name="menu_show_modules">Modules</string>
     <string name="menu_show_denylist">Denylist</string>
     <string name="failed_to_save_scope_list">Hilbijartina navnîşa çarçovê bi ser neket</string>
+    <string name="app_version">Versiyon: %1$s</string>
     <string name="use_recommended">Pêşniyar kirin</string>
     <string name="no_scope_selected_has_recommended">Te tu sepanê hilnebijart. Serlêdanên pêşniyarkirî hilbijêrin?</string>
     <string name="use_recommended_message">Serlêdanên pêşniyarkirî hilbijêrin?</string>
