@@ -131,6 +131,7 @@
     <string name="menu_show_modules">Moduly</string>
     <string name="menu_show_denylist">Seznam zakázaných</string>
     <string name="failed_to_save_scope_list">Nepodařilo se uložit seznam</string>
+    <string name="app_version">Verze: %1$s</string>
     <string name="use_recommended">Zvolit doporučené</string>
     <string name="no_scope_selected_has_recommended">Nevybrali jste žádnou aplikaci. Vybrat doporučené aplikace?</string>
     <string name="use_recommended_message">Vybrat doporučené aplikace?</string>
