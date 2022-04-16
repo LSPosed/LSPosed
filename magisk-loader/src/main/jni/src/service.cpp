@@ -28,6 +28,7 @@
 #include "context.h"
 #include "utils/jni_helper.hpp"
 #include "symbol_cache.h"
+#include "ConfigBridge.h"
 
 using namespace lsplant;
 
@@ -146,6 +147,12 @@ namespace lspd {
         initialized_ = true;
     }
 
+    std::string GetBridgeServiceName() {
+        const auto &obfs_map = ConfigBridge::GetInstance()->obfuscation_map();
+        static auto signature = obfs_map.at("org.lsposed.lspd.service.") + "BridgeService";
+        return signature;
+    }
+
     void Service::HookBridge(const Context &context, JNIEnv *env) {
         static bool kHooked = false;
         // This should only be ran once, so unlikely
@@ -153,7 +160,7 @@ namespace lspd {
         if (!initialized_) [[unlikely]] return;
         kHooked = true;
         if (auto bridge_service_class = context.FindClassFromCurrentLoader(env,
-                                                                           kBridgeServiceClassName))
+                                                                           GetBridgeServiceName()))
             bridge_service_class_ = JNI_NewGlobalRef(env, bridge_service_class);
         else {
             LOGE("server class not found");

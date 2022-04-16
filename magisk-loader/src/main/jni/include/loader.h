@@ -26,8 +26,6 @@
 #include "config.h"
 
 namespace lspd {
-    inline static constexpr auto kBridgeServiceClassName = "org.lsposed.lspd.service.BridgeService"_tstr;
-
     extern const int apiVersion;
     extern const char* const moduleName;
 }
