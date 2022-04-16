@@ -125,6 +125,7 @@
     <string name="menu_show_modules">モジュール</string>
     <string name="menu_show_denylist">拒否リスト</string>
     <string name="failed_to_save_scope_list">スコープリストの保存に失敗</string>
+    <string name="app_version">バージョン %1$sとなります。</string>
     <string name="use_recommended">おすすめ</string>
     <string name="no_scope_selected_has_recommended">アプリが選択されていません。おすすめのアプリを選択しますか？</string>
     <string name="use_recommended_message">おすすめのアプリを選択しますか？</string>
