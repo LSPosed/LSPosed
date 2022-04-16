@@ -93,7 +93,7 @@
     <string name="warning_min_version_too_low">Mô-đun này được tạo bởi phiên bản Xposed %1$d, nhưng vì lý do không tương thích với phiên bản %2$d, nên nó đã bị vô hiệu hóa</string>
     <string name="warning_installed_on_external_storage">Mô-đun này không được nạp vì nó được cài đặt trên thẻ nhớ SD, vui lòng chuyển nó vào bộ nhớ trong</string>
     <string name="module_uninstall">Gỡ cài đặt</string>
-    <string name="module_settings">Thiết lập Mô-đun</string>
+    <string name="module_settings">Cài đặt Mô-đun</string>
     <string name="view_in_repo">Xem ở trên Kho</string>
     <string name="module_uninstall_message">Bạn có muốn gỡ cài đặt mô-đun này?</string>
     <string name="module_uninstalled">Đã gỡ cài đặt %1$s</string>
@@ -180,7 +180,7 @@
     <string name="settings_enable_auto_add_shortcut_summary">Sẽ không có lối tắt mới nào được thêm khi vô hiệu trong trình quản lý không cộng sinh</string>
     <string name="settings_update_channel">Kênh cập nhật</string>
     <string name="update_channel_stable">Ổn định</string>
-    <string name="update_channel_bate">Beta</string>
+    <string name="update_channel_bate">Thử nghiệm</string>
     <string name="update_channel_nightly">Bản dựng hàng đêm</string>
     <string name="pref_title_restrict_classloader">Chỉ trình tải lớp mô-đun mới có thể sử dụng Xposed API</string>
     <string name="pref_summary_restrict_classloader">Điều này có thể phá vỡ một số mô-đun nhưng có lợi cho bảo mật (tính năng thử nghiệm)</string>
@@ -222,7 +222,7 @@
     <string name="color_yellow">Vàng</string>
     <string name="color_amber">Hổ phách</string>
     <string name="color_orange">Cam</string>
-    <string name="color_deep_orange">Cam sâu</string>
+    <string name="color_deep_orange">Cam đậm</string>
     <string name="color_brown">Nâu</string>
     <string name="color_blue_grey">Xanh xám</string>
 </resources>
