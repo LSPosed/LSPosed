@@ -91,16 +91,15 @@ namespace lspd {
             LOGE("Error while loading XResources class '{}':", x_resources_class_name);
             return JNI_FALSE;
         }
-        char buf[100];  // TODO: Replace with fmtlib / std::format
-        sprintf(buf, "(IL%s;Landroid/content/res/Resources;)I", x_resources_class_name.c_str());
         methodXResourcesTranslateResId = JNI_GetStaticMethodID(
-                env, classXResources, "translateResId", buf);
+                env, classXResources, "translateResId",
+                fmt::format("(IL{};Landroid/content/res/Resources;)I", x_resources_class_name));
         if (!methodXResourcesTranslateResId) {
             return JNI_FALSE;
         }
-        sprintf(buf, "(Ljava/lang/String;L%s;)I", x_resources_class_name.c_str());
         methodXResourcesTranslateAttrId = JNI_GetStaticMethodID(
-                env, classXResources, "translateAttrId",buf);
+                env, classXResources, "translateAttrId",
+                fmt::format("(Ljava/lang/String;L%s;)I", x_resources_class_name));
         if (!methodXResourcesTranslateAttrId) {
             return JNI_FALSE;
         }
@@ -223,9 +222,8 @@ namespace lspd {
     };
 
     void RegisterResourcesHook(JNIEnv *env) {
-        char buf[100];  // TODO: Replace with fmtlib / std::format
-        sprintf(buf, "(JL%s;Landroid/content/res/Resources;)V", GetXResourcesClassName().c_str());
-        gMethods[3].signature = buf;
+        auto sign = fmt::format("(JL%s;Landroid/content/res/Resources;)V", GetXResourcesClassName());
+        gMethods[3].signature = sign.c_str();
 
         REGISTER_LSP_NATIVE_METHODS(ResourcesHook);
     }
