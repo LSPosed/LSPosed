@@ -112,7 +112,7 @@ public class ConfigManager {
                 app.packageName = application.packageName;
                 list.add(app);
             });
-            return LSPManagerServiceHolder.getService().setModuleScope(packageName, new ParceledListSlice<>(list));
+            return LSPManagerServiceHolder.getService().setModuleScope(packageName, list);
         } catch (RemoteException e) {
             Log.e(App.TAG, Log.getStackTraceString(e));
             return false;
@@ -126,7 +126,7 @@ public class ConfigManager {
             if (applications == null) {
                 return list;
             }
-            applications.getList().forEach(application -> {
+            applications.forEach(application -> {
                 if (!application.packageName.equals(packageName)) {
                     list.add(new ScopeAdapter.ApplicationWithEquals(application));
                 }
