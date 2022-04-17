@@ -24,6 +24,7 @@
 #include <array>
 #include "logging.h"
 #include "loader.h"
+#include "ConfigImpl.h"
 #include "magisk_loader.h"
 #include "symbol_cache.h"
 
@@ -42,6 +43,7 @@ namespace lspd {
             LOGI("onModuleLoaded: version v{} ({})", versionName, versionCode);
             InitSymbolCache(nullptr);
             MagiskLoader::Init();
+            ConfigImpl::Init();
         }
 
         void nativeForkAndSpecializePre(JNIEnv *env, jclass, jint *_uid, jint *,

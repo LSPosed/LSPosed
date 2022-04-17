@@ -39,8 +39,14 @@
 using namespace lsplant;
 namespace {
 std::mutex init_lock{};
-std::string obfuscated_signature;
-const std::string original_signature = "Lde/robv/android/xposed/";
+std::map<const std::string, std::string> signatures = {
+        {"Lde/robv/android/xposed/", ""},
+        { "Landroid/app/AndroidApp", ""},
+        { "Landroid/content/res/X", ""},
+        { "Lorg/lsposed/lspd/core/", ""},
+        { "Lorg/lsposed/lspd/nativebridge/", ""},
+        { "Lorg/lsposed/lspd/service/", ""},
+};
 
 jclass class_file_descriptor;
 jmethodID method_file_descriptor_ctor;
@@ -73,7 +79,7 @@ void maybeInit(JNIEnv *env) {
 
     method_shared_memory_ctor = JNI_GetMethodID(env, class_shared_memory, "<init>", "(Ljava/io/FileDescriptor;)V");
 
-    auto regen = []() {
+    auto regen = [](std::string_view original_signature) {
         static auto& chrs = "abcdefghijklmnopqrstuvwxyz"
                             "ABCDEFGHIJKLMNOPQRSTUVWXYZ";
 
@@ -101,40 +107,72 @@ void maybeInit(JNIEnv *env) {
         return out;
     };
 
-    obfuscated_signature = regen();
+    for (auto &i: signatures) {
+        i.second = regen(i.first);
+        LOGD("%s => %s", i.first.c_str(), i.second.c_str());
+    }
 
-    LOGD("ObfuscationManager.getObfuscatedSignature: %s", obfuscated_signature.c_str());
     LOGD("ObfuscationManager init successfully");
     inited = true;
 }
 
-extern "C"
-JNIEXPORT jstring JNICALL
-Java_org_lsposed_lspd_service_ObfuscationManager_getObfuscatedSignature(JNIEnv *env, [[maybe_unused]] jclass obfuscation_manager) {
-    maybeInit(env);
-    static std::string obfuscated_signature_java = to_java(obfuscated_signature);
-    return env->NewStringUTF(obfuscated_signature_java.c_str());
+// https://stackoverflow.com/questions/4844022/jni-create-hashmap with modifications
+jobject stringMapToJavaHashMap(JNIEnv *env, const decltype(signatures)& map) {
+    jclass mapClass = env->FindClass("java/util/HashMap");
+    if(mapClass == nullptr)
+        return nullptr;
+
+    jmethodID init = env->GetMethodID(mapClass, "<init>", "()V");
+    jobject hashMap = env->NewObject(mapClass, init);
+    jmethodID put = env->GetMethodID(mapClass, "put", "(Ljava/lang/Object;Ljava/lang/Object;)Ljava/lang/Object;");
+
+    auto citr = map.begin();
+    for( ; citr != map.end(); ++citr) {
+        jstring keyJava = env->NewStringUTF(citr->first.c_str());
+        jstring valueJava = env->NewStringUTF(citr->second.c_str());
+
+        env->CallObjectMethod(hashMap, put, keyJava, valueJava);
+
+        env->DeleteLocalRef(keyJava);
+        env->DeleteLocalRef(valueJava);
+    }
+
+    auto hashMapGobal = static_cast<jobject>(env->NewGlobalRef(hashMap));
+    env->DeleteLocalRef(hashMap);
+    env->DeleteLocalRef(mapClass);
+
+    return hashMapGobal;
 }
 
 extern "C"
-JNIEXPORT jstring JNICALL
-Java_org_lsposed_lspd_service_ObfuscationManager_getOriginalSignature(JNIEnv *env, [[maybe_unused]] jclass obfuscation_manager) {
-    static std::string original_signature_java = to_java(original_signature);
-    return env->NewStringUTF(original_signature_java.c_str());
+JNIEXPORT jobject JNICALL
+Java_org_lsposed_lspd_service_ObfuscationManager_getSignatures(JNIEnv *env, [[maybe_unused]] jclass obfuscation_manager) {
+    maybeInit(env);
+    static jobject signatures_jni = nullptr;
+    if (signatures_jni) return signatures_jni;
+    decltype(signatures) signatures_java;
+    for (const auto &i: signatures) {
+        signatures_java[to_java(i.first)] = to_java(i.second);
+    }
+    signatures_jni = stringMapToJavaHashMap(env, signatures_java);
+    return signatures_jni;
 }
 
 static int obfuscateDex(const void *dex, size_t size) {
-    const char* new_sig = obfuscated_signature.c_str();
+    // const char* new_sig = obfuscated_signature.c_str();
     dex::Reader reader{reinterpret_cast<const dex::u1*>(dex), size};
 
     reader.CreateFullIr();
     auto ir = reader.GetIr();
     for (auto &i: ir->strings) {
         const char *s = i->c_str();
-        char* p = const_cast<char *>(strstr(s, original_signature.c_str()));
-        if (p) {
-            // NOLINTNEXTLINE bugprone-not-null-terminated-result
-            memcpy(p, new_sig, strlen(new_sig));
+        for (const auto &signature: signatures) {
+            char* p = const_cast<char *>(strstr(s, signature.first.c_str()));
+            if (p) {
+                auto new_sig = signature.second.c_str();
+                // NOLINTNEXTLINE bugprone-not-null-terminated-result
+                memcpy(p, new_sig, strlen(new_sig));
+            }
         }
     }
     dex::Writer writer(ir);

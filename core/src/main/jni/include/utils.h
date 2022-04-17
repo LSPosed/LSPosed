@@ -43,6 +43,11 @@ namespace lspd {
         }();
         return api_level;
     }
+
+    inline std::string JavaNameToSignature(std::string s) {
+        std::replace(s.begin(), s.end(), '.', '/');
+        return "L" + s;
+    }
 }
 
 #pragma clang diagnostic pop

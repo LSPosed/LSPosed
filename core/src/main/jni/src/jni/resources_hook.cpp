@@ -15,7 +15,7 @@
  * along with LSPosed.  If not, see <https://www.gnu.org/licenses/>.
  *
  * Copyright (C) 2020 EdXposed Contributors
- * Copyright (C) 2021 LSPosed Contributors
+ * Copyright (C) 2021 - 2022 LSPosed Contributors
  */
 
 #include <jni.h>
@@ -24,12 +24,11 @@
 #include "elf_util.h"
 #include "native_util.h"
 #include "resources_hook.h"
+#include "ConfigBridge.h"
 
 using namespace lsplant;
 
 namespace lspd {
-    static constexpr const char *kXResourcesClassName = "android/content/res/XResources";
-
     using TYPE_GET_ATTR_NAME_ID = int32_t (*)(void *, int);
 
     using TYPE_STRING_AT = char16_t *(*)(const void *, int32_t, size_t *);
@@ -45,6 +44,18 @@ namespace lspd {
     static TYPE_NEXT ResXMLParser_next = nullptr;
     static TYPE_RESTART ResXMLParser_restart = nullptr;
     static TYPE_GET_ATTR_NAME_ID ResXMLParser_getAttributeNameID = nullptr;
+
+    static std::string GetXResourcesClassName() {
+        auto &obfs_map = ConfigBridge::GetInstance()->obfuscation_map();
+        if (obfs_map.empty()) {
+            LOGW("GetXResourcesClassName: obfuscation_map empty?????");
+        }
+        static auto name = lspd::JavaNameToSignature(
+                obfs_map.at("android.content.res.X"))  // TODO: kill this hardcoded name
+                    .substr(1) + "Resources";
+        LOGD("{}", name.c_str());
+        return name;
+    }
 
     static bool PrepareSymbols() {
         SandHook::ElfImg fw(kLibFwName);
@@ -72,22 +83,23 @@ namespace lspd {
     }
 
     LSP_DEF_NATIVE_METHOD(jboolean, ResourcesHook, initXResourcesNative) {
+        const auto x_resources_class_name = GetXResourcesClassName();
         if (auto classXResources_ = Context::GetInstance()->FindClassFromCurrentLoader(env,
-                                                                                       kXResourcesClassName)) {
+                                                                                       x_resources_class_name)) {
             classXResources = JNI_NewGlobalRef(env, classXResources_);
         } else {
-            LOGE("Error while loading XResources class '{}':", kXResourcesClassName);
+            LOGE("Error while loading XResources class '{}':", x_resources_class_name);
             return JNI_FALSE;
         }
         methodXResourcesTranslateResId = JNI_GetStaticMethodID(
                 env, classXResources, "translateResId",
-                "(ILandroid/content/res/XResources;Landroid/content/res/Resources;)I");
+                fmt::format("(IL{};Landroid/content/res/Resources;)I", x_resources_class_name));
         if (!methodXResourcesTranslateResId) {
             return JNI_FALSE;
         }
         methodXResourcesTranslateAttrId = JNI_GetStaticMethodID(
                 env, classXResources, "translateAttrId",
-                "(Ljava/lang/String;Landroid/content/res/XResources;)I");
+                fmt::format("(Ljava/lang/String;L{};)I", x_resources_class_name));
         if (!methodXResourcesTranslateAttrId) {
             return JNI_FALSE;
         }
@@ -210,6 +222,9 @@ namespace lspd {
     };
 
     void RegisterResourcesHook(JNIEnv *env) {
+        auto sign = fmt::format("(JL{};Landroid/content/res/Resources;)V", GetXResourcesClassName());
+        gMethods[3].signature = sign.c_str();
+
         REGISTER_LSP_NATIVE_METHODS(ResourcesHook);
     }
 }

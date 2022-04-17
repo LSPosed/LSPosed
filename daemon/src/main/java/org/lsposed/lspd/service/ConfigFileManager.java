@@ -375,12 +375,14 @@ public class ConfigFileManager {
         if (moduleClassNames.isEmpty()) return null;
 
         if (obfuscate) {
+            var signatures = ObfuscationManager.getSignatures();
             for (int i = 0; i < moduleClassNames.size(); i++) {
                 var s = moduleClassNames.get(i);
-                var original = ObfuscationManager.getOriginalSignature();
-                if (s.startsWith(original)) {
-                    var obfuscated = ObfuscationManager.getObfuscatedSignature();
-                    moduleClassNames.add(i, s.replace(original, obfuscated));
+                for (String key : signatures.keySet()) {
+                    if (s.startsWith(key)) {
+                        // value should not be null, but idk how to ignore this warning
+                        moduleClassNames.add(i, s.replace(key, signatures.get(key)));
+                    }
                 }
             }
         }

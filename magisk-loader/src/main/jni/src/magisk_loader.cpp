@@ -22,6 +22,7 @@
 #include <linux/fs.h>
 #include <sys/mman.h>
 
+#include "ConfigImpl.h"
 #include "elf_util.h"
 #include "loader.h"
 #include "magisk_loader.h"
@@ -73,9 +74,15 @@ namespace lspd {
         env->DeleteLocalRef(dex_buffer);
     }
 
+    std::string GetEntryClassName() {
+        const auto &obfs_map = ConfigBridge::GetInstance()->obfuscation_map();
+        static auto signature = obfs_map.at("org.lsposed.lspd.core.") + "Main";
+        return signature;
+    }
+
     void MagiskLoader::SetupEntryClass(JNIEnv *env) {
         if (auto entry_class = FindClassFromLoader(env, GetCurrentClassLoader(),
-                                                   kEntryClassName)) {
+                                                   GetEntryClassName())) {
             entry_class_ = JNI_NewGlobalRef(env, entry_class);
         }
     }
@@ -104,7 +111,10 @@ namespace lspd {
 
             // Call application_binder directly if application binder is available,
             // or we proxy the request from system server binder
-            auto [dex_fd, size]= instance->RequestLSPDex(env, application_binder ? application_binder : system_server_binder);
+            const auto next_binder = std::move(application_binder ? application_binder : system_server_binder);
+            const auto [dex_fd, size] = instance->RequestLSPDex(env, next_binder);
+            auto obfs_map = instance->RequestObfuscationMap(env, next_binder);
+            ConfigBridge::GetInstance()->obfuscation_map(std::move(obfs_map));
             LoadDex(env, PreloadedDex(dex_fd, size));
             close(dex_fd);
             instance->HookBridge(*this, env);
@@ -196,6 +206,8 @@ namespace lspd {
             };
             InstallInlineHooks(env, initInfo);
             auto [dex_fd, size] = instance->RequestLSPDex(env, binder);
+            auto obfs_map = instance->RequestObfuscationMap(env, binder);
+            ConfigBridge::GetInstance()->obfuscation_map(std::move(obfs_map));
             LoadDex(env, PreloadedDex(dex_fd, size));
             close(dex_fd);
             InitHooks(env, initInfo);
