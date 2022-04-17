@@ -92,11 +92,13 @@ public class LSPApplicationService extends ILSPApplicationService.Stub {
                 return true;
             }
             case OBFUSCATION_MAP_TRANSACTION_CODE: {
+                var obfuscation = ConfigManager.getInstance().dexObfuscate();
                 var signatures = ObfuscationManager.getSignatures();
                 reply.writeInt(signatures.size() * 2);
                 for(Map.Entry<String,String> entry : signatures.entrySet()){
                     reply.writeString(entry.getKey());
-                    reply.writeString(entry.getValue());
+                    // return val = key if obfuscation disabled
+                    reply.writeString(obfuscation ? entry.getValue() : entry.getKey());
                 }
                 return true;
             }
