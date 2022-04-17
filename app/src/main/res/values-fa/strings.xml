@@ -92,7 +92,6 @@
     <string name="module_empty_description">(هیچ توضیحی ارائه نشده است)</string>
     <string name="warning_xposed_min_version">این ماژول به نسخه جدیدتر Xposed (%d) نیاز دارد و بنابراین نمی توان آن را فعال کرد</string>
     <string name="no_min_version_specified">این ماژول نسخه Xposed مورد نیاز خود را مشخص نمی کند.</string>
-    <string name="warning_min_version_too_low">این ماژول برای نسخه %1$d Xposed ایجاد شده است ، اما به دلیل تغییرات ناسازگار در نسخه %2$d، غیرفعال شده است</string>
     <string name="warning_installed_on_external_storage">این ماژول بارگیری نمی شود زیرا روی کارت SD نصب شده است ، لطفاً آن را به حافظه داخلی منتقل کنید</string>
     <string name="module_uninstall">حذف</string>
     <string name="module_settings">تنظیمات ماژول</string>
@@ -127,7 +126,6 @@
     <string name="menu_show_modules">ماژول ها</string>
     <string name="menu_show_denylist">انکار کننده</string>
     <string name="failed_to_save_scope_list">ناموفق در ذخیره لیست محدوده</string>
-    <string name="app_version">نسخه: %1$s</string>
     <string name="use_recommended">نیازمنده</string>
     <string name="no_scope_selected_has_recommended">شما هیچ برنامه ای را انتخاب نکردید. انتخاب برنامه های نیازمند؟</string>
     <string name="use_recommended_message">انتخاب برنامه های نیازمند؟</string>
