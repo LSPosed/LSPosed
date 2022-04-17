@@ -127,7 +127,7 @@
     <string name="menu_show_modules">ماڈیولز</string>
     <string name="menu_show_denylist">انکار کرنے والا</string>
     <string name="failed_to_save_scope_list">دائرہ کار کی فہرست کو محفوظ کرنے میں ناکام</string>
-    <string name="app_version">ورژن: %1$s</string>
+    <string name="app_version">ورژن: s$1%</string>
     <string name="use_recommended">سفارش کریں۔</string>
     <string name="no_scope_selected_has_recommended">آپ نے کوئی ایپ منتخب نہیں کی۔ تجویز کردہ ایپس کو منتخب کریں؟</string>
     <string name="use_recommended_message">تجویز کردہ ایپس کو منتخب کریں?</string>
