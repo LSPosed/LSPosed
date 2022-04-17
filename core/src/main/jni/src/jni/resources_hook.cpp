@@ -53,7 +53,7 @@ namespace lspd {
         static auto name = lspd::JavaNameToSignature(
                 obfs_map.at("android.content.res.X"))  // TODO: kill this hardcoded name
                     .substr(1) + "Resources";
-        LOGD("%s", name.c_str());
+        LOGD("{}", name.c_str());
         return name;
     }
 

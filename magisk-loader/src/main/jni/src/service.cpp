@@ -354,7 +354,7 @@ namespace lspd {
         }
 #ifndef NDEBUG
         for (const auto &i: ret) {
-            LOGD("%s => %s", i.first.c_str(), i.second.c_str());
+            LOGD("{} => {}", i.first, i.second);
         }
 #endif
 
