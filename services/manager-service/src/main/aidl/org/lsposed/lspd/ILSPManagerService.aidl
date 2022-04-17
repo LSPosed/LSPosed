@@ -16,9 +16,9 @@ interface ILSPManagerService {
 
     boolean disableModule(String packageName) = 5;
 
-    boolean setModuleScope(String packageName, in ParceledListSlice<Application> scope) = 6;
+    boolean setModuleScope(String packageName, in List<Application> scope) = 6;
 
-    ParceledListSlice<Application> getModuleScope(String packageName) = 7;
+    List<Application> getModuleScope(String packageName) = 7;
 
     boolean isVerboseLog() = 11;
 

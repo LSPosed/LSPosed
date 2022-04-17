@@ -544,15 +544,13 @@ public class LSPManagerService extends ILSPManagerService.Stub {
     }
 
     @Override
-    public boolean setModuleScope(String packageName, ParceledListSlice<Application> scope) throws RemoteException {
-        return ConfigManager.getInstance().setModuleScope(packageName, scope.getList());
+    public boolean setModuleScope(String packageName, List<Application> scope) throws RemoteException {
+        return ConfigManager.getInstance().setModuleScope(packageName, scope);
     }
 
     @Override
-    public ParceledListSlice<Application> getModuleScope(String packageName) {
-        List<Application> list = ConfigManager.getInstance().getModuleScope(packageName);
-        if (list == null) return null;
-        else return new ParceledListSlice<>(list);
+    public List<Application> getModuleScope(String packageName) {
+        return ConfigManager.getInstance().getModuleScope(packageName);
     }
 
     @Override
