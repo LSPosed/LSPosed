@@ -27,6 +27,7 @@ import android.os.ParcelFileDescriptor;
 import android.os.RemoteException;
 import android.util.Log;
 
+import org.lsposed.lspd.ILSPManagerService;
 import org.lsposed.lspd.models.Application;
 import org.lsposed.lspd.models.UserInfo;
 import org.lsposed.manager.adapters.ScopeAdapter;
@@ -39,10 +40,6 @@ import java.util.List;
 import java.util.Set;
 
 public class ConfigManager {
-
-    public enum Dex2OatCompatibility {
-        OK, CRASHED, MOUNT_FAILED, SELINUX_PERMISSIVE, SEPOLICY_INCORRECT
-    }
 
     public static boolean isBinderAlive() {
         return LSPManagerServiceHolder.getService() != null;
@@ -360,12 +357,12 @@ public class ConfigManager {
         }
     }
 
-    public static Dex2OatCompatibility getDex2OatWrapperCompatibility() {
+    public static int getDex2OatWrapperCompatibility() {
         try {
-            return Dex2OatCompatibility.values()[LSPManagerServiceHolder.getService().getDex2OatWrapperCompatibility()];
+            return LSPManagerServiceHolder.getService().getDex2OatWrapperCompatibility();
         } catch (RemoteException e) {
             Log.e(App.TAG, Log.getStackTraceString(e));
-            return Dex2OatCompatibility.CRASHED;
+            return ILSPManagerService.DEX2OAT_CRASHED;
         }
     }
 }

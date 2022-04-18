@@ -34,6 +34,7 @@ import androidx.annotation.Nullable;
 import androidx.core.text.HtmlCompat;
 import androidx.fragment.app.DialogFragment;
 
+import org.lsposed.lspd.ILSPManagerService;
 import org.lsposed.manager.BuildConfig;
 import org.lsposed.manager.ConfigManager;
 import org.lsposed.manager.R;
@@ -107,7 +108,7 @@ public class HomeFragment extends BaseFragment {
             } else {
                 binding.updateCard.setVisibility(View.GONE);
             }
-            boolean dex2oatAbnormal = ConfigManager.getDex2OatWrapperCompatibility() != ConfigManager.Dex2OatCompatibility.OK && !ConfigManager.dex2oatFlagsLoaded();
+            boolean dex2oatAbnormal = ConfigManager.getDex2OatWrapperCompatibility() != ILSPManagerService.DEX2OAT_OK && !ConfigManager.dex2oatFlagsLoaded();
             if (!ConfigManager.isSepolicyLoaded() || !ConfigManager.systemServerRequested() || dex2oatAbnormal) {
                 binding.statusTitle.setText(R.string.partial_activated);
                 binding.statusIcon.setImageResource(R.drawable.ic_round_warning_24);
@@ -160,19 +161,19 @@ public class HomeFragment extends BaseFragment {
             if (Build.VERSION.SDK_INT < Build.VERSION_CODES.Q) {
                 binding.dex2oatWrapper.setText(R.string.unsupported_android_version);
             } else switch (ConfigManager.getDex2OatWrapperCompatibility()) {
-                case OK:
+                case ILSPManagerService.DEX2OAT_OK:
                     binding.dex2oatWrapper.setText(R.string.supported);
                     break;
-                case CRASHED:
+                case ILSPManagerService.DEX2OAT_CRASHED:
                     binding.dex2oatWrapper.setText(R.string.unsupported_crashed);
                     break;
-                case MOUNT_FAILED:
+                case ILSPManagerService.DEX2OAT_MOUNT_FAILED:
                     binding.dex2oatWrapper.setText(R.string.unsupported_mount_failed);
                     break;
-                case SELINUX_PERMISSIVE:
+                case ILSPManagerService.DEX2OAT_SELINUX_PERMISSIVE:
                     binding.dex2oatWrapper.setText(R.string.unsupported_selinux_permissive);
                     break;
-                case SEPOLICY_INCORRECT:
+                case ILSPManagerService.DEX2OAT_SEPOLICY_INCORRECT:
                     binding.dex2oatWrapper.setText(R.string.unsupported_sepolicy_incorrect);
                     break;
             }

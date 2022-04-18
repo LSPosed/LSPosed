@@ -19,6 +19,8 @@
 
 package org.lsposed.lspd.service;
 
+import static org.lsposed.lspd.ILSPManagerService.*;
+
 import android.net.LocalServerSocket;
 import android.net.LocalSocket;
 import android.net.LocalSocketAddress;
@@ -42,10 +44,6 @@ import java.util.Locale;
 
 public class Dex2OatService {
 
-    enum Dex2OatCompatibility {
-        OK, CRASHED, MOUNT_FAILED, SELINUX_PERMISSIVE, SEPOLICY_INCORRECT
-    }
-
     public static final String PROP_NAME = "dalvik.vm.dex2oat-flags";
     public static final String PROP_VALUE = "--inline-max-code-units=0";
     private static final String TAG = "LSPosedDex2Oat";
@@ -56,7 +54,7 @@ public class Dex2OatService {
     private LocalSocket serverSocket = null;
     private LocalServerSocket server = null;
     private FileDescriptor stockFd32 = null, stockFd64 = null;
-    private Dex2OatCompatibility compatibility = Dex2OatCompatibility.OK;
+    private int compatibility = DEX2OAT_OK;
 
     @RequiresApi(Build.VERSION_CODES.Q)
     public Dex2OatService() {
@@ -65,7 +63,7 @@ public class Dex2OatService {
             setEnabled(true);
             if (!checkMount()) {
                 setEnabled(false);
-                compatibility = Dex2OatCompatibility.MOUNT_FAILED;
+                compatibility = DEX2OAT_MOUNT_FAILED;
                 return;
             }
         }
@@ -114,9 +112,9 @@ public class Dex2OatService {
                 } catch (ErrnoException ignored) {
                 }
                 synchronized (this) {
-                    if (compatibility == Dex2OatCompatibility.OK) {
+                    if (compatibility == DEX2OAT_OK) {
                         setEnabled(false);
-                        compatibility = Dex2OatCompatibility.CRASHED;
+                        compatibility = DEX2OAT_CRASHED;
                     }
                 }
             }
@@ -127,21 +125,21 @@ public class Dex2OatService {
                 try {
                     boolean enforcing = inotifySELinuxEnforce();
                     synchronized (this) {
-                        if (compatibility == Dex2OatCompatibility.CRASHED) break;
+                        if (compatibility == DEX2OAT_CRASHED) break;
                         if (!enforcing) {
-                            if (compatibility == Dex2OatCompatibility.OK) setEnabled(false);
-                            compatibility = Dex2OatCompatibility.SELINUX_PERMISSIVE;
+                            if (compatibility == DEX2OAT_OK) setEnabled(false);
+                            compatibility = DEX2OAT_SELINUX_PERMISSIVE;
                         } else if (SELinux.checkSELinuxAccess("u:r:untrusted_app:s0", "u:object_r:dex2oat_exec:s0", "file", "execute")
                                 || SELinux.checkSELinuxAccess("u:r:untrusted_app:s0", "u:object_r:dex2oat_exec:s0", "file", "execute_no_trans")) {
-                            if (compatibility == Dex2OatCompatibility.OK) setEnabled(false);
-                            compatibility = Dex2OatCompatibility.SEPOLICY_INCORRECT;
+                            if (compatibility == DEX2OAT_OK) setEnabled(false);
+                            compatibility = DEX2OAT_SEPOLICY_INCORRECT;
                         } else {
-                            if (compatibility != Dex2OatCompatibility.OK) {
+                            if (compatibility != DEX2OAT_OK) {
                                 setEnabled(true);
-                                if (checkMount()) compatibility = Dex2OatCompatibility.OK;
+                                if (checkMount()) compatibility = DEX2OAT_OK;
                                 else {
                                     setEnabled(false);
-                                    compatibility = Dex2OatCompatibility.MOUNT_FAILED;
+                                    compatibility = DEX2OAT_MOUNT_FAILED;
                                     break;
                                 }
                             }
@@ -150,8 +148,8 @@ public class Dex2OatService {
                 } catch (IOException e) {
                     Log.e(TAG, "File monitor crashed", e);
                     synchronized (this) {
-                        if (compatibility == Dex2OatCompatibility.OK) setEnabled(false);
-                        compatibility = Dex2OatCompatibility.CRASHED;
+                        if (compatibility == DEX2OAT_OK) setEnabled(false);
+                        compatibility = DEX2OAT_CRASHED;
                     }
                     break;
                 }
@@ -165,7 +163,7 @@ public class Dex2OatService {
 
     @RequiresApi(Build.VERSION_CODES.Q)
     public int getCompatibility() {
-        return compatibility.ordinal();
+        return compatibility;
     }
 
     private native void init();
