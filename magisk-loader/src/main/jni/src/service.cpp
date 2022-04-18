@@ -310,7 +310,7 @@ namespace lspd {
         if (app_binder) {
             JNI_NewGlobalRef(env, heart_beat_binder);
         }
-        LOGD("Service::RequestSystemServerBinder app_binder: {}", static_cast<void*>(app_binder.get()));
+        LOGD("app_binder: {}", static_cast<void*>(app_binder.get()));
         return app_binder;
     }
 
