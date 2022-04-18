@@ -23,8 +23,6 @@ import android.net.LocalServerSocket;
 import android.net.LocalSocket;
 import android.net.LocalSocketAddress;
 import android.os.Build;
-import android.os.Handler;
-import android.os.Looper;
 import android.os.SELinux;
 import android.system.ErrnoException;
 import android.system.Os;
@@ -44,31 +42,46 @@ import java.util.Locale;
 
 public class Dex2OatService {
 
+    enum Dex2OatCompatibility {
+        OK, CRASHED, MOUNT_FAILED, SELINUX_PERMISSIVE, SEPOLICY_INCORRECT
+    }
+
     public static final String PROP_NAME = "dalvik.vm.dex2oat-flags";
     public static final String PROP_VALUE = "--inline-max-code-units=0";
     private static final String TAG = "LSPosedDex2Oat";
     private static final String DEX2OAT_32 = "/apex/com.android.art/bin/dex2oat32";
     private static final String DEX2OAT_64 = "/apex/com.android.art/bin/dex2oat64";
 
-    private final Thread thread;
+    private String devTmpDir;
     private LocalSocket serverSocket = null;
     private LocalServerSocket server = null;
     private FileDescriptor stockFd32 = null, stockFd64 = null;
+    private Dex2OatCompatibility compatibility = Dex2OatCompatibility.OK;
 
     @RequiresApi(Build.VERSION_CODES.Q)
     public Dex2OatService() {
-        thread = new Thread(() -> {
-            var devPath = Paths.get(getDevPath());
+        init();
+        if (!checkMount()) { // Already mounted when restart daemon
+            setEnabled(true);
+            if (!checkMount()) {
+                setEnabled(false);
+                compatibility = Dex2OatCompatibility.MOUNT_FAILED;
+                return;
+            }
+        }
+
+        Thread daemonThread = new Thread(() -> {
+            var devPath = Paths.get(devTmpDir);
             var sockPath = devPath.resolve("dex2oat.sock");
             try {
-                Log.i(TAG, "dex2oat daemon start");
+                Log.i(TAG, "Daemon start");
                 if (setSocketCreateContext("u:r:dex2oat:s0")) {
-                    Log.d(TAG, "set socket context to u:r:dex2oat:s0");
+                    Log.d(TAG, "Set socket context to u:r:dex2oat:s0");
                 } else {
-                    throw new IOException("failed to set socket context");
+                    throw new IOException("Failed to set socket context");
                 }
                 Files.createDirectories(devPath);
-                Log.d(TAG, "dev path: " + devPath);
+                Log.d(TAG, "Dev path: " + devPath);
 
                 serverSocket = new LocalSocket(LocalSocket.SOCKET_STREAM);
                 serverSocket.bind(new LocalSocketAddress(sockPath.toString(), LocalSocketAddress.Namespace.FILESYSTEM));
@@ -85,11 +98,11 @@ public class Dex2OatService {
                         if (lp == 32) client.setFileDescriptorsForSend(new FileDescriptor[]{stockFd32});
                         else client.setFileDescriptorsForSend(new FileDescriptor[]{stockFd64});
                         os.write(1);
-                        Log.d(TAG, "sent fd" + lp);
+                        Log.d(TAG, "Sent fd" + lp);
                     }
                 }
             } catch (Throwable e) {
-                Log.e(TAG, "dex2oat daemon crashed", e);
+                Log.e(TAG, "Daemon crashed", e);
                 try {
                     server.close();
                     Files.delete(sockPath);
@@ -100,20 +113,68 @@ public class Dex2OatService {
                     if (stockFd64 != null && stockFd64.valid()) Os.close(stockFd64);
                 } catch (ErrnoException ignored) {
                 }
-                new Handler(Looper.getMainLooper()).post(Dex2OatService::fallback);
+                synchronized (this) {
+                    if (compatibility == Dex2OatCompatibility.OK) {
+                        setEnabled(false);
+                        compatibility = Dex2OatCompatibility.CRASHED;
+                    }
+                }
             }
         });
-        thread.start();
+
+        Thread selinuxMonitorThread = new Thread(() -> {
+            while (true) {
+                try {
+                    boolean enforcing = inotifySELinuxEnforce();
+                    synchronized (this) {
+                        if (compatibility == Dex2OatCompatibility.CRASHED) break;
+                        if (!enforcing) {
+                            if (compatibility == Dex2OatCompatibility.OK) setEnabled(false);
+                            compatibility = Dex2OatCompatibility.SELINUX_PERMISSIVE;
+                        } else if (SELinux.checkSELinuxAccess("u:r:untrusted_app:s0", "u:object_r:dex2oat_exec:s0", "file", "execute")
+                                || SELinux.checkSELinuxAccess("u:r:untrusted_app:s0", "u:object_r:dex2oat_exec:s0", "file", "execute_no_trans")) {
+                            if (compatibility == Dex2OatCompatibility.OK) setEnabled(false);
+                            compatibility = Dex2OatCompatibility.SEPOLICY_INCORRECT;
+                        } else {
+                            if (compatibility != Dex2OatCompatibility.OK) {
+                                setEnabled(true);
+                                if (checkMount()) compatibility = Dex2OatCompatibility.OK;
+                                else {
+                                    setEnabled(false);
+                                    compatibility = Dex2OatCompatibility.MOUNT_FAILED;
+                                    break;
+                                }
+                            }
+                        }
+                    }
+                } catch (IOException e) {
+                    Log.e(TAG, "File monitor crashed", e);
+                    synchronized (this) {
+                        if (compatibility == Dex2OatCompatibility.OK) setEnabled(false);
+                        compatibility = Dex2OatCompatibility.CRASHED;
+                    }
+                    break;
+                }
+            }
+            Log.i(TAG, "SELinux monitor thread exiting");
+        });
+
+        daemonThread.start();
+        selinuxMonitorThread.start();
     }
 
     @RequiresApi(Build.VERSION_CODES.Q)
-    public boolean isAlive() {
-        return thread.isAlive();
+    public int getCompatibility() {
+        return compatibility.ordinal();
     }
 
-    private static native String getDevPath();
+    private native void init();
 
-    private static native void fallback();
+    private native boolean checkMount();
+
+    private native boolean inotifySELinuxEnforce() throws IOException;
+
+    private native void setEnabled(boolean enabled);
 
     private boolean setSocketCreateContext(String context) {
         FileDescriptor fd = null;

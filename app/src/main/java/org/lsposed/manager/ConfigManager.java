@@ -35,14 +35,14 @@ import org.lsposed.manager.receivers.LSPManagerServiceHolder;
 import java.io.File;
 import java.util.ArrayList;
 import java.util.Arrays;
-import java.util.HashMap;
 import java.util.List;
-import java.util.Map;
 import java.util.Set;
 
-import io.github.xposed.xposedservice.utils.ParceledListSlice;
-
 public class ConfigManager {
+
+    public enum Dex2OatCompatibility {
+        OK, CRASHED, MOUNT_FAILED, SELINUX_PERMISSIVE, SEPOLICY_INCORRECT
+    }
 
     public static boolean isBinderAlive() {
         return LSPManagerServiceHolder.getService() != null;
@@ -360,12 +360,12 @@ public class ConfigManager {
         }
     }
 
-    public static boolean dex2oatWrapperAlive() {
+    public static Dex2OatCompatibility getDex2OatWrapperCompatibility() {
         try {
-            return LSPManagerServiceHolder.getService().dex2oatWrapperAlive();
+            return Dex2OatCompatibility.values()[LSPManagerServiceHolder.getService().getDex2OatWrapperCompatibility()];
         } catch (RemoteException e) {
             Log.e(App.TAG, Log.getStackTraceString(e));
-            return false;
+            return Dex2OatCompatibility.CRASHED;
         }
     }
 }

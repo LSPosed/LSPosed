@@ -777,11 +777,11 @@ public class LSPManagerService extends ILSPManagerService.Stub {
     }
 
     @Override
-    public boolean dex2oatWrapperAlive() {
+    public int getDex2OatWrapperCompatibility() {
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.Q) {
-            return ServiceManager.getDex2OatService().isAlive();
+            return ServiceManager.getDex2OatService().getCompatibility();
         } else {
-            return false;
+            return 0;
         }
     }
 }

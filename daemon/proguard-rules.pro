@@ -4,6 +4,9 @@
 -keepclasseswithmembers class org.lsposed.lspd.Main {
     public static void main(java.lang.String[]);
 }
+-keepclasseswithmembers class org.lsposed.lspd.service.Dex2OatService {
+    private java.lang.String devTmpDir;
+}
 -keepclasseswithmembers class org.lsposed.lspd.service.LogcatService {
     private int refreshFd(boolean);
 }

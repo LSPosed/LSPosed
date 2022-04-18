@@ -107,7 +107,7 @@ public class HomeFragment extends BaseFragment {
             } else {
                 binding.updateCard.setVisibility(View.GONE);
             }
-            boolean dex2oatAbnormal = !ConfigManager.dex2oatWrapperAlive() && !ConfigManager.dex2oatFlagsLoaded();
+            boolean dex2oatAbnormal = ConfigManager.getDex2OatWrapperCompatibility() != ConfigManager.Dex2OatCompatibility.OK && !ConfigManager.dex2oatFlagsLoaded();
             if (!ConfigManager.isSepolicyLoaded() || !ConfigManager.systemServerRequested() || dex2oatAbnormal) {
                 binding.statusTitle.setText(R.string.partial_activated);
                 binding.statusIcon.setImageResource(R.drawable.ic_round_warning_24);
@@ -159,10 +159,22 @@ public class HomeFragment extends BaseFragment {
             binding.frameworkVersion.setText(String.format(LocaleDelegate.getDefaultLocale(), "%1$s (%2$d)", ConfigManager.getXposedVersionName(), ConfigManager.getXposedVersionCode()));
             if (Build.VERSION.SDK_INT < Build.VERSION_CODES.Q) {
                 binding.dex2oatWrapper.setText(R.string.unsupported_android_version);
-            } else if (ConfigManager.dex2oatWrapperAlive()) {
-                binding.dex2oatWrapper.setText(R.string.supported);
-            } else {
-                binding.dex2oatWrapper.setText(R.string.unsupported_crashed);
+            } else switch (ConfigManager.getDex2OatWrapperCompatibility()) {
+                case OK:
+                    binding.dex2oatWrapper.setText(R.string.supported);
+                    break;
+                case CRASHED:
+                    binding.dex2oatWrapper.setText(R.string.unsupported_crashed);
+                    break;
+                case MOUNT_FAILED:
+                    binding.dex2oatWrapper.setText(R.string.unsupported_mount_failed);
+                    break;
+                case SELINUX_PERMISSIVE:
+                    binding.dex2oatWrapper.setText(R.string.unsupported_selinux_permissive);
+                    break;
+                case SEPOLICY_INCORRECT:
+                    binding.dex2oatWrapper.setText(R.string.unsupported_sepolicy_incorrect);
+                    break;
             }
         } else {
             binding.apiVersion.setText(R.string.not_installed);
