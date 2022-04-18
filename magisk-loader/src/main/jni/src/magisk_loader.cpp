@@ -111,7 +111,7 @@ namespace lspd {
 
             // Call application_binder directly if application binder is available,
             // or we proxy the request from system server binder
-            const auto next_binder = std::move(application_binder ? application_binder : system_server_binder);
+            auto &&next_binder = application_binder ? application_binder : system_server_binder;
             const auto [dex_fd, size] = instance->RequestLSPDex(env, next_binder);
             auto obfs_map = instance->RequestObfuscationMap(env, next_binder);
             ConfigBridge::GetInstance()->obfuscation_map(std::move(obfs_map));
