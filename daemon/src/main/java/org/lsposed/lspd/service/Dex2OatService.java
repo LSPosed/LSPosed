@@ -19,7 +19,11 @@
 
 package org.lsposed.lspd.service;
 
-import static org.lsposed.lspd.ILSPManagerService.*;
+import static org.lsposed.lspd.ILSPManagerService.DEX2OAT_CRASHED;
+import static org.lsposed.lspd.ILSPManagerService.DEX2OAT_MOUNT_FAILED;
+import static org.lsposed.lspd.ILSPManagerService.DEX2OAT_OK;
+import static org.lsposed.lspd.ILSPManagerService.DEX2OAT_SELINUX_PERMISSIVE;
+import static org.lsposed.lspd.ILSPManagerService.DEX2OAT_SEPOLICY_INCORRECT;
 
 import android.net.LocalServerSocket;
 import android.net.LocalSocket;
@@ -65,7 +69,7 @@ public class Dex2OatService {
             synchronized (this) {
                 if (compatibility == DEX2OAT_CRASHED) stopWatching();
                 boolean enforcing = false;
-                try(var is = Files.newInputStream(Paths.get("/sys/fs/selinux/enforce"))) {
+                try (var is = Files.newInputStream(Paths.get("/sys/fs/selinux/enforce"))) {
                     enforcing = is.read() == '1';
                 } catch (IOException ignored) {
                 }
@@ -176,23 +180,31 @@ public class Dex2OatService {
     private native void setEnabled(boolean enabled);
 
     private boolean checkMount() {
-        try {
-            var apex = Os.stat(rootMntBin32);
-            var fake = Os.stat(fakeBin32);
-            if (apex.st_ino != fake.st_ino) {
-                Log.w(TAG, "Check mount failed for dex2oat32");
+        if (new File(rootMntBin32).exists()) {
+            try {
+                var apex = Os.stat(rootMntBin32);
+                var fake = Os.stat(fakeBin32);
+                if (apex.st_ino != fake.st_ino) {
+                    Log.w(TAG, "Check mount failed for dex2oat32");
+                    return false;
+                }
+            } catch (ErrnoException e) {
+                Log.e(TAG, "Error occurred when checking mount for dex2oat32", e);
                 return false;
             }
-        } catch (ErrnoException ignored) {
         }
-        try {
-            var apex = Os.stat(rootMntBin64);
-            var fake = Os.stat(fakeBin64);
-            if (apex.st_ino != fake.st_ino) {
-                Log.w(TAG, "Check mount failed for dex2oat64");
+        if (new File(rootMntBin64).exists()) {
+            try {
+                var apex = Os.stat(rootMntBin64);
+                var fake = Os.stat(fakeBin64);
+                if (apex.st_ino != fake.st_ino) {
+                    Log.w(TAG, "Check mount failed for dex2oat64");
+                    return false;
+                }
+            } catch (ErrnoException e) {
+                Log.e(TAG, "Error occurred when checking mount for dex2oat64", e);
                 return false;
             }
-        } catch (ErrnoException ignored) {
         }
         Log.d(TAG, "Check mount succeeded");
         return true;
