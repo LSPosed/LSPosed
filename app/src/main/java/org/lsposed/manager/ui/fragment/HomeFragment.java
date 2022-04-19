@@ -200,6 +200,10 @@ public class HomeFragment extends BaseFragment {
                 "\n" +
                 binding.api.getText() +
                 "\n\n" +
+                activity.getString(R.string.info_dex2oat_wrapper) +
+                "\n" +
+                binding.dex2oatWrapper.getText() +
+                "\n\n" +
                 activity.getString(R.string.info_framework_version) +
                 "\n" +
                 binding.frameworkVersion.getText() +
