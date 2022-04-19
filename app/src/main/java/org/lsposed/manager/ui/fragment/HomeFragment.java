@@ -159,22 +159,22 @@ public class HomeFragment extends BaseFragment {
             binding.api.setText(ConfigManager.getApi());
             binding.frameworkVersion.setText(String.format(LocaleDelegate.getDefaultLocale(), "%1$s (%2$d)", ConfigManager.getXposedVersionName(), ConfigManager.getXposedVersionCode()));
             if (Build.VERSION.SDK_INT < Build.VERSION_CODES.Q) {
-                binding.dex2oatWrapper.setText(R.string.unsupported_android_version);
+                binding.dex2oatWrapper.setText(String.format(LocaleDelegate.getDefaultLocale(), "%s (%s)", getString(R.string.unsupported), getString(R.string.android_version_unsatisfied)));
             } else switch (ConfigManager.getDex2OatWrapperCompatibility()) {
                 case ILSPManagerService.DEX2OAT_OK:
                     binding.dex2oatWrapper.setText(R.string.supported);
                     break;
                 case ILSPManagerService.DEX2OAT_CRASHED:
-                    binding.dex2oatWrapper.setText(R.string.unsupported_crashed);
+                    binding.dex2oatWrapper.setText(String.format(LocaleDelegate.getDefaultLocale(), "%s (%s)", getString(R.string.unsupported), getString(R.string.crashed)));
                     break;
                 case ILSPManagerService.DEX2OAT_MOUNT_FAILED:
-                    binding.dex2oatWrapper.setText(R.string.unsupported_mount_failed);
+                    binding.dex2oatWrapper.setText(String.format(LocaleDelegate.getDefaultLocale(), "%s (%s)", getString(R.string.unsupported), getString(R.string.mount_failed)));
                     break;
                 case ILSPManagerService.DEX2OAT_SELINUX_PERMISSIVE:
-                    binding.dex2oatWrapper.setText(R.string.unsupported_selinux_permissive);
+                    binding.dex2oatWrapper.setText(String.format(LocaleDelegate.getDefaultLocale(), "%s (%s)", getString(R.string.unsupported), getString(R.string.selinux_permissive)));
                     break;
                 case ILSPManagerService.DEX2OAT_SEPOLICY_INCORRECT:
-                    binding.dex2oatWrapper.setText(R.string.unsupported_sepolicy_incorrect);
+                    binding.dex2oatWrapper.setText(String.format(LocaleDelegate.getDefaultLocale(), "%s (%s)", getString(R.string.unsupported), getString(R.string.sepolicy_incorrect)));
                     break;
             }
         } else {

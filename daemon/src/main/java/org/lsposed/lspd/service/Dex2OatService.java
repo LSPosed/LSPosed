@@ -25,6 +25,7 @@ import android.net.LocalServerSocket;
 import android.net.LocalSocket;
 import android.net.LocalSocketAddress;
 import android.os.Build;
+import android.os.FileObserver;
 import android.os.SELinux;
 import android.system.ErrnoException;
 import android.system.Os;
@@ -32,6 +33,7 @@ import android.system.OsConstants;
 import android.text.TextUtils;
 import android.util.Log;
 
+import androidx.annotation.Nullable;
 import androidx.annotation.RequiresApi;
 
 import java.io.File;
@@ -50,11 +52,50 @@ public class Dex2OatService {
     private static final String DEX2OAT_32 = "/apex/com.android.art/bin/dex2oat32";
     private static final String DEX2OAT_64 = "/apex/com.android.art/bin/dex2oat64";
 
-    private String devTmpDir;
+    private String devTmpDir, rootMntBin32, rootMntBin64, fakeBin32, fakeBin64;
     private LocalSocket serverSocket = null;
     private LocalServerSocket server = null;
     private FileDescriptor stockFd32 = null, stockFd64 = null;
     private int compatibility = DEX2OAT_OK;
+
+    private final FileObserver selinuxObserver = new FileObserver("/sys/fs/selinux/enforce", FileObserver.MODIFY) {
+        @Override
+        public void onEvent(int i, @Nullable String s) {
+            Log.d(TAG, "SELinux status changed");
+            synchronized (this) {
+                if (compatibility == DEX2OAT_CRASHED) stopWatching();
+                boolean enforcing = false;
+                try(var is = Files.newInputStream(Paths.get("/sys/fs/selinux/enforce"))) {
+                    enforcing = is.read() == '1';
+                } catch (IOException ignored) {
+                }
+                if (!enforcing) {
+                    if (compatibility == DEX2OAT_OK) setEnabled(false);
+                    compatibility = DEX2OAT_SELINUX_PERMISSIVE;
+                } else if (SELinux.checkSELinuxAccess("u:r:untrusted_app:s0", "u:object_r:dex2oat_exec:s0", "file", "execute")
+                        || SELinux.checkSELinuxAccess("u:r:untrusted_app:s0", "u:object_r:dex2oat_exec:s0", "file", "execute_no_trans")) {
+                    if (compatibility == DEX2OAT_OK) setEnabled(false);
+                    compatibility = DEX2OAT_SEPOLICY_INCORRECT;
+                } else {
+                    if (compatibility != DEX2OAT_OK) {
+                        setEnabled(true);
+                        if (checkMount()) compatibility = DEX2OAT_OK;
+                        else {
+                            setEnabled(false);
+                            compatibility = DEX2OAT_MOUNT_FAILED;
+                            stopWatching();
+                        }
+                    }
+                }
+            }
+        }
+
+        @Override
+        public void stopWatching() {
+            super.stopWatching();
+            Log.w(TAG, "SELinux observer stopped");
+        }
+    };
 
     @RequiresApi(Build.VERSION_CODES.Q)
     public Dex2OatService() {
@@ -112,6 +153,7 @@ public class Dex2OatService {
                 } catch (ErrnoException ignored) {
                 }
                 synchronized (this) {
+                    selinuxObserver.stopWatching();
                     if (compatibility == DEX2OAT_OK) {
                         setEnabled(false);
                         compatibility = DEX2OAT_CRASHED;
@@ -120,45 +162,8 @@ public class Dex2OatService {
             }
         });
 
-        Thread selinuxMonitorThread = new Thread(() -> {
-            while (true) {
-                try {
-                    boolean enforcing = inotifySELinuxEnforce();
-                    synchronized (this) {
-                        if (compatibility == DEX2OAT_CRASHED) break;
-                        if (!enforcing) {
-                            if (compatibility == DEX2OAT_OK) setEnabled(false);
-                            compatibility = DEX2OAT_SELINUX_PERMISSIVE;
-                        } else if (SELinux.checkSELinuxAccess("u:r:untrusted_app:s0", "u:object_r:dex2oat_exec:s0", "file", "execute")
-                                || SELinux.checkSELinuxAccess("u:r:untrusted_app:s0", "u:object_r:dex2oat_exec:s0", "file", "execute_no_trans")) {
-                            if (compatibility == DEX2OAT_OK) setEnabled(false);
-                            compatibility = DEX2OAT_SEPOLICY_INCORRECT;
-                        } else {
-                            if (compatibility != DEX2OAT_OK) {
-                                setEnabled(true);
-                                if (checkMount()) compatibility = DEX2OAT_OK;
-                                else {
-                                    setEnabled(false);
-                                    compatibility = DEX2OAT_MOUNT_FAILED;
-                                    break;
-                                }
-                            }
-                        }
-                    }
-                } catch (IOException e) {
-                    Log.e(TAG, "File monitor crashed", e);
-                    synchronized (this) {
-                        if (compatibility == DEX2OAT_OK) setEnabled(false);
-                        compatibility = DEX2OAT_CRASHED;
-                    }
-                    break;
-                }
-            }
-            Log.i(TAG, "SELinux monitor thread exiting");
-        });
-
         daemonThread.start();
-        selinuxMonitorThread.start();
+        selinuxObserver.startWatching();
     }
 
     @RequiresApi(Build.VERSION_CODES.Q)
@@ -168,11 +173,30 @@ public class Dex2OatService {
 
     private native void init();
 
-    private native boolean checkMount();
-
-    private native boolean inotifySELinuxEnforce() throws IOException;
-
     private native void setEnabled(boolean enabled);
+
+    private boolean checkMount() {
+        try {
+            var apex = Os.stat(rootMntBin32);
+            var fake = Os.stat(fakeBin32);
+            if (apex.st_ino != fake.st_ino) {
+                Log.w(TAG, "Check mount failed for dex2oat32");
+                return false;
+            }
+        } catch (ErrnoException ignored) {
+        }
+        try {
+            var apex = Os.stat(rootMntBin64);
+            var fake = Os.stat(fakeBin64);
+            if (apex.st_ino != fake.st_ino) {
+                Log.w(TAG, "Check mount failed for dex2oat64");
+                return false;
+            }
+        } catch (ErrnoException ignored) {
+        }
+        Log.d(TAG, "Check mount succeeded");
+        return true;
+    }
 
     private boolean setSocketCreateContext(String context) {
         FileDescriptor fd = null;

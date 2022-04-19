@@ -65,11 +65,12 @@
     <string name="info_api">Injection Interface</string>
     <string name="info_dex2oat_wrapper">Dex Optimizer Wrapper</string>
     <string name="supported">Supported</string>
-    <string name="unsupported_android_version">Unsupported (Android version unsatisfied)</string>
-    <string name="unsupported_crashed">Unsupported (Crashed)</string>
-    <string name="unsupported_mount_failed">Unsupported (Mount failed)</string>
-    <string name="unsupported_selinux_permissive">Unsupported (SELinux is permissive)</string>
-    <string name="unsupported_sepolicy_incorrect">Unsupported (SELinux policy is incorrect)</string>
+    <string name="unsupported">Unsupported</string>
+    <string name="android_version_unsatisfied">Android version unsatisfied</string>
+    <string name="crashed">Crashed</string>
+    <string name="mount_failed">Mount failed</string>
+    <string name="selinux_permissive">SELinux is permissive</string>
+    <string name="sepolicy_incorrect">SELinux policy is incorrect</string>
     <string name="parasitic_recommend">Parasitic Manager Recommended</string>
     <string name="parasitic_recommend_summary">LSPosed now supports system parasitization to avoid detection. You can safely uninstall the manager after successfully creating a shortcut of the parasitic manager. In any case you can install the manager back from /data/adb/lspd/manager.apk.</string>
     <string name="create_shortcut">Create shortcut</string>

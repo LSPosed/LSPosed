@@ -53,56 +53,15 @@ Java_org_lsposed_lspd_service_Dex2OatService_init(JNIEnv *env, jobject thiz) {
     sprintf(kFakeBin32, "%s/.magisk/modules/%s/bin/dex2oat32", magisk_path, module_name);
     sprintf(kFakeBin64, "%s/.magisk/modules/%s/bin/dex2oat64", magisk_path, module_name);
     auto path_field = env->GetFieldID(env->GetObjectClass(thiz), "devTmpDir", "Ljava/lang/String;");
+    auto root_mnt_bin32_field = env->GetFieldID(env->GetObjectClass(thiz), "rootMntBin32", "Ljava/lang/String;");
+    auto root_mnt_bin64_field = env->GetFieldID(env->GetObjectClass(thiz), "rootMntBin64", "Ljava/lang/String;");
+    auto fake_bin32_field = env->GetFieldID(env->GetObjectClass(thiz), "fakeBin32", "Ljava/lang/String;");
+    auto fake_bin64_field = env->GetFieldID(env->GetObjectClass(thiz), "fakeBin64", "Ljava/lang/String;");
     env->SetObjectField(thiz, path_field, env->NewStringUTF(kTmpDir + 12));
-}
-
-extern "C"
-JNIEXPORT jboolean JNICALL
-Java_org_lsposed_lspd_service_Dex2OatService_checkMount(JNIEnv *env, jobject thiz) {
-    struct stat apex{}, stock{};
-    if (0 == stat(kRootMntBin32, &apex)) {
-        stat(kFakeBin32, &stock);
-        if (apex.st_ino != stock.st_ino) {
-            LOGW("Check mount failed for dex2oat32");
-            return JNI_FALSE;
-        }
-    }
-    if (0 == stat(kRootMntBin64, &apex)) {
-        stat(kFakeBin64, &stock);
-        if (apex.st_ino != stock.st_ino) {
-            LOGW("Check mount failed for dex2oat64");
-            return JNI_FALSE;
-        }
-    }
-    LOGD("Check mount succeeded");
-    return JNI_TRUE;
-}
-
-extern "C"
-JNIEXPORT jboolean JNICALL
-Java_org_lsposed_lspd_service_Dex2OatService_inotifySELinuxEnforce(JNIEnv *env, jobject thiz) {
-    static int fd = 0;
-    if (!fd) {
-        fd = inotify_init();
-        inotify_add_watch(fd, "/sys/fs/selinux/enforce", IN_MODIFY);
-    } else {
-        char event_buf[512];
-        if (read(fd, event_buf, sizeof(event_buf)) < sizeof(inotify_event)) {
-            jclass io_exception_class = env->FindClass("java/io/IOException");
-            jmethodID ctor = env->GetMethodID(io_exception_class, "<init>", "(Ljava/lang/String;)V");
-            auto exception = (jthrowable) env->NewObject(
-                    io_exception_class,
-                    ctor,
-                    env->NewStringUTF("Failed to read inotify event"));
-            env->Throw(exception);
-        }
-        LOGD("SELinux status changed");
-    }
-    int enforce;
-    FILE *fp = fopen("/sys/fs/selinux/enforce", "r");
-    fscanf(fp, "%d", &enforce);
-    fclose(fp);
-    return enforce;
+    env->SetObjectField(thiz, root_mnt_bin32_field, env->NewStringUTF(kRootMntBin32));
+    env->SetObjectField(thiz, root_mnt_bin64_field, env->NewStringUTF(kRootMntBin64));
+    env->SetObjectField(thiz, fake_bin32_field, env->NewStringUTF(kFakeBin32));
+    env->SetObjectField(thiz, fake_bin64_field, env->NewStringUTF(kFakeBin64));
 }
 
 extern "C"
