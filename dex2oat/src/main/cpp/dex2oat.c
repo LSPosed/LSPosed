@@ -36,7 +36,7 @@
 # define LP_SELECT(lp32, lp64) lp32
 #endif
 
-char kTmpDir[] = "placeholder_/dev/0123456789abcdef";
+char kTmpDir[] = "placeholder_/dev/0123456789abcdef\0";
 
 static ssize_t xrecvmsg(int sockfd, struct msghdr *msg, int flags) {
     int rec = recvmsg(sockfd, msg, flags);
