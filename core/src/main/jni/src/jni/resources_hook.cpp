@@ -51,8 +51,8 @@ namespace lspd {
             LOGW("GetXResourcesClassName: obfuscation_map empty?????");
         }
         static auto name = lspd::JavaNameToSignature(
-                obfs_map.at("android.content.res.X"))  // TODO: kill this hardcoded name
-                    .substr(1) + "Resources";
+                obfs_map.at("android.content.res.XRes"))  // TODO: kill this hardcoded name
+                    .substr(1) + "ources";
         LOGD("{}", name.c_str());
         return name;
     }
