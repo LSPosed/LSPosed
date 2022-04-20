@@ -42,7 +42,8 @@ std::mutex init_lock{};
 std::map<const std::string, std::string> signatures = {
         {"Lde/robv/android/xposed/", ""},
         { "Landroid/app/AndroidApp", ""},
-        { "Landroid/content/res/X", ""},
+        { "Landroid/content/res/XRes", ""},
+        { "Landroid/content/res/XModule", ""},
         { "Lorg/lsposed/lspd/core/", ""},
         { "Lorg/lsposed/lspd/nativebridge/", ""},
         { "Lorg/lsposed/lspd/service/", ""},
