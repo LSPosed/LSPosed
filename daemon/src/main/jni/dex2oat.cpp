@@ -74,7 +74,7 @@ Java_org_lsposed_lspd_service_Dex2OatService_initNative(JNIEnv *env, jobject thi
         if (stock == -1) return false;
         struct stat st{};
         fstat(stock, &st);
-        int copy = open(src, O_WRONLY | O_CREAT, st.st_mode);
+        int copy = open(target.c_str(), O_WRONLY | O_CREAT, st.st_mode);
         sendfile(copy, stock, nullptr, st.st_size);
         close(stock);
         close(copy);
