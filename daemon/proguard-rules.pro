@@ -6,10 +6,10 @@
 }
 -keepclasseswithmembers class org.lsposed.lspd.service.Dex2OatService {
     private java.lang.String devTmpDir;
-    private java.lang.String rootMntBin32;
-    private java.lang.String rootMntBin64;
+    private java.lang.String magiskPath;
     private java.lang.String fakeBin32;
     private java.lang.String fakeBin64;
+    private java.lang.String[] dex2oatBinaries;
 }
 -keepclasseswithmembers class org.lsposed.lspd.service.LogcatService {
     private int refreshFd(boolean);

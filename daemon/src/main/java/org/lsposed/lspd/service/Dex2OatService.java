@@ -40,26 +40,26 @@ import android.util.Log;
 import androidx.annotation.Nullable;
 import androidx.annotation.RequiresApi;
 
-import java.io.File;
 import java.io.FileDescriptor;
 import java.io.IOException;
 import java.io.InterruptedIOException;
 import java.nio.file.Files;
 import java.nio.file.Paths;
+import java.util.Arrays;
 import java.util.Locale;
+import java.util.Objects;
 
 public class Dex2OatService {
 
     public static final String PROP_NAME = "dalvik.vm.dex2oat-flags";
     public static final String PROP_VALUE = "--inline-max-code-units=0";
     private static final String TAG = "LSPosedDex2Oat";
-    private static final String DEX2OAT_32 = "/apex/com.android.art/bin/dex2oat32";
-    private static final String DEX2OAT_64 = "/apex/com.android.art/bin/dex2oat64";
 
-    private String devTmpDir, rootMntBin32, rootMntBin64, fakeBin32, fakeBin64;
+    private String devTmpDir, magiskPath, fakeBin32, fakeBin64;
+    private String[] dex2oatBinaries;
+    private FileDescriptor[] stockFds;
     private LocalSocket serverSocket = null;
     private LocalServerSocket server = null;
-    private FileDescriptor stockFd32 = null, stockFd64 = null;
     private int compatibility = DEX2OAT_OK;
 
     private final FileObserver selinuxObserver = new FileObserver("/sys/fs/selinux/enforce", FileObserver.MODIFY) {
@@ -103,7 +103,20 @@ public class Dex2OatService {
 
     @RequiresApi(Build.VERSION_CODES.Q)
     public Dex2OatService() {
-        init();
+        initNative();
+        try {
+            Files.walk(Paths.get(magiskPath).resolve("dex2oat")).forEach(path -> {
+                SELinux.setFileContext(path.toString(), "u:object_r:magisk_file:s0");
+            });
+        } catch (IOException e) {
+            Log.e(TAG, "Error setting sepolicy", e);
+        }
+        if (Arrays.stream(dex2oatBinaries).noneMatch(Objects::nonNull)) {
+            Log.e(TAG, "Failed to find dex2oat binaries");
+            compatibility = DEX2OAT_MOUNT_FAILED;
+            return;
+        }
+
         if (!checkMount()) { // Already mounted when restart daemon
             setEnabled(true);
             if (!checkMount()) {
@@ -130,18 +143,21 @@ public class Dex2OatService {
                 serverSocket.bind(new LocalSocketAddress(sockPath.toString(), LocalSocketAddress.Namespace.FILESYSTEM));
                 server = new LocalServerSocket(serverSocket.getFileDescriptor());
                 SELinux.setFileContext(sockPath.toString(), "u:object_r:magisk_file:s0");
-                if (new File(DEX2OAT_32).exists()) stockFd32 = Os.open(DEX2OAT_32, OsConstants.O_RDONLY, 0);
-                if (new File(DEX2OAT_64).exists()) stockFd64 = Os.open(DEX2OAT_64, OsConstants.O_RDONLY, 0);
+                stockFds = new FileDescriptor[dex2oatBinaries.length];
+                for (int i = 0; i < dex2oatBinaries.length; i++) {
+                    if (dex2oatBinaries[i] != null) {
+                        stockFds[i] = Os.open(dex2oatBinaries[i], OsConstants.O_RDONLY, 0);
+                    }
+                }
 
                 while (true) {
                     var client = server.accept();
                     try (var is = client.getInputStream();
                          var os = client.getOutputStream()) {
-                        var lp = is.read();
-                        if (lp == 32) client.setFileDescriptorsForSend(new FileDescriptor[]{stockFd32});
-                        else client.setFileDescriptorsForSend(new FileDescriptor[]{stockFd64});
+                        var id = is.read();
+                        client.setFileDescriptorsForSend(new FileDescriptor[]{stockFds[id]});
                         os.write(1);
-                        Log.d(TAG, "Sent fd" + lp);
+                        Log.d(TAG, String.format("Sent stock fd: is64 = %b, isDebug = %b", (id & 0b10) != 0, (id & 0b01) != 0));
                     }
                 }
             } catch (Throwable e) {
@@ -152,8 +168,9 @@ public class Dex2OatService {
                 } catch (IOException ignored) {
                 }
                 try {
-                    if (stockFd32 != null && stockFd32.valid()) Os.close(stockFd32);
-                    if (stockFd64 != null && stockFd64.valid()) Os.close(stockFd64);
+                    for (var fd : stockFds) {
+                        if (fd != null && fd.valid()) Os.close(fd);
+                    }
                 } catch (ErrnoException ignored) {
                 }
                 synchronized (this) {
@@ -175,34 +192,23 @@ public class Dex2OatService {
         return compatibility;
     }
 
-    private native void init();
+    private native void initNative();
 
     private native void setEnabled(boolean enabled);
 
     private boolean checkMount() {
-        if (new File(rootMntBin32).exists()) {
+        for (int i = 0; i < dex2oatBinaries.length; i++) {
+            var bin = dex2oatBinaries[i];
+            if (bin == null) continue;
             try {
-                var apex = Os.stat(rootMntBin32);
-                var fake = Os.stat(fakeBin32);
+                var apex = Os.stat("/proc/1/root" + bin);
+                var fake = Os.stat(i < 2 ? fakeBin32 : fakeBin64);
                 if (apex.st_ino != fake.st_ino) {
-                    Log.w(TAG, "Check mount failed for dex2oat32");
+                    Log.w(TAG, "Check mount failed for " + bin);
                     return false;
                 }
             } catch (ErrnoException e) {
-                Log.e(TAG, "Error occurred when checking mount for dex2oat32", e);
-                return false;
-            }
-        }
-        if (new File(rootMntBin64).exists()) {
-            try {
-                var apex = Os.stat(rootMntBin64);
-                var fake = Os.stat(fakeBin64);
-                if (apex.st_ino != fake.st_ino) {
-                    Log.w(TAG, "Check mount failed for dex2oat64");
-                    return false;
-                }
-            } catch (ErrnoException e) {
-                Log.e(TAG, "Error occurred when checking mount for dex2oat64", e);
+                Log.e(TAG, "Check mount failed for " + bin, e);
                 return false;
             }
         }
