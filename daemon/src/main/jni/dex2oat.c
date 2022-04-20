@@ -28,7 +28,7 @@
 
 #include "logging.h"
 
-char kTmpDir[] = "placeholder_/dev/0123456789abcdef";
+char kTmpDir[] = "placeholder_/dev/0123456789abcdef\0";
 
 JNIEXPORT jstring JNICALL
 Java_org_lsposed_lspd_service_Dex2OatService_getDevPath(JNIEnv *env, jclass clazz) {
