@@ -62,10 +62,14 @@
     <string name="info_device">Toestel</string>
     <string name="info_system_abi">Stelsel ABI</string>
     <string name="info_api">Inspuitingskoppelvlak</string>
-    <string name="info_dex2oat_wrapper">Optimaliseerder-omhulsel</string>
+    <string name="info_dex2oat_wrapper">Dex Optimizer Wrapper</string>
     <string name="supported">Ondersteun</string>
-    <string name="unsupported_android_version">Nie ondersteun nie (Android-weergawe is nie tevrede nie)</string>
-    <string name="unsupported_crashed">Ongesteun (Omgeval)</string>
+    <string name="unsupported">Ongesteun</string>
+    <string name="android_version_unsatisfied">Android-weergawe nie tevrede nie</string>
+    <string name="crashed">Het neergestort</string>
+    <string name="mount_failed">Montering het misluk</string>
+    <string name="selinux_permissive">SELinux is permissief</string>
+    <string name="sepolicy_incorrect">SELinux-beleid is verkeerd</string>
     <string name="parasitic_recommend">Parasitiese Bestuurder Aanbeveel</string>
     <string name="parasitic_recommend_summary">LSPosed ondersteun nou stelselparasitering om opsporing te vermy. U kan die bestuurder veilig deïnstalleer nadat u \'n kortpad van die parasitiese bestuurder suksesvol geskep het. In elk geval kan jy die bestuurder terug installeer vanaf /data/adb/lspd/manager.apk.</string>
     <string name="create_shortcut">Skep kortpad</string>

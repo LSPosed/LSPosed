@@ -63,10 +63,14 @@ https://github.com/tclement0922</string>
     <string name="info_device">Périphérique</string>
     <string name="info_system_abi">Architecture du système</string>
     <string name="info_api">Interface d\'injection</string>
-    <string name="info_dex2oat_wrapper">Optimiseur de Conteneur</string>
+    <string name="info_dex2oat_wrapper">Enveloppeur Dex Optimizer</string>
     <string name="supported">Supporté</string>
-    <string name="unsupported_android_version">Non supporté (version Android non-satisfaisante)</string>
-    <string name="unsupported_crashed">Non supporté (Plantée)</string>
+    <string name="unsupported">Non supporté</string>
+    <string name="android_version_unsatisfied">Version d\'Android non satisfaisante</string>
+    <string name="crashed">Planté</string>
+    <string name="mount_failed">Échec du montage</string>
+    <string name="selinux_permissive">SELinux est permissif</string>
+    <string name="sepolicy_incorrect">La politique SELinux est incorrecte</string>
     <string name="parasitic_recommend">Gestionnaire parasitaire recommandé</string>
     <string name="parasitic_recommend_summary">LSPosed supporte maintenant la parasitation du système afin d\'éviter la détection. Vous pouvez désinstaller le gestionnaire en toute sécurité et après avoir créé un raccourci du gestionnaire parasitaire avec succès. Dans n\'importe quel cas vous pouvez installer à nouveau le gestionnaire depuis /data/adb/lspd/manager.apk.</string>
     <string name="create_shortcut">Créer le raccourci</string>

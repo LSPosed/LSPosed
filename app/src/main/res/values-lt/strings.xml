@@ -66,10 +66,14 @@
     <string name="info_device">Įrenginys</string>
     <string name="info_system_abi">Sistemos ABI</string>
     <string name="info_api">Injekcijos sąsaja</string>
-    <string name="info_dex2oat_wrapper">Optimizatoriaus apvalkalas</string>
+    <string name="info_dex2oat_wrapper">\"Dex Optimizer Wrapper</string>
     <string name="supported">Palaikomas</string>
-    <string name="unsupported_android_version">Nepalaikomas (nepatenkinta \"Android\" versija)</string>
-    <string name="unsupported_crashed">Nepalaikomas (sugedo)</string>
+    <string name="unsupported">Nepalaikomas</string>
+    <string name="android_version_unsatisfied">\"Android\" versija nepatenkinti</string>
+    <string name="crashed">Sugedo</string>
+    <string name="mount_failed">Montavimas nepavyko</string>
+    <string name="selinux_permissive">\"SELinux\" yra leidžiamoji</string>
+    <string name="sepolicy_incorrect">\"SELinux\" politika yra neteisinga</string>
     <string name="parasitic_recommend">Rekomenduojama parazitinė vadybininkė</string>
     <string name="parasitic_recommend_summary">\"LSPosed\" dabar palaiko sistemos parazitavimą siekiant išvengti aptikimo. Sėkmingai sukūrę parazituojančio tvarkytuvo nuorodą, galite saugiai pašalinti tvarkytuvą. Bet kuriuo atveju valdytoją galite vėl įdiegti iš /data/adb/lspd/manager.apk.</string>
     <string name="create_shortcut">Sukurti nuorodą</string>

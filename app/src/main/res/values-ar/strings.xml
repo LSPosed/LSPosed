@@ -71,10 +71,14 @@ Ali Samir</string>
     <string name="info_device">الجهاز</string>
     <string name="info_system_abi">نظام ABI</string>
     <string name="info_api">واجهة الحقن</string>
-    <string name="info_dex2oat_wrapper">غلاف محسّن</string>
+    <string name="info_dex2oat_wrapper">غلاف محسن Dex</string>
     <string name="supported">مدعوم</string>
-    <string name="unsupported_android_version">غير مدعوم (إصدار اندرويد غير راضٍ)</string>
-    <string name="unsupported_crashed">غير مدعوم (تَعـطّل)</string>
+    <string name="unsupported">غير مدعوم</string>
+    <string name="android_version_unsatisfied">نسخة أندرويد غير راضية</string>
+    <string name="crashed">تحطم</string>
+    <string name="mount_failed">فشل التحميل</string>
+    <string name="selinux_permissive">SELinux متساهل</string>
+    <string name="sepolicy_incorrect">سياسة SELinux غير صحيحة</string>
     <string name="parasitic_recommend">مدير طفيلي موصي به</string>
     <string name="parasitic_recommend_summary">يدعم LSPosed الآن تطهير النظام لتجنب الكشف. يمكنك إلغاء تثبيت المدير بأمان بعد إنشاء اختصار للمدير الطفيلي. على أي حال يمكنك تثبيت المدير مرة أخرى من /data/adb/lspd/manager.apk.</string>
     <string name="create_shortcut">إنشاء إختصار</string>

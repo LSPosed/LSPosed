@@ -60,10 +60,14 @@
     <string name="info_device">Thiết bị</string>
     <string name="info_system_abi">Hệ thống ABI</string>
     <string name="info_api">Giao diện nhúng</string>
-    <string name="info_dex2oat_wrapper">Trình tối ưu Wrapper</string>
+    <string name="info_dex2oat_wrapper">Trình tối ưu Dex Wrapper</string>
     <string name="supported">Được hỗ trợ</string>
-    <string name="unsupported_android_version">Không được hỗ trợ (phiên bản Android không tương thích)</string>
-    <string name="unsupported_crashed">Không được hỗ trợ (Bị lỗi crash)</string>
+    <string name="unsupported">Không được hỗ trợ</string>
+    <string name="android_version_unsatisfied">Phiên bản Android không hỗ trợ</string>
+    <string name="crashed">Bị lỗi</string>
+    <string name="mount_failed">Gắn kết không thành công</string>
+    <string name="selinux_permissive">SELinux tình trạng dễ dãi</string>
+    <string name="sepolicy_incorrect">Chính sách SELinux không chính xác</string>
     <string name="parasitic_recommend">Quản lý ký sinh khuyến nghị</string>
     <string name="parasitic_recommend_summary">LSPosed giờ đã hỗ trợ hệ thống ký sinh để tránh bị phát hiện. Bạn có thể thoải mái gỡ bỏ trình quản lý nếu đã có lối tắt của trình quản lý ký sinh. Trong bất cứ điều gì ngoài mong muốn bạn vẫn có thể cài đặt lại nó ở đường dẫn /data/adb/lspd/manager.apk.</string>
     <string name="create_shortcut">Tạo lối tắt</string>

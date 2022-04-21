@@ -62,10 +62,14 @@
     <string name="info_device">Aparelho</string>
     <string name="info_system_abi">Interfaces Binárias do Sistema</string>
     <string name="info_api">Interface de Injeção</string>
-    <string name="info_dex2oat_wrapper">Otimizar Encapsulamento</string>
+    <string name="info_dex2oat_wrapper">Otimizar Encapsulamento Dex</string>
     <string name="supported">Compatível</string>
-    <string name="unsupported_android_version">Sem Compatibilidade (versão do Android incompatível)</string>
-    <string name="unsupported_crashed">Sem Compatibilidade (Travou)</string>
+    <string name="unsupported">Incompatível</string>
+    <string name="android_version_unsatisfied">Versão do Android insuficiente</string>
+    <string name="crashed">Travou</string>
+    <string name="mount_failed">Falha na montagem</string>
+    <string name="selinux_permissive">O SELinux está permissivo</string>
+    <string name="sepolicy_incorrect">A política do SELinux está incorreta</string>
     <string name="parasitic_recommend">Recomendado Gerenciador Parasita</string>
     <string name="parasitic_recommend_summary">O LSPosed agora suporta a parasitização do sistema para evitar detecções. Você pode desinstalar o aplicativo do gerenciador com segurança após criar um atalho do gerenciador parasita. Caso necessário, você pode instalar o aplicativo do gerenciador novamente em /data/adb/lspd/manager.apk.</string>
     <string name="create_shortcut">Criar Atalho do Gerenciador Parasita</string>

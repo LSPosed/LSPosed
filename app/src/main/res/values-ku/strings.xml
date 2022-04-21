@@ -62,10 +62,14 @@
     <string name="info_device">Sazî</string>
     <string name="info_system_abi">Pergala ABI</string>
     <string name="info_api">Interface derzîlêdanê</string>
-    <string name="info_dex2oat_wrapper">Optimizer Wrapper</string>
+    <string name="info_dex2oat_wrapper">Dex Optimizer Wrapper</string>
     <string name="supported">Piştgirî kirin</string>
-    <string name="unsupported_android_version">Ne piştgirî (guhertoya Android-ê ne razî ye)</string>
-    <string name="unsupported_crashed">Ne piştgirî (Xezaket)</string>
+    <string name="unsupported">Piştgirî nekirin</string>
+    <string name="android_version_unsatisfied">Guhertoya Android-ê ne razî ye</string>
+    <string name="crashed">Qeza kirin</string>
+    <string name="mount_failed">Çiya têk çû</string>
+    <string name="selinux_permissive">SELinux destûr e</string>
+    <string name="sepolicy_incorrect">Siyaseta SELinux nerast e</string>
     <string name="parasitic_recommend">Rêvebirê Parazît Pêşniyar kirin</string>
     <string name="parasitic_recommend_summary">LSPosed naha parazîtkirina pergalê piştgirî dike da ku ji tespîtê dûr bixe. Piştî ku hûn bi serfirazî kurtebirek rêveberê parazît biafirînin, hûn dikarin bi ewlehî rêveberê rakin. Di her rewşê de hûn dikarin rêveberê ji /data/adb/lspd/manager.apk vegere saz bikin.</string>
     <string name="create_shortcut">Kurtenivîsê çêbikin</string>

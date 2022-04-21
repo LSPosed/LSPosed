@@ -60,10 +60,7 @@
     <string name="info_device">設備</string>
     <string name="info_system_abi">系統ABI</string>
     <string name="info_api">注入介面</string>
-    <string name="info_dex2oat_wrapper">優化器包裝器</string>
     <string name="supported">支援</string>
-    <string name="unsupported_android_version">不支援（Android 版本不符合要求）</string>
-    <string name="unsupported_crashed">不支援（已當機）</string>
     <string name="parasitic_recommend">推薦使用寄生管理器</string>
     <string name="parasitic_recommend_summary">LSPosed 現在支援寄生到系統以避免檢測。
 在成功建立寄生管理器的捷徑後你可以安全地移除管理器。
@@ -127,6 +124,7 @@
     <string name="menu_show_modules">模組</string>
     <string name="menu_show_denylist">拒絕名單</string>
     <string name="failed_to_save_scope_list">作用域名單保存失敗</string>
+    <string name="app_version">版本：%1$s</string>
     <string name="use_recommended">推薦應用程式</string>
     <string name="no_scope_selected_has_recommended">未選擇任何應用程式。選擇推薦的？</string>
     <string name="use_recommended_message">選擇推薦的應用程式?</string>

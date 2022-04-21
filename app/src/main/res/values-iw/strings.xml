@@ -67,10 +67,14 @@
     <string name="info_device">מכשיר</string>
     <string name="info_system_abi">ABI מערכת</string>
     <string name="info_api">ממשק הזרקה</string>
-    <string name="info_dex2oat_wrapper">מעטפת אופטימיזציה</string>
+    <string name="info_dex2oat_wrapper">עטיפה של Dex Optimizer</string>
     <string name="supported">נתמך</string>
-    <string name="unsupported_android_version">לא נתמך (גרסת אנדרואיד לא מרוצה)</string>
-    <string name="unsupported_crashed">לא נתמך (קרס)</string>
+    <string name="unsupported">לא נתמך</string>
+    <string name="android_version_unsatisfied">גרסת אנדרואיד לא מרוצה</string>
+    <string name="crashed">התרסק</string>
+    <string name="mount_failed">הר נכשל</string>
+    <string name="selinux_permissive">SELinux מתירנית</string>
+    <string name="sepolicy_incorrect">מדיניות SELinux שגויה</string>
     <string name="parasitic_recommend">מנהל טפילים מומלץ</string>
     <string name="parasitic_recommend_summary">LSPosed תומך כעת בטפילת מערכת כדי למנוע זיהוי. אתה יכול להסיר בבטחה את המנהל לאחר יצירת קיצור מוצלח של המנהל הטפילי. בכל מקרה אתה יכול להתקין את המנהל בחזרה מ /data/adb/lspd/manager.apk.</string>
     <string name="create_shortcut">צור קיצור דרך</string>

@@ -62,10 +62,14 @@
     <string name="info_device">Συσκευή</string>
     <string name="info_system_abi">Σύστημα ABI</string>
     <string name="info_api">Διεπαφή Έγχυσης</string>
-    <string name="info_dex2oat_wrapper">Βελτιστοποιητής Wrapper</string>
+    <string name="info_dex2oat_wrapper">Dex Optimizer Wrapper</string>
     <string name="supported">Υποστηριζόμενο</string>
-    <string name="unsupported_android_version">Μη υποστηριζόμενη (έκδοση Android που δεν ικανοποιείται)</string>
-    <string name="unsupported_crashed">Μη υποστηριζόμενο (συνετρίβη)</string>
+    <string name="unsupported">Μη υποστηριζόμενο</string>
+    <string name="android_version_unsatisfied">Ανικανοποίητη έκδοση Android</string>
+    <string name="crashed">Συνετρίβη</string>
+    <string name="mount_failed">Mount απέτυχε</string>
+    <string name="selinux_permissive">Το SELinux είναι επιτρεπτικό</string>
+    <string name="sepolicy_incorrect">Η πολιτική SELinux είναι λανθασμένη</string>
     <string name="parasitic_recommend">Προτεινόμενος Παρασιτικός Διαχειριστής</string>
     <string name="parasitic_recommend_summary">Το LSPosed τώρα υποστηρίζει παρασιτισμό συστήματος για την αποφυγή ανίχνευσης. Μπορείτε να απεγκαταστήσετε με ασφάλεια τον διαχειριστή μετά την επιτυχή δημιουργία μιας συντόμευσης του παρασιτικού διαχειριστή. Σε κάθε περίπτωση μπορείτε να εγκαταστήσετε το διαχειριστή ξανά από το /data/adb/lspd/manager.apk.</string>
     <string name="create_shortcut">Δημιουργία συντόμευσης</string>

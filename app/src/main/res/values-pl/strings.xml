@@ -66,10 +66,14 @@
     <string name="info_device">Urządzenie</string>
     <string name="info_system_abi">System ABI</string>
     <string name="info_api">Interfejs wstrzykiwania</string>
-    <string name="info_dex2oat_wrapper">Optymalizator Wrapper</string>
+    <string name="info_dex2oat_wrapper">Optymalizator Dex Optimizer Wrapper</string>
     <string name="supported">Obsługiwana strona</string>
-    <string name="unsupported_android_version">Nieobsługiwana (niezadowalająca wersja systemu Android)</string>
-    <string name="unsupported_crashed">Nieobsługiwane (zawieszone)</string>
+    <string name="unsupported">Nieobsługiwana strona</string>
+    <string name="android_version_unsatisfied">Niezadowolenie z wersji na Androida</string>
+    <string name="crashed">Rozbita</string>
+    <string name="mount_failed">Montaż nie powiódł się</string>
+    <string name="selinux_permissive">SELinux jest permisywny</string>
+    <string name="sepolicy_incorrect">Zasady SELinux są nieprawidłowe</string>
     <string name="parasitic_recommend">Rekomendowany menadżer Parasitic</string>
     <string name="parasitic_recommend_summary">LSPosed wspiera teraz pasożyty systemowe, aby uniknąć wykrycia. Możesz odinstalować menadżer po pomyśłnym utworzeniu skrótu w parastic manager. W każdym wypadku możesz zainstalować menadżer spowrotem z pliku /data/adb/lspd/manager.apk.</string>
     <string name="create_shortcut">Utwórz skrót</string>

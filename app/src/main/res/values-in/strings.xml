@@ -60,10 +60,14 @@
     <string name="info_device">Perangkat</string>
     <string name="info_system_abi">Sistem ABI</string>
     <string name="info_api">Antarmuka Injeksi</string>
-    <string name="info_dex2oat_wrapper">Pengoptimal Pengemas</string>
+    <string name="info_dex2oat_wrapper">Pembungkus Pengoptimal Dex</string>
     <string name="supported">Didukung</string>
-    <string name="unsupported_android_version">Tidak didukung (versi Android tidak terpenuhi)</string>
-    <string name="unsupported_crashed">Tidak didukung (Rusak)</string>
+    <string name="unsupported">Tidak didukung</string>
+    <string name="android_version_unsatisfied">Versi Android tidak puas</string>
+    <string name="crashed">Hancur</string>
+    <string name="mount_failed">Pemasangan gagal</string>
+    <string name="selinux_permissive">SELinux permisif</string>
+    <string name="sepolicy_incorrect">Kebijakan SELinux salah</string>
     <string name="parasitic_recommend">Manajer Parasit Direkomendasikan</string>
     <string name="parasitic_recommend_summary">LSPosed sekarang mendukung parasitisasi sistem untuk menghindari deteksi. Anda dapat menghapus instalan manajer dengan aman setelah berhasil membuat pintasan manajer parasit. Bagaimanapun, Anda dapat menginstal kembali manajer dari /data/adb/lspd/manager.apk.</string>
     <string name="create_shortcut">Buat pintasan</string>
