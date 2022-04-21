@@ -62,10 +62,14 @@
     <string name="info_device">Laite</string>
     <string name="info_system_abi">Järjestelmä ABI</string>
     <string name="info_api">Pistoksen Käyttöliittymä</string>
-    <string name="info_dex2oat_wrapper">Optimointilaitteen kääre</string>
+    <string name="info_dex2oat_wrapper">Dex Optimizer Wrapper</string>
     <string name="supported">Tuettu</string>
-    <string name="unsupported_android_version">Ei tuettu (Android-versio ei täytä vaatimuksia)</string>
-    <string name="unsupported_crashed">Ei tuettu (kaatui)</string>
+    <string name="unsupported">Ei tuettu</string>
+    <string name="android_version_unsatisfied">Android-versio tyytymätön</string>
+    <string name="crashed">Crashed</string>
+    <string name="mount_failed">Kiinnitys epäonnistui</string>
+    <string name="selinux_permissive">SELinux on salliva</string>
+    <string name="sepolicy_incorrect">SELinux-käytäntö on virheellinen</string>
     <string name="parasitic_recommend">Suositeltu Loistava Johtaja</string>
     <string name="parasitic_recommend_summary">LSPosed tukee nyt järjestelmän parasitization välttää havaitsemista. Voit turvallisesti poistaa managerin kun onnistuneesti luoda pikakuvake loishallintaan. Joka tapauksessa voit asentaa hallintaohjelman takaisin osoitteesta /data/adb/lspd/manager.apk.</string>
     <string name="create_shortcut">Luo pikakuvake</string>
