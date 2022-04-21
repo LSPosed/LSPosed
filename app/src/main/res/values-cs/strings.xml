@@ -66,10 +66,14 @@
     <string name="info_device">Zařízení</string>
     <string name="info_system_abi">Systémové ABI (architektura)</string>
     <string name="info_api">Závislost modulu</string>
-    <string name="info_dex2oat_wrapper">Optimizer Wrapper</string>
+    <string name="info_dex2oat_wrapper">Dex Optimizer Wrapper</string>
     <string name="supported">Podporováno</string>
-    <string name="unsupported_android_version">Nepodporováno (verze Androidu není spokojena)</string>
-    <string name="unsupported_crashed">Nepodporováno (selhání)</string>
+    <string name="unsupported">Nepodporováno</string>
+    <string name="android_version_unsatisfied">Verze Androidu není spokojena</string>
+    <string name="crashed">Havaroval</string>
+    <string name="mount_failed">Připojení se nezdařilo</string>
+    <string name="selinux_permissive">SELinux je permisivní</string>
+    <string name="sepolicy_incorrect">Zásady SELinuxu jsou nesprávné</string>
     <string name="parasitic_recommend">Doporučený parazitický správce</string>
     <string name="parasitic_recommend_summary">LSPosed nyní podporuje parazitizaci systému, aby se zabránilo detekci. Správce můžete bezpečně odinstalovat po úspěšném vytvoření zástupce parazitického manažera. V jakémkoli případě můžete správce nainstalovat zpět z /data/adb/lspd/manager.apk.</string>
     <string name="create_shortcut">Vytvořit zástupce</string>
