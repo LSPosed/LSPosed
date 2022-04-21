@@ -18,15 +18,8 @@
 #
 
 MODDIR=${0%/*}
-MODNAME=${MODDIR##*/}
-MAGISK_PATH=$(magisk --path)
 
 rm -f "/data/local/tmp/daemon.apk"
 cd "$MODDIR"
-
-if [ "$(getprop ro.build.version.sdk)" -ge 29 ]; then
-  mount --bind "$MAGISK_PATH/.magisk/modules/$MODNAME/bin/dex2oat32" "/apex/com.android.art/bin/dex2oat32"
-  mount --bind "$MAGISK_PATH/.magisk/modules/$MODNAME/bin/dex2oat64" "/apex/com.android.art/bin/dex2oat64"
-fi
 
 unshare -m sh -c "$MODDIR/daemon &"

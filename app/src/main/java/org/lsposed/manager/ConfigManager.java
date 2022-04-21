@@ -27,6 +27,7 @@ import android.os.ParcelFileDescriptor;
 import android.os.RemoteException;
 import android.util.Log;
 
+import org.lsposed.lspd.ILSPManagerService;
 import org.lsposed.lspd.models.Application;
 import org.lsposed.lspd.models.UserInfo;
 import org.lsposed.manager.adapters.ScopeAdapter;
@@ -35,12 +36,8 @@ import org.lsposed.manager.receivers.LSPManagerServiceHolder;
 import java.io.File;
 import java.util.ArrayList;
 import java.util.Arrays;
-import java.util.HashMap;
 import java.util.List;
-import java.util.Map;
 import java.util.Set;
-
-import io.github.xposed.xposedservice.utils.ParceledListSlice;
 
 public class ConfigManager {
 
@@ -360,12 +357,12 @@ public class ConfigManager {
         }
     }
 
-    public static boolean dex2oatWrapperAlive() {
+    public static int getDex2OatWrapperCompatibility() {
         try {
-            return LSPManagerServiceHolder.getService().dex2oatWrapperAlive();
+            return LSPManagerServiceHolder.getService().getDex2OatWrapperCompatibility();
         } catch (RemoteException e) {
             Log.e(App.TAG, Log.getStackTraceString(e));
-            return false;
+            return ILSPManagerService.DEX2OAT_CRASHED;
         }
     }
 }

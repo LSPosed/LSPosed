@@ -36,6 +36,8 @@
 # define LP_SELECT(lp32, lp64) lp32
 #endif
 
+#define ID_VEC(is64, is_debug) (((is64) << 1) | (is_debug))
+
 char kTmpDir[] = "placeholder_/dev/0123456789abcdef";
 
 static ssize_t xrecvmsg(int sockfd, struct msghdr *msg, int flags) {
@@ -106,7 +108,7 @@ int main(int argc, char **argv) {
         PLOGE("failed to connect to %s", sock.sun_path);
         return 1;
     }
-    write_int(sock_fd, LP_SELECT(32, 64));
+    write_int(sock_fd, ID_VEC(LP_SELECT(0, 1), strstr(argv[0], "dex2oatd") != NULL));
     int stock_fd = recv_fd(sock_fd);
     read_int(sock_fd);
     close(sock_fd);

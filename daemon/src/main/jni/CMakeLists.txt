@@ -4,7 +4,7 @@ cmake_minimum_required(VERSION 3.4.1)
 add_subdirectory(${EXTERNAL_ROOT} external)
 
 set(SOURCES
-        dex2oat.c
+        dex2oat.cpp
         logcat.cpp
         obfuscation.cpp
         )

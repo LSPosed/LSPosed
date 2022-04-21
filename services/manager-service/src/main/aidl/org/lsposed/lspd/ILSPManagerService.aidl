@@ -6,6 +6,12 @@ import org.lsposed.lspd.models.Application;
 
 
 interface ILSPManagerService {
+    const int DEX2OAT_OK = 0;
+    const int DEX2OAT_CRASHED = 1;
+    const int DEX2OAT_MOUNT_FAILED = 2;
+    const int DEX2OAT_SELINUX_PERMISSIVE = 3;
+    const int DEX2OAT_SEPOLICY_INCORRECT = 4;
+
     String getApi() = 1;
 
     ParceledListSlice<PackageInfo> getInstalledPackagesFromAllUsers(int flags, boolean filterNoProcess) = 2;
@@ -80,5 +86,5 @@ interface ILSPManagerService {
 
     void setDexObfuscate(boolean enable) = 43;
 
-    boolean dex2oatWrapperAlive() = 44;
+    int getDex2OatWrapperCompatibility() = 44;
 }

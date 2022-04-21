@@ -34,6 +34,7 @@ import androidx.annotation.Nullable;
 import androidx.core.text.HtmlCompat;
 import androidx.fragment.app.DialogFragment;
 
+import org.lsposed.lspd.ILSPManagerService;
 import org.lsposed.manager.BuildConfig;
 import org.lsposed.manager.ConfigManager;
 import org.lsposed.manager.R;
@@ -107,7 +108,7 @@ public class HomeFragment extends BaseFragment {
             } else {
                 binding.updateCard.setVisibility(View.GONE);
             }
-            boolean dex2oatAbnormal = !ConfigManager.dex2oatWrapperAlive() && !ConfigManager.dex2oatFlagsLoaded();
+            boolean dex2oatAbnormal = ConfigManager.getDex2OatWrapperCompatibility() != ILSPManagerService.DEX2OAT_OK && !ConfigManager.dex2oatFlagsLoaded();
             if (!ConfigManager.isSepolicyLoaded() || !ConfigManager.systemServerRequested() || dex2oatAbnormal) {
                 binding.statusTitle.setText(R.string.partial_activated);
                 binding.statusIcon.setImageResource(R.drawable.ic_round_warning_24);
@@ -158,11 +159,23 @@ public class HomeFragment extends BaseFragment {
             binding.api.setText(ConfigManager.getApi());
             binding.frameworkVersion.setText(String.format(LocaleDelegate.getDefaultLocale(), "%1$s (%2$d)", ConfigManager.getXposedVersionName(), ConfigManager.getXposedVersionCode()));
             if (Build.VERSION.SDK_INT < Build.VERSION_CODES.Q) {
-                binding.dex2oatWrapper.setText(R.string.unsupported_android_version);
-            } else if (ConfigManager.dex2oatWrapperAlive()) {
-                binding.dex2oatWrapper.setText(R.string.supported);
-            } else {
-                binding.dex2oatWrapper.setText(R.string.unsupported_crashed);
+                binding.dex2oatWrapper.setText(String.format(LocaleDelegate.getDefaultLocale(), "%s (%s)", getString(R.string.unsupported), getString(R.string.android_version_unsatisfied)));
+            } else switch (ConfigManager.getDex2OatWrapperCompatibility()) {
+                case ILSPManagerService.DEX2OAT_OK:
+                    binding.dex2oatWrapper.setText(R.string.supported);
+                    break;
+                case ILSPManagerService.DEX2OAT_CRASHED:
+                    binding.dex2oatWrapper.setText(String.format(LocaleDelegate.getDefaultLocale(), "%s (%s)", getString(R.string.unsupported), getString(R.string.crashed)));
+                    break;
+                case ILSPManagerService.DEX2OAT_MOUNT_FAILED:
+                    binding.dex2oatWrapper.setText(String.format(LocaleDelegate.getDefaultLocale(), "%s (%s)", getString(R.string.unsupported), getString(R.string.mount_failed)));
+                    break;
+                case ILSPManagerService.DEX2OAT_SELINUX_PERMISSIVE:
+                    binding.dex2oatWrapper.setText(String.format(LocaleDelegate.getDefaultLocale(), "%s (%s)", getString(R.string.unsupported), getString(R.string.selinux_permissive)));
+                    break;
+                case ILSPManagerService.DEX2OAT_SEPOLICY_INCORRECT:
+                    binding.dex2oatWrapper.setText(String.format(LocaleDelegate.getDefaultLocale(), "%s (%s)", getString(R.string.unsupported), getString(R.string.sepolicy_incorrect)));
+                    break;
             }
         } else {
             binding.apiVersion.setText(R.string.not_installed);
@@ -186,6 +199,10 @@ public class HomeFragment extends BaseFragment {
                 activity.getString(R.string.info_api) +
                 "\n" +
                 binding.api.getText() +
+                "\n\n" +
+                activity.getString(R.string.info_dex2oat_wrapper) +
+                "\n" +
+                binding.dex2oatWrapper.getText() +
                 "\n\n" +
                 activity.getString(R.string.info_framework_version) +
                 "\n" +

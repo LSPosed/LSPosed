@@ -18,26 +18,18 @@
  */
 
 //
-// Created by Nullptr on 2022/4/2.
+// Created by Nullptr on 2022/4/20.
 //
 
-#include <jni.h>
-#include <sys/system_properties.h>
-#include <unistd.h>
-#include <stdlib.h>
+#pragma once
 
-#include "logging.h"
-
-char kTmpDir[] = "placeholder_/dev/0123456789abcdef";
-
-JNIEXPORT jstring JNICALL
-Java_org_lsposed_lspd_service_Dex2OatService_getDevPath(JNIEnv *env, jclass clazz) {
-    return (*env)->NewStringUTF(env, kTmpDir + 12);
-}
-
-JNIEXPORT void JNICALL
-Java_org_lsposed_lspd_service_Dex2OatService_fallback(JNIEnv *env, jclass clazz) {
-    LOGI("do fallback");
-    system("nsenter -m -t 1 umount /apex/com.android.art/bin/dex2oat*");
-    __system_property_set("dalvik.vm.dex2oat-flags", "--inline-max-code-units=0");
+inline int32_t GetAndroidApiLevel() {
+    static int32_t api_level = []() {
+        char prop_value[PROP_VALUE_MAX];
+        __system_property_get("ro.build.version.sdk", prop_value);
+        int base = atoi(prop_value);
+        __system_property_get("ro.build.version.preview_sdk", prop_value);
+        return base + atoi(prop_value);
+    }();
+    return api_level;
 }
