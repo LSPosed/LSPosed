@@ -62,10 +62,14 @@
     <string name="info_device">उपकरण</string>
     <string name="info_system_abi">सिस्टम एबीआई</string>
     <string name="info_api">इंजेक्शन इंटरफ़ेस</string>
-    <string name="info_dex2oat_wrapper">अनुकूलक आवरण</string>
+    <string name="info_dex2oat_wrapper">डेक्स ऑप्टिमाइज़र रैपर</string>
     <string name="supported">समर्थित</string>
-    <string name="unsupported_android_version">असमर्थित (Android संस्करण असंतुष्ट)</string>
-    <string name="unsupported_crashed">असमर्थित (दुर्घटनाग्रस्त)</string>
+    <string name="unsupported">असमर्थित</string>
+    <string name="android_version_unsatisfied">Android संस्करण असंतुष्ट</string>
+    <string name="crashed">दुर्घटनाग्रस्त</string>
+    <string name="mount_failed">माउंट विफल</string>
+    <string name="selinux_permissive">SELinux अनुमेय है</string>
+    <string name="sepolicy_incorrect">SELinux नीति गलत है</string>
     <string name="parasitic_recommend">परजीवी प्रबंधक अनुशंसित</string>
     <string name="parasitic_recommend_summary">LSPosed अब पता लगाने से बचने के लिए सिस्टम परजीवीकरण का समर्थन करता है। परजीवी प्रबंधक का शॉर्टकट सफलतापूर्वक बनाने के बाद आप प्रबंधक को सुरक्षित रूप से अनइंस्टॉल कर सकते हैं। किसी भी स्थिति में आप प्रबंधक को /data/adb/lspd/manager.apk से वापस स्थापित कर सकते हैं।</string>
     <string name="create_shortcut">शॉर्टकट बनाएं</string>
