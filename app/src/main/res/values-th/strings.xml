@@ -60,10 +60,14 @@
     <string name="info_device">อุปกรณ์</string>
     <string name="info_system_abi">ระบบ ABI</string>
     <string name="info_api">ส่วนต่อประสานการฉีด</string>
-    <string name="info_dex2oat_wrapper">Wrapper ของเครื่องมือเพิ่มประสิทธิภาพ</string>
+    <string name="info_dex2oat_wrapper">Dex Optimizer Wrapper</string>
     <string name="supported">ได้รับการสนับสนุน</string>
-    <string name="unsupported_android_version">ไม่รองรับ (เวอร์ชัน Android ปัจจุบัน)</string>
-    <string name="unsupported_crashed">ไม่รองรับ (ขัดข้อง)</string>
+    <string name="unsupported">ไม่รองรับ</string>
+    <string name="android_version_unsatisfied">เวอร์ชัน Android ไม่พอใจ</string>
+    <string name="crashed">พัง</string>
+    <string name="mount_failed">เมานต์ล้มเหลว</string>
+    <string name="selinux_permissive">SELinux ได้รับอนุญาต</string>
+    <string name="sepolicy_incorrect">นโยบาย SELinux ไม่ถูกต้อง</string>
     <string name="parasitic_recommend">แนะนำ กำจัดไวรัส</string>
     <string name="parasitic_recommend_summary">ตอนนี้ LSPosed รองรับการทำให้เป็นกาฝากของระบบเพื่อหลีกเลี่ยงการตรวจจับ คุณสามารถถอนการติดตั้งตัวจัดการได้อย่างปลอดภัยหลังจากสร้างทางลัดของตัวจัดการปรสิตเรียบร้อยแล้ว ไม่ว่าในกรณีใด คุณสามารถติดตั้งตัวจัดการกลับจาก /data/adb/lspd/manager.apk</string>
     <string name="create_shortcut">สร้างทางลัด</string>
