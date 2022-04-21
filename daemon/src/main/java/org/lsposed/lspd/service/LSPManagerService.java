@@ -75,6 +75,7 @@ import java.io.FileOutputStream;
 import java.io.IOException;
 import java.lang.reflect.InvocationTargetException;
 import java.util.Collections;
+import java.util.HashMap;
 import java.util.LinkedList;
 import java.util.List;
 import java.util.UUID;
@@ -87,10 +88,12 @@ public class LSPManagerService extends ILSPManagerService.Stub {
     // this maybe useful when obtaining the manager binder
     private static String RANDOM_UUID = null;
     private static final String SHORTCUT_ID = "org.lsposed.manager.shortcut";
-    public static final int NOTIFICATION_ID = 114514;
     public static final String CHANNEL_ID = "lsposed";
     public static final String CHANNEL_NAME = "LSPosed Manager";
     public static final int CHANNEL_IMP = NotificationManager.IMPORTANCE_HIGH;
+
+    private static final String NOTIFICATION_TAG = "114514";
+    private static final HashMap<String, Integer> notificationIds = new HashMap<>();
 
     private static final HandlerThread worker = new HandlerThread("manager worker");
     private static final Handler workerHandler;
@@ -220,6 +223,23 @@ public class LSPManagerService extends ILSPManagerService.Stub {
         }
     }
 
+    private static String getNotificationIdKey(String modulePackageName,
+                                               int moduleUserId,
+                                               boolean enabled,
+                                               boolean systemModule) {
+        return modulePackageName + ":" + moduleUserId + ":" + enabled + ":" + systemModule;
+    }
+
+    private static int pushAndGetNotificationId(String modulePackageName,
+                                                int moduleUserId,
+                                                boolean enabled,
+                                                boolean systemModule) {
+        var idKey = getNotificationIdKey(modulePackageName, moduleUserId, enabled, systemModule);
+        var idValue = idKey.hashCode();
+        notificationIds.put(idKey, idValue);
+        return idValue;
+    }
+
     public static void showNotification(String modulePackageName,
                                         int moduleUserId,
                                         boolean enabled,
@@ -253,16 +273,25 @@ public class LSPManagerService extends ILSPManagerService.Stub {
                     new NotificationChannel(CHANNEL_ID, CHANNEL_NAME, CHANNEL_IMP);
             im.createNotificationChannels("android",
                     new android.content.pm.ParceledListSlice<>(Collections.singletonList(channel)));
-            im.enqueueNotificationWithTag("android", "android", "114514", NOTIFICATION_ID, notification, 0);
+            im.enqueueNotificationWithTag("android", "android", NOTIFICATION_TAG,
+                    pushAndGetNotificationId(modulePackageName, moduleUserId, enabled, systemModule),
+                    notification, 0);
         } catch (Throwable e) {
             Log.e(TAG, "post notification", e);
         }
     }
 
-    public static void cancelNotification() {
+    public static void cancelNotification(String modulePackageName,
+                                          int moduleUserId,
+                                          boolean enabled,
+                                          boolean systemModule) {
         try {
+            var idKey = getNotificationIdKey(modulePackageName, moduleUserId, enabled, systemModule);
+            var notificationId = notificationIds.get(idKey);
+            if (notificationId == null) return;
             var im = INotificationManager.Stub.asInterface(android.os.ServiceManager.getService("notification"));
-            im.cancelNotificationWithTag("android", "android", "114514", NOTIFICATION_ID, 0);
+            im.cancelNotificationWithTag("android", "android", NOTIFICATION_TAG, notificationId, 0);
+            notificationIds.remove(idKey);
         } catch (Throwable e) {
             Log.e(TAG, "cancel notification", e);
         }
