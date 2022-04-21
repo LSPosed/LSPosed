@@ -30,12 +30,12 @@
     <string name="Settings">تنظیمات</string>
     <string name="feedback_or_suggestion">بازخورد یا پیشنهادی بدهید</string>
     <string name="About">دەربارە</string>
-    <string name="report_issue">ڕیپۆرتی کێشە</string>
-    <string name="module_repo">ماژولەکان</string>
-    <string name="module_repo_loading">داگرتن …</string>
-    <string name="module_repo_up_to_date">هەموو ماژۆلەکان ئەپدەیت کرانەوە</string>
+    <string name="report_issue">گزارش مشکل</string>
+    <string name="module_repo">مخزن</string>
+    <string name="module_repo_loading">در حال بارگذاری…</string>
+    <string name="module_repo_up_to_date">همه ماژول ها به روز هستند</string>
     <plurals name="module_repo_upgradable">
-        <item quantity="one">%d ئەوەندە ئەپدەیت دەکرێنەوە </item>
+        <item quantity="one">%d ماژول قابل ارتقا</item>
         <item quantity="other">%d قابل بروز شدن هستند</item>
     </plurals>
     <string name="about_view_source_code"><![CDATA[کد منبع موجود در %1$s<br/> عضو شوید در %2$s کانال ما]]></string>
@@ -62,10 +62,14 @@
     <string name="info_device">دستگاه</string>
     <string name="info_system_abi">سیستم ABI</string>
     <string name="info_api">رابط کاربری نصب</string>
-    <string name="info_dex2oat_wrapper">بسته بندی بهینه ساز</string>
+    <string name="info_dex2oat_wrapper">بسته‌بندی دکس بهینه‌ساز</string>
     <string name="supported">پشتیبانی</string>
-    <string name="unsupported_android_version">پشتیبانی نشده (نسخه اندروید ناراضی)</string>
-    <string name="unsupported_crashed">پشتیبانی نشده (خراب شده)</string>
+    <string name="unsupported">پشتیبانی نمیشود</string>
+    <string name="android_version_unsatisfied">نسخه اندروید مناسب نبست</string>
+    <string name="crashed">هنگ کرد</string>
+    <string name="mount_failed">نصب انجام نشد</string>
+    <string name="selinux_permissive">SELinux مجاز است</string>
+    <string name="sepolicy_incorrect">خط مشی SELinux نادرست است</string>
     <string name="parasitic_recommend">مدیر انگلی توصیه می شود</string>
     <string name="parasitic_recommend_summary">LSPosed اکنون از انگلی شدن سیستم برای جلوگیری از شناسایی پشتیبانی می کند. پس از ایجاد موفقیت آمیز میانبر مدیر انگلی، می توانید با خیال راحت مدیر را حذف نصب کنید. در هر صورت می توانید مدیر را از /data/adb/lspd/manager.apk نصب کنید.</string>
     <string name="create_shortcut">ایجاد میان‌بر</string>
@@ -176,7 +180,7 @@
     <string name="settings_language">زبان</string>
     <string name="settings_translation_contributors">مترجم همکار</string>
     <string name="settings_translation">کمک در ترجمه</string>
-    <string name="settings_translation_summary">به ما کمک کنید %s به زبان شما ترجمه کنیم</string>
+    <string name="settings_translation_summary">به ما کمک کنید تا %s را به زبان شما ترجمه کنیم</string>
     <string name="pref_title_enable_auto_add_shortcut">به صورت خودکار یک میان‌بر اضافه کنید</string>
     <string name="create_shortcut_summary">دستی میانبر مدیر انگلی ایجاد کنید</string>
     <string name="settings_enable_auto_add_shortcut_summary">در صورت غیرفعال شدن در مدیر غیر انگلی، میان بر جدیدی اضافه نخواهد شد</string>
