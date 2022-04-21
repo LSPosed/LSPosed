@@ -63,11 +63,11 @@
     <string name="info_dex2oat_wrapper">Dex 优化器包装</string>
     <string name="supported">支持</string>
     <string name="unsupported">不支持</string>
-    <string name="android_version_unsatisfied">安卓版不满意</string>
-    <string name="crashed">坠毁</string>
-    <string name="mount_failed">安装失败</string>
-    <string name="selinux_permissive">SELinux是容许的</string>
-    <string name="sepolicy_incorrect">SELinux政策不正确</string>
+    <string name="android_version_unsatisfied">系统版本不受支持</string>
+    <string name="crashed">崩溃</string>
+    <string name="mount_failed">挂载失败</string>
+    <string name="selinux_permissive">SELinux 处于宽容模式</string>
+    <string name="sepolicy_incorrect">SELinux 规则异常</string>
     <string name="parasitic_recommend">推荐使用寄生管理器</string>
     <string name="parasitic_recommend_summary">LSPosed 现在支持寄生管理器到系统以避免检测。您可以在成功创建寄生管理器图标后卸载管理器。在任何情况下，您都可以从 /data/adb/lspd/manager.apk 安装管理器。</string>
     <string name="create_shortcut">创建快捷方式</string>
