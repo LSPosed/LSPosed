@@ -62,10 +62,14 @@
     <string name="info_device">Enhet</string>
     <string name="info_system_abi">System ABI</string>
     <string name="info_api">Injektionsgränssnitt</string>
-    <string name="info_dex2oat_wrapper">Optimering av omslagsformat</string>
+    <string name="info_dex2oat_wrapper">Dex Optimizer Wrapper</string>
     <string name="supported">Stöds</string>
-    <string name="unsupported_android_version">Stöds inte (Android-versionen är otillfredsställande)</string>
-    <string name="unsupported_crashed">Ej stödd (kraschade)</string>
+    <string name="unsupported">Ej stödd</string>
+    <string name="android_version_unsatisfied">Android-version otillfredsställd</string>
+    <string name="crashed">Kraschade</string>
+    <string name="mount_failed">Montering misslyckades</string>
+    <string name="selinux_permissive">SELinux är tillåtande</string>
+    <string name="sepolicy_incorrect">SELinux-politiken är felaktig</string>
     <string name="parasitic_recommend">Parasitic Manager rekommenderas</string>
     <string name="parasitic_recommend_summary">LSPosed stöder nu systemparasitering för att undvika upptäckt. Du kan tryggt avinstallera hanteraren efter att ha skapat en genväg till den parasiterande hanteraren. Du kan i vilket fall installera hanteraren från /data/adb/lspd/manager.apk.</string>
     <string name="create_shortcut">Skapa genväg</string>
