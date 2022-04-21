@@ -236,7 +236,7 @@ public class LSPManagerService extends ILSPManagerService.Stub {
                                                 boolean systemModule) {
         var idKey = getNotificationIdKey(modulePackageName, moduleUserId, enabled, systemModule);
         var idValue = idKey.hashCode();
-        notificationIds.put(idKey, idValue);
+        notificationIds.putIfAbsent(idKey, idValue);
         return idValue;
     }
 
