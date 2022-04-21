@@ -62,10 +62,14 @@
     <string name="info_device">Dispositivo</string>
     <string name="info_system_abi">ABI del sistema</string>
     <string name="info_api">Interfaccia di iniezione</string>
-    <string name="info_dex2oat_wrapper">Ottimizzatore Wrapper</string>
+    <string name="info_dex2oat_wrapper">Dex Optimizer Wrapper</string>
     <string name="supported">Supportato</string>
-    <string name="unsupported_android_version">Non supportato (versione di Android non soddisfatta)</string>
-    <string name="unsupported_crashed">Non supportato (arresto anomalo)</string>
+    <string name="unsupported">Non supportato</string>
+    <string name="android_version_unsatisfied">Versione di Android non soddisfatta</string>
+    <string name="crashed">Arrestato in modo anomalo</string>
+    <string name="mount_failed">Mount fallito</string>
+    <string name="selinux_permissive">SELinux è in modalità permissiva</string>
+    <string name="sepolicy_incorrect">La politica di SELinux non è corretta</string>
     <string name="parasitic_recommend">Manager parassitario consigliato</string>
     <string name="parasitic_recommend_summary">LSPosed ora supporta la parassitizzazione del sistema per evitare il rilevamento. Puoi disinstallare in modo sicuro il manager dopo aver creato con successo una scorciatoia del manager parassitario. In ogni caso è possibile installare il manager da /data/adb/lspd/manager.apk.</string>
     <string name="create_shortcut">Crea scorciatoia</string>
@@ -132,7 +136,7 @@
     <string name="no_scope_selected_has_recommended">Non hai selezionato nessuna app. Selezionare le app consigliate?</string>
     <string name="use_recommended_message">Selezionare le app consigliate?</string>
     <string name="module_is_not_activated_yet">Il modulo Xposed non è ancora attivo</string>
-    <string name="requested_by_module">Consigliato</string>
+    <string name="requested_by_module">Seleziona consigliate</string>
     <string name="update_available">Aggiornamento disponibile: %1$s</string>
     <string name="module_disabled_no_selection">Il modulo %s è stato disabilitato poiché nessuna app è stata selezionata.</string>
     <string name="android_framework">Framework di sistema</string>
@@ -222,7 +226,7 @@
     <string name="color_light_green">Verde chiaro</string>
     <string name="color_lime">Lime</string>
     <string name="color_yellow">Giallo</string>
-    <string name="color_amber">Ambrato</string>
+    <string name="color_amber">Ambra</string>
     <string name="color_orange">Arancione</string>
     <string name="color_deep_orange">Arancione scuro</string>
     <string name="color_brown">Marrone</string>
