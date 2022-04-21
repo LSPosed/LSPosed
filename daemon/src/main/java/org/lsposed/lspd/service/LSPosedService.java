@@ -178,6 +178,8 @@ public class LSPosedService extends ILSPosedService.Stub {
             boolean enabled = Arrays.asList(enabledModules).contains(packageName);
             if (!(Intent.ACTION_UID_REMOVED.equals(action) || Intent.ACTION_PACKAGE_FULLY_REMOVED.equals(action) || allUsers))
                 LSPManagerService.showNotification(packageName, userId, enabled, systemModule);
+            // Canceled the notification when Xposed Module removed
+            if (Intent.ACTION_PACKAGE_FULLY_REMOVED.equals(action)) LSPManagerService.cancelNotification();
         }
     }
 

@@ -259,6 +259,15 @@ public class LSPManagerService extends ILSPManagerService.Stub {
         }
     }
 
+    public static void cancelNotification() {
+        try {
+            var im = INotificationManager.Stub.asInterface(android.os.ServiceManager.getService("notification"));
+            im.cancelNotificationWithTag("android", "android", "114514", NOTIFICATION_ID, 0);
+        } catch (Throwable e) {
+            Log.e(TAG, "cancel notification", e);
+        }
+    }
+
     @SuppressLint("WrongConstant")
     public static void broadcastIntent(Intent inIntent) {
         var intent = new Intent("org.lsposed.manager.NOTIFICATION");
