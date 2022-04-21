@@ -43,7 +43,7 @@ const char *kDex2oat32Path, *kDex2oatDebug32Path;
 const char *kDex2oat64Path, *kDex2oatDebug64Path;
 
 char kFakeBin32[PATH_MAX], kFakeBin64[PATH_MAX];
-char kTmpDir[] = "placeholder_/dev/0123456789abcdef";
+char kTmpDir[] = "placeholder_/dev/0123456789abcdef\0";
 
 extern "C"
 JNIEXPORT void JNICALL
