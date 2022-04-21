@@ -62,10 +62,14 @@
     <string name="info_device">যন্ত্র</string>
     <string name="info_system_abi">সিস্টেম ABI</string>
     <string name="info_api">ইনজেকশন ইন্টারফেস</string>
-    <string name="info_dex2oat_wrapper">অপ্টিমাইজার মোড়ক</string>
+    <string name="info_dex2oat_wrapper">ডেক্স অপ্টিমাইজার মোড়ক</string>
     <string name="supported">সমর্থিত</string>
-    <string name="unsupported_android_version">অসমর্থিত (অ্যান্ড্রয়েড সংস্করণ অসন্তুষ্ট)</string>
-    <string name="unsupported_crashed">অসমর্থিত (ক্র্যাশ)</string>
+    <string name="unsupported">অসমর্থিত</string>
+    <string name="android_version_unsatisfied">অ্যান্ড্রয়েড সংস্করণ অসন্তুষ্ট</string>
+    <string name="crashed">বিধ্বস্ত</string>
+    <string name="mount_failed">মাউন্ট ব্যর্থ হয়েছে</string>
+    <string name="selinux_permissive">SELinux অনুমোদিত</string>
+    <string name="sepolicy_incorrect">SELinux নীতি ভুল</string>
     <string name="parasitic_recommend">পরজীবী ব্যবস্থাপক প্রস্তাবিত</string>
     <string name="parasitic_recommend_summary">LSPosed এখন সনাক্তকরণ এড়াতে সিস্টেম প্যারাসাইটাইজেশন সমর্থন করে। সফলভাবে পরজীবী ম্যানেজারের একটি শর্টকাট তৈরি করার পরে আপনি নিরাপদে ম্যানেজারটিকে আনইনস্টল করতে পারেন। যাই হোক না কেন আপনি /data/adb/lspd/manager.apk থেকে ম্যানেজারটি আবার ইনস্টল করতে পারেন।</string>
     <string name="create_shortcut">শর্টকাট তৈরি করুন</string>
