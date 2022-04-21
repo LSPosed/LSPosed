@@ -60,10 +60,14 @@
     <string name="info_device">デバイス</string>
     <string name="info_system_abi">システムABI</string>
     <string name="info_api">インジェクションインターフェイス</string>
-    <string name="info_dex2oat_wrapper">最適化ラッパー</string>
+    <string name="info_dex2oat_wrapper">Dex Optimizer Wrapper</string>
     <string name="supported">サポートされています</string>
-    <string name="unsupported_android_version">サポートされていません(Androidのバージョンが古い)</string>
-    <string name="unsupported_crashed">サポートされていません (クラッシュしました)</string>
+    <string name="unsupported">非対応</string>
+    <string name="android_version_unsatisfied">Android版不満足</string>
+    <string name="crashed">クラッシュ</string>
+    <string name="mount_failed">マウントに失敗</string>
+    <string name="selinux_permissive">SELinuxはパーミッシブ</string>
+    <string name="sepolicy_incorrect">SELinuxのポリシーが正しくない</string>
     <string name="parasitic_recommend">寄生マネージャーがおすすめです</string>
     <string name="parasitic_recommend_summary">LSPosedは、検出を回避するために、システムへの寄生をサポートするようになりました。寄生されたマネージャーのショートカットを作成したら、マネージャーをアンインストールしても問題ありません。何かあった場合は、/data/adb/lspd/manager.apkからマネージャーを再インストールできます。</string>
     <string name="create_shortcut">ショートカットを作成</string>
@@ -125,7 +129,7 @@
     <string name="menu_show_modules">モジュール</string>
     <string name="menu_show_denylist">拒否リスト</string>
     <string name="failed_to_save_scope_list">スコープリストの保存に失敗</string>
-    <string name="app_version">バージョン %1$sとなります。</string>
+    <string name="app_version">バージョン %1$s</string>
     <string name="use_recommended">おすすめ</string>
     <string name="no_scope_selected_has_recommended">アプリが選択されていません。おすすめのアプリを選択しますか？</string>
     <string name="use_recommended_message">おすすめのアプリを選択しますか？</string>
