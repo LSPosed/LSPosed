@@ -93,6 +93,7 @@ public class LSPManagerService extends ILSPManagerService.Stub {
     public static final int CHANNEL_IMP = NotificationManager.IMPORTANCE_HIGH;
 
     private static final HashMap<String, Integer> notificationIds = new HashMap<>();
+    private static int previousNotificationId = 2000;
 
     private static final HandlerThread worker = new HandlerThread("manager worker");
     private static final Handler workerHandler;
@@ -229,12 +230,32 @@ public class LSPManagerService extends ILSPManagerService.Stub {
         return modulePackageName + ":" + moduleUserId + ":" + enabled + ":" + systemModule;
     }
 
+    private static int getAutoIncrementNotificationId() {
+        // previousNotificationId start with 2001
+        var idValue = previousNotificationId++;
+        // Templates that may conflict with system ids after 2000
+        var NOTE_NETWORK_AVAILABLE = 17303299;
+        var NOTE_REMOTE_BUGREPORT = 678432343;
+        var NOTE_STORAGE_PUBLIC = 0x53505542;
+        var NOTE_STORAGE_PRIVATE = 0x53505256;
+        var NOTE_STORAGE_DISK = 0x5344534b;
+        var NOTE_STORAGE_MOVE = 0x534d4f56;
+        // If auto created id is conflict, recreate it
+        if (idValue == NOTE_NETWORK_AVAILABLE ||
+                idValue == NOTE_REMOTE_BUGREPORT ||
+                idValue == NOTE_STORAGE_PUBLIC ||
+                idValue == NOTE_STORAGE_PRIVATE ||
+                idValue == NOTE_STORAGE_DISK ||
+                idValue == NOTE_STORAGE_MOVE) return getAutoIncrementNotificationId();
+        else return idValue;
+    }
+
     private static int pushAndGetNotificationId(String modulePackageName,
                                                 int moduleUserId,
                                                 boolean enabled,
                                                 boolean systemModule) {
         var idKey = getNotificationIdKey(modulePackageName, moduleUserId, enabled, systemModule);
-        var idValue = idKey.hashCode();
+        var idValue = getAutoIncrementNotificationId();
         notificationIds.putIfAbsent(idKey, idValue);
         return idValue;
     }
