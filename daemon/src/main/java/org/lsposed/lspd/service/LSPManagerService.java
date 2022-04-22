@@ -253,9 +253,25 @@ public class LSPManagerService extends ILSPManagerService.Stub {
 
     private static int pushAndGetNotificationId(String modulePackageName, int moduleUserId) {
         var idKey = getNotificationIdKey(modulePackageName, moduleUserId);
-        var idValue = getAutoIncrementNotificationId();
-        notificationIds.putIfAbsent(idKey, idValue);
+        var idValue = notificationIds.get(idKey);
+        // If there is a new notification, put a new notification id into map
+        if (idValue == null) {
+            idValue = getAutoIncrementNotificationId();
+            notificationIds.putIfAbsent(idKey, idValue);
+        }
         return idValue;
+    }
+
+    private static int removeAndGetNotificationId(String modulePackageName, int moduleUserId) {
+        var idKey = getNotificationIdKey(modulePackageName, moduleUserId);
+        var idValue = notificationIds.get(idKey);
+        // Remove the notification id when the notification is canceled or current module app was uninstalled
+        if (idValue == null) {
+            return -1;
+        } else {
+            notificationIds.remove(idKey);
+            return idValue;
+        }
     }
 
     public static void showNotification(String modulePackageName,
@@ -301,12 +317,10 @@ public class LSPManagerService extends ILSPManagerService.Stub {
 
     public static void cancelNotification(String modulePackageName, int moduleUserId) {
         try {
-            var idKey = getNotificationIdKey(modulePackageName, moduleUserId);
-            var notificationId = notificationIds.get(idKey);
-            if (notificationId == null) return;
+            var notificationId = removeAndGetNotificationId(modulePackageName, moduleUserId);
+            if (notificationId == -1) return;
             var im = INotificationManager.Stub.asInterface(android.os.ServiceManager.getService("notification"));
             im.cancelNotificationWithTag("android", "android", modulePackageName, notificationId, 0);
-            notificationIds.remove(idKey);
         } catch (Throwable e) {
             Log.e(TAG, "cancel notification", e);
         }
