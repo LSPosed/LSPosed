@@ -92,7 +92,6 @@ public class LSPManagerService extends ILSPManagerService.Stub {
     public static final String CHANNEL_NAME = "LSPosed Manager";
     public static final int CHANNEL_IMP = NotificationManager.IMPORTANCE_HIGH;
 
-    private static final String NOTIFICATION_TAG = "114514";
     private static final HashMap<String, Integer> notificationIds = new HashMap<>();
 
     private static final HandlerThread worker = new HandlerThread("manager worker");
@@ -273,7 +272,7 @@ public class LSPManagerService extends ILSPManagerService.Stub {
                     new NotificationChannel(CHANNEL_ID, CHANNEL_NAME, CHANNEL_IMP);
             im.createNotificationChannels("android",
                     new android.content.pm.ParceledListSlice<>(Collections.singletonList(channel)));
-            im.enqueueNotificationWithTag("android", "android", NOTIFICATION_TAG,
+            im.enqueueNotificationWithTag("android", "android", modulePackageName,
                     pushAndGetNotificationId(modulePackageName, moduleUserId, enabled, systemModule),
                     notification, 0);
         } catch (Throwable e) {
@@ -290,7 +289,7 @@ public class LSPManagerService extends ILSPManagerService.Stub {
             var notificationId = notificationIds.get(idKey);
             if (notificationId == null) return;
             var im = INotificationManager.Stub.asInterface(android.os.ServiceManager.getService("notification"));
-            im.cancelNotificationWithTag("android", "android", NOTIFICATION_TAG, notificationId, 0);
+            im.cancelNotificationWithTag("android", "android", modulePackageName, notificationId, 0);
             notificationIds.remove(idKey);
         } catch (Throwable e) {
             Log.e(TAG, "cancel notification", e);
