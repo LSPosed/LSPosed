@@ -244,8 +244,11 @@ public class LSPManagerService extends ILSPManagerService.Stub {
                 idValue == NOTE_STORAGE_PUBLIC ||
                 idValue == NOTE_STORAGE_PRIVATE ||
                 idValue == NOTE_STORAGE_DISK ||
-                idValue == NOTE_STORAGE_MOVE) return getAutoIncrementNotificationId();
-        else return idValue;
+                idValue == NOTE_STORAGE_MOVE) {
+            return getAutoIncrementNotificationId();
+        } else {
+            return idValue;
+        }
     }
 
     private static int pushAndGetNotificationId(String modulePackageName, int moduleUserId) {
