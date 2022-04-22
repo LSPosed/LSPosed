@@ -223,11 +223,8 @@ public class LSPManagerService extends ILSPManagerService.Stub {
         }
     }
 
-    private static String getNotificationIdKey(String modulePackageName,
-                                               int moduleUserId,
-                                               boolean enabled,
-                                               boolean systemModule) {
-        return modulePackageName + ":" + moduleUserId + ":" + enabled + ":" + systemModule;
+    private static String getNotificationIdKey(String modulePackageName, int moduleUserId) {
+        return modulePackageName + ":" + moduleUserId;
     }
 
     private static int getAutoIncrementNotificationId() {
@@ -251,11 +248,8 @@ public class LSPManagerService extends ILSPManagerService.Stub {
         else return idValue;
     }
 
-    private static int pushAndGetNotificationId(String modulePackageName,
-                                                int moduleUserId,
-                                                boolean enabled,
-                                                boolean systemModule) {
-        var idKey = getNotificationIdKey(modulePackageName, moduleUserId, enabled, systemModule);
+    private static int pushAndGetNotificationId(String modulePackageName, int moduleUserId) {
+        var idKey = getNotificationIdKey(modulePackageName, moduleUserId);
         var idValue = getAutoIncrementNotificationId();
         notificationIds.putIfAbsent(idKey, idValue);
         return idValue;
@@ -295,19 +289,16 @@ public class LSPManagerService extends ILSPManagerService.Stub {
             im.createNotificationChannels("android",
                     new android.content.pm.ParceledListSlice<>(Collections.singletonList(channel)));
             im.enqueueNotificationWithTag("android", "android", modulePackageName,
-                    pushAndGetNotificationId(modulePackageName, moduleUserId, enabled, systemModule),
+                    pushAndGetNotificationId(modulePackageName, moduleUserId),
                     notification, 0);
         } catch (Throwable e) {
             Log.e(TAG, "post notification", e);
         }
     }
 
-    public static void cancelNotification(String modulePackageName,
-                                          int moduleUserId,
-                                          boolean enabled,
-                                          boolean systemModule) {
+    public static void cancelNotification(String modulePackageName, int moduleUserId) {
         try {
-            var idKey = getNotificationIdKey(modulePackageName, moduleUserId, enabled, systemModule);
+            var idKey = getNotificationIdKey(modulePackageName, moduleUserId);
             var notificationId = notificationIds.get(idKey);
             if (notificationId == null) return;
             var im = INotificationManager.Stub.asInterface(android.os.ServiceManager.getService("notification"));
