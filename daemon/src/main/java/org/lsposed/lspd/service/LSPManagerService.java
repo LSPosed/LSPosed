@@ -256,8 +256,9 @@ public class LSPManagerService extends ILSPManagerService.Stub {
         var idValue = notificationIds.get(idKey);
         // If there is a new notification, put a new notification id into map
         if (idValue == null) {
-            idValue = getAutoIncrementNotificationId();
-            notificationIds.putIfAbsent(idKey, idValue);
+            int newIdValue = getAutoIncrementNotificationId();
+            idValue = newIdValue;
+            notificationIds.computeIfAbsent(idKey, key -> newIdValue);
         }
         return idValue;
     }
