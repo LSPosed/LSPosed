@@ -176,6 +176,7 @@ public class LSPosedService extends ILSPosedService.Stub {
             boolean systemModule = scope != null &&
                     scope.parallelStream().anyMatch(app -> app.packageName.equals("android"));
             boolean enabled = Arrays.asList(enabledModules).contains(packageName);
+            // Exclude Xposed Module uninstall event
             if (!Intent.ACTION_UID_REMOVED.equals(action) && !Intent.ACTION_PACKAGE_FULLY_REMOVED.equals(action) && !allUsers)
                 LSPManagerService.showNotification(packageName, userId, enabled, systemModule);
             // Canceled the notification when Xposed Module removed
