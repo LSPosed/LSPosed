@@ -75,6 +75,7 @@ import java.io.FileOutputStream;
 import java.io.IOException;
 import java.lang.reflect.InvocationTargetException;
 import java.util.Collections;
+import java.util.HashMap;
 import java.util.LinkedList;
 import java.util.List;
 import java.util.UUID;
@@ -87,10 +88,12 @@ public class LSPManagerService extends ILSPManagerService.Stub {
     // this maybe useful when obtaining the manager binder
     private static String RANDOM_UUID = null;
     private static final String SHORTCUT_ID = "org.lsposed.manager.shortcut";
-    public static final int NOTIFICATION_ID = 114514;
     public static final String CHANNEL_ID = "lsposed";
     public static final String CHANNEL_NAME = "LSPosed Manager";
     public static final int CHANNEL_IMP = NotificationManager.IMPORTANCE_HIGH;
+
+    private static final HashMap<String, Integer> notificationIds = new HashMap<>();
+    private static int previousNotificationId = 2000;
 
     private static final HandlerThread worker = new HandlerThread("manager worker");
     private static final Handler workerHandler;
@@ -220,6 +223,41 @@ public class LSPManagerService extends ILSPManagerService.Stub {
         }
     }
 
+    private static String getNotificationIdKey(String modulePackageName, int moduleUserId) {
+        return modulePackageName + ":" + moduleUserId;
+    }
+
+    private static int getAutoIncrementNotificationId() {
+        // previousNotificationId start with 2001
+        var idValue = previousNotificationId++;
+        // Templates that may conflict with system ids after 2000
+        // Copied from https://android.googlesource.com/platform/frameworks/base/+/master/proto/src/system_messages.proto
+        var NOTE_NETWORK_AVAILABLE = 17303299;
+        var NOTE_REMOTE_BUGREPORT = 678432343;
+        var NOTE_STORAGE_PUBLIC = 0x53505542;
+        var NOTE_STORAGE_PRIVATE = 0x53505256;
+        var NOTE_STORAGE_DISK = 0x5344534b;
+        var NOTE_STORAGE_MOVE = 0x534d4f56;
+        // If auto created id is conflict, recreate it
+        if (idValue == NOTE_NETWORK_AVAILABLE ||
+                idValue == NOTE_REMOTE_BUGREPORT ||
+                idValue == NOTE_STORAGE_PUBLIC ||
+                idValue == NOTE_STORAGE_PRIVATE ||
+                idValue == NOTE_STORAGE_DISK ||
+                idValue == NOTE_STORAGE_MOVE) {
+            return getAutoIncrementNotificationId();
+        } else {
+            return idValue;
+        }
+    }
+
+    private static int pushAndGetNotificationId(String modulePackageName, int moduleUserId) {
+        var idKey = getNotificationIdKey(modulePackageName, moduleUserId);
+        var idValue = getAutoIncrementNotificationId();
+        notificationIds.putIfAbsent(idKey, idValue);
+        return idValue;
+    }
+
     public static void showNotification(String modulePackageName,
                                         int moduleUserId,
                                         boolean enabled,
@@ -253,9 +291,24 @@ public class LSPManagerService extends ILSPManagerService.Stub {
                     new NotificationChannel(CHANNEL_ID, CHANNEL_NAME, CHANNEL_IMP);
             im.createNotificationChannels("android",
                     new android.content.pm.ParceledListSlice<>(Collections.singletonList(channel)));
-            im.enqueueNotificationWithTag("android", "android", "114514", NOTIFICATION_ID, notification, 0);
+            im.enqueueNotificationWithTag("android", "android", modulePackageName,
+                    pushAndGetNotificationId(modulePackageName, moduleUserId),
+                    notification, 0);
         } catch (Throwable e) {
             Log.e(TAG, "post notification", e);
+        }
+    }
+
+    public static void cancelNotification(String modulePackageName, int moduleUserId) {
+        try {
+            var idKey = getNotificationIdKey(modulePackageName, moduleUserId);
+            var notificationId = notificationIds.get(idKey);
+            if (notificationId == null) return;
+            var im = INotificationManager.Stub.asInterface(android.os.ServiceManager.getService("notification"));
+            im.cancelNotificationWithTag("android", "android", modulePackageName, notificationId, 0);
+            notificationIds.remove(idKey);
+        } catch (Throwable e) {
+            Log.e(TAG, "cancel notification", e);
         }
     }
 
