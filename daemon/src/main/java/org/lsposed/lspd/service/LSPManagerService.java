@@ -234,6 +234,7 @@ public class LSPManagerService extends ILSPManagerService.Stub {
         // previousNotificationId start with 2001
         var idValue = previousNotificationId++;
         // Templates that may conflict with system ids after 2000
+        // Copied from https://android.googlesource.com/platform/frameworks/base/+/master/proto/src/system_messages.proto
         var NOTE_NETWORK_AVAILABLE = 17303299;
         var NOTE_REMOTE_BUGREPORT = 678432343;
         var NOTE_STORAGE_PUBLIC = 0x53505542;
