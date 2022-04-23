@@ -2,7 +2,7 @@
 <resources>
     <!-- Notification -->
     <string name="module_is_not_activated_yet">Xposed 模块尚未激活</string>
-    <string name="module_is_not_activated_yet_detailed">%s 已安装，但尚未激活</string>
+    <string name="module_is_not_activated_yet_detailed">%1$s 已安装到用户 %2$s，但尚未激活</string>
     <string name="xposed_module_updated_notification_title">Xposed 模块已更新</string>
     <string name="xposed_module_updated_notification_content">%s 已更新，请强行停止并重新打开其作用域内的应用</string>
     <string name="xposed_module_updated_notification_title_system">Xposed 模块已更新，需要重新启动</string>
