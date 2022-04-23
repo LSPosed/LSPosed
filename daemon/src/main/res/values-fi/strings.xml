@@ -2,7 +2,6 @@
 <resources>
     <!-- Notification -->
     <string name="module_is_not_activated_yet">Xposed moduuli ei ole vielä aktivoitu</string>
-    <string name="module_is_not_activated_yet_detailed">%s on asennettu, mutta ei ole vielä aktivoitu</string>
     <string name="xposed_module_updated_notification_title">Xposed moduuli päivitetty</string>
     <string name="xposed_module_updated_notification_content">%s on päivitetty, paina pysäytä ja käynnistä sovellukset uudelleen sen laajuudessa</string>
     <string name="xposed_module_updated_notification_title_system">Xposed moduuli päivitetty, järjestelmän uudelleenkäynnistys vaaditaan</string>

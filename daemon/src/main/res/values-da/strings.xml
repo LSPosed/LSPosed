@@ -2,7 +2,6 @@
 <resources>
     <!-- Notification -->
     <string name="module_is_not_activated_yet">Xposed modul er endnu ikke aktiveret</string>
-    <string name="module_is_not_activated_yet_detailed">%s er blevet installeret, men er ikke aktiveret endnu</string>
     <string name="xposed_module_updated_notification_title">Xposed modul opdateret</string>
     <string name="xposed_module_updated_notification_content">%s er blevet opdateret, gennemtving stop og genstart apps i dets anvendelsesområde</string>
     <string name="xposed_module_updated_notification_title_system">Xposed modul opdateret, system genstart kræves</string>

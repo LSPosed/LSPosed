@@ -264,6 +264,8 @@ public class LSPManagerService extends ILSPManagerService.Stub {
                                         boolean systemModule) {
         try {
             var context = new FakeContext();
+            var userInfo = UserService.getUserInfo(moduleUserId);
+            String userName = userInfo != null ? userInfo.name : String.valueOf(moduleUserId);
             String title = context.getString(enabled ? systemModule ?
                     R.string.xposed_module_updated_notification_title_system :
                     R.string.xposed_module_updated_notification_title :
@@ -271,7 +273,7 @@ public class LSPManagerService extends ILSPManagerService.Stub {
             String content = context.getString(enabled ? systemModule ?
                     R.string.xposed_module_updated_notification_content_system :
                     R.string.xposed_module_updated_notification_content :
-                    R.string.module_is_not_activated_yet_detailed, modulePackageName);
+                    R.string.module_is_not_activated_yet_detailed, modulePackageName, userName);
 
             var style = new Notification.BigTextStyle();
             style.bigText(content);

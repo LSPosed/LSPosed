@@ -2,7 +2,6 @@
 <resources>
     <!-- Notification -->
     <string name="module_is_not_activated_yet">Xposed modul är inte aktiverad än</string>
-    <string name="module_is_not_activated_yet_detailed">%s har installerats men är inte aktiverat ännu</string>
     <string name="xposed_module_updated_notification_title">Xposed modul uppdaterad</string>
     <string name="xposed_module_updated_notification_content">%s har uppdaterats. Tvinga stopp och starta om appar i dess omfattning</string>
     <string name="xposed_module_updated_notification_title_system">Xposed modul uppdaterad, systemomstart krävs</string>
