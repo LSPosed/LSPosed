@@ -2,6 +2,7 @@
 <resources>
     <!-- Notification -->
     <string name="module_is_not_activated_yet">Modul Xposed belum diaktifkan</string>
+    <string name="module_is_not_activated_yet_detailed">%s telah terpasang, tetapi belum diaktifkan</string>
     <string name="xposed_module_updated_notification_title">Modul xposed diperbarui</string>
     <string name="xposed_module_updated_notification_content">%s telah diperbarui, harap paksa berhenti dan mulai ulang aplikasi dalam cakupannya</string>
     <string name="xposed_module_updated_notification_title_system">Modul Xposed diperbarui, mulai ulang sistem diperlukan</string>

@@ -2,6 +2,7 @@
 <resources>
     <!-- Notification -->
     <string name="module_is_not_activated_yet">Xposed modul ještě není aktivován</string>
+    <string name="module_is_not_activated_yet_detailed">%s byl nainstalován, ale ještě není aktivován</string>
     <string name="xposed_module_updated_notification_title">Xposed modul byl aktualizován</string>
     <string name="xposed_module_updated_notification_content">%s byl aktualizován, prosím, násilně zastavte aplikace a restartujte je</string>
     <string name="xposed_module_updated_notification_title_system">Xposed modul aktualizován, je vyžadován restart systému</string>

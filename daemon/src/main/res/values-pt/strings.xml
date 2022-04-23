@@ -2,6 +2,7 @@
 <resources>
     <!-- Notification -->
     <string name="module_is_not_activated_yet">O módulo ainda não está ativo</string>
+    <string name="module_is_not_activated_yet_detailed">%s foi instalado. Mas, ainda falta ativar</string>
     <string name="xposed_module_updated_notification_title">Módulo Atualizado</string>
     <string name="xposed_module_updated_notification_content">%s foi atualizado. Force a parada do módulo e reinicie os apps que estão em seu escopo</string>
     <string name="xposed_module_updated_notification_title_system">Módulo Atualizado. É necessário reiniciar o sistema</string>

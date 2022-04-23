@@ -2,6 +2,7 @@
 <resources>
     <!-- Notification -->
     <string name="module_is_not_activated_yet">Xposedモジュールが有効化されていません</string>
+    <string name="module_is_not_activated_yet_detailed">%s がインストール済みですが、有効化されていません</string>
     <string name="xposed_module_updated_notification_title">Xposedモジュールが更新されました</string>
     <string name="xposed_module_updated_notification_content">%s が更新されました。スコープ内のアプリを強制停止してから再起動してください</string>
     <string name="xposed_module_updated_notification_title_system">Xposedモジュールを更新しました。システム再起動が必要です</string>

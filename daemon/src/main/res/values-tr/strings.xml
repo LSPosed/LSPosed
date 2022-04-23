@@ -2,6 +2,7 @@
 <resources>
     <!-- Notification -->
     <string name="module_is_not_activated_yet">Xposed modülü henüz etkinleştirilmedi</string>
+    <string name="module_is_not_activated_yet_detailed">%s kuruldu, ancak henüz etkinleştirilmedi</string>
     <string name="xposed_module_updated_notification_title">Xposed modül güncellemesi</string>
     <string name="xposed_module_updated_notification_content">%s güncellendi, lütfen kapsamındaki uygulamaları durdurmaya ve yeniden başlatmaya zorlayın</string>
     <string name="xposed_module_updated_notification_title_system">Xposed modülü güncellendi, sistemin yeniden başlatılması gerekiyor</string>
