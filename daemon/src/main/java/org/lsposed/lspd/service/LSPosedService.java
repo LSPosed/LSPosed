@@ -109,8 +109,14 @@ public class LSPosedService extends ILSPosedService.Stub {
                         isXposedModule = true;
                         broadcastAndShowNotification(moduleName, userId, intent, true);
                     }
+                // Anyway, canceled the notification
+                if (moduleName != null) LSPManagerService.cancelNotification(moduleName, userId);
                 break;
             }
+            case Intent.ACTION_PACKAGE_REMOVED:
+                // Anyway, canceled the notification
+                if (moduleName != null) LSPManagerService.cancelNotification(moduleName, userId);
+                break;
             case Intent.ACTION_PACKAGE_ADDED:
             case Intent.ACTION_PACKAGE_CHANGED: {
                 // make sure that the change is for the complete package, not only a
@@ -176,11 +182,8 @@ public class LSPosedService extends ILSPosedService.Stub {
             boolean systemModule = scope != null &&
                     scope.parallelStream().anyMatch(app -> app.packageName.equals("android"));
             boolean enabled = Arrays.asList(enabledModules).contains(packageName);
-            // Exclude Xposed Module uninstall event
-            if (!Intent.ACTION_UID_REMOVED.equals(action) && !Intent.ACTION_PACKAGE_FULLY_REMOVED.equals(action) && !allUsers)
+            if (!(Intent.ACTION_UID_REMOVED.equals(action) || Intent.ACTION_PACKAGE_FULLY_REMOVED.equals(action) || allUsers))
                 LSPManagerService.showNotification(packageName, userId, enabled, systemModule);
-            // Canceled the notification when Xposed Module removed
-            if (Intent.ACTION_PACKAGE_FULLY_REMOVED.equals(action)) LSPManagerService.cancelNotification(packageName, userId);
         }
     }
 
