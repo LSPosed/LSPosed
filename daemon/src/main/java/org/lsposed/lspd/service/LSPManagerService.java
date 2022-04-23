@@ -253,9 +253,8 @@ public class LSPManagerService extends ILSPManagerService.Stub {
 
     private static int pushAndGetNotificationId(String modulePackageName, int moduleUserId) {
         var idKey = getNotificationIdKey(modulePackageName, moduleUserId);
-        var idValue = getAutoIncrementNotificationId();
-        notificationIds.putIfAbsent(idKey, idValue);
-        return idValue;
+        // If there is a new notification, put a new notification id into map
+        return notificationIds.computeIfAbsent(idKey, key -> getAutoIncrementNotificationId());
     }
 
     public static void showNotification(String modulePackageName,
@@ -302,10 +301,11 @@ public class LSPManagerService extends ILSPManagerService.Stub {
     public static void cancelNotification(String modulePackageName, int moduleUserId) {
         try {
             var idKey = getNotificationIdKey(modulePackageName, moduleUserId);
-            var notificationId = notificationIds.get(idKey);
-            if (notificationId == null) return;
+            var idValue = notificationIds.get(idKey);
+            if (idValue == null) return;
             var im = INotificationManager.Stub.asInterface(android.os.ServiceManager.getService("notification"));
-            im.cancelNotificationWithTag("android", "android", modulePackageName, notificationId, 0);
+            im.cancelNotificationWithTag("android", "android", modulePackageName, idValue, 0);
+            // Remove the notification id when the notification is canceled or current module app was uninstalled
             notificationIds.remove(idKey);
         } catch (Throwable e) {
             Log.e(TAG, "cancel notification", e);
