@@ -253,14 +253,8 @@ public class LSPManagerService extends ILSPManagerService.Stub {
 
     private static int pushAndGetNotificationId(String modulePackageName, int moduleUserId) {
         var idKey = getNotificationIdKey(modulePackageName, moduleUserId);
-        var idValue = notificationIds.get(idKey);
         // If there is a new notification, put a new notification id into map
-        if (idValue == null) {
-            int newIdValue = getAutoIncrementNotificationId();
-            idValue = newIdValue;
-            notificationIds.computeIfAbsent(idKey, key -> newIdValue);
-        }
-        return idValue;
+        return notificationIds.computeIfAbsent(idKey, key -> getAutoIncrementNotificationId());
     }
 
     private static int removeAndGetNotificationId(String modulePackageName, int moduleUserId) {
