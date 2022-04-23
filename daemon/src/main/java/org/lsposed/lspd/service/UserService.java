@@ -95,6 +95,12 @@ public class UserService {
         return users;
     }
 
+    public static UserInfo getUserInfo(int userId) throws RemoteException {
+        IUserManager um = getUserManager();
+        if (um == null) return null;
+        return um.getUserInfo(userId);
+    }
+
     public static int getProfileParent(int userId) throws RemoteException {
         IUserManager um = getUserManager();
         if (um == null) return -1;
