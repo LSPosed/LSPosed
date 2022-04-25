@@ -272,7 +272,9 @@ public class LSPManagerService extends ILSPManagerService.Stub {
             String content = context.getString(enabled ? systemModule ?
                     R.string.xposed_module_updated_notification_content_system :
                     R.string.xposed_module_updated_notification_content :
-                    R.string.module_is_not_activated_yet_detailed, modulePackageName, userName);
+                    (moduleUserId == 0 ?
+                            R.string.module_is_not_activated_yet_main_user_detailed :
+                            R.string.module_is_not_activated_yet_multi_user_detailed), modulePackageName, userName);
 
             var style = new Notification.BigTextStyle();
             style.bigText(content);
