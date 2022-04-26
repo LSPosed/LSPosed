@@ -26,7 +26,6 @@
 #include "elf_util.h"
 #include "loader.h"
 #include "magisk_loader.h"
-#include "native_hook.h"
 #include "native_util.h"
 #include "service.h"
 #include "symbol_cache.h"
@@ -132,7 +131,6 @@ namespace lspd {
                         return GetArt()->getSymbAddress<void*>(symbol);
                     },
                 };
-                InstallInlineHooks(env, initInfo);
                 InitHooks(env, initInfo);
                 SetupEntryClass(env);
                 FindAndCall(env, "forkCommon",
@@ -204,7 +202,6 @@ namespace lspd {
                         return GetArt()->getSymbAddress<void*>(symbol);
                     },
             };
-            InstallInlineHooks(env, initInfo);
             auto [dex_fd, size] = instance->RequestLSPDex(env, binder);
             auto obfs_map = instance->RequestObfuscationMap(env, binder);
             ConfigBridge::GetInstance()->obfuscation_map(std::move(obfs_map));

@@ -22,7 +22,6 @@
 
 #include "config.h"
 #include "context.h"
-#include "native_hook.h"
 #include "native_util.h"
 #include "jni/hook_bridge.h"
 #include "jni/native_api.h"
@@ -48,11 +47,41 @@ namespace lspd {
         if (*this) munmap(addr_, size_);
     }
 
-    void Context::InitHooks(JNIEnv *env, const lsplant::InitInfo& initInfo) {
+    void Context::InitHooks(JNIEnv *env, const lsplant::InitInfo &initInfo) {
         if (!lsplant::Init(env, initInfo)) {
+            LOGE("Failed to init lsplant");
             return;
         }
-
+        auto path_list = JNI_GetObjectFieldOf(env, inject_class_loader_, "pathList",
+                                              "Ldalvik/system/DexPathList;");
+        if (!path_list) {
+            LOGE("Failed to get path list");
+            return;
+        }
+        const auto elements = JNI_Cast<jobjectArray>(
+                JNI_GetObjectFieldOf(env, path_list, "dexElements",
+                                     "[Ldalvik/system/DexPathList$Element;"));
+        if (!elements) {
+            LOGE("Failed to get elements");
+            return;
+        }
+        for (const auto &element: elements) {
+            if (!element)
+                continue;
+            auto java_dex_file = JNI_GetObjectFieldOf(env, element, "dexFile",
+                                                      "Ldalvik/system/DexFile;");
+            if (!java_dex_file) {
+                LOGE("Failed to get java dex file");
+                return;
+            }
+            auto cookie = JNI_GetObjectFieldOf(env, java_dex_file, "mCookie", "Ljava/lang/Object;");
+            if (!cookie) {
+                lsplant::MakeDexFileTrusted(env, cookie);
+            } else {
+                LOGE("Failed to get cookie");
+                return;
+            }
+        }
         RegisterResourcesHook(env);
         RegisterHookBridge(env);
         RegisterNativeAPI(env);

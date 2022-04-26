@@ -22,4 +22,4 @@ MODDIR=${0%/*}
 rm -f "/data/local/tmp/daemon.apk"
 cd "$MODDIR"
 
-unshare -m sh -c "$MODDIR/daemon &"
+unshare -m sh -c "$MODDIR/daemon $@&"

@@ -31,14 +31,17 @@ import org.lsposed.lspd.deopt.PrebuiltMethodsDeopter;
 import org.lsposed.lspd.hooker.CrashDumpHooker;
 import org.lsposed.lspd.hooker.HandleSystemServerProcessHooker;
 import org.lsposed.lspd.hooker.LoadedApkCtorHooker;
+import org.lsposed.lspd.hooker.OpenDexFileHooker;
 import org.lsposed.lspd.service.ILSPApplicationService;
 import org.lsposed.lspd.util.Utils;
 
+import dalvik.system.DexFile;
 import de.robv.android.xposed.XposedBridge;
 import de.robv.android.xposed.XposedHelpers;
 import de.robv.android.xposed.XposedInit;
 
 public class Startup {
+    @SuppressWarnings("deprecation")
     private static void startBootstrapHook(boolean isSystem) {
         Utils.logD("startBootstrapHook starts: isSystem = " + isSystem);
         XposedHelpers.findAndHookMethod(Thread.class, "dispatchUncaughtException",
@@ -46,6 +49,10 @@ public class Startup {
         if (isSystem) {
             XposedBridge.hookAllMethods(ZygoteInit.class,
                     "handleSystemServerProcess", new HandleSystemServerProcessHooker());
+        } else {
+            var hooker = new OpenDexFileHooker();
+            XposedBridge.hookAllMethods(DexFile.class, "openDexFile", hooker);
+            XposedBridge.hookAllMethods(DexFile.class, "openInMemoryDexFile", hooker);
         }
         XposedHelpers.findAndHookConstructor(LoadedApk.class,
                 ActivityThread.class, ApplicationInfo.class, CompatibilityInfo.class,

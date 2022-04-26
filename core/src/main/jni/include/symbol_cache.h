@@ -35,22 +35,12 @@ namespace lspd {
     struct SymbolCache {
         std::atomic_flag initialized{};
         void *do_dlopen;
-        void *openInMemoryDexFilesNative;
-        void *createCookieWithArray;
-        void *createCookieWithDirectBuffer;
-        void *openDexFileNative;
-        void *setTrusted;
         void *setTableOverride;
 
         SymbolCache() = default;
 
         SymbolCache(const SymbolCache &other) :
                 do_dlopen(other.do_dlopen),
-                openInMemoryDexFilesNative(other.openInMemoryDexFilesNative),
-                createCookieWithArray(other.createCookieWithArray),
-                createCookieWithDirectBuffer(other.createCookieWithDirectBuffer),
-                openDexFileNative(other.openDexFileNative),
-                setTrusted(other.setTrusted),
                 setTableOverride(other.setTableOverride) {}
 
         SymbolCache &operator=(const SymbolCache &other) {
