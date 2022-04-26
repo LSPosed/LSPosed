@@ -2,7 +2,8 @@
 <resources>
     <!-- Notification -->
     <string name="module_is_not_activated_yet">ماژول Xposed در حال حاضر فعال نشده</string>
-    <string name="module_is_not_activated_yet_detailed">%s نصب شده ، اما فعال نشده</string>
+    <string name="module_is_not_activated_yet_main_user_detailed">%s نصب شده ، اما فعال نشده</string>
+    <string name="module_is_not_activated_yet_multi_user_detailed">%s نصب شده ، اما فعال نشده</string>
     <string name="xposed_module_updated_notification_title">ماژول Xposed بروزرسانی شد</string>
     <string name="xposed_module_updated_notification_content">%s بروز شد، لطفا توقف اجباری و ریستارت کنید برنامه های این محدوده را</string>
     <string name="xposed_module_updated_notification_title_system">ماژول Xposed بروز شد، راه‌اندازی سیستم نیاز است</string>

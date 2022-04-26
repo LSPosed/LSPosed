@@ -2,7 +2,8 @@
 <resources>
     <!-- Notification -->
     <string name="module_is_not_activated_yet">Moduł Xposed nie jest jeszcze aktywowany</string>
-    <string name="module_is_not_activated_yet_detailed">%s został zainstalowany, ale nie jest jeszcze aktywowany</string>
+    <string name="module_is_not_activated_yet_main_user_detailed">%s został zainstalowany, ale nie jest jeszcze aktywowany</string>
+    <string name="module_is_not_activated_yet_multi_user_detailed">%s został zainstalowany, ale nie jest jeszcze aktywowany</string>
     <string name="xposed_module_updated_notification_title">Moduł Xposed zaktualizowany</string>
     <string name="xposed_module_updated_notification_content">%s został zaktualizowany, wymuś zatrzymanie i ponownie uruchom aplikacje w jego zakresie</string>
     <string name="xposed_module_updated_notification_title_system">Zaktualizowano moduł Xposed, wymagane ponowne uruchomienie systemu</string>
