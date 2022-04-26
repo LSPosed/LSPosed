@@ -47,24 +47,8 @@ namespace lspd {
     bool FindLibArt() {
         auto &art = GetArt();
         if (!art->isValid()) return false;
-        auto api_level = GetAndroidApiLevel();
-        return (symbol_cache->setTableOverride = art->getSymbAddress<void *>(
-                "_ZN3art9JNIEnvExt16SetTableOverrideEPK18JNINativeInterface")) != nullptr
-               && (api_level < __ANDROID_API_P__ || (
-                (symbol_cache->openDexFileNative = art->getSymbAddress<void *>(
-                        "_ZN3artL25DexFile_openDexFileNativeEP7_JNIEnvP7_jclassP8_jstringS5_iP8_jobjectP13_jobjectArray")) &&
-                (
-                        (symbol_cache->openInMemoryDexFilesNative = art->getSymbAddress<void *>(
-                                "_ZN3artL34DexFile_openInMemoryDexFilesNativeEP7_JNIEnvP7_jclassP13_jobjectArrayS5_P10_jintArrayS7_P8_jobjectS5_")) ||
-                        (
-                                (symbol_cache->createCookieWithArray = art->getSymbAddress<void *>(
-                                        "_ZN3artL29DexFile_createCookieWithArrayEP7_JNIEnvP7_jclassP11_jbyteArrayii")) &&
-                                (symbol_cache->createCookieWithDirectBuffer = art->getSymbAddress<void *>(
-                                        "_ZN3artL36DexFile_createCookieWithDirectBufferEP7_JNIEnvP7_jclassP8_jobjectii"))
-                        )
-                ) &&
-                (symbol_cache->setTrusted = art->getSymbAddress<void *>(
-                        "_ZN3artL18DexFile_setTrustedEP7_JNIEnvP7_jclassP8_jobject"))));
+        return symbol_cache->setTableOverride = art->getSymbAddress<void *>(
+                "_ZN3art9JNIEnvExt16SetTableOverrideEPK18JNINativeInterface");
     }
 
     void InitSymbolCache(SymbolCache *other) {

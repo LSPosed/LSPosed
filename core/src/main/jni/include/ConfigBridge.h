@@ -39,6 +39,7 @@ public:
     virtual obfuscation_map_t& obfuscation_map() = 0;
     virtual void obfuscation_map(obfuscation_map_t) = 0;
 
+    virtual ~ConfigBridge() = default;
 protected:
     inline static std::unique_ptr<ConfigBridge> instance_ = nullptr;
 };
