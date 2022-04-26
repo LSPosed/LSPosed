@@ -22,6 +22,7 @@ public class OpenDexFileHooker extends XC_MethodHook {
         while (classLoader != null) {
             if (classLoader == XposedHelpers.class.getClassLoader()) {
                 HookBridge.setTrusted(param.getResult());
+                return;
             } else {
                 classLoader = classLoader.getParent();
             }
