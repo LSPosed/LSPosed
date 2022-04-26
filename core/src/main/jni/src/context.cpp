@@ -76,11 +76,10 @@ namespace lspd {
             }
             auto cookie = JNI_GetObjectFieldOf(env, java_dex_file, "mCookie", "Ljava/lang/Object;");
             if (!cookie) {
-                lsplant::MakeDexFileTrusted(env, cookie);
-            } else {
                 LOGE("Failed to get cookie");
                 return;
             }
+            lsplant::MakeDexFileTrusted(env, cookie);
         }
         RegisterResourcesHook(env);
         RegisterHookBridge(env);
