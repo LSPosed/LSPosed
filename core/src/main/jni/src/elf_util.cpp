@@ -166,9 +166,8 @@ ElfW(Addr) ElfImg::GnuLookup(std::string_view name, uint32_t hash) const {
     return 0;
 }
 
-ElfW(Addr) ElfImg::LinearLookup(std::string_view name) const {
+void ElfImg::MayInitLinearMap() const {
     if (symtabs_.empty()) {
-        symtabs_.reserve(symtab_count);
         if (symtab_start != nullptr && symstr_offset_for_symtab != 0) {
             for (ElfW(Off) i = 0; i < symtab_count; i++) {
                 unsigned int st_type = ELF_ST_TYPE(symtab_start[i].st_info);
@@ -180,7 +179,21 @@ ElfW(Addr) ElfImg::LinearLookup(std::string_view name) const {
             }
         }
     }
+}
+
+ElfW(Addr) ElfImg::LinearLookup(std::string_view name) const {
+    MayInitLinearMap();
     if (auto i = symtabs_.find(name); i != symtabs_.end()) {
+        return i->second->st_value;
+    } else {
+        return 0;
+    }
+}
+
+ElfW(Addr) ElfImg::PrefixLookupFirst(std::string_view prefix) const {
+    MayInitLinearMap();
+    if (auto i = symtabs_.lower_bound(prefix); i != symtabs_.end() && i->first.starts_with(prefix)) {
+        LOGD("found prefix {} of {} {:#x} in {} in symtab by linear lookup", prefix, i->first, i->second->st_value, elf);
         return i->second->st_value;
     } else {
         return 0;

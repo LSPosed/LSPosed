@@ -77,7 +77,7 @@ namespace lspd {
         }
         return android::ResStringPool::setup(HookHandler{
             .art_symbol_resolver = [&](auto s) {
-                return fw.template getSymbAddress<void*>(s);
+                return fw.template getSymbAddress(s);
             }
         });
     }

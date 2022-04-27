@@ -47,7 +47,7 @@ namespace lspd {
     bool FindLibArt() {
         auto &art = GetArt();
         if (!art->isValid()) return false;
-        return symbol_cache->setTableOverride = art->getSymbAddress<void *>(
+        return symbol_cache->setTableOverride = art->getSymbAddress(
                 "_ZN3art9JNIEnvExt16SetTableOverrideEPK18JNINativeInterface");
     }
 
@@ -60,7 +60,7 @@ namespace lspd {
             return;
         }
         auto ok = FindLibArt();
-        symbol_cache->do_dlopen = SandHook::ElfImg("/linker").getSymbAddress<void *>(
+        symbol_cache->do_dlopen = SandHook::ElfImg("/linker").getSymbAddress(
                 "__dl__Z9do_dlopenPKciPK17android_dlextinfoPKv");
         if (!ok) [[unlikely]] {
             GetArt(true);
