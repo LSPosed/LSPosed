@@ -128,7 +128,10 @@ namespace lspd {
                         return UnhookFunction(t) == RT_SUCCESS ;
                     },
                     .art_symbol_resolver = [](auto symbol) {
-                        return GetArt()->getSymbAddress<void*>(symbol);
+                        return GetArt()->getSymbAddress(symbol);
+                    },
+                    .art_symbol_prefix_resolver = [](auto symbol) {
+                        return GetArt()->getSymbPrefixFirstOffset(symbol);
                     },
                 };
                 InitHooks(env, initInfo);
@@ -199,7 +202,10 @@ namespace lspd {
                         return UnhookFunction(t) == RT_SUCCESS;
                     },
                     .art_symbol_resolver = [](auto symbol){
-                        return GetArt()->getSymbAddress<void*>(symbol);
+                        return GetArt()->getSymbAddress(symbol);
+                    },
+                    .art_symbol_prefix_resolver = [](auto symbol) {
+                        return GetArt()->getSymbPrefixFirstOffset(symbol);
                     },
             };
             auto [dex_fd, size] = instance->RequestLSPDex(env, binder);
