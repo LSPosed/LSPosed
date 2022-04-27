@@ -212,7 +212,7 @@ public class ConfigManager {
                 return false;
             }
             m.file = file;
-            cachedModule.put(m.packageName, m);
+            cachedModule.putIfAbsent(m.packageName, m);
             return true;
         }).collect(Collectors.toList());
     }
