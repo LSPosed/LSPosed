@@ -116,6 +116,7 @@ public class ParasiticManagerHooker {
                     }
                 });
 
+        var activityClientRecordClass = XposedHelpers.findClass("android.app.ActivityThread$ActivityClientRecord", ActivityThread.class.getClassLoader());
         var activityHooker = new XC_MethodHook() {
             @Override
             protected void beforeHookedMethod(MethodHookParam param) {
@@ -128,30 +129,8 @@ public class ParasiticManagerHooker {
                             if ("org.lsposed.manager.ui.activity.MainActivity".equals(activity.name)) {
                                 activity.applicationInfo = pkgInfo.applicationInfo;
                                 param.args[i] = activity;
-                                break;
                             }
                         }
-
-                        for (var j = 0; j < param.args.length; ++j) {
-                            if (param.args[j] instanceof Bundle) {
-                                Hookers.logD("loading state of " + aInfo.name);
-                                int stateId = j;
-                                states.computeIfPresent(aInfo.name, (k, v) -> {
-                                    param.args[stateId] = v;
-                                    return v;
-                                });
-                                continue;
-                            }
-                            if (param.args[j] instanceof PersistableBundle) {
-                                Hookers.logD("loading persistentState of " + aInfo.name);
-                                int persistentStateId = j;
-                                states.computeIfPresent(aInfo.name, (k, v) -> {
-                                    param.args[persistentStateId] = v;
-                                    return v;
-                                });
-                            }
-                        }
-                        continue;
                     }
                     if (param.args[i] instanceof Intent) {
                         var intent = (Intent) param.args[i];
@@ -160,8 +139,25 @@ public class ParasiticManagerHooker {
                     }
                 }
             }
+
+            @Override
+            protected void afterHookedMethod(MethodHookParam param) {
+                for (var i = 0; i < param.args.length; ++i) {
+                    if (param.args[i] instanceof ActivityInfo) {
+                        var aInfo = (ActivityInfo) param.args[i];
+                        Hookers.logD("loading state of " + aInfo.name);
+                        states.computeIfPresent(aInfo.name, (k, v) -> {
+                            XposedHelpers.setObjectField(param.thisObject, "state", v);
+                            return v;
+                        });
+                        persistentStates.computeIfPresent(aInfo.name, (k, v) -> {
+                            XposedHelpers.setObjectField(param.thisObject, "persistentState", v);
+                            return v;
+                        });
+                    }
+                }
+            }
         };
-        var activityClientRecordClass = XposedHelpers.findClass("android.app.ActivityThread$ActivityClientRecord", ActivityThread.class.getClassLoader());
         XposedBridge.hookAllConstructors(activityClientRecordClass, activityHooker);
 
         if (Build.VERSION.SDK_INT <= Build.VERSION_CODES.O_MR1) {
