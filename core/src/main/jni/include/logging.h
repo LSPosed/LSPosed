@@ -30,11 +30,11 @@
 #endif
 
 #ifdef LOG_DISABLED
-#define LOGD(...)
-#define LOGV(...)
-#define LOGI(...)
-#define LOGW(...)
-#define LOGE(...)
+#define LOGD(...) 0
+#define LOGV(...) 0
+#define LOGI(...) 0
+#define LOGW(...) 0
+#define LOGE(...) 0
 #else
 template <typename... T>
 constexpr inline void LOG(int prio, const char* tag, fmt::format_string<T...> fmt, T&&... args) {
@@ -47,8 +47,8 @@ constexpr inline void LOG(int prio, const char* tag, fmt::format_string<T...> fm
 #define LOGD(fmt, ...) LOG(ANDROID_LOG_DEBUG, LOG_TAG, "{}:{}#{}" ": " fmt, __FILE_NAME__, __LINE__, __PRETTY_FUNCTION__ __VA_OPT__(,) __VA_ARGS__)
 #define LOGV(fmt, ...) LOG(ANDROID_LOG_VERBOSE, LOG_TAG, "{}:{}#{}" ": " fmt, __FILE_NAME__, __LINE__, __PRETTY_FUNCTION__ __VA_OPT__(,) __VA_ARGS__)
 #else
-#define LOGD(...)
-#define LOGV(...)
+#define LOGD(...) 0
+#define LOGV(...) 0
 #endif
 #define LOGI(...)  LOG(ANDROID_LOG_INFO, LOG_TAG, __VA_ARGS__)
 #define LOGW(...)  LOG(ANDROID_LOG_WARN, LOG_TAG, __VA_ARGS__)
