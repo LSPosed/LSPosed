@@ -26,7 +26,6 @@ import java.util.jar.JarFile;
 import java.util.zip.ZipEntry;
 
 import dalvik.system.DelegateLastClassLoader;
-import dalvik.system.PathClassLoader;
 import de.robv.android.xposed.XposedBridge;
 import hidden.ByteBufferDexClassLoader;
 
@@ -34,7 +33,7 @@ import hidden.ByteBufferDexClassLoader;
 public final class LspModuleClassLoader extends ByteBufferDexClassLoader {
     private static final String zipSeparator = "!/";
     private final String apk;
-    private final List<File> nativeLibraryDirs = new ArrayList<>();
+    private final File[] nativeLibraryDirs;
 
     private static List<File> splitPaths(String searchPath) {
         var result = new ArrayList<File>();
@@ -49,6 +48,7 @@ public final class LspModuleClassLoader extends ByteBufferDexClassLoader {
                                  ClassLoader parent,
                                  String apk) {
         super(dexBuffers, parent);
+        nativeLibraryDirs = new File[0];
         this.apk = apk;
     }
 
@@ -58,13 +58,15 @@ public final class LspModuleClassLoader extends ByteBufferDexClassLoader {
                                  ClassLoader parent,
                                  String apk) {
         super(dexBuffers, librarySearchPath, parent);
-        initNativeLibraryDirs(librarySearchPath);
+        nativeLibraryDirs = initNativeLibraryDirs(librarySearchPath);
         this.apk = apk;
     }
 
-    private void initNativeLibraryDirs(String librarySearchPath) {
-        nativeLibraryDirs.addAll(splitPaths(librarySearchPath));
-        nativeLibraryDirs.addAll(splitPaths(System.getProperty("java.library.path")));
+    private File[] initNativeLibraryDirs(String librarySearchPath) {
+        var searchPaths = new ArrayList<File>();
+        searchPaths.addAll(splitPaths(librarySearchPath));
+        searchPaths.addAll(splitPaths(System.getProperty("java.library.path")));
+        return searchPaths.toArray(new File[0]);
     }
 
     @Override
@@ -161,8 +163,7 @@ public final class LspModuleClassLoader extends ByteBufferDexClassLoader {
 
     @Override
     public Enumeration<URL> getResources(String name) throws IOException {
-        @SuppressWarnings("unchecked")
-        final var resources = (Enumeration<URL>[]) new Enumeration<?>[]{
+        @SuppressWarnings("unchecked") final var resources = (Enumeration<URL>[]) new Enumeration<?>[]{
                 Object.class.getClassLoader().getResources(name),
                 findResources(name),
                 getParent() == null ? null : getParent().getResources(name)};
@@ -174,14 +175,14 @@ public final class LspModuleClassLoader extends ByteBufferDexClassLoader {
     public String toString() {
         return "LspModuleClassLoader[" +
                 "module=" + apk + "," +
-                "nativeLibraryDirs=" + nativeLibraryDirs == null ? "null" : Arrays.toString(nativeLibraryDirs.toArray()) + "," +
+                "nativeLibraryDirs=" + Arrays.toString(nativeLibraryDirs) + "," +
                 super.toString() + "]";
     }
 
     public static ClassLoader loadApk(String apk,
-                                               List<SharedMemory> dexes,
-                                               String librarySearchPath,
-                                               ClassLoader parent) {
+                                      List<SharedMemory> dexes,
+                                      String librarySearchPath,
+                                      ClassLoader parent) {
         var dexBuffers = dexes.stream().parallel().map(dex -> {
             try {
                 return dex.mapReadOnly();
