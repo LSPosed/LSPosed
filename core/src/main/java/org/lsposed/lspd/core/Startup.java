@@ -53,6 +53,7 @@ public class Startup {
             var hooker = new OpenDexFileHooker();
             XposedBridge.hookAllMethods(DexFile.class, "openDexFile", hooker);
             XposedBridge.hookAllMethods(DexFile.class, "openInMemoryDexFile", hooker);
+            XposedBridge.hookAllMethods(DexFile.class, "openInMemoryDexFiles", hooker);
         }
         XposedHelpers.findAndHookConstructor(LoadedApk.class,
                 ActivityThread.class, ApplicationInfo.class, CompatibilityInfo.class,
