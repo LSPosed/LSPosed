@@ -101,7 +101,7 @@ namespace lspd {
                 } else {
                     ns = "NULL";
                 }
-                LOGD("native_api: do_dlopen({})", name);
+                LOGD("native_api: do_dlopen({})", ns);
                 if (handle == nullptr) {
                     return nullptr;
                 }
