@@ -111,12 +111,12 @@ if [ "$FLAVOR" == "zygisk" ]; then
   fi
 
   if [ "$ARCH" = "x86" ] || [ "$ARCH" = "x64" ]; then
-    extract "$ZIPFILE" "lib/x86_64/liblspd.so" "$MODPATH/zygisk" true
-    mv "$MODPATH/zygisk/liblspd.so" "$MODPATH/zygisk/x86_64.so"
+    extract "$ZIPFILE" "lib/x86/liblspd.so" "$MODPATH/zygisk" true
+    mv "$MODPATH/zygisk/liblspd.so" "$MODPATH/zygisk/x86.so"
 
     if [ "$IS64BIT" = true ]; then
-      extract "$ZIPFILE" "lib/x86/liblspd.so" "$MODPATH/zygisk" true
-      mv "$MODPATH/zygisk/liblspd.so" "$MODPATH/zygisk/x86.so"
+      extract "$ZIPFILE" "lib/x86_64/liblspd.so" "$MODPATH/zygisk" true
+      mv "$MODPATH/zygisk/liblspd.so" "$MODPATH/zygisk/x86_64.so"
     fi
   fi
 elif [ "$FLAVOR" == "riru" ]; then
