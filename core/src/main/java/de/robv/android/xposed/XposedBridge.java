@@ -397,7 +397,7 @@ public final class XposedBridge {
     public static class AdditionalHookInfo {
         private final Object params;
 
-        private AdditionalHookInfo(Executable method, Object[][] callbacks) {
+        private AdditionalHookInfo(Executable method) {
             var isStatic = Modifier.isStatic(method.getModifiers());
             Object returnType;
             if (method instanceof Method) {
@@ -407,7 +407,6 @@ public final class XposedBridge {
             }
             params = new Object[] {
                     method,
-                    callbacks,
                     returnType,
                     isStatic,
             };
@@ -421,9 +420,8 @@ public final class XposedBridge {
             var array = ((Object[]) params);
 
             var method = (Executable) array[0];
-            var callbacks = (Object[][]) array[1];
-            var returnType = (Class<?>) array[2];
-            var isStatic = (Boolean) array[3];
+            var returnType = (Class<?>) array[1];
+            var isStatic = (Boolean) array[2];
 
             param.method = method;
 
@@ -439,9 +437,8 @@ public final class XposedBridge {
                 }
             }
 
-            Object[] callbacksSnapshot = callbacks[0];
-            final int callbacksLength = callbacksSnapshot.length;
-            if (callbacksLength == 0) {
+            Object[] callbacksSnapshot = HookBridge.callbackSnapshot(method);
+            if (callbacksSnapshot == null || callbacksSnapshot.length == 0) {
                 try {
                     return HookBridge.invokeOriginalMethod(method, param.thisObject, param.args);
                 } catch (InvocationTargetException ite) {
@@ -468,7 +465,7 @@ public final class XposedBridge {
                     beforeIdx++;
                     break;
                 }
-            } while (++beforeIdx < callbacksLength);
+            } while (++beforeIdx < callbacksSnapshot.length);
 
             // call original method if not requested otherwise
             if (!param.returnEarly) {
