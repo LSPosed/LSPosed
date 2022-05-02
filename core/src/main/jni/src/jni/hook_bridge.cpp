@@ -74,8 +74,9 @@ LSP_DEF_NATIVE_METHOD(jboolean, HookBridge, hookMethod, jobject hookMethod,
         if (!hook_item->callbacks) {
             newHook = true;
             hook_item->callbacks = (jobjectArray) env->NewGlobalRef(
-                    env->NewObjectArray(1, env->FindClass("[Ljava/lang/Object;"),
-                                        env->NewObjectArray(0, JNI_FindClass(env, "java/lang/Object"), nullptr)));
+                    env->NewObjectArray(1, env->FindClass("java/lang/Object"),
+                                        env->NewObjectArray(0, env->FindClass("java/lang/Object"),
+                                                            nullptr)));
         }
     }
     if (newHook) {
@@ -187,7 +188,7 @@ static JNINativeMethod gMethods[] = {
 };
 
 void RegisterHookBridge(JNIEnv *env) {
-    auto method = env->FindClass("java/lang/reflect/Method");
+    jclass method = env->FindClass("java/lang/reflect/Method");
     invoke = env->GetMethodID(
             method, "invoke",
             "(Ljava/lang/Object;[Ljava/lang/Object;)Ljava/lang/Object;");

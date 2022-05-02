@@ -82,6 +82,20 @@ public final class XposedBridge {
 
     public static volatile ClassLoader dummyClassLoader = null;
 
+    private static final ClassCastException castException = new ClassCastException("Return value's type from hook callback does not match the hooked method");
+
+    private static final Method getCause;
+
+    static {
+        Method tmp;
+        try {
+            tmp = InvocationTargetException.class.getMethod("getCause");
+        } catch (Throwable e) {
+            tmp = null;
+        }
+        getCause = tmp;
+    }
+
     public static void initXResources() {
         if (dummyClassLoader != null) {
             return;
@@ -381,38 +395,35 @@ public final class XposedBridge {
     }
 
     public static class AdditionalHookInfo {
-        private static final ClassCastException castException = new ClassCastException("Return value's type from hook callback does not match the hooked method");
-        private static final Method getCause;
-        private final Executable method;
-        private final Object[][] callbacks;
-        private final Class<?> returnType;
-        private final boolean isStatic;
-
-        static {
-            Method tmp;
-            try {
-                tmp = InvocationTargetException.class.getMethod("getCause");
-            } catch (Throwable e) {
-                tmp = null;
-            }
-            getCause = tmp;
-        }
+        private final Object params;
 
         private AdditionalHookInfo(Executable method, Object[][] callbacks) {
-            this.method = method;
-            isStatic = Modifier.isStatic(method.getModifiers());
+            var isStatic = Modifier.isStatic(method.getModifiers());
+            Object returnType;
             if (method instanceof Method) {
                 returnType = ((Method) method).getReturnType();
             } else {
                 returnType = null;
             }
-            this.callbacks = callbacks;
+            params = new Object[] {
+                    method,
+                    callbacks,
+                    returnType,
+                    isStatic,
+            };
         }
 
         // This method is quite critical. We should try not to use system methods to avoid
         // endless recursive
         public Object callback(Object[] args) throws Throwable {
             XC_MethodHook.MethodHookParam param = new XC_MethodHook.MethodHookParam();
+
+            var array = ((Object[]) params);
+
+            var method = (Executable) array[0];
+            var callbacks = (Object[][]) array[1];
+            var returnType = (Class<?>) array[2];
+            var isStatic = (Boolean) array[3];
 
             param.method = method;
 
