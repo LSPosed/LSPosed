@@ -20,12 +20,13 @@ import android.os.PersistableBundle;
 import android.os.Process;
 import android.os.RemoteException;
 import android.util.AndroidRuntimeException;
+import android.util.ArrayMap;
 import android.webkit.WebViewDelegate;
 import android.webkit.WebViewFactory;
 import android.webkit.WebViewFactoryProvider;
 
-import org.lsposed.lspd.ILSPManagerService;
 import org.lsposed.lspd.BuildConfig;
+import org.lsposed.lspd.ILSPManagerService;
 
 import java.io.FileInputStream;
 import java.io.FileOutputStream;
@@ -138,11 +139,34 @@ public class ParasiticManagerHooker {
                         intent.setComponent(new ComponentName(intent.getComponent().getPackageName(), "org.lsposed.manager.ui.activity.MainActivity"));
                     }
                 }
+                if (param.method.getName().equals("scheduleLaunchActivity")) {
+                    ActivityInfo aInfo = null;
+                    var parameters = ((Method)param.method).getParameterTypes();
+                    for (var i = 0; i < parameters.length; ++i) {
+                        if (parameters[i] == ActivityInfo.class) {
+                            aInfo = (ActivityInfo) param.args[i];
+                            Hookers.logD("loading state of " + aInfo.name);
+                        } else if (parameters[i] == Bundle.class && aInfo != null) {
+                            final int idx = i;
+                            states.computeIfPresent(aInfo.name, (k, v) -> {
+                                param.args[idx] = v;
+                                return v;
+                            });
+                        } else if (parameters[i] == PersistableBundle.class && aInfo != null) {
+                            final int idx = i;
+                            persistentStates.computeIfPresent(aInfo.name, (k, v) -> {
+                                param.args[idx] = v;
+                                return v;
+                            });
+                        }
+                    }
+
+                }
             }
 
             @Override
             protected void afterHookedMethod(MethodHookParam param) {
-                for (var i = 0; i < param.args.length; ++i) {
+                for (var i = 0; i < param.args.length && activityClientRecordClass.isInstance(param.thisObject); ++i) {
                     if (param.args[i] instanceof ActivityInfo) {
                         var aInfo = (ActivityInfo) param.args[i];
                         Hookers.logD("loading state of " + aInfo.name);
@@ -214,8 +238,8 @@ public class ParasiticManagerHooker {
             @Override
             protected void beforeHookedMethod(MethodHookParam param) {
                 if (param.args[1] == null) return;
-                for (var intent : (List<Intent>) param.args[1]) {
-                    checkIntent(managerService, intent);
+                for (var intent : (List<?>) param.args[1]) {
+                    checkIntent(managerService, (Intent) intent);
                 }
             }
         });
@@ -250,14 +274,19 @@ public class ParasiticManagerHooker {
                 }
             }
         });
-        XposedBridge.hookAllMethods(ActivityThread.class, "performStopActivityInner", new XC_MethodHook() {
+        var stateHooker = new XC_MethodHook() {
             @Override
             protected void beforeHookedMethod(MethodHookParam param) {
                 try {
-                    XposedHelpers.callMethod(param.thisObject, Build.VERSION.SDK_INT >= Build.VERSION_CODES.P ? "callActivityOnSaveInstanceState" : "callCallActivityOnSaveInstanceState", param.args[0]);
-                    var state = (Bundle) XposedHelpers.getObjectField(param.args[0], "state");
-                    var persistentState = (PersistableBundle) XposedHelpers.getObjectField(param.args[0], "persistentState");
-                    var aInfo = (ActivityInfo) XposedHelpers.getObjectField(param.args[0], "activityInfo");
+                    var record = param.args[0];
+                    if (record instanceof IBinder) {
+                        record = ((ArrayMap<?, ?>) XposedHelpers.getObjectField(param.thisObject, "mActivities")).get(record);
+                        if (record == null) return;
+                    }
+                    XposedHelpers.callMethod(param.thisObject, Build.VERSION.SDK_INT >= Build.VERSION_CODES.P ? "callActivityOnSaveInstanceState" : "callCallActivityOnSaveInstanceState", record);
+                    var state = (Bundle) XposedHelpers.getObjectField(record, "state");
+                    var persistentState = (PersistableBundle) XposedHelpers.getObjectField(record, "persistentState");
+                    var aInfo = (ActivityInfo) XposedHelpers.getObjectField(record, "activityInfo");
                     states.compute(aInfo.name, (k, v) -> state);
                     persistentStates.compute(aInfo.name, (k, v) -> persistentState);
                     Hookers.logD("saving state of " + aInfo.name);
@@ -265,7 +294,9 @@ public class ParasiticManagerHooker {
                     Hookers.logE("save state", e);
                 }
             }
-        });
+        };
+        XposedBridge.hookAllMethods(ActivityThread.class, "performStopActivityInner", stateHooker);
+        XposedHelpers.findAndHookMethod(ActivityThread.class, "performDestroyActivity", IBinder.class, boolean.class, int.class, boolean.class, stateHooker);
     }
 
     private static void checkIntent(ILSPManagerService managerService, Intent intent) {
