@@ -82,6 +82,20 @@ public final class XposedBridge {
 
     public static volatile ClassLoader dummyClassLoader = null;
 
+    private static final ClassCastException castException = new ClassCastException("Return value's type from hook callback does not match the hooked method");
+
+    private static final Method getCause;
+
+    static {
+        Method tmp;
+        try {
+            tmp = InvocationTargetException.class.getMethod("getCause");
+        } catch (Throwable e) {
+            tmp = null;
+        }
+        getCause = tmp;
+    }
+
     public static void initXResources() {
         if (dummyClassLoader != null) {
             return;
@@ -381,38 +395,33 @@ public final class XposedBridge {
     }
 
     public static class AdditionalHookInfo {
-        private static final ClassCastException castException = new ClassCastException("Return value's type from hook callback does not match the hooked method");
-        private static final Method getCause;
-        private final Executable method;
-        private final Object[][] callbacks;
-        private final Class<?> returnType;
-        private final boolean isStatic;
+        private final Object params;
 
-        static {
-            Method tmp;
-            try {
-                tmp = InvocationTargetException.class.getMethod("getCause");
-            } catch (Throwable e) {
-                tmp = null;
-            }
-            getCause = tmp;
-        }
-
-        private AdditionalHookInfo(Executable method, Object[][] callbacks) {
-            this.method = method;
-            isStatic = Modifier.isStatic(method.getModifiers());
+        private AdditionalHookInfo(Executable method) {
+            var isStatic = Modifier.isStatic(method.getModifiers());
+            Object returnType;
             if (method instanceof Method) {
                 returnType = ((Method) method).getReturnType();
             } else {
                 returnType = null;
             }
-            this.callbacks = callbacks;
+            params = new Object[] {
+                    method,
+                    returnType,
+                    isStatic,
+            };
         }
 
         // This method is quite critical. We should try not to use system methods to avoid
         // endless recursive
         public Object callback(Object[] args) throws Throwable {
             XC_MethodHook.MethodHookParam param = new XC_MethodHook.MethodHookParam();
+
+            var array = ((Object[]) params);
+
+            var method = (Executable) array[0];
+            var returnType = (Class<?>) array[1];
+            var isStatic = (Boolean) array[2];
 
             param.method = method;
 
@@ -428,9 +437,8 @@ public final class XposedBridge {
                 }
             }
 
-            Object[] callbacksSnapshot = callbacks[0];
-            final int callbacksLength = callbacksSnapshot.length;
-            if (callbacksLength == 0) {
+            Object[] callbacksSnapshot = HookBridge.callbackSnapshot(method);
+            if (callbacksSnapshot == null || callbacksSnapshot.length == 0) {
                 try {
                     return HookBridge.invokeOriginalMethod(method, param.thisObject, param.args);
                 } catch (InvocationTargetException ite) {
@@ -457,7 +465,7 @@ public final class XposedBridge {
                     beforeIdx++;
                     break;
                 }
-            } while (++beforeIdx < callbacksLength);
+            } while (++beforeIdx < callbacksSnapshot.length);
 
             // call original method if not requested otherwise
             if (!param.returnEarly) {
