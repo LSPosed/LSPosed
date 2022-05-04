@@ -33,6 +33,8 @@ import hidden.ByteBufferDexClassLoader;
 @SuppressWarnings("ConstantConditions")
 public final class LspModuleClassLoader extends ByteBufferDexClassLoader {
     private static final String zipSeparator = "!/";
+    private static final List<File> systemNativeLibraryDirs =
+            splitPaths(System.getProperty("java.library.path"));
     private final String apk;
     private final List<File> nativeLibraryDirs = new ArrayList<>();
 
@@ -64,7 +66,7 @@ public final class LspModuleClassLoader extends ByteBufferDexClassLoader {
 
     private void initNativeLibraryDirs(String librarySearchPath) {
         nativeLibraryDirs.addAll(splitPaths(librarySearchPath));
-        nativeLibraryDirs.addAll(splitPaths(System.getProperty("java.library.path")));
+        nativeLibraryDirs.addAll(systemNativeLibraryDirs);
     }
 
     @Override
@@ -171,6 +173,11 @@ public final class LspModuleClassLoader extends ByteBufferDexClassLoader {
     @NonNull
     @Override
     public String toString() {
+        if (apk == null) {
+            return "LspModuleClassLoader[" +
+                    "instantiating, " +
+                    super.toString() + "]";
+        }
         var nativeLibraryDirsString = nativeLibraryDirs.stream()
                 .map(File::getPath)
                 .collect(Collectors.joining(", "));
