@@ -437,12 +437,18 @@ public final class XposedBridge {
                 }
             }
 
-            Object[] callbacksSnapshot = HookBridge.callbackSnapshot(method);
-            if (callbacksSnapshot == null || callbacksSnapshot.length == 0) {
+            Object[] objects = HookBridge.callbackSnapshot(method);
+            if (objects == null || objects.length == 0) {
                 try {
                     return HookBridge.invokeOriginalMethod(method, param.thisObject, param.args);
                 } catch (InvocationTargetException ite) {
                     throw (Throwable) HookBridge.invokeOriginalMethod(getCause, ite);
+                }
+            }
+            XC_MethodHook[] callbacksSnapshot = new XC_MethodHook[objects.length];
+            for (int i = 0; i < objects.length; i++) {
+                if (objects[i] instanceof XC_MethodHook) {
+                    callbacksSnapshot[i] = (XC_MethodHook) objects[i];
                 }
             }
 
@@ -450,7 +456,7 @@ public final class XposedBridge {
             int beforeIdx = 0;
             do {
                 try {
-                    ((XC_MethodHook) callbacksSnapshot[beforeIdx]).beforeHookedMethod(param);
+                    callbacksSnapshot[beforeIdx].beforeHookedMethod(param);
                 } catch (Throwable t) {
                     XposedBridge.log(t);
 
@@ -483,7 +489,7 @@ public final class XposedBridge {
                 Throwable lastThrowable = param.getThrowable();
 
                 try {
-                    ((XC_MethodHook) callbacksSnapshot[afterIdx]).afterHookedMethod(param);
+                    callbacksSnapshot[afterIdx].afterHookedMethod(param);
                 } catch (Throwable t) {
                     XposedBridge.log(t);
 
