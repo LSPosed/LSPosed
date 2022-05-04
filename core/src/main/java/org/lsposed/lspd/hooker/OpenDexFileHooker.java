@@ -3,6 +3,7 @@ package org.lsposed.lspd.hooker;
 import android.os.Build;
 
 import org.lsposed.lspd.nativebridge.HookBridge;
+import org.lsposed.lspd.util.Utils;
 
 import de.robv.android.xposed.XC_MethodHook;
 import de.robv.android.xposed.XposedHelpers;
@@ -20,6 +21,7 @@ public class OpenDexFileHooker extends XC_MethodHook {
             classLoader = XposedHelpers.class.getClassLoader();
         }
         while (classLoader != null) {
+            Utils.logD("OpenDexFileHooker: " + classLoader);
             if (classLoader == XposedHelpers.class.getClassLoader()) {
                 HookBridge.setTrusted(param.getResult());
                 return;
