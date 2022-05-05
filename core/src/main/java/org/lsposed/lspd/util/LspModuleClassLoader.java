@@ -23,17 +23,18 @@ import java.util.Enumeration;
 import java.util.List;
 import java.util.Objects;
 import java.util.jar.JarFile;
+import java.util.stream.Collectors;
 import java.util.zip.ZipEntry;
 
-import dalvik.system.DelegateLastClassLoader;
-import de.robv.android.xposed.XposedBridge;
 import hidden.ByteBufferDexClassLoader;
 
 @SuppressWarnings("ConstantConditions")
 public final class LspModuleClassLoader extends ByteBufferDexClassLoader {
     private static final String zipSeparator = "!/";
+    private static final List<File> systemNativeLibraryDirs =
+            splitPaths(System.getProperty("java.library.path"));
     private final String apk;
-    private final File[] nativeLibraryDirs;
+    private final List<File> nativeLibraryDirs = new ArrayList<>();
 
     private static List<File> splitPaths(String searchPath) {
         var result = new ArrayList<File>();
@@ -46,10 +47,8 @@ public final class LspModuleClassLoader extends ByteBufferDexClassLoader {
 
     private LspModuleClassLoader(ByteBuffer[] dexBuffers,
                                  ClassLoader parent,
-                                 String apk,
-                                 String librarySearchPath) {
+                                 String apk) {
         super(dexBuffers, parent);
-        nativeLibraryDirs = initNativeLibraryDirs(librarySearchPath);
         this.apk = apk;
     }
 
@@ -59,15 +58,13 @@ public final class LspModuleClassLoader extends ByteBufferDexClassLoader {
                                  ClassLoader parent,
                                  String apk) {
         super(dexBuffers, librarySearchPath, parent);
-        nativeLibraryDirs = initNativeLibraryDirs(librarySearchPath);
+        initNativeLibraryDirs(librarySearchPath);
         this.apk = apk;
     }
 
-    private File[] initNativeLibraryDirs(String librarySearchPath) {
-        var searchPaths = new ArrayList<File>();
-        searchPaths.addAll(splitPaths(librarySearchPath));
-        searchPaths.addAll(splitPaths(System.getProperty("java.library.path")));
-        return searchPaths.toArray(new File[0]);
+    private void initNativeLibraryDirs(String librarySearchPath) {
+        nativeLibraryDirs.addAll(splitPaths(librarySearchPath));
+        nativeLibraryDirs.addAll(systemNativeLibraryDirs);
     }
 
     @Override
@@ -174,9 +171,15 @@ public final class LspModuleClassLoader extends ByteBufferDexClassLoader {
     @NonNull
     @Override
     public String toString() {
+        if (apk == null) {
+            return "LspModuleClassLoader[instantiating]";
+        }
+        var nativeLibraryDirsString = nativeLibraryDirs.stream()
+                .map(File::getPath)
+                .collect(Collectors.joining(", "));
         return "LspModuleClassLoader[" +
-                "module=" + apk + "," +
-                "nativeLibraryDirs=" + Arrays.toString(nativeLibraryDirs) + "," +
+                "module=" + apk + ", " +
+                "nativeLibraryDirs=" + nativeLibraryDirsString + ", " +
                 super.toString() + "]";
     }
 
@@ -192,16 +195,12 @@ public final class LspModuleClassLoader extends ByteBufferDexClassLoader {
                 return null;
             }
         }).filter(Objects::nonNull).toArray(ByteBuffer[]::new);
-        if (dexBuffers == null) {
-            XposedBridge.log("Failed to load dex from daemon, falling back to PathDexClassloader");
-            return new DelegateLastClassLoader(apk, librarySearchPath, parent);
-        }
         LspModuleClassLoader cl;
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.Q) {
-            cl = new LspModuleClassLoader(dexBuffers, librarySearchPath,
-                    parent, apk);
+            cl = new LspModuleClassLoader(dexBuffers, librarySearchPath, parent, apk);
         } else {
-            cl = new LspModuleClassLoader(dexBuffers, parent, apk, librarySearchPath);
+            cl = new LspModuleClassLoader(dexBuffers, parent, apk);
+            cl.initNativeLibraryDirs(librarySearchPath);
         }
         Arrays.stream(dexBuffers).parallel().forEach(SharedMemory::unmap);
         dexes.stream().parallel().forEach(SharedMemory::close);
