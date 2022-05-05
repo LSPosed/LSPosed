@@ -172,9 +172,7 @@ public final class LspModuleClassLoader extends ByteBufferDexClassLoader {
     @Override
     public String toString() {
         if (apk == null) {
-            return "LspModuleClassLoader[" +
-                    "instantiating, " +
-                    super.toString() + "]";
+            return "LspModuleClassLoader[instantiating]";
         }
         var nativeLibraryDirsString = nativeLibraryDirs.stream()
                 .map(File::getPath)
