@@ -2,10 +2,10 @@
 <resources>
     <!-- Notification -->
     <string name="module_is_not_activated_yet">Модуль не включен</string>
-    <string name="module_is_not_activated_yet_main_user_detailed">Модуль %s установлен, но еще не включен</string>
-    <string name="module_is_not_activated_yet_multi_user_detailed">Модуль %s установлен, но еще не включен</string>
+    <string name="module_is_not_activated_yet_main_user_detailed">Модуль %1$s установлен, но еще не включен</string>
+    <string name="module_is_not_activated_yet_multi_user_detailed">Модуль %1$s установлен для пользователя  %2$s, но еще не включен</string>
     <string name="xposed_module_updated_notification_title">Модуль обновлен</string>
     <string name="xposed_module_updated_notification_content">Модуль %s обновлен, остановите и запустите приложения выбранные для модуля</string>
     <string name="xposed_module_updated_notification_title_system">Модуль обновлен, требуется перезагрузка</string>
-    <string name="xposed_module_updated_notification_content_system">Модуль %s обновлен, так как выбран системный фреймворк для модуля, требуется перезагрузка для применения изменений</string>
+    <string name="xposed_module_updated_notification_content_system">%s Has been updated, since the scope contains System Framework, required reboot to apply changes</string>
 </resources>
