@@ -2,8 +2,7 @@
 <resources>
     <!-- Notification -->
     <string name="module_is_not_activated_yet">โมดูล Xposed ยังไม่ได้เปิดใช้งาน</string>
-    <string name="module_is_not_activated_yet_main_user_detailed">ติดตั้ง %s แล้ว แต่ยังไม่เปิดใช้งาน</string>
-    <string name="module_is_not_activated_yet_multi_user_detailed">ติดตั้ง %s แล้ว แต่ยังไม่เปิดใช้งาน</string>
+    <string name="module_is_not_activated_yet_main_user_detailed">ติดตั้ง %1$s แล้ว แต่ยังไม่เปิดใช้งาน</string>
     <string name="xposed_module_updated_notification_title">โมดูล Xposed อัปเดตแล้ว</string>
     <string name="xposed_module_updated_notification_content">%s ได้รับการอัปเดตแล้ว โปรดบังคับหยุดและรีสตาร์ทแอปที่อยู่ในขอบเขต</string>
     <string name="xposed_module_updated_notification_title_system">อัปเดตโมดูล Xposed จำเป็นต้องรีบูตระบบ</string>
