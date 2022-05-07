@@ -62,12 +62,12 @@
     <string name="info_api">注入介面</string>
     <string name="info_dex2oat_wrapper">Dex 優化器包裝器</string>
     <string name="supported">支援</string>
-    <string name="unsupported">不支持</string>
-    <string name="android_version_unsatisfied">安卓版本不滿意</string>
-    <string name="crashed">墜毀</string>
+    <string name="unsupported">不支援</string>
+    <string name="android_version_unsatisfied">系統版本不受支援</string>
+    <string name="crashed">當機</string>
     <string name="mount_failed">掛載失敗</string>
-    <string name="selinux_permissive">SELinux 是允許的</string>
-    <string name="sepolicy_incorrect">SELinux 政策不正確</string>
+    <string name="selinux_permissive">SELinux 處於寬容模式</string>
+    <string name="sepolicy_incorrect">SELinux policy is incorrect</string>
     <string name="parasitic_recommend">推薦使用寄生管理器</string>
     <string name="parasitic_recommend_summary">LSPosed 現在支援系統寄生以繞過偵測。您可以在成功建立寄生管理器圖示後從系統設定中移除 LSPosed 管理器。您隨時可以從 /data/adb/lspd/manager.apk 重新安裝管理器。</string>
     <string name="create_shortcut">建立捷徑</string>
