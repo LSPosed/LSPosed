@@ -296,7 +296,8 @@ public class ParasiticManagerHooker {
             }
         };
         XposedBridge.hookAllMethods(ActivityThread.class, "performStopActivityInner", stateHooker);
-        XposedHelpers.findAndHookMethod(ActivityThread.class, "performDestroyActivity", IBinder.class, boolean.class, int.class, boolean.class, stateHooker);
+        if (Build.VERSION.SDK_INT <= Build.VERSION_CODES.O_MR1)
+            XposedHelpers.findAndHookMethod(ActivityThread.class, "performDestroyActivity", IBinder.class, boolean.class, int.class, boolean.class, stateHooker);
     }
 
     private static void checkIntent(ILSPManagerService managerService, Intent intent) {
