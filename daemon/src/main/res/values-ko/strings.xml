@@ -1,10 +1,10 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
     <!-- Notification -->
-    <string name="module_is_not_activated_yet">LSPosed 모듈이 아직 활성화되지 않았습니다.</string>
-    <string name="module_is_not_activated_yet_main_user_detailed">%s이(가) 설치되었지만 아직 활성화되지 않았습니다.</string>
-    <string name="module_is_not_activated_yet_multi_user_detailed">%s이(가) 설치되었지만 아직 활성화되지 않았습니다.</string>
-    <string name="xposed_module_updated_notification_title">LSPosed 모듈 업데이트</string>
+    <string name="module_is_not_activated_yet">Xposed 모듈이 아직 활성화되지 않았습니다.</string>
+    <string name="module_is_not_activated_yet_main_user_detailed">%1$s이(가) 설치되었지만 아직 활성화되지 않았습니다.</string>
+    <string name="module_is_not_activated_yet_multi_user_detailed">사용자 %2$s님에게 %1$s 이(가) 설치되었지만 아직 활성화되지 않았습니다.</string>
+    <string name="xposed_module_updated_notification_title">Xposed 모듈 업데이트</string>
     <string name="xposed_module_updated_notification_content">%s이(가) 업데이트되었습니다.</string>
     <string name="xposed_module_updated_notification_title_system">Xposed 모듈이 업데이트되었습니다, 재부팅이 필요합니다.</string>
     <string name="xposed_module_updated_notification_content_system">범위에 시스템 프레임워크가 포함되어 있으므로 %s 이 업데이트되었습니다. 변경 사항을 적용하려면 재부팅해야 합니다.</string>
