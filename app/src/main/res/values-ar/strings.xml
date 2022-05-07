@@ -71,7 +71,7 @@ Ali Samir</string>
     <string name="info_device">الجهاز</string>
     <string name="info_system_abi">نظام ABI</string>
     <string name="info_api">واجهة الحقن</string>
-    <string name="info_dex2oat_wrapper">غلاف محسن Dex</string>
+    <string name="info_dex2oat_wrapper">غلاف محسّن Dex</string>
     <string name="supported">مدعوم</string>
     <string name="unsupported">غير مدعوم</string>
     <string name="android_version_unsatisfied">نسخة أندرويد غير راضية</string>
