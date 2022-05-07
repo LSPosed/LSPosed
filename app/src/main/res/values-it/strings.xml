@@ -183,7 +183,7 @@
     <string name="settings_translation_summary">Aiutaci a tradurre %s nella tua lingua</string>
     <string name="pref_title_enable_auto_add_shortcut">Aggiungi automaticamente una scorciatoia</string>
     <string name="create_shortcut_summary">Crea manualmente la scorciatoia del manager parassitario</string>
-    <string name="settings_enable_auto_add_shortcut_summary">Nessuna nuova scorciatoia verrà aggiunta quando disabilitata nel manager non parassitario</string>
+    <string name="settings_enable_auto_add_shortcut_summary">Non verrà aggiunta nessuna nuova scorciatoia quando l\'opzione è disabilitata nel manager non parassitario</string>
     <string name="settings_update_channel">Canale di aggiornamento</string>
     <string name="update_channel_stable">Stabile</string>
     <string name="update_channel_bate">Beta</string>

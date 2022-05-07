@@ -66,7 +66,7 @@
     <string name="info_device">Устройство</string>
     <string name="info_system_abi">Разрядность системы ABI</string>
     <string name="info_api">Способ внедрения</string>
-    <string name="info_dex2oat_wrapper">Оболочка оптимизатора Dex</string>
+    <string name="info_dex2oat_wrapper">Оптимизатор Dex</string>
     <string name="supported">Поддерживается</string>
     <string name="unsupported">Не поддерживается</string>
     <string name="android_version_unsatisfied">Версия Android не подходит</string>
