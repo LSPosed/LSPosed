@@ -2,8 +2,6 @@
 <resources>
     <!-- Notification -->
     <string name="module_is_not_activated_yet">Xposed 模組尚未啟用</string>
-    <string name="module_is_not_activated_yet_main_user_detailed">%1$s 已安裝，但尚未啟用</string>
-    <string name="module_is_not_activated_yet_multi_user_detailed">%1$s 已安裝到用戶 %2$s, 但尚未啟用</string>
     <string name="xposed_module_updated_notification_title">Xposed 模組已更新</string>
     <string name="xposed_module_updated_notification_content">%s 已更新，請強制停止並重新打開其作用域內的程式</string>
     <string name="xposed_module_updated_notification_title_system">Xposed 模組已更新，需要重新啟動。</string>
