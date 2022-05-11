@@ -236,7 +236,7 @@ public class ConfigFileManager {
         return logDirPath.resolve("kmsg.log").toFile();
     }
 
-    static void getLogs(ParcelFileDescriptor zipFd) throws RemoteException {
+    static void getLogs(ParcelFileDescriptor zipFd) {
         try (var os = new ZipOutputStream(new FileOutputStream(zipFd.getFileDescriptor()))) {
             var comment = String.format(Locale.ROOT, "LSPosed %s %s (%d)",
                     BuildConfig.BUILD_TYPE, BuildConfig.VERSION_NAME, BuildConfig.VERSION_CODE);
@@ -260,7 +260,7 @@ public class ConfigFileManager {
             ConfigManager.getInstance().exportScopes(os);
         } catch (Throwable e) {
             Log.w(TAG, "get log", e);
-            throw new RemoteException(Log.getStackTraceString(e));
+            throw new IllegalStateException(e);
         }
     }
 
