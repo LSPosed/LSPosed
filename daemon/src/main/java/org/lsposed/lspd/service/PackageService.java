@@ -61,7 +61,7 @@ import java.util.Set;
 import java.util.concurrent.CountDownLatch;
 import java.util.stream.Collectors;
 
-import io.github.xposed.xposedservice.utils.ParceledListSlice;
+import rikka.parcelablelist.ParcelableListSlice;
 
 public class PackageService {
 
@@ -135,10 +135,10 @@ public class PackageService {
     }
 
     // Only for manager
-    public static ParceledListSlice<PackageInfo> getInstalledPackagesFromAllUsers(int flags, boolean filterNoProcess) throws RemoteException {
+    public static ParcelableListSlice<PackageInfo> getInstalledPackagesFromAllUsers(int flags, boolean filterNoProcess) throws RemoteException {
         List<PackageInfo> res = new ArrayList<>();
         IPackageManager pm = getPackageManager();
-        if (pm == null) return ParceledListSlice.emptyList();
+        if (pm == null) return ParcelableListSlice.emptyList();
         for (var user : UserService.getUsers()) {
             // in case pkginfo of other users in primary user
             res.addAll((Build.VERSION.SDK_INT + Build.VERSION.PREVIEW_SDK_INT > Build.VERSION_CODES.S_V2 ? pm.getInstalledPackages((long) flags, user.id) : pm.getInstalledPackages(flags, user.id))
@@ -154,7 +154,7 @@ public class PackageService {
                     .collect(Collectors.toList()));
         }
         if (filterNoProcess) {
-            return new ParceledListSlice<>(res.parallelStream().filter(packageInfo -> {
+            return new ParcelableListSlice<>(res.parallelStream().filter(packageInfo -> {
                 try {
                     PackageInfo pkgInfo = getPackageInfoWithComponents(packageInfo.packageName, MATCH_ALL_FLAGS, packageInfo.applicationInfo.uid / PER_USER_RANGE);
                     return !fetchProcesses(pkgInfo).isEmpty();
@@ -164,7 +164,7 @@ public class PackageService {
                 }
             }).collect(Collectors.toList()));
         }
-        return new ParceledListSlice<>(res);
+        return new ParcelableListSlice<>(res);
     }
 
     private static Set<String> fetchProcesses(PackageInfo pkgInfo) {
@@ -283,17 +283,17 @@ public class PackageService {
         }
     }
 
-    public static ParceledListSlice<ResolveInfo> queryIntentActivities(Intent intent, String resolvedType, int flags, int userId) throws RemoteException {
+    public static ParcelableListSlice<ResolveInfo> queryIntentActivities(Intent intent, String resolvedType, int flags, int userId) throws RemoteException {
         IPackageManager pm = getPackageManager();
         if (pm == null) return null;
-        return new ParceledListSlice<>((Build.VERSION.SDK_INT + Build.VERSION.PREVIEW_SDK_INT > Build.VERSION_CODES.S_V2 ? pm.queryIntentActivities(intent, resolvedType, (long) flags, userId) : pm.queryIntentActivities(intent, resolvedType, flags, userId)).getList());
+        return new ParcelableListSlice<>((Build.VERSION.SDK_INT + Build.VERSION.PREVIEW_SDK_INT > Build.VERSION_CODES.S_V2 ? pm.queryIntentActivities(intent, resolvedType, (long) flags, userId) : pm.queryIntentActivities(intent, resolvedType, flags, userId)).getList());
     }
 
     public static Intent getLaunchIntentForPackage(String packageName) throws RemoteException {
         Intent intentToResolve = new Intent(Intent.ACTION_MAIN);
         intentToResolve.addCategory(Intent.CATEGORY_INFO);
         intentToResolve.setPackage(packageName);
-        ParceledListSlice<ResolveInfo> ris = queryIntentActivities(intentToResolve, intentToResolve.getType(), 0, 0);
+        var ris = queryIntentActivities(intentToResolve, intentToResolve.getType(), 0, 0);
 
         // Otherwise, try to find a main launcher activity.
         if (ris == null || ris.getList().size() <= 0) {

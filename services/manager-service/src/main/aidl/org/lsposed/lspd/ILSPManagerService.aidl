@@ -1,6 +1,6 @@
 package org.lsposed.lspd;
 
-import io.github.xposed.xposedservice.utils.ParceledListSlice;
+import rikka.parcelablelist.ParcelableListSlice;
 import org.lsposed.lspd.models.UserInfo;
 import org.lsposed.lspd.models.Application;
 
@@ -14,7 +14,7 @@ interface ILSPManagerService {
 
     String getApi() = 1;
 
-    ParceledListSlice<PackageInfo> getInstalledPackagesFromAllUsers(int flags, boolean filterNoProcess) = 2;
+    ParcelableListSlice<PackageInfo> getInstalledPackagesFromAllUsers(int flags, boolean filterNoProcess) = 2;
 
     String[] enabledModules() = 3;
 
@@ -60,7 +60,7 @@ interface ILSPManagerService {
 
     int startActivityAsUserWithFeature(in Intent intent,  int userId) = 30;
 
-    ParceledListSlice<ResolveInfo> queryIntentActivitiesAsUser(in Intent intent, int flags, int userId) = 31;
+    ParcelableListSlice<ResolveInfo> queryIntentActivitiesAsUser(in Intent intent, int flags, int userId) = 31;
 
     boolean dex2oatFlagsLoaded() = 32;
 
