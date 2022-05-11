@@ -25,6 +25,7 @@
 #include <linux/elf.h>
 #include <sys/types.h>
 #include <link.h>
+#include <vector>
 #include "config.h"
 
 #define SHT_GNU_HASH 0x6ffffff6
@@ -48,13 +49,25 @@ namespace SandHook {
 
         template<typename T = void*>
         requires(std::is_pointer_v<T>)
-        constexpr const T getSymbPrefixFirstOffset(std::string_view prefix) const {
+        constexpr const T getSymbPrefixFirstAddress(std::string_view prefix) const {
             auto offset = PrefixLookupFirst(prefix);
             if (offset > 0 && base != nullptr) {
                 return reinterpret_cast<T>(static_cast<ElfW(Addr)>((uintptr_t) base + offset - bias));
             } else {
                 return nullptr;
             }
+        }
+
+        template<typename T = void*>
+        requires(std::is_pointer_v<T>)
+        const std::vector<T> getAllSymbAddress(std::string_view name) const {
+            auto offsets = LinearRangeLookup(name);
+            std::vector<T> res;
+            res.reserve(offsets.size());
+            for (const auto &offset : offsets) {
+                res.emplace_back(reinterpret_cast<T>(static_cast<ElfW(Addr)>((uintptr_t) base + offset - bias)));
+            }
+            return res;
         }
 
         bool isValid() const {
@@ -75,6 +88,8 @@ namespace SandHook {
         ElfW(Addr) GnuLookup(std::string_view name, uint32_t hash) const;
 
         ElfW(Addr) LinearLookup(std::string_view name) const;
+
+        std::vector<ElfW(Addr)> LinearRangeLookup(std::string_view name) const;
 
         ElfW(Addr) PrefixLookupFirst(std::string_view prefix) const;
 

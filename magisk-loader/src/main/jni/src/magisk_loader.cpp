@@ -131,7 +131,7 @@ namespace lspd {
                         return GetArt()->getSymbAddress(symbol);
                     },
                     .art_symbol_prefix_resolver = [](auto symbol) {
-                        return GetArt()->getSymbPrefixFirstOffset(symbol);
+                        return GetArt()->getSymbPrefixFirstAddress(symbol);
                     },
                 };
                 InitHooks(env, initInfo);
@@ -205,7 +205,7 @@ namespace lspd {
                         return GetArt()->getSymbAddress(symbol);
                     },
                     .art_symbol_prefix_resolver = [](auto symbol) {
-                        return GetArt()->getSymbPrefixFirstOffset(symbol);
+                        return GetArt()->getSymbPrefixFirstAddress(symbol);
                     },
             };
             auto [dex_fd, size] = instance->RequestLSPDex(env, binder);

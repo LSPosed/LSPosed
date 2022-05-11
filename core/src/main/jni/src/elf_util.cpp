@@ -190,6 +190,17 @@ ElfW(Addr) ElfImg::LinearLookup(std::string_view name) const {
     }
 }
 
+std::vector<ElfW(Addr)> ElfImg::LinearRangeLookup(std::string_view name) const {
+    MayInitLinearMap();
+    std::vector<ElfW(Addr)> res;
+    for (auto [i, end] = symtabs_.equal_range(name); i != end; ++i) {
+        auto offset = i->second->st_value;
+        res.emplace_back(offset);
+        LOGD("found {} {:#x} in {} in symtab by linear range lookup", name, offset, elf);
+    }
+    return res;
+}
+
 ElfW(Addr) ElfImg::PrefixLookupFirst(std::string_view prefix) const {
     MayInitLinearMap();
     if (auto i = symtabs_.lower_bound(prefix); i != symtabs_.end() && i->first.starts_with(prefix)) {
