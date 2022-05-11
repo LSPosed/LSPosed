@@ -88,8 +88,11 @@ public class LogsFragment extends BaseFragment {
                     var contentResolver = context.getContentResolver();
                     try (var zipFd = contentResolver.openFileDescriptor(uri, "wt")) {
                         LSPManagerServiceHolder.getService().getLogs(zipFd);
+                        showHint(context.getString(R.string.logs_saved), true);
                     } catch (Throwable e) {
-                        var text = context.getString(R.string.logs_save_failed2, e.getMessage());
+                        var cause = e.getCause();
+                        var message = cause == null ? e.getMessage() : cause.getMessage();
+                        var text = context.getString(R.string.logs_save_failed2, message);
                         showHint(text, false);
                         Log.w(App.TAG, "save log", e);
                     }
