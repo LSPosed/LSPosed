@@ -37,6 +37,7 @@ import android.content.Intent;
 import android.content.pm.LauncherApps;
 import android.content.pm.PackageInfo;
 import android.content.pm.PackageManager;
+import android.content.pm.ParceledListSlice;
 import android.content.pm.ResolveInfo;
 import android.content.pm.ShortcutInfo;
 import android.content.pm.ShortcutManager;
@@ -82,7 +83,7 @@ import java.util.UUID;
 import java.util.concurrent.TimeUnit;
 
 import hidden.HiddenApiBridge;
-import io.github.xposed.xposedservice.utils.ParceledListSlice;
+import rikka.parcelablelist.ParcelableListSlice;
 
 public class LSPManagerService extends ILSPManagerService.Stub {
     // this maybe useful when obtaining the manager binder
@@ -293,7 +294,7 @@ public class LSPManagerService extends ILSPManagerService.Stub {
             final NotificationChannel channel =
                     new NotificationChannel(CHANNEL_ID, CHANNEL_NAME, CHANNEL_IMP);
             im.createNotificationChannels("android",
-                    new android.content.pm.ParceledListSlice<>(Collections.singletonList(channel)));
+                    new ParceledListSlice<>(Collections.singletonList(channel)));
             im.enqueueNotificationWithTag("android", "android", modulePackageName,
                     pushAndGetNotificationId(modulePackageName, moduleUserId),
                     notification, 0);
@@ -586,7 +587,7 @@ public class LSPManagerService extends ILSPManagerService.Stub {
     }
 
     @Override
-    public ParceledListSlice<PackageInfo> getInstalledPackagesFromAllUsers(int flags, boolean filterNoProcess) throws RemoteException {
+    public ParcelableListSlice<PackageInfo> getInstalledPackagesFromAllUsers(int flags, boolean filterNoProcess) throws RemoteException {
         return PackageService.getInstalledPackagesFromAllUsers(flags, filterNoProcess);
     }
 
@@ -735,7 +736,7 @@ public class LSPManagerService extends ILSPManagerService.Stub {
     }
 
     @Override
-    public ParceledListSlice<ResolveInfo> queryIntentActivitiesAsUser(Intent intent, int flags, int userId) throws RemoteException {
+    public ParcelableListSlice<ResolveInfo> queryIntentActivitiesAsUser(Intent intent, int flags, int userId) throws RemoteException {
         return PackageService.queryIntentActivities(intent, intent.getType(), flags, userId);
     }
 
