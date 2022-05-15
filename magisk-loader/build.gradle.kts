@@ -108,6 +108,7 @@ android {
             }
         }
     }
+    namespace = "org.lsposed.lspd"
 }
 
 dependencies {
@@ -122,9 +123,6 @@ dependencies {
 val zipAll = task("zipAll") {
 
 }
-
-val apkDir: String
-    get() = if (rootProject.extra.properties["android.injected.invoked.from.ide"] == "true") "intermediates" else "outputs"
 
 fun afterEval() = android.applicationVariants.forEach { variant ->
     val variantCapped = variant.name.capitalize(Locale.ROOT)
@@ -269,7 +267,7 @@ val killLspd = task<Exec>("killLspd") {
 }
 val pushDaemon = task<Exec>("pushDaemon") {
     dependsOn(":daemon:assembleDebug")
-    workingDir("${project(":daemon").buildDir}/$apkDir/apk/debug")
+    workingDir("${project(":daemon").buildDir}/outputs/apk/debug")
     commandLine(adb, "push", "daemon-debug.apk", "/data/local/tmp/daemon.apk")
 }
 val pushDaemonNative = task<Exec>("pushDaemonNative") {
@@ -302,7 +300,7 @@ val reRunDaemon = task<Exec>("reRunDaemon") {
 val tmpApk = "/data/local/tmp/lsp.apk"
 val pushApk = task<Exec>("pushApk") {
     dependsOn(":app:assembleDebug")
-    workingDir("${project(":app").buildDir}/$apkDir/apk/debug")
+    workingDir("${project(":app").buildDir}/outputs/apk/debug")
     commandLine(adb, "push", "app-debug.apk", tmpApk)
 }
 val openApp = task<Exec>("openApp") {

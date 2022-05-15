@@ -82,6 +82,7 @@ android {
             }
         }
     }
+    namespace = "org.lsposed.daemon"
 }
 
 fun afterEval() = android.applicationVariants.forEach { variant ->
