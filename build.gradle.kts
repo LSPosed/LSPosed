@@ -160,10 +160,9 @@ fun Project.configureBaseExtension() {
                         ).joinToString(" ")
                         arguments.addAll(
                             arrayOf(
+                                "-DCMAKE_BUILD_TYPE=Release",
                                 "-DCMAKE_CXX_FLAGS_RELEASE=$configFlags",
-                                "-DCMAKE_CXX_FLAGS_RELWITHDEBINFO=$configFlags",
                                 "-DCMAKE_C_FLAGS_RELEASE=$configFlags",
-                                "-DCMAKE_C_FLAGS_RELWITHDEBINFO=$configFlags",
                                 "-DDEBUG_SYMBOLS_PATH=${buildDir.absolutePath}/symbols",
                             )
                         )
