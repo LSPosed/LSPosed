@@ -76,6 +76,7 @@ jobs:
         echo 'org.gradle.vfs.watch=true' >> gradle.properties
         echo 'org.gradle.jvmargs=-Xmx2048m' >> gradle.properties
         echo 'android.native.buildOutput=verbose' >> gradle.properties
+        echo 'buildCache { local { removeUnusedEntriesAfterDays = 1 } }' >> settings.gradle.kts
         ln -s $(which ninja) $(dirname $(which cmake)) # https://issuetracker.google.com/issues/206099937
         echo "cmake.dir=$(dirname $(dirname $(which cmake)))" >> local.properties
         ./gradlew zipAll

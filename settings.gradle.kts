@@ -38,5 +38,3 @@ include(
     ":services:daemon-service",
     ":services:xposed-service:interface",
 )
-
-buildCache { local { removeUnusedEntriesAfterDays = 1 } }

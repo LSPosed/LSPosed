@@ -99,7 +99,7 @@ static void write_int(int fd, int val) {
 }
 
 int main(int argc, char **argv) {
-    LOGI("dex2oat wrapper");
+    LOGD("dex2oat wrapper");
     struct sockaddr_un sock;
     sock.sun_family = AF_UNIX;
     snprintf(sock.sun_path, sizeof(sock.sun_path), "%s/dex2oat.sock", kTmpDir + 12);
