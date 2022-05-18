@@ -20,10 +20,11 @@
 
 package de.robv.android.xposed;
 
-import static de.robv.android.xposed.XposedHelpers.setObjectField;
-
 import android.app.ActivityThread;
+import android.content.ContextWrapper;
+import android.content.pm.ApplicationInfo;
 import android.content.res.Resources;
+import android.content.res.ResourcesImpl;
 import android.content.res.TypedArray;
 import android.util.Log;
 
@@ -50,7 +51,6 @@ import de.robv.android.xposed.callbacks.XC_LoadPackage;
  * This class contains most of Xposed's central logic, such as initialization and callbacks used by
  * the native side. It also includes methods to add new hooks.
  */
-@SuppressWarnings("JniMissingFunction")
 public final class XposedBridge {
     /**
      * The system class loader which can be used to locate Android framework classes.
@@ -133,10 +133,29 @@ public final class XposedBridge {
             ResourcesHook.makeInheritable(resClass);
             ResourcesHook.makeInheritable(taClass);
             ClassLoader myCL = XposedBridge.class.getClassLoader();
+            assert myCL != null;
             dummyClassLoader = ResourcesHook.buildDummyClassLoader(myCL.getParent(), resClass.getName(), taClass.getName());
             dummyClassLoader.loadClass("xposed.dummy.XResourcesSuperClass");
             dummyClassLoader.loadClass("xposed.dummy.XTypedArraySuperClass");
-            setObjectField(myCL, "parent", dummyClassLoader);
+            XposedHelpers.setObjectField(myCL, "parent", dummyClassLoader);
+
+            var contextField = XposedHelpers.findFieldIfExists(ResourcesImpl.class, "mAppContext");
+            // Used by com.mediatek.res.AsyncDrawableCache.putCacheList
+            if (contextField != null) {
+                var mediatekCompat = new ContextWrapper(null) {
+                    private final ApplicationInfo info = new ApplicationInfo();
+
+                    @Override
+                    public ApplicationInfo getApplicationInfo() {
+                        info.processName = "system";
+                        return info;
+                    }
+                };
+
+                // This field will be updated to correct value
+                // after ContextImpl.createAppContext
+                contextField.set(null, mediatekCompat);
+            }
         } catch (Throwable throwable) {
             XposedBridge.log(throwable);
             XposedInit.disableResources = true;
@@ -405,7 +424,7 @@ public final class XposedBridge {
             } else {
                 returnType = null;
             }
-            params = new Object[] {
+            params = new Object[]{
                     method,
                     returnType,
                     isStatic,
