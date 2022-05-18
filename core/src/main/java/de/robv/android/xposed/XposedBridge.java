@@ -143,9 +143,10 @@ public final class XposedBridge {
             // Used by com.mediatek.res.AsyncDrawableCache.putCacheList
             if (contextField != null) {
                 var mediatekCompat = new ContextWrapper(null) {
+                    private final ApplicationInfo info = new ApplicationInfo();
+
                     @Override
                     public ApplicationInfo getApplicationInfo() {
-                        var info = new ApplicationInfo();
                         info.processName = "system";
                         return info;
                     }
