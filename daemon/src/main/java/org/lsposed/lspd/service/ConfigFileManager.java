@@ -22,11 +22,8 @@ package org.lsposed.lspd.service;
 import static org.lsposed.lspd.service.ServiceManager.TAG;
 import static org.lsposed.lspd.service.ServiceManager.toGlobalNamespace;
 
-import android.content.ContextWrapper;
-import android.content.pm.ApplicationInfo;
 import android.content.res.AssetManager;
 import android.content.res.Resources;
-import android.content.res.ResourcesImpl;
 import android.os.ParcelFileDescriptor;
 import android.os.Process;
 import android.os.SELinux;
@@ -142,23 +139,6 @@ public class ConfigFileManager {
             }
         } catch (Throwable e) {
             Log.e(TAG, Log.getStackTraceString(e));
-        }
-        try {
-            @SuppressWarnings("JavaReflectionMemberAccess")
-            var contextField = ResourcesImpl.class.getDeclaredField("mAppContext");
-            contextField.setAccessible(true);
-            var mediatekCompat = new ContextWrapper(null) {
-                private final ApplicationInfo info = new ApplicationInfo();
-
-                @Override
-                public ApplicationInfo getApplicationInfo() {
-                    info.processName = "system";
-                    return info;
-                }
-            };
-            contextField.set(null, mediatekCompat);
-        } catch (Exception ignored) {
-            // Not a MediaTek device
         }
     }
 
