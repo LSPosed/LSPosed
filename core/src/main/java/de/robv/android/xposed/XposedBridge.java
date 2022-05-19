@@ -21,10 +21,7 @@
 package de.robv.android.xposed;
 
 import android.app.ActivityThread;
-import android.content.ContextWrapper;
-import android.content.pm.ApplicationInfo;
 import android.content.res.Resources;
-import android.content.res.ResourcesImpl;
 import android.content.res.TypedArray;
 import android.util.Log;
 
@@ -138,24 +135,6 @@ public final class XposedBridge {
             dummyClassLoader.loadClass("xposed.dummy.XResourcesSuperClass");
             dummyClassLoader.loadClass("xposed.dummy.XTypedArraySuperClass");
             XposedHelpers.setObjectField(myCL, "parent", dummyClassLoader);
-
-            var contextField = XposedHelpers.findFieldIfExists(ResourcesImpl.class, "mAppContext");
-            // Used by com.mediatek.res.AsyncDrawableCache.putCacheList
-            if (contextField != null) {
-                var mediatekCompat = new ContextWrapper(null) {
-                    private final ApplicationInfo info = new ApplicationInfo();
-
-                    @Override
-                    public ApplicationInfo getApplicationInfo() {
-                        info.processName = "system";
-                        return info;
-                    }
-                };
-
-                // This field will be updated to correct value
-                // after ContextImpl.createAppContext
-                contextField.set(null, mediatekCompat);
-            }
         } catch (Throwable throwable) {
             XposedBridge.log(throwable);
             XposedInit.disableResources = true;
