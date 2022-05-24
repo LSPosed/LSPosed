@@ -77,7 +77,6 @@ jobs:
         echo 'org.gradle.jvmargs=-Xmx2048m' >> gradle.properties
         echo 'android.native.buildOutput=verbose' >> gradle.properties
         echo 'buildCache { local { removeUnusedEntriesAfterDays = 1 } }' >> settings.gradle.kts
-        echo "84831b9409646a918e30573bab4c9c91346d8abd" > $ANDROID_SDK_ROOT/licenses/android-sdk-preview-license
         ./gradlew zipAll
         ccache -s
     - name: Prepare artifact
