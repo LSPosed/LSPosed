@@ -47,11 +47,14 @@ namespace lspd {
         if (*this) munmap(addr_, size_);
     }
 
-    void Context::InitHooks(JNIEnv *env, const lsplant::InitInfo &initInfo) {
+    void Context::InitArtHooker(JNIEnv *env, const lsplant::InitInfo &initInfo) {
         if (!lsplant::Init(env, initInfo)) {
             LOGE("Failed to init lsplant");
             return;
         }
+    }
+
+    void Context::InitHooks(JNIEnv *env) {
         auto path_list = JNI_GetObjectFieldOf(env, inject_class_loader_, "pathList",
                                               "Ldalvik/system/DexPathList;");
         if (!path_list) {
