@@ -81,6 +81,7 @@ JJ108</string>
     <string name="menuSaveToSd">Speichern</string>
     <string name="nav_item_logs_verbose">Ausführliche Protokolle</string>
     <string name="nav_item_logs_module">Modul-Protokolle</string>
+    <string name="logs_saved">Gespeicherte Protokolle</string>
     <string name="logs_save_failed2">Speichern fehlgeschlagen:\n%s</string>
     <string name="menuClearLog">Protokoll jetzt löschen</string>
     <string name="logs_cleared">Protokoll erfolgreich gelöscht.</string>
