@@ -84,6 +84,7 @@
     <string name="menuSaveToSd">Išsaugoti</string>
     <string name="nav_item_logs_verbose">Žurnalai su verbaline informacija</string>
     <string name="nav_item_logs_module">Modulių žurnalai</string>
+    <string name="logs_saved">Išsaugoti žurnalai</string>
     <string name="logs_save_failed2">Nepavyko išsaugoti:\n%s</string>
     <string name="menuClearLog">Išvalyti žurnalą dabar</string>
     <string name="logs_cleared">Žurnalas sėkmingai išvalytas.</string>
