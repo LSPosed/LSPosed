@@ -80,6 +80,7 @@
     <string name="menuSaveToSd">Desa</string>
     <string name="nav_item_logs_verbose">Registres detallats</string>
     <string name="nav_item_logs_module">Registres de mòduls</string>
+    <string name="logs_saved">Registres guardats</string>
     <string name="logs_save_failed2">No s\'ha pogut desar:\n%s</string>
     <string name="menuClearLog">Esborra el registre ara</string>
     <string name="logs_cleared">El registre s\'ha esborrat correctament.</string>
