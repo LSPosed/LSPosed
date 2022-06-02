@@ -80,6 +80,7 @@
     <string name="menuSaveToSd">Rizgarkirin</string>
     <string name="nav_item_logs_verbose">Têketinên Verbose</string>
     <string name="nav_item_logs_module">Têketinên Modulan</string>
+    <string name="logs_saved">Têketin xilas kirin</string>
     <string name="logs_save_failed2">Sazkirin bi ser neket:\n%s</string>
     <string name="menuClearLog">Naha têketinê paqij bike</string>
     <string name="logs_cleared">Têketin bi serkeftî hate paqij kirin.</string>
