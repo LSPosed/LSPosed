@@ -1,0 +1,11 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <!-- Notification -->
+    <string name="module_is_not_activated_yet">Модулът Xposed все още не е активиран</string>
+    <string name="module_is_not_activated_yet_main_user_detailed">%1$s е инсталиран, но все още не е активиран</string>
+    <string name="module_is_not_activated_yet_multi_user_detailed">%1$s е инсталиран на потребител %2$s, но все още не е активиран</string>
+    <string name="xposed_module_updated_notification_title">Актуализиран модул Xposed</string>
+    <string name="xposed_module_updated_notification_content">%s е актуализиран, моля, спрете принудително и рестартирайте приложенията в неговия обхват</string>
+    <string name="xposed_module_updated_notification_title_system">Актуализиран модул Xposed, изисква се рестартиране на системата</string>
+    <string name="xposed_module_updated_notification_content_system">%s е актуализиран, тъй като обхватът съдържа System Framework, необходимо е рестартиране, за да се приложат промените</string>
+</resources>
