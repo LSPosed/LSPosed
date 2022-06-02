@@ -2,6 +2,8 @@
 <resources>
     <!-- Notification -->
     <string name="module_is_not_activated_yet">Modulul Xposed nu este inca activat</string>
+    <string name="module_is_not_activated_yet_main_user_detailed">%1$s a fost instalat, dar nu este încă activat</string>
+    <string name="module_is_not_activated_yet_multi_user_detailed">%1$s a fost instalat la utilizatorul %2$s, dar nu este încă activat</string>
     <string name="xposed_module_updated_notification_title">Modulul Xposed actualizat</string>
     <string name="xposed_module_updated_notification_content">%s a fost actualizat, vă rugăm să forțați oprirea și repornirea aplicațiilor din domeniul său de aplicare</string>
     <string name="xposed_module_updated_notification_title_system">Modulul Xposed a fost actualizat, este necesară repornirea sistemului</string>
