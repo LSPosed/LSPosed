@@ -85,6 +85,7 @@
     <string name="menuSaveToSd">שמור</string>
     <string name="nav_item_logs_verbose">יומנים מפורשים</string>
     <string name="nav_item_logs_module">יומני מודלים</string>
+    <string name="logs_saved">יומנים נשמרו</string>
     <string name="logs_save_failed2">השמירה נכשלה:\n%s</string>
     <string name="menuClearLog">נקה לוגים עכשיו</string>
     <string name="logs_cleared">לוגים נוקו בהצלחה.</string>
