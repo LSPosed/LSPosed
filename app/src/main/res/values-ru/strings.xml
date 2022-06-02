@@ -84,6 +84,7 @@
     <string name="menuSaveToSd">Сохранить</string>
     <string name="nav_item_logs_verbose">Подробные логи</string>
     <string name="nav_item_logs_module">Логи модулей</string>
+    <string name="logs_saved">Логи сохранены</string>
     <string name="logs_save_failed2">Ошибка сохранения:\n%s</string>
     <string name="menuClearLog">Очистить логи</string>
     <string name="logs_cleared">Логи успешно очищены</string>
