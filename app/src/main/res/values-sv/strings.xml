@@ -80,6 +80,7 @@
     <string name="menuSaveToSd">Spara</string>
     <string name="nav_item_logs_verbose">Utförliga Loggar</string>
     <string name="nav_item_logs_module">Modul-loggar</string>
+    <string name="logs_saved">Loggar som sparas</string>
     <string name="logs_save_failed2">Det gick inte att spara:\n%s</string>
     <string name="menuClearLog">Rensa loggen nu</string>
     <string name="logs_cleared">Loggen har rensats.</string>
