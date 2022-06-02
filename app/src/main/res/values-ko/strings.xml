@@ -78,6 +78,7 @@
     <string name="menuSaveToSd">저장</string>
     <string name="nav_item_logs_verbose">자세한 로그</string>
     <string name="nav_item_logs_module">모듈 로그</string>
+    <string name="logs_saved">로그가 저장되었습니다</string>
     <string name="logs_save_failed2">저장 실패:\n%s</string>
     <string name="menuClearLog">로그 지우기</string>
     <string name="logs_cleared">로그를 성공적으로 지웠습니다.</string>
