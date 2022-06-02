@@ -84,6 +84,7 @@
     <string name="menuSaveToSd">Zapisz</string>
     <string name="nav_item_logs_verbose">Logi verbose</string>
     <string name="nav_item_logs_module">Logi modułów</string>
+    <string name="logs_saved">Zapisane dzienniki</string>
     <string name="logs_save_failed2">Nie udało się zapisać:\n%s</string>
     <string name="menuClearLog">Wyczyść log teraz</string>
     <string name="logs_cleared">Logi zostały pomyślnie wyczyszczone.</string>
