@@ -2,6 +2,8 @@
 <resources>
     <!-- Notification -->
     <string name="module_is_not_activated_yet">एक्सपोज़ड मॉड्यूल अभी तक सक्रिय नहीं है</string>
+    <string name="module_is_not_activated_yet_main_user_detailed">%1$s इंस्टॉल कर दिया गया है, लेकिन अब तक एक्टिवेट नही किया गया</string>
+    <string name="module_is_not_activated_yet_multi_user_detailed">%1$s को %2$s यूजर में इंस्टॉल कर दिया गया है, लेकिन अब तक एक्टिवेट नही किया गया है</string>
     <string name="xposed_module_updated_notification_title">एक्सपोज़ड मॉड्यूल अपडेट किया गया</string>
     <string name="xposed_module_updated_notification_content">%s अपडेट कर दिया गया है, कृपया बलपूर्वक रोकें और इसके दायरे में ऐप्स को पुनरारंभ करें</string>
     <string name="xposed_module_updated_notification_title_system">एक्सपोज़ड मॉड्यूल अपडेट किया गया, सिस्टम रीबूट की आवश्यकता है</string>
