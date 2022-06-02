@@ -81,6 +81,7 @@
     <string name="menuSaveToSd">Mentés</string>
     <string name="nav_item_logs_verbose">Szöveges naplók</string>
     <string name="nav_item_logs_module">Modulok Naplók</string>
+    <string name="logs_saved">Naplók mentése</string>
     <string name="logs_save_failed2">Nem sikerült menteni:\n%s</string>
     <string name="menuClearLog">Törölje a naplót most</string>
     <string name="logs_cleared">A napló sikeresen törlődött.</string>
