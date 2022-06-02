@@ -60,7 +60,14 @@
     <string name="info_device">設備</string>
     <string name="info_system_abi">系統ABI</string>
     <string name="info_api">注入介面</string>
+    <string name="info_dex2oat_wrapper">優化安裝器</string>
     <string name="supported">支援</string>
+    <string name="unsupported">不支持</string>
+    <string name="android_version_unsatisfied">不支持的安卓版本</string>
+    <string name="crashed">崩潰</string>
+    <string name="mount_failed">加載失敗</string>
+    <string name="selinux_permissive">寬容模式（SELinux）已啟用</string>
+    <string name="sepolicy_incorrect">寬容模式（SELinux）加載錯誤</string>
     <string name="parasitic_recommend">推薦使用寄生管理器</string>
     <string name="parasitic_recommend_summary">LSPosed 現在支援寄生到系統以避免檢測。
 在成功建立寄生管理器的捷徑後你可以安全地移除管理器。
@@ -73,6 +80,7 @@
     <string name="menuSaveToSd">儲存</string>
     <string name="nav_item_logs_verbose">詳細記錄檔</string>
     <string name="nav_item_logs_module">模組紀錄檔</string>
+    <string name="logs_saved">日誌已保存</string>
     <string name="logs_save_failed2">儲存失敗:\n%s</string>
     <string name="menuClearLog">立即清理紀錄檔</string>
     <string name="logs_cleared">紀錄檔清理成功</string>
