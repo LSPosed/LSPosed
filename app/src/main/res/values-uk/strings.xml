@@ -84,6 +84,7 @@
     <string name="menuSaveToSd">Зберегти</string>
     <string name="nav_item_logs_verbose">Детальні звіти</string>
     <string name="nav_item_logs_module">Звіти модулів</string>
+    <string name="logs_saved">Журнали збережено</string>
     <string name="logs_save_failed2">Не вдалося зберегти:\n%s</string>
     <string name="menuClearLog">Очистити звіт зараз</string>
     <string name="logs_cleared">Звіт успішно очищено.</string>
