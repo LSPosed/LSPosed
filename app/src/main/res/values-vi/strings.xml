@@ -78,6 +78,7 @@
     <string name="menuSaveToSd">Lưu lại</string>
     <string name="nav_item_logs_verbose">Nhật ký Chi tiết</string>
     <string name="nav_item_logs_module">Nhật ký các Mô-đun</string>
+    <string name="logs_saved">Nhật ký đã được lưu</string>
     <string name="logs_save_failed2">Lưu thất bại:\n%s</string>
     <string name="menuClearLog">Xóa nhật ký</string>
     <string name="logs_cleared">Nhật ký đã được xoá.</string>
