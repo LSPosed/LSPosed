@@ -80,6 +80,7 @@
     <string name="menuSaveToSd">Lagre</string>
     <string name="nav_item_logs_verbose">Detaljert logg</string>
     <string name="nav_item_logs_module">Modullogger</string>
+    <string name="logs_saved">Logger lagret</string>
     <string name="logs_save_failed2">Kunne ikke lagre:\n%s</string>
     <string name="menuClearLog">Tøm logg nå</string>
     <string name="logs_cleared">Logg fjernet.</string>
