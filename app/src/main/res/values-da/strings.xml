@@ -80,6 +80,7 @@
     <string name="menuSaveToSd">Gem</string>
     <string name="nav_item_logs_verbose">Verbose Logs</string>
     <string name="nav_item_logs_module">Moduler Logs</string>
+    <string name="logs_saved">Gemte logfiler</string>
     <string name="logs_save_failed2">Mislykkedes at gemme:\n%s</string>
     <string name="menuClearLog">Ryd log nu</string>
     <string name="logs_cleared">Loggen blev ryddet.</string>
