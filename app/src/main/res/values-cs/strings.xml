@@ -84,6 +84,7 @@
     <string name="menuSaveToSd">Uložit</string>
     <string name="nav_item_logs_verbose">Podrobné protokoly</string>
     <string name="nav_item_logs_module">Protokoly modulů</string>
+    <string name="logs_saved">Protokoly uloženy</string>
     <string name="logs_save_failed2">Nepodařilo se uložit:\n%s</string>
     <string name="menuClearLog">Vymazat log</string>
     <string name="logs_cleared">Log byl úspěšně vymazán.</string>
