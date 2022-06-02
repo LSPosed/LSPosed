@@ -80,6 +80,7 @@
     <string name="menuSaveToSd">Salvar</string>
     <string name="nav_item_logs_verbose">Registros Detalhados</string>
     <string name="nav_item_logs_module">Registros dos Módulos</string>
+    <string name="logs_saved">Registros salvos</string>
     <string name="logs_save_failed2">Falha ao salvar:\n%s</string>
     <string name="menuClearLog">Limpar Registros</string>
     <string name="logs_cleared">Registro limpo com sucesso.</string>

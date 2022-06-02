@@ -80,6 +80,7 @@
     <string name="menuSaveToSd">Stoor</string>
     <string name="nav_item_logs_verbose">Uitgebreide logs</string>
     <string name="nav_item_logs_module">Modules</string>
+    <string name="logs_saved">Logs gestoor</string>
     <string name="logs_save_failed2">Kon nie stoor nie:\n%s</string>
     <string name="menuClearLog">Vee logboek nou uit</string>
     <string name="logs_cleared">Log is suksesvol uitgevee.</string>

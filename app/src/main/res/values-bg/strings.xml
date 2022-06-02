@@ -1,0 +1,235 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!--
+  ~ This file is part of LSPosed.
+  ~
+  ~ LSPosed is free software: you can redistribute it and/or modify
+  ~ it under the terms of the GNU General Public License as published by
+  ~ the Free Software Foundation, either version 3 of the License, or
+  ~ (at your option) any later version.
+  ~
+  ~ LSPosed is distributed in the hope that it will be useful,
+  ~ but WITHOUT ANY WARRANTY; without even the implied warranty of
+  ~ MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+  ~ GNU General Public License for more details.
+  ~
+  ~ You should have received a copy of the GNU General Public License
+  ~ along with LSPosed.  If not, see <https://www.gnu.org/licenses/>.
+  ~
+  ~ Copyright (C) 2021 LSPosed Contributors
+  -->
+<resources xmlns:tools="http://schemas.android.com/tools" tools:keep="@string/xposed_module_updated_notification_*,@string/module_is_not_activated_*">
+    <!-- MainActivity -->
+    <string name="info">Информация</string>
+    <string name="overview">Преглед</string>
+    <string name="Modules">Модули</string>
+    <plurals name="modules_enabled_count">
+        <item quantity="one">%d модулът е активиран</item>
+        <item quantity="other">%d включени модули</item>
+    </plurals>
+    <string name="Logs">Дневници</string>
+    <string name="Settings">Настройки</string>
+    <string name="feedback_or_suggestion">Обратна връзка или предложение</string>
+    <string name="About">За</string>
+    <string name="report_issue">Докладване на проблем</string>
+    <string name="module_repo">Хранилище</string>
+    <string name="module_repo_loading">Зареждане…</string>
+    <string name="module_repo_up_to_date">Всички модули са актуализирани</string>
+    <plurals name="module_repo_upgradable">
+        <item quantity="one">%d модул за надграждане</item>
+        <item quantity="other">%d модули, които могат да се надграждат</item>
+    </plurals>
+    <string name="about_view_source_code"><![CDATA[Преглед на изходния код в %1$s<br/>Присъединете се към нашия %2$s канал]]></string>
+    <string name="translators" comment="Dear translators, please add your home page here following the format. There can be more than one translator. So feel free to append yourself.">null</string>
+    <string name="install">Инсталиране на</string>
+    <string name="install_summary">Докоснете, за да инсталирате LSPosed</string>
+    <string name="not_installed">Не е инсталиран</string>
+    <string name="not_install_summary">LSPosed не е инсталиран</string>
+    <string name="activated">Активиран</string>
+    <string name="partial_activated">Частично активиран</string>
+    <string name="selinux_policy_not_loaded_summary">SEPolicy не е заредена правилно</string>
+    <string name="selinux_policy_not_loaded"><![CDATA[Модулите, които закачат System Framework, няма да работят.<br/>Моля, докладвайте това на <a href="https://github.com/topjohnwu/Magisk/issues"><b>Magisk</b></a> разработчика.]]></string>
+    <string name="system_inject_fail_summary">Неуспешно инжектиране на системната рамка</string>
+    <string name="system_inject_fail"><![CDATA[Това се случва рядко и може да е причинено от <b>Magisk</b> или някои нискокачествени модули на Magisk.<br/>Моля, опитайте се да деактивирате модулите на Magisk, различни от Riru и LSPosed, или изпратете пълен журнал на разработчиците.]]></string>
+    <string name="system_prop_incorrect_summary">Неправилна опора на системата</string>
+    <string name="system_prop_incorrect"><![CDATA[Някои необходими системни свойства са изтрити или променени.<br/>Понякога модулите могат да се обезсилват.]]></string>
+    <string name="need_update">Необходимо е да се актуализира</string>
+    <string name="please_update_summary">Моля, инсталирайте най-новата версия на LSPosed</string>
+    <string name="lsposed_not_active">LSPosed в момента не е инсталиран или активен.</string>
+    <string name="info_api_version">Версия на API</string>
+    <string name="info_framework_version">Версия на рамката</string>
+    <string name="info_manager_version">Версия на мениджъра</string>
+    <string name="info_system_version">Версия на системата</string>
+    <string name="info_device">Устройство</string>
+    <string name="info_system_abi">ABI на системата</string>
+    <string name="info_api">Интерфейс за впръскване</string>
+    <string name="info_dex2oat_wrapper">Обвивка на Dex Optimizer</string>
+    <string name="supported">Поддържан</string>
+    <string name="unsupported">Неподдържан</string>
+    <string name="android_version_unsatisfied">Версията за Android е неудовлетворена</string>
+    <string name="crashed">Счупен</string>
+    <string name="mount_failed">Монтирането е неуспешно</string>
+    <string name="selinux_permissive">SELinux е разрешаващ</string>
+    <string name="sepolicy_incorrect">Политиката на SELinux е неправилна</string>
+    <string name="parasitic_recommend">Препоръчва се паразитен мениджър</string>
+    <string name="parasitic_recommend_summary">LSPosed вече поддържа паразитиране на системата, за да се избегне откриване. Можете безопасно да деинсталирате мениджъра след успешно създаване на пряк път на паразитния мениджър. Във всеки случай можете да инсталирате обратно мениджъра от /data/adb/lspd/manager.apk.</string>
+    <string name="create_shortcut">Създаване на пряк път</string>
+    <string name="never_show">Никога не показвайте</string>
+    <string name="update_lsposed">Актуализиране на LSPosed</string>
+    <string name="update_lsposed_msg">Потвърждаване на актуализацията на LSPosed? Това устройство ще се рестартира след завършване на актуализацията</string>
+    <!-- LogsActivity -->
+    <string name="menuSaveToSd">Запазете</string>
+    <string name="nav_item_logs_verbose">Условни дневници</string>
+    <string name="nav_item_logs_module">Дневници на модулите</string>
+    <string name="logs_saved">Запазени дневници</string>
+    <string name="logs_save_failed2">Не успяхте да запазите:\n%s</string>
+    <string name="menuClearLog">Изчистване на дневника сега</string>
+    <string name="logs_cleared">Дневникът е изчистен успешно.</string>
+    <string name="scroll_top">Превъртете към началото</string>
+    <string name="loading">Зареждане…</string>
+    <string name="scroll_bottom">Превъртете към дъното</string>
+    <string name="logs_cannot_read">Не мога да прочета дневника: \n</string>
+    <string name="menuReload">Презареждане</string>
+    <string name="logs_clear_failed_2">Неуспешно изчистване на дневника</string>
+    <string name="menu_enable_word_wrap">Обвиване на думата</string>
+    <string name="enabled_verbose_log">Разрешен е вербален дневник</string>
+    <string name="disabled_verbose_log">Деактивиран е вербалният дневник</string>
+    <!-- ModulesActivity -->
+    <string name="module_empty_description">(не е предоставено описание)</string>
+    <string name="warning_xposed_min_version">Този модул изисква по-нова версия на Xposed (%d) и поради това не може да бъде активиран</string>
+    <string name="no_min_version_specified">Този модул не посочва версията на Xposed, която му е необходима.</string>
+    <string name="warning_min_version_too_low">Този модул е създаден за Xposed версия %1$d, но поради несъвместими промени във версия %2$d, той е деактивиран</string>
+    <string name="warning_installed_on_external_storage">Този модул не може да бъде зареден, защото е инсталиран на SD картата, моля, преместете го във вътрешната памет</string>
+    <string name="module_uninstall">Деинсталиране на</string>
+    <string name="module_settings">Настройки на модула</string>
+    <string name="view_in_repo">Преглед в Repo</string>
+    <string name="module_uninstall_message">Искате ли да деинсталирате този модул?</string>
+    <string name="module_uninstalled">Деинсталиран %1$s</string>
+    <string name="module_uninstall_failed">Деинсталирането е неуспешно</string>
+    <string name="add_module_to_user">Добавяне на модул към потребителя</string>
+    <string name="module_installed">Добавяне на %1$s към потребител %2$s</string>
+    <string name="module_install_failed">Добавянето на модул е неуспешно</string>
+    <string name="install_to_user">Инсталиране на потребител %s</string>
+    <string name="install_to_user_message">Искате да инсталирате %1$s на потребител %2$s? Препоръчително е да се инсталира ръчно, принудителното инсталиране чрез LSPosed може да доведе до проблеми.</string>
+    <string name="expand">разширяване на</string>
+    <string name="collapse">срив</string>
+    <!-- AppListActivity -->
+    <string name="compile_speed">Оптимизиране на</string>
+    <string name="compile_speed_msg">Оптимизиране на…</string>
+    <string name="compile_done">Оптимизацията е завършена</string>
+    <string name="app_launch">Стартирайте го</string>
+    <string name="compile_failed">Оптимизацията е неуспешна: върнатата стойност е празна</string>
+    <string name="compile_failed_with_info">Оптимизацията е неуспешна: </string>
+    <string name="sort_by_name">Име на приложението</string>
+    <string name="sort_by_package_name">Име на пакета</string>
+    <string name="sort_by_install_time">Време за инсталиране</string>
+    <string name="sort_by_update_time">Време за актуализация</string>
+    <string name="sort_reverse">Обратен</string>
+    <string name="menu_show_system_apps">Системни приложения</string>
+    <string name="menu_sort">Сортиране</string>
+    <string name="enable_module">Включване на модула</string>
+    <string name="no_scope_selected">Не сте избрали нито едно приложение. Продължете?</string>
+    <string name="menu_show_games">Игри</string>
+    <string name="menu_show_modules">Модули</string>
+    <string name="menu_show_denylist">Denylist</string>
+    <string name="failed_to_save_scope_list">Неуспешно запазване на списъка с обхвата</string>
+    <string name="app_version">Версия: %1$s</string>
+    <string name="use_recommended">Препоръчителен</string>
+    <string name="no_scope_selected_has_recommended">Не сте избрали нито едно приложение. Избрахте препоръчани приложения?</string>
+    <string name="use_recommended_message">Изберете препоръчани приложения?</string>
+    <string name="module_is_not_activated_yet">Модулът Xposed все още не е активиран</string>
+    <string name="requested_by_module">Препоръчителен</string>
+    <string name="update_available">Налична е актуализация: %1$s</string>
+    <string name="module_disabled_no_selection">Модулът %s е деактивиран, тъй като не е избрано приложение.</string>
+    <string name="android_framework">Рамка на системата</string>
+    <string name="menu_backup_and_restore">Резервно копие</string>
+    <string name="menu_backup">Резервно копие</string>
+    <string name="menu_restore">Възстановяване на</string>
+    <string name="force_stop">Спиране на силата</string>
+    <string name="force_stop_dlg_title">Насилствено спиране?</string>
+    <string name="force_stop_dlg_text">Ако спрете приложение принудително, то може да се държи неправилно.</string>
+    <string name="reboot_required">Необходимо е рестартиране, за да се приложи тази промяна.</string>
+    <string name="reboot">Рестартиране на</string>
+    <string name="menu_hide">Скрий</string>
+    <string name="deny_list">%s е в denylist. Възможно е той да не влезе в сила.</string>
+    <string name="deny_list_info">На denylist</string>
+    <!-- ModulesActivity and AppListActivity -->
+    <string name="modules_other_app">Преглед в друго приложение</string>
+    <string name="module_app_info">Информация за приложението</string>
+    <string name="list_empty">¯\\\\_(ツ)_\/¯\nНищо тук</string>
+    <!-- SettingsActivity -->
+    <string name="settings_group_framework">Рамка</string>
+    <string name="pref_title_disable_verbose_log">Деактивиране на подробните дневници</string>
+    <string name="pure_black_dark_theme">Черна тъмна тема</string>
+    <string name="pure_black_dark_theme_summary">Използвайте чисто черната тема, ако е активирана тъмна тема</string>
+    <string name="settings_group_theme">Тема</string>
+    <string name="settings_backup_and_restore">Архивиране и възстановяване</string>
+    <string name="settings_backup_summery">Списък с резервни копия на модули и списъци на обхвата.</string>
+    <string name="settings_restore_summery">Възстановяване на списъците с модули и области.</string>
+    <string name="settings_backup">Резервно копие</string>
+    <string name="settings_backup_failed2">Неуспешно архивиране:\n%s</string>
+    <string name="enable_documentui">Моля, разрешете DocumentUI</string>
+    <string name="settings_restore">Възстановяване на</string>
+    <string name="settings_restore_failed2">Неуспешно възстановяване:\n%s</string>
+    <string name="group_network">Мрежа</string>
+    <string name="dns_over_http">DNS през HTTPS</string>
+    <string name="dns_over_http_summary">Заобикаляне на отравянето на DNS в някои държави</string>
+    <string name="theme_color">Цвят на темата</string>
+    <string name="theme_color_system">Цвят на темата на системата</string>
+    <string name="settings_show_hidden_icon_apps_enabled">Принуждаване на приложенията да показват икони на стартирането</string>
+    <string name="settings_show_hidden_icon_apps_enabled_summary">След Android 10 на приложенията не е позволено да скриват иконите си за стартиране. Изключете превключвателя, за да деактивирате тази системна функция.</string>
+    <string name="settings_group_system">Система</string>
+    <string name="settings_language">Език</string>
+    <string name="settings_translation_contributors">Преводачи, които допринасят за превода</string>
+    <string name="settings_translation">Участие в превод</string>
+    <string name="settings_translation_summary">Помогнете ни да преведем %s на вашия език</string>
+    <string name="pref_title_enable_auto_add_shortcut">Автоматично добавяне на пряк път</string>
+    <string name="create_shortcut_summary">Ръчно създаване на пряк път към паразитен мениджър</string>
+    <string name="settings_enable_auto_add_shortcut_summary">Не се добавят нови преки пътища, когато са деактивирани в непаразитния мениджър.</string>
+    <string name="settings_update_channel">Актуализиране на канала</string>
+    <string name="update_channel_stable">Стабилен</string>
+    <string name="update_channel_bate">Бета</string>
+    <string name="update_channel_nightly">Нощно изграждане</string>
+    <string name="pref_title_restrict_classloader">Само модулът classloader може да използва Xposed API</string>
+    <string name="pref_summary_restrict_classloader">Това може да наруши работата на някои модули, но да е от полза за сигурността (експериментална функция)</string>
+    <!-- Module Repo -->
+    <string name="module_readme">Readme</string>
+    <string name="module_releases">Освобождава</string>
+    <string name="module_information">Информация</string>
+    <string name="module_information_homepage">Начална страница</string>
+    <string name="module_information_source_url">Изходен код</string>
+    <string name="module_information_collaborators">Сътрудници</string>
+    <string name="module_release_view_assets">Активи</string>
+    <string name="menu_open_in_browser">Отваряне в браузъра</string>
+    <string name="refresh">Обновяване</string>
+    <string name="module_release_load_more">Показване на по-стари версии</string>
+    <string name="module_release_no_more">Няма повече освобождаване</string>
+    <string name="repo_load_failed">Неуспешно зареждане на модул repo: %s</string>
+    <string name="sort_upgradable_first">Може да се надгражда първо</string>
+    <!-- CrashReportActivity -->
+    <string name="version_mismatch">Версията на рамката LSPosed (%1$d) не съвпада с тази на мениджъра (%2$d). Моля, преинсталирайте LSPosed.</string>
+    <string name="manager_crashed">Мениджърът катастрофира</string>
+    <string name="manager_crashed_info">докладвайте това на </string>
+    <string name="send_crash_info">Изпращане на информация за катастрофата</string>
+    <string name="crash_info_copied">Информация за катастрофата, копирана в клипборда</string>
+    <string name="info_copied">Копиране в клипборда</string>
+    <!-- Colors -->
+    <string name="color_sakura">Сакура</string>
+    <string name="color_red">Червено</string>
+    <string name="color_pink">Розов</string>
+    <string name="color_purple">Лилаво</string>
+    <string name="color_deep_purple">Наситено лилаво</string>
+    <string name="color_indigo">Indigo</string>
+    <string name="color_blue">Синьо</string>
+    <string name="color_light_blue">Светлосиньо</string>
+    <string name="color_cyan">Cyan</string>
+    <string name="color_teal">Teal</string>
+    <string name="color_green">Зелен</string>
+    <string name="color_light_green">Светлозелено</string>
+    <string name="color_lime">Lime</string>
+    <string name="color_yellow">Жълт</string>
+    <string name="color_amber">Амбър</string>
+    <string name="color_orange">Orange</string>
+    <string name="color_deep_orange">Наситено оранжево</string>
+    <string name="color_brown">Кафяв</string>
+    <string name="color_blue_grey">Синьо сиво</string>
+</resources>

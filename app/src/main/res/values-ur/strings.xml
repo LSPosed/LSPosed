@@ -80,6 +80,7 @@
     <string name="menuSaveToSd">محفوظ کریں</string>
     <string name="nav_item_logs_verbose">وربوز لاگز</string>
     <string name="nav_item_logs_module">ماڈیولز نوشتہ جات</string>
+    <string name="logs_saved">لاگز محفوظ ہو گئے۔</string>
     <string name="logs_save_failed2">محفوظ کرنے میں ناکام:\n%s</string>
     <string name="menuClearLog">ابھی لاگ صاف کریں۔</string>
     <string name="logs_cleared">لاگ کامیابی سے صاف ہو گیا.</string>

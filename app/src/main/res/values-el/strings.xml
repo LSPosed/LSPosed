@@ -80,6 +80,7 @@
     <string name="menuSaveToSd">Αποθήκευση</string>
     <string name="nav_item_logs_verbose">Λεπτομερείς Καταγραφές</string>
     <string name="nav_item_logs_module">Αρχείο Καταγραφής Πρόσθετων</string>
+    <string name="logs_saved">Αποθηκευμένα αρχεία καταγραφής</string>
     <string name="logs_save_failed2">Αποτυχία αποθήκευσης:\n%s</string>
     <string name="menuClearLog">Καθαρισμός αρχείου καταγραφής τώρα</string>
     <string name="logs_cleared">Το αρχείο καταγραφής εκκαθαρίστηκε επιτυχώς.</string>

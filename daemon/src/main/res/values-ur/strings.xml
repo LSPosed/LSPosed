@@ -2,6 +2,8 @@
 <resources>
     <!-- Notification -->
     <string name="module_is_not_activated_yet">Xposed ماڈیول ابھی تک چالو نہیں ہوا ہے۔</string>
+    <string name="module_is_not_activated_yet_main_user_detailed">%1$s انسٹال ہو چکا ہے، لیکن ابھی تک چالو نہیں ہوا ہے۔</string>
+    <string name="module_is_not_activated_yet_multi_user_detailed">%1$s کو صارف %2$sپر انسٹال کر دیا گیا ہے، لیکن ابھی تک فعال نہیں ہوا ہے۔</string>
     <string name="xposed_module_updated_notification_title">Xposed ماڈیول کو اپ ڈیٹ کر دیا گیا۔</string>
     <string name="xposed_module_updated_notification_content">%s کو اپ ڈیٹ کر دیا گیا ہے، براہ کرم اس کے دائرہ کار میں ایپس کو زبردستی روکنے اور دوبارہ شروع کریں۔</string>
     <string name="xposed_module_updated_notification_title_system">Xposed ماڈیول کو اپ ڈیٹ کر دیا گیا، سسٹم ریبوٹ درکار ہے۔</string>

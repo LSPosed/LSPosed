@@ -28,7 +28,7 @@
     </plurals>
     <string name="Logs">Trozas</string>
     <string name="Settings">Configuración</string>
-    <string name="feedback_or_suggestion">Comentarios o sugerencias</string>
+    <string name="feedback_or_suggestion">Comentarios o sugerencia</string>
     <string name="About">Acerca de</string>
     <string name="report_issue">Reportar problema</string>
     <string name="module_repo">Repositorio</string>
@@ -80,6 +80,7 @@
     <string name="menuSaveToSd">Guardar</string>
     <string name="nav_item_logs_verbose">Registros detallados</string>
     <string name="nav_item_logs_module">Logs de los módulos</string>
+    <string name="logs_saved">Registros guardados</string>
     <string name="logs_save_failed2">No se pudo guardar:\n%s</string>
     <string name="menuClearLog">Limpiar los registros</string>
     <string name="logs_cleared">Registros limpiados satisfactoriamente.</string>

@@ -80,6 +80,7 @@
     <string name="menuSaveToSd">সংরক্ষণ</string>
     <string name="nav_item_logs_verbose">ভার্বোস লগ</string>
     <string name="nav_item_logs_module">মডিউল লগ</string>
+    <string name="logs_saved">লগ সংরক্ষিত</string>
     <string name="logs_save_failed2">সংরক্ষণ করতে ব্যর্থ হয়েছে:\n%s</string>
     <string name="menuClearLog">এখন লগ সাফ করুন</string>
     <string name="logs_cleared">লগ সফলভাবে সাফ করা হয়েছে৷</string>

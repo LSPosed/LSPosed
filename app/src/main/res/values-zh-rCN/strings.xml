@@ -78,6 +78,7 @@
     <string name="menuSaveToSd">保存</string>
     <string name="nav_item_logs_verbose">详细日志</string>
     <string name="nav_item_logs_module">模块日志</string>
+    <string name="logs_saved">Logs saved</string>
     <string name="logs_save_failed2">保存失败：\n%s</string>
     <string name="menuClearLog">立即清空日志</string>
     <string name="logs_cleared">成功清空日志。</string>

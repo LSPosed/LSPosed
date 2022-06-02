@@ -78,6 +78,7 @@
     <string name="menuSaveToSd">บันทึก</string>
     <string name="nav_item_logs_verbose">บันทึกอย่างละเอียด</string>
     <string name="nav_item_logs_module">บันทึกโมดูล</string>
+    <string name="logs_saved">บันทึกบันทึกแล้ว</string>
     <string name="logs_save_failed2">ไม่สามารถบันทึก:\n%s</string>
     <string name="menuClearLog">ล้างบันทึกตอนนี้</string>
     <string name="logs_cleared">ล้างบันทึกเรียบร้อยแล้ว</string>

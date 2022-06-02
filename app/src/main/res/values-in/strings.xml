@@ -78,6 +78,7 @@
     <string name="menuSaveToSd">Simpan</string>
     <string name="nav_item_logs_verbose">Log Verbose</string>
     <string name="nav_item_logs_module">Log Modul</string>
+    <string name="logs_saved">Log disimpan</string>
     <string name="logs_save_failed2">Gagal menyimpan:\n%s</string>
     <string name="menuClearLog">Hapus log sekarang</string>
     <string name="logs_cleared">Log berhasil dihapus.</string>

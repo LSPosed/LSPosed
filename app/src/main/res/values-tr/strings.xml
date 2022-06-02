@@ -80,6 +80,7 @@
     <string name="menuSaveToSd">Kaydet</string>
     <string name="nav_item_logs_verbose">Ayrıntılı Günlükler</string>
     <string name="nav_item_logs_module">Modül Günlükleri</string>
+    <string name="logs_saved">Günlükler kaydedildi</string>
     <string name="logs_save_failed2">Kaydedilemedi:\n%s</string>
     <string name="menuClearLog">Günlüğü şimdi temizle</string>
     <string name="logs_cleared">Günlük başarıyla temizlendi.</string>

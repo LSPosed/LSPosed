@@ -80,6 +80,7 @@
     <string name="menuSaveToSd">Salva</string>
     <string name="nav_item_logs_verbose">Log verbosi</string>
     <string name="nav_item_logs_module">Log dei moduli</string>
+    <string name="logs_saved">Log salvati</string>
     <string name="logs_save_failed2">Salvataggio non riuscito:\n%s</string>
     <string name="menuClearLog">Cancella il log ora</string>
     <string name="logs_cleared">Log cancellato con successo.</string>

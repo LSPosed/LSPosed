@@ -80,6 +80,7 @@
     <string name="menuSaveToSd">Opslaan</string>
     <string name="nav_item_logs_verbose">Uitgebreide logs</string>
     <string name="nav_item_logs_module">Modules Logbestanden</string>
+    <string name="logs_saved">Opgeslagen logboeken</string>
     <string name="logs_save_failed2">Opslaan mislukt:\n%s</string>
     <string name="menuClearLog">Wis het logboek nu</string>
     <string name="logs_cleared">Log succesvol gewist.</string>
