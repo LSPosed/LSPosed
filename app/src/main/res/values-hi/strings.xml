@@ -19,19 +19,19 @@
   -->
 <resources xmlns:tools="http://schemas.android.com/tools" tools:keep="@string/xposed_module_updated_notification_*,@string/module_is_not_activated_*">
     <!-- MainActivity -->
-    <string name="info">जानकारी</string>
-    <string name="overview">अवलोकन</string>
-    <string name="Modules">मॉड्यूल</string>
+    <string name="info">जानकारियां</string>
+    <string name="overview">ओवरव्यू</string>
+    <string name="Modules">मॉड्यूल्स</string>
     <plurals name="modules_enabled_count">
-        <item quantity="one">%d मॉड्यूल सक्षम</item>
-        <item quantity="other">%d मॉड्यूल सक्षम</item>
+        <item quantity="one">%d मॉड्यूल एनेबल किए गए</item>
+        <item quantity="other">%d मॉड्यूल्स एनेबल किए गए</item>
     </plurals>
     <string name="Logs">लॉग्स</string>
-    <string name="Settings">समायोजन</string>
-    <string name="feedback_or_suggestion">प्रतिक्रिया या सुझाव</string>
-    <string name="About">लगभग</string>
-    <string name="report_issue">रिपोर्ट मुद्दा</string>
-    <string name="module_repo">कोष</string>
+    <string name="Settings">सेटिंग्स</string>
+    <string name="feedback_or_suggestion">फीडबैक या सजेशन</string>
+    <string name="About">इसके बारे में</string>
+    <string name="report_issue">इशू को रिपोर्ट करें</string>
+    <string name="module_repo">रिपोज़िटरी</string>
     <string name="module_repo_loading">लोड हो रहा है…</string>
     <string name="module_repo_up_to_date">सभी मॉड्यूल अप टू डेट</string>
     <plurals name="module_repo_upgradable">
@@ -80,6 +80,7 @@
     <string name="menuSaveToSd">बचाना</string>
     <string name="nav_item_logs_verbose">वर्बोज़ लॉग्स</string>
     <string name="nav_item_logs_module">मॉड्यूल लॉग</string>
+    <string name="logs_saved">लॉग सेव हो गए</string>
     <string name="logs_save_failed2">सहेजने में विफल:\n%s</string>
     <string name="menuClearLog">अभी लॉग साफ़ करें</string>
     <string name="logs_cleared">लॉग सफलतापूर्वक साफ़ किया गया।</string>
