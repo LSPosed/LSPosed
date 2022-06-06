@@ -6,10 +6,17 @@ import android.os.IBinder;
 import android.os.IInterface;
 import android.os.RemoteException;
 
+import androidx.annotation.RequiresApi;
+
 public interface INotificationManager extends IInterface {
     void enqueueNotificationWithTag(String pkg, String opPkg, String tag, int id,
                                     Notification notification, int userId) throws RemoteException;
+
+    void cancelNotificationWithTag(String pkg, String tag, int id, int userId) throws RemoteException;
+
+    @RequiresApi(30)
     void cancelNotificationWithTag(String pkg, String opPkg, String tag, int id, int userId) throws RemoteException;
+
     void createNotificationChannels(String pkg, ParceledListSlice<NotificationChannel> channelsList) throws RemoteException;
 
     abstract class Stub extends Binder implements INotificationManager {

@@ -309,7 +309,11 @@ public class LSPManagerService extends ILSPManagerService.Stub {
             var idValue = notificationIds.get(idKey);
             if (idValue == null) return;
             var im = INotificationManager.Stub.asInterface(android.os.ServiceManager.getService("notification"));
-            im.cancelNotificationWithTag("android", "android", modulePackageName, idValue, 0);
+            if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.R) {
+                im.cancelNotificationWithTag("android", "android", modulePackageName, idValue, 0);
+            } else {
+                im.cancelNotificationWithTag("android", modulePackageName, idValue, 0);
+            }
             // Remove the notification id when the notification is canceled or current module app was uninstalled
             notificationIds.remove(idKey);
         } catch (Throwable e) {
