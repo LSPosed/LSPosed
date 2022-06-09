@@ -86,7 +86,8 @@ public class ConfigManager {
     private static ConfigManager instance = null;
 
     private final SQLiteDatabase db =
-            SQLiteDatabase.openOrCreateDatabase(ConfigFileManager.dbPath, null);
+            SQLiteDatabase.openOrCreateDatabase(ConfigFileManager.dbPath.getAbsolutePath(), null,
+                    sqLiteDatabase -> Log.w(TAG, "database corrupted"));
 
     private boolean verboseLog = true;
     private boolean dexObfuscate = false;
