@@ -147,7 +147,6 @@ public class RepoItemFragment extends BaseFragment implements RepoLoader.RepoLis
             var setting = view.getSettings();
             setting.setOffscreenPreRaster(true);
             setting.setDomStorageEnabled(true);
-            setting.setAppCacheEnabled(true);
             setting.setMixedContentMode(WebSettings.MIXED_CONTENT_ALWAYS_ALLOW);
             setting.setAllowContentAccess(false);
             setting.setAllowFileAccessFromFileURLs(true);
