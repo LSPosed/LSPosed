@@ -522,7 +522,8 @@ public class ScopeAdapter extends EmptyStateRecyclerView.EmptyStateAdapter<Scope
             appList.parallelStream().forEach(info -> {
                 int userId = info.applicationInfo.uid / 100000;
                 String packageName = info.packageName;
-                if (packageName.equals("android") && userId != 0 ||
+                if (userId != module.userId ||
+                        packageName.equals("android") && userId != 0 ||
                         packageName.equals(module.packageName) ||
                         packageName.equals(BuildConfig.APPLICATION_ID)) {
                     return;
@@ -532,10 +533,6 @@ public class ScopeAdapter extends EmptyStateRecyclerView.EmptyStateAdapter<Scope
 
                 synchronized (installedList) {
                     installedList.add(application);
-                }
-
-                if (userId != module.userId) {
-                    return;
                 }
 
                 if (scopeList != null && scopeList.contains(packageName)) {
