@@ -221,11 +221,21 @@ fun Project.configureBaseExtension() {
     }
 }
 
+fun Project.configureJavaExtension() {
+    extensions.findByType(JavaPluginExtension::class.java)?.run {
+        sourceCompatibility = androidSourceCompatibility
+        targetCompatibility = androidTargetCompatibility
+    }
+}
+
 subprojects {
     plugins.withId("com.android.application") {
         configureBaseExtension()
     }
     plugins.withId("com.android.library") {
         configureBaseExtension()
+    }
+    plugins.withId("org.gradle.java-library") {
+        configureJavaExtension()
     }
 }
