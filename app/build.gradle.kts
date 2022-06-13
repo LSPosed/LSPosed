@@ -152,7 +152,7 @@ dependencies {
     implementation("com.github.bumptech.glide:glide:$glideVersion")
     implementation("com.google.android.material:material:1.6.0-beta01")
     implementation("com.google.code.gson:gson:2.9.0")
-    implementation(platform("com.squareup.okhttp3:okhttp-bom:4.9.3"))
+    implementation(platform("com.squareup.okhttp3:okhttp-bom:4.10.0"))
     implementation("com.squareup.okhttp3:okhttp")
     implementation("com.squareup.okhttp3:okhttp-dnsoverhttps")
     implementation("com.squareup.okhttp3:logging-interceptor")
