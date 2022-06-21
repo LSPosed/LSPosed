@@ -9,7 +9,7 @@ on:
 jobs:
   build:
     runs-on: ubuntu-20.04
-    if: ${{ !startsWith(github.event.head_commit.message, '[skip ci]') }}
+    if: ${{ !startsWith(github.event.head_commit.message, '[skip ci]') && github.event_name != 'pull_request' }}
 
     steps:
     - name: Checkout
