@@ -36,7 +36,7 @@ import androidx.annotation.Nullable;
 import androidx.core.text.HtmlCompat;
 import androidx.preference.Preference;
 import androidx.preference.PreferenceFragmentCompat;
-import androidx.preference.SwitchPreference;
+import rikka.material.preference.MaterialSwitchPreference;
 import androidx.recyclerview.widget.RecyclerView;
 
 import com.google.android.material.color.DynamicColors;
@@ -144,7 +144,7 @@ public class SettingsFragment extends BaseFragment {
             addPreferencesFromResource(R.xml.prefs);
 
             boolean installed = ConfigManager.isBinderAlive();
-            SwitchPreference prefVerboseLogs = findPreference("disable_verbose_log");
+            MaterialSwitchPreference prefVerboseLogs = findPreference("disable_verbose_log");
             if (prefVerboseLogs != null) {
                 prefVerboseLogs.setEnabled(!BuildConfig.DEBUG && installed);
                 prefVerboseLogs.setChecked(!installed || !ConfigManager.isVerboseLogEnabled());
@@ -152,7 +152,7 @@ public class SettingsFragment extends BaseFragment {
                         ConfigManager.setVerboseLogEnabled(!(boolean) newValue));
             }
 
-            SwitchPreference prefDexObfuscate = findPreference("enable_dex_obfuscate");
+            MaterialSwitchPreference prefDexObfuscate = findPreference("enable_dex_obfuscate");
             if (prefDexObfuscate != null) {
                 prefDexObfuscate.setEnabled(installed);
                 prefDexObfuscate.setChecked(!installed || ConfigManager.isDexObfuscateEnabled());
@@ -163,7 +163,7 @@ public class SettingsFragment extends BaseFragment {
                 });
             }
 
-            SwitchPreference prefEnableShortcut = findPreference("enable_auto_add_shortcut");
+            MaterialSwitchPreference prefEnableShortcut = findPreference("enable_auto_add_shortcut");
             if (prefEnableShortcut != null) {
                 prefEnableShortcut.setEnabled(installed);
                 prefEnableShortcut.setVisible(!App.isParasitic());
@@ -249,7 +249,7 @@ public class SettingsFragment extends BaseFragment {
                 });
             }
 
-            SwitchPreference prefShowHiddenIcons = findPreference("show_hidden_icon_apps_enabled");
+            MaterialSwitchPreference prefShowHiddenIcons = findPreference("show_hidden_icon_apps_enabled");
             if (prefShowHiddenIcons != null && Build.VERSION.SDK_INT >= Build.VERSION_CODES.Q) {
                 if (ConfigManager.isBinderAlive()) {
                     prefShowHiddenIcons.setEnabled(true);
@@ -260,7 +260,7 @@ public class SettingsFragment extends BaseFragment {
                         requireActivity().getContentResolver(), "show_hidden_icon_apps_enabled", 1) != 0);
             }
 
-            SwitchPreference prefFollowSystemAccent = findPreference("follow_system_accent");
+            MaterialSwitchPreference prefFollowSystemAccent = findPreference("follow_system_accent");
             if (prefFollowSystemAccent != null && DynamicColors.isDynamicColorAvailable()) {
                 if (primary_color != null) {
                     primary_color.setVisible(!prefFollowSystemAccent.isChecked());

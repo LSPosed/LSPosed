@@ -22,7 +22,7 @@
     xmlns:app="http://schemas.android.com/apk/res-auto">
     <PreferenceCategory android:title="@string/group_network">
 
-        <SwitchPreference
+        <rikka.material.preference.MaterialSwitchPreference
             android:defaultValue="false"
             android:icon="@drawable/ic_outline_dns_24"
             android:key="doh"
@@ -53,7 +53,7 @@
     </PreferenceCategory>
 
     <PreferenceCategory android:title="@string/settings_group_theme">
-        <SwitchPreference
+        <rikka.material.preference.MaterialSwitchPreference
             android:defaultValue="true"
             android:icon="@drawable/ic_outline_palette_24"
             android:key="follow_system_accent"
@@ -75,7 +75,7 @@
             android:key="dark_theme"
             android:summary="%s"
             android:title="@string/dark_theme" />
-        <SwitchPreference
+        <rikka.material.preference.MaterialSwitchPreference
             android:icon="@drawable/ic_outline_invert_colors_24"
             android:key="black_dark_theme"
             android:summary="@string/pure_black_dark_theme_summary"
@@ -83,14 +83,14 @@
     </PreferenceCategory>
 
     <PreferenceCategory android:title="@string/settings_group_framework">
-        <SwitchPreference
+        <rikka.material.preference.MaterialSwitchPreference
             android:defaultValue="false"
             android:icon="@drawable/ic_outline_assignment_24"
             android:key="disable_verbose_log"
             android:persistent="false"
             android:title="@string/pref_title_disable_verbose_log" />
 
-        <SwitchPreference
+        <rikka.material.preference.MaterialSwitchPreference
             android:defaultValue="true"
             android:icon="@drawable/ic_outline_shield_24"
             android:key="enable_dex_obfuscate"
@@ -104,7 +104,7 @@
             android:summary="@string/create_shortcut_summary"
             android:title="@string/create_shortcut" />
 
-        <SwitchPreference
+        <rikka.material.preference.MaterialSwitchPreference
             android:defaultValue="false"
             android:icon="@drawable/ic_outline_add_to_home_screen_24"
             android:key="enable_auto_add_shortcut"
@@ -141,7 +141,7 @@
         android:key="settings_group_system"
         android:title="@string/settings_group_system"
         app:isPreferenceVisible="@bool/show_system_settings">
-        <SwitchPreference
+        <rikka.material.preference.MaterialSwitchPreference
             android:defaultValue="true"
             android:enabled="false"
             android:icon="@drawable/ic_outline_android_24"
