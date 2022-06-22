@@ -21,6 +21,7 @@
 #include "native_util.h"
 #include "lsplant.hpp"
 #include <absl/container/flat_hash_map.h>
+#include <memory>
 #include <shared_mutex>
 #include <set>
 
@@ -68,8 +69,10 @@ LSP_DEF_NATIVE_METHOD(jboolean, HookBridge, hookMethod, jobject hookMethod,
     }
     if (!hook_item) {
         std::unique_lock lk(hooked_lock);
-        hook_item = hooked_methods[target].get();
-        newHook = true;
+        if (auto &ptr = hooked_methods[target]; !ptr) {
+            ptr = std::make_unique<HookItem>();
+            newHook = true;
+        }
     }
     if (newHook) {
         auto init = env->GetMethodID(hooker, "<init>", "(Ljava/lang/reflect/Executable;)V");
