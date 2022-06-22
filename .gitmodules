@@ -13,3 +13,6 @@
 [submodule "external/fmt"]
 	path = external/fmt
 	url = https://github.com/fmtlib/fmt.git
+[submodule "external/abseil"]
+	path = external/abseil
+	url = https://github.com/abseil/abseil-cpp.git

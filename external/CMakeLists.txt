@@ -101,6 +101,9 @@ target_include_directories(cxx PRIVATE ${LIBCXX_INCLUDES} ${LIBCXXABI_INCLUDES})
 
 link_libraries(cxx)
 
+add_subdirectory(abseil)
+link_libraries(absl::flat_hash_map)
+
 add_subdirectory(lsplant/lsplant/src/main/jni)
 add_subdirectory(dobby)
 add_subdirectory(fmt)
