@@ -71,6 +71,7 @@ LSP_DEF_NATIVE_METHOD(jboolean, HookBridge, hookMethod, jobject hookMethod,
         std::unique_lock lk(hooked_lock);
         if (auto &ptr = hooked_methods[target]; !ptr) {
             ptr = std::make_unique<HookItem>();
+            hook_item = ptr.get();
             newHook = true;
         }
     }
