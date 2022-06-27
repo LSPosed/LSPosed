@@ -27,7 +27,8 @@ set(LIBCXX_SOURCES
         filesystem/operations.cpp
         functional.cpp
         future.cpp
-        hash.cpp
+# use absl instead
+#        hash.cpp
         ios.cpp
         iostream.cpp
         locale.cpp
@@ -44,7 +45,7 @@ set(LIBCXX_SOURCES
         strstream.cpp
         system_error.cpp
         thread.cpp
-        typeinfo.cpp
+#        typeinfo.cpp
         utility.cpp
         valarray.cpp
         variant.cpp
@@ -101,9 +102,7 @@ target_include_directories(cxx PRIVATE ${LIBCXX_INCLUDES} ${LIBCXXABI_INCLUDES})
 
 link_libraries(cxx)
 
-add_subdirectory(abseil)
-link_libraries(absl::flat_hash_map)
-
+OPTION(LSPLANT_BUILD_SHARED OFF)
 add_subdirectory(lsplant/lsplant/src/main/jni)
 add_subdirectory(dobby)
 add_subdirectory(fmt)
