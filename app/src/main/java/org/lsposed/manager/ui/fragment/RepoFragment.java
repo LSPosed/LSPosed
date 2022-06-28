@@ -289,7 +289,7 @@ public class RepoFragment extends BaseFragment implements RepoLoader.RepoListene
             var instant = Instant.parse(module.getReleases().get(0).getPublishedAt());
             var formatter = DateTimeFormatter.ofLocalizedDate(FormatStyle.SHORT)
                     .withLocale(App.getLocale()).withZone(ZoneId.systemDefault());
-            holder.publishedTime.setText(String.format(getString(R.string.module_repo_published_time), formatter.format(instant)));
+            holder.publishedTime.setText(String.format(getString(R.string.module_repo_updated_time), formatter.format(instant)));
             SpannableStringBuilder sb = new SpannableStringBuilder();
 
             String summary = module.getSummary();
