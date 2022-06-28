@@ -20,7 +20,8 @@
 #include "hook_bridge.h"
 #include "native_util.h"
 #include "lsplant.hpp"
-#include "unordered_map"
+#include <absl/container/flat_hash_map.h>
+#include <memory>
 #include <shared_mutex>
 #include <set>
 
@@ -34,8 +35,7 @@ struct HookItem {
 };
 
 std::shared_mutex hooked_lock;
-// Rehashing invalidates iterators, changes ordering between elements, and changes which buckets elements appear in, but does not invalidate pointers or references to elements.
-std::unordered_map<jmethodID, HookItem> hooked_methods;
+absl::flat_hash_map<jmethodID, std::unique_ptr<HookItem>> hooked_methods;
 
 jmethodID invoke = nullptr;
 }
@@ -64,13 +64,16 @@ LSP_DEF_NATIVE_METHOD(jboolean, HookBridge, hookMethod, jobject hookMethod,
     {
         std::shared_lock lk(hooked_lock);
         if (auto found = hooked_methods.find(target); found != hooked_methods.end()) {
-            hook_item = &found->second;
+            hook_item = found->second.get();
         }
     }
     if (!hook_item) {
         std::unique_lock lk(hooked_lock);
-        hook_item = &hooked_methods[target];
-        newHook = true;
+        if (auto &ptr = hooked_methods[target]; !ptr) {
+            ptr = std::make_unique<HookItem>();
+            hook_item = ptr.get();
+            newHook = true;
+        }
     }
     if (newHook) {
         auto init = env->GetMethodID(hooker, "<init>", "(Ljava/lang/reflect/Executable;)V");
@@ -92,7 +95,7 @@ LSP_DEF_NATIVE_METHOD(jboolean, HookBridge, unhookMethod, jobject hookMethod, jo
     {
         std::shared_lock lk(hooked_lock);
         if (auto found = hooked_methods.find(target); found != hooked_methods.end()) {
-            hook_item = &found->second;
+            hook_item = found->second.get();
         }
     }
     if (!hook_item) return JNI_FALSE;
@@ -118,7 +121,7 @@ LSP_DEF_NATIVE_METHOD(jobject, HookBridge, invokeOriginalMethod, jobject hookMet
     {
         std::shared_lock lk(hooked_lock);
         if (auto found = hooked_methods.find(target); found != hooked_methods.end()) {
-            hook_item = &found->second;
+            hook_item = found->second.get();
         }
     }
     jobject to_call = hookMethod;
@@ -142,7 +145,7 @@ LSP_DEF_NATIVE_METHOD(jobjectArray, HookBridge, callbackSnapshot, jobject method
     {
         std::shared_lock lk(hooked_lock);
         if (auto found = hooked_methods.find(target); found != hooked_methods.end()) {
-            hook_item = &found->second;
+            hook_item = found->second.get();
         }
     }
     if (!hook_item) return nullptr;

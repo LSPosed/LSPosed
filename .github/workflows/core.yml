@@ -62,6 +62,7 @@ jobs:
         ccache -o max_size=1G
         ccache -o hash_dir=false
         ccache -o compiler_check='%compiler% -dumpmachine; %compiler% -dumpversion'
+        ccache -o hard_link=true
         ccache -zp
     - name: Build with Gradle
       run: |
