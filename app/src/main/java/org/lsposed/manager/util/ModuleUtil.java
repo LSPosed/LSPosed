@@ -36,13 +36,19 @@ import org.lsposed.manager.ConfigManager;
 import org.lsposed.manager.repo.RepoLoader;
 import org.lsposed.manager.repo.model.OnlineModule;
 
+import java.text.DateFormat;
+import java.text.ParseException;
+import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Arrays;
+import java.util.Date;
 import java.util.HashMap;
 import java.util.HashSet;
 import java.util.List;
+import java.util.Locale;
 import java.util.Map;
 import java.util.Set;
+import java.util.TimeZone;
 import java.util.concurrent.ConcurrentHashMap;
 
 public final class ModuleUtil {
@@ -309,6 +315,24 @@ public final class ModuleUtil {
         @Override
         public String toString() {
             return getAppName();
+        }
+    }
+
+    public static String timeFormat(String time, boolean displayTime) {
+        SimpleDateFormat format = new SimpleDateFormat(
+                "yyyy-MM-dd'T'HH:mm:ss'Z'", Locale.getDefault());
+        format.setTimeZone(TimeZone.getTimeZone("GMT"));
+        Date updateTimeDate;
+        try {
+            updateTimeDate = format.parse(time);
+        } catch (ParseException e) {
+            throw new RuntimeException(e);
+        }
+        assert updateTimeDate != null;
+        if (displayTime) {
+            return DateFormat.getDateTimeInstance(DateFormat.SHORT, DateFormat.SHORT).format(updateTimeDate);
+        } else {
+            return DateFormat.getDateInstance(DateFormat.SHORT).format(updateTimeDate);
         }
     }
 }

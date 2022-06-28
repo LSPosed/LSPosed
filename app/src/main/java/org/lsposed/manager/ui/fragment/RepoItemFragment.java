@@ -71,6 +71,7 @@ import org.lsposed.manager.repo.model.ReleaseAsset;
 import org.lsposed.manager.ui.dialog.BlurBehindDialogBuilder;
 import org.lsposed.manager.ui.widget.EmptyStateRecyclerView;
 import org.lsposed.manager.ui.widget.LinkifyTextView;
+import org.lsposed.manager.util.ModuleUtil;
 import org.lsposed.manager.util.NavUtil;
 import org.lsposed.manager.util.SimpleStatefulAdaptor;
 import org.lsposed.manager.util.chrome.CustomTabsURLSpan;
@@ -411,6 +412,7 @@ public class RepoItemFragment extends BaseFragment implements RepoLoader.RepoLis
             } else {
                 Release release = items.get(position);
                 holder.title.setText(release.getName());
+                holder.updateTime.setText(String.format(getString(R.string.module_repo_update_time), ModuleUtil.timeFormat(release.getUpdatedAt(),true)));
                 renderGithubMarkdown(holder.description, release.getDescriptionHTML());
                 holder.openInBrowser.setOnClickListener(v -> NavUtil.startURL(requireActivity(), release.getUrl()));
                 List<ReleaseAsset> assets = release.getReleaseAssets();
@@ -443,6 +445,7 @@ public class RepoItemFragment extends BaseFragment implements RepoLoader.RepoLis
 
         class ViewHolder extends RecyclerView.ViewHolder {
             TextView title;
+            TextView updateTime;
             WebView description;
             MaterialButton openInBrowser;
             MaterialButton viewAssets;
@@ -457,6 +460,7 @@ public class RepoItemFragment extends BaseFragment implements RepoLoader.RepoLis
             public ReleaseViewHolder(ItemRepoReleaseBinding binding) {
                 super(binding.getRoot());
                 title = binding.title;
+                updateTime = binding.updateTime;
                 description = binding.description;
                 openInBrowser = binding.openInBrowser;
                 viewAssets = binding.viewAssets;

@@ -283,6 +283,7 @@ public class RepoFragment extends BaseFragment implements RepoLoader.RepoListene
             OnlineModule module = showList.get(position);
             holder.appName.setText(module.getDescription());
             holder.appPackageName.setText(module.getName());
+            holder.updateTime.setText(String.format(getString(R.string.module_repo_update_time),ModuleUtil.timeFormat(module.getReleases().get(0).getUpdatedAt(), false)));
 
             SpannableStringBuilder sb = new SpannableStringBuilder();
 
@@ -392,6 +393,7 @@ public class RepoFragment extends BaseFragment implements RepoLoader.RepoListene
             TextView appPackageName;
             TextView appDescription;
             TextView hint;
+            TextView updateTime;
 
             ViewHolder(ItemOnlinemoduleBinding binding) {
                 super(binding.getRoot());
@@ -400,6 +402,7 @@ public class RepoFragment extends BaseFragment implements RepoLoader.RepoListene
                 appPackageName=binding.appPackageName;
                 appDescription = binding.description;
                 hint = binding.hint;
+                updateTime = binding.updateTime;
             }
         }
 
