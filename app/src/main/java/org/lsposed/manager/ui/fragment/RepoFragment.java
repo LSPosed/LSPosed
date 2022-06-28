@@ -58,6 +58,10 @@ import org.lsposed.manager.ui.widget.EmptyStateRecyclerView;
 import org.lsposed.manager.util.ModuleUtil;
 
 import java.time.Instant;
+import java.time.ZoneId;
+import java.time.ZonedDateTime;
+import java.time.format.DateTimeFormatter;
+import java.time.format.FormatStyle;
 import java.util.ArrayList;
 import java.util.Collection;
 import java.util.Collections;
@@ -283,7 +287,12 @@ public class RepoFragment extends BaseFragment implements RepoLoader.RepoListene
             OnlineModule module = showList.get(position);
             holder.appName.setText(module.getDescription());
             holder.appPackageName.setText(module.getName());
-            holder.updateTime.setText(String.format(getString(R.string.module_repo_update_time),ModuleUtil.timeFormat(module.getReleases().get(0).getUpdatedAt(), false)));
+
+            var dtf = DateTimeFormatter.ISO_INSTANT.withZone(ZoneId.systemDefault());
+            var zt = ZonedDateTime.parse(module.getReleases().get(0).getUpdatedAt(), dtf);
+            holder.updateTime.setText(
+                    String.format(getString(R.string.module_repo_update_time),
+                            DateTimeFormatter.ofLocalizedDate(FormatStyle.SHORT).format(zt)));
 
             SpannableStringBuilder sb = new SpannableStringBuilder();
 

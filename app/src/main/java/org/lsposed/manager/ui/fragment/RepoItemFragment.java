@@ -78,6 +78,10 @@ import org.lsposed.manager.util.chrome.CustomTabsURLSpan;
 
 import java.io.ByteArrayInputStream;
 import java.nio.charset.StandardCharsets;
+import java.time.ZoneId;
+import java.time.ZonedDateTime;
+import java.time.format.DateTimeFormatter;
+import java.time.format.FormatStyle;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.ListIterator;
@@ -412,7 +416,13 @@ public class RepoItemFragment extends BaseFragment implements RepoLoader.RepoLis
             } else {
                 Release release = items.get(position);
                 holder.title.setText(release.getName());
-                holder.updateTime.setText(String.format(getString(R.string.module_repo_update_time), ModuleUtil.timeFormat(release.getUpdatedAt(),true)));
+
+                var dtf = DateTimeFormatter.ISO_INSTANT.withZone(ZoneId.systemDefault());
+                var zt = ZonedDateTime.parse(release.getUpdatedAt(), dtf);
+                holder.updateTime.setText(
+                        String.format(getString(R.string.module_repo_update_time),
+                                DateTimeFormatter.ofLocalizedDateTime(FormatStyle.SHORT).format(zt)));
+
                 renderGithubMarkdown(holder.description, release.getDescriptionHTML());
                 holder.openInBrowser.setOnClickListener(v -> NavUtil.startURL(requireActivity(), release.getUrl()));
                 List<ReleaseAsset> assets = release.getReleaseAssets();

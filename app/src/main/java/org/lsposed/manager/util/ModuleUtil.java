@@ -317,22 +317,4 @@ public final class ModuleUtil {
             return getAppName();
         }
     }
-
-    public static String timeFormat(String time, boolean displayTime) {
-        SimpleDateFormat format = new SimpleDateFormat(
-                "yyyy-MM-dd'T'HH:mm:ss'Z'", Locale.getDefault());
-        format.setTimeZone(TimeZone.getTimeZone("GMT"));
-        Date updateTimeDate;
-        try {
-            updateTimeDate = format.parse(time);
-        } catch (ParseException e) {
-            throw new RuntimeException(e);
-        }
-        assert updateTimeDate != null;
-        if (displayTime) {
-            return DateFormat.getDateTimeInstance(DateFormat.SHORT, DateFormat.SHORT).format(updateTimeDate);
-        } else {
-            return DateFormat.getDateInstance(DateFormat.SHORT).format(updateTimeDate);
-        }
-    }
 }
