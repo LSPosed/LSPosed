@@ -71,15 +71,14 @@ import org.lsposed.manager.repo.model.ReleaseAsset;
 import org.lsposed.manager.ui.dialog.BlurBehindDialogBuilder;
 import org.lsposed.manager.ui.widget.EmptyStateRecyclerView;
 import org.lsposed.manager.ui.widget.LinkifyTextView;
-import org.lsposed.manager.util.ModuleUtil;
 import org.lsposed.manager.util.NavUtil;
 import org.lsposed.manager.util.SimpleStatefulAdaptor;
 import org.lsposed.manager.util.chrome.CustomTabsURLSpan;
 
 import java.io.ByteArrayInputStream;
 import java.nio.charset.StandardCharsets;
+import java.time.Instant;
 import java.time.ZoneId;
-import java.time.ZonedDateTime;
 import java.time.format.DateTimeFormatter;
 import java.time.format.FormatStyle;
 import java.util.ArrayList;
@@ -416,13 +415,10 @@ public class RepoItemFragment extends BaseFragment implements RepoLoader.RepoLis
             } else {
                 Release release = items.get(position);
                 holder.title.setText(release.getName());
-
-                var dtf = DateTimeFormatter.ISO_INSTANT.withZone(ZoneId.systemDefault());
-                var zt = ZonedDateTime.parse(release.getUpdatedAt(), dtf);
-                holder.updateTime.setText(
-                        String.format(getString(R.string.module_repo_update_time),
-                                DateTimeFormatter.ofLocalizedDateTime(FormatStyle.SHORT).format(zt)));
-
+                var instant = Instant.parse(release.getUpdatedAt());
+                var formatter = DateTimeFormatter.ofLocalizedDateTime(FormatStyle.SHORT)
+                        .withLocale(App.getLocale()).withZone(ZoneId.systemDefault());
+                holder.updateTime.setText(String.format(getString(R.string.module_repo_update_time), formatter.format(instant)));
                 renderGithubMarkdown(holder.description, release.getDescriptionHTML());
                 holder.openInBrowser.setOnClickListener(v -> NavUtil.startURL(requireActivity(), release.getUrl()));
                 List<ReleaseAsset> assets = release.getReleaseAssets();
