@@ -415,10 +415,10 @@ public class RepoItemFragment extends BaseFragment implements RepoLoader.RepoLis
             } else {
                 Release release = items.get(position);
                 holder.title.setText(release.getName());
-                var instant = Instant.parse(release.getUpdatedAt());
+                var instant = Instant.parse(release.getPublishedAt());
                 var formatter = DateTimeFormatter.ofLocalizedDateTime(FormatStyle.SHORT)
                         .withLocale(App.getLocale()).withZone(ZoneId.systemDefault());
-                holder.updateTime.setText(String.format(getString(R.string.module_repo_update_time), formatter.format(instant)));
+                holder.publishedTime.setText(String.format(getString(R.string.module_repo_published_time), formatter.format(instant)));
                 renderGithubMarkdown(holder.description, release.getDescriptionHTML());
                 holder.openInBrowser.setOnClickListener(v -> NavUtil.startURL(requireActivity(), release.getUrl()));
                 List<ReleaseAsset> assets = release.getReleaseAssets();
@@ -451,7 +451,7 @@ public class RepoItemFragment extends BaseFragment implements RepoLoader.RepoLis
 
         class ViewHolder extends RecyclerView.ViewHolder {
             TextView title;
-            TextView updateTime;
+            TextView publishedTime;
             WebView description;
             MaterialButton openInBrowser;
             MaterialButton viewAssets;
@@ -466,7 +466,7 @@ public class RepoItemFragment extends BaseFragment implements RepoLoader.RepoLis
             public ReleaseViewHolder(ItemRepoReleaseBinding binding) {
                 super(binding.getRoot());
                 title = binding.title;
-                updateTime = binding.updateTime;
+                publishedTime = binding.publishedTime;
                 description = binding.description;
                 openInBrowser = binding.openInBrowser;
                 viewAssets = binding.viewAssets;

@@ -98,7 +98,7 @@
             android:textAppearance="?android:attr/textAppearanceListItemSecondary"
             android:textColor="?android:attr/textColorPrimary"
             app:layout_constrainedWidth="true"
-            app:layout_constraintBottom_toTopOf="@id/update_Time"
+            app:layout_constraintBottom_toTopOf="@id/published_Time"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintHorizontal_bias="0.0"
             app:layout_constraintStart_toStartOf="parent"
@@ -107,7 +107,7 @@
             tools:text="@tools:sample/lorem" />
 
         <com.google.android.material.textview.MaterialTextView
-            android:id="@+id/update_Time"
+            android:id="@+id/published_Time"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_gravity="center_vertical"

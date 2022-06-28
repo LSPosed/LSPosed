@@ -286,10 +286,10 @@ public class RepoFragment extends BaseFragment implements RepoLoader.RepoListene
             OnlineModule module = showList.get(position);
             holder.appName.setText(module.getDescription());
             holder.appPackageName.setText(module.getName());
-            var instant = Instant.parse(module.getReleases().get(0).getUpdatedAt());
+            var instant = Instant.parse(module.getReleases().get(0).getPublishedAt());
             var formatter = DateTimeFormatter.ofLocalizedDate(FormatStyle.SHORT)
                     .withLocale(App.getLocale()).withZone(ZoneId.systemDefault());
-            holder.updateTime.setText(String.format(getString(R.string.module_repo_update_time), formatter.format(instant)));
+            holder.publishedTime.setText(String.format(getString(R.string.module_repo_published_time), formatter.format(instant)));
             SpannableStringBuilder sb = new SpannableStringBuilder();
 
             String summary = module.getSummary();
@@ -398,7 +398,7 @@ public class RepoFragment extends BaseFragment implements RepoLoader.RepoListene
             TextView appPackageName;
             TextView appDescription;
             TextView hint;
-            TextView updateTime;
+            TextView publishedTime;
 
             ViewHolder(ItemOnlinemoduleBinding binding) {
                 super(binding.getRoot());
@@ -407,7 +407,7 @@ public class RepoFragment extends BaseFragment implements RepoLoader.RepoListene
                 appPackageName = binding.appPackageName;
                 appDescription = binding.description;
                 hint = binding.hint;
-                updateTime = binding.updateTime;
+                publishedTime = binding.publishedTime;
             }
         }
 
