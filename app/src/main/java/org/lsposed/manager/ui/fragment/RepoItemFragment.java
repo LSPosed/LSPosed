@@ -82,7 +82,6 @@ import java.time.ZoneId;
 import java.time.format.DateTimeFormatter;
 import java.time.format.FormatStyle;
 import java.util.ArrayList;
-import java.util.Comparator;
 import java.util.List;
 import java.util.ListIterator;
 import java.util.stream.Collectors;
@@ -385,8 +384,7 @@ public class RepoItemFragment extends BaseFragment implements RepoLoader.RepoLis
                     return !name.startsWith("snapshot") && !name.startsWith("nightly");
                 }).collect(Collectors.toList());
             } else tmpList = releases;
-            Comparator<Release> comparator = Comparator.comparing(a -> Instant.parse(a.getPublishedAt()));
-            tmpList.sort(comparator.reversed());
+            tmpList.sort((a, b) -> Instant.parse(b.getPublishedAt()).compareTo(Instant.parse(a.getPublishedAt())));
             runOnUiThread(() -> {
                 items = tmpList;
                 notifyDataSetChanged();
