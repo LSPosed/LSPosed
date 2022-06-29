@@ -46,6 +46,9 @@ public class OnlineModule {
     @SerializedName("latestRelease")
     @Expose
     private String latestRelease;
+    @SerializedName("latestReleaseTime")
+    @Expose
+    private String latestReleaseTime;
     @SerializedName("releases")
     @Expose
     private List<Release> releases = new ArrayList<>();
@@ -123,6 +126,10 @@ public class OnlineModule {
 
     public List<Release> getReleases() {
         return releases;
+    }
+
+    public String getLatestReleaseTime() {
+        return latestReleaseTime;
     }
 
     public void setReleases(List<Release> releases) {

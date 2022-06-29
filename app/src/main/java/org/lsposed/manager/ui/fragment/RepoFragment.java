@@ -58,6 +58,9 @@ import org.lsposed.manager.ui.widget.EmptyStateRecyclerView;
 import org.lsposed.manager.util.ModuleUtil;
 
 import java.time.Instant;
+import java.time.ZoneId;
+import java.time.format.DateTimeFormatter;
+import java.time.format.FormatStyle;
 import java.util.ArrayList;
 import java.util.Collection;
 import java.util.Collections;
@@ -283,7 +286,10 @@ public class RepoFragment extends BaseFragment implements RepoLoader.RepoListene
             OnlineModule module = showList.get(position);
             holder.appName.setText(module.getDescription());
             holder.appPackageName.setText(module.getName());
-
+            var instant = Instant.parse(module.getLatestReleaseTime());
+            var formatter = DateTimeFormatter.ofLocalizedDate(FormatStyle.SHORT)
+                    .withLocale(App.getLocale()).withZone(ZoneId.systemDefault());
+            holder.publishedTime.setText(String.format(getString(R.string.module_repo_updated_time), formatter.format(instant)));
             SpannableStringBuilder sb = new SpannableStringBuilder();
 
             String summary = module.getSummary();
@@ -352,7 +358,7 @@ public class RepoFragment extends BaseFragment implements RepoLoader.RepoListene
                         if (sort == 0) {
                             return labelComparator.compare(a.getDescription(), b.getDescription());
                         } else {
-                            return Instant.parse(b.getReleases().get(0).getUpdatedAt()).compareTo(Instant.parse(a.getReleases().get(0).getUpdatedAt()));
+                            return Instant.parse(b.getLatestReleaseTime()).compareTo(Instant.parse(a.getLatestReleaseTime()));
                         }
                     }).collect(Collectors.toList());
             String queryStr = searchView != null ? searchView.getQuery().toString() : "";
@@ -392,14 +398,16 @@ public class RepoFragment extends BaseFragment implements RepoLoader.RepoListene
             TextView appPackageName;
             TextView appDescription;
             TextView hint;
+            TextView publishedTime;
 
             ViewHolder(ItemOnlinemoduleBinding binding) {
                 super(binding.getRoot());
                 root = binding.itemRoot;
                 appName = binding.appName;
-                appPackageName=binding.appPackageName;
+                appPackageName = binding.appPackageName;
                 appDescription = binding.description;
                 hint = binding.hint;
+                publishedTime = binding.publishedTime;
             }
         }
 

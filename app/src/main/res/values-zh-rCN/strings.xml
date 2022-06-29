@@ -33,6 +33,8 @@
     <string name="module_repo">仓库</string>
     <string name="module_repo_loading">加载中…</string>
     <string name="module_repo_up_to_date">所有模块均已最新</string>
+    <string name="module_repo_published_time">发布于 %s</string>
+    <string name="module_repo_updated_time">更新于 %s</string>
     <plurals name="module_repo_upgradable">
         <item quantity="other">%d 个模块可更新</item>
     </plurals>
