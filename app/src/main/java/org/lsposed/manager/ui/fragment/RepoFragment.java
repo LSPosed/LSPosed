@@ -358,7 +358,7 @@ public class RepoFragment extends BaseFragment implements RepoLoader.RepoListene
                         if (sort == 0) {
                             return labelComparator.compare(a.getDescription(), b.getDescription());
                         } else {
-                            return Instant.parse(b.getReleases().get(0).getUpdatedAt()).compareTo(Instant.parse(a.getReleases().get(0).getUpdatedAt()));
+                            return Instant.parse(b.getLatestReleaseTime()).compareTo(Instant.parse(a.getLatestReleaseTime()));
                         }
                     }).collect(Collectors.toList());
             String queryStr = searchView != null ? searchView.getQuery().toString() : "";
