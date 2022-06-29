@@ -286,7 +286,7 @@ public class RepoFragment extends BaseFragment implements RepoLoader.RepoListene
             OnlineModule module = showList.get(position);
             holder.appName.setText(module.getDescription());
             holder.appPackageName.setText(module.getName());
-            var instant = Instant.parse(module.getReleases().get(0).getPublishedAt());
+            var instant = Instant.parse(module.getLatestReleaseTime());
             var formatter = DateTimeFormatter.ofLocalizedDate(FormatStyle.SHORT)
                     .withLocale(App.getLocale()).withZone(ZoneId.systemDefault());
             holder.publishedTime.setText(String.format(getString(R.string.module_repo_updated_time), formatter.format(instant)));
