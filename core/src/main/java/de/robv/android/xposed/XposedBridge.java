@@ -79,7 +79,7 @@ public final class XposedBridge {
 
     public static volatile ClassLoader dummyClassLoader = null;
 
-    private static final ClassCastException castException = new ClassCastException("Return value's type from hook callback does not match the hooked method");
+    private static final String castException = "Return value's type from hook callback does not match the hooked method";
 
     private static final Method getCause;
 
@@ -499,7 +499,7 @@ public final class XposedBridge {
             else {
                 var result = param.getResult();
                 if (returnType != null && !returnType.isPrimitive() && !HookBridge.instanceOf(result, returnType)) {
-                    throw castException;
+                    throw new ClassCastException(castException);
                 }
                 return result;
             }
