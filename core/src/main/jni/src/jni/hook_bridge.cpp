@@ -73,6 +73,8 @@ LSP_DEF_NATIVE_METHOD(jboolean, HookBridge, hookMethod, jobject hookMethod,
             ptr = std::make_unique<HookItem>();
             hook_item = ptr.get();
             newHook = true;
+        } else {
+            hook_item = ptr.get();
         }
     }
     if (newHook) {
