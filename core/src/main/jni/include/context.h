@@ -109,7 +109,7 @@ namespace lspd {
             }
             jmethodID mid = lsplant::JNI_GetStaticMethodID(env, entry_class_, method_name, method_sig);
             if (mid) [[likely]] {
-                env->CallStaticVoidMethod(entry_class_, mid, std::forward<Args>(args)...);
+                env->CallStaticVoidMethod(entry_class_, mid, lsplant::UnwrapScope(std::forward<Args>(args))...);
             } else {
                 LOGE("method {} id is null", method_name);
             }
