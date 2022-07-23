@@ -53,14 +53,8 @@ public class LogcatService implements Runnable {
     @SuppressLint("UnsafeDynamicallyLoadedCode")
     public LogcatService() {
         String classPath = System.getProperty("java.class.path");
-        var abis = Process.is64Bit() ? Build.SUPPORTED_64_BIT_ABIS : Build.SUPPORTED_32_BIT_ABIS;
-        for (String abi : abis) {
-            try {
-                System.load(classPath + "!/lib/" + abi + "/" + System.mapLibraryName("daemon"));
-                break;
-            } catch (Throwable ignored) {
-            }
-        }
+        var abi = Process.is64Bit() ? Build.SUPPORTED_64_BIT_ABIS[0] : Build.SUPPORTED_32_BIT_ABIS[0];
+        System.load(classPath + "!/lib/" + abi + "/" + System.mapLibraryName("daemon"));
         ConfigFileManager.moveLogDir();
 
         // Meizu devices set this prop and prevent debug logs from being recorded
