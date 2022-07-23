@@ -25,7 +25,7 @@
 #include "zygisk.h"
 #include "logging.h"
 #include "loader.h"
-#include "ConfigImpl.h"
+#include "config_impl.h"
 #include "magisk_loader.h"
 #include "symbol_cache.h"
 

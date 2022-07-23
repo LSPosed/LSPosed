@@ -23,7 +23,8 @@
 
 #ifndef LSPOSED_CONFIGIMPL_H
 #define LSPOSED_CONFIGIMPL_H
-#include "ConfigBridge.h"
+
+#include "config_bridge.h"
 #include "service.h"
 
 class ConfigImpl: public ConfigBridge {

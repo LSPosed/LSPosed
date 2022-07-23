@@ -28,7 +28,7 @@
 #include "context.h"
 #include "utils/jni_helper.hpp"
 #include "symbol_cache.h"
-#include "ConfigBridge.h"
+#include "config_bridge.h"
 
 using namespace lsplant;
 
