@@ -89,9 +89,6 @@ fun afterEval() = android.applicationVariants.forEach { variant ->
     val variantCapped = variant.name.capitalize(Locale.ROOT)
     val variantLowered = variant.name.toLowerCase(Locale.ROOT)
 
-    tasks["merge${variantCapped}JniLibFolders"].enabled = false
-    tasks["merge${variantCapped}NativeLibs"].enabled = false
-
     val app = rootProject.project(":app").extensions.getByName<BaseExtension>("android")
     val outSrcDir = file("$buildDir/generated/source/signInfo/${variantLowered}")
     val outSrc = file("$outSrcDir/org/lsposed/lspd/util/SignInfo.java")

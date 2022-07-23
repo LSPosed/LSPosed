@@ -1,7 +1,9 @@
 project(dex2oat)
 cmake_minimum_required(VERSION 3.4.1)
 
-add_executable(dex2oat dex2oat.c)
+add_library(dex2oat SHARED dex2oat.c)
+
+target_link_options(dex2oat PRIVATE "-fPIE")
 
 target_link_libraries(dex2oat log)
 

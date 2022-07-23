@@ -144,7 +144,7 @@ fun afterEval() = android.applicationVariants.forEach { variant ->
             "assemble$variantCapped",
             ":app:package$buildTypeCapped",
             ":daemon:package$buildTypeCapped",
-            ":dex2oat:merge${buildTypeCapped}NativeLibs"
+            ":dex2oat:strip${buildTypeCapped}DebugSymbols"
         )
         into(magiskDir)
         from("${rootProject.projectDir}/README.md")
@@ -199,16 +199,14 @@ fun afterEval() = android.applicationVariants.forEach { variant ->
             rename(".*\\.apk", "daemon.apk")
         }
         into("lib") {
-            from("${buildDir}/intermediates/cmake/$variantCapped/obj") {
+            from("${buildDir}/intermediates/stripped_native_libs/$variantCapped/out/lib") {
                 include("**/liblspd.so")
-            }
-            from("${project(":daemon").buildDir}/intermediates/cmake/$buildTypeLowered/obj") {
-                include("**/libdaemon.so")
             }
         }
         into("bin") {
-            from("${project(":dex2oat").buildDir}/intermediates/cmake/$buildTypeLowered/obj") {
-                include("**/dex2oat")
+            from("${project(":dex2oat").buildDir}/intermediates/stripped_native_libs/$buildTypeLowered/out/lib") {
+                include("**/libdex2oat.so")
+                rename { n -> n.replace("libdex2oat.so", "dex2oat") }
             }
         }
         val dexOutPath = if (buildTypeLowered == "release")
@@ -289,7 +287,7 @@ val pushDaemonNative = task<Exec>("pushDaemonNative") {
             }
             outputStream.toString().trim()
         }
-        workingDir("${project(":daemon").buildDir}/intermediates/cmake/debug/obj/$abi")
+        workingDir("${project(":daemon").buildDir}/intermediates/stripped_native_libs/debug/out/lib/$abi")
     }
     commandLine(adb, "push", "libdaemon.so", "/data/local/tmp/libdaemon.so")
 }
