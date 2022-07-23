@@ -159,7 +159,7 @@ dependencies {
     implementation("dev.rikka.rikkax.appcompat:appcompat:1.4.1")
     implementation("dev.rikka.rikkax.core:core:1.4.1")
     implementation("dev.rikka.rikkax.insets:insets:1.3.0")
-    implementation("dev.rikka.rikkax.material:material:2.5.0")
+    implementation("dev.rikka.rikkax.material:material:2.5.1")
     implementation("dev.rikka.rikkax.material:material-preference:2.0.0")
     implementation("dev.rikka.rikkax.preference:simplemenu-preference:1.0.3")
     implementation("dev.rikka.rikkax.recyclerview:recyclerview-ktx:1.3.1")
