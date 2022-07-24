@@ -1,7 +1,9 @@
 package org.lsposed.lspd.service;
 
 import android.annotation.SuppressLint;
+import android.os.Build;
 import android.os.ParcelFileDescriptor;
+import android.os.Process;
 import android.os.SELinux;
 import android.os.SystemProperties;
 import android.system.Os;
@@ -50,8 +52,9 @@ public class LogcatService implements Runnable {
 
     @SuppressLint("UnsafeDynamicallyLoadedCode")
     public LogcatService() {
-        String libraryPath = System.getProperty("lsp.library.path");
-        System.load(libraryPath + "/" + System.mapLibraryName("daemon"));
+        String classPath = System.getProperty("java.class.path");
+        var abi = Process.is64Bit() ? Build.SUPPORTED_64_BIT_ABIS[0] : Build.SUPPORTED_32_BIT_ABIS[0];
+        System.load(classPath + "!/lib/" + abi + "/" + System.mapLibraryName("daemon"));
         ConfigFileManager.moveLogDir();
 
         // Meizu devices set this prop and prevent debug logs from being recorded
