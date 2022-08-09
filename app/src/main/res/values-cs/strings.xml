@@ -36,6 +36,8 @@
     <string name="module_repo">Repozitář</string>
     <string name="module_repo_loading">Načítání…</string>
     <string name="module_repo_up_to_date">Všechny moduly jsou aktuální</string>
+    <string name="module_repo_published_time">Publikováno v %s</string>
+    <string name="module_repo_updated_time">Aktualizováno v %s</string>
     <plurals name="module_repo_upgradable">
         <item quantity="one">%d modul je možné aktualizovat</item>
         <item quantity="few">%d moduly je možné aktualizovat</item>
@@ -176,7 +178,7 @@
     <string name="settings_restore_failed2">Nepodařilo se obnovit:\n%s</string>
     <string name="group_network">Síť</string>
     <string name="dns_over_http">DNS over HTTPS</string>
-    <string name="dns_over_http_summary">Řešení DNS poisoningu v některých zemích</string>
+    <string name="dns_over_http_summary">Řešení DNS oprav v některých zemích</string>
     <string name="theme_color">Barva motivu</string>
     <string name="theme_color_system">Barva systémového motivu</string>
     <string name="settings_show_hidden_icon_apps_enabled">Vynutit aplikace k zobrazení ikon spouštěče</string>
