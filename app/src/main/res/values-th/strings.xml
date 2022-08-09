@@ -33,6 +33,8 @@
     <string name="module_repo">ที่เก็บ</string>
     <string name="module_repo_loading">กำลังโหลด…</string>
     <string name="module_repo_up_to_date">โมดูลทั้งหมดเป็นปัจจุบัน</string>
+    <string name="module_repo_published_time">เผยแพร่เมื่อ %s</string>
+    <string name="module_repo_updated_time">อัปเดตเมื่อ %s</string>
     <plurals name="module_repo_upgradable">
         <item quantity="other">%d โมดูลที่สามารถอัพเกรดได้</item>
     </plurals>
