@@ -37,6 +37,8 @@
     <string name="module_repo">רפוסיטורי</string>
     <string name="module_repo_loading">טוען…</string>
     <string name="module_repo_up_to_date">כל המודלים מעודכנים</string>
+    <string name="module_repo_published_time">פורסם ב %s</string>
+    <string name="module_repo_updated_time">עודכן ב %s</string>
     <plurals name="module_repo_upgradable">
         <item quantity="one">%d מודלים ניתנים לשדרוג</item>
         <item quantity="two">%d שני מודלים ניתנים לשדרוג</item>

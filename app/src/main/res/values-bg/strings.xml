@@ -34,6 +34,8 @@
     <string name="module_repo">Хранилище</string>
     <string name="module_repo_loading">Зареждане…</string>
     <string name="module_repo_up_to_date">Всички модули са актуализирани</string>
+    <string name="module_repo_published_time">Публикувано в %s</string>
+    <string name="module_repo_updated_time">Акттуализиран на %s</string>
     <plurals name="module_repo_upgradable">
         <item quantity="one">%d модул за надграждане</item>
         <item quantity="other">%d модули, които могат да се надграждат</item>

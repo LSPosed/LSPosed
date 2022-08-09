@@ -34,6 +34,8 @@
     <string name="module_repo">Lagre</string>
     <string name="module_repo_loading">Indlæser…</string>
     <string name="module_repo_up_to_date">Alle moduler opdateret</string>
+    <string name="module_repo_published_time">Udgivet på %s</string>
+    <string name="module_repo_updated_time">Opdateret på %s</string>
     <plurals name="module_repo_upgradable">
         <item quantity="one">%d modul opgraderbar</item>
         <item quantity="other">%d moduler opgraderbare</item>

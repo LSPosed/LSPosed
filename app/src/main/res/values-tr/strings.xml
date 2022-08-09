@@ -34,6 +34,8 @@
     <string name="module_repo">Modül deposu</string>
     <string name="module_repo_loading">Yükleniyor…</string>
     <string name="module_repo_up_to_date">Bütün modüller güncel</string>
+    <string name="module_repo_published_time">%syayınlandı</string>
+    <string name="module_repo_updated_time">%sgüncellendi</string>
     <plurals name="module_repo_upgradable">
         <item quantity="one">%d modül güncellenebilir</item>
         <item quantity="other">%d modül güncellenebilir</item>

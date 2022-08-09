@@ -36,6 +36,8 @@
     <string name="module_repo">Saugykla</string>
     <string name="module_repo_loading">Įkrovimas…</string>
     <string name="module_repo_up_to_date">Visi moduliai atnaujinti</string>
+    <string name="module_repo_published_time">Paskelbta adresu %s</string>
+    <string name="module_repo_updated_time">Atnaujinta %s</string>
     <plurals name="module_repo_upgradable">
         <item quantity="one">%d modulis atnaujinamas</item>
         <item quantity="few">%d atnaujinami moduliai</item>

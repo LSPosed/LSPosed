@@ -2,7 +2,7 @@
 <resources>
     <!-- Notification -->
     <string name="module_is_not_activated_yet">وحدة Xposed لم يتم تفعيلها بعد</string>
-    <string name="module_is_not_activated_yet_main_user_detailed">%1$s تم تثبيته، ولكن لم يتم تفعيله بعد</string>
+    <string name="module_is_not_activated_yet_main_user_detailed">%1$s تم التثبيت ولكنه لم يفعل بعد</string>
     <string name="module_is_not_activated_yet_multi_user_detailed">%1$s تم تثبيته للمستخدم %2$s ولكن لم يتم تفعيله بعد</string>
     <string name="xposed_module_updated_notification_title">وحدة Xposed تم تحديثها</string>
     <string name="xposed_module_updated_notification_content">%s تم تحديثه، يرجى فرض إيقاف وإعادة تشغيل التطبيقات في نطاقه</string>

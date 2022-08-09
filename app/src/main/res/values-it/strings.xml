@@ -34,6 +34,8 @@
     <string name="module_repo">Repository</string>
     <string name="module_repo_loading">Caricamento in corso…</string>
     <string name="module_repo_up_to_date">Tutti i moduli sono aggiornati</string>
+    <string name="module_repo_published_time">Pubblicato alle %s</string>
+    <string name="module_repo_updated_time">Aggiornato alle %s</string>
     <plurals name="module_repo_upgradable">
         <item quantity="one">%d modulo aggiornabile</item>
         <item quantity="other">%d moduli aggiornabili</item>
