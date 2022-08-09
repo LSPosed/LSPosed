@@ -34,6 +34,8 @@
     <string name="module_repo">Dépôt</string>
     <string name="module_repo_loading">Chargement…</string>
     <string name="module_repo_up_to_date">Tous les modules sont à jour</string>
+    <string name="module_repo_published_time">Publié le %s</string>
+    <string name="module_repo_updated_time">Mise à jour le %s</string>
     <plurals name="module_repo_upgradable">
         <item quantity="one">%d modules évolutifs</item>
         <item quantity="other">%d modules évolutifs</item>
