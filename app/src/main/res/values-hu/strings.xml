@@ -34,6 +34,8 @@
     <string name="module_repo">Modulok</string>
     <string name="module_repo_loading">Loading…</string>
     <string name="module_repo_up_to_date">Todos los modulos actualizados</string>
+    <string name="module_repo_published_time">Megjelent a %soldalon.</string>
+    <string name="module_repo_updated_time">Frissítve: %s</string>
     <plurals name="module_repo_upgradable">
         <item quantity="one">%d module upgradable</item>
         <item quantity="other">%d bővíthető modulok</item>
