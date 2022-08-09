@@ -33,6 +33,8 @@
     <string name="module_repo">저장소</string>
     <string name="module_repo_loading">불러오는 중…</string>
     <string name="module_repo_up_to_date">모든 모듈이 최신 버전입니다</string>
+    <string name="module_repo_published_time">%s 에 배포됨</string>
+    <string name="module_repo_updated_time">%s 에 업데이트됨</string>
     <plurals name="module_repo_upgradable">
         <item quantity="other">%d 개의 모듈이 업데이트 가능합니다</item>
     </plurals>
