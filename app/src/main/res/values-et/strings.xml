@@ -51,7 +51,7 @@
     <string name="selinux_policy_not_loaded_summary">SEPolicy ei ole korralikult laetud</string>
     <string name="selinux_policy_not_loaded"><![CDATA[Moodulid, mis haakuvad System Frameworkiga, ei tööta.<br/>Palun teatage sellest <a href="https://github.com/topjohnwu/Magisk/issues"><b>Magiski</b></a> arendajale.]]></string>
     <string name="system_inject_fail_summary">System Frameworki süstimine ebaõnnestus</string>
-    <string name="system_inject_fail"><![CDATA[Seda esineb harva ja selle põhjuseks võib olla <b>Magisk</b> või mõned madala kvaliteediga Magisk-moodulid.<br/>Palun proovige lülitada välja Magisk'i moodulid peale Riru ja LSPosed või esitage täielik logi arendajatele.]]></string>
+    <string name="system_inject_fail"><![CDATA[Seda esineb harva ja selle põhjuseks võib olla <b>Magisk</b> või mõned madala kvaliteediga Magisk-moodulid.<br/>Palun proovige lülitada välja Magisk\'i moodulid peale Riru ja LSPosed või esitage täielik logi arendajatele.]]></string>
     <string name="system_prop_incorrect_summary">Süsteemi tugi vale</string>
     <string name="system_prop_incorrect"><![CDATA[Mõned vajalikud süsteemiomadused kustutatud või muudetud.<br/>Moodulid võivad aeg-ajalt kehtetuks muutuda.]]></string>
     <string name="need_update">Vaja uuendada</string>
