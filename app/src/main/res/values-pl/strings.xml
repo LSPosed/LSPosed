@@ -36,6 +36,8 @@
     <string name="module_repo">Repozytorium</string>
     <string name="module_repo_loading">Ładowanie…</string>
     <string name="module_repo_up_to_date">Wszystkie moduły są aktualne</string>
+    <string name="module_repo_published_time">Opublikowano na stronie %s</string>
+    <string name="module_repo_updated_time">Aktualizacja na stronie %s</string>
     <plurals name="module_repo_upgradable">
         <item quantity="one">%d moduł możliwy do aktualizacji</item>
         <item quantity="few">%d moduły z możliwością aktualizacji</item>
