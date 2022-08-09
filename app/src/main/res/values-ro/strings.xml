@@ -35,6 +35,8 @@
     <string name="module_repo">Depozit</string>
     <string name="module_repo_loading">Se încarcă…</string>
     <string name="module_repo_up_to_date">Toate modulele sunt actualizate</string>
+    <string name="module_repo_published_time">Publicat la %s</string>
+    <string name="module_repo_updated_time">Actualizat la %s</string>
     <plurals name="module_repo_upgradable">
         <item quantity="one">%d module actualizabile.</item>
         <item quantity="few">%d module actualizabile</item>
