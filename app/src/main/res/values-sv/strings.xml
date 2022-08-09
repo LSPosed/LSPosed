@@ -34,6 +34,8 @@
     <string name="module_repo">Förvar</string>
     <string name="module_repo_loading">Laddar…</string>
     <string name="module_repo_up_to_date">Alla moduler uppdaterade</string>
+    <string name="module_repo_published_time">Publicerad på %s</string>
+    <string name="module_repo_updated_time">Uppdaterad på %s</string>
     <plurals name="module_repo_upgradable">
         <item quantity="one">%d modul uppgraderbar</item>
         <item quantity="other">%d moduler uppgraderbara</item>
