@@ -34,6 +34,8 @@
     <string name="module_repo">مخزن۔</string>
     <string name="module_repo_loading">لوڈ ہو رہا ہے…</string>
     <string name="module_repo_up_to_date">تمام ماڈیولز اپ ٹو ڈیٹ</string>
+    <string name="module_repo_published_time">%sپر شائع ہوا۔</string>
+    <string name="module_repo_updated_time">%sپر اپ ڈیٹ کیا گیا۔</string>
     <plurals name="module_repo_upgradable">
         <item quantity="one">%d ماڈیول قابل اپ گریڈ</item>
         <item quantity="other">%d ماڈیولز قابل اپ گریڈ</item>
