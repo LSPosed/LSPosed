@@ -34,6 +34,8 @@
     <string name="module_repo">Bewaarplek</string>
     <string name="module_repo_loading">Laai…</string>
     <string name="module_repo_up_to_date">%d modules enabled</string>
+    <string name="module_repo_published_time">Published at %s</string>
+    <string name="module_repo_updated_time">Opgedateer op %s</string>
     <plurals name="module_repo_upgradable">
         <item quantity="one">%d module enabled</item>
         <item quantity="other">%d modules enabled</item>
