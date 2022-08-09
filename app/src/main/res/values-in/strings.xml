@@ -33,6 +33,8 @@
     <string name="module_repo">Gudang</string>
     <string name="module_repo_loading">Memuat…</string>
     <string name="module_repo_up_to_date">Semua modul sudah terbaru</string>
+    <string name="module_repo_published_time">Diterbitkan pada %s</string>
+    <string name="module_repo_updated_time">Diperbarui pada %s</string>
     <plurals name="module_repo_upgradable">
         <item quantity="other">%d modul dapat ditingkatkan</item>
     </plurals>
