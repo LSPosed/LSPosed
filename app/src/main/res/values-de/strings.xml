@@ -29,11 +29,13 @@
     <string name="Logs">Protokolle</string>
     <string name="Settings">Einstellungen</string>
     <string name="feedback_or_suggestion">Feedback oder Verbesserungsideen</string>
-    <string name="About">Über</string>
+    <string name="About">Mehr Erfahren</string>
     <string name="report_issue">Fehler melden</string>
     <string name="module_repo">Modularchiv</string>
     <string name="module_repo_loading">Wird geladen…</string>
     <string name="module_repo_up_to_date">Alle Module sind auf dem neusten Stand</string>
+    <string name="module_repo_published_time">Veröffentlicht am %s</string>
+    <string name="module_repo_updated_time">Aktualisiert am %s</string>
     <plurals name="module_repo_upgradable">
         <item quantity="one">%d Modul Update verfügbar</item>
         <item quantity="other">%d Modul Updates verfügbar</item>
