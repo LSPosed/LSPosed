@@ -34,6 +34,8 @@
     <string name="module_repo">Versiovarasto</string>
     <string name="module_repo_loading">Ladataan…</string>
     <string name="module_repo_up_to_date">Kaikki moduulit ajan tasalla</string>
+    <string name="module_repo_published_time">Julkaistu osoitteessa %s</string>
+    <string name="module_repo_updated_time">Päivitetty osoitteessa %s</string>
     <plurals name="module_repo_upgradable">
         <item quantity="one">%d moduuli päivitettävissä</item>
         <item quantity="other">%d moduulia päivitettävissä</item>
