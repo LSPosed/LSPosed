@@ -34,6 +34,8 @@
     <string name="module_repo">Depo</string>
     <string name="module_repo_loading">Barkirin…</string>
     <string name="module_repo_up_to_date">Hemî modulên nûjen</string>
+    <string name="module_repo_published_time">Di %sde hate weşandin</string>
+    <string name="module_repo_updated_time">Di %sde hate nûve kirin</string>
     <plurals name="module_repo_upgradable">
         <item quantity="one">%d module nûvekirin</item>
         <item quantity="other">%d modulên nûvekirî</item>
