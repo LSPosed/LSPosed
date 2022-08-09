@@ -36,6 +36,8 @@
     <string name="module_repo">Репозиторий</string>
     <string name="module_repo_loading">Загрузка…</string>
     <string name="module_repo_up_to_date">Все модули в актуальном состоянии</string>
+    <string name="module_repo_published_time">Опубликовано в %s</string>
+    <string name="module_repo_updated_time">Обновлено в %s</string>
     <plurals name="module_repo_upgradable">
         <item quantity="one">Найдено обновление %d модуля</item>
         <item quantity="few">Найдены обновления %d модулей</item>
@@ -50,7 +52,7 @@
     <string name="not_install_summary">LSPosed не установлен!</string>
     <string name="activated">Активирован</string>
     <string name="partial_activated">Частично активирован</string>
-    <string name="selinux_policy_not_loaded_summary">SEPolicy неправильно загружен</string>
+    <string name="selinux_policy_not_loaded_summary">SEPolicy загружен неправильно</string>
     <string name="selinux_policy_not_loaded"><![CDATA[Модули которым нужен системный фреймворк, не будут работать.<br/>Пожалуйста, сообщите об этом разработчику <a href="https://github.com/topjohnwu/Magisk/issues"><b>Magisk</b></a>]]></string>
     <string name="system_inject_fail_summary">Ошибка внедрения системного фреймворка</string>
     <string name="system_inject_fail"><![CDATA[Это редкость и может быть вызвано <b>Magisk</b> или несовместимыми модулями Magisk.<br/>Пожалуйста, попробуйте отключить модули Magisk кроме Riru и LSPosed или пришлите полные логи разработчику]]></string>
@@ -64,7 +66,7 @@
     <string name="info_manager_version">Версия приложения</string>
     <string name="info_system_version">Версия Android</string>
     <string name="info_device">Устройство</string>
-    <string name="info_system_abi">Разрядность системы ABI</string>
+    <string name="info_system_abi">Разрядность системы (ABI)</string>
     <string name="info_api">Способ внедрения</string>
     <string name="info_dex2oat_wrapper">Оптимизатор Dex</string>
     <string name="supported">Поддерживается</string>
