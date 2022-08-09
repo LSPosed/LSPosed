@@ -34,6 +34,8 @@
     <string name="module_repo">Kodelager</string>
     <string name="module_repo_loading">Laster…</string>
     <string name="module_repo_up_to_date">Alle moduler oppdatert</string>
+    <string name="module_repo_published_time">Publisert på %s</string>
+    <string name="module_repo_updated_time">Oppdatert kl %s</string>
     <plurals name="module_repo_upgradable">
         <item quantity="one">%d modul kan oppgraderes</item>
         <item quantity="other">%d moduler kan oppgraderes</item>
