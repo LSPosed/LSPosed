@@ -34,6 +34,8 @@
     <string name="module_repo">Αποθετήριο</string>
     <string name="module_repo_loading">Φόρτωση…</string>
     <string name="module_repo_up_to_date">Όλα τα πρόσθετα είναι ενημερωμένα</string>
+    <string name="module_repo_published_time">Δημοσιεύθηκε στο %s</string>
+    <string name="module_repo_updated_time">Ενημερώθηκε στο %s</string>
     <plurals name="module_repo_upgradable">
         <item quantity="one">%d ένθεμα αναβαθμίσιμο</item>
         <item quantity="other">%d πρόσθετα μπορούν να ενημερωθούν</item>
