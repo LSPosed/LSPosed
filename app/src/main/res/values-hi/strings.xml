@@ -34,6 +34,8 @@
     <string name="module_repo">रिपोज़िटरी</string>
     <string name="module_repo_loading">लोड हो रहा है…</string>
     <string name="module_repo_up_to_date">सभी मॉड्यूल अप टू डेट</string>
+    <string name="module_repo_published_time">%s. पर प्रकाशित</string>
+    <string name="module_repo_updated_time">%s. पर अपडेट किया गया</string>
     <plurals name="module_repo_upgradable">
         <item quantity="one">%d मॉड्यूल अपग्रेड करने योग्य</item>
         <item quantity="other">%d मॉड्यूल अपग्रेड करने योग्य</item>
