@@ -176,7 +176,7 @@ if [ "$API" -ge 29 ]; then
   while [ -d "/dev/$DEV_PATH" ]; do
     DEV_PATH=$(tr -dc 'a-f0-9' < /dev/urandom | head -c 16)
   done
-  sed -i "s/placeholder_\/dev\/................/placeholder_\/dev\/$DEV_PATH/" "$MODPATH/libdaemon.so"
+  sed -i "s/placeholder_\/dev\/................/placeholder_\/dev\/$DEV_PATH/g" "$MODPATH/daemon.apk"
   sed -i "s/placeholder_\/dev\/................/placeholder_\/dev\/$DEV_PATH/" "$MODPATH/bin/dex2oat32"
   sed -i "s/placeholder_\/dev\/................/placeholder_\/dev\/$DEV_PATH/" "$MODPATH/bin/dex2oat64"
 else
