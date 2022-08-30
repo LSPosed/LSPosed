@@ -144,7 +144,7 @@ fun afterEval() = android.applicationVariants.forEach { variant ->
             "assemble$variantCapped",
             ":app:package$buildTypeCapped",
             ":daemon:package$buildTypeCapped",
-            ":dex2oat:strip${buildTypeCapped}DebugSymbols"
+            ":dex2oat:merge${buildTypeCapped}NativeLibs"
         )
         into(magiskDir)
         from("${rootProject.projectDir}/README.md")
@@ -204,9 +204,8 @@ fun afterEval() = android.applicationVariants.forEach { variant ->
             }
         }
         into("bin") {
-            from("${project(":dex2oat").buildDir}/intermediates/stripped_native_libs/$buildTypeLowered/out/lib") {
-                include("**/libdex2oat.so")
-                rename { n -> n.replace("libdex2oat.so", "dex2oat") }
+            from("${project(":dex2oat").buildDir}/intermediates/cmake/$buildTypeLowered/obj") {
+                include("**/dex2oat")
             }
         }
         val dexOutPath = if (buildTypeLowered == "release")
