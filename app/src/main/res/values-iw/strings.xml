@@ -46,7 +46,7 @@
         <item quantity="other">%d מודלים ניתנים לשדרוג</item>
     </plurals>
     <string name="about_view_source_code"><![CDATA[הצג קוד מקור ב%1$s<br/> הצטרף לערוץ %2$s שלנו]]></string>
-    <string name="translators" comment="Dear translators, please add your home page here following the format. There can be more than one translator. So feel free to append yourself.">null</string>
+    <string name="translators" comment="Dear translators, please add your home page here following the format. There can be more than one translator. So feel free to append yourself.">א ש</string>
     <string name="install">התקנה</string>
     <string name="install_summary">הקש כדי להתקין את LSPosed</string>
     <string name="not_installed">לא מותקן</string>
