@@ -1,0 +1,11 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <!-- Notification -->
+    <string name="module_is_not_activated_yet">Xposed modul još nije aktiviran</string>
+    <string name="module_is_not_activated_yet_main_user_detailed">%1$s je instaliran, ali još nije aktiviran</string>
+    <string name="module_is_not_activated_yet_multi_user_detailed">%1$s je instaliran korisniku %2$s, ali još nije aktiviran</string>
+    <string name="xposed_module_updated_notification_title">Modul Xposed ažuriran</string>
+    <string name="xposed_module_updated_notification_content">%s je ažuriran, prisilno zaustavite i ponovno pokrenite aplikacije u njegovom opsegu</string>
+    <string name="xposed_module_updated_notification_title_system">Xposed modul je ažuriran, potrebno je ponovno pokretanje sustava</string>
+    <string name="xposed_module_updated_notification_content_system">%s je ažuriran, budući da opseg sadrži System Framework, potrebno je ponovno pokretanje za primjenu promjena</string>
+</resources>
