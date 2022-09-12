@@ -41,7 +41,7 @@
         <item quantity="other">%d модули, които могат да се надграждат</item>
     </plurals>
     <string name="about_view_source_code"><![CDATA[Преглед на изходния код в %1$s<br/>Присъединете се към нашия %2$s канал]]></string>
-    <string name="translators" comment="Dear translators, please add your home page here following the format. There can be more than one translator. So feel free to append yourself.">null</string>
+    <string name="translators" comment="Dear translators, please add your home page here following the format. There can be more than one translator. So feel free to append yourself.">Светлин Карагеоргиев</string>
     <string name="install">Инсталиране на</string>
     <string name="install_summary">Докоснете, за да инсталирате LSPosed</string>
     <string name="not_installed">Не е инсталиран</string>
