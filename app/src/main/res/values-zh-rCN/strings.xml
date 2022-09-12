@@ -80,7 +80,7 @@
     <string name="menuSaveToSd">保存</string>
     <string name="nav_item_logs_verbose">详细日志</string>
     <string name="nav_item_logs_module">模块日志</string>
-    <string name="logs_saved">Logs saved</string>
+    <string name="logs_saved">日志已保存</string>
     <string name="logs_save_failed2">保存失败：\n%s</string>
     <string name="menuClearLog">立即清空日志</string>
     <string name="logs_cleared">成功清空日志。</string>
@@ -225,7 +225,7 @@
     <string name="color_teal">青绿</string>
     <string name="color_green">绿色</string>
     <string name="color_light_green">浅绿</string>
-    <string name="color_lime">石灰</string>
+    <string name="color_lime">黄绿</string>
     <string name="color_yellow">黄色</string>
     <string name="color_amber">琥珀</string>
     <string name="color_orange">橙色</string>
