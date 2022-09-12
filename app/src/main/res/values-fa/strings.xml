@@ -41,7 +41,7 @@
         <item quantity="other">%d ماژول قابل ارتقا است</item>
     </plurals>
     <string name="about_view_source_code"><![CDATA[کد منبع را در %1$s مشاهده کنید<br/> و در کانال %2$s ما عضو شوید]]></string>
-    <string name="translators" comment="Dear translators, please add your home page here following the format. There can be more than one translator. So feel free to append yourself.">خالی</string>
+    <string name="translators" comment="Dear translators, please add your home page here following the format. There can be more than one translator. So feel free to append yourself.">rezamqds</string>
     <string name="install">نصب</string>
     <string name="install_summary">برای نصب LSPosed فشار دهید</string>
     <string name="not_installed">نصب نشده</string>
@@ -159,7 +159,7 @@
     <string name="module_app_info">اطلاعات برنامه</string>
     <string name="list_empty">¯\\\\_(ツ)_\/¯\n اینجا چیزی نیست</string>
     <!-- SettingsActivity -->
-    <string name="settings_group_framework">فریمورک</string>
+    <string name="settings_group_framework">Framework</string>
     <string name="pref_title_disable_verbose_log">غیرفعال کردن گزارش های کامل</string>
     <string name="pure_black_dark_theme">پوسته سیاه تاریک</string>
     <string name="pure_black_dark_theme_summary">اگر پوسته سیاه فعال است از پوسته سیاه خالص استفاده کنید</string>

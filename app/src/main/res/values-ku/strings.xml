@@ -41,7 +41,6 @@
         <item quantity="other">%d modulên nûvekirî</item>
     </plurals>
     <string name="about_view_source_code"><![CDATA[Koda çavkaniyê li %1$s<br/>bibînin Tevlî %2$s kanala me bibin]]></string>
-    <string name="translators" comment="Dear translators, please add your home page here following the format. There can be more than one translator. So feel free to append yourself.">null</string>
     <string name="install">Lêkirin</string>
     <string name="install_summary">Ji bo sazkirina LSPosed bikirtînin</string>
     <string name="not_installed">Ne hatiye sazkirin</string>

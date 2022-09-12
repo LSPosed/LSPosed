@@ -41,7 +41,6 @@
         <item quantity="other">%d moduulia päivitettävissä</item>
     </plurals>
     <string name="about_view_source_code"><![CDATA[Näytä lähdekoodi %1$s<br/>Liity kanavaamme %2$s]]></string>
-    <string name="translators" comment="Dear translators, please add your home page here following the format. There can be more than one translator. So feel free to append yourself.">null</string>
     <string name="install">Asenna</string>
     <string name="install_summary">Napauta asentaaksesi LSPosed</string>
     <string name="not_installed">Ei asennettu</string>

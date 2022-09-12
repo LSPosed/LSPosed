@@ -39,7 +39,7 @@
         <item quantity="other">%d โมดูลที่สามารถอัพเกรดได้</item>
     </plurals>
     <string name="about_view_source_code"><![CDATA[ดูซอร์สโค้ดได้ที่ %1$s<br/>เข้าร่วม %2$s ช่องของเรา]]></string>
-    <string name="translators" comment="Dear translators, please add your home page here following the format. There can be more than one translator. So feel free to append yourself.">โมฆะ</string>
+    <string name="translators" comment="Dear translators, please add your home page here following the format. There can be more than one translator. So feel free to append yourself.">와타나, Eifsy Popay</string>
     <string name="install">ติดตั้ง</string>
     <string name="install_summary">แตะเพื่อติดตั้งLSPosed</string>
     <string name="not_installed">ไม่ได้ติดตั้ง</string>
