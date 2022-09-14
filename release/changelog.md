@@ -17,7 +17,7 @@
 - 通过 Android 13 兼容性测试
 - 修复非主用户的模块配置
 - 修复日志保存
-- 整个应用 WebView 缓存目录的 SELinux 标签
+- 调整管理器 WebView 缓存目录的 SELinux 标签
 - 重构核心
 - 修复 Android 11- 的 `cancelNotificationWithTag`
 - 修复 Android 12+ 的 `broadcastIntentWithFeature`
