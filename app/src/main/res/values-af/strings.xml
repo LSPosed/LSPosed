@@ -38,7 +38,7 @@
     <string name="module_repo_updated_time">Opgedateer op %s</string>
     <plurals name="module_repo_upgradable">
         <item quantity="one">%d module opgradeerbaar</item>
-        <item quantity="other">%d modules enabled</item>
+        <item quantity="other">%d modules opgradeerbaar</item>
     </plurals>
     <string name="about_view_source_code"><![CDATA[Bekyk bronkode by %1$s<br/>Sluit aan by ons %2$s -kanaal]]></string>
     <string name="install">Install</string>
