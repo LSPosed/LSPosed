@@ -33,9 +33,13 @@
     <string name="report_issue">Rapporteer probleem</string>
     <string name="module_repo">Bewaarplek</string>
     <string name="module_repo_loading">Laai…</string>
-    <string name="module_repo_up_to_date">%d modules enabled</string>
+    <string name="module_repo_up_to_date">Alle modules op datum</string>
     <string name="module_repo_published_time">Published at %s</string>
     <string name="module_repo_updated_time">Opgedateer op %s</string>
+    <plurals name="module_repo_upgradable">
+        <item quantity="one">%d module opgradeerbaar</item>
+        <item quantity="other">%d modules enabled</item>
+    </plurals>
     <string name="about_view_source_code"><![CDATA[Bekyk bronkode by %1$s<br/>Sluit aan by ons %2$s -kanaal]]></string>
     <string name="install">Install</string>
     <string name="install_summary">Tik om LSPosed te installeer</string>
@@ -88,7 +92,7 @@
     <string name="menuReload">Herlaai</string>
     <string name="logs_clear_failed_2">Kon nie die logboek skoonmaak nie</string>
     <string name="menu_enable_word_wrap">Woordomhulsel</string>
-    <string name="enabled_verbose_log">%d module enabled</string>
+    <string name="enabled_verbose_log">Uitgebreide logboek geaktiveer</string>
     <string name="disabled_verbose_log">Uitgebreide logboek gedeaktiveer</string>
     <!-- ModulesActivity -->
     <string name="module_empty_description">(geen beskrywing verskaf nie)</string>
