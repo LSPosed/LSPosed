@@ -33,7 +33,7 @@ import android.os.RemoteException;
 import androidx.annotation.RequiresApi;
 
 public interface IActivityManager extends IInterface {
-    @RequiresApi(32)
+    @RequiresApi(31)
     int broadcastIntentWithFeature(IApplicationThread caller, String callingFeatureId,
                                    Intent intent, String resolvedType, IIntentReceiver resultTo,
                                    int resultCode, String resultData, Bundle resultExtras,

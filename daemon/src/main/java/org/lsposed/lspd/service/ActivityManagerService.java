@@ -79,15 +79,13 @@ public class ActivityManagerService {
                                                  int appOp, Bundle options, boolean serialized, boolean sticky, int userId) throws RemoteException {
         IActivityManager am = getActivityManager();
         if (am == null || thread == null) return -1;
-        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.S_V2) {
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.S) {
             try {
                 return am.broadcastIntentWithFeature(thread, callingFeatureId, intent, resolvedType, resultTo,
                         resultCode, resultData, null, requiredPermissions, null, null, appOp, null,
                         serialized, sticky, userId);
             } catch (NoSuchMethodError ignored) {
             }
-        }
-        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.S) {
             return am.broadcastIntentWithFeature(thread, callingFeatureId, intent, resolvedType, resultTo,
                     resultCode, resultData, null, requiredPermissions, null, appOp, null,
                     serialized, sticky, userId);
