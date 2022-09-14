@@ -6,6 +6,6 @@
     <string name="module_is_not_activated_yet_multi_user_detailed">%1$s برای کاربر %2$s نصب شده است اما هنوز فعال نشده است</string>
     <string name="xposed_module_updated_notification_title">ماژول Xposed به روز رسانی شده</string>
     <string name="xposed_module_updated_notification_content">%s به‌روزرسانی شده است لطفا برنامه‌ ها را متوقف کرده و سپس دوباره اجرا کنید</string>
-    <string name="xposed_module_updated_notification_title_system">ماژول Xposed به روز شد، سیستم نیاز به راه اندازی مجدد دارد</string>
+    <string name="xposed_module_updated_notification_title_system">ماژول Xposed به روز رسانی شد سیستم به خاموش و روشن کردن دستگاه نیاز دارد</string>
     <string name="xposed_module_updated_notification_content_system">%s به‌روزرسانی شده است و چون شامل محدوده فریمورک سیستم است برای انجام تغییرات به خاموش و روشن کردن دستگاه نیاز دارد</string>
 </resources>

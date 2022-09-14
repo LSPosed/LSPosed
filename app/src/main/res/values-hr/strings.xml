@@ -43,7 +43,6 @@
         <item quantity="other">%d modula koji se mogu nadograditi</item>
     </plurals>
     <string name="about_view_source_code"><![CDATA[Pogledajte izvorni kod na %1$s<br/>Pridružite se našem %2$s kanalu]]></string>
-    <string name="translators" comment="Dear translators, please add your home page here following the format. There can be more than one translator. So feel free to append yourself.">ništavan</string>
     <string name="install">Instalirati</string>
     <string name="install_summary">Dodirnite za instaliranje LSPosed</string>
     <string name="not_installed">Nije instalirano</string>
