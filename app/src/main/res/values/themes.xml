@@ -67,11 +67,4 @@
         <item name="android:paddingBottom">24dp</item>
     </style>
 
-    <style name="Widget.App.Button.OutlinedButton.IconOnly" parent="Widget.Material3.Button.OutlinedButton">
-        <item name="iconPadding">0dp</item>
-        <item name="android:paddingLeft">@dimen/mtrl_btn_icon_btn_padding_left</item>
-        <item name="android:paddingRight">@dimen/mtrl_btn_icon_btn_padding_left</item>
-        <item name="android:minWidth">36dp</item>
-    </style>
-
 </resources>
