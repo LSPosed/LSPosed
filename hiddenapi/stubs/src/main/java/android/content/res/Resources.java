@@ -15,6 +15,10 @@ public class Resources {
 		throw new UnsupportedOperationException("STUB");
 	}
 
+	public ResourcesImpl getImpl() {
+		throw new UnsupportedOperationException("STUB");
+	}
+
 	public CompatibilityInfo getCompatibilityInfo() {
 	    throw new UnsupportedOperationException("STUB");
 	}

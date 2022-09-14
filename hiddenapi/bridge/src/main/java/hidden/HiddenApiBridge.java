@@ -127,4 +127,8 @@ public class HiddenApiBridge {
             return Os.ioctlInt(fd, cmd);
         }
     }
+
+    public static ResourcesImpl Resources_getImpl(Resources res) {
+        return res.getImpl();
+    }
 }

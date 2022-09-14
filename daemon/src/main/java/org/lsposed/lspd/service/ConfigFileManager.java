@@ -22,8 +22,10 @@ package org.lsposed.lspd.service;
 import static org.lsposed.lspd.service.ServiceManager.TAG;
 import static org.lsposed.lspd.service.ServiceManager.toGlobalNamespace;
 
+import android.content.Context;
 import android.content.res.AssetManager;
 import android.content.res.Resources;
+import android.content.res.ResourcesImpl;
 import android.os.ParcelFileDescriptor;
 import android.os.Process;
 import android.os.SELinux;
@@ -37,6 +39,7 @@ import androidx.annotation.Nullable;
 
 import org.lsposed.daemon.BuildConfig;
 import org.lsposed.lspd.models.PreLoadedApk;
+import org.lsposed.lspd.util.FakeContext;
 import org.lsposed.lspd.util.InstallerVerifier;
 import org.lsposed.lspd.util.Utils;
 
@@ -136,6 +139,10 @@ public class ConfigFileManager {
             if ((int) addAssetPath.invoke(am, daemonApkPath.toString()) > 0) {
                 //noinspection deprecation
                 res = new Resources(am, null, null);
+                try {
+                    HiddenApiBridge.Resources_getImpl(res).setAppContext(new FakeContext("lspd"));
+                } catch (Throwable ignored) {
+                }
             }
         } catch (Throwable e) {
             Log.e(TAG, Log.getStackTraceString(e));
