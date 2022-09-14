@@ -139,11 +139,11 @@ dependencies {
     val glideVersion = "4.13.2"
     val navVersion: String by project
     annotationProcessor("com.github.bumptech.glide:compiler:$glideVersion")
-    implementation("androidx.activity:activity:1.4.0")
+    implementation("androidx.activity:activity:1.5.1")
     implementation("androidx.browser:browser:1.4.0")
     implementation("androidx.constraintlayout:constraintlayout:2.1.4")
-    implementation("androidx.core:core:1.8.0")
-    implementation("androidx.fragment:fragment:1.4.1")
+    implementation("androidx.core:core:1.9.0")
+    implementation("androidx.fragment:fragment:1.5.2")
     implementation("androidx.navigation:navigation-fragment:$navVersion")
     implementation("androidx.navigation:navigation-ui:$navVersion")
     implementation("androidx.preference:preference:1.2.0")
