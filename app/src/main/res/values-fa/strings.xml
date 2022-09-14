@@ -28,7 +28,7 @@
     </plurals>
     <string name="Logs">گزارش‌ ها</string>
     <string name="Settings">تنظیمات</string>
-    <string name="feedback_or_suggestion">پیشنهاد یا بازخورد</string>
+    <string name="feedback_or_suggestion">بازخورد یا پیشنهاد</string>
     <string name="About">درباره lsposed</string>
     <string name="report_issue">گزارش مشکل</string>
     <string name="module_repo">مخزن</string>
@@ -41,7 +41,7 @@
         <item quantity="other">%d ماژول قابل ارتقا است</item>
     </plurals>
     <string name="about_view_source_code"><![CDATA[کد منبع را در %1$s مشاهده کنید<br/> و در کانال %2$s ما عضو شوید]]></string>
-    <string name="translators" comment="Dear translators, please add your home page here following the format. There can be more than one translator. So feel free to append yourself.">rezamqds</string>
+    <string name="translators" comment="Dear translators, please add your home page here following the format. There can be more than one translator. So feel free to append yourself.">milad19s</string>
     <string name="install">نصب</string>
     <string name="install_summary">برای نصب LSPosed فشار دهید</string>
     <string name="not_installed">نصب نشده</string>
