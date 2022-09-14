@@ -82,7 +82,6 @@
 
         <com.google.android.material.button.MaterialButton
             android:id="@+id/view_assets"
-            style="@style/Widget.MaterialComponents.Button.Icon"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_marginTop="4dp"
@@ -96,7 +95,7 @@
 
         <com.google.android.material.button.MaterialButton
             android:id="@+id/open_in_browser"
-            style="@style/Widget.App.Button.OutlinedButton.IconOnly"
+            style="?attr/materialIconButtonOutlinedStyle"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_marginStart="6dp"
