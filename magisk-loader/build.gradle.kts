@@ -112,7 +112,7 @@ android {
 }
 
 dependencies {
-    compileOnly("androidx.annotation:annotation:1.3.0")
+    compileOnly("androidx.annotation:annotation:1.4.0")
     compileOnly(projects.hiddenapi.stubs)
     implementation(projects.core)
     implementation(projects.hiddenapi.bridge)
@@ -199,11 +199,8 @@ fun afterEval() = android.applicationVariants.forEach { variant ->
             rename(".*\\.apk", "daemon.apk")
         }
         into("lib") {
-            from("${buildDir}/intermediates/cmake/$variantCapped/obj") {
+            from("${buildDir}/intermediates/stripped_native_libs/$variantCapped/out/lib") {
                 include("**/liblspd.so")
-            }
-            from("${project(":daemon").buildDir}/intermediates/cmake/$buildTypeLowered/obj") {
-                include("**/libdaemon.so")
             }
         }
         into("bin") {
@@ -289,7 +286,7 @@ val pushDaemonNative = task<Exec>("pushDaemonNative") {
             }
             outputStream.toString().trim()
         }
-        workingDir("${project(":daemon").buildDir}/intermediates/cmake/debug/obj/$abi")
+        workingDir("${project(":daemon").buildDir}/intermediates/stripped_native_libs/debug/out/lib/$abi")
     }
     commandLine(adb, "push", "libdaemon.so", "/data/local/tmp/libdaemon.so")
 }

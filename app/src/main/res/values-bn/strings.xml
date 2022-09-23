@@ -19,7 +19,8 @@
   -->
 <resources xmlns:tools="http://schemas.android.com/tools" tools:keep="@string/xposed_module_updated_notification_*,@string/module_is_not_activated_*">
     <!-- MainActivity -->
-    <string name="info">তথ্য</string>
+    <string name="info">তথ্য
+প্রধানকার্যকলাপ</string>
     <string name="overview">ওভারভিউ</string>
     <string name="Modules">মডিউল</string>
     <plurals name="modules_enabled_count">
@@ -34,12 +35,14 @@
     <string name="module_repo">ভান্ডার</string>
     <string name="module_repo_loading">লোড হচ্ছে…</string>
     <string name="module_repo_up_to_date">সব মডিউল আপ টু ডেট</string>
+    <string name="module_repo_published_time">মডিউল_রিপো_প্রকাশের_সময়</string>
+    <string name="module_repo_updated_time">মডিউল_রিপো_হালনাগাদের_সময়</string>
     <plurals name="module_repo_upgradable">
         <item quantity="one">%d মডিউল আপগ্রেডযোগ্য</item>
         <item quantity="other">%d মডিউল আপগ্রেডযোগ্য</item>
     </plurals>
     <string name="about_view_source_code"><![CDATA[%1$s<br/>এ সোর্স কোড দেখুন আমাদের %2$s চ্যানেলে যোগ দিন]]></string>
-    <string name="translators" comment="Dear translators, please add your home page here following the format. There can be more than one translator. So feel free to append yourself.">শূন্য</string>
+    <string name="translators" comment="Dear translators, please add your home page here following the format. There can be more than one translator. So feel free to append yourself.">bdtipsntricks</string>
     <string name="install">ইনস্টল করুন</string>
     <string name="install_summary">LSPosed ইনস্টল করতে আলতো চাপুন</string>
     <string name="not_installed">ইনস্টল করা না</string>

@@ -34,12 +34,14 @@
     <string name="module_repo">Repositori</string>
     <string name="module_repo_loading">Carregant…</string>
     <string name="module_repo_up_to_date">Tots els mòduls actualitzats</string>
+    <string name="module_repo_published_time">Published at %s</string>
+    <string name="module_repo_updated_time">Actualitzat a les %s</string>
     <plurals name="module_repo_upgradable">
         <item quantity="one">%d mòdul actualitzable</item>
         <item quantity="other">%d mòduls actualitzables</item>
     </plurals>
     <string name="about_view_source_code"><![CDATA[Veure codi font a %1$s<br/>Uneix-te al nostre %2$s canal]]></string>
-    <string name="translators" comment="Dear translators, please add your home page here following the format. There can be more than one translator. So feel free to append yourself.">null</string>
+    <string name="translators" comment="Dear translators, please add your home page here following the format. There can be more than one translator. So feel free to append yourself.">Frederic Blay,  Ghost Face, Yannick Kamin</string>
     <string name="install">Instalar</string>
     <string name="install_summary">Toca per instal·lar LSPosed</string>
     <string name="not_installed">No instalat</string>

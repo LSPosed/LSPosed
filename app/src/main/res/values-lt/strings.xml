@@ -36,6 +36,8 @@
     <string name="module_repo">Saugykla</string>
     <string name="module_repo_loading">Įkrovimas…</string>
     <string name="module_repo_up_to_date">Visi moduliai atnaujinti</string>
+    <string name="module_repo_published_time">Paskelbta adresu %s</string>
+    <string name="module_repo_updated_time">Atnaujinta %s</string>
     <plurals name="module_repo_upgradable">
         <item quantity="one">%d modulis atnaujinamas</item>
         <item quantity="few">%d atnaujinami moduliai</item>
@@ -43,7 +45,7 @@
         <item quantity="other">%d atnaujinami moduliai</item>
     </plurals>
     <string name="about_view_source_code"><![CDATA[Peržiūrėkite šaltinio kodą adresu %1$s<br/>Prisijunkite prie mūsų %2$s kanalo]]></string>
-    <string name="translators" comment="Dear translators, please add your home page here following the format. There can be more than one translator. So feel free to append yourself.">null</string>
+    <string name="translators" comment="Dear translators, please add your home page here following the format. There can be more than one translator. So feel free to append yourself.">Ace Miller, im sorry</string>
     <string name="install">Įdiekite</string>
     <string name="install_summary">Bakstelėkite, jei norite įdiegti LSPosed</string>
     <string name="not_installed">Neįdiegta</string>

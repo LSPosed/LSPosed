@@ -24,7 +24,7 @@
 #include "elf_util.h"
 #include "native_util.h"
 #include "resources_hook.h"
-#include "ConfigBridge.h"
+#include "config_bridge.h"
 
 using namespace lsplant;
 

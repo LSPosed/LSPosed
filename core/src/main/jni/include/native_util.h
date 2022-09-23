@@ -31,7 +31,7 @@
 #include "logging.h"
 #include "config.h"
 #include <cassert>
-#include "ConfigBridge.h"
+#include "config_bridge.h"
 
 #define _uintval(p)               reinterpret_cast<uintptr_t>(p)
 #define _ptr(p)                   reinterpret_cast<void *>(p)

@@ -37,6 +37,13 @@ public interface IActivityManager extends IInterface {
     int broadcastIntentWithFeature(IApplicationThread caller, String callingFeatureId,
                                    Intent intent, String resolvedType, IIntentReceiver resultTo,
                                    int resultCode, String resultData, Bundle resultExtras,
+                                   String[] requiredPermissions, String[] excludedPermissions,
+                                   String[] excludePackages, int appOp, Bundle bOptions,
+                                   boolean serialized, boolean sticky, int userId) throws RemoteException;
+    @RequiresApi(31)
+    int broadcastIntentWithFeature(IApplicationThread caller, String callingFeatureId,
+                                   Intent intent, String resolvedType, IIntentReceiver resultTo,
+                                   int resultCode, String resultData, Bundle resultExtras,
                                    String[] requiredPermissions, String[] excludedPermissions, int appOp, Bundle bOptions,
                                    boolean serialized, boolean sticky, int userId) throws RemoteException;
 

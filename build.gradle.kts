@@ -36,7 +36,7 @@ buildscript {
         mavenCentral()
     }
     dependencies {
-        classpath("org.eclipse.jgit:org.eclipse.jgit:6.2.0.202206071550-r")
+        classpath("org.eclipse.jgit:org.eclipse.jgit:6.3.0.202209071007-r")
     }
 }
 
@@ -50,12 +50,12 @@ val injectedPackageUid by extra(2000)
 val defaultManagerPackageName by extra("org.lsposed.manager")
 val apiCode by extra(93)
 val verCode by extra(commitCount + 4200)
-val verName by extra("1.8.3")
+val verName by extra("1.8.4")
 val androidTargetSdkVersion by extra(33)
 val androidMinSdkVersion by extra(27)
 val androidBuildToolsVersion by extra("32.0.0")
 val androidCompileSdkVersion by extra(33)
-val androidCompileNdkVersion by extra("24.0.8215888")
+val androidCompileNdkVersion by extra("25.1.8937393")
 val androidSourceCompatibility by extra(JavaVersion.VERSION_11)
 val androidTargetCompatibility by extra(JavaVersion.VERSION_11)
 

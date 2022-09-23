@@ -38,6 +38,8 @@
     <string name="module_repo">المُستودع</string>
     <string name="module_repo_loading">جارٍ التحميل…</string>
     <string name="module_repo_up_to_date">جميع الوحدات محدثة</string>
+    <string name="module_repo_published_time">تم نشرها في %s</string>
+    <string name="module_repo_updated_time">تَم تحديثها في %s</string>
     <plurals name="module_repo_upgradable">
         <item quantity="zero">%d وحدة قابلة للترقية</item>
         <item quantity="one">%d وحدة قابلة للترقية</item>
@@ -222,7 +224,7 @@ Ali Samir</string>
     <string name="crash_info_copied">تم نسخ معلومات العطل إلى الحافظة</string>
     <string name="info_copied">تم النسخ إلى الحافظة</string>
     <!-- Colors -->
-    <string name="color_sakura">ساكورا</string>
+    <string name="color_sakura">لون ساكورا</string>
     <string name="color_red">أحمر</string>
     <string name="color_pink">وردي</string>
     <string name="color_purple">بنفسجي</string>

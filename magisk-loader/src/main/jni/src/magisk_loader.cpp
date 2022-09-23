@@ -22,7 +22,7 @@
 #include <linux/fs.h>
 #include <sys/mman.h>
 
-#include "ConfigImpl.h"
+#include "config_impl.h"
 #include "elf_util.h"
 #include "loader.h"
 #include "magisk_loader.h"

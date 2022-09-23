@@ -88,16 +88,6 @@ extract "$ZIPFILE" 'daemon'             "$MODPATH"
 rm -f /data/adb/lspd/manager.apk
 extract "$ZIPFILE" 'manager.apk'        '/data/adb/lspd'
 
-ui_print "- Extracting daemon libraries"
-if [ "$ARCH" = "arm" ] ; then
-  extract "$ZIPFILE" 'lib/armeabi-v7a/libdaemon.so' "$MODPATH" true
-elif [ "$ARCH" = "arm64" ]; then
-  extract "$ZIPFILE" 'lib/arm64-v8a/libdaemon.so' "$MODPATH" true
-elif [ "$ARCH" = "x86" ]; then
-  extract "$ZIPFILE" 'lib/x86/libdaemon.so' "$MODPATH" true
-elif [ "$ARCH" = "x64" ]; then
-  extract "$ZIPFILE" 'lib/x86_64/libdaemon.so' "$MODPATH" true
-fi
 if [ "$FLAVOR" == "zygisk" ]; then
   mkdir -p "$MODPATH/zygisk"
   if [ "$ARCH" = "arm" ] || [ "$ARCH" = "arm64" ]; then
@@ -186,7 +176,7 @@ if [ "$API" -ge 29 ]; then
   while [ -d "/dev/$DEV_PATH" ]; do
     DEV_PATH=$(tr -dc 'a-f0-9' < /dev/urandom | head -c 16)
   done
-  sed -i "s/placeholder_\/dev\/................/placeholder_\/dev\/$DEV_PATH/" "$MODPATH/libdaemon.so"
+  sed -i "s/placeholder_\/dev\/................/placeholder_\/dev\/$DEV_PATH/g" "$MODPATH/daemon.apk"
   sed -i "s/placeholder_\/dev\/................/placeholder_\/dev\/$DEV_PATH/" "$MODPATH/bin/dex2oat32"
   sed -i "s/placeholder_\/dev\/................/placeholder_\/dev\/$DEV_PATH/" "$MODPATH/bin/dex2oat64"
 else

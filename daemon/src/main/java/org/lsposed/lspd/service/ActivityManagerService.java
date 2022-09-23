@@ -80,6 +80,12 @@ public class ActivityManagerService {
         IActivityManager am = getActivityManager();
         if (am == null || thread == null) return -1;
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.S) {
+            try {
+                return am.broadcastIntentWithFeature(thread, callingFeatureId, intent, resolvedType, resultTo,
+                        resultCode, resultData, null, requiredPermissions, null, null, appOp, null,
+                        serialized, sticky, userId);
+            } catch (NoSuchMethodError ignored) {
+            }
             return am.broadcastIntentWithFeature(thread, callingFeatureId, intent, resolvedType, resultTo,
                     resultCode, resultData, null, requiredPermissions, null, appOp, null,
                     serialized, sticky, userId);
