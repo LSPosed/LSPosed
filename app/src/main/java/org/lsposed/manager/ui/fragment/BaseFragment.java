@@ -134,9 +134,9 @@ public class BaseFragment extends Fragment {
                 var snackbar = Snackbar.make(container, str, lengthShort ? Snackbar.LENGTH_SHORT : Snackbar.LENGTH_LONG);
                 if (container.findViewById(R.id.nav) instanceof BottomNavigationView)
                     snackbar.setAnchorView(R.id.nav);
-                if (container.findViewById(R.id.fab) instanceof FloatingActionButton &&
-                        ((FloatingActionButton) container.findViewById(R.id.fab)).isOrWillBeShown())
-                    snackbar.setAnchorView(R.id.fab);
+                var fab = container.findViewById(R.id.fab);
+                if (fab instanceof FloatingActionButton && ((FloatingActionButton) fab).isOrWillBeShown())
+                    snackbar.setAnchorView(fab);
                 if (actionStr != null && action != null) snackbar.setAction(actionStr, action);
                 snackbar.show();
                 return;
