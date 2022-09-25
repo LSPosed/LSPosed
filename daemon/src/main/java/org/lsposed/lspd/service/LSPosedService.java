@@ -247,12 +247,11 @@ public class LSPosedService extends ILSPosedService.Stub {
                 @Override
                 public void performReceive(Intent intent, int resultCode, String data, Bundle extras, boolean ordered, boolean sticky, int sendingUser) {
                     getExecutorService().submit(() -> dispatchPackageChanged(intent));
-                    if (ordered) {
-                        try {
-                            ActivityManagerService.finishReceiver(this, resultCode, data, extras, false, intent.getFlags());
-                        } catch (Throwable e) {
-                            Log.e(TAG, "finish receiver", e);
-                        }
+                    if (!ordered) return;
+                    try {
+                        ActivityManagerService.finishReceiver(this, resultCode, data, extras, false, intent.getFlags());
+                    } catch (Throwable e) {
+                        Log.e(TAG, "finish receiver", e);
                     }
                 }
             };
@@ -274,12 +273,11 @@ public class LSPosedService extends ILSPosedService.Stub {
                 @Override
                 public void performReceive(Intent intent, int resultCode, String data, Bundle extras, boolean ordered, boolean sticky, int sendingUser) {
                     getExecutorService().submit(() -> dispatchUserUnlocked(intent));
-                    if (ordered) {
-                        try {
-                            ActivityManagerService.finishReceiver(this, resultCode, data, extras, false, intent.getFlags());
-                        } catch (Throwable e) {
-                            Log.e(TAG, "finish receiver", e);
-                        }
+                    if (!ordered) return;
+                    try {
+                        ActivityManagerService.finishReceiver(this, resultCode, data, extras, false, intent.getFlags());
+                    } catch (Throwable e) {
+                        Log.e(TAG, "finish receiver", e);
                     }
                 }
             }, intentFilter, null, 0, 0);
@@ -298,12 +296,11 @@ public class LSPosedService extends ILSPosedService.Stub {
                 @Override
                 public void performReceive(Intent intent, int resultCode, String data, Bundle extras, boolean ordered, boolean sticky, int sendingUser) {
                     getExecutorService().submit(() -> dispatchConfigurationChanged(intent));
-                    if (ordered) {
-                        try {
-                            ActivityManagerService.finishReceiver(this, resultCode, data, extras, false, intent.getFlags());
-                        } catch (Throwable e) {
-                            Log.e(TAG, "finish receiver", e);
-                        }
+                    if (!ordered) return;
+                    try {
+                        ActivityManagerService.finishReceiver(this, resultCode, data, extras, false, intent.getFlags());
+                    } catch (Throwable e) {
+                        Log.e(TAG, "finish receiver", e);
                     }
                 }
             }, intentFilter, null, 0, 0);
@@ -324,12 +321,11 @@ public class LSPosedService extends ILSPosedService.Stub {
                 @Override
                 public void performReceive(Intent intent, int resultCode, String data, Bundle extras, boolean ordered, boolean sticky, int sendingUser) {
                     getExecutorService().submit(() -> dispatchSecretCodeReceive());
-                    if (ordered) {
-                        try {
-                            ActivityManagerService.finishReceiver(this, resultCode, data, extras, false, intent.getFlags());
-                        } catch (Throwable e) {
-                            Log.e(TAG, "finish receiver", e);
-                        }
+                    if (!ordered) return;
+                    try {
+                        ActivityManagerService.finishReceiver(this, resultCode, data, extras, false, intent.getFlags());
+                    } catch (Throwable e) {
+                        Log.e(TAG, "finish receiver", e);
                     }
                 }
             }, intentFilter, null, 0, 0);
@@ -355,12 +351,11 @@ public class LSPosedService extends ILSPosedService.Stub {
                             Log.e(TAG, "setActivityController", e);
                         }
                     });
-                    if (ordered) {
-                        try {
-                            ActivityManagerService.finishReceiver(this, resultCode, data, extras, false, intent.getFlags());
-                        } catch (Throwable e) {
-                            Log.e(TAG, "finish receiver", e);
-                        }
+                    if (!ordered) return;
+                    try {
+                        ActivityManagerService.finishReceiver(this, resultCode, data, extras, false, intent.getFlags());
+                    } catch (Throwable e) {
+                        Log.e(TAG, "finish receiver", e);
                     }
                 }
             }, intentFilter, null, 0, 0);
@@ -380,12 +375,11 @@ public class LSPosedService extends ILSPosedService.Stub {
                 @Override
                 public void performReceive(Intent intent, int resultCode, String data, Bundle extras, boolean ordered, boolean sticky, int sendingUser) {
                     getExecutorService().submit(() -> dispatchUserChanged(intent));
-                    if (ordered) {
-                        try {
-                            ActivityManagerService.finishReceiver(this, resultCode, data, extras, false, intent.getFlags());
-                        } catch (Throwable e) {
-                            Log.e(TAG, "finish receiver", e);
-                        }
+                    if (!ordered) return;
+                    try {
+                        ActivityManagerService.finishReceiver(this, resultCode, data, extras, false, intent.getFlags());
+                    } catch (Throwable e) {
+                        Log.e(TAG, "finish receiver", e);
                     }
                 }
             };
