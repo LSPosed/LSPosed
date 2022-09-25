@@ -87,4 +87,6 @@ interface ILSPManagerService {
     void setDexObfuscate(boolean enable) = 43;
 
     int getDex2OatWrapperCompatibility() = 44;
+
+    void clearApplicationProfileData(in String packageName) = 45;
 }
