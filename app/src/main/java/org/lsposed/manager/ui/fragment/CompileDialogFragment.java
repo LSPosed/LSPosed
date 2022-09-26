@@ -83,6 +83,7 @@ public class CompileDialogFragment extends AppCompatDialogFragment {
         @Override
         protected Throwable doInBackground(String... commands) {
             try {
+                LSPManagerServiceHolder.getService().clearApplicationProfileData(commands[0]);
                 if (LSPManagerServiceHolder.getService().performDexOptMode(commands[0])) {
                     return null;
                 } else {

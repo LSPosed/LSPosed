@@ -313,11 +313,17 @@ public class PackageService {
         return intent;
     }
 
+    public static void clearApplicationProfileData(String packageName) throws RemoteException {
+        IPackageManager pm = getPackageManager();
+        if (pm == null) return;
+        pm.clearApplicationProfileData(packageName);
+    }
+
     public static boolean performDexOptMode(String packageName) throws RemoteException {
         IPackageManager pm = getPackageManager();
         if (pm == null) return false;
         return pm.performDexOptMode(packageName,
                 SystemProperties.getBoolean("dalvik.vm.usejitprofiles", false),
-                "speed", true, true, null);
+                SystemProperties.get("pm.dexopt.install", "speed-profile"), true, true, null);
     }
 }

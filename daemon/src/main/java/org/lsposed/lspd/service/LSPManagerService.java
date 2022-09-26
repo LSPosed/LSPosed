@@ -822,6 +822,11 @@ public class LSPManagerService extends ILSPManagerService.Stub {
     }
 
     @Override
+    public void clearApplicationProfileData(String packageName) throws RemoteException {
+        PackageService.clearApplicationProfileData(packageName);
+    }
+
+    @Override
     public boolean performDexOptMode(String packageName) throws RemoteException {
         return PackageService.performDexOptMode(packageName);
     }

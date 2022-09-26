@@ -93,6 +93,8 @@ public interface IPackageManager extends IInterface {
                               String targetCompilerFilter, boolean force, boolean bootComplete, String splitName)
             throws RemoteException;
 
+    void clearApplicationProfileData(String packageName) throws RemoteException;
+
     abstract class Stub extends Binder implements IPackageManager {
 
         public static IPackageManager asInterface(IBinder obj) {
