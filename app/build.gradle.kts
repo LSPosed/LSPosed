@@ -136,7 +136,7 @@ materialThemeBuilder {
 }
 
 dependencies {
-    val glideVersion = "4.14.1"
+    val glideVersion = "4.14.2"
     val navVersion: String by project
     annotationProcessor("com.github.bumptech.glide:compiler:$glideVersion")
     implementation("androidx.activity:activity:1.5.1")
