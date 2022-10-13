@@ -25,16 +25,12 @@ jobs:
           echo androidStoreFile='key.jks' >> gradle.properties
           echo ${{ secrets.KEY_STORE }} | base64 --decode > key.jks
         fi
-    - name: Cache Gradle Dependencies
-      uses: actions/cache@v2
+    - name: Setup Java
+      uses: actions/setup-java@v3
       with:
-        path: |
-          ~/.gradle/caches
-          ~/.gradle/wrapper
-          !~/.gradle/caches/build-cache-*
-        key: gradle-deps-core-${{ hashFiles('**/build.gradle.kts') }}
-        restore-keys: |
-          gradle-deps
+        distribution: 'zulu'
+        java-version: '17'
+        cache: 'gradle'
     - name: Cache Gradle Build
       uses: actions/cache@v2
       with:
