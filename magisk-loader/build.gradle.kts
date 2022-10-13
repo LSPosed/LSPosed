@@ -112,7 +112,7 @@ android {
 }
 
 dependencies {
-    compileOnly("androidx.annotation:annotation:1.4.0")
+    compileOnly("androidx.annotation:annotation:1.5.0")
     compileOnly(projects.hiddenapi.stubs)
     implementation(projects.core)
     implementation(projects.hiddenapi.bridge)

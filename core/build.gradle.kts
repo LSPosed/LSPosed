@@ -47,7 +47,7 @@ android {
 dependencies {
     implementation("org.apache.commons:commons-lang3:3.12.0")
     implementation("de.upb.cs.swt:axml:2.1.3")
-    compileOnly("androidx.annotation:annotation:1.4.0")
+    compileOnly("androidx.annotation:annotation:1.5.0")
     compileOnly(projects.hiddenapi.stubs)
     implementation(projects.hiddenapi.bridge)
     implementation(projects.services.daemonService)
