@@ -59,7 +59,7 @@ check_android_version() {
 
 check_incompatible_module() {
   MODULEDIR="$(magisk --path)/.magisk/modules"
-  for id in "riru_dreamland" "riru_edxposed" "riru_edxposed_sandhook" "taichi" "zygisk_jshook"; do
+  for id in "riru_dreamland" "riru_edxposed" "riru_edxposed_sandhook" "taichi"; do
     if [ -d "$MODULEDIR/$id" ] && [ ! -f "$MODULEDIR/$id/disable" ] && [ ! -f "$MODULEDIR/$id/remove" ]; then
       ui_print "*********************************************************"
       ui_print "! Please disable or uninstall incompatible frameworks:"
