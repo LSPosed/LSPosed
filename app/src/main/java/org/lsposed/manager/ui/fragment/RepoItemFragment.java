@@ -379,11 +379,20 @@ public class RepoItemFragment extends BaseFragment implements RepoLoader.RepoLis
                     return !name.startsWith("snapshot") && !name.startsWith("nightly");
                 }).collect(Collectors.toList());
             } else if (channel.equals(channels[1])) {
+                if (!isLoaded() && !module.getBetaReleases().isEmpty())
+                    releases = module.getBetaReleases();
                 tmpList = releases.parallelStream().filter(t -> {
                     var name = t.getName().toLowerCase(LocaleDelegate.getDefaultLocale());
                     return !name.startsWith("snapshot") && !name.startsWith("nightly");
                 }).collect(Collectors.toList());
-            } else tmpList = releases;
+            } else {
+                if (!isLoaded())
+                    if (!module.getSnapshotReleases().isEmpty())
+                        releases = module.getSnapshotReleases();
+                    else if (!module.getBetaReleases().isEmpty())
+                        releases = module.getBetaReleases();
+                tmpList = releases;
+            }
             runOnUiThread(() -> {
                 items = tmpList;
                 notifyDataSetChanged();

@@ -49,9 +49,27 @@ public class OnlineModule {
     @SerializedName("latestReleaseTime")
     @Expose
     private String latestReleaseTime;
+    @SerializedName("latestBetaRelease")
+    @Expose
+    private String latestBetaRelease;
+    @SerializedName("latestBetaReleaseTime")
+    @Expose
+    private String latestBetaReleaseTime;
+    @SerializedName("latestSnapshotRelease")
+    @Expose
+    private String latestSnapshotRelease;
+    @SerializedName("latestSnapshotReleaseTime")
+    @Expose
+    private String latestSnapshotReleaseTime;
     @SerializedName("releases")
     @Expose
     private List<Release> releases = new ArrayList<>();
+    @SerializedName("betaReleases")
+    @Expose
+    private List<Release> betaReleases = new ArrayList<>();
+    @SerializedName("snapshotReleases")
+    @Expose
+    private List<Release> snapshotReleases = new ArrayList<>();
     @SerializedName("readme")
     @Expose
     private String readme;
@@ -223,5 +241,29 @@ public class OnlineModule {
 
     public void setLatestRelease(String latestRelease) {
         this.latestRelease = latestRelease;
+    }
+
+    public String getLatestBetaRelease() {
+        return latestBetaRelease;
+    }
+
+    public String getLatestBetaReleaseTime() {
+        return latestBetaReleaseTime;
+    }
+
+    public String getLatestSnapshotRelease() {
+        return latestSnapshotRelease;
+    }
+
+    public String getLatestSnapshotReleaseTime() {
+        return latestSnapshotReleaseTime;
+    }
+
+    public List<Release> getBetaReleases() {
+        return betaReleases;
+    }
+
+    public List<Release> getSnapshotReleases() {
+        return snapshotReleases;
     }
 }
