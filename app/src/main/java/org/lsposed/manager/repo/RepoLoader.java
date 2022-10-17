@@ -113,8 +113,11 @@ public class RepoLoader {
                             String release = module.getLatestRelease();
                             if (channel.equals(channels[1]) && !module.getLatestBetaRelease().isEmpty()) {
                                 release = module.getLatestBetaRelease();
-                            } else if (channel.equals(channels[2]) && !module.getLatestSnapshotRelease().isEmpty()) {
-                                release = module.getLatestSnapshotRelease();
+                            } else if (channel.equals(channels[2])) {
+                                if (!module.getLatestSnapshotRelease().isEmpty())
+                                    release = module.getLatestSnapshotRelease();
+                                else if (!module.getLatestBetaRelease().isEmpty())
+                                    release = module.getLatestBetaRelease();
                             }
                             if (release == null || release.isEmpty()) continue;
                             var splits = release.split("-", 2);
