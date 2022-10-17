@@ -88,7 +88,7 @@ public class RepoLoader {
     }
 
     synchronized public void loadRemoteData() {
-        repoLoaded = true;
+        repoLoaded = false;
         try {
             var response = App.getOkHttpClient().newCall(new Request.Builder()
                     .url(repoUrl + "modules.json")
@@ -200,8 +200,7 @@ public class RepoLoader {
     }
 
     public void addListener(RepoListener listener) {
-        if (!listeners.contains(listener))
-            listeners.add(listener);
+        listeners.add(listener);
     }
 
     public void removeListener(RepoListener listener) {
@@ -210,7 +209,7 @@ public class RepoLoader {
 
     @Nullable
     public OnlineModule getOnlineModule(String packageName) {
-        return !repoLoaded || packageName == null ? null : onlineModules.get(packageName);
+        return repoLoaded && packageName != null ? onlineModules.get(packageName) : null;
     }
 
     @Nullable
