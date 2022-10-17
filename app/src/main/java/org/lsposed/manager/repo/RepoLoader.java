@@ -110,12 +110,10 @@ public class RepoLoader {
                         var channel = App.getPreferences().getString("update_channel", channels[0]);
                         Map<String, ModuleVersion> versions = new ConcurrentHashMap<>();
                         for (var module : repoModules) {
-                            String release;
-                            if (channel.equals(channels[0])) {
-                                release = module.getLatestRelease();
-                            } else if (channel.equals(channels[1])) {
+                            String release = module.getLatestRelease();
+                            if (channel.equals(channels[1]) && !module.getLatestBetaRelease().isEmpty()) {
                                 release = module.getLatestBetaRelease();
-                            } else {
+                            } else if (channel.equals(channels[2]) && !module.getLatestSnapshotRelease().isEmpty()) {
                                 release = module.getLatestSnapshotRelease();
                             }
                             if (release == null || release.isEmpty()) continue;
