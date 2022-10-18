@@ -329,6 +329,7 @@ public class SettingsFragment extends BaseFragment {
             if (channel != null) {
                 channel.setOnPreferenceChangeListener((preference, newValue) -> {
                     var repoLoader = RepoLoader.getInstance();
+                    repoLoader.updateLatestVersion(String.valueOf(newValue));
                     return true;
                 });
             }

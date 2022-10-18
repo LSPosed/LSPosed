@@ -112,32 +112,7 @@ public class RepoLoader {
                         Arrays.stream(repoModules).forEach(onlineModule -> modules.put(onlineModule.getName(), onlineModule));
                         onlineModules = modules;
                         var channel = App.getPreferences().getString("update_channel", channels[0]);
-                        Map<String, ModuleVersion> versions = new ConcurrentHashMap<>();
-                        for (var module : repoModules) {
-                            String release = module.getLatestRelease();
-                            if (channel.equals(channels[1]) && module.getLatestBetaRelease() != null && !module.getLatestBetaRelease().isEmpty()) {
-                                release = module.getLatestBetaRelease();
-                            } else if (channel.equals(channels[2])) {
-                                if (module.getLatestSnapshotRelease() != null && !module.getLatestSnapshotRelease().isEmpty())
-                                    release = module.getLatestSnapshotRelease();
-                                else if (module.getLatestBetaRelease() != null && !module.getLatestBetaRelease().isEmpty())
-                                    release = module.getLatestBetaRelease();
-                            }
-                            if (release == null || release.isEmpty()) continue;
-                            var splits = release.split("-", 2);
-                            if (splits.length < 2) continue;
-                            long verCode;
-                            String verName;
-                            try {
-                                verCode = Long.parseLong(splits[0]);
-                                verName = splits[1];
-                            } catch (NumberFormatException ignored) {
-                                continue;
-                            }
-                            String pkgName = module.getName();
-                            versions.put(pkgName, new ModuleVersion(verCode, verName));
-                        }
-                        latestVersion = versions;
+                        updateLatestVersion(repoModules, channel);
 
                         Files.write(repoFile, bodyString.getBytes(StandardCharsets.UTF_8));
                         repoLoaded = true;
@@ -164,6 +139,42 @@ public class RepoLoader {
         } finally {
             repoLoaded = true;
         }
+    }
+
+    synchronized private void updateLatestVersion(OnlineModule[] onlineModules, String channel) {
+        repoLoaded = false;
+        Map<String, ModuleVersion> versions = new ConcurrentHashMap<>();
+        for (var module : onlineModules) {
+            String release = module.getLatestRelease();
+            if (channel.equals(channels[1]) && module.getLatestBetaRelease() != null && !module.getLatestBetaRelease().isEmpty()) {
+                release = module.getLatestBetaRelease();
+            } else if (channel.equals(channels[2])) {
+                if (module.getLatestSnapshotRelease() != null && !module.getLatestSnapshotRelease().isEmpty())
+                    release = module.getLatestSnapshotRelease();
+                else if (module.getLatestBetaRelease() != null && !module.getLatestBetaRelease().isEmpty())
+                    release = module.getLatestBetaRelease();
+            }
+            if (release == null || release.isEmpty()) continue;
+            var splits = release.split("-", 2);
+            if (splits.length < 2) continue;
+            long verCode;
+            String verName;
+            try {
+                verCode = Long.parseLong(splits[0]);
+                verName = splits[1];
+            } catch (NumberFormatException ignored) {
+                continue;
+            }
+            String pkgName = module.getName();
+            versions.put(pkgName, new ModuleVersion(verCode, verName));
+        }
+        latestVersion = versions;
+        repoLoaded = true;
+    }
+
+    public void updateLatestVersion(String channel) {
+        if (repoLoaded)
+            updateLatestVersion(onlineModules.keySet().stream().map(onlineModules::get).toArray(OnlineModule[]::new), channel);
     }
 
     @Nullable
