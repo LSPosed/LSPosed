@@ -20,6 +20,8 @@
 
 package org.lsposed.manager.repo.model;
 
+import androidx.annotation.Nullable;
+
 import com.google.gson.annotations.Expose;
 import com.google.gson.annotations.SerializedName;
 
@@ -243,6 +245,7 @@ public class OnlineModule {
         this.latestRelease = latestRelease;
     }
 
+    @Nullable
     public String getLatestBetaRelease() {
         return latestBetaRelease;
     }
@@ -251,6 +254,7 @@ public class OnlineModule {
         return latestBetaReleaseTime;
     }
 
+    @Nullable
     public String getLatestSnapshotRelease() {
         return latestSnapshotRelease;
     }

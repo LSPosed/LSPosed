@@ -114,12 +114,12 @@ public class RepoLoader {
                         Map<String, ModuleVersion> versions = new ConcurrentHashMap<>();
                         for (var module : repoModules) {
                             String release = module.getLatestRelease();
-                            if (channel.equals(channels[1]) && !module.getLatestBetaRelease().isEmpty()) {
+                            if (channel.equals(channels[1]) && !(module.getLatestBetaRelease() != null && module.getLatestBetaRelease().isEmpty())) {
                                 release = module.getLatestBetaRelease();
                             } else if (channel.equals(channels[2])) {
-                                if (!module.getLatestSnapshotRelease().isEmpty())
+                                if (!(module.getLatestSnapshotRelease() != null && module.getLatestSnapshotRelease().isEmpty()))
                                     release = module.getLatestSnapshotRelease();
-                                else if (!module.getLatestBetaRelease().isEmpty())
+                                else if (!(module.getLatestBetaRelease() != null && module.getLatestBetaRelease().isEmpty()))
                                     release = module.getLatestBetaRelease();
                             }
                             if (release == null || release.isEmpty()) continue;
