@@ -211,8 +211,11 @@ public class RepoLoader {
                 if (!module.releasesLoaded) {
                     if (channel.equals(channels[1]) && !(module.getBetaReleases() != null && module.getBetaReleases().isEmpty())) {
                         releases = module.getBetaReleases();
-                    } else if (channel.equals(channels[2]) && !(module.getSnapshotReleases() != null && module.getSnapshotReleases().isEmpty()))
-                        releases = module.getSnapshotReleases();
+                    } else if (channel.equals(channels[2]))
+                        if (!(module.getSnapshotReleases() != null && module.getSnapshotReleases().isEmpty()))
+                            releases = module.getSnapshotReleases();
+                        else if (!(module.getBetaReleases() != null && module.getBetaReleases().isEmpty()))
+                            releases = module.getBetaReleases();
                 }
             }
         }
@@ -228,8 +231,11 @@ public class RepoLoader {
                 releaseTime = module.getLatestReleaseTime();
                 if (channel.equals(channels[1]) && module.getLatestBetaReleaseTime() != null) {
                     releaseTime = module.getLatestBetaReleaseTime();
-                } else if (channel.equals(channels[2]) && module.getLatestSnapshotReleaseTime() != null)
-                    releaseTime = module.getLatestSnapshotReleaseTime();
+                } else if (channel.equals(channels[2]))
+                    if (module.getLatestSnapshotReleaseTime() != null)
+                        releaseTime = module.getLatestSnapshotReleaseTime();
+                    else if (module.getLatestBetaReleaseTime() != null)
+                        releaseTime = module.getLatestBetaReleaseTime();
             }
         }
         return releaseTime;
