@@ -235,10 +235,11 @@ public class RepoItemFragment extends BaseFragment implements RepoLoader.RepoLis
     @Override
     public void onModuleReleasesLoaded(OnlineModule module) {
         this.module = module;
+        var repoLoader = RepoLoader.getInstance();
         if (releaseAdapter != null) {
             runAsync(releaseAdapter::loadItems);
         }
-        if ((module.getReleases() != null ? module.getReleases().size() : 1) == 1) {
+        if ((repoLoader.getReleases(module.getName()) != null ? repoLoader.getReleases(module.getName()).size() : 1) == 1) {
             showHint(R.string.module_release_no_more, true);
         }
     }
