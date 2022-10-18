@@ -89,7 +89,7 @@ public class RepoLoader {
     public static synchronized RepoLoader getInstance() {
         if (instance == null) {
             instance = new RepoLoader();
-            App.getExecutorService().submit(instance::loadRemoteData);
+            App.getExecutorService().submit(() -> instance.loadLocalData(true));
         }
         return instance;
     }
@@ -97,53 +97,15 @@ public class RepoLoader {
     synchronized public void loadRemoteData() {
         repoLoaded = false;
         try {
-            var response = App.getOkHttpClient().newCall(new Request.Builder()
-                    .url(repoUrl + "modules.json")
-                    .build()).execute();
+            var response = App.getOkHttpClient().newCall(new Request.Builder().url(repoUrl + "modules.json").build()).execute();
 
             if (response.isSuccessful()) {
                 ResponseBody body = response.body();
                 if (body != null) {
                     try {
                         String bodyString = body.string();
-                        Gson gson = new Gson();
-                        Map<String, OnlineModule> modules = new HashMap<>();
-                        OnlineModule[] repoModules = gson.fromJson(bodyString, OnlineModule[].class);
-                        Arrays.stream(repoModules).forEach(onlineModule -> modules.put(onlineModule.getName(), onlineModule));
-                        var channel = App.getPreferences().getString("update_channel", channels[0]);
-                        Map<String, ModuleVersion> versions = new ConcurrentHashMap<>();
-                        for (var module : repoModules) {
-                            String release = module.getLatestRelease();
-                            if (channel.equals(channels[1]) && !(module.getLatestBetaRelease() != null && module.getLatestBetaRelease().isEmpty())) {
-                                release = module.getLatestBetaRelease();
-                            } else if (channel.equals(channels[2])) {
-                                if (!(module.getLatestSnapshotRelease() != null && module.getLatestSnapshotRelease().isEmpty()))
-                                    release = module.getLatestSnapshotRelease();
-                                else if (!(module.getLatestBetaRelease() != null && module.getLatestBetaRelease().isEmpty()))
-                                    release = module.getLatestBetaRelease();
-                            }
-                            if (release == null || release.isEmpty()) continue;
-                            var splits = release.split("-", 2);
-                            if (splits.length < 2) continue;
-                            long verCode;
-                            String verName;
-                            try {
-                                verCode = Long.parseLong(splits[0]);
-                                verName = splits[1];
-                            } catch (NumberFormatException ignored) {
-                                continue;
-                            }
-                            String pkgName = module.getName();
-                            versions.put(pkgName, new ModuleVersion(verCode, verName));
-                        }
-
-                        latestVersion = versions;
-                        onlineModules = modules;
                         Files.write(repoFile, bodyString.getBytes(StandardCharsets.UTF_8));
-                        repoLoaded = true;
-                        for (RepoListener listener : listeners) {
-                            listener.onRepoLoaded();
-                        }
+                        loadLocalData(false);
                     } catch (Throwable t) {
                         Log.e(App.TAG, Log.getStackTraceString(t));
                         for (RepoListener listener : listeners) {
@@ -161,9 +123,76 @@ public class RepoLoader {
                 repoUrl = backupRepoUrl;
                 loadRemoteData();
             }
+        }
+    }
+
+    synchronized public void loadLocalData(boolean updateRemoteRepo) {
+        repoLoaded = false;
+        try {
+            if (Files.notExists(repoFile)) {
+                loadRemoteData();
+                updateRemoteRepo = false;
+            }
+            byte[] encoded = Files.readAllBytes(repoFile);
+            String bodyString = new String(encoded, StandardCharsets.UTF_8);
+            Gson gson = new Gson();
+            Map<String, OnlineModule> modules = new HashMap<>();
+            OnlineModule[] repoModules = gson.fromJson(bodyString, OnlineModule[].class);
+            Arrays.stream(repoModules).forEach(onlineModule -> modules.put(onlineModule.getName(), onlineModule));
+            var channel = App.getPreferences().getString("update_channel", channels[0]);
+            updateLatestVersion(repoModules, channel);
+            onlineModules = modules;
+        } catch (Throwable t) {
+            Log.e(App.TAG, Log.getStackTraceString(t));
+            for (RepoListener listener : listeners) {
+                listener.onThrowable(t);
+            }
         } finally {
             repoLoaded = true;
+            for (RepoListener listener : listeners) {
+                listener.onRepoLoaded();
+            }
+            if (updateRemoteRepo) loadRemoteData();
         }
+    }
+
+    synchronized private void updateLatestVersion(OnlineModule[] onlineModules, String channel) {
+        repoLoaded = false;
+        Map<String, ModuleVersion> versions = new ConcurrentHashMap<>();
+        for (var module : onlineModules) {
+            String release = module.getLatestRelease();
+            if (channel.equals(channels[1]) && module.getLatestBetaRelease() != null && !module.getLatestBetaRelease().isEmpty()) {
+                release = module.getLatestBetaRelease();
+            } else if (channel.equals(channels[2])) {
+                if (module.getLatestSnapshotRelease() != null && !module.getLatestSnapshotRelease().isEmpty())
+                    release = module.getLatestSnapshotRelease();
+                else if (module.getLatestBetaRelease() != null && !module.getLatestBetaRelease().isEmpty())
+                    release = module.getLatestBetaRelease();
+            }
+            if (release == null || release.isEmpty()) continue;
+            var splits = release.split("-", 2);
+            if (splits.length < 2) continue;
+            long verCode;
+            String verName;
+            try {
+                verCode = Long.parseLong(splits[0]);
+                verName = splits[1];
+            } catch (NumberFormatException ignored) {
+                continue;
+            }
+            String pkgName = module.getName();
+            versions.put(pkgName, new ModuleVersion(verCode, verName));
+        }
+        latestVersion = versions;
+        repoLoaded = true;
+        for (RepoListener listener : listeners) {
+            listener.onRepoLoaded();
+        }
+    }
+
+    public void updateLatestVersion(String channel) {
+        if (repoLoaded)
+            updateLatestVersion(onlineModules.keySet().parallelStream().map(onlineModules::get).toArray(OnlineModule[]::new), channel);
     }
 
     @Nullable
@@ -207,9 +236,7 @@ public class RepoLoader {
     }
 
     public void loadRemoteReleases(String packageName) {
-        App.getOkHttpClient().newCall(new Request.Builder()
-                .url(String.format(repoUrl + "module/%s.json", packageName))
-                .build()).enqueue(new Callback() {
+        App.getOkHttpClient().newCall(new Request.Builder().url(String.format(repoUrl + "module/%s.json", packageName)).build()).enqueue(new Callback() {
             @Override
             public void onFailure(@NonNull Call call, @NonNull IOException e) {
                 Log.e(App.TAG, call.request().url() + e.getMessage());

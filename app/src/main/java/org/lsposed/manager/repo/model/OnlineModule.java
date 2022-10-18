@@ -68,10 +68,10 @@ public class OnlineModule {
     private List<Release> releases = new ArrayList<>();
     @SerializedName("betaReleases")
     @Expose
-    private List<Release> betaReleases = new ArrayList<>();
+    private final List<Release> betaReleases = new ArrayList<>();
     @SerializedName("snapshotReleases")
     @Expose
-    private List<Release> snapshotReleases = new ArrayList<>();
+    private final List<Release> snapshotReleases = new ArrayList<>();
     @SerializedName("readme")
     @Expose
     private String readme;

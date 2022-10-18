@@ -293,8 +293,8 @@ public class RepoFragment extends BaseFragment implements RepoLoader.RepoListene
             holder.appPackageName.setText(module.getName());
             Instant instant;
             channel = App.getPreferences().getString("update_channel", channels[0]);
-
-            instant = Instant.parse(repoLoader.getLatestReleaseTime(module.getName(), channel));
+            var latestReleaseTime = repoLoader.getLatestReleaseTime(module.getName(), channel);
+            instant = Instant.parse(latestReleaseTime != null ? latestReleaseTime : module.getLatestReleaseTime());
             var formatter = DateTimeFormatter.ofLocalizedDate(FormatStyle.SHORT)
                     .withLocale(App.getLocale()).withZone(ZoneId.systemDefault());
             holder.publishedTime.setText(String.format(getString(R.string.module_repo_updated_time), formatter.format(instant)));
@@ -356,7 +356,6 @@ public class RepoFragment extends BaseFragment implements RepoLoader.RepoListene
             int sort = App.getPreferences().getInt("repo_sort", 0);
             boolean upgradableFirst = App.getPreferences().getBoolean("upgradable_first", true);
             ConcurrentHashMap<String, Boolean> upgradable = new ConcurrentHashMap<>();
-
             fullList = modules.parallelStream().filter((onlineModule -> !onlineModule.isHide() && !onlineModule.getReleases().isEmpty()))
                     .sorted((a, b) -> {
                         if (upgradableFirst) {
