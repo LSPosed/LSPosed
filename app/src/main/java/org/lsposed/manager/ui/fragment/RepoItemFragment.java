@@ -370,7 +370,8 @@ public class RepoItemFragment extends BaseFragment implements RepoLoader.RepoLis
         public void loadItems() {
             var channels = resources.getStringArray(R.array.update_channel_values);
             var channel = App.getPreferences().getString("update_channel", channels[0]);
-            var releases = module.getReleases();
+            var releases = RepoLoader.getInstance().getReleases(module.getName());
+            if (releases == null) releases = module.getReleases();
             List<Release> tmpList;
             if (channel.equals(channels[0])) {
                 tmpList = releases.parallelStream().filter(t -> {
@@ -383,7 +384,9 @@ public class RepoItemFragment extends BaseFragment implements RepoLoader.RepoLis
                     var name = t.getName().toLowerCase(LocaleDelegate.getDefaultLocale());
                     return !name.startsWith("snapshot") && !name.startsWith("nightly");
                 }).collect(Collectors.toList());
-            } else tmpList = releases;
+            } else {
+                tmpList = releases;
+            }
             runOnUiThread(() -> {
                 items = tmpList;
                 notifyDataSetChanged();

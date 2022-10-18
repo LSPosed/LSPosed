@@ -20,6 +20,7 @@
 
 package org.lsposed.manager.repo;
 
+import android.content.res.Resources;
 import android.util.Log;
 
 import androidx.annotation.NonNull;
@@ -28,16 +29,20 @@ import androidx.annotation.Nullable;
 import com.google.gson.Gson;
 
 import org.lsposed.manager.App;
+import org.lsposed.manager.R;
 import org.lsposed.manager.repo.model.OnlineModule;
+import org.lsposed.manager.repo.model.Release;
 
 import java.io.IOException;
 import java.nio.charset.StandardCharsets;
 import java.nio.file.Files;
 import java.nio.file.Path;
 import java.nio.file.Paths;
+import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Collection;
 import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
 import java.util.Set;
 import java.util.concurrent.ConcurrentHashMap;
@@ -74,6 +79,8 @@ public class RepoLoader {
     private static final String originRepoUrl = "https://modules.lsposed.org/";
     private static final String backupRepoUrl = "https://cdn.jsdelivr.net/gh/Xposed-Modules-Repo/modules@gh-pages/";
     private static String repoUrl = originRepoUrl;
+    private final Resources resources = App.getInstance().getResources();
+    private final String[] channels = resources.getStringArray(R.array.update_channel_values);
 
     public boolean isRepoLoaded() {
         return repoLoaded;
@@ -103,10 +110,18 @@ public class RepoLoader {
                         Map<String, OnlineModule> modules = new HashMap<>();
                         OnlineModule[] repoModules = gson.fromJson(bodyString, OnlineModule[].class);
                         Arrays.stream(repoModules).forEach(onlineModule -> modules.put(onlineModule.getName(), onlineModule));
-
+                        var channel = App.getPreferences().getString("update_channel", channels[0]);
                         Map<String, ModuleVersion> versions = new ConcurrentHashMap<>();
                         for (var module : repoModules) {
-                            var release = module.getLatestRelease();
+                            String release = module.getLatestRelease();
+                            if (channel.equals(channels[1]) && !(module.getLatestBetaRelease() != null && module.getLatestBetaRelease().isEmpty())) {
+                                release = module.getLatestBetaRelease();
+                            } else if (channel.equals(channels[2])) {
+                                if (!(module.getLatestSnapshotRelease() != null && module.getLatestSnapshotRelease().isEmpty()))
+                                    release = module.getLatestSnapshotRelease();
+                                else if (!(module.getLatestBetaRelease() != null && module.getLatestBetaRelease().isEmpty()))
+                                    release = module.getLatestBetaRelease();
+                            }
                             if (release == null || release.isEmpty()) continue;
                             var splits = release.split("-", 2);
                             if (splits.length < 2) continue;
@@ -154,6 +169,41 @@ public class RepoLoader {
     @Nullable
     public ModuleVersion getModuleLatestVersion(String packageName) {
         return repoLoaded ? latestVersion.getOrDefault(packageName, null) : null;
+    }
+
+    @Nullable
+    public List<Release> getReleases(String packageName) {
+        var channel = App.getPreferences().getString("update_channel", channels[0]);
+        List<Release> releases = new ArrayList<>();
+        if (repoLoaded) {
+            var module = onlineModules.get(packageName);
+            if (module != null) {
+                releases = module.getReleases();
+                if (!module.releasesLoaded) {
+                    if (channel.equals(channels[1]) && !module.getBetaReleases().isEmpty()) {
+                        releases = module.getBetaReleases();
+                    } else if (channel.equals(channels[2]) && !module.getSnapshotReleases().isEmpty())
+                        releases = module.getSnapshotReleases();
+                }
+            }
+        }
+        return releases;
+    }
+
+    @Nullable
+    public String getLatestReleaseTime(String packageName, String channel) {
+        String releaseTime = null;
+        if (repoLoaded) {
+            var module = onlineModules.get(packageName);
+            if (module != null) {
+                releaseTime = module.getLatestReleaseTime();
+                if (channel.equals(channels[1]) && module.getLatestBetaReleaseTime() != null) {
+                    releaseTime = module.getLatestBetaReleaseTime();
+                } else if (channel.equals(channels[2]) && module.getLatestSnapshotReleaseTime() != null)
+                    releaseTime = module.getLatestSnapshotReleaseTime();
+            }
+        }
+        return releaseTime;
     }
 
     public void loadRemoteReleases(String packageName) {
