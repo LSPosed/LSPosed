@@ -370,7 +370,8 @@ public class RepoItemFragment extends BaseFragment implements RepoLoader.RepoLis
         public void loadItems() {
             var channels = resources.getStringArray(R.array.update_channel_values);
             var channel = App.getPreferences().getString("update_channel", channels[0]);
-            var releases = module.getReleases();
+            var releases = RepoLoader.getInstance().getReleases(module.getName());
+            if (releases == null) releases = module.getReleases();
             List<Release> tmpList;
             if (channel.equals(channels[0])) {
                 tmpList = releases.parallelStream().filter(t -> {
@@ -379,18 +380,11 @@ public class RepoItemFragment extends BaseFragment implements RepoLoader.RepoLis
                     return !name.startsWith("snapshot") && !name.startsWith("nightly");
                 }).collect(Collectors.toList());
             } else if (channel.equals(channels[1])) {
-                if (!isLoaded() && !module.getBetaReleases().isEmpty())
-                    releases = module.getBetaReleases();
                 tmpList = releases.parallelStream().filter(t -> {
                     var name = t.getName().toLowerCase(LocaleDelegate.getDefaultLocale());
                     return !name.startsWith("snapshot") && !name.startsWith("nightly");
                 }).collect(Collectors.toList());
             } else {
-                if (!isLoaded())
-                    if (!module.getSnapshotReleases().isEmpty())
-                        releases = module.getSnapshotReleases();
-                    else if (!module.getBetaReleases().isEmpty())
-                        releases = module.getBetaReleases();
                 tmpList = releases;
             }
             runOnUiThread(() -> {
