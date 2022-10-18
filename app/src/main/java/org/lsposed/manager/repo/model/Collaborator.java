@@ -20,6 +20,8 @@
 
 package org.lsposed.manager.repo.model;
 
+import androidx.annotation.Nullable;
+
 import com.google.gson.annotations.Expose;
 import com.google.gson.annotations.SerializedName;
 
@@ -32,6 +34,7 @@ public class Collaborator {
     @Expose
     private String name;
 
+    @Nullable
     public String getLogin() {
         return login;
     }
@@ -40,6 +43,7 @@ public class Collaborator {
         this.login = login;
     }
 
+    @Nullable
     public String getName() {
         return name;
     }

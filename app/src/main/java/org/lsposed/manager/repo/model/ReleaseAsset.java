@@ -20,6 +20,8 @@
 
 package org.lsposed.manager.repo.model;
 
+import androidx.annotation.Nullable;
+
 import com.google.gson.annotations.Expose;
 import com.google.gson.annotations.SerializedName;
 
@@ -35,6 +37,7 @@ public class ReleaseAsset {
     @Expose
     private String downloadUrl;
 
+    @Nullable
     public String getName() {
         return name;
     }
@@ -43,6 +46,7 @@ public class ReleaseAsset {
         this.name = name;
     }
 
+    @Nullable
     public String getContentType() {
         return contentType;
     }
@@ -51,6 +55,7 @@ public class ReleaseAsset {
         this.contentType = contentType;
     }
 
+    @Nullable
     public String getDownloadUrl() {
         return downloadUrl;
     }
