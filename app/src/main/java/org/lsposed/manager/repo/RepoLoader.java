@@ -190,6 +190,22 @@ public class RepoLoader {
         return releases;
     }
 
+    @Nullable
+    public String getLatestReleaseTime(String packageName, String channel) {
+        String releaseTime = null;
+        if (repoLoaded) {
+            var module = onlineModules.get(packageName);
+            if (module != null) {
+                releaseTime = module.getLatestReleaseTime();
+                if (channel.equals(channels[1]) && module.getLatestBetaReleaseTime() != null) {
+                    releaseTime = module.getLatestBetaReleaseTime();
+                } else if (channel.equals(channels[2]) && module.getLatestSnapshotReleaseTime() != null)
+                    releaseTime = module.getLatestSnapshotReleaseTime();
+            }
+        }
+        return releaseTime;
+    }
+
     public void loadRemoteReleases(String packageName) {
         App.getOkHttpClient().newCall(new Request.Builder()
                 .url(String.format(repoUrl + "module/%s.json", packageName))

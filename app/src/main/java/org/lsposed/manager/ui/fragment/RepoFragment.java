@@ -264,6 +264,7 @@ public class RepoFragment extends BaseFragment implements RepoLoader.RepoListene
         private final Resources resources = App.getInstance().getResources();
         private final String[] channels = resources.getStringArray(R.array.update_channel_values);
         private String channel;
+        private final RepoLoader repoLoader = RepoLoader.getInstance();
 
         RepoAdapter() {
             fullList = showList = Collections.emptyList();
@@ -292,13 +293,8 @@ public class RepoFragment extends BaseFragment implements RepoLoader.RepoListene
             holder.appPackageName.setText(module.getName());
             Instant instant;
             channel = App.getPreferences().getString("update_channel", channels[0]);
-            if (channel.equals(channels[0])) {
-                instant = Instant.parse(module.getLatestReleaseTime());
-            } else if (channel.equals(channels[1])) {
-                instant = Instant.parse(module.getLatestBetaReleaseTime());
-            } else {
-                instant = Instant.parse(module.getLatestSnapshotReleaseTime());
-            }
+
+            instant = Instant.parse(repoLoader.getLatestReleaseTime(module.getName(), channel));
             var formatter = DateTimeFormatter.ofLocalizedDate(FormatStyle.SHORT)
                     .withLocale(App.getLocale()).withZone(ZoneId.systemDefault());
             holder.publishedTime.setText(String.format(getString(R.string.module_repo_updated_time), formatter.format(instant)));
@@ -360,6 +356,7 @@ public class RepoFragment extends BaseFragment implements RepoLoader.RepoListene
             int sort = App.getPreferences().getInt("repo_sort", 0);
             boolean upgradableFirst = App.getPreferences().getBoolean("upgradable_first", true);
             ConcurrentHashMap<String, Boolean> upgradable = new ConcurrentHashMap<>();
+
             fullList = modules.parallelStream().filter((onlineModule -> !onlineModule.isHide() && !onlineModule.getReleases().isEmpty()))
                     .sorted((a, b) -> {
                         if (upgradableFirst) {
@@ -371,12 +368,7 @@ public class RepoFragment extends BaseFragment implements RepoLoader.RepoListene
                         if (sort == 0) {
                             return labelComparator.compare(a.getDescription(), b.getDescription());
                         } else {
-                            if (channel.equals(channels[0])) {
-                                return Instant.parse(b.getLatestReleaseTime()).compareTo(Instant.parse(a.getLatestReleaseTime()));
-                            } else if (channel.equals(channels[1])) {
-                                return Instant.parse(b.getLatestBetaReleaseTime()).compareTo(Instant.parse(a.getLatestBetaReleaseTime()));
-                            } else
-                                return Instant.parse(b.getLatestSnapshotReleaseTime()).compareTo(Instant.parse(a.getLatestSnapshotReleaseTime()));
+                            return Instant.parse(repoLoader.getLatestReleaseTime(b.getName(), channel)).compareTo(Instant.parse(repoLoader.getLatestReleaseTime(a.getName(), channel)));
                         }
                     }).collect(Collectors.toList());
             String queryStr = searchView != null ? searchView.getQuery().toString() : "";

@@ -250,6 +250,7 @@ public class OnlineModule {
         return latestBetaRelease;
     }
 
+    @Nullable
     public String getLatestBetaReleaseTime() {
         return latestBetaReleaseTime;
     }
@@ -259,6 +260,7 @@ public class OnlineModule {
         return latestSnapshotRelease;
     }
 
+    @Nullable
     public String getLatestSnapshotReleaseTime() {
         return latestSnapshotReleaseTime;
     }
