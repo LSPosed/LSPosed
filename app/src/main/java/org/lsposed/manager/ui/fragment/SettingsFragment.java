@@ -36,7 +36,9 @@ import androidx.annotation.Nullable;
 import androidx.core.text.HtmlCompat;
 import androidx.preference.Preference;
 import androidx.preference.PreferenceFragmentCompat;
+
 import rikka.material.preference.MaterialSwitchPreference;
+
 import androidx.recyclerview.widget.RecyclerView;
 
 import com.google.android.material.color.DynamicColors;
@@ -47,6 +49,7 @@ import org.lsposed.manager.ConfigManager;
 import org.lsposed.manager.R;
 import org.lsposed.manager.databinding.FragmentSettingsBinding;
 import org.lsposed.manager.receivers.LSPManagerServiceHolder;
+import org.lsposed.manager.repo.RepoLoader;
 import org.lsposed.manager.ui.activity.MainActivity;
 import org.lsposed.manager.util.BackupUtils;
 import org.lsposed.manager.util.LangList;
@@ -75,15 +78,12 @@ public class SettingsFragment extends BaseFragment {
         setupToolbar(binding.toolbar, binding.clickView, R.string.Settings);
         binding.toolbar.setNavigationIcon(null);
         if (savedInstanceState == null) {
-            getChildFragmentManager().beginTransaction()
-                    .add(R.id.setting_container, new PreferenceFragment()).commitNow();
+            getChildFragmentManager().beginTransaction().add(R.id.setting_container, new PreferenceFragment()).commitNow();
         }
         if (ConfigManager.isBinderAlive()) {
-            binding.toolbar.setSubtitle(String.format(LocaleDelegate.getDefaultLocale(), "%s (%d) - %s",
-                    ConfigManager.getXposedVersionName(), ConfigManager.getXposedVersionCode(), ConfigManager.getApi()));
+            binding.toolbar.setSubtitle(String.format(LocaleDelegate.getDefaultLocale(), "%s (%d) - %s", ConfigManager.getXposedVersionName(), ConfigManager.getXposedVersionCode(), ConfigManager.getApi()));
         } else {
-            binding.toolbar.setSubtitle(String.format(LocaleDelegate.getDefaultLocale(), "%s (%d) - %s",
-                    BuildConfig.VERSION_NAME, BuildConfig.VERSION_CODE, getString(R.string.not_installed)));
+            binding.toolbar.setSubtitle(String.format(LocaleDelegate.getDefaultLocale(), "%s (%d) - %s", BuildConfig.VERSION_NAME, BuildConfig.VERSION_CODE, getString(R.string.not_installed)));
         }
         return binding.getRoot();
     }
@@ -98,30 +98,28 @@ public class SettingsFragment extends BaseFragment {
     public static class PreferenceFragment extends PreferenceFragmentCompat {
         private SettingsFragment parentFragment;
 
-        ActivityResultLauncher<String> backupLauncher = registerForActivityResult(new ActivityResultContracts.CreateDocument("application/gzip"),
-                uri -> {
-                    if (uri == null || parentFragment == null) return;
-                    parentFragment.runAsync(() -> {
-                        try {
-                            BackupUtils.backup(uri);
-                        } catch (Exception e) {
-                            var text = App.getInstance().getString(R.string.settings_backup_failed2, e.getMessage());
-                            parentFragment.showHint(text, false);
-                        }
-                    });
-                });
-        ActivityResultLauncher<String[]> restoreLauncher = registerForActivityResult(new ActivityResultContracts.OpenDocument(),
-                uri -> {
-                    if (uri == null || parentFragment == null) return;
-                    parentFragment.runAsync(() -> {
-                        try {
-                            BackupUtils.restore(uri);
-                        } catch (Exception e) {
-                            var text = App.getInstance().getString(R.string.settings_restore_failed2, e.getMessage());
-                            parentFragment.showHint(text, false);
-                        }
-                    });
-                });
+        ActivityResultLauncher<String> backupLauncher = registerForActivityResult(new ActivityResultContracts.CreateDocument("application/gzip"), uri -> {
+            if (uri == null || parentFragment == null) return;
+            parentFragment.runAsync(() -> {
+                try {
+                    BackupUtils.backup(uri);
+                } catch (Exception e) {
+                    var text = App.getInstance().getString(R.string.settings_backup_failed2, e.getMessage());
+                    parentFragment.showHint(text, false);
+                }
+            });
+        });
+        ActivityResultLauncher<String[]> restoreLauncher = registerForActivityResult(new ActivityResultContracts.OpenDocument(), uri -> {
+            if (uri == null || parentFragment == null) return;
+            parentFragment.runAsync(() -> {
+                try {
+                    BackupUtils.restore(uri);
+                } catch (Exception e) {
+                    var text = App.getInstance().getString(R.string.settings_restore_failed2, e.getMessage());
+                    parentFragment.showHint(text, false);
+                }
+            });
+        });
 
         @Override
         public void onAttach(@NonNull Context context) {
@@ -148,8 +146,7 @@ public class SettingsFragment extends BaseFragment {
             if (prefVerboseLogs != null) {
                 prefVerboseLogs.setEnabled(!BuildConfig.DEBUG && installed);
                 prefVerboseLogs.setChecked(!installed || !ConfigManager.isVerboseLogEnabled());
-                prefVerboseLogs.setOnPreferenceChangeListener((preference, newValue) ->
-                        ConfigManager.setVerboseLogEnabled(!(boolean) newValue));
+                prefVerboseLogs.setOnPreferenceChangeListener((preference, newValue) -> ConfigManager.setVerboseLogEnabled(!(boolean) newValue));
             }
 
             MaterialSwitchPreference prefDexObfuscate = findPreference("enable_dex_obfuscate");
@@ -157,8 +154,7 @@ public class SettingsFragment extends BaseFragment {
                 prefDexObfuscate.setEnabled(installed);
                 prefDexObfuscate.setChecked(!installed || ConfigManager.isDexObfuscateEnabled());
                 prefDexObfuscate.setOnPreferenceChangeListener((preference, newValue) -> {
-                    parentFragment.showHint(R.string.reboot_required, true, R.string.reboot,
-                            v -> ConfigManager.reboot(false));
+                    parentFragment.showHint(R.string.reboot_required, true, R.string.reboot, v -> ConfigManager.reboot(false));
                     return ConfigManager.setDexObfuscateEnabled((boolean) newValue);
                 });
             }
@@ -189,8 +185,7 @@ public class SettingsFragment extends BaseFragment {
                 backup.setOnPreferenceClickListener(preference -> {
                     LocalDateTime now = LocalDateTime.now();
                     try {
-                        backupLauncher.launch(String.format(LocaleDelegate.getDefaultLocale(),
-                                "LSPosed_%s.lsp", now.toString()));
+                        backupLauncher.launch(String.format(LocaleDelegate.getDefaultLocale(), "LSPosed_%s.lsp", now.toString()));
                         return true;
                     } catch (ActivityNotFoundException e) {
                         parentFragment.showHint(R.string.enable_documentui, true);
@@ -253,11 +248,9 @@ public class SettingsFragment extends BaseFragment {
             if (prefShowHiddenIcons != null && Build.VERSION.SDK_INT >= Build.VERSION_CODES.Q) {
                 if (ConfigManager.isBinderAlive()) {
                     prefShowHiddenIcons.setEnabled(true);
-                    prefShowHiddenIcons.setOnPreferenceChangeListener((preference, newValue) ->
-                            ConfigManager.setHiddenIcon(!(boolean) newValue));
+                    prefShowHiddenIcons.setOnPreferenceChangeListener((preference, newValue) -> ConfigManager.setHiddenIcon(!(boolean) newValue));
                 }
-                prefShowHiddenIcons.setChecked(Settings.Global.getInt(
-                        requireActivity().getContentResolver(), "show_hidden_icon_apps_enabled", 1) != 0);
+                prefShowHiddenIcons.setChecked(Settings.Global.getInt(requireActivity().getContentResolver(), "show_hidden_icon_apps_enabled", 1) != 0);
             }
 
             MaterialSwitchPreference prefFollowSystemAccent = findPreference("follow_system_accent");
@@ -299,7 +292,7 @@ public class SettingsFragment extends BaseFragment {
                 }
                 language.setOnPreferenceChangeListener((preference, newValue) -> {
                     var app = App.getInstance();
-                    var locale = App.getLocale((String)newValue);
+                    var locale = App.getLocale((String) newValue);
                     var res = app.getResources();
                     var config = res.getConfiguration();
                     config.setLocale(locale);
@@ -331,6 +324,13 @@ public class SettingsFragment extends BaseFragment {
                 } else {
                     translation_contributors.setSummary(translators);
                 }
+            }
+            SimpleMenuPreference channel = findPreference("update_channel");
+            if (channel != null) {
+                channel.setOnPreferenceChangeListener((preference, newValue) -> {
+                    var repoLoader = RepoLoader.getInstance();
+                    return true;
+                });
             }
         }
 

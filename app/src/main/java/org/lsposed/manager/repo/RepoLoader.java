@@ -110,16 +110,17 @@ public class RepoLoader {
                         Map<String, OnlineModule> modules = new HashMap<>();
                         OnlineModule[] repoModules = gson.fromJson(bodyString, OnlineModule[].class);
                         Arrays.stream(repoModules).forEach(onlineModule -> modules.put(onlineModule.getName(), onlineModule));
+                        onlineModules = modules;
                         var channel = App.getPreferences().getString("update_channel", channels[0]);
                         Map<String, ModuleVersion> versions = new ConcurrentHashMap<>();
                         for (var module : repoModules) {
                             String release = module.getLatestRelease();
-                            if (channel.equals(channels[1]) && !(module.getLatestBetaRelease() != null && module.getLatestBetaRelease().isEmpty())) {
+                            if (channel.equals(channels[1]) && module.getLatestBetaRelease() != null && !module.getLatestBetaRelease().isEmpty()) {
                                 release = module.getLatestBetaRelease();
                             } else if (channel.equals(channels[2])) {
-                                if (!(module.getLatestSnapshotRelease() != null && module.getLatestSnapshotRelease().isEmpty()))
+                                if (module.getLatestSnapshotRelease() != null && !module.getLatestSnapshotRelease().isEmpty())
                                     release = module.getLatestSnapshotRelease();
-                                else if (!(module.getLatestBetaRelease() != null && module.getLatestBetaRelease().isEmpty()))
+                                else if (module.getLatestBetaRelease() != null && !module.getLatestBetaRelease().isEmpty())
                                     release = module.getLatestBetaRelease();
                             }
                             if (release == null || release.isEmpty()) continue;
@@ -136,9 +137,8 @@ public class RepoLoader {
                             String pkgName = module.getName();
                             versions.put(pkgName, new ModuleVersion(verCode, verName));
                         }
-
                         latestVersion = versions;
-                        onlineModules = modules;
+
                         Files.write(repoFile, bodyString.getBytes(StandardCharsets.UTF_8));
                         repoLoaded = true;
                         for (RepoListener listener : listeners) {
@@ -203,7 +203,6 @@ public class RepoLoader {
                     releaseTime = module.getLatestSnapshotReleaseTime();
             }
         }
-        Log.d(App.TAG, "getLatestReleaseTime: repoLoaded=" + repoLoaded + " packageName=" + packageName + " releaseTime=" + releaseTime);
         return releaseTime;
     }
 
