@@ -35,6 +35,7 @@ import org.lsposed.manager.repo.model.Release;
 
 import java.io.IOException;
 import java.nio.charset.StandardCharsets;
+
 import java.nio.file.Files;
 import java.nio.file.Path;
 import java.nio.file.Paths;
@@ -89,7 +90,7 @@ public class RepoLoader {
     public static synchronized RepoLoader getInstance() {
         if (instance == null) {
             instance = new RepoLoader();
-            App.getExecutorService().submit(instance::loadRemoteData);
+            App.getExecutorService().submit(() -> instance.loadLocalData(true));
         }
         return instance;
     }
@@ -97,23 +98,15 @@ public class RepoLoader {
     synchronized public void loadRemoteData() {
         repoLoaded = false;
         try {
-            var response = App.getOkHttpClient().newCall(new Request.Builder()
-                    .url(repoUrl + "modules.json")
-                    .build()).execute();
+            var response = App.getOkHttpClient().newCall(new Request.Builder().url(repoUrl + "modules.json").build()).execute();
 
             if (response.isSuccessful()) {
                 ResponseBody body = response.body();
                 if (body != null) {
                     try {
                         String bodyString = body.string();
-                        Gson gson = new Gson();
-                        Map<String, OnlineModule> modules = new HashMap<>();
-                        OnlineModule[] repoModules = gson.fromJson(bodyString, OnlineModule[].class);
-                        Arrays.stream(repoModules).forEach(onlineModule -> modules.put(onlineModule.getName(), onlineModule));
-                        var channel = App.getPreferences().getString("update_channel", channels[0]);
                         Files.write(repoFile, bodyString.getBytes(StandardCharsets.UTF_8));
-                        updateLatestVersion(repoModules, channel);
-                        onlineModules = modules;
+                        loadLocalData(false);
                     } catch (Throwable t) {
                         Log.e(App.TAG, Log.getStackTraceString(t));
                         for (RepoListener listener : listeners) {
@@ -131,11 +124,36 @@ public class RepoLoader {
                 repoUrl = backupRepoUrl;
                 loadRemoteData();
             }
+        }
+    }
+
+    synchronized public void loadLocalData(boolean updateRemoteRepo) {
+        repoLoaded = false;
+        try {
+            if (Files.notExists(repoFile)) {
+                loadRemoteData();
+                updateRemoteRepo = false;
+            }
+            byte[] encoded = Files.readAllBytes(repoFile);
+            String bodyString = new String(encoded, StandardCharsets.UTF_8);
+            Gson gson = new Gson();
+            Map<String, OnlineModule> modules = new HashMap<>();
+            OnlineModule[] repoModules = gson.fromJson(bodyString, OnlineModule[].class);
+            Arrays.stream(repoModules).forEach(onlineModule -> modules.put(onlineModule.getName(), onlineModule));
+            var channel = App.getPreferences().getString("update_channel", channels[0]);
+            updateLatestVersion(repoModules, channel);
+            onlineModules = modules;
+        } catch (Throwable t) {
+            Log.e(App.TAG, Log.getStackTraceString(t));
+            for (RepoListener listener : listeners) {
+                listener.onThrowable(t);
+            }
         } finally {
             repoLoaded = true;
             for (RepoListener listener : listeners) {
                 listener.onRepoLoaded();
             }
+            if (updateRemoteRepo) loadRemoteData();
         }
     }
 
@@ -164,7 +182,6 @@ public class RepoLoader {
                 continue;
             }
             String pkgName = module.getName();
-            Log.d(App.TAG, "updateLatestVersion: " + pkgName + " " + verCode + " " + verName + " " + channel);
             versions.put(pkgName, new ModuleVersion(verCode, verName));
         }
         latestVersion = versions;
@@ -220,9 +237,7 @@ public class RepoLoader {
     }
 
     public void loadRemoteReleases(String packageName) {
-        App.getOkHttpClient().newCall(new Request.Builder()
-                .url(String.format(repoUrl + "module/%s.json", packageName))
-                .build()).enqueue(new Callback() {
+        App.getOkHttpClient().newCall(new Request.Builder().url(String.format(repoUrl + "module/%s.json", packageName)).build()).enqueue(new Callback() {
             @Override
             public void onFailure(@NonNull Call call, @NonNull IOException e) {
                 Log.e(App.TAG, call.request().url() + e.getMessage());
