@@ -20,6 +20,8 @@
 
 package org.lsposed.manager.repo.model;
 
+import androidx.annotation.Nullable;
+
 import com.google.gson.annotations.Expose;
 import com.google.gson.annotations.SerializedName;
 
@@ -59,6 +61,7 @@ public class Release {
     @Expose
     private List<ReleaseAsset> releaseAssets = new ArrayList<>();
 
+    @Nullable
     public String getName() {
         return name;
     }
@@ -67,6 +70,7 @@ public class Release {
         this.name = name;
     }
 
+    @Nullable
     public String getUrl() {
         return url;
     }
@@ -75,6 +79,7 @@ public class Release {
         this.url = url;
     }
 
+    @Nullable
     public String getDescription() {
         return description;
     }
@@ -83,6 +88,7 @@ public class Release {
         this.description = description;
     }
 
+    @Nullable
     public String getDescriptionHTML() {
         return descriptionHTML;
     }
@@ -91,6 +97,7 @@ public class Release {
         this.descriptionHTML = descriptionHTML;
     }
 
+    @Nullable
     public String getCreatedAt() {
         return createdAt;
     }
@@ -99,6 +106,7 @@ public class Release {
         this.createdAt = createdAt;
     }
 
+    @Nullable
     public String getPublishedAt() {
         return publishedAt;
     }
@@ -107,6 +115,7 @@ public class Release {
         this.publishedAt = publishedAt;
     }
 
+    @Nullable
     public String getUpdatedAt() {
         return updatedAt;
     }
@@ -115,6 +124,7 @@ public class Release {
         this.updatedAt = updatedAt;
     }
 
+    @Nullable
     public String getTagName() {
         return tagName;
     }
@@ -123,6 +133,7 @@ public class Release {
         this.tagName = tagName;
     }
 
+    @Nullable
     public Boolean getIsPrerelease() {
         return isPrerelease;
     }
@@ -131,6 +142,7 @@ public class Release {
         this.isPrerelease = isPrerelease;
     }
 
+    @Nullable
     public List<ReleaseAsset> getReleaseAssets() {
         return releaseAssets;
     }
