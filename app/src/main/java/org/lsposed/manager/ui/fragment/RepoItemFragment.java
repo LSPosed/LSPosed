@@ -384,9 +384,7 @@ public class RepoItemFragment extends BaseFragment implements RepoLoader.RepoLis
                     var name = t.getName().toLowerCase(LocaleDelegate.getDefaultLocale());
                     return !name.startsWith("snapshot") && !name.startsWith("nightly");
                 }).collect(Collectors.toList());
-            } else {
-                tmpList = releases;
-            }
+            } else tmpList = releases;
             runOnUiThread(() -> {
                 items = tmpList;
                 notifyDataSetChanged();

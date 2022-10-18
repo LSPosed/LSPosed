@@ -203,6 +203,7 @@ public class RepoLoader {
                     releaseTime = module.getLatestSnapshotReleaseTime();
             }
         }
+        Log.d(App.TAG, "getLatestReleaseTime: repoLoaded=" + repoLoaded + " packageName=" + packageName + " releaseTime=" + releaseTime);
         return releaseTime;
     }
 
