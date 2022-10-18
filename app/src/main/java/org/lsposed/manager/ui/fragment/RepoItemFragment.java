@@ -282,13 +282,16 @@ public class RepoItemFragment extends BaseFragment implements RepoLoader.RepoLis
                 holder.title.setText(R.string.module_information_homepage);
                 holder.description.setText(module.getHomepageUrl());
             } else if (position == collaboratorsRow) {
-                holder.title.setText(R.string.module_information_collaborators);
                 List<Collaborator> collaborators = module.getCollaborators();
+                if (collaborators == null) return;
+                holder.title.setText(R.string.module_information_collaborators);
                 SpannableStringBuilder sb = new SpannableStringBuilder();
                 ListIterator<Collaborator> iterator = collaborators.listIterator();
                 while (iterator.hasNext()) {
                     Collaborator collaborator = iterator.next();
-                    String name = collaborator.getName() == null ? collaborator.getLogin() : collaborator.getName();
+                    var collaboratorLogin = collaborator.getLogin();
+                    if (collaboratorLogin == null) continue;
+                    String name = collaborator.getName() == null ? collaboratorLogin : collaborator.getName();
                     sb.append(name);
                     CustomTabsURLSpan span = new CustomTabsURLSpan(requireActivity(), String.format("https://github.com/%s", collaborator.getLogin()));
                     sb.setSpan(span, sb.length() - name.length(), sb.length(), Spannable.SPAN_EXCLUSIVE_EXCLUSIVE);
@@ -375,14 +378,14 @@ public class RepoItemFragment extends BaseFragment implements RepoLoader.RepoLis
             List<Release> tmpList;
             if (channel.equals(channels[0])) {
                 tmpList = releases != null ? releases.parallelStream().filter(t -> {
-                    if (t.getIsPrerelease()) return false;
-                    var name = t.getName().toLowerCase(LocaleDelegate.getDefaultLocale());
-                    return !name.startsWith("snapshot") && !name.startsWith("nightly");
+                    if (Boolean.TRUE.equals(t.getIsPrerelease())) return false;
+                    var name = t.getName() != null ? t.getName().toLowerCase(LocaleDelegate.getDefaultLocale()) : null;
+                    return !(name != null && name.startsWith("snapshot")) && !(name != null && name.startsWith("nightly"));
                 }).collect(Collectors.toList()) : null;
             } else if (channel.equals(channels[1])) {
                 tmpList = releases != null ? releases.parallelStream().filter(t -> {
-                    var name = t.getName().toLowerCase(LocaleDelegate.getDefaultLocale());
-                    return !name.startsWith("snapshot") && !name.startsWith("nightly");
+                    var name = t.getName() != null ? t.getName().toLowerCase(LocaleDelegate.getDefaultLocale()) : null;
+                    return !(name != null && name.startsWith("snapshot")) && !(name != null && name.startsWith("nightly"));
                 }).collect(Collectors.toList()) : null;
             } else tmpList = releases;
             runOnUiThread(() -> {
