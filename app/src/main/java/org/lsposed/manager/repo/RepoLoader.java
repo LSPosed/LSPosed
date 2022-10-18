@@ -114,10 +114,6 @@ public class RepoLoader {
                         Files.write(repoFile, bodyString.getBytes(StandardCharsets.UTF_8));
                         updateLatestVersion(repoModules, channel);
                         onlineModules = modules;
-                        repoLoaded = true;
-                        for (RepoListener listener : listeners) {
-                            listener.onRepoLoaded();
-                        }
                     } catch (Throwable t) {
                         Log.e(App.TAG, Log.getStackTraceString(t));
                         for (RepoListener listener : listeners) {
@@ -137,6 +133,9 @@ public class RepoLoader {
             }
         } finally {
             repoLoaded = true;
+            for (RepoListener listener : listeners) {
+                listener.onRepoLoaded();
+            }
         }
     }
 
@@ -165,10 +164,14 @@ public class RepoLoader {
                 continue;
             }
             String pkgName = module.getName();
+            Log.d(App.TAG, "updateLatestVersion: " + pkgName + " " + verCode + " " + verName + " " + channel);
             versions.put(pkgName, new ModuleVersion(verCode, verName));
         }
         latestVersion = versions;
         repoLoaded = true;
+        for (RepoListener listener : listeners) {
+            listener.onRepoLoaded();
+        }
     }
 
     public void updateLatestVersion(String channel) {
