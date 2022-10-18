@@ -144,6 +144,7 @@ public class OnlineModule {
         this.collaborators = collaborators;
     }
 
+    @Nullable
     public List<Release> getReleases() {
         return releases;
     }
@@ -265,10 +266,12 @@ public class OnlineModule {
         return latestSnapshotReleaseTime;
     }
 
+    @Nullable
     public List<Release> getBetaReleases() {
         return betaReleases;
     }
 
+    @Nullable
     public List<Release> getSnapshotReleases() {
         return snapshotReleases;
     }

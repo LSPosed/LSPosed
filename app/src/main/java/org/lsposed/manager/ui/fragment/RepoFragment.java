@@ -356,7 +356,7 @@ public class RepoFragment extends BaseFragment implements RepoLoader.RepoListene
             int sort = App.getPreferences().getInt("repo_sort", 0);
             boolean upgradableFirst = App.getPreferences().getBoolean("upgradable_first", true);
             ConcurrentHashMap<String, Boolean> upgradable = new ConcurrentHashMap<>();
-            fullList = modules.parallelStream().filter((onlineModule -> !onlineModule.isHide() && !onlineModule.getReleases().isEmpty()))
+            fullList = modules.parallelStream().filter((onlineModule -> !onlineModule.isHide() && !(onlineModule.getReleases() != null && onlineModule.getReleases().isEmpty())))
                     .sorted((a, b) -> {
                         if (upgradableFirst) {
                             var aUpgrade = upgradable.computeIfAbsent(a.getName(), n -> getUpgradableVer(a) != null);

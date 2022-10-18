@@ -238,7 +238,7 @@ public class RepoItemFragment extends BaseFragment implements RepoLoader.RepoLis
         if (releaseAdapter != null) {
             runAsync(releaseAdapter::loadItems);
         }
-        if (module.getReleases().size() == 1) {
+        if ((module.getReleases() != null ? module.getReleases().size() : 1) == 1) {
             showHint(R.string.module_release_no_more, true);
         }
     }
@@ -374,16 +374,16 @@ public class RepoItemFragment extends BaseFragment implements RepoLoader.RepoLis
             if (releases == null) releases = module.getReleases();
             List<Release> tmpList;
             if (channel.equals(channels[0])) {
-                tmpList = releases.parallelStream().filter(t -> {
+                tmpList = releases != null ? releases.parallelStream().filter(t -> {
                     if (t.getIsPrerelease()) return false;
                     var name = t.getName().toLowerCase(LocaleDelegate.getDefaultLocale());
                     return !name.startsWith("snapshot") && !name.startsWith("nightly");
-                }).collect(Collectors.toList());
+                }).collect(Collectors.toList()) : null;
             } else if (channel.equals(channels[1])) {
-                tmpList = releases.parallelStream().filter(t -> {
+                tmpList = releases != null ? releases.parallelStream().filter(t -> {
                     var name = t.getName().toLowerCase(LocaleDelegate.getDefaultLocale());
                     return !name.startsWith("snapshot") && !name.startsWith("nightly");
-                }).collect(Collectors.toList());
+                }).collect(Collectors.toList()) : null;
             } else tmpList = releases;
             runOnUiThread(() -> {
                 items = tmpList;

@@ -209,9 +209,9 @@ public class RepoLoader {
             if (module != null) {
                 releases = module.getReleases();
                 if (!module.releasesLoaded) {
-                    if (channel.equals(channels[1]) && !module.getBetaReleases().isEmpty()) {
+                    if (channel.equals(channels[1]) && !(module.getBetaReleases() != null && module.getBetaReleases().isEmpty())) {
                         releases = module.getBetaReleases();
-                    } else if (channel.equals(channels[2]) && !module.getSnapshotReleases().isEmpty())
+                    } else if (channel.equals(channels[2]) && !(module.getSnapshotReleases() != null && module.getSnapshotReleases().isEmpty()))
                         releases = module.getSnapshotReleases();
                 }
             }
