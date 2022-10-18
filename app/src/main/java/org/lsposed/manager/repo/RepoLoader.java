@@ -110,11 +110,10 @@ public class RepoLoader {
                         Map<String, OnlineModule> modules = new HashMap<>();
                         OnlineModule[] repoModules = gson.fromJson(bodyString, OnlineModule[].class);
                         Arrays.stream(repoModules).forEach(onlineModule -> modules.put(onlineModule.getName(), onlineModule));
-                        onlineModules = modules;
                         var channel = App.getPreferences().getString("update_channel", channels[0]);
-                        updateLatestVersion(repoModules, channel);
-
                         Files.write(repoFile, bodyString.getBytes(StandardCharsets.UTF_8));
+                        updateLatestVersion(repoModules, channel);
+                        onlineModules = modules;
                         repoLoaded = true;
                         for (RepoListener listener : listeners) {
                             listener.onRepoLoaded();
@@ -174,7 +173,7 @@ public class RepoLoader {
 
     public void updateLatestVersion(String channel) {
         if (repoLoaded)
-            updateLatestVersion(onlineModules.keySet().stream().map(onlineModules::get).toArray(OnlineModule[]::new), channel);
+            updateLatestVersion(onlineModules.keySet().parallelStream().map(onlineModules::get).toArray(OnlineModule[]::new), channel);
     }
 
     @Nullable
