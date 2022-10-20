@@ -256,6 +256,7 @@ public class HomeFragment extends BaseFragment {
             }
             manufacturer += " " + Build.MODEL + " ";
         } catch (Exception e) {
+            Log.d(App.TAG, "Build.MANUFACTURER: " + Build.MANUFACTURER + " Build.BRAND: " + Build.BRAND + " Build.MODEL: " + Build.MODEL);
             Log.e(App.TAG, "getDevice: " + e.getMessage());
         }
         return manufacturer;
@@ -265,7 +266,7 @@ public class HomeFragment extends BaseFragment {
         @NonNull
         @Override
         public Dialog onCreateDialog(@Nullable Bundle savedInstanceState) {
-            DialogAboutBinding binding = DialogAboutBinding.inflate(LayoutInflater.from(requireActivity()), null, false);
+            DialogAboutBinding binding = DialogAboutBinding.inflate(requireActivity().getLayoutInflater(), null, false);
             binding.designAboutTitle.setText(R.string.app_name);
             binding.designAboutInfo.setMovementMethod(LinkMovementMethod.getInstance());
             binding.designAboutInfo.setTransformationMethod(new LinkTransformationMethod(requireActivity()));
