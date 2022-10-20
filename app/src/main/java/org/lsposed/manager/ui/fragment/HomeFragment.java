@@ -24,6 +24,7 @@ import android.app.Dialog;
 import android.os.Build;
 import android.os.Bundle;
 import android.text.method.LinkMovementMethod;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.Menu;
 import android.view.View;
@@ -35,6 +36,7 @@ import androidx.core.text.HtmlCompat;
 import androidx.fragment.app.DialogFragment;
 
 import org.lsposed.lspd.ILSPManagerService;
+import org.lsposed.manager.App;
 import org.lsposed.manager.BuildConfig;
 import org.lsposed.manager.ConfigManager;
 import org.lsposed.manager.R;
@@ -77,7 +79,8 @@ public class HomeFragment extends BaseFragment {
     }
 
     @Override
-    public View onCreateView(@NonNull LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
+    public View onCreateView(@NonNull LayoutInflater inflater, ViewGroup container,
+                             Bundle savedInstanceState) {
         binding = FragmentHomeBinding.inflate(inflater, container, false);
         setupToolbar(binding.toolbar, binding.clickView, R.string.app_name, R.menu.menu_home);
         binding.toolbar.setNavigationIcon(null);
@@ -130,8 +133,9 @@ public class HomeFragment extends BaseFragment {
                 binding.statusTitle.setText(R.string.activated);
                 binding.statusIcon.setImageResource(R.drawable.ic_round_check_circle_24);
             }
-            binding.statusSummary.setText(String.format(LocaleDelegate.getDefaultLocale(), "%s (%d) - %s",
-                    ConfigManager.getXposedVersionName(), ConfigManager.getXposedVersionCode(), ConfigManager.getApi()));
+            binding.statusSummary.setText(String.format(LocaleDelegate.getDefaultLocale(),
+                    "%s " + "(%d) - %s", ConfigManager.getXposedVersionName(),
+                    ConfigManager.getXposedVersionCode(), ConfigManager.getApi()));
         } else {
             boolean isMagiskInstalled = ConfigManager.isMagiskInstalled();
             if (isMagiskInstalled) {
@@ -157,9 +161,13 @@ public class HomeFragment extends BaseFragment {
         if (ConfigManager.isBinderAlive()) {
             binding.apiVersion.setText(String.valueOf(ConfigManager.getXposedApiVersion()));
             binding.api.setText(ConfigManager.getApi());
-            binding.frameworkVersion.setText(String.format(LocaleDelegate.getDefaultLocale(), "%1$s (%2$d)", ConfigManager.getXposedVersionName(), ConfigManager.getXposedVersionCode()));
+            binding.frameworkVersion.setText(String.format(LocaleDelegate.getDefaultLocale(),
+                    "%1$s (%2$d)", ConfigManager.getXposedVersionName(),
+                    ConfigManager.getXposedVersionCode()));
             if (Build.VERSION.SDK_INT < Build.VERSION_CODES.Q) {
-                binding.dex2oatWrapper.setText(String.format(LocaleDelegate.getDefaultLocale(), "%s (%s)", getString(R.string.unsupported), getString(R.string.android_version_unsatisfied)));
+                binding.dex2oatWrapper.setText(String.format(LocaleDelegate.getDefaultLocale(),
+                        "%s (%s)", getString(R.string.unsupported),
+                        getString(R.string.android_version_unsatisfied)));
             } else switch (ConfigManager.getDex2OatWrapperCompatibility()) {
                 case ILSPManagerService.DEX2OAT_OK:
                     binding.dex2oatWrapper.setText(R.string.supported);
@@ -182,12 +190,15 @@ public class HomeFragment extends BaseFragment {
             binding.api.setText(R.string.not_installed);
             binding.frameworkVersion.setText(R.string.not_installed);
         }
-        binding.managerVersion.setText(String.format(LocaleDelegate.getDefaultLocale(), "%1$s (%2$d)", BuildConfig.VERSION_NAME, BuildConfig.VERSION_CODE));
+        binding.managerVersion.setText(String.format(LocaleDelegate.getDefaultLocale(),
+                "%1$s " + "(%2$d)", BuildConfig.VERSION_NAME, BuildConfig.VERSION_CODE));
 
         if (Build.VERSION.PREVIEW_SDK_INT != 0) {
-            binding.systemVersion.setText(String.format(LocaleDelegate.getDefaultLocale(), "%1$s Preview (API %2$d)", Build.VERSION.CODENAME, Build.VERSION.SDK_INT));
+            binding.systemVersion.setText(String.format(LocaleDelegate.getDefaultLocale(), "%1$s "
+                    + "Preview (API %2$d)", Build.VERSION.CODENAME, Build.VERSION.SDK_INT));
         } else {
-            binding.systemVersion.setText(String.format(LocaleDelegate.getDefaultLocale(), "%1$s (API %2$d)", Build.VERSION.RELEASE, Build.VERSION.SDK_INT));
+            binding.systemVersion.setText(String.format(LocaleDelegate.getDefaultLocale(), "%1$s "
+                    + "(API %2$d)", Build.VERSION.RELEASE, Build.VERSION.SDK_INT));
         }
 
         binding.device.setText(getDevice());
@@ -236,11 +247,17 @@ public class HomeFragment extends BaseFragment {
     }
 
     private String getDevice() {
-        String manufacturer = Character.toUpperCase(Build.MANUFACTURER.charAt(0)) + Build.MANUFACTURER.substring(1);
-        if (!Build.BRAND.equals(Build.MANUFACTURER)) {
-            manufacturer += " " + Character.toUpperCase(Build.BRAND.charAt(0)) + Build.BRAND.substring(1);
+        String manufacturer = "";
+        try {
+            manufacturer =
+                    Character.toUpperCase(Build.MANUFACTURER.charAt(0)) + Build.MANUFACTURER.substring(1);
+            if (!Build.BRAND.equals(Build.MANUFACTURER)) {
+                manufacturer += " " + Character.toUpperCase(Build.BRAND.charAt(0)) + Build.BRAND.substring(1);
+            }
+            manufacturer += " " + Build.MODEL + " ";
+        } catch (Exception e) {
+            Log.e(App.TAG, "getDevice: " + e.getMessage());
         }
-        manufacturer += " " + Build.MODEL + " ";
         return manufacturer;
     }
 
