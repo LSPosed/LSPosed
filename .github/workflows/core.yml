@@ -11,7 +11,7 @@ jobs:
     runs-on: ubuntu-latest
     steps:
     - name: Checkout
-      uses: actions/checkout@v2
+      uses: actions/checkout@v3
       with:
         submodules: 'recursive'
         fetch-depth: 0
@@ -32,7 +32,7 @@ jobs:
         java-version: '17'
         cache: 'gradle'
     - name: Cache Gradle Build
-      uses: actions/cache@v2
+      uses: actions/cache@v3
       with:
         path: |
           ~/.gradle/caches/build-cache-*
@@ -41,7 +41,7 @@ jobs:
         restore-keys: |
           gradle-builds
     - name: Cache native build
-      uses: actions/cache@v2
+      uses: actions/cache@v3
       with:
         path: |
           ~/.ccache
@@ -83,34 +83,34 @@ jobs:
         unzip magisk-loader/release/LSPosed-v*-zygisk-release.zip -d LSPosed-zygisk-release
         unzip magisk-loader/release/LSPosed-v*-zygisk-debug.zip -d LSPosed-zygisk-debug
     - name: Upload riru release
-      uses: actions/upload-artifact@v2
+      uses: actions/upload-artifact@v3
       with:
         name: ${{ steps.prepareArtifact.outputs.riruReleaseName }}
         path: './LSPosed-riru-release/*'
     - name: Upload riru debug
-      uses: actions/upload-artifact@v2
+      uses: actions/upload-artifact@v3
       with:
         name: ${{ steps.prepareArtifact.outputs.riruDebugName }}
         path: './LSPosed-riru-debug/*'
     - name: Upload zygisk release
-      uses: actions/upload-artifact@v2
+      uses: actions/upload-artifact@v3
       with:
         name: ${{ steps.prepareArtifact.outputs.zygiskReleaseName }}
         path: './LSPosed-zygisk-release/*'
     - name: Upload zygisk debug
-      uses: actions/upload-artifact@v2
+      uses: actions/upload-artifact@v3
       with:
         name: ${{ steps.prepareArtifact.outputs.zygiskDebugName }}
         path: './LSPosed-zygisk-debug/*'
     - name: Upload mappings
-      uses: actions/upload-artifact@v2
+      uses: actions/upload-artifact@v3
       with:
         name: mappings
         path: |
           magisk-loader/build/outputs/mapping
           app/build/outputs/mapping
     - name: Upload symbols
-      uses: actions/upload-artifact@v2
+      uses: actions/upload-artifact@v3
       with:
         name: symbols
         path: |
