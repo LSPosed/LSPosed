@@ -68,7 +68,7 @@ public class RepoLoader {
         }
 
         public boolean upgradable(long versionCode, String versionName) {
-            return this.versionCode > versionCode || (this.versionCode == versionCode && !versionName.equals(this.versionName));
+            return this.versionCode > versionCode || (this.versionCode == versionCode && !versionName.replace(' ', '_').equals(this.versionName));
         }
 
     }
