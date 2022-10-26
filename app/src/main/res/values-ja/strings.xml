@@ -33,8 +33,8 @@
     <string name="module_repo">リポジトリ</string>
     <string name="module_repo_loading">読み込み中…</string>
     <string name="module_repo_up_to_date">全てのモジュールが最新です</string>
-    <string name="module_repo_published_time">公開日時：%s</string>
-    <string name="module_repo_updated_time">更新日時：%s</string>
+    <string name="module_repo_published_time">公開日時: %s</string>
+    <string name="module_repo_updated_time">更新日時: %s</string>
     <plurals name="module_repo_upgradable">
         <item quantity="other">%d 個のモジュールがアップグレード可能</item>
     </plurals>
@@ -50,7 +50,7 @@
     <string name="selinux_policy_not_loaded"><![CDATA[システムフレームワークをフックするモジュールは動作しません。<br/>この問題について<a href="https://github.com/topjohnwu/Magisk/issues"><b>Magisk</b></a>開発者に報告して下さい。]]></string>
     <string name="system_inject_fail_summary">システムフレームワークへのパッチに失敗しました</string>
     <string name="system_inject_fail"><![CDATA[本現象はごく稀に発生し、<b>Magisk</b>もしくは低品質な Magiskモジュールが原因で発生します。<br/>RiruとLSPosed以外のMagiskモジュールを一時的に無効化してみるか、開発者へすべてのログを提出して下さい。]]></string>
-    <string name="system_prop_incorrect_summary">誤ったシステム設定</string>
+    <string name="system_prop_incorrect_summary">System propが正しくありません</string>
     <string name="system_prop_incorrect"><![CDATA[必須のシステム設定が変更もしくは削除されています。<br/>モジュールが無効化される場合があります。]]></string>
     <string name="need_update">更新が必要です</string>
     <string name="please_update_summary">最新バージョンの LSPosedをインストールして下さい</string>
@@ -62,16 +62,16 @@
     <string name="info_device">デバイス</string>
     <string name="info_system_abi">システムABI</string>
     <string name="info_api">インジェクションインターフェイス</string>
-    <string name="info_dex2oat_wrapper">Dex Optimizer Wrapper</string>
-    <string name="supported">サポートされています</string>
+    <string name="info_dex2oat_wrapper">Dex最適化ラッパー</string>
+    <string name="supported">対応</string>
     <string name="unsupported">非対応</string>
-    <string name="android_version_unsatisfied">Android版不満足</string>
-    <string name="crashed">クラッシュ</string>
-    <string name="mount_failed">マウントに失敗</string>
-    <string name="selinux_permissive">SELinuxはパーミッシブ</string>
-    <string name="sepolicy_incorrect">SELinuxのポリシーが正しくない</string>
+    <string name="android_version_unsatisfied">Androidのバージョンが適合しません</string>
+    <string name="crashed">クラッシュしました</string>
+    <string name="mount_failed">マウントに失敗しました</string>
+    <string name="selinux_permissive">SELinuxはPermissiveです</string>
+    <string name="sepolicy_incorrect">SELinuxのポリシーが正しくありません</string>
     <string name="parasitic_recommend">寄生マネージャーがおすすめです</string>
-    <string name="parasitic_recommend_summary">LSPosedは、検出を回避するために、システムへの寄生をサポートするようになりました。寄生されたマネージャーのショートカットを作成したら、マネージャーをアンインストールしても問題ありません。何かあった場合は、/data/adb/lspd/manager.apkからマネージャーを再インストールできます。</string>
+    <string name="parasitic_recommend_summary">LSPosedは、検出を回避するために、システムへの寄生をサポートするようになりました。寄生されたマネージャーのショートカットを作成したら、マネージャーをアンインストールしても問題ありません。何かあった場合は、「/data/adb/lspd/manager.apk」からマネージャーを再インストールできます。</string>
     <string name="create_shortcut">ショートカットを作成</string>
     <string name="never_show">表示しない</string>
     <string name="update_lsposed">LSPossedをアップデート</string>
@@ -80,9 +80,9 @@
     <string name="menuSaveToSd">保存</string>
     <string name="nav_item_logs_verbose">詳細ログ</string>
     <string name="nav_item_logs_module">モジュールログ</string>
-    <string name="logs_saved">ログ保存</string>
+    <string name="logs_saved">ログを保存</string>
     <string name="logs_save_failed2">保存に失敗しました:\n%s</string>
-    <string name="menuClearLog">直ちにログを消去</string>
+    <string name="menuClearLog">すぐにログを消去</string>
     <string name="logs_cleared">ログの消去に成功しました。</string>
     <string name="scroll_top">ログの先頭行にスクロール</string>
     <string name="loading">読み込み中…</string>
@@ -197,7 +197,7 @@
     <string name="module_information">情報</string>
     <string name="module_information_homepage">ホームページ</string>
     <string name="module_information_source_url">ソースコード</string>
-    <string name="module_information_collaborators">コラボレーター</string>
+    <string name="module_information_collaborators">協力</string>
     <string name="module_release_view_assets">アセット</string>
     <string name="menu_open_in_browser">ブラウザで表示</string>
     <string name="refresh">更新</string>

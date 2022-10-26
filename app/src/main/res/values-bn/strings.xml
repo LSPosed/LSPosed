@@ -35,7 +35,7 @@
     <string name="module_repo">ভান্ডার</string>
     <string name="module_repo_loading">লোড হচ্ছে…</string>
     <string name="module_repo_up_to_date">সব মডিউল আপ টু ডেট</string>
-    <string name="module_repo_published_time">মডিউল_রিপো_প্রকাশের_সময়</string>
+    <string name="module_repo_published_time">%sএ প্রকাশিত</string>
     <string name="module_repo_updated_time">মডিউল_রিপো_হালনাগাদের_সময়</string>
     <plurals name="module_repo_upgradable">
         <item quantity="one">%d মডিউল আপগ্রেডযোগ্য</item>
