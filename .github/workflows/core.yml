@@ -9,6 +9,11 @@ on:
 jobs:
   build:
     runs-on: ubuntu-latest
+    env:
+      CCACHE_COMPILERCHECK: "%compiler% -dumpmachine; %compiler% -dumpversion"
+      CCACHE_NOHASHDIR: "true"
+      CCACHE_MAXSIZE: "1G"
+      CCACHE_HARDLINK: "true"
     steps:
     - name: Checkout
       uses: actions/checkout@v3
@@ -28,7 +33,7 @@ jobs:
     - name: Setup Java
       uses: actions/setup-java@v3
       with:
-        distribution: 'zulu'
+        distribution: 'temurin'
         java-version: '17'
         cache: 'gradle'
     - name: Cache Gradle Build
@@ -40,24 +45,11 @@ jobs:
         key: gradle-builds-core-${{ github.sha }}
         restore-keys: |
           gradle-builds
-    - name: Cache native build
-      uses: actions/cache@v3
+    - name: Set up ccache
+      uses: hendrikmuhs/ccache-action@v1.2
       with:
-        path: |
-          ~/.ccache
-          magisk-loader/build/.lto-cache
-          daemon/build/.lto-cache
-          dex2oat/build/.lto-cache
-        key: native-cache-${{ github.sha }}
-        restore-keys: native-cache-
-    - name: Install dep
-      run: |
-        sudo apt-get install -y ccache
-        ccache -o max_size=1G
-        ccache -o hash_dir=false
-        ccache -o compiler_check='%compiler% -dumpmachine; %compiler% -dumpversion'
-        ccache -o hard_link=true
-        ccache -zp
+        key: ${{ runner.os }}
+        restore-keys: ${{ runner.os }}
     - name: Build with Gradle
       run: |
         [ $(du -s ~/.gradle/wrapper | awk '{ print $1 }') -gt 250000 ] && rm -rf ~/.gradle/wrapper/* || true
@@ -69,7 +61,6 @@ jobs:
         echo 'android.native.buildOutput=verbose' >> gradle.properties
         echo 'buildCache { local { removeUnusedEntriesAfterDays = 1 } }' >> settings.gradle.kts
         ./gradlew zipAll
-        ccache -s
     - name: Prepare artifact
       if: success()
       id: prepareArtifact
