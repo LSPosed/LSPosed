@@ -235,4 +235,8 @@
     <string name="color_deep_orange">গভীর কমলা</string>
     <string name="color_brown">বাদামী</string>
     <string name="color_blue_grey">নীল ধূসর</string>
+    <plurals name="module_release_assets_download_count">
+        <item quantity="one">%d ডাউনলোড</item>
+        <item quantity="other">%d ডাউনলোড</item>
+    </plurals>
 </resources>
