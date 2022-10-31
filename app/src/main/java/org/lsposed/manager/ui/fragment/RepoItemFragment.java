@@ -20,6 +20,7 @@
 package org.lsposed.manager.ui.fragment;
 
 import android.annotation.SuppressLint;
+import android.app.Activity;
 import android.app.Dialog;
 import android.content.res.Resources;
 import android.graphics.Color;
@@ -27,7 +28,10 @@ import android.os.Bundle;
 import android.text.Spannable;
 import android.text.SpannableStringBuilder;
 import android.text.TextUtils;
+import android.text.format.Formatter;
 import android.text.style.ClickableSpan;
+import android.text.style.ForegroundColorSpan;
+import android.text.style.RelativeSizeSpan;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.MenuItem;
@@ -38,6 +42,7 @@ import android.webkit.WebResourceResponse;
 import android.webkit.WebSettings;
 import android.webkit.WebView;
 import android.webkit.WebViewClient;
+import android.widget.ArrayAdapter;
 import android.widget.ScrollView;
 import android.widget.TextView;
 
@@ -347,16 +352,30 @@ public class RepoItemFragment extends BaseFragment implements RepoLoader.RepoLis
             return new BlurBehindDialogBuilder(requireActivity(), R.style.ThemeOverlay_MaterialAlertDialog_Centered_FullWidthButtons)
                     .setTitle(R.string.module_release_view_assets)
                     .setPositiveButton(android.R.string.cancel, null)
-                    .setItems(args.getCharSequenceArray("names"),
+                    .setAdapter(new ArrayAdapter<>(requireActivity(), R.layout.dialog_item, args.getCharSequenceArray("names")),
                             (dialog, which) -> NavUtil.startURL(requireActivity(), args.getStringArrayList("urls").get(which)))
                     .create();
         }
 
-        static void create(FragmentManager fm, String[] names, ArrayList<String> urls) {
+        static void create(Activity activity, FragmentManager fm, List<ReleaseAsset> assets) {
             var f = new DownloadDialog();
             var bundle = new Bundle();
-            bundle.putStringArray("names", names);
-            bundle.putStringArrayList("urls", urls);
+
+            var displayNames = new CharSequence[assets.size()];
+            for (int i = 0; i < assets.size(); i++) {
+                var sb = new SpannableStringBuilder(assets.get(i).getName());
+                var count = assets.get(i).getDownloadCount();
+                var countStr = activity.getResources().getQuantityString(R.plurals.module_release_assets_download_count, count, count);
+                var sizeStr = Formatter.formatShortFileSize(activity, assets.get(i).getSize());
+                sb.append('\n').append(sizeStr).append('/').append(countStr);
+                final ForegroundColorSpan foregroundColorSpan = new ForegroundColorSpan(ResourceUtils.resolveColor(activity.getTheme(), android.R.attr.textColorSecondary));
+                final RelativeSizeSpan relativeSizeSpan = new RelativeSizeSpan(0.8f);
+                sb.setSpan(foregroundColorSpan, sb.length() - sizeStr.length() - countStr.length() - 1, sb.length(), Spannable.SPAN_EXCLUSIVE_EXCLUSIVE);
+                sb.setSpan(relativeSizeSpan, sb.length() - sizeStr.length() - countStr.length() - 1, sb.length(), Spannable.SPAN_EXCLUSIVE_EXCLUSIVE);
+                displayNames[i] = sb;
+            }
+            bundle.putCharSequenceArray("names", displayNames);
+            bundle.putStringArrayList("urls", assets.stream().map(ReleaseAsset::getDownloadUrl).collect(Collectors.toCollection(ArrayList::new)));
             f.setArguments(bundle);
             f.show(fm, "download");
         }
@@ -429,9 +448,7 @@ public class RepoItemFragment extends BaseFragment implements RepoLoader.RepoLis
                 List<ReleaseAsset> assets = release.getReleaseAssets();
                 if (assets != null && !assets.isEmpty()) {
                     holder.viewAssets.setOnClickListener(v -> {
-                        ArrayList<String> names = new ArrayList<>();
-                        assets.forEach(releaseAsset -> names.add(releaseAsset.getName()));
-                        DownloadDialog.create(getChildFragmentManager(), names.toArray(new String[0]), assets.stream().map(ReleaseAsset::getDownloadUrl).collect(Collectors.toCollection(ArrayList::new)));
+                        DownloadDialog.create(requireActivity(), getParentFragmentManager(), assets);
                     });
                 } else {
                     holder.viewAssets.setVisibility(View.GONE);
