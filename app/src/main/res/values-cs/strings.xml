@@ -238,4 +238,10 @@
     <string name="color_deep_orange">Tmavě oranžová</string>
     <string name="color_brown">Hnědá</string>
     <string name="color_blue_grey">Modro-šedivá</string>
+    <plurals name="module_release_assets_download_count">
+        <item quantity="one">%d ke stažení</item>
+        <item quantity="few">%d ke stažení</item>
+        <item quantity="many">%d ke stažení</item>
+        <item quantity="other">%d ke stažení</item>
+    </plurals>
 </resources>
