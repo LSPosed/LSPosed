@@ -234,4 +234,8 @@
     <string name="color_deep_orange">Dyp oransje</string>
     <string name="color_brown">Brun</string>
     <string name="color_blue_grey">Blå grå</string>
+    <plurals name="module_release_assets_download_count">
+        <item quantity="one">%d nedlasting</item>
+        <item quantity="other">%d nedlastinger</item>
+    </plurals>
 </resources>
