@@ -243,4 +243,12 @@ Ali Samir</string>
     <string name="color_deep_orange">برتقالي عميق</string>
     <string name="color_brown">بني</string>
     <string name="color_blue_grey">أزرق رمادي</string>
+    <plurals name="module_release_assets_download_count">
+        <item quantity="zero">%d التنزيلات</item>
+        <item quantity="one">%d تنزيل</item>
+        <item quantity="two">%d التنزيلات</item>
+        <item quantity="few">%d التنزيلات</item>
+        <item quantity="many">%d التنزيلات</item>
+        <item quantity="other">%d التنزيلات</item>
+    </plurals>
 </resources>
