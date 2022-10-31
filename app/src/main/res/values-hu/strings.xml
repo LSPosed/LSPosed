@@ -235,4 +235,8 @@
     <string name="color_deep_orange">Mély narancssárga</string>
     <string name="color_brown">Barna</string>
     <string name="color_blue_grey">Kékes szürke</string>
+    <plurals name="module_release_assets_download_count">
+        <item quantity="one">%d letöltés</item>
+        <item quantity="other">%d letöltések</item>
+    </plurals>
 </resources>
