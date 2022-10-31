@@ -232,4 +232,7 @@
     <string name="color_deep_orange">Cam đậm</string>
     <string name="color_brown">Nâu</string>
     <string name="color_blue_grey">Xanh xám</string>
+    <plurals name="module_release_assets_download_count">
+        <item quantity="other">%d lượt tải xuống</item>
+    </plurals>
 </resources>
