@@ -238,4 +238,10 @@
     <string name="color_deep_orange">Насыщенный оранжевый</string>
     <string name="color_brown">Коричневый</string>
     <string name="color_blue_grey">Серо-голубой</string>
+    <plurals name="module_release_assets_download_count">
+        <item quantity="one">%d скачивание</item>
+        <item quantity="few">%d скачивается</item>
+        <item quantity="many">%d загрузки</item>
+        <item quantity="other">%d скачано</item>
+    </plurals>
 </resources>

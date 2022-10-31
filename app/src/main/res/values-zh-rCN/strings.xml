@@ -232,4 +232,7 @@
     <string name="color_deep_orange">深橙</string>
     <string name="color_brown">棕色</string>
     <string name="color_blue_grey">灰蓝</string>
+    <plurals name="module_release_assets_download_count">
+        <item quantity="other">%d 次下载</item>
+    </plurals>
 </resources>

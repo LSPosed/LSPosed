@@ -235,4 +235,8 @@ JJ108</string>
     <string name="color_deep_orange">Dunkelorange</string>
     <string name="color_brown">Braun</string>
     <string name="color_blue_grey">Blaugrau</string>
+    <plurals name="module_release_assets_download_count">
+        <item quantity="one">%d herunterladen</item>
+        <item quantity="other">%d Downloads</item>
+    </plurals>
 </resources>
