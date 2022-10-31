@@ -234,4 +234,8 @@
     <string name="color_deep_orange">porteqala kûr</string>
     <string name="color_brown">qehweyî</string>
     <string name="color_blue_grey">Şîn gewr</string>
+    <plurals name="module_release_assets_download_count">
+        <item quantity="one">%d download</item>
+        <item quantity="other">%d downloads</item>
+    </plurals>
 </resources>
