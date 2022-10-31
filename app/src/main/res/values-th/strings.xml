@@ -232,4 +232,7 @@
     <string name="color_deep_orange">ส้มเข้ม</string>
     <string name="color_brown">สีน้ำตาล</string>
     <string name="color_blue_grey">น้ำเงินเทา</string>
+    <plurals name="module_release_assets_download_count">
+        <item quantity="other">%d ดาวน์โหลด</item>
+    </plurals>
 </resources>
