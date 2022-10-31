@@ -237,6 +237,6 @@ https://github.com/tclement0922</string>
     <string name="color_blue_grey">Bleu grisâtre</string>
     <plurals name="module_release_assets_download_count">
         <item quantity="one">%d télécharger</item>
-        <item quantity="other">%d téléchargements</item>
+        <item quantity="other">%d téléchargés</item>
     </plurals>
 </resources>
