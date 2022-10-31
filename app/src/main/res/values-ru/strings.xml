@@ -239,9 +239,9 @@
     <string name="color_brown">Коричневый</string>
     <string name="color_blue_grey">Серо-голубой</string>
     <plurals name="module_release_assets_download_count">
-        <item quantity="one">%d скачать</item>
-        <item quantity="few">%d загрузки</item>
+        <item quantity="one">%d скачивание</item>
+        <item quantity="few">%d скачивается</item>
         <item quantity="many">%d загрузки</item>
-        <item quantity="other">%d загружено</item>
+        <item quantity="other">%d скачано</item>
     </plurals>
 </resources>
