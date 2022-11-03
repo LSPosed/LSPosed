@@ -1775,7 +1775,7 @@ public class XResources extends XResourcesSuperClass {
 			try {
 				XposedInit.hookResources();
 			} catch (Throwable throwable) {
-				throw new IllegalStateException("Failed to initialize resources hook");
+				throw new IllegalStateException("Failed to initialize resources hook", throwable);
 			}
 		}
 
