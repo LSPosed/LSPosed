@@ -1771,6 +1771,14 @@ public class XResources extends XResourcesSuperClass {
 		if (id == 0)
 			throw new IllegalArgumentException("id 0 is not an allowed resource identifier");
 
+		if (resDir == null) {
+			try {
+				XposedInit.hookResources();
+			} catch (Throwable throwable) {
+				throw new IllegalStateException("Failed to initialize resources hook", throwable);
+			}
+		}
+
 		HashMap<String, CopyOnWriteSortedSet<XC_LayoutInflated>> inner;
 		synchronized (sLayoutCallbacks) {
 			inner = sLayoutCallbacks.get(id);
