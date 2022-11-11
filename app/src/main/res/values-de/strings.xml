@@ -23,7 +23,7 @@
     <string name="overview">Übersicht</string>
     <string name="Modules">Module</string>
     <plurals name="modules_enabled_count">
-        <item quantity="one">%d Modul aktiviert</item>
+        <item quantity="one">%d Module aktiviert</item>
         <item quantity="other">%d Module aktiviert</item>
     </plurals>
     <string name="Logs">Protokolle</string>
@@ -57,7 +57,7 @@ JJ108</string>
     <string name="system_prop_incorrect"><![CDATA[Einige notwendige Systemeigenschaften wurden gelöscht oder geändert.<br/>Module können gelegentlich außer Kraft gesetzt werden.]]></string>
     <string name="need_update">Aktualisierung erforderlich</string>
     <string name="please_update_summary">Bitte installieren Sie die neueste Version von LSPosed</string>
-    <string name="lsposed_not_active">LSPosed ist derzeit nicht installiert oder läuft nicht.</string>
+    <string name="lsposed_not_active">LSPosed ist derzeit nicht installiert oder aktiv.</string>
     <string name="info_api_version">API Version</string>
     <string name="info_framework_version">Framework Version</string>
     <string name="info_manager_version">Manager Version</string>

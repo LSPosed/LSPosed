@@ -241,7 +241,7 @@
     <plurals name="module_release_assets_download_count">
         <item quantity="one">%d скачивание</item>
         <item quantity="few">%d скачивается</item>
-        <item quantity="many">%d загрузки</item>
+        <item quantity="many">%d скачиваются</item>
         <item quantity="other">%d скачано</item>
     </plurals>
 </resources>
