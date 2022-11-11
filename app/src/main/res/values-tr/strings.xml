@@ -49,7 +49,7 @@
     <string name="activated">Aktif edildi</string>
     <string name="partial_activated">Kısmen etkinleştirildi</string>
     <string name="selinux_policy_not_loaded_summary">SEPolicy düzgün yüklenmemiş</string>
-    <string name="selinux_policy_not_loaded"><![CDATA[SEPolicy düzgün yüklenmemiş, System Framework'u bağlayan modüller çalışmayacaktır.<br/>Lütfen bunu <a href="https://github.com/topjohnwu/Magisk/issues"><b>Magisk</b></a> geliştiricisine rapor edin.]]></string>
+    <string name="selinux_policy_not_loaded"><![CDATA[SEPolicy düzgün yüklenmemiş, System Framework\'u bağlayan modüller çalışmayacaktır.<br/>Lütfen bunu <a href="https://github.com/topjohnwu/Magisk/issues"><b>Magisk</b></a> geliştiricisine rapor edin.]]></string>
     <string name="system_inject_fail_summary">Sistem Çerçevesi enjeksiyonu başarısız oldu</string>
     <string name="system_inject_fail"><![CDATA[Bu nadiren yaşanır ve <b>Magisk</b> veya düşük kaliteli modüller yüzünden olabilir.<br/>Lütfen Riru ve LSPosed dışında bütün modülleri devre dışı bırakmayı deneyin veya geliştiricilere tam bir hata kaydı gönderin.]]></string>
     <string name="system_prop_incorrect_summary">Sistem desteği yanlış</string>
