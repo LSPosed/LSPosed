@@ -24,24 +24,24 @@
     <string name="Modules">Modüller</string>
     <plurals name="modules_enabled_count">
         <item quantity="one">%d modül etkin</item>
-        <item quantity="other">%d modül etkin</item>
+        <item quantity="other">%d modülleri etkin</item>
     </plurals>
     <string name="Logs">Günlükler</string>
     <string name="Settings">Ayarlar</string>
     <string name="feedback_or_suggestion">Geri bildirim veya öneri</string>
     <string name="About">Hakkında</string>
-    <string name="report_issue">Hata raporla</string>
+    <string name="report_issue">Hata bildir</string>
     <string name="module_repo">Modül deposu</string>
     <string name="module_repo_loading">Yükleniyor…</string>
     <string name="module_repo_up_to_date">Bütün modüller güncel</string>
-    <string name="module_repo_published_time">%syayınlandı</string>
-    <string name="module_repo_updated_time">%sgüncellendi</string>
+    <string name="module_repo_published_time">%s yayınlandı</string>
+    <string name="module_repo_updated_time">%s güncellendi</string>
     <plurals name="module_repo_upgradable">
-        <item quantity="one">%d modül güncellenebilir</item>
-        <item quantity="other">%d modül güncellenebilir</item>
+        <item quantity="one">%d modülü güncellenebilir</item>
+        <item quantity="other">%d modülleri güncellenebilir</item>
     </plurals>
-    <string name="about_view_source_code"><![CDATA[%1$s adresindeki kaynak kodunu görüntüle<br/>%2$s kanalımıza katılın]]></string>
-    <string name="translators" comment="Dear translators, please add your home page here following the format. There can be more than one translator. So feel free to append yourself.">Bedircan AYAYDIN, Furkan KARCIOĞLU, Ahmet AÇIKGÖZ</string>
+    <string name="about_view_source_code"><![CDATA[%1$s adresinden kaynak kodu görüntüleyin<br/>%2$s kanalımıza katılın]]></string>
+    <string name="translators" comment="Dear translators, please add your home page here following the format. There can be more than one translator. So feel free to append yourself.">Bedircan AYAYDIN, Furkan KARCIOĞLU, Ahmet AÇIKGÖZ, Sir-C</string>
     <string name="install">Yükle</string>
     <string name="install_summary">LSPosed\'i yüklemek için dokunun</string>
     <string name="not_installed">Yüklenmedi</string>
@@ -49,7 +49,7 @@
     <string name="activated">Aktif edildi</string>
     <string name="partial_activated">Kısmen etkinleştirildi</string>
     <string name="selinux_policy_not_loaded_summary">SEPolicy düzgün yüklenmemiş</string>
-    <string name="selinux_policy_not_loaded"><![CDATA[SEPolicy düzgün yüklenmemiş, System Framework\'u bağlayan modüller çalışmayacaktır.<br/>Lütfen bunu <a href="https://github.com/topjohnwu/Magisk/issues"><b>Magisk</b></a> geliştiricisine rapor edin.]]></string>
+    <string name="selinux_policy_not_loaded"><![CDATA[SEPolicy düzgün yüklenmemiş, System Framework'u bağlayan modüller çalışmayacaktır.<br/>Lütfen bunu <a href="https://github.com/topjohnwu/Magisk/issues"><b>Magisk</b></a> geliştiricisine rapor edin.]]></string>
     <string name="system_inject_fail_summary">Sistem Çerçevesi enjeksiyonu başarısız oldu</string>
     <string name="system_inject_fail"><![CDATA[Bu nadiren yaşanır ve <b>Magisk</b> veya düşük kaliteli modüller yüzünden olabilir.<br/>Lütfen Riru ve LSPosed dışında bütün modülleri devre dışı bırakmayı deneyin veya geliştiricilere tam bir hata kaydı gönderin.]]></string>
     <string name="system_prop_incorrect_summary">Sistem desteği yanlış</string>
@@ -64,13 +64,13 @@
     <string name="info_device">Cihaz</string>
     <string name="info_system_abi">Sistem ABI\'si</string>
     <string name="info_api">Enjeksiyon Arayüzü</string>
-    <string name="info_dex2oat_wrapper">Dex Optimize Edici Sarıcı</string>
+    <string name="info_dex2oat_wrapper">Dex Optimize Edici Sarıcısı</string>
     <string name="supported">Desteklenen</string>
-    <string name="unsupported">desteklenmiyor</string>
+    <string name="unsupported">Desteklenmiyor</string>
     <string name="android_version_unsatisfied">Android sürümü tatmin edici değil</string>
     <string name="crashed">çöktü</string>
-    <string name="mount_failed">Montaj başarısız</string>
-    <string name="selinux_permissive">SELinux izinlidir</string>
+    <string name="mount_failed">Bağlama başarısız</string>
+    <string name="selinux_permissive">SELinux\'a izin verildi</string>
     <string name="sepolicy_incorrect">SELinux politikası yanlış</string>
     <string name="parasitic_recommend">Parazit Yönetici Önerilir</string>
     <string name="parasitic_recommend_summary">LSPosed şu an sisteme parazit olarak yerleşip denetlemeleri önlemeyi destekliyor. Parazit yönetici kısayolunu ana ekrana ekledikten sonra güvenle bu yöneticiyi kaldırabilirsiniz. Eğer eski yöneticiyi geri isterseniz /data/adb/lspd/manager.apk konumunda bulabilirsiniz.</string>
