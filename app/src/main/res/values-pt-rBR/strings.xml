@@ -235,7 +235,7 @@
     <string name="color_brown">Marrom</string>
     <string name="color_blue_grey">Azul-acinzentado</string>
     <plurals name="module_release_assets_download_count">
-        <item quantity="one">%d descarregar</item>
-        <item quantity="other">%d transferências</item>
+        <item quantity="one">%d Descarregar</item>
+        <item quantity="other">%d Transferências</item>
     </plurals>
 </resources>
