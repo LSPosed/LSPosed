@@ -29,10 +29,10 @@
     <string name="Logs">Logs</string>
     <string name="Settings">Settings</string>
     <string name="feedback_or_suggestion">Terugvoer of voorstel</string>
-    <string name="About">上下文</string>
+    <string name="About">Oor</string>
     <string name="report_issue">Rapporteer probleem</string>
-    <string name="module_repo">上下文</string>
-    <string name="module_repo_loading">正在加載…</string>
+    <string name="module_repo">Bewaarplek</string>
+    <string name="module_repo_loading">Laai…</string>
     <string name="module_repo_up_to_date">Alle modules op datum</string>
     <string name="module_repo_published_time">Published at %s</string>
     <string name="module_repo_updated_time">Opgedateer op %s</string>
