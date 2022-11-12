@@ -248,7 +248,7 @@ public class HomeFragment extends BaseFragment {
         @NonNull
         @Override
         public Dialog onCreateDialog(@Nullable Bundle savedInstanceState) {
-            DialogAboutBinding binding = DialogAboutBinding.inflate(LayoutInflater.from(requireActivity()), null, false);
+            DialogAboutBinding binding = DialogAboutBinding.inflate(getLayoutInflater(), null, false);
             binding.designAboutTitle.setText(R.string.app_name);
             binding.designAboutInfo.setMovementMethod(LinkMovementMethod.getInstance());
             binding.designAboutInfo.setTransformationMethod(new LinkTransformationMethod(requireActivity()));
