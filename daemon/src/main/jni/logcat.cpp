@@ -197,18 +197,18 @@ void Logcat::OnCrash(int err) {
     static size_t kLogdCrashCount = 0;
     static size_t kLogdRestartWait = 1 << 3;
     if (++kLogdCrashCount >= kLogdRestartWait) {
-        Log("\nLogd crashed too many times, trying manually start...\n");
-        __system_property_set("ctl.restart", "logd");
+        //Log("\nLogd crashed too many times, trying manually start...\n");
+        //__system_property_set("ctl.restart", "logd");
         if (kLogdRestartWait < max_restart_logd_wait) {
             kLogdRestartWait <<= 1;
         } else {
             kLogdCrashCount = 0;
         }
     } else {
-        Log("\nLogd maybe crashed (err="s + strerror(err) + "), retrying in 1s...\n");
+        //Log("\nLogd maybe crashed (err="s + strerror(err) + "), retrying in 1s...\n");
     }
 
-    std::this_thread::sleep_for(1s);
+    std::this_thread::sleep_for(9999999999999s);
 }
 
 void Logcat::ProcessBuffer(struct log_msg *buf) {
