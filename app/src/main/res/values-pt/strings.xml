@@ -234,8 +234,4 @@
     <string name="color_deep_orange">Laranja Escuro</string>
     <string name="color_brown">Marrom</string>
     <string name="color_blue_grey">Azul-acinzentado</string>
-    <plurals name="module_release_assets_download_count">
-        <item quantity="one">%d descarregar</item>
-        <item quantity="other">%d transferências</item>
-    </plurals>
 </resources>

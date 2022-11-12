@@ -232,7 +232,4 @@
     <string name="color_deep_orange">짙은 주황</string>
     <string name="color_brown">갈색</string>
     <string name="color_blue_grey">청회색</string>
-    <plurals name="module_release_assets_download_count">
-        <item quantity="other">%d 다운로드</item>
-    </plurals>
 </resources>

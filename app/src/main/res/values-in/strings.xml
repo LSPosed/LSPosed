@@ -232,7 +232,4 @@
     <string name="color_deep_orange">Oranye gelap</string>
     <string name="color_brown">Coklat</string>
     <string name="color_blue_grey">Abu-abu kebiruan</string>
-    <plurals name="module_release_assets_download_count">
-        <item quantity="other">%d unduhan</item>
-    </plurals>
 </resources>

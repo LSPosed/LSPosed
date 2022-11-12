@@ -234,8 +234,4 @@
     <string name="color_deep_orange">Наситено оранжево</string>
     <string name="color_brown">Кафяв</string>
     <string name="color_blue_grey">Синьо сиво</string>
-    <plurals name="module_release_assets_download_count">
-        <item quantity="one">%d изтегляне</item>
-        <item quantity="other">%d Изтегляния</item>
-    </plurals>
 </resources>

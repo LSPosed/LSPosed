@@ -239,10 +239,4 @@
     <string name="color_deep_orange">כתום עמוק</string>
     <string name="color_brown">חום</string>
     <string name="color_blue_grey">כחול אפור</string>
-    <plurals name="module_release_assets_download_count">
-        <item quantity="one">%d הורדה</item>
-        <item quantity="two">%d הורדות</item>
-        <item quantity="many">%d הורדות</item>
-        <item quantity="other">%d הורדות</item>
-    </plurals>
 </resources>

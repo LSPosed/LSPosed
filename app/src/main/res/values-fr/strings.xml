@@ -235,8 +235,4 @@ https://github.com/tclement0922</string>
     <string name="color_deep_orange">Orange foncé</string>
     <string name="color_brown">Marron</string>
     <string name="color_blue_grey">Bleu grisâtre</string>
-    <plurals name="module_release_assets_download_count">
-        <item quantity="one">%d téléchargé</item>
-        <item quantity="other">%d téléchargés</item>
-    </plurals>
 </resources>

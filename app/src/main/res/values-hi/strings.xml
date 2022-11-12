@@ -234,8 +234,4 @@
     <string name="color_deep_orange">गहरा नारंगी</string>
     <string name="color_brown">भूरा</string>
     <string name="color_blue_grey">नीला ग्रे</string>
-    <plurals name="module_release_assets_download_count">
-        <item quantity="one">%d डाउनलोड</item>
-        <item quantity="other">%d डाउनलोड</item>
-    </plurals>
 </resources>

@@ -238,10 +238,4 @@
     <string name="color_deep_orange">Ciemny pomarańczowy</string>
     <string name="color_brown">Brązowy</string>
     <string name="color_blue_grey">Niebiesko szary</string>
-    <plurals name="module_release_assets_download_count">
-        <item quantity="one">%d pobierz</item>
-        <item quantity="few">%d pobieranie</item>
-        <item quantity="many">%d pobieranie</item>
-        <item quantity="other">%d pobrania</item>
-    </plurals>
 </resources>

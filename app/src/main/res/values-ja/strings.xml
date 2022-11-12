@@ -232,7 +232,4 @@
     <string name="color_deep_orange">深いオレンジ</string>
     <string name="color_brown">茶色</string>
     <string name="color_blue_grey">ブルーグレー</string>
-    <plurals name="module_release_assets_download_count">
-        <item quantity="other">%d ダウンロード</item>
-    </plurals>
 </resources>

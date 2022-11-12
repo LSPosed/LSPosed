@@ -234,8 +234,4 @@
     <string name="color_deep_orange">نارنجی پر رنگ</string>
     <string name="color_brown">قهوه ای</string>
     <string name="color_blue_grey">آبی خاکستری</string>
-    <plurals name="module_release_assets_download_count">
-        <item quantity="one">%d دانلود</item>
-        <item quantity="other">%d دانلود</item>
-    </plurals>
 </resources>

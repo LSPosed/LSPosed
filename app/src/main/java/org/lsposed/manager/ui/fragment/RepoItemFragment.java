@@ -364,14 +364,12 @@ public class RepoItemFragment extends BaseFragment implements RepoLoader.RepoLis
             var displayNames = new CharSequence[assets.size()];
             for (int i = 0; i < assets.size(); i++) {
                 var sb = new SpannableStringBuilder(assets.get(i).getName());
-                var count = assets.get(i).getDownloadCount();
-                var countStr = activity.getResources().getQuantityString(R.plurals.module_release_assets_download_count, count, count);
                 var sizeStr = Formatter.formatShortFileSize(activity, assets.get(i).getSize());
-                sb.append('\n').append(sizeStr).append('/').append(countStr);
+                sb.append('\n').append(sizeStr);
                 final ForegroundColorSpan foregroundColorSpan = new ForegroundColorSpan(ResourceUtils.resolveColor(activity.getTheme(), android.R.attr.textColorSecondary));
                 final RelativeSizeSpan relativeSizeSpan = new RelativeSizeSpan(0.8f);
-                sb.setSpan(foregroundColorSpan, sb.length() - sizeStr.length() - countStr.length() - 1, sb.length(), Spannable.SPAN_EXCLUSIVE_EXCLUSIVE);
-                sb.setSpan(relativeSizeSpan, sb.length() - sizeStr.length() - countStr.length() - 1, sb.length(), Spannable.SPAN_EXCLUSIVE_EXCLUSIVE);
+                sb.setSpan(foregroundColorSpan, sb.length() - sizeStr.length() - 1, sb.length(), Spannable.SPAN_EXCLUSIVE_EXCLUSIVE);
+                sb.setSpan(relativeSizeSpan, sb.length() - sizeStr.length() - 1, sb.length(), Spannable.SPAN_EXCLUSIVE_EXCLUSIVE);
                 displayNames[i] = sb;
             }
             bundle.putCharSequenceArray("names", displayNames);
@@ -447,9 +445,7 @@ public class RepoItemFragment extends BaseFragment implements RepoLoader.RepoLis
                 holder.openInBrowser.setOnClickListener(v -> NavUtil.startURL(requireActivity(), release.getUrl()));
                 List<ReleaseAsset> assets = release.getReleaseAssets();
                 if (assets != null && !assets.isEmpty()) {
-                    holder.viewAssets.setOnClickListener(v -> {
-                        DownloadDialog.create(requireActivity(), getParentFragmentManager(), assets);
-                    });
+                    holder.viewAssets.setOnClickListener(v -> DownloadDialog.create(requireActivity(), getParentFragmentManager(), assets));
                 } else {
                     holder.viewAssets.setVisibility(View.GONE);
                 }
