@@ -447,9 +447,7 @@ public class RepoItemFragment extends BaseFragment implements RepoLoader.RepoLis
                 holder.openInBrowser.setOnClickListener(v -> NavUtil.startURL(requireActivity(), release.getUrl()));
                 List<ReleaseAsset> assets = release.getReleaseAssets();
                 if (assets != null && !assets.isEmpty()) {
-                    holder.viewAssets.setOnClickListener(v -> {
-                        DownloadDialog.create(requireActivity(), getParentFragmentManager(), assets);
-                    });
+                    holder.viewAssets.setOnClickListener(v -> DownloadDialog.create(requireActivity(), getParentFragmentManager(), assets));
                 } else {
                     holder.viewAssets.setVisibility(View.GONE);
                 }
