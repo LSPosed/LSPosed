@@ -33,6 +33,7 @@ import android.content.pm.IPackageManager;
 import android.content.pm.PackageInfo;
 import android.content.pm.PackageInstaller;
 import android.content.pm.PackageManager;
+import android.content.pm.ParceledListSlice;
 import android.content.pm.ResolveInfo;
 import android.content.pm.ServiceInfo;
 import android.content.pm.VersionedPackage;
@@ -107,7 +108,7 @@ public class PackageService {
     public static PackageInfo getPackageInfo(String packageName, int flags, int userId) throws RemoteException {
         IPackageManager pm = getPackageManager();
         if (pm == null) return null;
-        if (Build.VERSION.SDK_INT + Build.VERSION.PREVIEW_SDK_INT > Build.VERSION_CODES.S_V2) {
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.TIRAMISU) {
             return pm.getPackageInfo(packageName, (long) flags, userId);
         }
         return pm.getPackageInfo(packageName, flags, userId);
@@ -128,7 +129,7 @@ public class PackageService {
     public static ApplicationInfo getApplicationInfo(String packageName, int flags, int userId) throws RemoteException {
         IPackageManager pm = getPackageManager();
         if (pm == null) return null;
-        if (Build.VERSION.SDK_INT + Build.VERSION.PREVIEW_SDK_INT > Build.VERSION_CODES.S_V2) {
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.TIRAMISU) {
             return pm.getApplicationInfo(packageName, (long) flags, userId);
         }
         return pm.getApplicationInfo(packageName, flags, userId);
@@ -141,7 +142,13 @@ public class PackageService {
         if (pm == null) return ParcelableListSlice.emptyList();
         for (var user : UserService.getUsers()) {
             // in case pkginfo of other users in primary user
-            res.addAll((Build.VERSION.SDK_INT + Build.VERSION.PREVIEW_SDK_INT > Build.VERSION_CODES.S_V2 ? pm.getInstalledPackages((long) flags, user.id) : pm.getInstalledPackages(flags, user.id))
+            ParceledListSlice<PackageInfo> infos;
+            if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.TIRAMISU) {
+                infos = pm.getInstalledPackages((long) flags, user.id);
+            } else {
+                infos = pm.getInstalledPackages(flags, user.id);
+            }
+            res.addAll(infos
                     .getList().parallelStream()
                     .filter(info -> info.applicationInfo != null && info.applicationInfo.uid / PER_USER_RANGE == user.id)
                     .filter(info -> {
@@ -198,6 +205,7 @@ public class PackageService {
         return pm.isPackageAvailable(packageName, userId) || (ignoreHidden && pm.getApplicationHiddenSettingAsUser(packageName, userId));
     }
 
+    @SuppressWarnings({"ConstantConditions", "SameParameterValue"})
     private static PackageInfo getPackageInfoWithComponents(String packageName, int flags, int userId) throws RemoteException {
         IPackageManager pm = getPackageManager();
         if (pm == null) return null;
@@ -286,7 +294,13 @@ public class PackageService {
     public static ParcelableListSlice<ResolveInfo> queryIntentActivities(Intent intent, String resolvedType, int flags, int userId) throws RemoteException {
         IPackageManager pm = getPackageManager();
         if (pm == null) return null;
-        return new ParcelableListSlice<>((Build.VERSION.SDK_INT + Build.VERSION.PREVIEW_SDK_INT > Build.VERSION_CODES.S_V2 ? pm.queryIntentActivities(intent, resolvedType, (long) flags, userId) : pm.queryIntentActivities(intent, resolvedType, flags, userId)).getList());
+        ParceledListSlice<ResolveInfo> infos;
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.TIRAMISU) {
+            infos = pm.queryIntentActivities(intent, resolvedType, (long) flags, userId);
+        } else {
+            infos = pm.queryIntentActivities(intent, resolvedType, flags, userId);
+        }
+        return new ParcelableListSlice<>(infos.getList());
     }
 
     public static Intent getLaunchIntentForPackage(String packageName) throws RemoteException {
@@ -296,14 +310,14 @@ public class PackageService {
         var ris = queryIntentActivities(intentToResolve, intentToResolve.getType(), 0, 0);
 
         // Otherwise, try to find a main launcher activity.
-        if (ris == null || ris.getList().size() <= 0) {
+        if (ris == null || ris.getList().size() == 0) {
             // reuse the intent instance
             intentToResolve.removeCategory(Intent.CATEGORY_INFO);
             intentToResolve.addCategory(Intent.CATEGORY_LAUNCHER);
             intentToResolve.setPackage(packageName);
             ris = queryIntentActivities(intentToResolve, intentToResolve.getType(), 0, 0);
         }
-        if (ris == null || ris.getList().size() <= 0) {
+        if (ris == null || ris.getList().size() == 0) {
             return null;
         }
         Intent intent = new Intent(intentToResolve);
