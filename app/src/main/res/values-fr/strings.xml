@@ -207,7 +207,7 @@ https://github.com/tclement0922</string>
     <string name="module_release_load_more">Afficher les anciennes versions</string>
     <string name="module_release_no_more">Pas d\’autres versions</string>
     <string name="repo_load_failed">Échec de chargement du dépôt des modules : %s</string>
-    <string name="sort_upgradable_first">Évolutif d\'abord</string>
+    <string name="sort_upgradable_first">Évolutifs en premier</string>
     <!-- CrashReportActivity -->
     <string name="version_mismatch">La version du sous système LSPosed (%1$d) ne correspond pas à celle du gestionnaire (%2$d). Merci de réinstaller LSPosed.</string>
     <string name="manager_crashed">Le gestionnaire a planté</string>
@@ -235,4 +235,8 @@ https://github.com/tclement0922</string>
     <string name="color_deep_orange">Orange foncé</string>
     <string name="color_brown">Marron</string>
     <string name="color_blue_grey">Bleu grisâtre</string>
+    <plurals name="module_release_assets_download_count">
+        <item quantity="one">%d téléchargé</item>
+        <item quantity="other">%d téléchargés</item>
+    </plurals>
 </resources>

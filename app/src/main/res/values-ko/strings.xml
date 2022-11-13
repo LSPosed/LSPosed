@@ -66,7 +66,7 @@
     <string name="supported">지원</string>
     <string name="unsupported">지원되지 않음</string>
     <string name="android_version_unsatisfied">안드로이드 버전 불만족</string>
-    <string name="crashed">추락</string>
+    <string name="crashed">충돌</string>
     <string name="mount_failed">마운트 실패</string>
     <string name="selinux_permissive">SELinux는 허용적입니다.</string>
     <string name="sepolicy_incorrect">SELinux 정책이 잘못되었습니다.</string>
@@ -92,7 +92,7 @@
     <string name="logs_clear_failed_2">로그를 지우지 못했습니다.</string>
     <string name="menu_enable_word_wrap">줄 바꿈</string>
     <string name="enabled_verbose_log">자세한 로그 사용</string>
-    <string name="disabled_verbose_log">자세한 로그 비활성화됨</string>
+    <string name="disabled_verbose_log">자세한 로그 비활성화</string>
     <!-- ModulesActivity -->
     <string name="module_empty_description">(설명 없음)</string>
     <string name="warning_xposed_min_version">이 모듈에는 최신 LSPosed (%d) 버전이 필요하므로 활성화할 수 없습니다.</string>
@@ -110,8 +110,8 @@
     <string name="module_install_failed">모듈 추가 실패</string>
     <string name="install_to_user">%s 사용자에게 설치</string>
     <string name="install_to_user_message">%2$s 사용자에게 %1$s을(를) 설치하시겠습니까? 수동으로 설치하는 것이 좋습니다. LSPosed를 통해 강제로 설치하면 문제가 발생할 수 있습니다.</string>
-    <string name="expand">확장하다</string>
-    <string name="collapse">무너지다</string>
+    <string name="expand">펼치기</string>
+    <string name="collapse">접기</string>
     <!-- AppListActivity -->
     <string name="compile_speed">다시 최적화</string>
     <string name="compile_speed_msg">최적화 중…</string>
@@ -119,10 +119,10 @@
     <string name="app_launch">실행</string>
     <string name="compile_failed">최적화에 실패했거나 반환 값이 비어 있습니다.</string>
     <string name="compile_failed_with_info">최적화 실패: </string>
-    <string name="sort_by_name">응용 프로그램 이름별로 정렬</string>
-    <string name="sort_by_package_name">패키지 이름별로 정렬</string>
-    <string name="sort_by_install_time">설치 시간별로 정렬</string>
-    <string name="sort_by_update_time">업데이트 시간별로 정렬</string>
+    <string name="sort_by_name">애플리케이션 이름</string>
+    <string name="sort_by_package_name">패키지 이름</string>
+    <string name="sort_by_install_time">설치 시간</string>
+    <string name="sort_by_update_time">업데이트 시간</string>
     <string name="sort_reverse">역순</string>
     <string name="menu_show_system_apps">시스템 앱</string>
     <string name="menu_sort">정렬</string>
@@ -130,14 +130,14 @@
     <string name="no_scope_selected">앱을 선택하지 않았습니다. 계속하시겠습니까?</string>
     <string name="menu_show_games">게임</string>
     <string name="menu_show_modules">모듈</string>
-    <string name="menu_show_denylist">거부자</string>
+    <string name="menu_show_denylist">Denylist</string>
     <string name="failed_to_save_scope_list">범위 목록 저장에 실패했습니다.</string>
     <string name="app_version">버전: %1$s</string>
     <string name="use_recommended">권장</string>
     <string name="no_scope_selected_has_recommended">앱을 선택하지 않았습니다. 권장 앱을 선택하시겠습니까?</string>
     <string name="use_recommended_message">권장 앱을 선택하시겠습니까?</string>
     <string name="module_is_not_activated_yet">LSPosed 모듈이 아직 활성화되지 않았습니다.</string>
-    <string name="requested_by_module">권장된</string>
+    <string name="requested_by_module">권장</string>
     <string name="update_available">업데이트 가능: %1$s</string>
     <string name="module_disabled_no_selection">앱을 선택하지 않았기 때문에 %s 모듈이 비활성화되었습니다.</string>
     <string name="android_framework">시스템 프레임워크</string>
@@ -149,7 +149,7 @@
     <string name="force_stop_dlg_text">앱을 강제로 중지하면 잘못된 동작이 발생할 수 있습니다.</string>
     <string name="reboot_required">이 변경 내용을 적용하려면 재부팅해야 합니다.</string>
     <string name="reboot">재부팅</string>
-    <string name="menu_hide">숨다</string>
+    <string name="menu_hide">숨김</string>
     <string name="deny_list">%s 은 거부 목록에 있습니다. 적용되지 않을 수 있습니다.</string>
     <string name="deny_list_info">차단 목록에서</string>
     <!-- ModulesActivity and AppListActivity -->
@@ -157,8 +157,8 @@
     <string name="module_app_info">앱 정보</string>
     <string name="list_empty">¯\\\\_(ツ)_\/¯\n아무것도 없음</string>
     <!-- SettingsActivity -->
-    <string name="settings_group_framework">뼈대</string>
-    <string name="pref_title_disable_verbose_log">상세 로그 사용 안 함</string>
+    <string name="settings_group_framework">프레임워크</string>
+    <string name="pref_title_disable_verbose_log">상세한 로그 비활성화</string>
     <string name="pure_black_dark_theme">블랙 다크 테마</string>
     <string name="pure_black_dark_theme_summary">다크 테마가 활성화된 경우 순수 검은색 테마를 사용합니다.</string>
     <string name="settings_group_theme">테마</string>
@@ -181,12 +181,12 @@
     <string name="settings_language">언어</string>
     <string name="settings_translation_contributors">번역 기여자</string>
     <string name="settings_translation">번역 참여</string>
-    <string name="settings_translation_summary">%s 을 귀하의 언어로 번역하는 데 도움을 주세요.</string>
+    <string name="settings_translation_summary">%s를 귀하의 언어로 번역하는 데 도움을 주세요.</string>
     <string name="pref_title_enable_auto_add_shortcut">자동으로 바로가기 추가</string>
     <string name="create_shortcut_summary">수동으로 기생 관리자 바로 가기 만들기</string>
     <string name="settings_enable_auto_add_shortcut_summary">비 기생 관리자에서 비활성화하면 새 바로 가기가 추가되지 않습니다.</string>
-    <string name="settings_update_channel">채널 업데이트</string>
-    <string name="update_channel_stable">안정적인</string>
+    <string name="settings_update_channel">업데이트 채널</string>
+    <string name="update_channel_stable">안정</string>
     <string name="update_channel_bate">베타</string>
     <string name="update_channel_nightly">야간 빌드</string>
     <string name="pref_title_restrict_classloader">모듈 클래스 로더만 Xposed API를 사용할 수 있습니다.</string>
@@ -213,23 +213,26 @@
     <string name="crash_info_copied">충돌 정보가 클립보드에 복사되었습니다.</string>
     <string name="info_copied">클립보드에 복사됨</string>
     <!-- Colors -->
-    <string name="color_sakura">사쿠라</string>
+    <string name="color_sakura">벚꽃</string>
     <string name="color_red">빨강</string>
-    <string name="color_pink">핑크</string>
+    <string name="color_pink">분홍</string>
     <string name="color_purple">보라</string>
     <string name="color_deep_purple">짙은 보라</string>
-    <string name="color_indigo">남색</string>
+    <string name="color_indigo">군청</string>
     <string name="color_blue">파랑</string>
-    <string name="color_light_blue">라이트 블루</string>
-    <string name="color_cyan">청록색</string>
-    <string name="color_teal">암청색</string>
+    <string name="color_light_blue">밝은 파랑</string>
+    <string name="color_cyan">청록</string>
+    <string name="color_teal">암청</string>
     <string name="color_green">초록</string>
     <string name="color_light_green">연두</string>
     <string name="color_lime">라임</string>
     <string name="color_yellow">노랑</string>
-    <string name="color_amber">호박색</string>
+    <string name="color_amber">호박</string>
     <string name="color_orange">주황색</string>
-    <string name="color_deep_orange">딥 오렌지</string>
+    <string name="color_deep_orange">짙은 주황</string>
     <string name="color_brown">갈색</string>
-    <string name="color_blue_grey">블루 그레이</string>
+    <string name="color_blue_grey">청회색</string>
+    <plurals name="module_release_assets_download_count">
+        <item quantity="other">%d 다운로드</item>
+    </plurals>
 </resources>

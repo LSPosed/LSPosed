@@ -33,6 +33,8 @@
     <string name="module_repo">倉庫</string>
     <string name="module_repo_loading">正在載入…</string>
     <string name="module_repo_up_to_date">所有模組為最新版本</string>
+    <string name="module_repo_published_time">發佈於 %s</string>
+    <string name="module_repo_updated_time">更新於 %s</string>
     <plurals name="module_repo_upgradable">
         <item quantity="other">%d 模組可更新</item>
     </plurals>
@@ -232,4 +234,7 @@
     <string name="color_deep_orange">深橙色</string>
     <string name="color_brown">啡色</string>
     <string name="color_blue_grey">藍灰色</string>
+    <plurals name="module_release_assets_download_count">
+        <item quantity="other">%d 次下載</item>
+    </plurals>
 </resources>

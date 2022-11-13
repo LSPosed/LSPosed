@@ -29,7 +29,7 @@
     <string name="Logs">Дневници</string>
     <string name="Settings">Настройки</string>
     <string name="feedback_or_suggestion">Обратна връзка или предложение</string>
-    <string name="About">За</string>
+    <string name="About">За нас</string>
     <string name="report_issue">Докладване на проблем</string>
     <string name="module_repo">Хранилище</string>
     <string name="module_repo_loading">Зареждане…</string>
@@ -37,13 +37,13 @@
     <string name="module_repo_published_time">Публикувано в %s</string>
     <string name="module_repo_updated_time">Акттуализиран на %s</string>
     <plurals name="module_repo_upgradable">
-        <item quantity="one">%d модул за надграждане</item>
-        <item quantity="other">%d модули, които могат да се надграждат</item>
+        <item quantity="one">%d модула има актуализация</item>
+        <item quantity="other">%d модули с актуализации</item>
     </plurals>
     <string name="about_view_source_code"><![CDATA[Преглед на изходния код в %1$s<br/>Присъединете се към нашия %2$s канал]]></string>
-    <string name="translators" comment="Dear translators, please add your home page here following the format. There can be more than one translator. So feel free to append yourself.">Светлин Карагеоргиев</string>
+    <string name="translators" comment="Dear translators, please add your home page here following the format. There can be more than one translator. So feel free to append yourself.">невалидно</string>
     <string name="install">Инсталиране на</string>
-    <string name="install_summary">Докоснете, за да инсталирате LSPosed</string>
+    <string name="install_summary">Натиснете, за да инсталирате LSPosed</string>
     <string name="not_installed">Не е инсталиран</string>
     <string name="not_install_summary">LSPosed не е инсталиран</string>
     <string name="activated">Активиран</string>
@@ -52,7 +52,7 @@
     <string name="selinux_policy_not_loaded"><![CDATA[Модулите, които закачат System Framework, няма да работят.<br/>Моля, докладвайте това на <a href="https://github.com/topjohnwu/Magisk/issues"><b>Magisk</b></a> разработчика.]]></string>
     <string name="system_inject_fail_summary">Неуспешно инжектиране на системната рамка</string>
     <string name="system_inject_fail"><![CDATA[Това се случва рядко и може да е причинено от <b>Magisk</b> или някои нискокачествени модули на Magisk.<br/>Моля, опитайте се да деактивирате модулите на Magisk, различни от Riru и LSPosed, или изпратете пълен журнал на разработчиците.]]></string>
-    <string name="system_prop_incorrect_summary">Неправилна опора на системата</string>
+    <string name="system_prop_incorrect_summary">Неправилна стойност на системата</string>
     <string name="system_prop_incorrect"><![CDATA[Някои необходими системни свойства са изтрити или променени.<br/>Понякога модулите могат да се обезсилват.]]></string>
     <string name="need_update">Необходимо е да се актуализира</string>
     <string name="please_update_summary">Моля, инсталирайте най-новата версия на LSPosed</string>
@@ -234,4 +234,8 @@
     <string name="color_deep_orange">Наситено оранжево</string>
     <string name="color_brown">Кафяв</string>
     <string name="color_blue_grey">Синьо сиво</string>
+    <plurals name="module_release_assets_download_count">
+        <item quantity="one">%d изтегляне</item>
+        <item quantity="other">%d Изтегляния</item>
+    </plurals>
 </resources>

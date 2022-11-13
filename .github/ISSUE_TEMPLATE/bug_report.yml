@@ -9,7 +9,7 @@ body:
         Thanks for reporting issues of LSPosed!
 
         To make it easier for us to help you please enter detailed information below.
-        
+
         感谢给 LSPosed 汇报问题！
         为了使我们更好地帮助你，请提供以下信息。
         为了防止重复汇报，标题请务必使用英文。
@@ -17,9 +17,9 @@ body:
     attributes:
       label: Steps to reproduce/复现步骤
       placeholder: |
-        1. 
-        2. 
-        3. 
+        1.
+        2.
+        3.
     validations:
       required: true
   - type: textarea
@@ -78,7 +78,7 @@ body:
   - type: textarea
     attributes:
       label: Logs/日志
-      description: For usage issues, please provide the log zip saved from manager; for activation issues, please provide [bugreport](https://developer.android.com/studio/debug/bug-report). Without log, the issue will be closed. /使用问题请提供从管理器保存的日志压缩包；激活问题请提供 [bugreport](https://developer.android.google.cn/studio/debug/bug-report?hl=zh-cn) 日志。无日志提交会被关闭。
-      placeholder: Upload logs by clicking the bar on the bottom. /点击文本框底栏上传日志文件。
+      description: For usage issues, please provide the log zip saved from manager; for activation issues, please provide [bugreport](https://developer.android.com/studio/debug/bug-report). Without logs zip, the issue will be closed. /使用问题请提供从管理器保存的日志压缩包；激活问题请提供 [bugreport](https://developer.android.google.cn/studio/debug/bug-report?hl=zh-cn) 日志。没有日志附件的问题会被关闭。
+      placeholder: Upload logs zip by clicking the bar on the bottom. Upload logs to other websites or using external links is prohibited. /点击文本框底栏上传日志压缩包，禁止上传到其它网站或使用外链提供日志。
     validations:
       required: true

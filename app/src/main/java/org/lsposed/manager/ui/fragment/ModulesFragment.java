@@ -683,21 +683,21 @@ public class ModulesFragment extends BaseFragment implements ModuleUtil.ModuleLi
                             return 1;
                         }
                     }).forEachOrdered(new Consumer<>() {
-                private final HashSet<String> uniquer = new HashSet<>();
+                        private final HashSet<String> uniquer = new HashSet<>();
 
-                @Override
-                public void accept(ModuleUtil.InstalledModule module) {
-                    if (isPick()) {
-                        if (!uniquer.contains(module.packageName)) {
-                            uniquer.add(module.packageName);
-                            if (module.userId != getUser().id)
+                        @Override
+                        public void accept(ModuleUtil.InstalledModule module) {
+                            if (isPick()) {
+                                if (!uniquer.contains(module.packageName)) {
+                                    uniquer.add(module.packageName);
+                                    if (module.userId != getUser().id)
+                                        tmpList.add(module);
+                                }
+                            } else if (module.userId == getUser().id) {
                                 tmpList.add(module);
+                            }
                         }
-                    } else if (module.userId == getUser().id) {
-                        tmpList.add(module);
-                    }
-                }
-            });
+                    });
             String queryStr = searchView != null ? searchView.getQuery().toString() : "";
             searchList = tmpList;
             runOnUiThread(() -> getFilter().filter(queryStr));

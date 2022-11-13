@@ -20,6 +20,7 @@
 package org.lsposed.manager.ui.fragment;
 
 import android.annotation.SuppressLint;
+import android.content.res.Resources;
 import android.graphics.Typeface;
 import android.os.Build;
 import android.os.Bundle;
@@ -259,6 +260,10 @@ public class RepoFragment extends BaseFragment implements RepoLoader.RepoListene
         private List<OnlineModule> fullList, showList;
         private final LabelComparator labelComparator = new LabelComparator();
         private boolean isLoaded = false;
+        private final Resources resources = App.getInstance().getResources();
+        private final String[] channels = resources.getStringArray(R.array.update_channel_values);
+        private String channel;
+        private final RepoLoader repoLoader = RepoLoader.getInstance();
 
         RepoAdapter() {
             fullList = showList = Collections.emptyList();
@@ -285,7 +290,10 @@ public class RepoFragment extends BaseFragment implements RepoLoader.RepoListene
             OnlineModule module = showList.get(position);
             holder.appName.setText(module.getDescription());
             holder.appPackageName.setText(module.getName());
-            var instant = Instant.parse(module.getLatestReleaseTime());
+            Instant instant;
+            channel = App.getPreferences().getString("update_channel", channels[0]);
+            var latestReleaseTime = repoLoader.getLatestReleaseTime(module.getName(), channel);
+            instant = Instant.parse(latestReleaseTime != null ? latestReleaseTime : module.getLatestReleaseTime());
             var formatter = DateTimeFormatter.ofLocalizedDate(FormatStyle.SHORT)
                     .withLocale(App.getLocale()).withZone(ZoneId.systemDefault());
             holder.publishedTime.setText(String.format(getString(R.string.module_repo_updated_time), formatter.format(instant)));
@@ -343,10 +351,11 @@ public class RepoFragment extends BaseFragment implements RepoLoader.RepoListene
         public void setData(Collection<OnlineModule> modules) {
             if (modules == null) return;
             setLoaded(null, false);
+            channel = App.getPreferences().getString("update_channel", channels[0]);
             int sort = App.getPreferences().getInt("repo_sort", 0);
             boolean upgradableFirst = App.getPreferences().getBoolean("upgradable_first", true);
             ConcurrentHashMap<String, Boolean> upgradable = new ConcurrentHashMap<>();
-            fullList = modules.parallelStream().filter((onlineModule -> !onlineModule.isHide() && !onlineModule.getReleases().isEmpty()))
+            fullList = modules.parallelStream().filter((onlineModule -> !onlineModule.isHide() && !(repoLoader.getReleases(onlineModule.getName()) != null && repoLoader.getReleases(onlineModule.getName()).isEmpty())))
                     .sorted((a, b) -> {
                         if (upgradableFirst) {
                             var aUpgrade = upgradable.computeIfAbsent(a.getName(), n -> getUpgradableVer(a) != null);
@@ -357,7 +366,7 @@ public class RepoFragment extends BaseFragment implements RepoLoader.RepoListene
                         if (sort == 0) {
                             return labelComparator.compare(a.getDescription(), b.getDescription());
                         } else {
-                            return Instant.parse(b.getLatestReleaseTime()).compareTo(Instant.parse(a.getLatestReleaseTime()));
+                            return Instant.parse(repoLoader.getLatestReleaseTime(b.getName(), channel)).compareTo(Instant.parse(repoLoader.getLatestReleaseTime(a.getName(), channel)));
                         }
                     }).collect(Collectors.toList());
             String queryStr = searchView != null ? searchView.getQuery().toString() : "";

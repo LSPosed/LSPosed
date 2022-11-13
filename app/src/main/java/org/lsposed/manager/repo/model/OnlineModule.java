@@ -20,6 +20,8 @@
 
 package org.lsposed.manager.repo.model;
 
+import androidx.annotation.Nullable;
+
 import com.google.gson.annotations.Expose;
 import com.google.gson.annotations.SerializedName;
 
@@ -49,9 +51,27 @@ public class OnlineModule {
     @SerializedName("latestReleaseTime")
     @Expose
     private String latestReleaseTime;
+    @SerializedName("latestBetaRelease")
+    @Expose
+    private String latestBetaRelease;
+    @SerializedName("latestBetaReleaseTime")
+    @Expose
+    private String latestBetaReleaseTime;
+    @SerializedName("latestSnapshotRelease")
+    @Expose
+    private String latestSnapshotRelease;
+    @SerializedName("latestSnapshotReleaseTime")
+    @Expose
+    private String latestSnapshotReleaseTime;
     @SerializedName("releases")
     @Expose
     private List<Release> releases = new ArrayList<>();
+    @SerializedName("betaReleases")
+    @Expose
+    private final List<Release> betaReleases = new ArrayList<>();
+    @SerializedName("snapshotReleases")
+    @Expose
+    private final List<Release> snapshotReleases = new ArrayList<>();
     @SerializedName("readme")
     @Expose
     private String readme;
@@ -84,6 +104,7 @@ public class OnlineModule {
     private Integer stargazerCount;
     public boolean releasesLoaded = false;
 
+    @Nullable
     public String getName() {
         return name;
     }
@@ -92,6 +113,7 @@ public class OnlineModule {
         this.name = name;
     }
 
+    @Nullable
     public String getDescription() {
         return description;
     }
@@ -100,6 +122,7 @@ public class OnlineModule {
         this.description = description;
     }
 
+    @Nullable
     public String getUrl() {
         return url;
     }
@@ -108,6 +131,7 @@ public class OnlineModule {
         this.url = url;
     }
 
+    @Nullable
     public String getHomepageUrl() {
         return homepageUrl;
     }
@@ -116,6 +140,7 @@ public class OnlineModule {
         this.homepageUrl = homepageUrl;
     }
 
+    @Nullable
     public List<Collaborator> getCollaborators() {
         return collaborators;
     }
@@ -124,10 +149,12 @@ public class OnlineModule {
         this.collaborators = collaborators;
     }
 
+    @Nullable
     public List<Release> getReleases() {
         return releases;
     }
 
+    @Nullable
     public String getLatestReleaseTime() {
         return latestReleaseTime;
     }
@@ -136,6 +163,7 @@ public class OnlineModule {
         this.releases = releases;
     }
 
+    @Nullable
     public String getReadme() {
         return readme;
     }
@@ -144,6 +172,7 @@ public class OnlineModule {
         this.readme = readme;
     }
 
+    @Nullable
     public String getReadmeHTML() {
         return readmeHTML;
     }
@@ -152,7 +181,7 @@ public class OnlineModule {
         this.readmeHTML = readmeHTML;
     }
 
-
+    @Nullable
     public String getSummary() {
         return summary;
     }
@@ -161,6 +190,7 @@ public class OnlineModule {
         this.summary = summary;
     }
 
+    @Nullable
     public List<String> getScope() {
         return scope;
     }
@@ -169,6 +199,7 @@ public class OnlineModule {
         this.scope = scope;
     }
 
+    @Nullable
     public String getSourceUrl() {
         return sourceUrl;
     }
@@ -185,6 +216,7 @@ public class OnlineModule {
         this.hide = hide;
     }
 
+    @Nullable
     public List<Object> getAdditionalAuthors() {
         return additionalAuthors;
     }
@@ -193,6 +225,7 @@ public class OnlineModule {
         this.additionalAuthors = additionalAuthors;
     }
 
+    @Nullable
     public String getUpdatedAt() {
         return updatedAt;
     }
@@ -201,6 +234,7 @@ public class OnlineModule {
         this.updatedAt = updatedAt;
     }
 
+    @Nullable
     public String getCreatedAt() {
         return createdAt;
     }
@@ -209,6 +243,7 @@ public class OnlineModule {
         this.createdAt = createdAt;
     }
 
+    @Nullable
     public Integer getStargazerCount() {
         return stargazerCount;
     }
@@ -217,11 +252,42 @@ public class OnlineModule {
         this.stargazerCount = stargazerCount;
     }
 
+    @Nullable
     public String getLatestRelease() {
         return latestRelease;
     }
 
     public void setLatestRelease(String latestRelease) {
         this.latestRelease = latestRelease;
+    }
+
+    @Nullable
+    public String getLatestBetaRelease() {
+        return latestBetaRelease;
+    }
+
+    @Nullable
+    public String getLatestBetaReleaseTime() {
+        return latestBetaReleaseTime;
+    }
+
+    @Nullable
+    public String getLatestSnapshotRelease() {
+        return latestSnapshotRelease;
+    }
+
+    @Nullable
+    public String getLatestSnapshotReleaseTime() {
+        return latestSnapshotReleaseTime;
+    }
+
+    @Nullable
+    public List<Release> getBetaReleases() {
+        return betaReleases;
+    }
+
+    @Nullable
+    public List<Release> getSnapshotReleases() {
+        return snapshotReleases;
     }
 }

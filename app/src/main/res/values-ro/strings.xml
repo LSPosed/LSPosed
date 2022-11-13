@@ -236,4 +236,9 @@
     <string name="color_deep_orange">Portocaliu închis</string>
     <string name="color_brown">Maro</string>
     <string name="color_blue_grey">Albastru gri</string>
+    <plurals name="module_release_assets_download_count">
+        <item quantity="one">%d descărcați</item>
+        <item quantity="few">%d descărcări</item>
+        <item quantity="other">%d descărcări</item>
+    </plurals>
 </resources>

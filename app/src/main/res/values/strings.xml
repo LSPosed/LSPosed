@@ -218,7 +218,6 @@
     <!-- CrashReportActivity -->
     <string name="version_mismatch">The version of the LSPosed framework (%1$d) does not match manager (%2$d). Please reinstall LSPosed.</string>
     <string name="manager_crashed">Manager crashed</string>
-    <string name="manager_crashed_info">report this to </string>
     <string name="send_crash_info">Send crash info</string>
     <string name="crash_info_copied">Crash info copied to clipboard</string>
     <string name="info_copied">Copied to clipboard</string>
@@ -243,4 +242,8 @@
     <string name="color_deep_orange">Deep orange</string>
     <string name="color_brown">Brown</string>
     <string name="color_blue_grey">Blue grey</string>
+    <plurals name="module_release_assets_download_count">
+        <item quantity="one">%d download</item>
+        <item quantity="other">%d downloads</item>
+    </plurals>
 </resources>

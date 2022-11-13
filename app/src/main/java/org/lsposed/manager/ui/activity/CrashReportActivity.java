@@ -23,13 +23,15 @@ package org.lsposed.manager.ui.activity;
 import android.content.ClipData;
 import android.content.ClipboardManager;
 import android.content.Intent;
+import android.content.res.Resources;
 import android.os.Build;
 import android.os.Bundle;
 import android.widget.Toast;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
-import androidx.appcompat.app.AppCompatActivity;
+
+import com.google.android.material.color.DynamicColors;
 
 import org.lsposed.manager.BuildConfig;
 import org.lsposed.manager.R;
@@ -39,8 +41,9 @@ import org.lsposed.manager.util.NavUtil;
 import java.time.LocalDateTime;
 
 import rikka.material.app.LocaleDelegate;
+import rikka.material.app.MaterialActivity;
 
-public class CrashReportActivity extends AppCompatActivity {
+public class CrashReportActivity extends MaterialActivity {
     ActivityCrashReportBinding binding;
 
     @Override
@@ -59,13 +62,20 @@ public class CrashReportActivity extends AppCompatActivity {
             var clipboard = getSystemService(ClipboardManager.class);
             //Are there any devices without clipboard...?
             if (clipboard != null) {
-                ClipData clip = ClipData.newPlainText("LSPManagerCrashInfo", getAllErrorDetailsFromIntent(getIntent()));
+                ClipData clip = ClipData.newPlainText("LSPManagerCrashInfo",
+                        getAllErrorDetailsFromIntent(getIntent()));
                 clipboard.setPrimaryClip(clip);
                 Toast.makeText(this, R.string.crash_info_copied, Toast.LENGTH_LONG).show();
             }
             NavUtil.startURL(this, "https://github.com/LSPosed/LSPosed/issues");
         });
 
+    }
+
+    @Override
+    public void onApplyUserThemeResource(@NonNull Resources.Theme theme, boolean isDecorView) {
+        if (!DynamicColors.isDynamicColorAvailable())
+            theme.applyStyle(R.style.ThemeOverlay_MaterialBlue, true);
     }
 
     public String getAllErrorDetailsFromIntent(@NonNull Intent intent) {

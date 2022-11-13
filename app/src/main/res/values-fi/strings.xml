@@ -41,6 +41,7 @@
         <item quantity="other">%d moduulia päivitettävissä</item>
     </plurals>
     <string name="about_view_source_code"><![CDATA[Näytä lähdekoodi %1$s<br/>Liity kanavaamme %2$s]]></string>
+    <string name="translators" comment="Dear translators, please add your home page here following the format. There can be more than one translator. So feel free to append yourself.">tyhjä</string>
     <string name="install">Asenna</string>
     <string name="install_summary">Napauta asentaaksesi LSPosed</string>
     <string name="not_installed">Ei asennettu</string>
@@ -233,4 +234,8 @@
     <string name="color_deep_orange">Syvä oranssi</string>
     <string name="color_brown">Ruskea</string>
     <string name="color_blue_grey">Sininen harmaa</string>
+    <plurals name="module_release_assets_download_count">
+        <item quantity="one">%d lataa</item>
+        <item quantity="other">%d lataukset</item>
+    </plurals>
 </resources>

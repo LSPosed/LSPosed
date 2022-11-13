@@ -8,12 +8,15 @@ on:
 
 jobs:
   build:
-    runs-on: ubuntu-20.04
-    if: ${{ !startsWith(github.event.head_commit.message, '[skip ci]') }}
-
+    runs-on: ubuntu-latest
+    env:
+      CCACHE_COMPILERCHECK: "%compiler% -dumpmachine; %compiler% -dumpversion"
+      CCACHE_NOHASHDIR: "true"
+      CCACHE_MAXSIZE: "1G"
+      CCACHE_HARDLINK: "true"
     steps:
     - name: Checkout
-      uses: actions/checkout@v2
+      uses: actions/checkout@v3
       with:
         submodules: 'recursive'
         fetch-depth: 0
@@ -27,18 +30,14 @@ jobs:
           echo androidStoreFile='key.jks' >> gradle.properties
           echo ${{ secrets.KEY_STORE }} | base64 --decode > key.jks
         fi
-    - name: Cache Gradle Dependencies
-      uses: actions/cache@v2
+    - name: Setup Java
+      uses: actions/setup-java@v3
       with:
-        path: |
-          ~/.gradle/caches
-          ~/.gradle/wrapper
-          !~/.gradle/caches/build-cache-*
-        key: gradle-deps-core-${{ hashFiles('**/build.gradle.kts') }}
-        restore-keys: |
-          gradle-deps
+        distribution: 'temurin'
+        java-version: '17'
+        cache: 'gradle'
     - name: Cache Gradle Build
-      uses: actions/cache@v2
+      uses: actions/cache@v3
       with:
         path: |
           ~/.gradle/caches/build-cache-*
@@ -46,24 +45,11 @@ jobs:
         key: gradle-builds-core-${{ github.sha }}
         restore-keys: |
           gradle-builds
-    - name: Cache native build
-      uses: actions/cache@v2
+    - name: Set up ccache
+      uses: hendrikmuhs/ccache-action@v1.2
       with:
-        path: |
-          ~/.ccache
-          magisk-loader/build/.lto-cache
-          daemon/build/.lto-cache
-          dex2oat/build/.lto-cache
-        key: native-cache-${{ github.sha }}
-        restore-keys: native-cache-
-    - name: Install dep
-      run: |
-        sudo apt-get install -y ccache
-        ccache -o max_size=1G
-        ccache -o hash_dir=false
-        ccache -o compiler_check='%compiler% -dumpmachine; %compiler% -dumpversion'
-        ccache -o hard_link=true
-        ccache -zp
+        key: ${{ runner.os }}
+        restore-keys: ${{ runner.os }}
     - name: Build with Gradle
       run: |
         [ $(du -s ~/.gradle/wrapper | awk '{ print $1 }') -gt 250000 ] && rm -rf ~/.gradle/wrapper/* || true
@@ -75,48 +61,47 @@ jobs:
         echo 'android.native.buildOutput=verbose' >> gradle.properties
         echo 'buildCache { local { removeUnusedEntriesAfterDays = 1 } }' >> settings.gradle.kts
         ./gradlew zipAll
-        ccache -s
     - name: Prepare artifact
       if: success()
       id: prepareArtifact
       run: |
-        riruReleaseName=`ls magisk-loader/release/LSPosed-v*-riru-release.zip | awk -F '(/|.zip)' '{print $3}'` && echo "::set-output name=riruReleaseName::$riruReleaseName"
-        riruDebugName=`ls magisk-loader/release/LSPosed-v*-riru-debug.zip | awk -F '(/|.zip)' '{print $3}'` && echo "::set-output name=riruDebugName::$riruDebugName"
-        zygiskReleaseName=`ls magisk-loader/release/LSPosed-v*-zygisk-release.zip | awk -F '(/|.zip)' '{print $3}'` && echo "::set-output name=zygiskReleaseName::$zygiskReleaseName"
-        zygiskDebugName=`ls magisk-loader/release/LSPosed-v*-zygisk-debug.zip | awk -F '(/|.zip)' '{print $3}'` && echo "::set-output name=zygiskDebugName::$zygiskDebugName"
+        riruReleaseName=`ls magisk-loader/release/LSPosed-v*-riru-release.zip | awk -F '(/|.zip)' '{print $3}'` && echo "riruReleaseName=$riruReleaseName" >> $GITHUB_OUTPUT
+        riruDebugName=`ls magisk-loader/release/LSPosed-v*-riru-debug.zip | awk -F '(/|.zip)' '{print $3}'` && echo "riruDebugName=$riruDebugName" >> $GITHUB_OUTPUT
+        zygiskReleaseName=`ls magisk-loader/release/LSPosed-v*-zygisk-release.zip | awk -F '(/|.zip)' '{print $3}'` && echo "zygiskReleaseName=$zygiskReleaseName" >> $GITHUB_OUTPUT
+        zygiskDebugName=`ls magisk-loader/release/LSPosed-v*-zygisk-debug.zip | awk -F '(/|.zip)' '{print $3}'` && echo "zygiskDebugName=$zygiskDebugName" >> $GITHUB_OUTPUT
         unzip magisk-loader/release/LSPosed-v*-riru-release.zip -d LSPosed-riru-release
         unzip magisk-loader/release/LSPosed-v*-riru-debug.zip -d LSPosed-riru-debug
         unzip magisk-loader/release/LSPosed-v*-zygisk-release.zip -d LSPosed-zygisk-release
         unzip magisk-loader/release/LSPosed-v*-zygisk-debug.zip -d LSPosed-zygisk-debug
     - name: Upload riru release
-      uses: actions/upload-artifact@v2
+      uses: actions/upload-artifact@v3
       with:
         name: ${{ steps.prepareArtifact.outputs.riruReleaseName }}
         path: './LSPosed-riru-release/*'
     - name: Upload riru debug
-      uses: actions/upload-artifact@v2
+      uses: actions/upload-artifact@v3
       with:
         name: ${{ steps.prepareArtifact.outputs.riruDebugName }}
         path: './LSPosed-riru-debug/*'
     - name: Upload zygisk release
-      uses: actions/upload-artifact@v2
+      uses: actions/upload-artifact@v3
       with:
         name: ${{ steps.prepareArtifact.outputs.zygiskReleaseName }}
         path: './LSPosed-zygisk-release/*'
     - name: Upload zygisk debug
-      uses: actions/upload-artifact@v2
+      uses: actions/upload-artifact@v3
       with:
         name: ${{ steps.prepareArtifact.outputs.zygiskDebugName }}
         path: './LSPosed-zygisk-debug/*'
     - name: Upload mappings
-      uses: actions/upload-artifact@v2
+      uses: actions/upload-artifact@v3
       with:
         name: mappings
         path: |
           magisk-loader/build/outputs/mapping
           app/build/outputs/mapping
     - name: Upload symbols
-      uses: actions/upload-artifact@v2
+      uses: actions/upload-artifact@v3
       with:
         name: symbols
         path: |
@@ -127,6 +112,8 @@ jobs:
       if: ${{ github.event_name != 'pull_request' && success() && github.ref == 'refs/heads/master' }}
       env:
         CHANNEL_ID: ${{ secrets.CHANNEL_ID }}
+        DISCUSSION_ID: ${{ secrets.DISCUSSION_ID }}
+        TOPIC_ID: ${{ secrets.TOPIC_ID }}
         BOT_TOKEN: ${{ secrets.BOT_TOKEN }}
         COMMIT_MESSAGE: ${{ github.event.head_commit.message }}
         COMMIT_URL: ${{ github.event.head_commit.url }}
@@ -139,4 +126,5 @@ jobs:
           export zygiskDebug=$(find $OUTPUT -name "LSPosed-v*-zygisk-debug.zip")
           ESCAPED=`python3 -c 'import json,os,urllib.parse; msg = json.dumps(os.environ["COMMIT_MESSAGE"]); print(urllib.parse.quote(msg if len(msg) <= 1024 else json.dumps(os.environ["COMMIT_URL"])))'`
           curl -v "https://api.telegram.org/bot${BOT_TOKEN}/sendMediaGroup?chat_id=${CHANNEL_ID}&media=%5B%7B%22type%22%3A%22document%22%2C%20%22media%22%3A%22attach%3A%2F%2FriruRelease%22%7D%2C%7B%22type%22%3A%22document%22%2C%20%22media%22%3A%22attach%3A%2F%2FzygiskRelease%22%7D%2C%7B%22type%22%3A%22document%22%2C%20%22media%22%3A%22attach%3A%2F%2FriruDebug%22%7D%2C%7B%22type%22%3A%22document%22%2C%20%22media%22%3A%22attach%3A%2F%2FzygiskDebug%22%2C%22caption%22:${ESCAPED}%7D%5D" -F riruRelease="@$riruRelease" -F riruDebug="@$riruDebug" -F zygiskRelease="@$zygiskRelease" -F zygiskDebug="@$zygiskDebug"
+          curl -v "https://api.telegram.org/bot${BOT_TOKEN}/sendMediaGroup?chat_id=${DISCUSSION_ID}&message_thread_id=${TOPIC_ID}&media=%5B%7B%22type%22%3A%22document%22%2C%20%22media%22%3A%22attach%3A%2F%2FriruRelease%22%7D%2C%7B%22type%22%3A%22document%22%2C%20%22media%22%3A%22attach%3A%2F%2FzygiskRelease%22%7D%2C%7B%22type%22%3A%22document%22%2C%20%22media%22%3A%22attach%3A%2F%2FriruDebug%22%7D%2C%7B%22type%22%3A%22document%22%2C%20%22media%22%3A%22attach%3A%2F%2FzygiskDebug%22%2C%22caption%22:${ESCAPED}%7D%5D" -F riruRelease="@$riruRelease" -F riruDebug="@$riruDebug" -F zygiskRelease="@$zygiskRelease" -F zygiskDebug="@$zygiskDebug"
         fi

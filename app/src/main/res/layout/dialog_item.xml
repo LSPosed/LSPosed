@@ -16,22 +16,13 @@
   ~
   ~ Copyright (C) 2021 LSPosed Contributors
   -->
-<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
-    android:orientation="vertical"
+<com.google.android.material.textview.MaterialTextView xmlns:android="http://schemas.android.com/apk/res/android"
+    android:id="@+id/item"
+    style="@style/TextAppearance.MaterialComponents.Body2"
     android:layout_width="match_parent"
-    android:layout_height="wrap_content">
-
-    <com.google.android.material.textview.MaterialTextView
-        style="@style/DeviceInfoDialogLabel"
-        android:id="@+id/title"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content" />
-
-    <com.google.android.material.textview.MaterialTextView
-        style="@style/DeviceInfoDialogValue"
-        android:id="@+id/value"
-        android:gravity="center_vertical"
-        android:paddingBottom="0dp"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content" />
-</LinearLayout>
+    android:layout_height="wrap_content"
+    android:gravity="center_vertical|start"
+    android:minHeight="?attr/listPreferredItemHeight"
+    android:paddingStart="?attr/listPreferredItemPaddingStart"
+    android:paddingEnd="?attr/listPreferredItemPaddingEnd"
+    android:textAlignment="viewStart" />

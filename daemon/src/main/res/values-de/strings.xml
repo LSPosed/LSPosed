@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
     <!-- Notification -->
-    <string name="module_is_not_activated_yet">Das LSPosed-Modul wurde noch nicht aktiviert</string>
+    <string name="module_is_not_activated_yet">Das Xposed-Modul ist noch nicht aktiviert</string>
     <string name="module_is_not_activated_yet_main_user_detailed">%1$s wurde installiert, ist aber noch nicht aktiviert</string>
     <string name="module_is_not_activated_yet_multi_user_detailed">%1$s wurde unter dem Benutzer %2$sinstalliert, ist aber noch nicht aktiviert</string>
     <string name="xposed_module_updated_notification_title">Xposed-Modul aktualisiert</string>
