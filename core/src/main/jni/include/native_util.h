@@ -33,17 +33,6 @@
 #include <cassert>
 #include "config_bridge.h"
 
-#define _uintval(p)               reinterpret_cast<uintptr_t>(p)
-#define _ptr(p)                   reinterpret_cast<void *>(p)
-#define _align_up(x, n)           (((x) + ((n) - 1)) & ~((n) - 1))
-#define _align_down(x, n)         ((x) & -(n))
-#define _page_size                4096
-#define _page_align(n)            _align_up(static_cast<uintptr_t>(n), _page_size)
-#define _ptr_align(x)             _ptr(_align_down(reinterpret_cast<uintptr_t>(x), _page_size))
-#define _make_rwx(p, n)           ::mprotect(_ptr_align(p), \
-                                              _page_align(_uintval(p) + n) != _page_align(_uintval(p)) ? _page_align(n) + _page_size : _page_align(n), \
-                                              PROT_READ | PROT_WRITE | PROT_EXEC)
-
 namespace lspd {
 
 [[gnu::always_inline]]
@@ -87,7 +76,6 @@ inline bool RegisterNativeMethodsInternal(JNIEnv *env,
   RegisterNativeMethodsInternal(env, GetNativeBridgeSignature() + #class_name, gMethods, arraysize(gMethods))
 
 inline int HookFunction(void *original, void *replace, void **backup) {
-    _make_rwx(original, _page_size);
     if constexpr (isDebug) {
         Dl_info info;
         if (dladdr(original, &info))
@@ -95,7 +83,7 @@ inline int HookFunction(void *original, void *replace, void **backup) {
              info.dli_sname ? info.dli_sname : "(unknown symbol)", info.dli_saddr,
              info.dli_fname ? info.dli_fname : "(unknown file)", info.dli_fbase);
     }
-    return DobbyHook(original, replace, backup);
+    return DobbyHook(original, reinterpret_cast<dobby_dummy_func_t>(replace), reinterpret_cast<dobby_dummy_func_t *>(backup));
 }
 
 inline int UnhookFunction(void *original) {
