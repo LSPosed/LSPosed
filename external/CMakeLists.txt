@@ -64,7 +64,7 @@ set(LIBCXX_FLAGS
         -D__STDC_FORMAT_MACROS
         )
 set(LIBCXX_EXPORT_INCLUDES cxx/include)
-set(LIBCXX_INCLUDES)
+set(LIBCXX_INCLUDES cxx/src)
 
 set(LIBCXXABI_SOURCES
         abort_message.cpp
@@ -75,7 +75,6 @@ set(LIBCXXABI_SOURCES
         cxa_handlers.cpp
         cxa_noexception.cpp
         cxa_thread_atexit.cpp
-        cxa_unexpected.cpp
         cxa_vector.cpp
         cxa_virtual.cpp
         stdlib_exception.cpp
