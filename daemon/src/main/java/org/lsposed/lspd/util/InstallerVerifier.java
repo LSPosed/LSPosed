@@ -1,29 +1,31 @@
 package org.lsposed.lspd.util;
 
+import static org.lsposed.lspd.util.SignInfo.CERTIFICATE;
+
 import com.android.apksig.ApkVerifier;
 
 import java.io.File;
+import java.io.IOException;
 import java.util.Arrays;
-
-import static org.lsposed.lspd.util.SignInfo.CERTIFICATE;
 
 public class InstallerVerifier {
 
-    public static boolean verifyInstallerSignature(String path) {
+    public static void verifyInstallerSignature(String path) throws IOException {
         ApkVerifier verifier = new ApkVerifier.Builder(new File(path))
                 .setMinCheckedPlatformVersion(27)
                 .build();
         try {
             ApkVerifier.Result result = verifier.verify();
             if (!result.isVerified()) {
-                return false;
+                throw new IOException("apk signature not verified");
             }
-            boolean ret = Arrays.equals(result.getSignerCertificates().get(0).getEncoded(), CERTIFICATE);
-            Utils.logI("verifyInstallerSignature: " + ret);
-            return ret;
-        } catch (Throwable t) {
-            Utils.logE("verifyInstallerSignature: ", t);
-            return false;
+            var mainCert = result.getSignerCertificates().get(0);
+            if (!Arrays.equals(mainCert.getEncoded(), CERTIFICATE)) {
+                var dname = mainCert.getSubjectX500Principal().getName();
+                throw new IOException("apk signature mismatch: " + dname);
+            }
+        } catch (Exception t) {
+            throw new IOException(t);
         }
     }
 }
