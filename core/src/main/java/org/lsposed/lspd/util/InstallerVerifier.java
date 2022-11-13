@@ -26,17 +26,15 @@ import de.robv.android.xposed.XposedHelpers;
 
 public class InstallerVerifier {
 
-    public static boolean sendBinderToManager(final ClassLoader classLoader, IBinder binder) {
-        Utils.logI("Found LSPosed Manager");
+    public static void sendBinderToManager(final ClassLoader classLoader, IBinder binder) {
         try {
             var clazz = XposedHelpers.findClass("org.lsposed.manager.Constants", classLoader);
-            var ret = (boolean) XposedHelpers.callStaticMethod(clazz, "setBinder",
+            var ok = (boolean) XposedHelpers.callStaticMethod(clazz, "setBinder",
                     new Class[]{IBinder.class}, binder);
-            Utils.logI("Send binder to LSPosed Manager: " + ret);
-            return ret;
+            if (ok) return;
+            throw new RuntimeException("setBinder: " + false);
         } catch (Throwable t) {
             Utils.logW("Could not send binder to LSPosed Manager", t);
-            return false;
         }
     }
 }

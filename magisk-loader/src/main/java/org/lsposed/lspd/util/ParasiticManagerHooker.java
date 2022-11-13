@@ -141,7 +141,7 @@ public class ParasiticManagerHooker {
                 }
                 if (param.method.getName().equals("scheduleLaunchActivity")) {
                     ActivityInfo aInfo = null;
-                    var parameters = ((Method)param.method).getParameterTypes();
+                    var parameters = ((Method) param.method).getParameterTypes();
                     for (var i = 0; i < parameters.length; ++i) {
                         if (parameters[i] == ActivityInfo.class) {
                             aInfo = (ActivityInfo) param.args[i];
@@ -317,9 +317,8 @@ public class ParasiticManagerHooker {
 
 
     static public boolean start() {
-        try {
-            List<IBinder> binder = new ArrayList<>(1);
-            var managerParcelFd = serviceClient.requestInjectedManagerBinder(binder);
+        List<IBinder> binder = new ArrayList<>(1);
+        try (var managerParcelFd = serviceClient.requestInjectedManagerBinder(binder)) {
             if (binder.size() > 0 && binder.get(0) != null && managerParcelFd != null) {
                 managerFd = managerParcelFd.detachFd();
                 var managerService = ILSPManagerService.Stub.asInterface(binder.get(0));
