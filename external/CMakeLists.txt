@@ -6,9 +6,6 @@ endmacro()
 
 SET_OPTION(DOBBY_GENERATE_SHARED OFF)
 SET_OPTION(Plugin.SymbolResolver OFF)
-if (NOT CMAKE_BUILD_TYPE STREQUAL "Debug")
-    SET_OPTION(DOBBY_DEBUG OFF)
-endif ()
 
 set(LIBCXX_SOURCES
         algorithm.cpp
@@ -67,7 +64,7 @@ set(LIBCXX_FLAGS
         -D__STDC_FORMAT_MACROS
         )
 set(LIBCXX_EXPORT_INCLUDES cxx/include)
-set(LIBCXX_INCLUDES)
+set(LIBCXX_INCLUDES cxx/src)
 
 set(LIBCXXABI_SOURCES
         abort_message.cpp
@@ -78,7 +75,6 @@ set(LIBCXXABI_SOURCES
         cxa_handlers.cpp
         cxa_noexception.cpp
         cxa_thread_atexit.cpp
-        cxa_unexpected.cpp
         cxa_vector.cpp
         cxa_virtual.cpp
         stdlib_exception.cpp
