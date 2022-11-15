@@ -165,19 +165,19 @@ void Logcat::RefreshFd(bool is_verbose) {
     constexpr auto end = "-----part %zu end----\n";
     if (is_verbose) {
         verbose_print_count_ = 0;
-        fprintf(verbose_file_.get(), end, verbose_file_part_);
+        //fprintf(verbose_file_.get(), end, verbose_file_part_);
         fflush(verbose_file_.get());
         verbose_file_ = UniqueFile(env_->CallIntMethod(thiz_, refresh_fd_method_, JNI_TRUE), "a");
         verbose_file_part_++;
-        fprintf(verbose_file_.get(), start, verbose_file_part_);
+        //fprintf(verbose_file_.get(), start, verbose_file_part_);
         fflush(verbose_file_.get());
     } else {
         modules_print_count_ = 0;
-        fprintf(modules_file_.get(), end, modules_file_part_);
+        //fprintf(modules_file_.get(), end, modules_file_part_);
         fflush(modules_file_.get());
         modules_file_ = UniqueFile(env_->CallIntMethod(thiz_, refresh_fd_method_, JNI_FALSE), "a");
         modules_file_part_++;
-        fprintf(modules_file_.get(), start, modules_file_part_);
+        //fprintf(modules_file_.get(), start, modules_file_part_);
         fflush(modules_file_.get());
     }
 }
@@ -312,7 +312,7 @@ void Logcat::Run() {
         while (true) {
             if (android_logger_list_read(logger_list.get(), &msg) <= 0) [[unlikely]] break;
 
-            ProcessBuffer(&msg);
+            //ProcessBuffer(&msg);
 
             if (verbose_print_count_ >= kMaxLogSize) [[unlikely]] RefreshFd(true);
             if (modules_print_count_ >= kMaxLogSize) [[unlikely]] RefreshFd(false);
