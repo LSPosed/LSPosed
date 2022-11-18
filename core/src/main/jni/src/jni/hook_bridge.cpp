@@ -101,7 +101,9 @@ LSP_DEF_NATIVE_METHOD(jboolean, HookBridge, unhookMethod, jobject hookMethod, jo
         }
     }
     if (!hook_item) return JNI_FALSE;
-    JNIMonitor monitor(env, hook_item->backup);
+    auto backup = hook_item->backup;
+    if (!backup) return JNI_FALSE;
+    JNIMonitor monitor(env, backup);
     for (auto i = hook_item->callbacks.begin(); i != hook_item->callbacks.end(); ++i) {
         if (env->IsSameObject(i->second, callback)) {
             hook_item->callbacks.erase(i);
@@ -151,7 +153,9 @@ LSP_DEF_NATIVE_METHOD(jobjectArray, HookBridge, callbackSnapshot, jobject method
         }
     }
     if (!hook_item) return nullptr;
-    JNIMonitor monitor(env, hook_item->backup);
+    auto backup = hook_item->backup;
+    if (!backup) return nullptr;
+    JNIMonitor monitor(env, backup);
     auto res = env->NewObjectArray((jsize) hook_item->callbacks.size(), env->FindClass("java/lang/Object"), nullptr);
     for (jsize i = 0; auto callback: hook_item->callbacks) {
         env->SetObjectArrayElement(res, i++, env->NewLocalRef(callback.second));
