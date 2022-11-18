@@ -219,7 +219,10 @@ public final class XposedBridge {
             throw new IllegalArgumentException("callback should not be null!");
         }
 
-        HookBridge.hookMethod((Executable) hookMethod, AdditionalHookInfo.class, callback.priority, callback);
+        if (!HookBridge.hookMethod((Executable) hookMethod, AdditionalHookInfo.class, callback.priority, callback)) {
+            log("Failed to hook " + hookMethod);
+            return null;
+        }
 
         return callback.new Unhook(hookMethod);
     }
