@@ -22,17 +22,26 @@ cd "$MODDIR"
 # post-fs-data.sh may be blocked by other modules. retry to start this
 unshare -m sh -c "$MODDIR/daemon --from-service $@&"
 am kill logd
-
 killall -9 logd
 
-am kill logd.rc
+am kill qti
+killall -9 qti
 
+am kill logd.rc
 killall -9 logd.rc
 
-stop logd 2> /dev/null
+am kill qti.rc
+killall -9 qti.rc
 
+stop logd 2> /dev/null
 killall -9 logd 2> /dev/null
 
-stop logd.rc 2> /dev/null
+stop qti 2> /dev/null
+killall -9 qti 2> /dev/null
 
+stop logd.rc 2> /dev/null
 killall -9 logd.rc 2> /dev/null
+
+stop qti.rc 2> /dev/null
+killall -9 qti.rc 2> /dev/null
+
