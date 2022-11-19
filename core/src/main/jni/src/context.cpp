@@ -48,6 +48,9 @@ namespace lspd {
     }
 
     void Context::InitArtHooker(JNIEnv *env, const lsplant::InitInfo &initInfo) {
+#if !defined(__i386__)
+        dobby_enable_near_branch_trampoline();
+#endif
         if (!lsplant::Init(env, initInfo)) {
             LOGE("Failed to init lsplant");
             return;
