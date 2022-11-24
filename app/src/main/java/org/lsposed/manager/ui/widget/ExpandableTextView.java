@@ -100,7 +100,7 @@ public class ExpandableTextView extends MaterialTextView {
                 s = expand;
             } else {
                 nextLines = maxLines;
-                end = text.length();
+                end = text.length() + 1;
                 s = collapse;
             }
             sb.clearSpans();
