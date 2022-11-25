@@ -184,7 +184,7 @@ else
 fi
 
 set_perm_recursive "$MODPATH" 0 0 0755 0644
-set_perm_recursive "$MODPATH/bin" 0 0 0755 0755 u:object_r:dex2oat_exec:s0
+set_perm_recursive "$MODPATH/bin" 0 2000 0755 0755 u:object_r:dex2oat_exec:s0
 chmod 0744 "$MODPATH/daemon"
 
 if [ "$(grep_prop ro.maple.enable)" == "1" ] && [ "$FLAVOR" == "zygisk" ]; then
