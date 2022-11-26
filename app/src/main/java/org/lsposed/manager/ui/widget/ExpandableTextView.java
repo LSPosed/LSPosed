@@ -19,7 +19,6 @@
 
 package org.lsposed.manager.ui.widget;
 
-import android.annotation.SuppressLint;
 import android.content.Context;
 import android.graphics.Typeface;
 import android.os.Bundle;
@@ -113,7 +112,6 @@ public class ExpandableTextView extends MaterialTextView {
         return super.onPreDraw();
     }
 
-    @SuppressLint("ClickableViewAccessibility")
     @Override
     public boolean onTouchEvent(@NonNull MotionEvent event) {
         Layout layout = this.getLayout();
@@ -129,12 +127,18 @@ public class ExpandableTextView extends MaterialTextView {
                 if (links.length == 0) {
                     return false;
                 } else {
+                    performClick();
                     return super.onTouchEvent(event);
                 }
             }
         }
 
         return false;
+    }
+
+    @Override
+    public boolean performClick() {
+        return super.performClick();
     }
 
     @Override

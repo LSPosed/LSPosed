@@ -105,9 +105,7 @@ public class Dex2OatService {
     public Dex2OatService() {
         initNative();
         try {
-            Files.walk(Paths.get(magiskPath).resolve("dex2oat")).forEach(path -> {
-                SELinux.setFileContext(path.toString(), "u:object_r:magisk_file:s0");
-            });
+            Files.walk(Paths.get(magiskPath).resolve("dex2oat")).forEach(path -> SELinux.setFileContext(path.toString(), "u:object_r:magisk_file:s0"));
         } catch (IOException e) {
             Log.e(TAG, "Error setting sepolicy", e);
         }
@@ -130,7 +128,7 @@ public class Dex2OatService {
             var devPath = Paths.get(devTmpDir);
             var sockPath = devPath.resolve("dex2oat.sock");
             try {
-                Log.i(TAG, "Daemon start");
+                Log.i(TAG, "Dex2oat wrapper daemon start");
                 if (setSocketCreateContext("u:r:dex2oat:s0")) {
                     Log.d(TAG, "Set socket context to u:r:dex2oat:s0");
                 } else {
@@ -161,7 +159,7 @@ public class Dex2OatService {
                     }
                 }
             } catch (Throwable e) {
-                Log.e(TAG, "Daemon crashed", e);
+                Log.e(TAG, "Dex2oat wrapper daemon crashed", e);
                 try {
                     server.close();
                     Files.delete(sockPath);
