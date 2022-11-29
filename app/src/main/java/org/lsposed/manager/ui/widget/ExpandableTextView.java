@@ -19,6 +19,7 @@
 
 package org.lsposed.manager.ui.widget;
 
+import android.annotation.SuppressLint;
 import android.content.Context;
 import android.graphics.Typeface;
 import android.os.Bundle;
@@ -49,6 +50,7 @@ public class ExpandableTextView extends MaterialTextView {
     private final SpannableString collapse;
     private final SpannableString expand;
     private final SpannableStringBuilder sb = new SpannableStringBuilder();
+    private int lineCount = 0;
 
     public ExpandableTextView(Context context) {
         this(context, null);
@@ -89,29 +91,44 @@ public class ExpandableTextView extends MaterialTextView {
 
     @Override
     public boolean onPreDraw() {
-        var lineCount = getLayout().getLineCount();
+        this.getViewTreeObserver().removeOnPreDrawListener(this);
+        if (lineCount == 0) {
+            lineCount = getLayout().getLineCount();
+        }
         if (lineCount > maxLines) {
-            SpannableString s;
-            int end;
+            int hintTextOffsetEnd;
             if (maxLines == getMaxLines()) {
                 nextLines = lineCount + 1;
-                end = getLayout().getLineStart(getMaxLines() - 1);
-                s = expand;
-            } else {
+                hintTextOffsetEnd = getLayout().getLineStart(getMaxLines() - 1) - 1;
+                sb.clearSpans();
+                sb.clear();
+                sb.append(text, 0, hintTextOffsetEnd);
+                sb.append("\n");
+                sb.append(expand);
+                super.setText(sb, BufferType.NORMAL);
+            } else if (nextLines == getMaxLines()) {
                 nextLines = maxLines;
-                end = text.length() + 1;
-                s = collapse;
+                hintTextOffsetEnd = getLayout().getLineStart(getMaxLines() - 1);
+                sb.clearSpans();
+                sb.clear();
+                sb.append(text, 0, hintTextOffsetEnd);
+                sb.append("\n");
+                sb.append(collapse);
+                super.setText(sb, BufferType.NORMAL);
             }
-            sb.clearSpans();
-            sb.clear();
-            sb.append(text, 0, end - 1);
-            sb.append("\n");
-            sb.append(s);
-            super.setText(sb, BufferType.NORMAL);
         }
         return super.onPreDraw();
     }
 
+    @Override
+    protected void onLayout(boolean changed, int left, int top, int right, int bottom) {
+        super.onLayout(changed, left, top, right, bottom);
+        if (getLayout() != null) {
+            lineCount = getLayout().getLineCount();
+        }
+    }
+
+    @SuppressLint("ClickableViewAccessibility")
     @Override
     public boolean onTouchEvent(@NonNull MotionEvent event) {
         Layout layout = this.getLayout();
@@ -127,18 +144,12 @@ public class ExpandableTextView extends MaterialTextView {
                 if (links.length == 0) {
                     return false;
                 } else {
-                    performClick();
                     return super.onTouchEvent(event);
                 }
             }
         }
 
         return false;
-    }
-
-    @Override
-    public boolean performClick() {
-        return super.performClick();
     }
 
     @Override
