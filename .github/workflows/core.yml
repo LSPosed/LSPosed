@@ -4,6 +4,7 @@ on:
   workflow_dispatch:
   push:
     branches: [ master ]
+    tags: [ v* ]
   pull_request:
 
 jobs:
@@ -21,7 +22,7 @@ jobs:
         submodules: 'recursive'
         fetch-depth: 0
     - name: Write key
-      if: github.event_name != 'pull_request' && github.ref == 'refs/heads/master'
+      if: ${{ ( github.event_name != 'pull_request' && github.ref == 'refs/heads/master' ) || github.ref_type == 'tag' }}
       run: |
         if [ ! -z "${{ secrets.KEY_STORE }}" ]; then
           echo androidStorePassword='${{ secrets.KEY_STORE_PASSWORD }}' >> gradle.properties
@@ -109,7 +110,7 @@ jobs:
           daemon/build/symbols
           dex2oat/build/symbols
     - name: Post to channel
-      if: ${{ github.event_name != 'pull_request' && success() && github.ref == 'refs/heads/master' }}
+      if: ${{ success() && ( ( github.event_name != 'pull_request' && github.ref == 'refs/heads/master' ) || github.ref_type == 'tag' ) }}
       env:
         CHANNEL_ID: ${{ secrets.CHANNEL_ID }}
         DISCUSSION_ID: ${{ secrets.DISCUSSION_ID }}
