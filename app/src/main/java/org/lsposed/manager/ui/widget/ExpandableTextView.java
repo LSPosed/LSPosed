@@ -99,25 +99,25 @@ public class ExpandableTextView extends MaterialTextView {
             int hintTextOffsetEnd;
             if (maxLines == getMaxLines()) {
                 nextLines = lineCount + 1;
-                hintTextOffsetEnd = getLayout().getLineStart(getMaxLines() - 1) - 1;
-                sb.clearSpans();
-                sb.clear();
-                sb.append(text, 0, hintTextOffsetEnd);
-                sb.append("\n");
-                sb.append(expand);
-                super.setText(sb, BufferType.NORMAL);
+                hintTextOffsetEnd = getLayout().getLineStart(getMaxLines() - 1);
+                setTextWithSpan(text, hintTextOffsetEnd - 1, expand);
             } else if (nextLines == getMaxLines()) {
                 nextLines = maxLines;
                 hintTextOffsetEnd = getLayout().getLineStart(getMaxLines() - 1);
-                sb.clearSpans();
-                sb.clear();
-                sb.append(text, 0, hintTextOffsetEnd);
-                sb.append("\n");
-                sb.append(collapse);
-                super.setText(sb, BufferType.NORMAL);
+                setTextWithSpan(text, hintTextOffsetEnd, collapse);
             }
         }
         return super.onPreDraw();
+    }
+
+    private void setTextWithSpan(CharSequence text, int textOffsetEnd,
+                                 SpannableString sbStr) {
+        sb.clearSpans();
+        sb.clear();
+        sb.append(text, 0, textOffsetEnd);
+        sb.append("\n");
+        sb.append(sbStr);
+        super.setText(sb, BufferType.NORMAL);
     }
 
     @Override
