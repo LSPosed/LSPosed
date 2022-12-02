@@ -55,7 +55,7 @@
                 android:layout_height="?actionBarSize"
                 android:elevation="0dp"
                 app:layout_collapseMode="pin"
-                app:logo="@drawable/ic_launcher"
+                app:logo="@drawable/ic_launcher_round"
                 app:titleMarginStart="@dimen/m3_alert_dialog_icon_margin" />
         </com.google.android.material.appbar.CollapsingToolbarLayout>
 
