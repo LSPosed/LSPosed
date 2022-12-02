@@ -33,11 +33,14 @@ import android.net.Uri;
 import android.os.Binder;
 import android.os.Bundle;
 import android.os.IBinder;
+import android.os.RemoteException;
 import android.util.Log;
 
 import org.lsposed.daemon.BuildConfig;
 
 import java.util.Arrays;
+import java.util.List;
+import java.util.function.Consumer;
 
 public class LSPosedService extends ILSPosedService.Stub {
     private static final int AID_NOBODY = 9999;
@@ -77,7 +80,7 @@ public class LSPosedService extends ILSPosedService.Stub {
      * However, PACKAGE_REMOVED will be triggered by `pm hide`, so we use UID_REMOVED instead.
      */
 
-    synchronized public void dispatchPackageChanged(Intent intent) {
+    private void dispatchPackageChanged(Intent intent) {
         if (intent == null) return;
         int uid = intent.getIntExtra(Intent.EXTRA_UID, AID_NOBODY);
         if (uid == AID_NOBODY || uid <= 0) return;
@@ -109,13 +112,15 @@ public class LSPosedService extends ILSPosedService.Stub {
                         isXposedModule = true;
                         broadcastAndShowNotification(moduleName, userId, intent, true);
                     }
-                // Anyway, canceled the notification
-                if (moduleName != null) LSPManagerService.cancelNotification(moduleName, userId);
+                if (moduleName != null) {
+                    LSPNotificationManager.cancelUpdatedNotification(moduleName, userId);
+                }
                 break;
             }
             case Intent.ACTION_PACKAGE_REMOVED:
-                // Anyway, canceled the notification
-                if (moduleName != null) LSPManagerService.cancelNotification(moduleName, userId);
+                if (moduleName != null) {
+                    LSPNotificationManager.cancelUpdatedNotification(moduleName, userId);
+                }
                 break;
             case Intent.ACTION_PACKAGE_ADDED:
             case Intent.ACTION_PACKAGE_CHANGED: {
@@ -159,12 +164,7 @@ public class LSPosedService extends ILSPosedService.Stub {
 
         if (BuildConfig.DEFAULT_MANAGER_PACKAGE_NAME.equals(moduleName) && userId == 0) {
             Log.d(TAG, "Manager updated");
-            try {
-                ConfigManager.getInstance().updateManager(removed);
-                LSPManagerService.createOrUpdateShortcut(false);
-            } catch (Throwable e) {
-                Log.e(TAG, Log.getStackTraceString(e));
-            }
+            ConfigManager.getInstance().updateManager(removed);
         }
     }
 
@@ -183,212 +183,123 @@ public class LSPosedService extends ILSPosedService.Stub {
                     scope.parallelStream().anyMatch(app -> app.packageName.equals("android"));
             boolean enabled = Arrays.asList(enabledModules).contains(packageName);
             if (!(Intent.ACTION_UID_REMOVED.equals(action) || Intent.ACTION_PACKAGE_FULLY_REMOVED.equals(action) || allUsers))
-                LSPManagerService.showNotification(packageName, userId, enabled, systemModule);
+                LSPNotificationManager.notifyModuleUpdated(packageName, userId, enabled, systemModule);
         }
     }
 
-    synchronized public void dispatchUserChanged(Intent intent) {
+    private void dispatchUserChanged(Intent intent) {
         if (intent == null) return;
         int uid = intent.getIntExtra(EXTRA_USER_HANDLE, AID_NOBODY);
         if (uid == AID_NOBODY || uid <= 0) return;
+        LSPManagerService.broadcastIntent(intent);
+    }
+
+    private void dispatchBootCompleted(Intent intent) {
         try {
-            LSPManagerService.broadcastIntent(intent);
-        } catch (Throwable e) {
-            Log.e(TAG, "dispatch user info changed", e);
+            var am = ActivityManagerService.getActivityManager();
+            if (am != null) am.setActivityController(null, false);
+        } catch (RemoteException e) {
+            Log.e(TAG, "setActivityController", e);
+        }
+        var configManager = ConfigManager.getInstance();
+        if (configManager.enableStatusNotification()) {
+            LSPNotificationManager.notifyStatusNotification();
         }
     }
 
-    synchronized public void dispatchUserUnlocked(Intent intent) {
-        try {
-            LSPManagerService.createOrUpdateShortcut(false);
-        } catch (Throwable e) {
-            Log.e(TAG, "dispatch user unlocked", e);
-        }
+    private void dispatchConfigurationChanged(Intent intent) {
+        ConfigFileManager.reloadConfiguration();
     }
 
-    synchronized public void dispatchConfigurationChanged(Intent intent) {
-        try {
-            ConfigFileManager.reloadConfiguration();
-            LSPManagerService.createOrUpdateShortcut(false, false);
-        } catch (Throwable e) {
-            Log.e(TAG, "dispatch configuration changed", e);
-        }
+    private void dispatchSecretCodeReceive(Intent i) {
+        LSPManagerService.openManager(null);
     }
 
-    synchronized public void dispatchSecretCodeReceive() {
-        Intent intent = LSPManagerService.getManagerIntent();
-        try {
-            var userInfo = ActivityManagerService.getCurrentUser();
-            if (userInfo != null) {
-                var userId = userInfo.id;
-                if (userId == 0) {
-                    ActivityManagerService.startActivityAsUserWithFeature("android", null,
-                            intent, intent.getType(), null, null, 0, 0, null, null, userId);
-                    LSPManagerService.createOrUpdateShortcut(false);
+    private void dispatchOpenManager(Intent intent) {
+        LSPManagerService.openManager(intent.getData());
+    }
+
+    private void registerReceiver(List<IntentFilter> filters, String requiredPermission, int userId, Consumer<Intent> task) {
+        var receiver = new IIntentReceiver.Stub() {
+            @Override
+            public void performReceive(Intent intent, int resultCode, String data, Bundle extras, boolean ordered, boolean sticky, int sendingUser) {
+                getExecutorService().submit(() -> task.accept(intent));
+                if (!ordered) return;
+                try {
+                    ActivityManagerService.finishReceiver(this, resultCode, data, extras, false, intent.getFlags());
+                } catch (RemoteException e) {
+                    Log.e(TAG, "finish receiver", e);
                 }
             }
-        } catch (Throwable e) {
-            Log.e(TAG, "dispatch secret code received", e);
+        };
+        try {
+            for (var filter : filters) {
+                ActivityManagerService.registerReceiver("android", null, receiver, filter, requiredPermission, userId, 0);
+            }
+        } catch (RemoteException e) {
+            Log.e(TAG, "register receiver", e);
         }
+    }
+
+    private void registerReceiver(List<IntentFilter> filters, int userId, Consumer<Intent> task) {
+        registerReceiver(filters, null, userId, task);
     }
 
     private void registerPackageReceiver() {
-        try {
-            IntentFilter packageFilter = new IntentFilter();
-            packageFilter.addAction(Intent.ACTION_PACKAGE_ADDED);
-            packageFilter.addAction(Intent.ACTION_PACKAGE_CHANGED);
-            packageFilter.addAction(Intent.ACTION_PACKAGE_FULLY_REMOVED);
-            packageFilter.addDataScheme("package");
+        var packageFilter = new IntentFilter();
+        packageFilter.addAction(Intent.ACTION_PACKAGE_ADDED);
+        packageFilter.addAction(Intent.ACTION_PACKAGE_CHANGED);
+        packageFilter.addAction(Intent.ACTION_PACKAGE_FULLY_REMOVED);
+        packageFilter.addDataScheme("package");
 
-            IntentFilter uidFilter = new IntentFilter();
-            uidFilter.addAction(Intent.ACTION_UID_REMOVED);
+        var uidFilter = new IntentFilter(Intent.ACTION_UID_REMOVED);
 
-            var receiver = new IIntentReceiver.Stub() {
-                @Override
-                public void performReceive(Intent intent, int resultCode, String data, Bundle extras, boolean ordered, boolean sticky, int sendingUser) {
-                    getExecutorService().submit(() -> dispatchPackageChanged(intent));
-                    if (!ordered) return;
-                    try {
-                        ActivityManagerService.finishReceiver(this, resultCode, data, extras, false, intent.getFlags());
-                    } catch (Throwable e) {
-                        Log.e(TAG, "finish receiver", e);
-                    }
-                }
-            };
-
-            ActivityManagerService.registerReceiver("android", null, receiver, packageFilter, null, -1, 0);
-            ActivityManagerService.registerReceiver("android", null, receiver, uidFilter, null, -1, 0);
-        } catch (Throwable e) {
-            Log.e(TAG, "register package receiver", e);
-        }
+        registerReceiver(List.of(packageFilter, uidFilter), -1, this::dispatchPackageChanged);
         Log.d(TAG, "registered package receiver");
     }
 
-    private void registerUnlockReceiver() {
-        try {
-            IntentFilter intentFilter = new IntentFilter();
-            intentFilter.addAction(Intent.ACTION_USER_UNLOCKED);
-
-            ActivityManagerService.registerReceiver("android", null, new IIntentReceiver.Stub() {
-                @Override
-                public void performReceive(Intent intent, int resultCode, String data, Bundle extras, boolean ordered, boolean sticky, int sendingUser) {
-                    getExecutorService().submit(() -> dispatchUserUnlocked(intent));
-                    if (!ordered) return;
-                    try {
-                        ActivityManagerService.finishReceiver(this, resultCode, data, extras, false, intent.getFlags());
-                    } catch (Throwable e) {
-                        Log.e(TAG, "finish receiver", e);
-                    }
-                }
-            }, intentFilter, null, 0, 0);
-        } catch (Throwable e) {
-            Log.e(TAG, "register unlock receiver", e);
-        }
-        Log.d(TAG, "registered unlock receiver");
-    }
-
     private void registerConfigurationReceiver() {
-        try {
-            IntentFilter intentFilter = new IntentFilter();
-            intentFilter.addAction(Intent.ACTION_CONFIGURATION_CHANGED);
+        var intentFilter = new IntentFilter(Intent.ACTION_CONFIGURATION_CHANGED);
 
-            ActivityManagerService.registerReceiver("android", null, new IIntentReceiver.Stub() {
-                @Override
-                public void performReceive(Intent intent, int resultCode, String data, Bundle extras, boolean ordered, boolean sticky, int sendingUser) {
-                    getExecutorService().submit(() -> dispatchConfigurationChanged(intent));
-                    if (!ordered) return;
-                    try {
-                        ActivityManagerService.finishReceiver(this, resultCode, data, extras, false, intent.getFlags());
-                    } catch (Throwable e) {
-                        Log.e(TAG, "finish receiver", e);
-                    }
-                }
-            }, intentFilter, null, 0, 0);
-        } catch (Throwable e) {
-            Log.e(TAG, "register configuration receiver", e);
-        }
+        registerReceiver(List.of(intentFilter), 0, this::dispatchConfigurationChanged);
         Log.d(TAG, "registered configuration receiver");
     }
 
     private void registerSecretCodeReceiver() {
-        try {
-            IntentFilter intentFilter = new IntentFilter();
-            intentFilter.addAction("android.provider.Telephony.SECRET_CODE");
-            intentFilter.addDataAuthority("5776733", null);
-            intentFilter.addDataScheme("android_secret_code");
+        IntentFilter intentFilter = new IntentFilter();
+        intentFilter.addAction("android.provider.Telephony.SECRET_CODE");
+        intentFilter.addAction("android.telephony.action.SECRET_CODE");
+        intentFilter.addDataAuthority("5776733", null);
+        intentFilter.addDataScheme("android_secret_code");
 
-            ActivityManagerService.registerReceiver("android", null, new IIntentReceiver.Stub() {
-                @Override
-                public void performReceive(Intent intent, int resultCode, String data, Bundle extras, boolean ordered, boolean sticky, int sendingUser) {
-                    getExecutorService().submit(() -> dispatchSecretCodeReceive());
-                    if (!ordered) return;
-                    try {
-                        ActivityManagerService.finishReceiver(this, resultCode, data, extras, false, intent.getFlags());
-                    } catch (Throwable e) {
-                        Log.e(TAG, "finish receiver", e);
-                    }
-                }
-            }, intentFilter, null, 0, 0);
-        } catch (Throwable e) {
-            Log.e(TAG, "register secret code receiver", e);
-        }
+        registerReceiver(List.of(intentFilter), 0, this::dispatchSecretCodeReceive);
         Log.d(TAG, "registered secret code receiver");
     }
 
     private void registerBootCompleteReceiver() {
-        try {
-            IntentFilter intentFilter = new IntentFilter();
-            intentFilter.addAction(Intent.ACTION_LOCKED_BOOT_COMPLETED);
+        var intentFilter = new IntentFilter(Intent.ACTION_LOCKED_BOOT_COMPLETED);
 
-            ActivityManagerService.registerReceiver("android", null, new IIntentReceiver.Stub() {
-                @Override
-                public void performReceive(Intent intent, int resultCode, String data, Bundle extras, boolean ordered, boolean sticky, int sendingUser) {
-                    getExecutorService().submit(() -> {
-                        try {
-                            var am = ActivityManagerService.getActivityManager();
-                            if (am != null) am.setActivityController(null, false);
-                        } catch (Throwable e) {
-                            Log.e(TAG, "setActivityController", e);
-                        }
-                    });
-                    if (!ordered) return;
-                    try {
-                        ActivityManagerService.finishReceiver(this, resultCode, data, extras, false, intent.getFlags());
-                    } catch (Throwable e) {
-                        Log.e(TAG, "finish receiver", e);
-                    }
-                }
-            }, intentFilter, null, 0, 0);
-        } catch (Throwable e) {
-            Log.e(TAG, "register boot receiver", e);
-        }
+        registerReceiver(List.of(intentFilter), 0, this::dispatchBootCompleted);
         Log.d(TAG, "registered boot receiver");
     }
 
     private void registerUserChangeReceiver() {
-        try {
-            IntentFilter userFilter = new IntentFilter();
-            userFilter.addAction(ACTION_USER_ADDED);
-            userFilter.addAction(ACTION_USER_REMOVED);
+        var userFilter = new IntentFilter();
+        userFilter.addAction(ACTION_USER_ADDED);
+        userFilter.addAction(ACTION_USER_REMOVED);
 
-            var receiver = new IIntentReceiver.Stub() {
-                @Override
-                public void performReceive(Intent intent, int resultCode, String data, Bundle extras, boolean ordered, boolean sticky, int sendingUser) {
-                    getExecutorService().submit(() -> dispatchUserChanged(intent));
-                    if (!ordered) return;
-                    try {
-                        ActivityManagerService.finishReceiver(this, resultCode, data, extras, false, intent.getFlags());
-                    } catch (Throwable e) {
-                        Log.e(TAG, "finish receiver", e);
-                    }
-                }
-            };
-
-            ActivityManagerService.registerReceiver("android", null, receiver, userFilter, null, -1, 0);
-        } catch (Throwable e) {
-            Log.e(TAG, "register user info change receiver", e);
-        }
+        registerReceiver(List.of(userFilter), -1, this::dispatchUserChanged);
         Log.d(TAG, "registered user info change receiver");
+    }
+
+    private void registerOpenManagerReceiver() {
+        var intentFilter = new IntentFilter(LSPNotificationManager.openManagerAction);
+        var moduleFilter = new IntentFilter(intentFilter);
+        moduleFilter.addDataScheme("module");
+
+        registerReceiver(List.of(intentFilter, moduleFilter),
+                "android.permission.BRICK", 0, this::dispatchOpenManager);
+        Log.d(TAG, "registered open manager receiver");
     }
 
     @Override
@@ -397,11 +308,11 @@ public class LSPosedService extends ILSPosedService.Stub {
         ConfigManager.getInstance().setApi(api);
         ActivityManagerService.onSystemServerContext(IApplicationThread.Stub.asInterface(activityThread), activityToken);
         registerPackageReceiver();
-        registerUnlockReceiver();
         registerConfigurationReceiver();
         registerSecretCodeReceiver();
         registerBootCompleteReceiver();
         registerUserChangeReceiver();
+        registerOpenManagerReceiver();
     }
 
     @Override

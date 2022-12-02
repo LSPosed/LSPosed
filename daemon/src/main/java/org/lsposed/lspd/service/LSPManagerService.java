@@ -24,33 +24,18 @@ import static org.lsposed.lspd.service.ServiceManager.TAG;
 import static org.lsposed.lspd.service.ServiceManager.getExecutorService;
 
 import android.annotation.SuppressLint;
-import android.app.INotificationManager;
 import android.app.IServiceConnection;
-import android.app.Notification;
-import android.app.NotificationChannel;
-import android.app.NotificationManager;
-import android.app.PendingIntent;
 import android.content.AttributionSource;
 import android.content.ComponentName;
 import android.content.Context;
 import android.content.Intent;
-import android.content.pm.LauncherApps;
 import android.content.pm.PackageInfo;
 import android.content.pm.PackageManager;
-import android.content.pm.ParceledListSlice;
 import android.content.pm.ResolveInfo;
-import android.content.pm.ShortcutInfo;
-import android.content.pm.ShortcutManager;
 import android.content.pm.VersionedPackage;
-import android.graphics.Bitmap;
-import android.graphics.Canvas;
-import android.graphics.Color;
-import android.graphics.drawable.Icon;
 import android.net.Uri;
 import android.os.Build;
 import android.os.Bundle;
-import android.os.Handler;
-import android.os.HandlerThread;
 import android.os.IBinder;
 import android.os.ParcelFileDescriptor;
 import android.os.RemoteException;
@@ -64,19 +49,14 @@ import android.view.IWindowManager;
 import androidx.annotation.NonNull;
 
 import org.lsposed.daemon.BuildConfig;
-import org.lsposed.daemon.R;
 import org.lsposed.lspd.ILSPManagerService;
 import org.lsposed.lspd.models.Application;
 import org.lsposed.lspd.models.UserInfo;
-import org.lsposed.lspd.util.FakeContext;
 import org.lsposed.lspd.util.Utils;
 
 import java.io.File;
 import java.io.FileOutputStream;
 import java.io.IOException;
-import java.lang.reflect.InvocationTargetException;
-import java.util.Collections;
-import java.util.HashMap;
 import java.util.LinkedList;
 import java.util.List;
 import java.util.UUID;
@@ -88,22 +68,8 @@ import rikka.parcelablelist.ParcelableListSlice;
 public class LSPManagerService extends ILSPManagerService.Stub {
     // this maybe useful when obtaining the manager binder
     private static String RANDOM_UUID = null;
-    private static final String SHORTCUT_ID = "org.lsposed.manager.shortcut";
-    public static final String CHANNEL_ID = "lsposed";
-    public static final String CHANNEL_NAME = "LSPosed Manager";
-    public static final int CHANNEL_IMP = NotificationManager.IMPORTANCE_HIGH;
 
-    private static final HashMap<String, Integer> notificationIds = new HashMap<>();
-    private static int previousNotificationId = 2000;
-
-    private static final HandlerThread worker = new HandlerThread("manager worker");
-    private static final Handler workerHandler;
     private static Intent managerIntent = null;
-
-    static {
-        worker.start();
-        workerHandler = new Handler(worker.getLooper());
-    }
 
     public class ManagerGuard implements IBinder.DeathRecipient {
         private final @NonNull
@@ -162,162 +128,47 @@ public class LSPManagerService extends ILSPManagerService.Stub {
     LSPManagerService() {
     }
 
-    private static Icon getIcon(int res) {
-        var icon = ConfigFileManager.getResources().getDrawable(res, ConfigFileManager.getResources().newTheme());
-        var bitmap = Bitmap.createBitmap(icon.getIntrinsicWidth(), icon.getIntrinsicHeight(), Bitmap.Config.ARGB_8888);
-        icon.setBounds(0, 0, icon.getIntrinsicWidth(), icon.getIntrinsicHeight());
-        icon.draw(new Canvas(bitmap));
-        return Icon.createWithBitmap(bitmap);
-    }
-
-    private static Icon getManagerIcon() {
+    private static Intent getManagerIntent() {
+        if (managerIntent != null) return managerIntent;
         try {
-            return getIcon(R.mipmap.ic_launcher);
-        } catch (Throwable e) {
-            return getIcon(R.drawable.ic_launcher);
-        }
-    }
-
-    private static Icon getNotificationIcon() {
-        return getIcon(R.drawable.ic_outline_extension_24);
-    }
-
-    static Intent getManagerIntent() {
-        try {
-            if (managerIntent == null) {
-                var intent = PackageService.getLaunchIntentForPackage(BuildConfig.MANAGER_INJECTED_PKG_NAME);
-                if (intent == null) {
-                    var pkgInfo = PackageService.getPackageInfo(BuildConfig.MANAGER_INJECTED_PKG_NAME, PackageManager.GET_ACTIVITIES, 0);
-                    if (pkgInfo != null && pkgInfo.activities != null && pkgInfo.activities.length > 0) {
-                        for (var activityInfo : pkgInfo.activities) {
-                            if (activityInfo.processName.equals(activityInfo.packageName)) {
-                                intent = new Intent();
-                                intent.setComponent(new ComponentName(activityInfo.packageName, activityInfo.name));
-                                intent.setAction(Intent.ACTION_MAIN);
-                                break;
-                            }
+            var intent = PackageService.getLaunchIntentForPackage(BuildConfig.MANAGER_INJECTED_PKG_NAME);
+            if (intent == null) {
+                var pkgInfo = PackageService.getPackageInfo(BuildConfig.MANAGER_INJECTED_PKG_NAME, PackageManager.GET_ACTIVITIES, 0);
+                if (pkgInfo != null && pkgInfo.activities != null && pkgInfo.activities.length > 0) {
+                    for (var activityInfo : pkgInfo.activities) {
+                        if (activityInfo.processName.equals(activityInfo.packageName)) {
+                            intent = new Intent();
+                            intent.setComponent(new ComponentName(activityInfo.packageName, activityInfo.name));
+                            intent.setAction(Intent.ACTION_MAIN);
+                            break;
                         }
                     }
                 }
-                if (intent != null) {
-                    if (intent.getCategories() != null) intent.getCategories().clear();
-                    intent.addCategory("org.lsposed.manager.LAUNCH_MANAGER");
-                    intent.setPackage(BuildConfig.MANAGER_INJECTED_PKG_NAME);
-                    managerIntent = (Intent) intent.clone();
-                }
             }
-        } catch (Throwable e) {
+            if (intent != null) {
+                if (intent.getCategories() != null) intent.getCategories().clear();
+                intent.addCategory("org.lsposed.manager.LAUNCH_MANAGER");
+                intent.setPackage(BuildConfig.MANAGER_INJECTED_PKG_NAME);
+                managerIntent = new Intent(intent);
+            }
+        } catch (RemoteException e) {
             Log.e(TAG, "get Intent", e);
         }
         return managerIntent;
-
     }
 
-    public static PendingIntent getNotificationIntent(String modulePackageName, int moduleUserId) {
+    static void openManager(Uri withData) {
+        var intent = getManagerIntent();
+        if (intent == null) return;
+        intent = new Intent(intent);
+        intent.setData(withData);
         try {
-            var intent = (Intent) getManagerIntent().clone();
-            intent.setData(new Uri.Builder().scheme("module").encodedAuthority(modulePackageName + ":" + moduleUserId).build());
-            return PendingIntent.getActivity(new FakeContext(), 0, intent, PendingIntent.FLAG_UPDATE_CURRENT | PendingIntent.FLAG_IMMUTABLE);
-        } catch (Throwable e) {
-            Log.e(TAG, "get notification intent", e);
-            return null;
-        }
-    }
-
-    private static String getNotificationIdKey(String modulePackageName, int moduleUserId) {
-        return modulePackageName + ":" + moduleUserId;
-    }
-
-    private static int getAutoIncrementNotificationId() {
-        // previousNotificationId start with 2001
-        var idValue = previousNotificationId++;
-        // Templates that may conflict with system ids after 2000
-        // Copied from https://android.googlesource.com/platform/frameworks/base/+/master/proto/src/system_messages.proto
-        var NOTE_NETWORK_AVAILABLE = 17303299;
-        var NOTE_REMOTE_BUGREPORT = 678432343;
-        var NOTE_STORAGE_PUBLIC = 0x53505542;
-        var NOTE_STORAGE_PRIVATE = 0x53505256;
-        var NOTE_STORAGE_DISK = 0x5344534b;
-        var NOTE_STORAGE_MOVE = 0x534d4f56;
-        // If auto created id is conflict, recreate it
-        if (idValue == NOTE_NETWORK_AVAILABLE ||
-                idValue == NOTE_REMOTE_BUGREPORT ||
-                idValue == NOTE_STORAGE_PUBLIC ||
-                idValue == NOTE_STORAGE_PRIVATE ||
-                idValue == NOTE_STORAGE_DISK ||
-                idValue == NOTE_STORAGE_MOVE) {
-            return getAutoIncrementNotificationId();
-        } else {
-            return idValue;
-        }
-    }
-
-    private static int pushAndGetNotificationId(String modulePackageName, int moduleUserId) {
-        var idKey = getNotificationIdKey(modulePackageName, moduleUserId);
-        // If there is a new notification, put a new notification id into map
-        return notificationIds.computeIfAbsent(idKey, key -> getAutoIncrementNotificationId());
-    }
-
-    public static void showNotification(String modulePackageName,
-                                        int moduleUserId,
-                                        boolean enabled,
-                                        boolean systemModule) {
-        try {
-            var context = new FakeContext();
-            var userInfo = UserService.getUserInfo(moduleUserId);
-            String userName = userInfo != null ? userInfo.name : String.valueOf(moduleUserId);
-            String title = context.getString(enabled ? systemModule ?
-                    R.string.xposed_module_updated_notification_title_system :
-                    R.string.xposed_module_updated_notification_title :
-                    R.string.module_is_not_activated_yet);
-            String content = context.getString(enabled ? systemModule ?
-                    R.string.xposed_module_updated_notification_content_system :
-                    R.string.xposed_module_updated_notification_content :
-                    (moduleUserId == 0 ?
-                            R.string.module_is_not_activated_yet_main_user_detailed :
-                            R.string.module_is_not_activated_yet_multi_user_detailed), modulePackageName, userName);
-
-            var style = new Notification.BigTextStyle();
-            style.bigText(content);
-
-            var notification = new Notification.Builder(context, CHANNEL_ID)
-                    .setContentTitle(title)
-                    .setContentText(content)
-                    .setSmallIcon(getNotificationIcon())
-                    .setColor(Color.BLUE)
-                    .setContentIntent(getNotificationIntent(modulePackageName, moduleUserId))
-                    .setAutoCancel(true)
-                    .setStyle(style)
-                    .build();
-            notification.extras.putString("android.substName", "LSPosed");
-            var im = INotificationManager.Stub.asInterface(android.os.ServiceManager.getService("notification"));
-            final NotificationChannel channel =
-                    new NotificationChannel(CHANNEL_ID, CHANNEL_NAME, CHANNEL_IMP);
-            im.createNotificationChannels("android",
-                    new ParceledListSlice<>(Collections.singletonList(channel)));
-            im.enqueueNotificationWithTag("android", "android", modulePackageName,
-                    pushAndGetNotificationId(modulePackageName, moduleUserId),
-                    notification, 0);
-        } catch (Throwable e) {
-            Log.e(TAG, "post notification", e);
-        }
-    }
-
-    public static void cancelNotification(String modulePackageName, int moduleUserId) {
-        try {
-            var idKey = getNotificationIdKey(modulePackageName, moduleUserId);
-            var idValue = notificationIds.get(idKey);
-            if (idValue == null) return;
-            var im = INotificationManager.Stub.asInterface(android.os.ServiceManager.getService("notification"));
-            if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.R) {
-                im.cancelNotificationWithTag("android", "android", modulePackageName, idValue, 0);
-            } else {
-                im.cancelNotificationWithTag("android", modulePackageName, idValue, 0);
-            }
-            // Remove the notification id when the notification is canceled or current module app was uninstalled
-            notificationIds.remove(idKey);
-        } catch (Throwable e) {
-            Log.e(TAG, "cancel notification", e);
+            var userInfo = ActivityManagerService.getCurrentUser();
+            if (userInfo == null || userInfo.id != 0) return;
+            ActivityManagerService.startActivityAsUserWithFeature("android", null,
+                    intent, intent.getType(), null, null, 0, 0, null, null, 0);
+        } catch (RemoteException e) {
+            Log.e(TAG, "open manager", e);
         }
     }
 
@@ -338,72 +189,8 @@ public class LSPManagerService extends ILSPManagerService.Stub {
                     null, null, 0, null, null,
                     null, -1, null, true, false,
                     0);
-        } catch (Throwable t) {
+        } catch (RemoteException t) {
             Log.e(TAG, "Broadcast to manager failed: ", t);
-        }
-    }
-
-    public static void createOrUpdateShortcut(boolean force) {
-        workerHandler.post(() -> createOrUpdateShortcutInternal(force, true));
-    }
-
-    public static void createOrUpdateShortcut(boolean force, boolean shouldCreate) {
-        workerHandler.post(() -> createOrUpdateShortcutInternal(force, shouldCreate));
-    }
-
-    private synchronized static void createOrUpdateShortcutInternal(boolean force, boolean shouldCreate) {
-        try {
-            while (!UserService.isUserUnlocked(0)) {
-                Log.d(TAG, "user is not yet unlocked, waiting for 1s...");
-                Thread.sleep(1000);
-            }
-            var smCtor = ShortcutManager.class.getDeclaredConstructor(Context.class);
-            smCtor.setAccessible(true);
-            var context = new FakeContext("com.android.settings");
-            var sm = smCtor.newInstance(context);
-            if (!sm.isRequestPinShortcutSupported()) {
-                Log.d(TAG, "pinned shortcut not supported, skipping");
-                return;
-            }
-            var intent = getManagerIntent();
-            var settingIntent = PackageService.getLaunchIntentForPackage("com.android.settings");
-            var componentName = settingIntent != null ? settingIntent.getComponent() : new ComponentName("com.android.settings", "android.__dummy__");
-            var shortcut = new ShortcutInfo.Builder(context, SHORTCUT_ID)
-                    .setShortLabel("LSPosed")
-                    .setLongLabel("LSPosed")
-                    .setIntent(intent)
-                    .setActivity(componentName)
-                    .setCategories(intent.getCategories())
-                    .setIcon(getManagerIcon())
-                    .build();
-
-            for (var shortcutInfo : sm.getPinnedShortcuts()) {
-                if (SHORTCUT_ID.equals(shortcutInfo.getId()) && shortcutInfo.isPinned()) {
-                    var shortcutIntent = sm.createShortcutResultIntent(shortcutInfo);
-                    var request = (LauncherApps.PinItemRequest) shortcutIntent.getParcelableExtra(LauncherApps.EXTRA_PIN_ITEM_REQUEST);
-                    var requestInfo = request.getShortcutInfo();
-                    // https://cs.android.com/android/platform/superproject/+/android-8.1.0_r1:frameworks/base/services/core/java/com/android/server/pm/ShortcutRequestPinProcessor.java;drc=4ad6b57700bef4c484021f49e018117046562e6b;l=337
-                    if (requestInfo.isPinned()) {
-                        Log.d(TAG, "shortcut exists, updating");
-                        sm.updateShortcuts(Collections.singletonList(shortcut));
-                        return;
-                    }
-                }
-            }
-            var configManager = ConfigManager.getInstance();
-            if (!force && configManager.isManagerInstalled()) {
-                Log.d(TAG, "Manager has installed, skip adding shortcut");
-                return;
-            }
-            // Only existing shortcuts are updated when system settings
-            // are changed and no new shortcuts are requested
-            if (!force && !shouldCreate) return;
-            if (configManager.isAddShortcut()) {
-                sm.requestPinShortcut(shortcut, null);
-                Log.d(TAG, "done add shortcut");
-            }
-        } catch (Throwable e) {
-            Log.e(TAG, "add shortcut", e);
         }
     }
 
@@ -509,7 +296,7 @@ public class LSPManagerService extends ILSPManagerService.Stub {
             ActivityManagerService.forceStopPackage(packageName, 0);
             Log.d(TAG, "stopped old package");
             if (addUUID) {
-                intent = (Intent) intent.clone();
+                intent = new Intent(intent);
                 RANDOM_UUID = UUID.randomUUID().toString();
                 intent.addCategory(RANDOM_UUID);
             }
@@ -619,17 +406,6 @@ public class LSPManagerService extends ILSPManagerService.Stub {
     }
 
     @Override
-    public boolean isAddShortcut() {
-        return ConfigManager.getInstance().isAddShortcut();
-    }
-
-    @Override
-    public void setAddShortcut(boolean enabled) {
-        ConfigManager.getInstance().setAddShortcut(enabled);
-        if (enabled) createOrUpdateShortcut(true);
-    }
-
-    @Override
     public boolean isVerboseLog() {
         return ConfigManager.getInstance().verboseLog();
     }
@@ -646,7 +422,7 @@ public class LSPManagerService extends ILSPManagerService.Stub {
 
     @Override
     public ParcelFileDescriptor getModulesLog() {
-        workerHandler.post(() -> ServiceManager.getLogcatService().checkLogFile());
+        ServiceManager.getLogcatService().checkLogFile();
         return ConfigManager.getInstance().getModulesLog();
     }
 
@@ -674,10 +450,13 @@ public class LSPManagerService extends ILSPManagerService.Stub {
     @Override
     public boolean uninstallPackage(String packageName, int userId) throws RemoteException {
         try {
-            if (ActivityManagerService.startUserInBackground(userId))
-                return PackageService.uninstallPackage(new VersionedPackage(packageName, PackageManager.VERSION_CODE_HIGHEST), userId);
-            else return false;
-        } catch (InterruptedException | InvocationTargetException | NoSuchMethodException | InstantiationException | IllegalAccessException e) {
+            if (ActivityManagerService.startUserInBackground(userId)) {
+                var pkg = new VersionedPackage(packageName, PackageManager.VERSION_CODE_HIGHEST);
+                return PackageService.uninstallPackage(pkg, userId);
+            } else {
+                return false;
+            }
+        } catch (InterruptedException | ReflectiveOperationException e) {
             Log.e(TAG, e.getMessage(), e);
             return false;
         }
@@ -727,7 +506,7 @@ public class LSPManagerService extends ILSPManagerService.Stub {
             if (parent < 0) return -1;
             if (currentUser.id != parent) {
                 if (!ActivityManagerService.switchUser(parent)) return -1;
-                var window = android.os.ServiceManager.getService("window");
+                var window = android.os.ServiceManager.getService(Context.WINDOW_SERVICE);
                 if (window != null) {
                     var wm = IWindowManager.Stub.asInterface(window);
                     wm.lockNow(null);
@@ -759,9 +538,9 @@ public class LSPManagerService extends ILSPManagerService.Stub {
                     if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.S) {
                         contentProvider.call(new AttributionSource.Builder(1000).setPackageName("android").build(),
                                 "settings", "PUT_global", "show_hidden_icon_apps_enabled", args);
-                    } else if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.R) {
+                    } else if (Build.VERSION.SDK_INT == Build.VERSION_CODES.R) {
                         contentProvider.call("android", null, "settings", "PUT_global", "show_hidden_icon_apps_enabled", args);
-                    } else if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.Q) {
+                    } else if (Build.VERSION.SDK_INT == Build.VERSION_CODES.Q) {
                         contentProvider.call("android", "settings", "PUT_global", "show_hidden_icon_apps_enabled", args);
                     }
                 } catch (NoSuchMethodError e) {
@@ -782,12 +561,6 @@ public class LSPManagerService extends ILSPManagerService.Stub {
     public void restartFor(Intent intent) throws RemoteException {
         forceStopPackage(BuildConfig.MANAGER_INJECTED_PKG_NAME, 0);
         stopAndStartActivity(BuildConfig.MANAGER_INJECTED_PKG_NAME, intent, false);
-    }
-
-    @Override
-    public void createShortcut() {
-        createOrUpdateShortcut(true);
-        setAddShortcut(true);
     }
 
     @Override
@@ -824,6 +597,26 @@ public class LSPManagerService extends ILSPManagerService.Stub {
     @Override
     public void clearApplicationProfileData(String packageName) throws RemoteException {
         PackageService.clearApplicationProfileData(packageName);
+    }
+
+    @Override
+    public Intent getLaunchIntentForManager() {
+        return getManagerIntent();
+    }
+
+    @Override
+    public boolean enableStatusNotification() {
+        return ConfigManager.getInstance().enableStatusNotification();
+    }
+
+    @Override
+    public void setEnableStatusNotification(boolean enable) {
+        ConfigManager.getInstance().setEnableStatusNotification(enable);
+        if (enable) {
+            LSPNotificationManager.notifyStatusNotification();
+        } else {
+            LSPNotificationManager.cancelStatusNotification();
+        }
     }
 
     @Override

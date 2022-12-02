@@ -17,7 +17,12 @@ public interface INotificationManager extends IInterface {
     @RequiresApi(30)
     void cancelNotificationWithTag(String pkg, String opPkg, String tag, int id, int userId) throws RemoteException;
 
-    void createNotificationChannels(String pkg, ParceledListSlice<NotificationChannel> channelsList) throws RemoteException;
+    void createNotificationChannelsForPackage(String pkg, int uid, ParceledListSlice<NotificationChannel> channelsList) throws RemoteException;
+
+    @RequiresApi(30)
+    NotificationChannel getNotificationChannelForPackage(String pkg, int uid, String channelId, String conversationId, boolean includeDeleted) throws RemoteException;
+
+    NotificationChannel getNotificationChannelForPackage(String pkg, int uid, String channelId, boolean includeDeleted) throws RemoteException;
 
     abstract class Stub extends Binder implements INotificationManager {
         public static INotificationManager asInterface(IBinder obj) {

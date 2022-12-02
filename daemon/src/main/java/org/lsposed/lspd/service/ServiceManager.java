@@ -54,7 +54,7 @@ public class ServiceManager {
     private static LogcatService logcatService = null;
     private static Dex2OatService dex2OatService = null;
 
-    private static final ExecutorService executorService = Executors.newCachedThreadPool();
+    private static final ExecutorService executorService = Executors.newSingleThreadExecutor();
 
     @RequiresApi(Build.VERSION_CODES.Q)
     public static Dex2OatService getDex2OatService() {
