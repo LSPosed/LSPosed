@@ -83,7 +83,6 @@ LSP_DEF_NATIVE_METHOD(jboolean, HookBridge, hookMethod, jobject hookMethod,
                                                                                "([Ljava/lang/Object;)Ljava/lang/Object;"),
                                                       false);
         auto hooker_object = env->NewObject(hooker, init, hookMethod);
-        std::unique_lock lk(hooked_lock);
         hook_item->backup = lsplant::Hook(env, hookMethod, hooker_object, callback_method);
         env->DeleteLocalRef(hooker_object);
     }
