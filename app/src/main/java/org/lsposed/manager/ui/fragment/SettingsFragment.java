@@ -36,9 +36,6 @@ import androidx.annotation.Nullable;
 import androidx.core.text.HtmlCompat;
 import androidx.preference.Preference;
 import androidx.preference.PreferenceFragmentCompat;
-
-import rikka.material.preference.MaterialSwitchPreference;
-
 import androidx.recyclerview.widget.RecyclerView;
 
 import com.google.android.material.color.DynamicColors;
@@ -48,12 +45,12 @@ import org.lsposed.manager.BuildConfig;
 import org.lsposed.manager.ConfigManager;
 import org.lsposed.manager.R;
 import org.lsposed.manager.databinding.FragmentSettingsBinding;
-import org.lsposed.manager.receivers.LSPManagerServiceHolder;
 import org.lsposed.manager.repo.RepoLoader;
 import org.lsposed.manager.ui.activity.MainActivity;
 import org.lsposed.manager.util.BackupUtils;
 import org.lsposed.manager.util.LangList;
 import org.lsposed.manager.util.NavUtil;
+import org.lsposed.manager.util.ShortcutUtil;
 import org.lsposed.manager.util.ThemeUtil;
 
 import java.time.LocalDateTime;
@@ -63,6 +60,7 @@ import java.util.Locale;
 import rikka.core.util.ResourceUtils;
 import rikka.material.app.DayNightDelegate;
 import rikka.material.app.LocaleDelegate;
+import rikka.material.preference.MaterialSwitchPreference;
 import rikka.preference.SimpleMenuPreference;
 import rikka.recyclerview.RecyclerViewKt;
 import rikka.widget.borderview.BorderRecyclerView;
@@ -159,24 +157,29 @@ public class SettingsFragment extends BaseFragment {
                 });
             }
 
-            MaterialSwitchPreference prefEnableShortcut = findPreference("enable_auto_add_shortcut");
-            if (prefEnableShortcut != null) {
-                prefEnableShortcut.setEnabled(installed);
-                prefEnableShortcut.setVisible(!App.isParasitic());
-                prefEnableShortcut.setChecked(installed && ConfigManager.isAddShortcut());
-                prefEnableShortcut.setOnPreferenceChangeListener((preference, newValue) -> ConfigManager.setAddShortcut((boolean) newValue));
-            }
-
             Preference shortcut = findPreference("add_shortcut");
             if (shortcut != null) {
-                shortcut.setEnabled(installed);
+                shortcut.setVisible(App.isParasitic());
+                shortcut.setEnabled(!ShortcutUtil.isLaunchShortcutPinned());
                 shortcut.setOnPreferenceClickListener(preference -> {
-                    try {
-                        LSPManagerServiceHolder.getService().createShortcut();
-                    } catch (Throwable ignored) {
-                    }
+                    ShortcutUtil.requestPinLaunchShortcut();
                     return true;
                 });
+            }
+
+            MaterialSwitchPreference notification = findPreference("enable_status_notification");
+            if (notification != null) {
+                if (App.isParasitic() && !ShortcutUtil.isLaunchShortcutPinned()) {
+                    var s = notification.getContext().getString(R.string.disable_status_notification_error);
+                    notification.setSummaryOn(notification.getSummary() + "\n" + s);
+                    notification.setEnabled(false);
+                } else {
+                    notification.setEnabled(installed);
+                }
+                notification.setChecked(installed && ConfigManager.enableStatusNotification());
+                notification.setOnPreferenceChangeListener((p, v) ->
+                        ConfigManager.setEnableStatusNotification((boolean) v)
+                );
             }
 
             Preference backup = findPreference("backup");

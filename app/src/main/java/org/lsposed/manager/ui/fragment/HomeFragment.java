@@ -42,7 +42,7 @@ import org.lsposed.manager.databinding.DialogAboutBinding;
 import org.lsposed.manager.databinding.FragmentHomeBinding;
 import org.lsposed.manager.ui.dialog.BlurBehindDialogBuilder;
 import org.lsposed.manager.ui.dialog.FlashDialogBuilder;
-import org.lsposed.manager.ui.dialog.ShortcutDialog;
+import org.lsposed.manager.ui.dialog.WelcomeDialog;
 import org.lsposed.manager.util.NavUtil;
 import org.lsposed.manager.util.Telemetry;
 import org.lsposed.manager.util.UpdateUtil;
@@ -61,7 +61,7 @@ public class HomeFragment extends BaseFragment {
     @Override
     public void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        ShortcutDialog.showIfNeed(getChildFragmentManager());
+        WelcomeDialog.showIfNeed(getChildFragmentManager());
     }
 
     @Override
