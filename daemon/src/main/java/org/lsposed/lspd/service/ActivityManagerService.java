@@ -26,6 +26,7 @@ import android.app.IActivityManager;
 import android.app.IApplicationThread;
 import android.app.IServiceConnection;
 import android.app.ProfilerInfo;
+import android.content.Context;
 import android.content.IContentProvider;
 import android.content.IIntentReceiver;
 import android.content.Intent;
@@ -58,8 +59,8 @@ public class ActivityManagerService {
     };
 
     public static IActivityManager getActivityManager() {
-        if (binder == null && am == null) {
-            binder = ServiceManager.getService("activity");
+        if (binder == null || am == null) {
+            binder = ServiceManager.getService(Context.ACTIVITY_SERVICE);
             if (binder == null) return null;
             try {
                 binder.linkToDeath(deathRecipient, 0);

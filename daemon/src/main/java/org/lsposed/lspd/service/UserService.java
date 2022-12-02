@@ -21,6 +21,7 @@ package org.lsposed.lspd.service;
 
 import static org.lsposed.lspd.service.ServiceManager.TAG;
 
+import android.content.Context;
 import android.content.pm.UserInfo;
 import android.os.Build;
 import android.os.IBinder;
@@ -53,8 +54,8 @@ public class UserService {
     }
 
     public static IUserManager getUserManager() {
-        if (binder == null && um == null) {
-            binder = ServiceManager.getService("user");
+        if (binder == null || um == null) {
+            binder = ServiceManager.getService(Context.USER_SERVICE);
             if (binder == null) return null;
             try {
                 binder.linkToDeath(recipient, 0);
