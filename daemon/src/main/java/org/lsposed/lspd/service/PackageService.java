@@ -92,7 +92,7 @@ public class PackageService {
     };
 
     private static IPackageManager getPackageManager() {
-        if (binder == null && pm == null) {
+        if (binder == null || pm == null) {
             binder = ServiceManager.getService("package");
             if (binder == null) return null;
             try {
