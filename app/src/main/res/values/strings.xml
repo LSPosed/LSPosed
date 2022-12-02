@@ -73,12 +73,16 @@
     <string name="mount_failed">Mount failed</string>
     <string name="selinux_permissive">SELinux is permissive</string>
     <string name="sepolicy_incorrect">SELinux policy is incorrect</string>
-    <string name="parasitic_recommend">Parasitic Manager Recommended</string>
-    <string name="parasitic_recommend_summary">LSPosed now supports system parasitization to avoid detection. You can safely uninstall the manager after successfully creating a shortcut of the parasitic manager. In any case you can install the manager back from /data/adb/lspd/manager.apk.</string>
-    <string name="create_shortcut">Create shortcut</string>
-    <string name="never_show">Never show</string>
     <string name="update_lsposed">Update LSPosed</string>
     <string name="update_lsposed_msg">Confirm to update LSPosed? This device will reboot after update completion</string>
+
+    <!-- WelcomeDialog -->
+    <string name="parasitic_welcome">Welcome to LSPosed</string>
+    <string name="parasitic_welcome_summary">You are using the parasitic manager, which can create shortcut or still open from notification.</string>
+    <string name="create_shortcut">Create shortcut</string>
+    <string name="never_show">Never show</string>
+    <string name="app_welcome">Parasitic Manager Recommended</string>
+    <string name="app_welcome_summary">LSPosed now supports system parasitization to avoid detection, you can open parasitic manager from notification. It is recommended to uninstall the current application.</string>
 
     <!-- LogsActivity -->
     <string name="menuSaveToSd">Save</string>
@@ -190,9 +194,11 @@
     <string name="settings_translation_contributors">Translation contributors</string>
     <string name="settings_translation">Participate in translation</string>
     <string name="settings_translation_summary">Help us translate %s into your language</string>
-    <string name="pref_title_enable_auto_add_shortcut">Automatically add a shortcut</string>
     <string name="create_shortcut_summary">Manually create parasitic manager shortcut</string>
-    <string name="settings_enable_auto_add_shortcut_summary">No new shortcuts will be added when disabled in the non-parasitic manager</string>
+    <string name="open_parasitic_summary">Recommended use parasitic manager</string>
+    <string name="settings_enable_status_notification">Status Notification</string>
+    <string name="settings_enable_status_notification_summary">Show a notification that can open parasitic manager</string>
+    <string name="disable_status_notification_error">No shortcut, cannot disable notification</string>
     <string name="settings_update_channel">Update channel</string>
     <string name="update_channel_stable">Stable</string>
     <string name="update_channel_bate">Beta</string>

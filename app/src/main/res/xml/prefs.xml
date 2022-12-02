@@ -106,11 +106,11 @@
 
         <rikka.material.preference.MaterialSwitchPreference
             android:defaultValue="false"
-            android:icon="@drawable/ic_outline_add_to_home_screen_24"
-            android:key="enable_auto_add_shortcut"
+            android:icon="@drawable/ic_outline_speaker_notes_24"
+            android:key="enable_status_notification"
             android:persistent="false"
-            android:summary="@string/settings_enable_auto_add_shortcut_summary"
-            android:title="@string/pref_title_enable_auto_add_shortcut" />
+            android:summary="@string/settings_enable_status_notification_summary"
+            android:title="@string/settings_enable_status_notification" />
     </PreferenceCategory>
 
     <PreferenceCategory android:title="@string/settings_group_repo">
