@@ -74,12 +74,11 @@
     <string name="mount_failed">Montarea a eșuat</string>
     <string name="selinux_permissive">SELinux este permisiv</string>
     <string name="sepolicy_incorrect">Politica SELinux este incorectă</string>
-    <string name="parasitic_recommend">Manager parazitar recomandat</string>
-    <string name="parasitic_recommend_summary">LSPosed acceptă acum parazitizarea sistemului pentru a evita detectarea. Puteți dezinstala managerul în siguranță după crearea cu succes a unei comenzi rapide a managerului parazitar. În orice caz, puteți instala managerul înapoi din /data/adb/lspd/manager.apk.</string>
-    <string name="create_shortcut">Creează scurtătură</string>
-    <string name="never_show">Nu arăta niciodată</string>
     <string name="update_lsposed">Actualizează LSPosed</string>
     <string name="update_lsposed_msg">Confirmați actualizarea LSPosed? Acest dispozitiv va reporni după finalizarea actualizării</string>
+    <!-- WelcomeDialog -->
+    <string name="create_shortcut">Creează scurtătură</string>
+    <string name="never_show">Nu arăta niciodată</string>
     <!-- LogsActivity -->
     <string name="menuSaveToSd">Salvează</string>
     <string name="nav_item_logs_verbose">Jurnalele Verbose</string>
@@ -186,9 +185,7 @@
     <string name="settings_translation_contributors">Contribuitori la traducere</string>
     <string name="settings_translation">Participă în traducere</string>
     <string name="settings_translation_summary">Ajută-ne să traducem %s în limba ta</string>
-    <string name="pref_title_enable_auto_add_shortcut">Adaugă automat o comandă rapidă</string>
     <string name="create_shortcut_summary">Creați manual o comandă rapidă pentru managerul de paraziți</string>
-    <string name="settings_enable_auto_add_shortcut_summary">Nicio comandă rapidă nouă nu va fi adăugată când este dezactivată în managerul non-parazit</string>
     <string name="settings_update_channel">Canal de actualizare</string>
     <string name="update_channel_stable">Stabil</string>
     <string name="update_channel_bate">Beta</string>
@@ -212,7 +209,6 @@
     <!-- CrashReportActivity -->
     <string name="version_mismatch">Versiunea LSPosed Framework (%1$d) nu se potrivește cu managerul (%2$d). Vă rugăm să reinstalați LSPosed.</string>
     <string name="manager_crashed">Manager prăbușit</string>
-    <string name="manager_crashed_info">raportează acest lucru la </string>
     <string name="send_crash_info">Trimite informații despre prabusire</string>
     <string name="crash_info_copied">Informații prabusire copiate în clipboard</string>
     <string name="info_copied">Copiat în clipboard</string>
