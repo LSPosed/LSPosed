@@ -19,7 +19,7 @@
   -->
 <resources xmlns:tools="http://schemas.android.com/tools" tools:keep="@string/xposed_module_updated_notification_*,@string/module_is_not_activated_*">
     <!-- MainActivity -->
-    <string name="info">Informació</string>
+    <string name="info">Info</string>
     <string name="overview">Visió general</string>
     <string name="Modules">Mòduls</string>
     <plurals name="modules_enabled_count">
@@ -72,12 +72,11 @@
     <string name="mount_failed">El muntatge ha fallat</string>
     <string name="selinux_permissive">SELinux és permissiu</string>
     <string name="sepolicy_incorrect">La política de SELinux és incorrecta</string>
-    <string name="parasitic_recommend">Administrador de paràsits recomanat</string>
-    <string name="parasitic_recommend_summary">LSPosed ara admet la parasitització del sistema per evitar la detecció. Podeu desinstal·lar el gestor amb seguretat després de crear correctament una drecera del gestor de paràsits. En qualsevol cas, podeu tornar a instal·lar el gestor des de /data/adb/lspd/manager.apk.</string>
-    <string name="create_shortcut">Crear accès directe</string>
-    <string name="never_show">No mostris mai</string>
     <string name="update_lsposed">Actualització LSPosed</string>
     <string name="update_lsposed_msg">Confirmeu per actualitzar LSPosed? Aquest dispositiu es reiniciarà un cop finalitzada l\'actualització</string>
+    <!-- WelcomeDialog -->
+    <string name="create_shortcut">Crear accès directe</string>
+    <string name="never_show">No mostris mai</string>
     <!-- LogsActivity -->
     <string name="menuSaveToSd">Desa</string>
     <string name="nav_item_logs_verbose">Registres detallats</string>
@@ -184,9 +183,7 @@
     <string name="settings_translation_contributors">Col·laboradors de traducció</string>
     <string name="settings_translation">Participar en la traducció</string>
     <string name="settings_translation_summary">Ajuda\'ns a traduir %s al teu idioma</string>
-    <string name="pref_title_enable_auto_add_shortcut">Afegeix automàticament una drecera</string>
     <string name="create_shortcut_summary">Crea manualment la drecera del gestor de paràsits</string>
-    <string name="settings_enable_auto_add_shortcut_summary">No s\'afegiran dreceres noves quan estiguin desactivades al gestor no paràsit</string>
     <string name="settings_update_channel">Actualitza el canal</string>
     <string name="update_channel_stable">Estable</string>
     <string name="update_channel_bate">Beta</string>
@@ -210,7 +207,6 @@
     <!-- CrashReportActivity -->
     <string name="version_mismatch">La versió del marc LSPosed (%1$d) no coincideix amb el gestor (%2$d). Torneu a instal·lar LSPosed.</string>
     <string name="manager_crashed">El gerent s\'ha estavellat</string>
-    <string name="manager_crashed_info">informar-ho a </string>
     <string name="send_crash_info">Envia informació de l\'accident</string>
     <string name="crash_info_copied">S\'ha copiat la informació de l\'error al porta-retalls</string>
     <string name="info_copied">S\'ha copiat al porta-retalls</string>
