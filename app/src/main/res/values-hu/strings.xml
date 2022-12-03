@@ -73,12 +73,11 @@
     <string name="mount_failed">A csatolás sikertelen</string>
     <string name="selinux_permissive">Az SELinux engedélyezett</string>
     <string name="sepolicy_incorrect">Az SELinux házirend helytelen</string>
-    <string name="parasitic_recommend">Parazita menedzser Ajánlott</string>
-    <string name="parasitic_recommend_summary">Az LSPosed mostantól támogatja a rendszer parazitizálását a felderítés elkerülése érdekében. A parazita menedzser sikeres parancsikonjának létrehozása után biztonságosan eltávolíthatja a menedzsert. A menedzsert minden esetben visszatelepítheti a /data/adb/lspd/manager.apk fájlból.</string>
-    <string name="create_shortcut">Parancsikon létrehozása</string>
-    <string name="never_show">Soha ne mutassa</string>
     <string name="update_lsposed">Az LSPosed frissítése</string>
     <string name="update_lsposed_msg">Jóváhagyja az LSPosed frissítését? A készülék a frissítés befejezése után újra fog indulni</string>
+    <!-- WelcomeDialog -->
+    <string name="create_shortcut">Parancsikon létrehozása</string>
+    <string name="never_show">Soha ne mutassa</string>
     <!-- LogsActivity -->
     <string name="menuSaveToSd">Mentés</string>
     <string name="nav_item_logs_verbose">Szöveges naplók</string>
@@ -185,9 +184,7 @@
     <string name="settings_translation_contributors">A fordításban közreműködők</string>
     <string name="settings_translation">Részvétel a fordításban</string>
     <string name="settings_translation_summary">Segítsen nekünk lefordítani az %s -t az Ön nyelvére</string>
-    <string name="pref_title_enable_auto_add_shortcut">Parancsikon automatikus hozzáadása</string>
     <string name="create_shortcut_summary">Kézzel hozzon létre parazita menedzser parancsikont</string>
-    <string name="settings_enable_auto_add_shortcut_summary">Nem lesznek új parancsikonok hozzáadva, ha a nem parazita menedzserben le van tiltva.</string>
     <string name="settings_update_channel">Frissítési csatorna</string>
     <string name="update_channel_stable">Stabil</string>
     <string name="update_channel_bate">Béta</string>
@@ -211,7 +208,6 @@
     <!-- CrashReportActivity -->
     <string name="version_mismatch">Az LSPosed keretrendszer verziója (%1$d) nem egyezik a manager (%2$d) verziójával. Kérjük, telepítse újra az LSPosed-et.</string>
     <string name="manager_crashed">A menedzser összeomlott</string>
-    <string name="manager_crashed_info">jelentse ezt a </string>
     <string name="send_crash_info">Összeomlási információk küldése</string>
     <string name="crash_info_copied">Az összeomlási információk a vágólapra másolva</string>
     <string name="info_copied">A vágólapra másolva</string>
