@@ -72,12 +72,11 @@
     <string name="mount_failed">ماؤنٹ ناکام ہوگیا۔</string>
     <string name="selinux_permissive">SELinux کی اجازت ہے۔</string>
     <string name="sepolicy_incorrect">SELinux پالیسی غلط ہے۔</string>
-    <string name="parasitic_recommend">پرجیوی مینیجر کی سفارش</string>
-    <string name="parasitic_recommend_summary">LSPosed اب سراغ لگانے سے بچنے کے لیے سسٹم پیراجیٹائزیشن کی حمایت کرتا ہے۔ پرجیوی مینیجر کا شارٹ کٹ کامیابی سے بنانے کے بعد آپ منیجر کو محفوظ طریقے سے انسٹال کر سکتے ہیں۔ کسی بھی صورت میں آپ آدمی کو انسٹال کر سکتے ہیں.</string>
-    <string name="create_shortcut">شارٹ کٹ بنانا</string>
-    <string name="never_show">کبھی نہ دکھائیں۔</string>
     <string name="update_lsposed">LSPosed کو اپ ڈیٹ کریں۔</string>
     <string name="update_lsposed_msg">LSPosed کو اپ ڈیٹ کرنے کی تصدیق کریں؟ یہ آلہ اپ ڈیٹ مکمل ہونے کے بعد دوبارہ شروع ہو جائے گا۔</string>
+    <!-- WelcomeDialog -->
+    <string name="create_shortcut">شارٹ کٹ بنانا</string>
+    <string name="never_show">کبھی نہ دکھائیں۔</string>
     <!-- LogsActivity -->
     <string name="menuSaveToSd">محفوظ کریں</string>
     <string name="nav_item_logs_verbose">وربوز لاگز</string>
@@ -184,9 +183,7 @@
     <string name="settings_translation_contributors">ترجمہ کرنے والے</string>
     <string name="settings_translation">ترجمہ میں حصہ لیں۔</string>
     <string name="settings_translation_summary">%s کا اپنی زبان میں ترجمہ کرنے میں ہماری مدد کریں۔</string>
-    <string name="pref_title_enable_auto_add_shortcut">خودکار طور پر ایک شارٹ کٹ شامل کریں۔</string>
     <string name="create_shortcut_summary">دستی طور پر پرجیوی مینیجر شارٹ کٹ بنائیں</string>
-    <string name="settings_enable_auto_add_shortcut_summary">غیر پرجیوی مینیجر میں غیر فعال ہونے پر کوئی نیا شارٹ کٹ شامل نہیں کیا جائے گا۔</string>
     <string name="settings_update_channel">چینل کو اپ ڈیٹ کریں۔</string>
     <string name="update_channel_stable">مستحکم</string>
     <string name="update_channel_bate">بیٹا</string>
@@ -210,7 +207,6 @@
     <!-- CrashReportActivity -->
     <string name="version_mismatch">LSPosed فریم ورک (%1$d) کا ورژن مینیجر (%2$d) سے میل نہیں کھاتا۔ براہ کرم LSPosed کو دوبارہ انسٹال کریں۔</string>
     <string name="manager_crashed">مینیجر کریش ہو گیا۔</string>
-    <string name="manager_crashed_info">اس کو رپورٹ کریں </string>
     <string name="send_crash_info">حادثے کی معلومات بھیجیں۔</string>
     <string name="crash_info_copied">کریش کی معلومات کلپ بورڈ پر کاپی ہو گئی۔</string>
     <string name="info_copied">کلپ بورڈ پر کاپی ہو گیا۔</string>
