@@ -72,12 +72,11 @@
     <string name="mount_failed">Falha na montagem</string>
     <string name="selinux_permissive">O SELinux está permissivo</string>
     <string name="sepolicy_incorrect">A política do SELinux está incorreta</string>
-    <string name="parasitic_recommend">Recomendado Gerenciador Parasita</string>
-    <string name="parasitic_recommend_summary">O LSPosed agora suporta a parasitização do sistema para evitar detecções. Você pode desinstalar o aplicativo do gerenciador com segurança após criar um atalho do gerenciador parasita. Caso necessário, você pode instalar o aplicativo do gerenciador novamente em /data/adb/lspd/manager.apk.</string>
-    <string name="create_shortcut">Criar Atalho do Gerenciador Parasita</string>
-    <string name="never_show">Não mostrar novamente</string>
     <string name="update_lsposed">Atualizar o LSPosed</string>
     <string name="update_lsposed_msg">Confirmar atualização do LSPosed? O aparelho irá reiniciar após completar a atualização</string>
+    <!-- WelcomeDialog -->
+    <string name="create_shortcut">Criar Atalho do Gerenciador Parasita</string>
+    <string name="never_show">Não mostrar novamente</string>
     <!-- LogsActivity -->
     <string name="menuSaveToSd">Salvar</string>
     <string name="nav_item_logs_verbose">Registros Detalhados</string>
@@ -184,9 +183,7 @@
     <string name="settings_translation_contributors">Tradutores</string>
     <string name="settings_translation">Participe das Traduções</string>
     <string name="settings_translation_summary">Ajude a traduzir o %s para o Português 🇧🇷🇵🇹</string>
-    <string name="pref_title_enable_auto_add_shortcut">Adicionar um atalho automaticamente</string>
     <string name="create_shortcut_summary">Crie manualmente o atalho do gerenciador parasita</string>
-    <string name="settings_enable_auto_add_shortcut_summary">Nenhum novo atalho será adicionado quando desativado no gerenciador não parasita</string>
     <string name="settings_update_channel">Canal de Atualizações</string>
     <string name="update_channel_stable">Estável</string>
     <string name="update_channel_bate">Beta</string>
@@ -210,7 +207,6 @@
     <!-- CrashReportActivity -->
     <string name="version_mismatch">A versão do LSPosed framework (%1$d) não corresponde ao gerenciador (%2$d). Por favor, reinstale o LSPosed.</string>
     <string name="manager_crashed">O gerenciador travou</string>
-    <string name="manager_crashed_info">relatar isto para </string>
     <string name="send_crash_info">Enviar as informações do erro</string>
     <string name="crash_info_copied">Informações do erro copiadas para a área de transferência</string>
     <string name="info_copied">Copiado para a área de transferência</string>
