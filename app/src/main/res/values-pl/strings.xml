@@ -76,12 +76,11 @@
     <string name="mount_failed">Montaż nie powiódł się</string>
     <string name="selinux_permissive">SELinux jest permisywny</string>
     <string name="sepolicy_incorrect">Zasady SELinux są nieprawidłowe</string>
-    <string name="parasitic_recommend">Rekomendowany menadżer Parasitic</string>
-    <string name="parasitic_recommend_summary">LSPosed wspiera teraz pasożyty systemowe, aby uniknąć wykrycia. Możesz odinstalować menadżer po pomyśłnym utworzeniu skrótu w parastic manager. W każdym wypadku możesz zainstalować menadżer spowrotem z pliku /data/adb/lspd/manager.apk.</string>
-    <string name="create_shortcut">Utwórz skrót</string>
-    <string name="never_show">Nigdy nie pokazuj</string>
     <string name="update_lsposed">Aktualizuj LSPosed</string>
     <string name="update_lsposed_msg">Czy chcesz zatwierdzić aktualizację LSPosed? Urządzenie zostanie uruchomione ponownie po zakończeniu aktualizacji</string>
+    <!-- WelcomeDialog -->
+    <string name="create_shortcut">Utwórz skrót</string>
+    <string name="never_show">Nigdy nie pokazuj</string>
     <!-- LogsActivity -->
     <string name="menuSaveToSd">Zapisz</string>
     <string name="nav_item_logs_verbose">Logi verbose</string>
@@ -188,9 +187,7 @@
     <string name="settings_translation_contributors">Tłumacze</string>
     <string name="settings_translation">Weź udział w tłumaczeniu</string>
     <string name="settings_translation_summary">Pomóż nam przetłumaczyć %s na Twój język</string>
-    <string name="pref_title_enable_auto_add_shortcut">Automatycznie dodaj skrót</string>
     <string name="create_shortcut_summary">Ręcznie utwórz skrót do menedżera pasożytów</string>
-    <string name="settings_enable_auto_add_shortcut_summary">Nie zostaną dodane żadne nowe skróty, jeśli są wyłączone w menedżerze niepasożytniczym.</string>
     <string name="settings_update_channel">Kanał aktualizacji</string>
     <string name="update_channel_stable">Stabilny</string>
     <string name="update_channel_bate">Beta</string>
@@ -214,7 +211,6 @@
     <!-- CrashReportActivity -->
     <string name="version_mismatch">Wersja LSPosed framework (%1$d) nie jest taka sama jak wersja menadżera (%2$d). Zainstaluj ponownie LSPosed.</string>
     <string name="manager_crashed">Menedżer uległ awarii</string>
-    <string name="manager_crashed_info">zgłoś to do </string>
     <string name="send_crash_info">Wyślij informacje o awarii</string>
     <string name="crash_info_copied">Informacje o awarii skopiowane do schowka</string>
     <string name="info_copied">Skopiowane do schowka</string>
