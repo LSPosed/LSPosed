@@ -76,12 +76,15 @@
     <string name="mount_failed">Připojení se nezdařilo</string>
     <string name="selinux_permissive">SELinux je permisivní</string>
     <string name="sepolicy_incorrect">Zásady SELinuxu jsou nesprávné</string>
-    <string name="parasitic_recommend">Doporučený parazitický správce</string>
-    <string name="parasitic_recommend_summary">LSPosed nyní podporuje parazitizaci systému, aby se zabránilo detekci. Správce můžete bezpečně odinstalovat po úspěšném vytvoření zástupce parazitického manažera. V jakémkoli případě můžete správce nainstalovat zpět z /data/adb/lspd/manager.apk.</string>
-    <string name="create_shortcut">Vytvořit zástupce</string>
-    <string name="never_show">Nikdy nezobrazovat</string>
     <string name="update_lsposed">Aktualizovat LSPosed</string>
     <string name="update_lsposed_msg">Potvrdit aktualizaci LSPosed? Toto zařízení se restartuje po dokončení aktualizace</string>
+    <!-- WelcomeDialog -->
+    <string name="parasitic_welcome">Vítejte v LSPosed</string>
+    <string name="parasitic_welcome_summary">Používáte parazitního správce, který může vytvořit zástupce nebo se stále otevírat z oznámení.</string>
+    <string name="create_shortcut">Vytvořit zástupce</string>
+    <string name="never_show">Nikdy nezobrazovat</string>
+    <string name="app_welcome">Doporučený parazitický manažer</string>
+    <string name="app_welcome_summary">LSPosed nyní podporuje parazitování systému. K zabránění detekce můžete správce parazitů otevřít z oznámení. Doporučuje se odinstalovat aktuální aplikaci.</string>
     <!-- LogsActivity -->
     <string name="menuSaveToSd">Uložit</string>
     <string name="nav_item_logs_verbose">Podrobné protokoly</string>
@@ -188,9 +191,11 @@
     <string name="settings_translation_contributors">Přispěvatelé překladu</string>
     <string name="settings_translation">Účast na překladu</string>
     <string name="settings_translation_summary">Pomozte nám přeložit %s do vašeho jazyka</string>
-    <string name="pref_title_enable_auto_add_shortcut">Automaticky přidat zástupce</string>
     <string name="create_shortcut_summary">Ručně vytvořit zástupce parazitického manažera</string>
-    <string name="settings_enable_auto_add_shortcut_summary">Žádné nové zkratky nebudou přidány, pokud jsou vypnuty v neparazitickém správci</string>
+    <string name="open_parasitic_summary">Doporučené použití parazitního manažera</string>
+    <string name="settings_enable_status_notification">Oznámení o stavu</string>
+    <string name="settings_enable_status_notification_summary">Zobrazení oznámení, které může otevřít parazitního správce</string>
+    <string name="disable_status_notification_error">Žádný zástupce, nelze zakázat oznámení</string>
     <string name="settings_update_channel">Kanál aktualizace</string>
     <string name="update_channel_stable">Stabilní</string>
     <string name="update_channel_bate">Beta</string>
@@ -214,7 +219,6 @@
     <!-- CrashReportActivity -->
     <string name="version_mismatch">Verze LSPosed (%1$d) neodpovídá správci (%2$d). Prosím přeinstalujte LSPosed.</string>
     <string name="manager_crashed">Manažer selhal</string>
-    <string name="manager_crashed_info">nahlásit to </string>
     <string name="send_crash_info">Odeslat informace o pádu</string>
     <string name="crash_info_copied">Informace o pádu zkopírovány do schránky</string>
     <string name="info_copied">Zkopírováno do schránky</string>
