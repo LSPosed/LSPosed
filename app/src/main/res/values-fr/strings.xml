@@ -73,12 +73,15 @@ https://github.com/tclement0922</string>
     <string name="mount_failed">Échec du montage</string>
     <string name="selinux_permissive">SELinux est permissif</string>
     <string name="sepolicy_incorrect">La politique SELinux est incorrecte</string>
-    <string name="parasitic_recommend">Gestionnaire parasitaire recommandé</string>
-    <string name="parasitic_recommend_summary">LSPosed supporte maintenant la parasitation du système afin d\'éviter la détection. Vous pouvez désinstaller le gestionnaire en toute sécurité et après avoir créé un raccourci du gestionnaire parasitaire avec succès. Dans n\'importe quel cas vous pouvez installer à nouveau le gestionnaire depuis /data/adb/lspd/manager.apk.</string>
-    <string name="create_shortcut">Créer le raccourci</string>
-    <string name="never_show">Ne jamais afficher</string>
     <string name="update_lsposed">Mettre à jour LSPosed</string>
     <string name="update_lsposed_msg">Vous confirmez la mise à jour LSPosed ? Ce périphérique redémarrera après la mise à jour effectuée</string>
+    <!-- WelcomeDialog -->
+    <string name="parasitic_welcome">Bienvenue dans LSPosed</string>
+    <string name="parasitic_welcome_summary">Vous utilisez le gestionnaire parasité, qui ne peut pas créer de raccourcis ou même être ouvert à partir d\'une notification.</string>
+    <string name="create_shortcut">Créer le raccourci</string>
+    <string name="never_show">Ne jamais afficher</string>
+    <string name="app_welcome">Gestionnaire parasité recommandé</string>
+    <string name="app_welcome_summary">LSPosed supporte maintenant la parasitage du système afin d\'éviter les détection, vous pouvez l\'ouvrir depuis la notification. Il est recommandé de désinstaller l\'application actuelle.</string>
     <!-- LogsActivity -->
     <string name="menuSaveToSd">Sauvegarder</string>
     <string name="nav_item_logs_verbose">Journaux détaillés</string>
@@ -185,9 +188,11 @@ https://github.com/tclement0922</string>
     <string name="settings_translation_contributors">Contributeurs de traduction</string>
     <string name="settings_translation">Participer à la traduction</string>
     <string name="settings_translation_summary">Aidez-nous à traduire %s dans votre langue</string>
-    <string name="pref_title_enable_auto_add_shortcut">Ajouter automatiquement un raccourci</string>
     <string name="create_shortcut_summary">Créer le raccourci du gestionnaire parasitaire manuellement</string>
-    <string name="settings_enable_auto_add_shortcut_summary">Aucun nouveau raccourci ne sera ajouté si désactivé dans le gestionnaire non parasitaire</string>
+    <string name="open_parasitic_summary">Utilisation recommandée du gestionnaire parasite</string>
+    <string name="settings_enable_status_notification">Notification d\'état</string>
+    <string name="settings_enable_status_notification_summary">Afficher une notification pouvant ouvrir le gestionnaire parasite</string>
+    <string name="disable_status_notification_error">Pas de raccourcis, la notification ne peut pas être désactivée</string>
     <string name="settings_update_channel">Canal de mise à jour</string>
     <string name="update_channel_stable">Stable</string>
     <string name="update_channel_bate">Bêta</string>
@@ -211,7 +216,6 @@ https://github.com/tclement0922</string>
     <!-- CrashReportActivity -->
     <string name="version_mismatch">La version du sous système LSPosed (%1$d) ne correspond pas à celle du gestionnaire (%2$d). Merci de réinstaller LSPosed.</string>
     <string name="manager_crashed">Le gestionnaire a planté</string>
-    <string name="manager_crashed_info">rapporter cela à </string>
     <string name="send_crash_info">Envoyer les infos de plantage</string>
     <string name="crash_info_copied">Infos de plantage copiées dans le presse-papier</string>
     <string name="info_copied">Copié dans le presse-papier</string>
