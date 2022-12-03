@@ -72,12 +72,11 @@
     <string name="mount_failed">Mount απέτυχε</string>
     <string name="selinux_permissive">Το SELinux είναι επιτρεπτικό</string>
     <string name="sepolicy_incorrect">Η πολιτική SELinux είναι λανθασμένη</string>
-    <string name="parasitic_recommend">Προτεινόμενος Παρασιτικός Διαχειριστής</string>
-    <string name="parasitic_recommend_summary">Το LSPosed τώρα υποστηρίζει παρασιτισμό συστήματος για την αποφυγή ανίχνευσης. Μπορείτε να απεγκαταστήσετε με ασφάλεια τον διαχειριστή μετά την επιτυχή δημιουργία μιας συντόμευσης του παρασιτικού διαχειριστή. Σε κάθε περίπτωση μπορείτε να εγκαταστήσετε το διαχειριστή ξανά από το /data/adb/lspd/manager.apk.</string>
-    <string name="create_shortcut">Δημιουργία συντόμευσης</string>
-    <string name="never_show">Να μην εμφανίζεται ποτέ</string>
     <string name="update_lsposed">Ενημέρωση LSPosed</string>
     <string name="update_lsposed_msg">Επιβεβαίωση ενημέρωσης του LSPosed? Αυτή η συσκευή θα επανεκκινηθεί μετά την ολοκλήρωση της ενημέρωσης</string>
+    <!-- WelcomeDialog -->
+    <string name="create_shortcut">Δημιουργία συντόμευσης</string>
+    <string name="never_show">Να μην εμφανίζεται ποτέ</string>
     <!-- LogsActivity -->
     <string name="menuSaveToSd">Αποθήκευση</string>
     <string name="nav_item_logs_verbose">Λεπτομερείς Καταγραφές</string>
@@ -184,9 +183,7 @@
     <string name="settings_translation_contributors">Συντελεστές μετάφρασης</string>
     <string name="settings_translation">Συμμετοχή στη μετάφραση</string>
     <string name="settings_translation_summary">Βοηθήστε μας να μεταφράσουμε το %s στη γλώσσα σας</string>
-    <string name="pref_title_enable_auto_add_shortcut">Αυτόματη προσθήκη συντόμευσης</string>
     <string name="create_shortcut_summary">Χειροκίνητη δημιουργία συντόμευσης παρασιτικού διαχειριστή</string>
-    <string name="settings_enable_auto_add_shortcut_summary">Δεν θα προστεθούν νέες συντομεύσεις όταν απενεργοποιηθεί στον μη-παρασιτικό διαχειριστή</string>
     <string name="settings_update_channel">Ενημέρωση καναλιού</string>
     <string name="update_channel_stable">Σταθερό</string>
     <string name="update_channel_bate">Βήτα</string>
@@ -210,7 +207,6 @@
     <!-- CrashReportActivity -->
     <string name="version_mismatch">The version of the LSPosed framework (%1$d) does not match manager (%2$d). Please reinstall LSPosed.</string>
     <string name="manager_crashed">Ο διαχειριστής συνετρίβη</string>
-    <string name="manager_crashed_info">αναφορά σε </string>
     <string name="send_crash_info">Αποστολή πληροφοριών κατάρρευσης</string>
     <string name="crash_info_copied">Οι πληροφορίες κατάρρευσης αντιγράφηκαν στο πρόχειρο</string>
     <string name="info_copied">Αντιγραφή στο πρόχειρο</string>

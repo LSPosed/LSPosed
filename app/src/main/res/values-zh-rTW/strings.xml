@@ -70,12 +70,15 @@
     <string name="mount_failed">掛載失敗</string>
     <string name="selinux_permissive">SELinux 處於寬容模式</string>
     <string name="sepolicy_incorrect">SELinux 規則異常</string>
-    <string name="parasitic_recommend">推薦使用寄生管理器</string>
-    <string name="parasitic_recommend_summary">LSPosed 現在支援系統寄生以繞過偵測。您可以在成功建立寄生管理器圖示後從系統設定中移除 LSPosed 管理器。您隨時可以從 /data/adb/lspd/manager.apk 重新安裝管理器。</string>
-    <string name="create_shortcut">建立捷徑</string>
-    <string name="never_show">不再顯示</string>
     <string name="update_lsposed">更新 LSPosed</string>
     <string name="update_lsposed_msg">確定要更新LSPosed嗎？更新完成後將會重啟裝置</string>
+    <!-- WelcomeDialog -->
+    <string name="parasitic_welcome">歡迎使用 LSPosed</string>
+    <string name="parasitic_welcome_summary">您正在使用寄生管理員，您可以建立捷徑或從通知開啟。</string>
+    <string name="create_shortcut">建立捷徑</string>
+    <string name="never_show">不再顯示</string>
+    <string name="app_welcome">建議使用寄生管理員</string>
+    <string name="app_welcome_summary">LSPosed 現在支援系統寄生以避免偵測，您可以從通知開啟寄生管理員。建議解除安裝目前應用程式。</string>
     <!-- LogsActivity -->
     <string name="menuSaveToSd">儲存</string>
     <string name="nav_item_logs_verbose">詳細日誌</string>
@@ -182,9 +185,11 @@
     <string name="settings_translation_contributors">譯者</string>
     <string name="settings_translation">參與翻譯</string>
     <string name="settings_translation_summary">幫助我們翻譯 %s 到您的語言</string>
-    <string name="pref_title_enable_auto_add_shortcut">自動新增捷徑</string>
     <string name="create_shortcut_summary">手動建立寄生管理器捷徑</string>
-    <string name="settings_enable_auto_add_shortcut_summary">在非寄生的管理器中停用後將不會新增捷徑</string>
+    <string name="open_parasitic_summary">建議使用寄生管理員</string>
+    <string name="settings_enable_status_notification">狀態通知</string>
+    <string name="settings_enable_status_notification_summary">顯示通知以便開啟寄生管理員</string>
+    <string name="disable_status_notification_error">沒有捷徑，無法停用通知</string>
     <string name="settings_update_channel">更新通道</string>
     <string name="update_channel_stable">穩定版</string>
     <string name="update_channel_bate">測試版</string>
@@ -208,7 +213,6 @@
     <!-- CrashReportActivity -->
     <string name="version_mismatch">LSPosed框架版本 (%1$d) 與管理器 (%2$d) 不匹配，請重新安裝LSPosed。</string>
     <string name="manager_crashed">應用程式出現未知錯誤</string>
-    <string name="manager_crashed_info">回報給 </string>
     <string name="send_crash_info">傳送錯誤日誌</string>
     <string name="crash_info_copied">錯誤日誌已複製到剪貼簿</string>
     <string name="info_copied">已複製到剪貼簿</string>

@@ -70,12 +70,15 @@
     <string name="mount_failed">Gắn kết không thành công</string>
     <string name="selinux_permissive">SELinux tình trạng dễ dãi</string>
     <string name="sepolicy_incorrect">Chính sách SELinux không chính xác</string>
-    <string name="parasitic_recommend">Quản lý ký sinh khuyến nghị</string>
-    <string name="parasitic_recommend_summary">LSPosed giờ đã hỗ trợ hệ thống ký sinh để tránh bị phát hiện. Bạn có thể thoải mái gỡ bỏ trình quản lý nếu đã có lối tắt của trình quản lý ký sinh. Trong bất cứ điều gì ngoài mong muốn bạn vẫn có thể cài đặt lại nó ở đường dẫn /data/adb/lspd/manager.apk.</string>
-    <string name="create_shortcut">Tạo lối tắt</string>
-    <string name="never_show">Không hiện nữa</string>
     <string name="update_lsposed">Cập nhật LSPosed</string>
     <string name="update_lsposed_msg">Xác nhận để cập nhật LSPosed? Thiết bị sẽ khởi động lại sau khi cập nhật hoàn tất</string>
+    <!-- WelcomeDialog -->
+    <string name="parasitic_welcome">Chào mừng đến với LSPosed</string>
+    <string name="parasitic_welcome_summary">Bạn đang sử dụng trình quản lý ký sinh, có thể tạo lối tắt hoặc mở từ thông báo.</string>
+    <string name="create_shortcut">Tạo lối tắt</string>
+    <string name="never_show">Không hiện nữa</string>
+    <string name="app_welcome">Quản lý ký sinh khuyến nghị</string>
+    <string name="app_welcome_summary">LSPosed giờ đã hỗ trợ ký sinh hệ thống để tránh bị phát hiện, bạn có thể mở trình quản lý ký sinh từ thông báo. Bạn nên gỡ cài đặt ứng dụng hiện tại.</string>
     <!-- LogsActivity -->
     <string name="menuSaveToSd">Lưu lại</string>
     <string name="nav_item_logs_verbose">Nhật ký Chi tiết</string>
@@ -182,9 +185,11 @@
     <string name="settings_translation_contributors">Cộng tác viên phiên dịch</string>
     <string name="settings_translation">Tham gia phiên dịch</string>
     <string name="settings_translation_summary">Giúp chúng tôi dịch %s sang ngôn ngữ của bạn</string>
-    <string name="pref_title_enable_auto_add_shortcut">Tự động thêm một lối tắt</string>
     <string name="create_shortcut_summary">Tạo lối tắt trình quản lý ký sinh theo cách thủ công</string>
-    <string name="settings_enable_auto_add_shortcut_summary">Sẽ không có lối tắt mới nào được thêm khi vô hiệu trong trình quản lý không cộng sinh</string>
+    <string name="open_parasitic_summary">Khuyến nghị sử dụng trình quản lý ký sinh</string>
+    <string name="settings_enable_status_notification">Thông báo trạng thái</string>
+    <string name="settings_enable_status_notification_summary">Hiển thị thông báo để có thể mở trình quản lý ký sinh</string>
+    <string name="disable_status_notification_error">Không lối tắt, không thể tắt thông báo</string>
     <string name="settings_update_channel">Kênh cập nhật</string>
     <string name="update_channel_stable">Ổn định</string>
     <string name="update_channel_bate">Thử nghiệm</string>
@@ -208,7 +213,6 @@
     <!-- CrashReportActivity -->
     <string name="version_mismatch">Phiên bản của LSPosed framework (%1$d) không trùng khớp với phiên bản quản lý (%2$d). Hãy cài đặt lại LSPosed.</string>
     <string name="manager_crashed">Trình quản lí gặp sự cố</string>
-    <string name="manager_crashed_info">báo cáo đến </string>
     <string name="send_crash_info">Gửi thông tin sự cố</string>
     <string name="crash_info_copied">Đã sao chép thông tin sự cố vào bộ nhớ tạm</string>
     <string name="info_copied">Đã sao chép vào bảng nhớ tạm</string>

@@ -76,12 +76,15 @@
     <string name="mount_failed">Ошибка монтирования</string>
     <string name="selinux_permissive">SELinux в разрешающим режиме</string>
     <string name="sepolicy_incorrect">Неправильная политика SELinux</string>
-    <string name="parasitic_recommend">Скрытие приложения LSPosed</string>
-    <string name="parasitic_recommend_summary">Рекомендуется скрыть приложение LSPosed от различных обнаружений в системе. Для этого создайте ярлык и безопасно удалите само приложение LSPosed. В любой момент можно вернуть приложение установив его из \"/data/adb/lspd/manager.apk\"</string>
-    <string name="create_shortcut">Создать ярлык</string>
-    <string name="never_show">Больше не показывать</string>
     <string name="update_lsposed">Обновление LSPosed</string>
     <string name="update_lsposed_msg">Вы точно хотите обновить LSPosed?\nУстройство перезагрузится после завершения обновления</string>
+    <!-- WelcomeDialog -->
+    <string name="parasitic_welcome">Добро пожаловать в LSPosed</string>
+    <string name="parasitic_welcome_summary">Вы используете скрытый режим. Для открытия LSPosed, можно создать ярлык на рабочем столе или открывать из уведомлений</string>
+    <string name="create_shortcut">Создать ярлык</string>
+    <string name="never_show">Больше не показывать</string>
+    <string name="app_welcome">Скрытие приложения LSPosed</string>
+    <string name="app_welcome_summary">LSPosed теперь поддерживает скрытие, чтобы избежать различные обнаружения системой, вы можете открыть LSPosed из уведомления. Рекомендуется удалить текущее приложение</string>
     <!-- LogsActivity -->
     <string name="menuSaveToSd">Сохранить</string>
     <string name="nav_item_logs_verbose">Подробные логи</string>
@@ -188,9 +191,11 @@
     <string name="settings_translation_contributors">Автор перевода</string>
     <string name="settings_translation">Принять участие в переводе</string>
     <string name="settings_translation_summary">Помогите нам перевести %s на ваш язык</string>
-    <string name="pref_title_enable_auto_add_shortcut">Автоматически добавлять ярлык</string>
     <string name="create_shortcut_summary">Вручную создать ярлык LSPosed</string>
-    <string name="settings_enable_auto_add_shortcut_summary">Новый ярлык LSPosed не будет добавляться автоматически, если выключить этот переключатель</string>
+    <string name="open_parasitic_summary">Рекомендуется скрыть приложение LSPosed</string>
+    <string name="settings_enable_status_notification">Уведомление о состоянии</string>
+    <string name="settings_enable_status_notification_summary">Показывать уведомление, через которое можно открыть LSPosed</string>
+    <string name="disable_status_notification_error">Не найден ярлык, выключить уведомление нельзя</string>
     <string name="settings_update_channel">Источник обновлений</string>
     <string name="update_channel_stable">Стабильные версии</string>
     <string name="update_channel_bate">Бета-версии</string>
@@ -214,7 +219,6 @@
     <!-- CrashReportActivity -->
     <string name="version_mismatch">Версия LSPosed фреймворк (%1$d) не соответствует версии приложения (%2$d). Пожалуйста, переустановите LSPosed</string>
     <string name="manager_crashed">Сбой приложения LSPosed</string>
-    <string name="manager_crashed_info">сообщить об этом </string>
     <string name="send_crash_info">Отправить информацию о сбое</string>
     <string name="crash_info_copied">Информация о сбое скопирована в буфер обмена</string>
     <string name="info_copied">Скопировано в буфер обмена</string>
@@ -239,9 +243,9 @@
     <string name="color_brown">Коричневый</string>
     <string name="color_blue_grey">Серо-голубой</string>
     <plurals name="module_release_assets_download_count">
-        <item quantity="one">%d скачивание</item>
-        <item quantity="few">%d скачивается</item>
-        <item quantity="many">%d скачиваются</item>
-        <item quantity="other">%d скачано</item>
+        <item quantity="one">%d раз скачали</item>
+        <item quantity="few">%d раза скачали</item>
+        <item quantity="many">%d раз скачали</item>
+        <item quantity="other">%d раз скачали</item>
     </plurals>
 </resources>

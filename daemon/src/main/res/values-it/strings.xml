@@ -8,4 +8,8 @@
     <string name="xposed_module_updated_notification_content">%s è stato aggiornato, arresta e riavvia le applicazioni per le quali è abilitato</string>
     <string name="xposed_module_updated_notification_title_system">Modulo Xposed aggiornato, è necessario il riavvio del sistema</string>
     <string name="xposed_module_updated_notification_content_system">%s è stato aggiornato. Poiché è abilitato per il framework di sistema, è necessario riavviare per applicare le modifiche</string>
+    <string name="module_updated_channel_name">Aggiornamento del modulo completato</string>
+    <string name="status_channel_name">Stato LSPosed</string>
+    <string name="lsposed_running_notification_title">LSPosed caricato</string>
+    <string name="lsposed_running_notification_content">Tocca la notifica per aprire il manager</string>
 </resources>

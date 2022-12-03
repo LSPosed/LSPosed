@@ -76,12 +76,11 @@
     <string name="mount_failed">Не вдалося під\'єднати</string>
     <string name="selinux_permissive">SELinux є дозволеним</string>
     <string name="sepolicy_incorrect">Політика SELinux неправильна</string>
-    <string name="parasitic_recommend">Рекомендується менеджер-паразит</string>
-    <string name="parasitic_recommend_summary">LSPosed тепер підтримує системний паразитизм, щоб уникнути виявлення. Ви можете безпечно видалити менеджер після успішного створення ярлика менеджера-паразита. У разі необхідності ви можете встановити менеджер назад з /data/adb/lspd/manager.apk.</string>
-    <string name="create_shortcut">Створити ярлик</string>
-    <string name="never_show">Ніколи не показувати</string>
     <string name="update_lsposed">Оновити LSPosed</string>
     <string name="update_lsposed_msg">Підтвердити оновлення LSPosed? Цей пристрій перезавантажиться після завершення оновлення</string>
+    <!-- WelcomeDialog -->
+    <string name="create_shortcut">Створити ярлик</string>
+    <string name="never_show">Ніколи не показувати</string>
     <!-- LogsActivity -->
     <string name="menuSaveToSd">Зберегти</string>
     <string name="nav_item_logs_verbose">Детальні звіти</string>
@@ -188,9 +187,7 @@
     <string name="settings_translation_contributors">Автори перекладу</string>
     <string name="settings_translation">Допомогти з перекладом</string>
     <string name="settings_translation_summary">Доповнити український переклад %s</string>
-    <string name="pref_title_enable_auto_add_shortcut">Автоматично додавати ярлик</string>
     <string name="create_shortcut_summary">Вручну створити ярлик менеджера LSPosed</string>
-    <string name="settings_enable_auto_add_shortcut_summary">Новий ярлик LSPosed не буде додаватися автоматично, якщо цю опцію вимкнено</string>
     <string name="settings_update_channel">Канал оновлень</string>
     <string name="update_channel_stable">Стабільний</string>
     <string name="update_channel_bate">Бета-версія</string>
@@ -214,7 +211,6 @@
     <!-- CrashReportActivity -->
     <string name="version_mismatch">Версія LSPosed framework (%1$d) не відповідає менеджеру (%2$d). Будь-ласка, перевстановіть LSPosed.</string>
     <string name="manager_crashed">Менеджер зазнав збою</string>
-    <string name="manager_crashed_info">надіслати це на </string>
     <string name="send_crash_info">Надіслати інформацію про помилку</string>
     <string name="crash_info_copied">Інформація про помилку скопійована до буферу обміну</string>
     <string name="info_copied">Скопійовано до буфера обміну</string>

@@ -8,4 +8,8 @@
     <string name="xposed_module_updated_notification_content">%s đã được cập nhật, xin hãy buộc dừng và khởi động lại ứng dụng liên quan</string>
     <string name="xposed_module_updated_notification_title_system">Mô-đun Xposed đã được cập nhật, yêu cầu khởi động lại hệ thống</string>
     <string name="xposed_module_updated_notification_content_system">%s đã được cập nhật, vì phạm vi bao gồm Framework Hệ thống, thì khởi động lại là cần thiết để áp dụng các thay đổi</string>
+    <string name="module_updated_channel_name">Cập nhật mô-đun hoàn tất</string>
+    <string name="status_channel_name">Trạng thái LSPosed</string>
+    <string name="lsposed_running_notification_title">LSPos đã được tải</string>
+    <string name="lsposed_running_notification_content">Nhấn vào thông báo để mở trình quản lý</string>
 </resources>

@@ -80,12 +80,11 @@
     <string name="mount_failed">فشل التحميل</string>
     <string name="selinux_permissive">SELinux متساهل</string>
     <string name="sepolicy_incorrect">سياسة SELinux غير صحيحة</string>
-    <string name="parasitic_recommend">مدير طفيلي موصي به</string>
-    <string name="parasitic_recommend_summary">يدعم LSPosed الآن تطهير النظام لتجنب الكشف. يمكنك إلغاء تثبيت المدير بأمان بعد إنشاء اختصار للمدير الطفيلي. على أي حال يمكنك تثبيت المدير مرة أخرى من /data/adb/lspd/manager.apk.</string>
-    <string name="create_shortcut">إنشاء إختصار</string>
-    <string name="never_show">لا تظهر أبداً</string>
     <string name="update_lsposed">تحديث LSPosed</string>
     <string name="update_lsposed_msg">تأكيد تحديث LSPosed؟ سيتم إعـادة تشغيل هذا الجهاز بعد اكتمال التحديث</string>
+    <!-- WelcomeDialog -->
+    <string name="create_shortcut">إنشاء إختصار</string>
+    <string name="never_show">لا تظهر أبداً</string>
     <!-- LogsActivity -->
     <string name="menuSaveToSd">احفظ</string>
     <string name="nav_item_logs_verbose">سجلات مفصّلة</string>
@@ -192,9 +191,7 @@
     <string name="settings_translation_contributors">المساهمون بالترجمة</string>
     <string name="settings_translation">المشاركة في الترجمة</string>
     <string name="settings_translation_summary">ساعدنا في ترجمة %s إلى لغتك</string>
-    <string name="pref_title_enable_auto_add_shortcut">إضافة اختصار تلقائياً</string>
     <string name="create_shortcut_summary">إنشاء اختصار المدير الطفيلي يدويًا</string>
-    <string name="settings_enable_auto_add_shortcut_summary">لن تضاف اختصارات جديدة عند تعطيلها في المدير غير الطفيلي</string>
     <string name="settings_update_channel">قناة التحديث</string>
     <string name="update_channel_stable">مستقر</string>
     <string name="update_channel_bate">تجريبي</string>
@@ -218,7 +215,6 @@
     <!-- CrashReportActivity -->
     <string name="version_mismatch">إصدار إطار LSPosed (%1$d) لا يتطابق مع المدير (%2$d). يرجى إعادة تثبيت LSPosed.</string>
     <string name="manager_crashed">تعطل المدير</string>
-    <string name="manager_crashed_info">أبلغ عن هذا إلى </string>
     <string name="send_crash_info">إرسال معلومات العطل</string>
     <string name="crash_info_copied">تم نسخ معلومات العطل إلى الحافظة</string>
     <string name="info_copied">تم النسخ إلى الحافظة</string>

@@ -77,12 +77,11 @@
     <string name="mount_failed">הר נכשל</string>
     <string name="selinux_permissive">SELinux מתירנית</string>
     <string name="sepolicy_incorrect">מדיניות SELinux שגויה</string>
-    <string name="parasitic_recommend">מנהל טפילים מומלץ</string>
-    <string name="parasitic_recommend_summary">LSPosed תומך כעת בטפילת מערכת כדי למנוע זיהוי. אתה יכול להסיר בבטחה את המנהל לאחר יצירת קיצור מוצלח של המנהל הטפילי. בכל מקרה אתה יכול להתקין את המנהל בחזרה מ /data/adb/lspd/manager.apk.</string>
-    <string name="create_shortcut">צור קיצור דרך</string>
-    <string name="never_show">לעולם על תראה</string>
     <string name="update_lsposed">עדכון LSPosed</string>
     <string name="update_lsposed_msg">לאשר לעדכן את LSPosed? מכשיר זה יאתחל לאחר השלמת העדכון</string>
+    <!-- WelcomeDialog -->
+    <string name="create_shortcut">צור קיצור דרך</string>
+    <string name="never_show">לעולם על תראה</string>
     <!-- LogsActivity -->
     <string name="menuSaveToSd">שמור</string>
     <string name="nav_item_logs_verbose">יומנים מפורשים</string>
@@ -189,9 +188,7 @@
     <string name="settings_translation_contributors">תורמים לתרגום</string>
     <string name="settings_translation">השתתף בתרגום</string>
     <string name="settings_translation_summary">עזור לנו לתרגם את %s לשפה שלך</string>
-    <string name="pref_title_enable_auto_add_shortcut">הוסף אוטומטית קיצור דרך</string>
     <string name="create_shortcut_summary">צור באופן ידני קיצור דרך למנהל טפילי</string>
-    <string name="settings_enable_auto_add_shortcut_summary">לא יתווספו קיצורי דרך חדשים כשהם מושבתים במנהל הלא טפילי</string>
     <string name="settings_update_channel">ערוץ עדכון</string>
     <string name="update_channel_stable">יציב</string>
     <string name="update_channel_bate">בטא</string>
@@ -215,7 +212,6 @@
     <!-- CrashReportActivity -->
     <string name="version_mismatch">הגרסה של LSPosed framework (%1$d) אינה תואמת למנהל (%2$d). נא להתקין מחדש את LSPosed.</string>
     <string name="manager_crashed">המנהל התרסק</string>
-    <string name="manager_crashed_info">דווח על כך </string>
     <string name="send_crash_info">שלח מידע על הקריסה</string>
     <string name="crash_info_copied">מידע קריסה הועתק ללוח</string>
     <string name="info_copied">הועתק ללוח</string>

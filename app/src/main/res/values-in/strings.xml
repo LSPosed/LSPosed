@@ -70,12 +70,11 @@
     <string name="mount_failed">Pemasangan gagal</string>
     <string name="selinux_permissive">SELinux permisif</string>
     <string name="sepolicy_incorrect">Kebijakan SELinux salah</string>
-    <string name="parasitic_recommend">Manajer Parasit Direkomendasikan</string>
-    <string name="parasitic_recommend_summary">LSPosed sekarang mendukung parasitisasi sistem untuk menghindari deteksi. Anda dapat menghapus instalan manajer dengan aman setelah berhasil membuat pintasan manajer parasit. Bagaimanapun, Anda dapat menginstal kembali manajer dari /data/adb/lspd/manager.apk.</string>
-    <string name="create_shortcut">Buat pintasan</string>
-    <string name="never_show">Jangan pernah tampilkan</string>
     <string name="update_lsposed">Perbarui LSPosed</string>
     <string name="update_lsposed_msg">Konfirmasi untuk pembaharuan LSPosed? Perangkat ini akan mulai ulang setelah pembaharuan selesai</string>
+    <!-- WelcomeDialog -->
+    <string name="create_shortcut">Buat pintasan</string>
+    <string name="never_show">Jangan pernah tampilkan</string>
     <!-- LogsActivity -->
     <string name="menuSaveToSd">Simpan</string>
     <string name="nav_item_logs_verbose">Log Verbose</string>
@@ -182,9 +181,7 @@
     <string name="settings_translation_contributors">Kontributor terjemahan</string>
     <string name="settings_translation">Berpartisipasi dalam terjemahan</string>
     <string name="settings_translation_summary">Bantu kami menerjemahkan %s kedalam bahasamu</string>
-    <string name="pref_title_enable_auto_add_shortcut">Buat jalur pintas secara otomatis</string>
     <string name="create_shortcut_summary">Buat pintasan manajer parasit secara manual</string>
-    <string name="settings_enable_auto_add_shortcut_summary">Tidak ada pintasan baru yang akan ditambahkan saat dinonaktifkan di manajer non-parasit</string>
     <string name="settings_update_channel">Perbarui saluran</string>
     <string name="update_channel_stable">Stabil</string>
     <string name="update_channel_bate">Beta</string>
@@ -208,7 +205,6 @@
     <!-- CrashReportActivity -->
     <string name="version_mismatch">Versi dari LSPosed framework (%1$d) tidak cocok dengan manajer (%2$d). Mohon untuk menginstal ulang LSPosed.</string>
     <string name="manager_crashed">Manajer rusak</string>
-    <string name="manager_crashed_info">laporkan ini kepada </string>
     <string name="send_crash_info">Kirim info kerusakan</string>
     <string name="crash_info_copied">Info kerusakan disalin ke papan klip</string>
     <string name="info_copied">Disalin ke papan klip</string>

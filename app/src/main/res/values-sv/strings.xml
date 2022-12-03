@@ -72,12 +72,11 @@
     <string name="mount_failed">Montering misslyckades</string>
     <string name="selinux_permissive">SELinux är tillåtande</string>
     <string name="sepolicy_incorrect">SELinux-politiken är felaktig</string>
-    <string name="parasitic_recommend">Parasitic Manager rekommenderas</string>
-    <string name="parasitic_recommend_summary">LSPosed stöder nu systemparasitering för att undvika upptäckt. Du kan tryggt avinstallera hanteraren efter att ha skapat en genväg till den parasiterande hanteraren. Du kan i vilket fall installera hanteraren från /data/adb/lspd/manager.apk.</string>
-    <string name="create_shortcut">Skapa genväg</string>
-    <string name="never_show">Visa aldrig</string>
     <string name="update_lsposed">Uppdatera LSPosed</string>
     <string name="update_lsposed_msg">Bekräfta att uppdatera LSPosed? Denna enhet kommer att starta om efter att uppdateringen är slutförd</string>
+    <!-- WelcomeDialog -->
+    <string name="create_shortcut">Skapa genväg</string>
+    <string name="never_show">Visa aldrig</string>
     <!-- LogsActivity -->
     <string name="menuSaveToSd">Spara</string>
     <string name="nav_item_logs_verbose">Utförliga Loggar</string>
@@ -184,9 +183,7 @@
     <string name="settings_translation_contributors">Bidragande översättare</string>
     <string name="settings_translation">Delta i översättning</string>
     <string name="settings_translation_summary">Hjälp oss att översätta %s till ditt språk</string>
-    <string name="pref_title_enable_auto_add_shortcut">Lägg automatiskt till en genväg</string>
     <string name="create_shortcut_summary">Skapa manuellt en genväg för parasitansvarig</string>
-    <string name="settings_enable_auto_add_shortcut_summary">Inga nya genvägar kommer att läggas till när inaktiverad i den icke-parasiterande hanteraren</string>
     <string name="settings_update_channel">Uppdatera kanal</string>
     <string name="update_channel_stable">Stabil</string>
     <string name="update_channel_bate">Beta</string>
@@ -210,7 +207,6 @@
     <!-- CrashReportActivity -->
     <string name="version_mismatch">Versionen av det LSPosed ramverket (%1$d) matchar inte hanteraren (%2$d). Installera om LSPosed.</string>
     <string name="manager_crashed">Hanteraren kraschade</string>
-    <string name="manager_crashed_info">rapportera detta till </string>
     <string name="send_crash_info">Skicka kraschinformation</string>
     <string name="crash_info_copied">Kraschinformation kopierad till urklipp</string>
     <string name="info_copied">Kopieras till urklipp</string>

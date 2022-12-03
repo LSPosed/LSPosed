@@ -74,12 +74,11 @@
     <string name="mount_failed">Postavljanje nije uspjelo</string>
     <string name="selinux_permissive">SELinux je permisivan</string>
     <string name="sepolicy_incorrect">Pravila SELinuxa je netočna</string>
-    <string name="parasitic_recommend">Parazitski Manager Preporučen</string>
-    <string name="parasitic_recommend_summary">LSPosed sada podržava parazitizaciju sustava kako bi se izbjeglo otkrivanje. Možete sigurno deinstalirati Manager nakon uspješnog stvaranja prečaca parazitskog Managera. U svakom slučaju Manager ponovno možete instalirati iz /data/adb/lspd/manager.apk.</string>
-    <string name="create_shortcut">Napravi prečac</string>
-    <string name="never_show">Nikad ne pokazuj</string>
     <string name="update_lsposed">Ažurirajte LSPosed</string>
     <string name="update_lsposed_msg">Potvrditi ažuriranje LSPosed? Ovaj će se uređaj ponovno pokrenuti nakon završetka ažuriranja</string>
+    <!-- WelcomeDialog -->
+    <string name="create_shortcut">Napravi prečac</string>
+    <string name="never_show">Nikad ne pokazuj</string>
     <!-- LogsActivity -->
     <string name="menuSaveToSd">Sačuvaj</string>
     <string name="nav_item_logs_verbose">Opširni zapisi</string>
@@ -186,9 +185,7 @@
     <string name="settings_translation_contributors">Suradnici prijevoda</string>
     <string name="settings_translation">Sudjelujte u prevođenju</string>
     <string name="settings_translation_summary">Pomozite nam prevesti %s na vaš jezik</string>
-    <string name="pref_title_enable_auto_add_shortcut">Automatski dodajte prečac</string>
     <string name="create_shortcut_summary">Ručno kreirajte prečac parazitskog upravitelja</string>
-    <string name="settings_enable_auto_add_shortcut_summary">Neće se dodavati novi prečaci kada su onemogućeni u neparazitskom upravitelju</string>
     <string name="settings_update_channel">Ažurirajte kanal</string>
     <string name="update_channel_stable">Stabilan</string>
     <string name="update_channel_bate">Beta</string>
@@ -212,7 +209,6 @@
     <!-- CrashReportActivity -->
     <string name="version_mismatch">Verzija okvira LSPosed (%1$d) ne odgovara upravitelju (%2$d). Molimo ponovno instalirajte LSPosed.</string>
     <string name="manager_crashed">Upravitelj se srušio</string>
-    <string name="manager_crashed_info">prijavi ovo </string>
     <string name="send_crash_info">Pošalji informacije o padu</string>
     <string name="crash_info_copied">Informacije o padu kopirane su u međuspremnik</string>
     <string name="info_copied">Kopirano u međuspremnik</string>

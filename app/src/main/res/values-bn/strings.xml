@@ -73,12 +73,11 @@
     <string name="mount_failed">মাউন্ট ব্যর্থ হয়েছে</string>
     <string name="selinux_permissive">SELinux অনুমোদিত</string>
     <string name="sepolicy_incorrect">SELinux নীতি ভুল</string>
-    <string name="parasitic_recommend">পরজীবী ব্যবস্থাপক প্রস্তাবিত</string>
-    <string name="parasitic_recommend_summary">LSPosed এখন সনাক্তকরণ এড়াতে সিস্টেম প্যারাসাইটাইজেশন সমর্থন করে। সফলভাবে পরজীবী ম্যানেজারের একটি শর্টকাট তৈরি করার পরে আপনি নিরাপদে ম্যানেজারটিকে আনইনস্টল করতে পারেন। যাই হোক না কেন আপনি /data/adb/lspd/manager.apk থেকে ম্যানেজারটি আবার ইনস্টল করতে পারেন।</string>
-    <string name="create_shortcut">শর্টকাট তৈরি করুন</string>
-    <string name="never_show">কখনও দেখাবে না</string>
     <string name="update_lsposed">আপডেট LSPosed</string>
     <string name="update_lsposed_msg">LSPosed আপডেট করার জন্য নিশ্চিত? আপডেট সম্পূর্ণ হওয়ার পরে এই ডিভাইসটি রিবুট হবে</string>
+    <!-- WelcomeDialog -->
+    <string name="create_shortcut">শর্টকাট তৈরি করুন</string>
+    <string name="never_show">কখনও দেখাবে না</string>
     <!-- LogsActivity -->
     <string name="menuSaveToSd">সংরক্ষণ</string>
     <string name="nav_item_logs_verbose">ভার্বোস লগ</string>
@@ -185,9 +184,7 @@
     <string name="settings_translation_contributors">অনুবাদ অবদানকারী</string>
     <string name="settings_translation">অনুবাদে অংশগ্রহণ করুন</string>
     <string name="settings_translation_summary">আপনার ভাষায় %s অনুবাদ করতে আমাদের সাহায্য করুন</string>
-    <string name="pref_title_enable_auto_add_shortcut">স্বয়ংক্রিয়ভাবে একটি শর্টকাট যোগ করুন</string>
     <string name="create_shortcut_summary">ম্যানুয়ালি পরজীবী ম্যানেজার শর্টকাট তৈরি করুন</string>
-    <string name="settings_enable_auto_add_shortcut_summary">নন-প্যারাসাটিক ম্যানেজারে অক্ষম করা হলে কোনো নতুন শর্টকাট যোগ করা হবে না</string>
     <string name="settings_update_channel">চ্যানেল আপডেট করুন</string>
     <string name="update_channel_stable">স্থিতিশীল</string>
     <string name="update_channel_bate">বেটা</string>
@@ -211,7 +208,6 @@
     <!-- CrashReportActivity -->
     <string name="version_mismatch">LSPosed ফ্রেমওয়ার্কের সংস্করণ (%1$d) ম্যানেজার (%2$d) এর সাথে মেলে না। অনুগ্রহ করে LSPosed পুনরায় ইনস্টল করুন।</string>
     <string name="manager_crashed">ম্যানেজার বিধ্বস্ত</string>
-    <string name="manager_crashed_info">এই রিপোর্ট </string>
     <string name="send_crash_info">ক্র্যাশ তথ্য পাঠান</string>
     <string name="crash_info_copied">ক্র্যাশ তথ্য ক্লিপবোর্ডে অনুলিপি করা হয়েছে৷</string>
     <string name="info_copied">ক্লিপবোর্ডে কপি করা হয়েছে</string>

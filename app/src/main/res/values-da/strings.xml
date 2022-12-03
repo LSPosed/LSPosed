@@ -41,7 +41,7 @@
         <item quantity="other">%d moduler opgraderbare</item>
     </plurals>
     <string name="about_view_source_code"><![CDATA[Vis kildekode på %1$s<br/>Tilmeld dig vores %2$s kanal]]></string>
-    <string name="translators" comment="Dear translators, please add your home page here following the format. There can be more than one translator. So feel free to append yourself.">nul</string>
+    <string name="translators" comment="Dear translators, please add your home page here following the format. There can be more than one translator. So feel free to append yourself.">null</string>
     <string name="install">Installér</string>
     <string name="install_summary">Tryk for at installere LSPosed</string>
     <string name="not_installed">Ikke installeret</string>
@@ -72,12 +72,11 @@
     <string name="mount_failed">Montering mislykkedes</string>
     <string name="selinux_permissive">SELinux er tilladende</string>
     <string name="sepolicy_incorrect">SELinux-politik er forkert</string>
-    <string name="parasitic_recommend">Parasitisk Håndtering Anbefalet</string>
-    <string name="parasitic_recommend_summary">LSPosed understøtter nu system parasitization for at undgå afsløring. Du kan trygt afinstallere manager efter held at oprette en genvej til parasitleder. Under alle omstændigheder kan du installere manager tilbage fra /data/adb/lspd/manager.apk.</string>
-    <string name="create_shortcut">Opret genvej</string>
-    <string name="never_show">Vis aldrig</string>
     <string name="update_lsposed">Opdater LSPosed</string>
     <string name="update_lsposed_msg">Bekræft opdatering af LSPosed? Denne enhed vil genstarte efter opdateringsfuldførelse</string>
+    <!-- WelcomeDialog -->
+    <string name="create_shortcut">Opret genvej</string>
+    <string name="never_show">Vis aldrig</string>
     <!-- LogsActivity -->
     <string name="menuSaveToSd">Gem</string>
     <string name="nav_item_logs_verbose">Verbose Logs</string>
@@ -184,9 +183,7 @@
     <string name="settings_translation_contributors">Oversættelsesbidragsydere</string>
     <string name="settings_translation">Deltag i oversættelse</string>
     <string name="settings_translation_summary">Hjælp os med at oversætte %s til dit sprog</string>
-    <string name="pref_title_enable_auto_add_shortcut">Tilføj automatisk en genvej</string>
     <string name="create_shortcut_summary">Opret manuelt en genvej til parasitic manager manuelt</string>
-    <string name="settings_enable_auto_add_shortcut_summary">Ingen nye genveje vil blive tilføjet når deaktiveret i den ikke-parasitære manager</string>
     <string name="settings_update_channel">Opdater kanal</string>
     <string name="update_channel_stable">Stabil</string>
     <string name="update_channel_bate">Beta</string>
@@ -210,7 +207,6 @@
     <!-- CrashReportActivity -->
     <string name="version_mismatch">Versionen af LSPosed framework (%1$d) matcher ikke manager (%2$d). Geninstaller venligst LSPosed.</string>
     <string name="manager_crashed">Manager styrtede ned</string>
-    <string name="manager_crashed_info">rapportér dette til </string>
     <string name="send_crash_info">Send crash info</string>
     <string name="crash_info_copied">Crash info kopieret til udklipsholder</string>
     <string name="info_copied">Kopieret til udklipsholderen</string>

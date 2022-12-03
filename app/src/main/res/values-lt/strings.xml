@@ -76,12 +76,11 @@
     <string name="mount_failed">Montavimas nepavyko</string>
     <string name="selinux_permissive">\"SELinux\" yra leidžiamoji</string>
     <string name="sepolicy_incorrect">\"SELinux\" politika yra neteisinga</string>
-    <string name="parasitic_recommend">Rekomenduojama parazitinė vadybininkė</string>
-    <string name="parasitic_recommend_summary">\"LSPosed\" dabar palaiko sistemos parazitavimą siekiant išvengti aptikimo. Sėkmingai sukūrę parazituojančio tvarkytuvo nuorodą, galite saugiai pašalinti tvarkytuvą. Bet kuriuo atveju valdytoją galite vėl įdiegti iš /data/adb/lspd/manager.apk.</string>
-    <string name="create_shortcut">Sukurti nuorodą</string>
-    <string name="never_show">Niekada nerodykite</string>
     <string name="update_lsposed">Atnaujinti LSPosed</string>
     <string name="update_lsposed_msg">Patvirtinkite, kad atnaujintumėte LSPosed? Baigus atnaujinimą šis prietaisas bus perkrautas</string>
+    <!-- WelcomeDialog -->
+    <string name="create_shortcut">Sukurti nuorodą</string>
+    <string name="never_show">Niekada nerodykite</string>
     <!-- LogsActivity -->
     <string name="menuSaveToSd">Išsaugoti</string>
     <string name="nav_item_logs_verbose">Žurnalai su verbaline informacija</string>
@@ -188,9 +187,7 @@
     <string name="settings_translation_contributors">Vertimo paslaugų teikėjai</string>
     <string name="settings_translation">Dalyvaukite vertimo procese</string>
     <string name="settings_translation_summary">Padėkite mums išversti %s į savo kalbą</string>
-    <string name="pref_title_enable_auto_add_shortcut">Automatiškai pridėkite nuorodą</string>
     <string name="create_shortcut_summary">Rankiniu būdu sukurkite parazitinio tvarkytuvo nuorodą</string>
-    <string name="settings_enable_auto_add_shortcut_summary">Neparazitiniame tvarkytuve išjungus spartųjį klavišą, naujų spartieji klavišai nepridedami.</string>
     <string name="settings_update_channel">Atnaujinti kanalą</string>
     <string name="update_channel_stable">Stabilus</string>
     <string name="update_channel_bate">Beta</string>
@@ -214,7 +211,6 @@
     <!-- CrashReportActivity -->
     <string name="version_mismatch">LSPosed sistemos versija (%1$d) neatitinka valdytojo (%2$d). Iš naujo įdiekite \"LSPosed\".</string>
     <string name="manager_crashed">Vadybininkas patyrė avariją</string>
-    <string name="manager_crashed_info">praneškite apie tai </string>
     <string name="send_crash_info">Siųsti informaciją apie avariją</string>
     <string name="crash_info_copied">Į iškarpinę nukopijuota informacija apie avariją</string>
     <string name="info_copied">Nukopijuota į iškarpinę</string>

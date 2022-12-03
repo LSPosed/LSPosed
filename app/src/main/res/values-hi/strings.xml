@@ -72,12 +72,11 @@
     <string name="mount_failed">माउंट विफल</string>
     <string name="selinux_permissive">SELinux अनुमेय है</string>
     <string name="sepolicy_incorrect">SELinux नीति गलत है</string>
-    <string name="parasitic_recommend">परजीवी प्रबंधक अनुशंसित</string>
-    <string name="parasitic_recommend_summary">LSPosed अब पता लगाने से बचने के लिए सिस्टम परजीवीकरण का समर्थन करता है। परजीवी प्रबंधक का शॉर्टकट सफलतापूर्वक बनाने के बाद आप प्रबंधक को सुरक्षित रूप से अनइंस्टॉल कर सकते हैं। किसी भी स्थिति में आप प्रबंधक को /data/adb/lspd/manager.apk से वापस स्थापित कर सकते हैं।</string>
-    <string name="create_shortcut">शॉर्टकट बनाएं</string>
-    <string name="never_show">कभी भी न दिखाओ</string>
     <string name="update_lsposed">अद्यतन LSPosed</string>
     <string name="update_lsposed_msg">LSPosed को अपडेट करने की पुष्टि करें? अपडेट पूरा होने के बाद यह डिवाइस रीबूट हो जाएगा</string>
+    <!-- WelcomeDialog -->
+    <string name="create_shortcut">शॉर्टकट बनाएं</string>
+    <string name="never_show">कभी भी न दिखाओ</string>
     <!-- LogsActivity -->
     <string name="menuSaveToSd">बचाना</string>
     <string name="nav_item_logs_verbose">वर्बोज़ लॉग्स</string>
@@ -184,9 +183,7 @@
     <string name="settings_translation_contributors">अनुवाद योगदानकर्ता</string>
     <string name="settings_translation">अनुवाद में भाग लें</string>
     <string name="settings_translation_summary">%s को अपनी भाषा में अनुवाद करने में हमारी सहायता करें</string>
-    <string name="pref_title_enable_auto_add_shortcut">स्वचालित रूप से एक शॉर्टकट जोड़ें</string>
     <string name="create_shortcut_summary">मैन्युअल रूप से परजीवी प्रबंधक शॉर्टकट बनाएं</string>
-    <string name="settings_enable_auto_add_shortcut_summary">गैर-परजीवी प्रबंधक में अक्षम होने पर कोई नया शॉर्टकट नहीं जोड़ा जाएगा</string>
     <string name="settings_update_channel">चैनल अपडेट करें</string>
     <string name="update_channel_stable">स्थिर</string>
     <string name="update_channel_bate">बीटा</string>
@@ -210,7 +207,6 @@
     <!-- CrashReportActivity -->
     <string name="version_mismatch">LSPosed ढांचे का संस्करण (%1$d) प्रबंधक से मेल नहीं खाता (%2$d)। कृपया LSPosed को पुन: स्थापित करें।</string>
     <string name="manager_crashed">प्रबंधक दुर्घटनाग्रस्त</string>
-    <string name="manager_crashed_info">इसकी रिपोर्ट करें </string>
     <string name="send_crash_info">क्रैश की जानकारी भेजें</string>
     <string name="crash_info_copied">क्रैश जानकारी को क्लिपबोर्ड पर कॉपी किया गया</string>
     <string name="info_copied">क्लिपबोर्ड पर नकल</string>

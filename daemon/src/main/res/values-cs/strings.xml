@@ -8,4 +8,8 @@
     <string name="xposed_module_updated_notification_content">%s byl aktualizován, prosím, násilně zastavte aplikace a restartujte je</string>
     <string name="xposed_module_updated_notification_title_system">Xposed modul aktualizován, je vyžadován restart systému</string>
     <string name="xposed_module_updated_notification_content_system">%s byl aktualizován, a protože se provedly změny v souvislosti se Systémovým Frameworkem, je vyžadován restart pro aplikaci změn</string>
+    <string name="module_updated_channel_name">Aktualizace modulu dokončena</string>
+    <string name="status_channel_name">Stav LSPosed</string>
+    <string name="lsposed_running_notification_title">LPosed načten</string>
+    <string name="lsposed_running_notification_content">Klepnutím na oznámení otevřete správce</string>
 </resources>

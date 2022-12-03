@@ -19,9 +19,9 @@
   -->
 <resources xmlns:tools="http://schemas.android.com/tools" tools:keep="@string/xposed_module_updated_notification_*,@string/module_is_not_activated_*">
     <!-- MainActivity -->
-    <string name="info">Информация</string>
-    <string name="overview">Преглед</string>
-    <string name="Modules">Модули</string>
+    <string name="info">معلومات</string>
+    <string name="overview">نظرة عامة</string>
+    <string name="Modules">الوحدات</string>
     <plurals name="modules_enabled_count">
         <item quantity="one">%d модулът е активиран</item>
         <item quantity="other">%d включени модули</item>
@@ -72,12 +72,11 @@
     <string name="mount_failed">Монтирането е неуспешно</string>
     <string name="selinux_permissive">SELinux е разрешаващ</string>
     <string name="sepolicy_incorrect">Политиката на SELinux е неправилна</string>
-    <string name="parasitic_recommend">Препоръчва се паразитен мениджър</string>
-    <string name="parasitic_recommend_summary">LSPosed вече поддържа паразитиране на системата, за да се избегне откриване. Можете безопасно да деинсталирате мениджъра след успешно създаване на пряк път на паразитния мениджър. Във всеки случай можете да инсталирате обратно мениджъра от /data/adb/lspd/manager.apk.</string>
-    <string name="create_shortcut">Създаване на пряк път</string>
-    <string name="never_show">Никога не показвайте</string>
     <string name="update_lsposed">Актуализиране на LSPosed</string>
     <string name="update_lsposed_msg">Потвърждаване на актуализацията на LSPosed? Това устройство ще се рестартира след завършване на актуализацията</string>
+    <!-- WelcomeDialog -->
+    <string name="create_shortcut">Създаване на пряк път</string>
+    <string name="never_show">Никога не показвайте</string>
     <!-- LogsActivity -->
     <string name="menuSaveToSd">Запазете</string>
     <string name="nav_item_logs_verbose">Условни дневници</string>
@@ -184,9 +183,7 @@
     <string name="settings_translation_contributors">Преводачи, които допринасят за превода</string>
     <string name="settings_translation">Участие в превод</string>
     <string name="settings_translation_summary">Помогнете ни да преведем %s на вашия език</string>
-    <string name="pref_title_enable_auto_add_shortcut">Автоматично добавяне на пряк път</string>
     <string name="create_shortcut_summary">Ръчно създаване на пряк път към паразитен мениджър</string>
-    <string name="settings_enable_auto_add_shortcut_summary">Не се добавят нови преки пътища, когато са деактивирани в непаразитния мениджър.</string>
     <string name="settings_update_channel">Актуализиране на канала</string>
     <string name="update_channel_stable">Стабилен</string>
     <string name="update_channel_bate">Бета</string>
@@ -210,7 +207,6 @@
     <!-- CrashReportActivity -->
     <string name="version_mismatch">Версията на рамката LSPosed (%1$d) не съвпада с тази на мениджъра (%2$d). Моля, преинсталирайте LSPosed.</string>
     <string name="manager_crashed">Мениджърът катастрофира</string>
-    <string name="manager_crashed_info">докладвайте това на </string>
     <string name="send_crash_info">Изпращане на информация за катастрофата</string>
     <string name="crash_info_copied">Информация за катастрофата, копирана в клипборда</string>
     <string name="info_copied">Копиране в клипборда</string>
