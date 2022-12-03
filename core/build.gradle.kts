@@ -18,6 +18,8 @@
  */
 
 val apiCode: Int by rootProject.extra
+val verName: String by rootProject.extra
+val verCode: Int by rootProject.extra
 
 plugins {
     id("com.android.library")
@@ -42,6 +44,12 @@ android {
             proguardFiles("proguard-rules.pro")
         }
     }
+}
+copy {
+    from("src/main/jni/template/") {
+        expand("VERSION_CODE" to "$verCode", "VERSION_NAME" to verName)
+    }
+    into("src/main/jni/src/")
 }
 
 dependencies {
