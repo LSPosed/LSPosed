@@ -70,12 +70,11 @@
     <string name="mount_failed">マウントに失敗しました</string>
     <string name="selinux_permissive">SELinuxはPermissiveです</string>
     <string name="sepolicy_incorrect">SELinuxのポリシーが正しくありません</string>
-    <string name="parasitic_recommend">寄生マネージャーがおすすめです</string>
-    <string name="parasitic_recommend_summary">LSPosedは、検出を回避するために、システムへの寄生をサポートするようになりました。寄生されたマネージャーのショートカットを作成したら、マネージャーをアンインストールしても問題ありません。何かあった場合は、「/data/adb/lspd/manager.apk」からマネージャーを再インストールできます。</string>
-    <string name="create_shortcut">ショートカットを作成</string>
-    <string name="never_show">表示しない</string>
     <string name="update_lsposed">LSPossedをアップデート</string>
     <string name="update_lsposed_msg">LSPosedをアップデートしてもよろしいですか？アップデート完了後、このデバイスは再起動します</string>
+    <!-- WelcomeDialog -->
+    <string name="create_shortcut">ショートカットを作成</string>
+    <string name="never_show">表示しない</string>
     <!-- LogsActivity -->
     <string name="menuSaveToSd">保存</string>
     <string name="nav_item_logs_verbose">詳細ログ</string>
@@ -182,9 +181,7 @@
     <string name="settings_translation_contributors">翻訳貢献者</string>
     <string name="settings_translation">翻訳に参加する</string>
     <string name="settings_translation_summary">%s をあなたの言語に翻訳するのを手伝ってください</string>
-    <string name="pref_title_enable_auto_add_shortcut">ショートカットを自動的に追加する</string>
     <string name="create_shortcut_summary">寄生マネージャーのショートカットを手動で作成する</string>
-    <string name="settings_enable_auto_add_shortcut_summary">無効にした場合、寄生マネージャーの新しいショートカットは追加されません</string>
     <string name="settings_update_channel">更新チャンネル</string>
     <string name="update_channel_stable">安定版</string>
     <string name="update_channel_bate">ベータ版</string>
@@ -208,7 +205,6 @@
     <!-- CrashReportActivity -->
     <string name="version_mismatch">LSPosedフレームワークのバージョン(%1$d)とマネージャー(%2$d)が合っていません。LSPosedを再インストールしてください。</string>
     <string name="manager_crashed">マネージャーがクラッシュしました</string>
-    <string name="manager_crashed_info">これを報告する </string>
     <string name="send_crash_info">クラッシュ情報を送信する</string>
     <string name="crash_info_copied">クラッシュ情報がクリップボードにコピーされました</string>
     <string name="info_copied">クリップボードへコピーされました</string>
