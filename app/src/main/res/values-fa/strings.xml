@@ -72,12 +72,11 @@
     <string name="mount_failed">Mount انجام نشد</string>
     <string name="selinux_permissive">SELinux مجاز است</string>
     <string name="sepolicy_incorrect">خط مشی SELinux نادرست است</string>
-    <string name="parasitic_recommend">Parasitic Manager توصیه شده</string>
-    <string name="parasitic_recommend_summary">LSPosed اکنون از parasitization سیستم برای جلوگیری از شناسایی پشتیبانی می کند پس از ساخت موفقیت آمیز میانبر parasitic manager می توانید با خیال راحت manager را حذف نصب کنید در هر صورت شما می توانید manager را از /data/adb/lspd/manager.apk دوباره نصب کنید.</string>
-    <string name="create_shortcut">ساخت میانبر</string>
-    <string name="never_show">هرگز نشان نده</string>
     <string name="update_lsposed">به روز رسانی LSPosed</string>
     <string name="update_lsposed_msg">آیا می خواهید LSPosed به‌روزرسانی شود؟ این دستگاه پس از تکمیل به روز رسانی خاموش و روشن می شود</string>
+    <!-- WelcomeDialog -->
+    <string name="create_shortcut">ساخت میانبر</string>
+    <string name="never_show">هرگز نشان نده</string>
     <!-- LogsActivity -->
     <string name="menuSaveToSd">ذخیره</string>
     <string name="nav_item_logs_verbose">گزارش های کامل</string>
@@ -173,7 +172,7 @@
     <string name="settings_restore">بازگردانی</string>
     <string name="settings_restore_failed2">بازگردانی انجام نشد : \n%s</string>
     <string name="group_network">شبکه</string>
-    <string name="dns_over_http">DNS از طریق HTTPS</string>
+    <string name="dns_over_http">رفع مسدودیت از طریق DNS</string>
     <string name="dns_over_http_summary">مشکل فیلتر شدن برنامه در برخی کشور ها را با اتصال به DNS برطرف می کند</string>
     <string name="theme_color">رنگ پس زمینه</string>
     <string name="theme_color_system">رنگ پس زمینه سیستم</string>
@@ -184,9 +183,7 @@
     <string name="settings_translation_contributors">مترجم زبان پارسی</string>
     <string name="settings_translation">در ترجمه شرکت کنید</string>
     <string name="settings_translation_summary">به ما کمک کنید تا %s را به زبان شما ترجمه کنیم</string>
-    <string name="pref_title_enable_auto_add_shortcut">به طور خودکار یک میانبر اضافه کنید</string>
     <string name="create_shortcut_summary">به صورت دستی میانبر parasitic manager را بسازید</string>
-    <string name="settings_enable_auto_add_shortcut_summary">در صورت غیرفعال شدن در parasitic manager میانبر جدیدی اضافه نخواهد شد</string>
     <string name="settings_update_channel">نوع به روز رسانی </string>
     <string name="update_channel_stable">نسخه پایدار</string>
     <string name="update_channel_bate">نسخه آزمایشی</string>
@@ -210,7 +207,6 @@
     <!-- CrashReportActivity -->
     <string name="version_mismatch">نسخه فریمورک LSPosed (%1$d) با برنامه (%2$d) مطابقت ندارد لطفا LSPosed را دوباره نصب کنید</string>
     <string name="manager_crashed">برنامه خراب شده</string>
-    <string name="manager_crashed_info">لطفا این مشکل را گزارش کنید </string>
     <string name="send_crash_info">ارسال اطلاعات خرابی</string>
     <string name="crash_info_copied">اطلاعات خرابی در کلیپ بورد کپی شد</string>
     <string name="info_copied">در کلیپ بورد کپی شد</string>
