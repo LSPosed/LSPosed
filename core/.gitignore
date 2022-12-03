@@ -1,2 +1,3 @@
 /build
 /.cxx
+/src/main/jni/src/config.cpp

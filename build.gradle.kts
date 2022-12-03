@@ -125,8 +125,6 @@ fun Project.configureBaseExtension() {
                     cFlags("-std=c18", *flags)
                     arguments(
                         "-DANDROID_STL=none",
-                        "-DVERSION_CODE=$verCode",
-                        "-DVERSION_NAME=$verName",
                     )
                     findInPath("ccache")?.let {
                         println("Using ccache $it")

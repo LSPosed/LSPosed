@@ -122,7 +122,6 @@ dependencies {
 
 val zipAll = task("zipAll") {
     group = "LSPosed"
-
 }
 
 fun afterEval() = android.applicationVariants.forEach { variant ->
