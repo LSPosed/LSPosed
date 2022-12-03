@@ -41,7 +41,7 @@
         <item quantity="other">%d modules opgradeerbaar</item>
     </plurals>
     <string name="about_view_source_code"><![CDATA[Bekyk bronkode by %1$s<br/>Sluit aan by ons %2$s -kanaal]]></string>
-    <string name="translators" comment="Dear translators, please add your home page here following the format. There can be more than one translator. So feel free to append yourself.">nul</string>
+    <string name="translators" comment="Dear translators, please add your home page here following the format. There can be more than one translator. So feel free to append yourself.">null</string>
     <string name="install">Install</string>
     <string name="install_summary">Tik om LSPosed te installeer</string>
     <string name="not_installed">Not installed</string>
@@ -72,12 +72,11 @@
     <string name="mount_failed">Montering het misluk</string>
     <string name="selinux_permissive">SELinux is permissief</string>
     <string name="sepolicy_incorrect">SELinux-beleid is verkeerd</string>
-    <string name="parasitic_recommend">Parasitiese Bestuurder Aanbeveel</string>
-    <string name="parasitic_recommend_summary">LSPosed ondersteun nou stelselparasitering om opsporing te vermy. U kan die bestuurder veilig deïnstalleer nadat u \'n kortpad van die parasitiese bestuurder suksesvol geskep het. In elk geval kan jy die bestuurder terug installeer vanaf /data/adb/lspd/manager.apk.</string>
-    <string name="create_shortcut">Skep kortpad</string>
-    <string name="never_show">Moet nooit wys nie</string>
     <string name="update_lsposed">Dateer LSPosed op</string>
     <string name="update_lsposed_msg">Bevestig om LSPosed op te dateer? Hierdie toestel sal herlaai nadat die opdatering voltooi is</string>
+    <!-- WelcomeDialog -->
+    <string name="create_shortcut">Skep kortpad</string>
+    <string name="never_show">Moet nooit wys nie</string>
     <!-- LogsActivity -->
     <string name="menuSaveToSd">Stoor</string>
     <string name="nav_item_logs_verbose">Uitgebreide logs</string>
@@ -184,9 +183,7 @@
     <string name="settings_translation_contributors">Vertaling bydraers</string>
     <string name="settings_translation">Neem deel aan vertaling</string>
     <string name="settings_translation_summary">Help ons om %s in jou taal te vertaal</string>
-    <string name="pref_title_enable_auto_add_shortcut">Voeg outomaties \'n kortpad by</string>
     <string name="create_shortcut_summary">Skep parasitiese bestuurder kortpad handmatig</string>
-    <string name="settings_enable_auto_add_shortcut_summary">Geen nuwe kortpaaie sal bygevoeg word wanneer dit in die nie-parasitiese bestuurder gedeaktiveer is nie</string>
     <string name="settings_update_channel">Dateer kanaal op</string>
     <string name="update_channel_stable">Stabiel</string>
     <string name="update_channel_bate">Beta</string>
@@ -210,7 +207,6 @@
     <!-- CrashReportActivity -->
     <string name="version_mismatch">Die weergawe van die LSPosed-raamwerk (%1$d) stem nie ooreen met bestuurder (%2$d) nie. Herinstalleer asseblief LSPosed.</string>
     <string name="manager_crashed">Bestuurder het omgeval</string>
-    <string name="manager_crashed_info">rapporteer dit aan </string>
     <string name="send_crash_info">Stuur omvalinligting</string>
     <string name="crash_info_copied">Omvalinligting is na knipbord gekopieer</string>
     <string name="info_copied">Gekopieer na knipbord</string>
