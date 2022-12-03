@@ -8,4 +8,8 @@
     <string name="xposed_module_updated_notification_content">%s a été mis à jour, merci de forcer l\’arrêt ou de redémarrer les applis dans leurs champs d\’application</string>
     <string name="xposed_module_updated_notification_title_system">Module Xposed mis à jour, redémarrage du système requis</string>
     <string name="xposed_module_updated_notification_content_system">%s a été mis à jour, étant donné que le champ d\'application est étendu au sous système, un redémarrage est nécessaire pour appliquer les changements</string>
+    <string name="module_updated_channel_name">Mise à jour du module terminée</string>
+    <string name="status_channel_name">Statut LSPosed</string>
+    <string name="lsposed_running_notification_title">LSPosed chargé</string>
+    <string name="lsposed_running_notification_content">Appuyer sur la notification pour ouvrir le gestionnaire</string>
 </resources>
