@@ -72,12 +72,11 @@
     <string name="mount_failed">Berg mislukt</string>
     <string name="selinux_permissive">SELinux is permissief</string>
     <string name="sepolicy_incorrect">SELinux beleid is onjuist</string>
-    <string name="parasitic_recommend">Parasitaire manager aanbevolen</string>
-    <string name="parasitic_recommend_summary">LSPosed ondersteunt nu parasitisering van het systeem om detectie te voorkomen. U kunt de manager veilig deïnstalleren na het maken van een snelkoppeling van de parastische manager. In elk geval kunt u de manager installeren vanuit /data/adb/lspd/manager.apk.</string>
-    <string name="create_shortcut">Snelkoppeling maken</string>
-    <string name="never_show">Nooit tonen</string>
     <string name="update_lsposed">Update LSPosed</string>
     <string name="update_lsposed_msg">Bevestig bijwerken van LSPosed? Dit apparaat zal opnieuw opstarten nadat de update is voltooid</string>
+    <!-- WelcomeDialog -->
+    <string name="create_shortcut">Snelkoppeling maken</string>
+    <string name="never_show">Nooit tonen</string>
     <!-- LogsActivity -->
     <string name="menuSaveToSd">Opslaan</string>
     <string name="nav_item_logs_verbose">Uitgebreide logs</string>
@@ -184,9 +183,7 @@
     <string name="settings_translation_contributors">Bijdragers van vertalingen</string>
     <string name="settings_translation">Deelnemen aan vertaling</string>
     <string name="settings_translation_summary">Help ons %s te vertalen in uw taal</string>
-    <string name="pref_title_enable_auto_add_shortcut">Snelkoppeling automatisch toevoegen</string>
     <string name="create_shortcut_summary">Maak handmatig een snelkoppeling naar parasitic manager</string>
-    <string name="settings_enable_auto_add_shortcut_summary">Er zullen geen nieuwe snelkoppelingen worden toegevoegd wanneer uitgeschakeld in de niet-parasitaire manager</string>
     <string name="settings_update_channel">Kanaal bijwerken</string>
     <string name="update_channel_stable">Stabiel</string>
     <string name="update_channel_bate">Bèta</string>
@@ -210,7 +207,6 @@
     <!-- CrashReportActivity -->
     <string name="version_mismatch">De versie van het LSPosed framework (%1$d) komt niet overeen met manager (%2$d). Herinstalleer LSPosed.</string>
     <string name="manager_crashed">Manager gecrasht</string>
-    <string name="manager_crashed_info">meld dit aan </string>
     <string name="send_crash_info">Stuur crash informatie</string>
     <string name="crash_info_copied">Crash informatie naar klembord gekopieerd</string>
     <string name="info_copied">Gekopieerd naar klembord</string>
