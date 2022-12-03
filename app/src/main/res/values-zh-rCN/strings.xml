@@ -70,12 +70,15 @@
     <string name="mount_failed">挂载失败</string>
     <string name="selinux_permissive">SELinux 处于宽容模式</string>
     <string name="sepolicy_incorrect">SELinux 规则异常</string>
-    <string name="parasitic_recommend">推荐使用寄生管理器</string>
-    <string name="parasitic_recommend_summary">LSPosed 现在支持寄生管理器到系统以避免检测。您可以在成功创建寄生管理器图标后卸载管理器。在任何情况下，您都可以从 /data/adb/lspd/manager.apk 安装管理器。</string>
-    <string name="create_shortcut">创建快捷方式</string>
-    <string name="never_show">不再显示</string>
     <string name="update_lsposed">更新 LSPosed</string>
     <string name="update_lsposed_msg">确认更新 LSPosed? 设备将会在完成更新后自动重启。</string>
+    <!-- WelcomeDialog -->
+    <string name="parasitic_welcome">欢迎使用 LSPosed</string>
+    <string name="parasitic_welcome_summary">你正在使用寄生管理器，可创建快捷方式或继续从通知中打开。</string>
+    <string name="create_shortcut">创建快捷方式</string>
+    <string name="never_show">不再显示</string>
+    <string name="app_welcome">推荐使用寄生管理器</string>
+    <string name="app_welcome_summary">LSPosed 现在支持系统寄生以避免检测，你可以从通知中打开寄生管理器。建议卸载当前应用。</string>
     <!-- LogsActivity -->
     <string name="menuSaveToSd">保存</string>
     <string name="nav_item_logs_verbose">详细日志</string>
@@ -182,9 +185,11 @@
     <string name="settings_translation_contributors">译者</string>
     <string name="settings_translation">参与翻译</string>
     <string name="settings_translation_summary">帮助我们把 %s 翻译到你的语言</string>
-    <string name="pref_title_enable_auto_add_shortcut">自动添加快捷方式</string>
     <string name="create_shortcut_summary">手动创建寄生管理器快捷方式</string>
-    <string name="settings_enable_auto_add_shortcut_summary">在非寄生管理器中禁用该选项将不会新建快捷方式</string>
+    <string name="open_parasitic_summary">推荐使用寄生管理器</string>
+    <string name="settings_enable_status_notification">状态通知</string>
+    <string name="settings_enable_status_notification_summary">显示一个通知以打开寄生管理器</string>
+    <string name="disable_status_notification_error">没有快捷方式，无法禁用通知</string>
     <string name="settings_update_channel">模块更新通道</string>
     <string name="update_channel_stable">稳定版</string>
     <string name="update_channel_bate">测试版</string>
@@ -208,7 +213,6 @@
     <!-- CrashReportActivity -->
     <string name="version_mismatch">LSPosed 框架 (%1$d) 的版本与管理器（%2$d）不匹配。请重新安装 LSPosed。</string>
     <string name="manager_crashed">管理器已崩溃</string>
-    <string name="manager_crashed_info">反馈该问题到 </string>
     <string name="send_crash_info">发送崩溃信息</string>
     <string name="crash_info_copied">崩溃信息已复制到剪贴板</string>
     <string name="info_copied">已复制到剪贴板</string>
