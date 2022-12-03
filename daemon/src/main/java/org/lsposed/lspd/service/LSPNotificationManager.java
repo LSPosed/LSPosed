@@ -86,6 +86,15 @@ public class LSPNotificationManager {
         return Icon.createWithBitmap(getBitmap(R.drawable.ic_notification));
     }
 
+    private static boolean hasNotificationChannelForSystem(
+            INotificationManager nm, String channelId) throws RemoteException {
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.R) {
+            return nm.getNotificationChannelForPackage("android", 1000, channelId, null, false) != null;
+        } else {
+            return nm.getNotificationChannelForPackage("android", 1000, channelId, false) != null;
+        }
+    }
+
     private static void createNotificationChannel(INotificationManager nm) throws RemoteException {
         var context = new FakeContext();
         var list = new ArrayList<NotificationChannel>();
@@ -94,13 +103,21 @@ public class LSPNotificationManager {
                 context.getString(R.string.module_updated_channel_name),
                 NotificationManager.IMPORTANCE_HIGH);
         updated.setShowBadge(false);
-        list.add(updated);
+        if (hasNotificationChannelForSystem(nm, UPDATED_CHANNEL_ID)) {
+            nm.updateNotificationChannelForPackage("android", 1000, updated);
+        } else {
+            list.add(updated);
+        }
 
         var status = new NotificationChannel(STATUS_CHANNEL_ID,
                 context.getString(R.string.status_channel_name),
                 NotificationManager.IMPORTANCE_MIN);
         status.setShowBadge(false);
-        list.add(status);
+        if (hasNotificationChannelForSystem(nm, STATUS_CHANNEL_ID)) {
+            nm.updateNotificationChannelForPackage("android", 1000, status);
+        } else {
+            list.add(status);
+        }
 
         nm.createNotificationChannelsForPackage("android", 1000, new ParceledListSlice<>(list));
     }
