@@ -70,14 +70,11 @@
     <string name="mount_failed">加載失敗</string>
     <string name="selinux_permissive">寬容模式（SELinux）已啟用</string>
     <string name="sepolicy_incorrect">寬容模式（SELinux）加載錯誤</string>
-    <string name="parasitic_recommend">推薦使用寄生管理器</string>
-    <string name="parasitic_recommend_summary">LSPosed 現在支援寄生到系統以避免檢測。
-在成功建立寄生管理器的捷徑後你可以安全地移除管理器。
-在任何情況下，你都可以在/data/adb/lspd/manager.apk 重新安裝管理路</string>
-    <string name="create_shortcut">建立捷徑</string>
-    <string name="never_show">不再顯示</string>
     <string name="update_lsposed">更新 LSPosed</string>
     <string name="update_lsposed_msg">確認更新LSPosed? 此裝置會於更新完成後重啟</string>
+    <!-- WelcomeDialog -->
+    <string name="create_shortcut">建立捷徑</string>
+    <string name="never_show">不再顯示</string>
     <!-- LogsActivity -->
     <string name="menuSaveToSd">儲存</string>
     <string name="nav_item_logs_verbose">詳細記錄檔</string>
@@ -184,9 +181,7 @@
     <string name="settings_translation_contributors">翻譯貢獻者</string>
     <string name="settings_translation">參與翻譯</string>
     <string name="settings_translation_summary">幫助我們翻譯 %s 到您的語言</string>
-    <string name="pref_title_enable_auto_add_shortcut">自動新增捷徑</string>
     <string name="create_shortcut_summary">手動建立寄生管理器捷徑</string>
-    <string name="settings_enable_auto_add_shortcut_summary">當在非寄生管理器禁用時不再新增捷徑</string>
     <string name="settings_update_channel">更新頻道</string>
     <string name="update_channel_stable">穩定版</string>
     <string name="update_channel_bate">測試版</string>
@@ -210,7 +205,6 @@
     <!-- CrashReportActivity -->
     <string name="version_mismatch">LSPosed框架版本 (%1$d) 與管理器 (%2$d) 不匹配，請重新安裝LSPosed。</string>
     <string name="manager_crashed">應用程式已崩潰</string>
-    <string name="manager_crashed_info">回報問題到 </string>
     <string name="send_crash_info">發送崩潰訊息</string>
     <string name="crash_info_copied">崩潰訊息已複製到剪貼板</string>
     <string name="info_copied">已複製</string>
