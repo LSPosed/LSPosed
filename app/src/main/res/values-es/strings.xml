@@ -72,12 +72,11 @@
     <string name="mount_failed">El montaje falló</string>
     <string name="selinux_permissive">SELinux es permisivo</string>
     <string name="sepolicy_incorrect">La política de SELinux es incorrecta</string>
-    <string name="parasitic_recommend">Se recomienda Parasitic Manager</string>
-    <string name="parasitic_recommend_summary">LSPosed ahora soporta la parasitización del sistema para evitar ser detectado. Puede desinstalar el Manager de forma segura después de crear con éxito un acceso directo al Parasitic Manager. En cualquier caso, puedes instalar el Manager desde /data/adb/lspd/manager.apk.</string>
-    <string name="create_shortcut">Crear acceso directo</string>
-    <string name="never_show">Nunca mostrar</string>
     <string name="update_lsposed">Actualizar LSPosed</string>
     <string name="update_lsposed_msg">¿Confirmar para actualizar LSPose? Este dispositivo se reiniciará después de completar la actualización</string>
+    <!-- WelcomeDialog -->
+    <string name="create_shortcut">Crear acceso directo</string>
+    <string name="never_show">Nunca mostrar</string>
     <!-- LogsActivity -->
     <string name="menuSaveToSd">Guardar</string>
     <string name="nav_item_logs_verbose">Registros detallados</string>
@@ -184,9 +183,7 @@
     <string name="settings_translation_contributors">Colaboradores de traducción</string>
     <string name="settings_translation">Participar en la traducción</string>
     <string name="settings_translation_summary">Ayúdanos a traducir %s a tu idioma</string>
-    <string name="pref_title_enable_auto_add_shortcut">Añadir automáticamente un acceso directo</string>
     <string name="create_shortcut_summary">Crear manualmente el acceso directo al gestor de parásitos</string>
-    <string name="settings_enable_auto_add_shortcut_summary">No se añadirán nuevos atajos cuando estén desactivados en el gestor no parasítico</string>
     <string name="settings_update_channel">Actualizar canal</string>
     <string name="update_channel_stable">Estable</string>
     <string name="update_channel_bate">Beta</string>
@@ -210,7 +207,6 @@
     <!-- CrashReportActivity -->
     <string name="version_mismatch">La versión del framework LSPosed (%1$d) no coincide con el administrador (%2$d). Por favor, reinstale LSPosed.</string>
     <string name="manager_crashed">El Manager se ha crasheado</string>
-    <string name="manager_crashed_info">reportar esto a </string>
     <string name="send_crash_info">Enviar información de error</string>
     <string name="crash_info_copied">Información del error copiada al portapapeles</string>
     <string name="info_copied">Información copiada al portapapeles</string>
