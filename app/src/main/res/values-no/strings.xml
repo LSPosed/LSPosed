@@ -72,12 +72,11 @@
     <string name="mount_failed">Montering mislyktes</string>
     <string name="selinux_permissive">SELinux er tillatt</string>
     <string name="sepolicy_incorrect">SELinux policy er feil</string>
-    <string name="parasitic_recommend">Parasittisk leder anbefales</string>
-    <string name="parasitic_recommend_summary">LSPidet støtter nå systemparasitisering for å unngå deteksjon. Du kan trygt avinstallere håndtereren etter å ha lykkes med å lage en snarvei til den parasittiske behandleren. Du kan i alle tilfeller installere koordinatoren tilbake fra /data/adb/lspd/manager.apk.</string>
-    <string name="create_shortcut">Opprett snarvei</string>
-    <string name="never_show">Vis aldri</string>
     <string name="update_lsposed">Oppdateringen LSPosed</string>
     <string name="update_lsposed_msg">Bekreft oppdatering av LSPosed? Denne enheten vil starte på nytt etter fullført oppdatering</string>
+    <!-- WelcomeDialog -->
+    <string name="create_shortcut">Opprett snarvei</string>
+    <string name="never_show">Vis aldri</string>
     <!-- LogsActivity -->
     <string name="menuSaveToSd">Lagre</string>
     <string name="nav_item_logs_verbose">Detaljert logg</string>
@@ -184,9 +183,7 @@
     <string name="settings_translation_contributors">Oversettelse bidragsytere</string>
     <string name="settings_translation">Delta i oversettelse</string>
     <string name="settings_translation_summary">Hjelp oss med å oversette %s til ditt språk</string>
-    <string name="pref_title_enable_auto_add_shortcut">Legg til snarvei automatisk</string>
     <string name="create_shortcut_summary">Lag en snarvei for parasittisk manager manuelt</string>
-    <string name="settings_enable_auto_add_shortcut_summary">Ingen nye snarveier vil legges til når de er deaktivert i den ikke-parasittiske lederen</string>
     <string name="settings_update_channel">Oppdater kanal</string>
     <string name="update_channel_stable">Stabil</string>
     <string name="update_channel_bate">beta</string>
@@ -210,7 +207,6 @@
     <!-- CrashReportActivity -->
     <string name="version_mismatch">Versjonen av det LSPed-rammeverket (%1$d) stemmer ikke overens med behandleren (%2$d). Installer LSPC på nytt.</string>
     <string name="manager_crashed">Håndterer krasjet</string>
-    <string name="manager_crashed_info">rapportere dette til </string>
     <string name="send_crash_info">Send krasjinformasjon</string>
     <string name="crash_info_copied">Krasj info kopiert til utklippstavlen</string>
     <string name="info_copied">Kopiert til utklippstavlen</string>
