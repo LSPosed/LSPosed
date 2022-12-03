@@ -70,12 +70,11 @@
     <string name="mount_failed">เมานต์ล้มเหลว</string>
     <string name="selinux_permissive">SELinux ได้รับอนุญาต</string>
     <string name="sepolicy_incorrect">นโยบาย SELinux ไม่ถูกต้อง</string>
-    <string name="parasitic_recommend">แนะนำ กำจัดไวรัส</string>
-    <string name="parasitic_recommend_summary">ตอนนี้ LSPosed รองรับการทำให้เป็นกาฝากของระบบเพื่อหลีกเลี่ยงการตรวจจับ คุณสามารถถอนการติดตั้งตัวจัดการได้อย่างปลอดภัยหลังจากสร้างทางลัดของตัวจัดการปรสิตเรียบร้อยแล้ว ไม่ว่าในกรณีใด คุณสามารถติดตั้งตัวจัดการกลับจาก /data/adb/lspd/manager.apk</string>
-    <string name="create_shortcut">สร้างทางลัด</string>
-    <string name="never_show">ไม่ต้องแสดง</string>
     <string name="update_lsposed">อัพเดท LSPosed</string>
     <string name="update_lsposed_msg">ยืนยันการอัปเดต LSPosed? อุปกรณ์นี้จะรีบูตหลังจากอัปเดตเสร็จสิ้น</string>
+    <!-- WelcomeDialog -->
+    <string name="create_shortcut">สร้างทางลัด</string>
+    <string name="never_show">ไม่ต้องแสดง</string>
     <!-- LogsActivity -->
     <string name="menuSaveToSd">บันทึก</string>
     <string name="nav_item_logs_verbose">บันทึกอย่างละเอียด</string>
@@ -182,9 +181,7 @@
     <string name="settings_translation_contributors">ผู้ร่วมแปล</string>
     <string name="settings_translation">มีส่วนร่วมในการแปล</string>
     <string name="settings_translation_summary">ช่วยเราแปล %s เป็นภาษาของคุณ</string>
-    <string name="pref_title_enable_auto_add_shortcut">เพิ่มทางลัดโดยอัตโนมัติ</string>
     <string name="create_shortcut_summary">สร้างทางลัดผู้จัดการปรสิตด้วยตนเอง</string>
-    <string name="settings_enable_auto_add_shortcut_summary">จะไม่มีการเพิ่มทางลัดใหม่เมื่อปิดใช้งานในตัวจัดการที่ไม่ใช่ปรสิต</string>
     <string name="settings_update_channel">อัพเดทช่อง</string>
     <string name="update_channel_stable">มั่นคง</string>
     <string name="update_channel_bate">เบต้า</string>
@@ -208,7 +205,6 @@
     <!-- CrashReportActivity -->
     <string name="version_mismatch">เวอร์ชันของกรอบงาน LSPosed (%1$d) ไม่ตรงกับตัวจัดการ (%2$d) โปรดติดตั้ง LSPosed อีกครั้ง</string>
     <string name="manager_crashed">ผู้จัดการล้มเหลว</string>
-    <string name="manager_crashed_info">รายงานเรื่องนี้ไปยัง </string>
     <string name="send_crash_info">ส่งข้อมูลข้อขัดข้อง</string>
     <string name="crash_info_copied">คัดลอกข้อมูลข้อขัดข้องไปยังคลิปบอร์ดแล้ว</string>
     <string name="info_copied">คัดลอกไปยังคลิปบอร์ดแล้ว</string>
