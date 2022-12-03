@@ -19,6 +19,8 @@ public interface INotificationManager extends IInterface {
 
     void createNotificationChannelsForPackage(String pkg, int uid, ParceledListSlice<NotificationChannel> channelsList) throws RemoteException;
 
+    void updateNotificationChannelForPackage(String pkg, int uid, NotificationChannel channel);
+
     @RequiresApi(30)
     NotificationChannel getNotificationChannelForPackage(String pkg, int uid, String channelId, String conversationId, boolean includeDeleted) throws RemoteException;
 

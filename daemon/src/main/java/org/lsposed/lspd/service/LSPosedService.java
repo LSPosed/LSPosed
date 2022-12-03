@@ -209,6 +209,10 @@ public class LSPosedService extends ILSPosedService.Stub {
 
     private void dispatchConfigurationChanged(Intent intent) {
         ConfigFileManager.reloadConfiguration();
+        var configManager = ConfigManager.getInstance();
+        if (configManager.enableStatusNotification()) {
+            LSPNotificationManager.notifyStatusNotification();
+        }
     }
 
     private void dispatchSecretCodeReceive(Intent i) {
