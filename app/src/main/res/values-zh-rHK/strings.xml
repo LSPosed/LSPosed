@@ -75,6 +75,7 @@
     <!-- WelcomeDialog -->
     <string name="create_shortcut">建立捷徑</string>
     <string name="never_show">不再顯示</string>
+    <string name="app_welcome">推薦使用寄生管理器</string>
     <!-- LogsActivity -->
     <string name="menuSaveToSd">儲存</string>
     <string name="nav_item_logs_verbose">詳細記錄檔</string>
