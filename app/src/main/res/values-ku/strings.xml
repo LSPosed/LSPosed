@@ -72,12 +72,11 @@
     <string name="mount_failed">Çiya têk çû</string>
     <string name="selinux_permissive">SELinux destûr e</string>
     <string name="sepolicy_incorrect">Siyaseta SELinux nerast e</string>
-    <string name="parasitic_recommend">Rêvebirê Parazît Pêşniyar kirin</string>
-    <string name="parasitic_recommend_summary">LSPosed naha parazîtkirina pergalê piştgirî dike da ku ji tespîtê dûr bixe. Piştî ku hûn bi serfirazî kurtebirek rêveberê parazît biafirînin, hûn dikarin bi ewlehî rêveberê rakin. Di her rewşê de hûn dikarin rêveberê ji /data/adb/lspd/manager.apk vegere saz bikin.</string>
-    <string name="create_shortcut">Kurtenivîsê çêbikin</string>
-    <string name="never_show">Qet nîşan nedin</string>
     <string name="update_lsposed">LSPosed nûve bikin</string>
     <string name="update_lsposed_msg">Piştrast bike ku LSPosed nûve bike? Ev cîhaz dê piştî qedandina nûvekirinê ji nû ve dest pê bike</string>
+    <!-- WelcomeDialog -->
+    <string name="create_shortcut">Kurtenivîsê çêbikin</string>
+    <string name="never_show">Qet nîşan nedin</string>
     <!-- LogsActivity -->
     <string name="menuSaveToSd">Rizgarkirin</string>
     <string name="nav_item_logs_verbose">Têketinên Verbose</string>
@@ -184,9 +183,7 @@
     <string name="settings_translation_contributors">Beşdarên wergerê</string>
     <string name="settings_translation">Beşdarî wergerê bibin</string>
     <string name="settings_translation_summary">Alîkariya me bikin ku %s wergerînin zimanê we</string>
-    <string name="pref_title_enable_auto_add_shortcut">Bixweber kurtebirrek lê zêde bike</string>
     <string name="create_shortcut_summary">Bi destan kurteya rêveberê parazît biafirînin</string>
-    <string name="settings_enable_auto_add_shortcut_summary">Dema ku di rêvebirê ne-parazît de neçalak bibe dê kurtebirên nû werin zêdekirin</string>
     <string name="settings_update_channel">Kanalê nûve bikin</string>
     <string name="update_channel_stable">Stewr</string>
     <string name="update_channel_bate">Beta</string>
@@ -210,7 +207,6 @@
     <!-- CrashReportActivity -->
     <string name="version_mismatch">Guhertoya çarçoveya LSPosed (%1$d) bi rêveberê (%2$d) re nagire. Ji kerema xwe LSPosed ji nû ve saz bikin.</string>
     <string name="manager_crashed">Rêveber qeza kir</string>
-    <string name="manager_crashed_info">vê yekê rapor bikin </string>
     <string name="send_crash_info">Agahdariya qezayê bişînin</string>
     <string name="crash_info_copied">Agahdariya qezayê li clipboardê hate kopî kirin</string>
     <string name="info_copied">Li clipboardê hate kopî kirin</string>
