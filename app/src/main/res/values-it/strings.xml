@@ -72,12 +72,13 @@
     <string name="mount_failed">Mount fallito</string>
     <string name="selinux_permissive">SELinux è in modalità permissiva</string>
     <string name="sepolicy_incorrect">La politica di SELinux non è corretta</string>
-    <string name="parasitic_recommend">Manager parassitario consigliato</string>
-    <string name="parasitic_recommend_summary">LSPosed ora supporta la parassitizzazione del sistema per evitare il rilevamento. Puoi disinstallare in modo sicuro il manager dopo aver creato con successo una scorciatoia del manager parassitario. In ogni caso è possibile installare il manager da /data/adb/lspd/manager.apk.</string>
-    <string name="create_shortcut">Crea scorciatoia</string>
-    <string name="never_show">Non mostrare mai</string>
     <string name="update_lsposed">Aggiorna LSPosed</string>
     <string name="update_lsposed_msg">Confermi di voler aggiornare LSPosed? Il dispositivo verrà riavviato dopo il completamento dell\'aggiornamento</string>
+    <!-- WelcomeDialog -->
+    <string name="parasitic_welcome">Benvenuto in LSPosed</string>
+    <string name="parasitic_welcome_summary">Stai usando il manager parassitario, che può creare scorciatoie o essere aperto dalla notifica.</string>
+    <string name="create_shortcut">Crea scorciatoia</string>
+    <string name="never_show">Non mostrare mai</string>
     <!-- LogsActivity -->
     <string name="menuSaveToSd">Salva</string>
     <string name="nav_item_logs_verbose">Log verbosi</string>
@@ -184,9 +185,7 @@
     <string name="settings_translation_contributors">Contributori alla traduzione</string>
     <string name="settings_translation">Partecipa alla traduzione</string>
     <string name="settings_translation_summary">Aiutaci a tradurre %s nella tua lingua</string>
-    <string name="pref_title_enable_auto_add_shortcut">Aggiungi automaticamente una scorciatoia</string>
     <string name="create_shortcut_summary">Crea manualmente la scorciatoia del manager parassitario</string>
-    <string name="settings_enable_auto_add_shortcut_summary">Non verrà aggiunta nessuna nuova scorciatoia quando l\'opzione è disabilitata nel manager non parassitario</string>
     <string name="settings_update_channel">Canale di aggiornamento</string>
     <string name="update_channel_stable">Stabile</string>
     <string name="update_channel_bate">Beta</string>
@@ -210,7 +209,6 @@
     <!-- CrashReportActivity -->
     <string name="version_mismatch">La versione del framework LSPosed (%1$d) non corrisponde al manager (%2$d). Reinstalla LSPosed.</string>
     <string name="manager_crashed">Manager andato in crash</string>
-    <string name="manager_crashed_info">segnalalo a </string>
     <string name="send_crash_info">Invia informazioni sul crash</string>
     <string name="crash_info_copied">Informazioni sul crash copiate negli appunti</string>
     <string name="info_copied">Copiato negli appunti</string>
