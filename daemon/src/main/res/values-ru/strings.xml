@@ -8,4 +8,8 @@
     <string name="xposed_module_updated_notification_content">Модуль %s обновлен, остановите и запустите приложения выбранные для модуля</string>
     <string name="xposed_module_updated_notification_title_system">Модуль обновлен, требуется перезагрузка</string>
     <string name="xposed_module_updated_notification_content_system">Модуль %s обновлен, так как выбран системный фреймворк для модуля, требуется перезагрузка для применения изменений</string>
+    <string name="module_updated_channel_name">Обновление модуля завершено</string>
+    <string name="status_channel_name">LSPosed статус</string>
+    <string name="lsposed_running_notification_title">LSPosed загружен</string>
+    <string name="lsposed_running_notification_content">Нажмите на уведомление, чтобы открыть LSPosed</string>
 </resources>
