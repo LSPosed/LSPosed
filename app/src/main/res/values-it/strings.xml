@@ -79,6 +79,7 @@
     <string name="parasitic_welcome_summary">Stai usando il manager parassitario, che può creare scorciatoie o essere aperto dalla notifica.</string>
     <string name="create_shortcut">Crea scorciatoia</string>
     <string name="never_show">Non mostrare mai</string>
+    <string name="app_welcome">Manager parassitario consigliato</string>
     <!-- LogsActivity -->
     <string name="menuSaveToSd">Salva</string>
     <string name="nav_item_logs_verbose">Log verbosi</string>
@@ -186,6 +187,9 @@
     <string name="settings_translation">Partecipa alla traduzione</string>
     <string name="settings_translation_summary">Aiutaci a tradurre %s nella tua lingua</string>
     <string name="create_shortcut_summary">Crea manualmente la scorciatoia del manager parassitario</string>
+    <string name="open_parasitic_summary">Consigliato l\'uso del manager parassitario</string>
+    <string name="settings_enable_status_notification">Notifica di stato</string>
+    <string name="disable_status_notification_error">Nessuna scorciatoia, impossibile disattivare la notifica</string>
     <string name="settings_update_channel">Canale di aggiornamento</string>
     <string name="update_channel_stable">Stabile</string>
     <string name="update_channel_bate">Beta</string>
