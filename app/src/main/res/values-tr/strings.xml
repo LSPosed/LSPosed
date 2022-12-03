@@ -72,12 +72,11 @@
     <string name="mount_failed">Bağlama başarısız</string>
     <string name="selinux_permissive">SELinux\'a izin verildi</string>
     <string name="sepolicy_incorrect">SELinux politikası yanlış</string>
-    <string name="parasitic_recommend">Parazit Yönetici Önerilir</string>
-    <string name="parasitic_recommend_summary">LSPosed şu an sisteme parazit olarak yerleşip denetlemeleri önlemeyi destekliyor. Parazit yönetici kısayolunu ana ekrana ekledikten sonra güvenle bu yöneticiyi kaldırabilirsiniz. Eğer eski yöneticiyi geri isterseniz /data/adb/lspd/manager.apk konumunda bulabilirsiniz.</string>
-    <string name="create_shortcut">Kısayol oluştur</string>
-    <string name="never_show">Asla gösterme</string>
     <string name="update_lsposed">LSPosed\'ı güncelle</string>
     <string name="update_lsposed_msg">LSPosed\'ı güncellemek istediğinize emin misiniz? Bu cihaz güncelleme tamamlandıktan sonra yeniden başlatılacak</string>
+    <!-- WelcomeDialog -->
+    <string name="create_shortcut">Kısayol oluştur</string>
+    <string name="never_show">Asla gösterme</string>
     <!-- LogsActivity -->
     <string name="menuSaveToSd">Kaydet</string>
     <string name="nav_item_logs_verbose">Ayrıntılı Günlükler</string>
@@ -184,9 +183,7 @@
     <string name="settings_translation_contributors">Çeviri katılımcıları</string>
     <string name="settings_translation">Çeviriye katılın</string>
     <string name="settings_translation_summary">%s yazılımını çevirmemize yardım edin</string>
-    <string name="pref_title_enable_auto_add_shortcut">Otomatik olarak bir kısayol ekle</string>
     <string name="create_shortcut_summary">Parazit yönetici kısayolunu manuel olarak oluşturun</string>
-    <string name="settings_enable_auto_add_shortcut_summary">Parazit olmayan yöneticilerde devre dışı bırakılınca yeni kısayol eklenmez</string>
     <string name="settings_update_channel">Güncelleme kanalı</string>
     <string name="update_channel_stable">Stabil</string>
     <string name="update_channel_bate">Beta</string>
@@ -210,7 +207,6 @@
     <!-- CrashReportActivity -->
     <string name="version_mismatch">LSPosed çerçevesinin sürümü (%1$d) yöneticininkiyle eşleşmiyor (%2$d). Lütfen LSPosed\'ı tekrar kurun.</string>
     <string name="manager_crashed">Yönetici çöktü</string>
-    <string name="manager_crashed_info">bunu şuraya rapor et </string>
     <string name="send_crash_info">Çökme bilgisi gönder</string>
     <string name="crash_info_copied">Çökme bilgisi panoya kopyalandı</string>
     <string name="info_copied">Panoya kopyalandı</string>
