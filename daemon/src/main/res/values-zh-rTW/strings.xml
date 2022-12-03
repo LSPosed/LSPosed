@@ -8,4 +8,8 @@
     <string name="xposed_module_updated_notification_content">%s 已更新，請強制停止並重新打開其作用域內的程式</string>
     <string name="xposed_module_updated_notification_title_system">Xposed 模組已更新，需要重新啟動。</string>
     <string name="xposed_module_updated_notification_content_system">%s 已更新，由於作用域包含系統框架，需要重新啟動以套用修改。</string>
+    <string name="module_updated_channel_name">模組更新完成</string>
+    <string name="status_channel_name">LSPosed 狀態</string>
+    <string name="lsposed_running_notification_title">LSPosed 已載入</string>
+    <string name="lsposed_running_notification_content">輕觸通知以開啟管理員</string>
 </resources>
