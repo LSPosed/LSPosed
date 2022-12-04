@@ -4,7 +4,7 @@ import android.content.Context;
 import android.content.ContextWrapper;
 
 public class FakeContext extends ContextWrapper {
-    private String packageName = "android";
+    private final String packageName;
 
     public FakeContext(Context context, String packageName) {
         super(context);
