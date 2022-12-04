@@ -1,8 +1,13 @@
 package org.lsposed.manager.util;
 
+import android.annotation.SuppressLint;
+import android.app.PendingIntent;
+import android.content.BroadcastReceiver;
 import android.content.ComponentName;
 import android.content.Context;
 import android.content.Intent;
+import android.content.IntentFilter;
+import android.content.IntentSender;
 import android.content.pm.PackageManager;
 import android.content.pm.ShortcutInfo;
 import android.content.pm.ShortcutManager;
@@ -16,6 +21,8 @@ import android.graphics.drawable.LayerDrawable;
 
 import org.lsposed.manager.App;
 import org.lsposed.manager.R;
+
+import java.util.UUID;
 
 public class ShortcutUtil {
     private static final String SHORTCUT_ID = "org.lsposed.manager.shortcut";
@@ -71,7 +78,30 @@ public class ShortcutUtil {
         return intent;
     }
 
-    public static void requestPinLaunchShortcut() {
+    @SuppressLint("InlinedApi")
+    private static IntentSender registerReceiver(Context context, Runnable task) {
+        if (task == null) return null;
+
+        var uuid = UUID.randomUUID().toString();
+        var filter = new IntentFilter(uuid);
+        var permission = "android.permission.CREATE_USERS";
+        var receiver = new BroadcastReceiver() {
+            @Override
+            public void onReceive(Context c, Intent intent) {
+                if (!uuid.equals(intent.getAction())) return;
+                context.unregisterReceiver(this);
+                task.run();
+            }
+        };
+        context.registerReceiver(receiver, filter, permission,
+                null/* main thread */, Context.RECEIVER_NOT_EXPORTED);
+
+        var intent = new Intent(uuid);
+        int flags = PendingIntent.FLAG_UPDATE_CURRENT | PendingIntent.FLAG_IMMUTABLE;
+        return PendingIntent.getBroadcast(context, 0, intent, flags).getIntentSender();
+    }
+
+    public static void requestPinLaunchShortcut(Runnable afterPinned) {
         if (!App.isParasitic()) throw new RuntimeException();
         var context = App.getInstance();
         var info = new ShortcutInfo.Builder(context, SHORTCUT_ID)
@@ -81,7 +111,7 @@ public class ShortcutUtil {
                 .setIcon(Icon.createWithAdaptiveBitmap(getBitmap(context, R.drawable.ic_launcher)))
                 .build();
         var sm = context.getSystemService(ShortcutManager.class);
-        sm.requestPinShortcut(info, null);
+        sm.requestPinShortcut(info, registerReceiver(context, afterPinned));
     }
 
     public static boolean isLaunchShortcutPinned() {

@@ -157,16 +157,6 @@ public class SettingsFragment extends BaseFragment {
                 });
             }
 
-            Preference shortcut = findPreference("add_shortcut");
-            if (shortcut != null) {
-                shortcut.setVisible(App.isParasitic());
-                shortcut.setEnabled(!ShortcutUtil.isLaunchShortcutPinned());
-                shortcut.setOnPreferenceClickListener(preference -> {
-                    ShortcutUtil.requestPinLaunchShortcut();
-                    return true;
-                });
-            }
-
             MaterialSwitchPreference notification = findPreference("enable_status_notification");
             if (notification != null) {
                 if (App.isParasitic() && !ShortcutUtil.isLaunchShortcutPinned()) {
@@ -180,6 +170,22 @@ public class SettingsFragment extends BaseFragment {
                 notification.setOnPreferenceChangeListener((p, v) ->
                         ConfigManager.setEnableStatusNotification((boolean) v)
                 );
+            }
+
+            Preference shortcut = findPreference("add_shortcut");
+            if (shortcut != null) {
+                shortcut.setVisible(App.isParasitic());
+                shortcut.setEnabled(!ShortcutUtil.isLaunchShortcutPinned());
+                shortcut.setOnPreferenceClickListener(preference -> {
+                    ShortcutUtil.requestPinLaunchShortcut(() -> {
+                        shortcut.setEnabled(false);
+                        if (notification != null) {
+                            notification.setEnabled(true);
+                            notification.setSummaryOn(R.string.settings_enable_status_notification_summary);
+                        }
+                    });
+                    return true;
+                });
             }
 
             Preference backup = findPreference("backup");
