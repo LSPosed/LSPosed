@@ -18,6 +18,7 @@ import android.graphics.drawable.BitmapDrawable;
 import android.graphics.drawable.Drawable;
 import android.graphics.drawable.Icon;
 import android.graphics.drawable.LayerDrawable;
+import android.os.Build;
 
 import org.lsposed.manager.App;
 import org.lsposed.manager.R;
@@ -104,14 +105,17 @@ public class ShortcutUtil {
     public static void requestPinLaunchShortcut(Runnable afterPinned) {
         if (!App.isParasitic()) throw new RuntimeException();
         var context = App.getInstance();
-        var info = new ShortcutInfo.Builder(context, SHORTCUT_ID)
+        var builder = new ShortcutInfo.Builder(context, SHORTCUT_ID)
                 .setShortLabel(context.getString(R.string.app_name))
                 .setIntent(getLaunchIntent(context))
-                .setActivity(new ComponentName(context.getPackageName(), "android.app.AppDetailsActivity"))
-                .setIcon(Icon.createWithAdaptiveBitmap(getBitmap(context, R.drawable.ic_launcher)))
-                .build();
+                .setIcon(Icon.createWithAdaptiveBitmap(getBitmap(context, R.drawable.ic_launcher)));
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.Q) {
+            var activity = new ComponentName(context.getPackageName(),
+                    "android.app.AppDetailsActivity");
+            builder.setActivity(activity);
+        }
         var sm = context.getSystemService(ShortcutManager.class);
-        sm.requestPinShortcut(info, registerReceiver(context, afterPinned));
+        sm.requestPinShortcut(builder.build(), registerReceiver(context, afterPinned));
     }
 
     public static boolean isLaunchShortcutPinned() {
