@@ -1,6 +1,9 @@
 package org.lsposed.manager.util;
 
+import android.content.ComponentName;
 import android.content.Context;
+import android.content.Intent;
+import android.content.pm.PackageManager;
 import android.content.pm.ShortcutInfo;
 import android.content.pm.ShortcutManager;
 import android.graphics.Bitmap;
@@ -12,7 +15,6 @@ import android.graphics.drawable.Icon;
 import android.graphics.drawable.LayerDrawable;
 
 import org.lsposed.manager.App;
-import org.lsposed.manager.ConfigManager;
 import org.lsposed.manager.R;
 
 public class ShortcutUtil {
@@ -38,12 +40,44 @@ public class ShortcutUtil {
         }
     }
 
+    private static Intent getLaunchIntent(Context context) {
+        var pm = context.getPackageManager();
+        var pkg = context.getPackageName();
+        var intent = pm.getLaunchIntentForPackage(pkg);
+        if (intent == null) {
+            try {
+                var pkgInfo = pm.getPackageInfo(pkg, PackageManager.GET_ACTIVITIES);
+                if (pkgInfo.activities != null) {
+                    for (var activityInfo : pkgInfo.activities) {
+                        if (activityInfo.processName.equals(activityInfo.packageName)) {
+                            intent = new Intent(Intent.ACTION_MAIN);
+                            intent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
+                            intent.setComponent(new ComponentName(pkg, activityInfo.name));
+                            break;
+                        }
+                    }
+                }
+            } catch (PackageManager.NameNotFoundException ignored) {
+            }
+        }
+        if (intent != null) {
+            var categories = intent.getCategories();
+            if (categories != null) {
+                categories.clear();
+            }
+            intent.addCategory("org.lsposed.manager.LAUNCH_MANAGER");
+            intent.setPackage(pkg);
+        }
+        return intent;
+    }
+
     public static void requestPinLaunchShortcut() {
-        var context= App.getInstance();
-        var intent = ConfigManager.getLaunchIntentForManager();
+        if (!App.isParasitic()) throw new RuntimeException();
+        var context = App.getInstance();
         var info = new ShortcutInfo.Builder(context, SHORTCUT_ID)
                 .setShortLabel(context.getString(R.string.app_name))
-                .setIntent(intent)
+                .setIntent(getLaunchIntent(context))
+                .setActivity(new ComponentName(context.getPackageName(), "android.__dummy__"))
                 .setIcon(Icon.createWithAdaptiveBitmap(getBitmap(context, R.drawable.ic_launcher)))
                 .build();
         var sm = context.getSystemService(ShortcutManager.class);
@@ -51,7 +85,7 @@ public class ShortcutUtil {
     }
 
     public static boolean isLaunchShortcutPinned() {
-        var context= App.getInstance();
+        var context = App.getInstance();
         var sm = context.getSystemService(ShortcutManager.class);
         boolean pinned = false;
         for (var info : sm.getPinnedShortcuts()) {

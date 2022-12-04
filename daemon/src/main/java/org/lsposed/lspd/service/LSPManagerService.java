@@ -600,11 +600,6 @@ public class LSPManagerService extends ILSPManagerService.Stub {
     }
 
     @Override
-    public Intent getLaunchIntentForManager() {
-        return getManagerIntent();
-    }
-
-    @Override
     public boolean enableStatusNotification() {
         return ConfigManager.getInstance().enableStatusNotification();
     }
