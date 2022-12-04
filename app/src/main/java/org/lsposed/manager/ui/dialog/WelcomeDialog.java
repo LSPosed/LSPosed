@@ -23,7 +23,7 @@ public class WelcomeDialog extends DialogFragment {
                 .setNegativeButton(R.string.never_show, (dialog, which) ->
                         App.getPreferences().edit().putBoolean("never_show_welcome", true).apply())
                 .setNeutralButton(R.string.create_shortcut, (dialog, which) ->
-                        ShortcutUtil.requestPinLaunchShortcut())
+                        ShortcutUtil.requestPinLaunchShortcut(null))
                 .setPositiveButton(android.R.string.ok, null)
                 .create();
     }
