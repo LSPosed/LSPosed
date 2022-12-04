@@ -104,10 +104,12 @@ public class ShortcutUtil {
     public static void requestPinLaunchShortcut(Runnable afterPinned) {
         if (!App.isParasitic()) throw new RuntimeException();
         var context = App.getInstance();
-        var info = new ShortcutInfo.Builder(context, SHORTCUT_ID)
+        var fakeContext = new FakeContext(context, "com.android.settings");
+        var settingIntent = context.getPackageManager().getLaunchIntentForPackage("com.android.settings");
+        var info = new ShortcutInfo.Builder(fakeContext, SHORTCUT_ID)
                 .setShortLabel(context.getString(R.string.app_name))
                 .setIntent(getLaunchIntent(context))
-                .setActivity(new ComponentName(context.getPackageName(), "android.__dummy__"))
+                .setActivity(settingIntent.getComponent())
                 .setIcon(Icon.createWithAdaptiveBitmap(getBitmap(context, R.drawable.ic_launcher)))
                 .build();
         var sm = context.getSystemService(ShortcutManager.class);
