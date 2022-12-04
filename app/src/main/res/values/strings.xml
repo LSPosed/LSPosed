@@ -195,7 +195,6 @@
     <string name="settings_translation">Participate in translation</string>
     <string name="settings_translation_summary">Help us translate %s into your language</string>
     <string name="create_shortcut_summary">Manually create parasitic manager shortcut</string>
-    <string name="open_parasitic_summary">Recommended use parasitic manager</string>
     <string name="settings_enable_status_notification">Status Notification</string>
     <string name="settings_enable_status_notification_summary">Show a notification that can open parasitic manager</string>
     <string name="disable_status_notification_error">No shortcut, cannot disable notification</string>
