@@ -53,9 +53,6 @@ public class BaseActivity extends MaterialActivity {
     @Override
     public void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        if (ThemeUtil.isSystemAccent()) {
-            DynamicColors.applyToActivityIfAvailable(this);
-        }
         // make sure the versions are consistent
         if (BuildConfig.DEBUG) return;
         if (!ConfigManager.isBinderAlive()) return;
