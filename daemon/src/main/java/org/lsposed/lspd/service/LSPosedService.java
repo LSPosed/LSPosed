@@ -227,7 +227,13 @@ public class LSPosedService extends ILSPosedService.Stub {
         var receiver = new IIntentReceiver.Stub() {
             @Override
             public void performReceive(Intent intent, int resultCode, String data, Bundle extras, boolean ordered, boolean sticky, int sendingUser) {
-                getExecutorService().submit(() -> task.accept(intent));
+                getExecutorService().submit(() -> {
+                    try {
+                        task.accept(intent);
+                    } catch (Throwable t) {
+                        Log.e(TAG, "performReceive: ", t);
+                    }
+                });
                 if (!ordered) return;
                 try {
                     ActivityManagerService.finishReceiver(this, resultCode, data, extras, false, intent.getFlags());
