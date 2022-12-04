@@ -153,6 +153,7 @@ public class ActivityManagerService {
                                                      ProfilerInfo profilerInfo, Bundle options, int userId) throws RemoteException {
         IActivityManager am = getActivityManager();
         if (am == null || thread == null) return -1;
+        intent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.R) {
             return am.startActivityAsUserWithFeature(thread, callingPackage, callingFeatureId, intent, resolvedType, resultTo, resultWho, requestCode, flags, profilerInfo, options, userId);
         } else {
