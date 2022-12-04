@@ -107,7 +107,7 @@ public class ShortcutUtil {
         var info = new ShortcutInfo.Builder(context, SHORTCUT_ID)
                 .setShortLabel(context.getString(R.string.app_name))
                 .setIntent(getLaunchIntent(context))
-                .setActivity(new ComponentName(context.getPackageName(), "android.__dummy__"))
+                .setActivity(new ComponentName(context.getPackageName(), "android.app.AppDetailsActivity"))
                 .setIcon(Icon.createWithAdaptiveBitmap(getBitmap(context, R.drawable.ic_launcher)))
                 .build();
         var sm = context.getSystemService(ShortcutManager.class);
