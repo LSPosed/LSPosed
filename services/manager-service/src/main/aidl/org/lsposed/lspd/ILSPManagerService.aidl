@@ -84,8 +84,6 @@ interface ILSPManagerService {
 
     void clearApplicationProfileData(in String packageName) = 45;
 
-    Intent getLaunchIntentForManager() = 46;
-
     boolean enableStatusNotification() = 47;
 
     void setEnableStatusNotification(boolean enable) = 48;

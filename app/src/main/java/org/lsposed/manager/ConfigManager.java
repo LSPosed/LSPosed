@@ -134,15 +134,6 @@ public class ConfigManager {
         return list;
     }
 
-    public static Intent getLaunchIntentForManager() {
-        try {
-            return LSPManagerServiceHolder.getService().getLaunchIntentForManager();
-        } catch (RemoteException e) {
-            Log.e(App.TAG, Log.getStackTraceString(e));
-            return null;
-        }
-    }
-
     public static boolean enableStatusNotification() {
         try {
             return LSPManagerServiceHolder.getService().enableStatusNotification();
