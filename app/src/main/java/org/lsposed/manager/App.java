@@ -29,6 +29,7 @@ import android.content.Intent;
 import android.content.IntentFilter;
 import android.content.SharedPreferences;
 import android.os.Build;
+import android.os.Handler;
 import android.os.Looper;
 import android.os.Process;
 import android.system.Os;
@@ -126,7 +127,8 @@ public class App extends Application {
     private static OkHttpClient okHttpClient;
     private static Cache okHttpCache;
     private SharedPreferences pref;
-    private final ExecutorService executorService = Executors.newCachedThreadPool();
+    private static final ExecutorService executorService = Executors.newCachedThreadPool();
+    private static final Handler MainHandler = new Handler(Looper.getMainLooper());
 
     public static App getInstance() {
         return instance;
@@ -142,6 +144,10 @@ public class App extends Application {
 
     public static boolean isParasitic() {
         return !Process.isApplicationUid(Process.myUid());
+    }
+
+    public static Handler getMainHandler() {
+        return MainHandler;
     }
 
     @Override
