@@ -34,11 +34,13 @@ public class LSPNotificationManager {
     private static final String UPDATED_CHANNEL_ID = "lsposed_module_updated";
     private static final String STATUS_CHANNEL_ID = "lsposed_status";
     private static final int STATUS_NOTIFICATION_ID = 2000;
+    private static final String opPkg = Build.VERSION.SDK_INT >= Build.VERSION_CODES.Q ?
+            "android" : "com.android.settings";
 
     private static final HashMap<String, Integer> notificationIds = new HashMap<>();
     private static int previousNotificationId = STATUS_NOTIFICATION_ID;
 
-    static String openManagerAction = UUID.randomUUID().toString();
+    static final String openManagerAction = UUID.randomUUID().toString();
 
     private static INotificationManager notificationManager = null;
     private static IBinder binder = null;
@@ -140,7 +142,7 @@ public class LSPNotificationManager {
         try {
             var nm = getNotificationManager();
             createNotificationChannel(nm);
-            nm.enqueueNotificationWithTag("android", "android", null,
+            nm.enqueueNotificationWithTag("android", opPkg, null,
                     STATUS_NOTIFICATION_ID, notification, 0);
         } catch (RemoteException e) {
             Log.e(TAG, "notifyStatusNotification: ", e);
@@ -215,7 +217,7 @@ public class LSPNotificationManager {
             notification.extras.putString("android.substName", "LSPosed");
             var nm = getNotificationManager();
             createNotificationChannel(nm);
-            nm.enqueueNotificationWithTag("android", "android", modulePackageName,
+            nm.enqueueNotificationWithTag("android", opPkg, modulePackageName,
                     pushAndGetNotificationId(modulePackageName, moduleUserId),
                     notification, 0);
         } catch (Throwable e) {
