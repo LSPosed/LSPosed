@@ -97,6 +97,12 @@ public class ShortcutUtil {
         context.registerReceiver(receiver, filter, permission,
                 null/* main thread */, Context.RECEIVER_NOT_EXPORTED);
 
+        App.getMainHandler().postDelayed(() -> {
+            if (isLaunchShortcutPinned()) {
+                task.run();
+            }
+        }, 1000);
+
         var intent = new Intent(uuid);
         int flags = PendingIntent.FLAG_UPDATE_CURRENT | PendingIntent.FLAG_IMMUTABLE;
         return PendingIntent.getBroadcast(context, 0, intent, flags).getIntentSender();
