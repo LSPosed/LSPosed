@@ -88,20 +88,21 @@
             android:icon="@drawable/ic_outline_assignment_24"
             android:key="disable_verbose_log"
             android:persistent="false"
-            android:title="@string/pref_title_disable_verbose_log" />
+            android:title="@string/settings_disable_verbose_log"
+            android:summary="@string/settings_disable_verbose_log_summary"/>
 
         <rikka.material.preference.MaterialSwitchPreference
             android:defaultValue="true"
             android:icon="@drawable/ic_outline_shield_24"
             android:key="enable_dex_obfuscate"
             android:persistent="false"
-            android:title="@string/pref_title_restrict_classloader"
-            android:summary="@string/pref_summary_restrict_classloader"/>
+            android:title="@string/settings_xposed_api_call_protection"
+            android:summary="@string/settings_xposed_api_call_protection_summary"/>
 
         <Preference
             android:icon="@drawable/ic_outline_app_shortcut_24"
             android:key="add_shortcut"
-            android:summary="@string/create_shortcut_summary"
+            android:summary="@string/settings_create_shortcut_summary"
             android:title="@string/create_shortcut" />
 
         <rikka.material.preference.MaterialSwitchPreference

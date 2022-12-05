@@ -244,7 +244,7 @@
                             style="@style/DeviceInfoDialogLabel"
                             android:layout_width="match_parent"
                             android:layout_height="wrap_content"
-                            android:text="@string/info_api" />
+                            android:text="@string/settings_xposed_api_call_protection" />
 
                         <com.google.android.material.textview.MaterialTextView
                             android:id="@+id/api"
