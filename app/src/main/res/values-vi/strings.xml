@@ -61,8 +61,9 @@
     <string name="info_system_version">Phiên bản hệ thống</string>
     <string name="info_device">Thiết bị</string>
     <string name="info_system_abi">Hệ thống ABI</string>
-    <string name="info_api">Giao diện nhúng</string>
     <string name="info_dex2oat_wrapper">Trình tối ưu Dex Wrapper</string>
+    <string name="enabled">Đã kích hoạt</string>
+    <string name="not_enabled">Không được kích hoạt</string>
     <string name="supported">Được hỗ trợ</string>
     <string name="unsupported">Không được hỗ trợ</string>
     <string name="android_version_unsatisfied">Phiên bản Android không hỗ trợ</string>
@@ -161,7 +162,8 @@
     <string name="list_empty">¯\\\\_(ツ)_\/¯\nKhông có gì ở đây cả</string>
     <!-- SettingsActivity -->
     <string name="settings_group_framework">Framework</string>
-    <string name="pref_title_disable_verbose_log">Vô hiệu hoá nhật ký chi tiết</string>
+    <string name="settings_disable_verbose_log">Vô hiệu hoá nhật ký chi tiết</string>
+    <string name="settings_disable_verbose_log_summary">Báo cáo sự cố có yêu cầu bao gồm thêm nhật ký chi tiết</string>
     <string name="pure_black_dark_theme">Chủ đề Đen - Tối</string>
     <string name="pure_black_dark_theme_summary">Sử dụng chủ đề đen nếu chủ đề tối được bật</string>
     <string name="settings_group_theme">Chủ đề</string>
@@ -185,8 +187,8 @@
     <string name="settings_translation_contributors">Cộng tác viên phiên dịch</string>
     <string name="settings_translation">Tham gia phiên dịch</string>
     <string name="settings_translation_summary">Giúp chúng tôi dịch %s sang ngôn ngữ của bạn</string>
-    <string name="create_shortcut_summary">Tạo lối tắt trình quản lý ký sinh theo cách thủ công</string>
-    <string name="open_parasitic_summary">Khuyến nghị sử dụng trình quản lý ký sinh</string>
+    <string name="settings_create_shortcut_summary">Tạo lối tắt để có thể mở trình quản lý ký sinh</string>
+    <string name="settings_created_shortcut_summary">Một lối tắt đã được tạo để mở trình quản lý ký sinh</string>
     <string name="settings_enable_status_notification">Thông báo trạng thái</string>
     <string name="settings_enable_status_notification_summary">Hiển thị thông báo để có thể mở trình quản lý ký sinh</string>
     <string name="disable_status_notification_error">Không lối tắt, không thể tắt thông báo</string>
@@ -194,8 +196,8 @@
     <string name="update_channel_stable">Ổn định</string>
     <string name="update_channel_bate">Thử nghiệm</string>
     <string name="update_channel_nightly">Bản dựng hàng đêm</string>
-    <string name="pref_title_restrict_classloader">Chỉ trình tải lớp mô-đun mới có thể sử dụng Xposed API</string>
-    <string name="pref_summary_restrict_classloader">Điều này có thể phá vỡ một số mô-đun nhưng có lợi cho bảo mật (tính năng thử nghiệm)</string>
+    <string name="settings_xposed_api_call_protection">Bảo vệ kết nối tới Xposed API</string>
+    <string name="settings_xposed_api_call_protection_summary">Chặn các mã mô-đun được tải động sử dụng API Xposed, điều này có thể làm hỏng một số mô-đun nhưng có lợi cho bảo mật (tính năng thử nghiệm)</string>
     <!-- Module Repo -->
     <string name="module_readme">Readme</string>
     <string name="module_releases">Bản phát hành</string>
