@@ -264,7 +264,7 @@ public class MainActivity extends BaseActivity implements RepoLoader.RepoListene
                 }
             }
         }
-        if(App.isParasitic() && ShortcutUtil.isLaunchShortcutPinned()){
+        if(App.isParasitic()){
             ShortcutUtil.updateShortcut();
         }
     }
