@@ -63,7 +63,6 @@
     <string name="info_system_version">Versión del sistema</string>
     <string name="info_device">Dispositivo</string>
     <string name="info_system_abi">ABI del Sistema</string>
-    <string name="info_api">Interfaz de inyección</string>
     <string name="info_dex2oat_wrapper">Envoltura del optimizador Dex</string>
     <string name="supported">Apoyado</string>
     <string name="unsupported">No soportado</string>
@@ -77,6 +76,7 @@
     <!-- WelcomeDialog -->
     <string name="create_shortcut">Crear acceso directo</string>
     <string name="never_show">Nunca mostrar</string>
+    <string name="app_welcome">Se recomienda Parasitic Manager</string>
     <!-- LogsActivity -->
     <string name="menuSaveToSd">Guardar</string>
     <string name="nav_item_logs_verbose">Registros detallados</string>
@@ -159,7 +159,7 @@
     <string name="list_empty">¯\\\\_(ツ)_\/¯\nNo hay nada por aquí</string>
     <!-- SettingsActivity -->
     <string name="settings_group_framework">Framework</string>
-    <string name="pref_title_disable_verbose_log">Desactivar registros detallados</string>
+    <string name="settings_disable_verbose_log">Desactivar registros detallados</string>
     <string name="pure_black_dark_theme">Tema negro oscuro</string>
     <string name="pure_black_dark_theme_summary">Usar el tema negro puro si el tema oscuro está activado</string>
     <string name="settings_group_theme">Tema</string>
@@ -183,13 +183,10 @@
     <string name="settings_translation_contributors">Colaboradores de traducción</string>
     <string name="settings_translation">Participar en la traducción</string>
     <string name="settings_translation_summary">Ayúdanos a traducir %s a tu idioma</string>
-    <string name="create_shortcut_summary">Crear manualmente el acceso directo al gestor de parásitos</string>
     <string name="settings_update_channel">Actualizar canal</string>
     <string name="update_channel_stable">Estable</string>
     <string name="update_channel_bate">Beta</string>
     <string name="update_channel_nightly">Construcción nocturna</string>
-    <string name="pref_title_restrict_classloader">Sólo el módulo classloader puede utilizar la API Xposed</string>
-    <string name="pref_summary_restrict_classloader">Esto puede romper algunos módulos pero beneficia la seguridad (característica experimental)</string>
     <!-- Module Repo -->
     <string name="module_readme">Léeme</string>
     <string name="module_releases">Versiones</string>
