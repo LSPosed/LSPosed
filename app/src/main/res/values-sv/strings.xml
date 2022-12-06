@@ -63,7 +63,6 @@
     <string name="info_system_version">Systemversion</string>
     <string name="info_device">Enhet</string>
     <string name="info_system_abi">System ABI</string>
-    <string name="info_api">Injektionsgränssnitt</string>
     <string name="info_dex2oat_wrapper">Dex Optimizer Wrapper</string>
     <string name="supported">Stöds</string>
     <string name="unsupported">Ej stödd</string>
@@ -159,7 +158,6 @@
     <string name="list_empty">&lt;unk&gt; \\\\_(&lt;unk&gt; )_\/ &lt;unk&gt;\nIngenting här</string>
     <!-- SettingsActivity -->
     <string name="settings_group_framework">Framework</string>
-    <string name="pref_title_disable_verbose_log">Inaktivera verbose loggar</string>
     <string name="pure_black_dark_theme">Svart mörkt tema</string>
     <string name="pure_black_dark_theme_summary">Använd det rena svarta temat om mörkt tema är aktiverat</string>
     <string name="settings_group_theme">Tema</string>
@@ -183,13 +181,10 @@
     <string name="settings_translation_contributors">Bidragande översättare</string>
     <string name="settings_translation">Delta i översättning</string>
     <string name="settings_translation_summary">Hjälp oss att översätta %s till ditt språk</string>
-    <string name="create_shortcut_summary">Skapa manuellt en genväg för parasitansvarig</string>
     <string name="settings_update_channel">Uppdatera kanal</string>
     <string name="update_channel_stable">Stabil</string>
     <string name="update_channel_bate">Beta</string>
     <string name="update_channel_nightly">Nattligt bygg</string>
-    <string name="pref_title_restrict_classloader">Endast modul classloader kan använda Xposed API</string>
-    <string name="pref_summary_restrict_classloader">Detta kan förstöra vissa moduler men gynnar säkerheten (experimentell funktion)</string>
     <!-- Module Repo -->
     <string name="module_readme">Läsa</string>
     <string name="module_releases">Släpp</string>
