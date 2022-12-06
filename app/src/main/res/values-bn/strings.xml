@@ -64,7 +64,6 @@
     <string name="info_system_version">সিস্টেম সংস্করণ</string>
     <string name="info_device">যন্ত্র</string>
     <string name="info_system_abi">সিস্টেম ABI</string>
-    <string name="info_api">ইনজেকশন ইন্টারফেস</string>
     <string name="info_dex2oat_wrapper">ডেক্স অপ্টিমাইজার মোড়ক</string>
     <string name="supported">সমর্থিত</string>
     <string name="unsupported">অসমর্থিত</string>
@@ -160,7 +159,6 @@
     <string name="list_empty">¯\\\\_(ツ)_\/¯\nএখানে কিছুই নেই</string>
     <!-- SettingsActivity -->
     <string name="settings_group_framework">ফ্রেমওয়ার্ক</string>
-    <string name="pref_title_disable_verbose_log">ভার্বোস লগ অক্ষম করুন</string>
     <string name="pure_black_dark_theme">কালো অন্ধকার থিম</string>
     <string name="pure_black_dark_theme_summary">অন্ধকার থিম সক্ষম থাকলে খাঁটি কালো থিম ব্যবহার করুন</string>
     <string name="settings_group_theme">থিম</string>
@@ -184,13 +182,10 @@
     <string name="settings_translation_contributors">অনুবাদ অবদানকারী</string>
     <string name="settings_translation">অনুবাদে অংশগ্রহণ করুন</string>
     <string name="settings_translation_summary">আপনার ভাষায় %s অনুবাদ করতে আমাদের সাহায্য করুন</string>
-    <string name="create_shortcut_summary">ম্যানুয়ালি পরজীবী ম্যানেজার শর্টকাট তৈরি করুন</string>
     <string name="settings_update_channel">চ্যানেল আপডেট করুন</string>
     <string name="update_channel_stable">স্থিতিশীল</string>
     <string name="update_channel_bate">বেটা</string>
     <string name="update_channel_nightly">রাতারাতি নির্মাণ</string>
-    <string name="pref_title_restrict_classloader">শুধুমাত্র মডিউল ক্লাসলোডার Xposed API ব্যবহার করতে পারে</string>
-    <string name="pref_summary_restrict_classloader">এটি কিছু মডিউল ভেঙ্গে ফেলতে পারে কিন্তু নিরাপত্তা লাভ করতে পারে (পরীক্ষামূলক বৈশিষ্ট্য)</string>
     <!-- Module Repo -->
     <string name="module_readme">রিডমি</string>
     <string name="module_releases">মুক্তি দেয়</string>
