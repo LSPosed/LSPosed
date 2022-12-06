@@ -22,7 +22,6 @@ package org.lsposed.manager.ui.activity;
 import android.annotation.SuppressLint;
 import android.content.Context;
 import android.content.Intent;
-import android.content.res.Configuration;
 import android.net.Uri;
 import android.os.Build;
 import android.os.Bundle;
@@ -291,17 +290,5 @@ public class MainActivity extends BaseActivity implements RepoLoader.RepoListene
         super.onDestroy();
         repoLoader.removeListener(this);
         moduleUtil.removeListener(this);
-    }
-
-    @Override
-    public void onConfigurationChanged (@NonNull Configuration configuration) {
-        super.onConfigurationChanged(configuration);
-        int currentNightMode = configuration.uiMode & Configuration.UI_MODE_NIGHT_MASK;
-        switch (currentNightMode) {
-            case Configuration.UI_MODE_NIGHT_NO:
-            case Configuration.UI_MODE_NIGHT_YES:
-                ShortcutUtil.updateShortcut();
-                break;
-        }
     }
 }

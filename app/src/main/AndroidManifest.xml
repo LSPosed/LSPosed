@@ -45,7 +45,6 @@
         tools:targetApi="q">
         <activity
             android:name=".ui.activity.MainActivity"
-            android:configChanges="uiMode"
             android:exported="true"
             android:launchMode="singleTop">
             <intent-filter>
