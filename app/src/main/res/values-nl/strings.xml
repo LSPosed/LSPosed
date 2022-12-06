@@ -63,7 +63,6 @@
     <string name="info_system_version">Systeem versie</string>
     <string name="info_device">Apparaat</string>
     <string name="info_system_abi">Systeem ABI</string>
-    <string name="info_api">Injectie interface</string>
     <string name="info_dex2oat_wrapper">Dex Optimizer Wrapper</string>
     <string name="supported">Ondersteund</string>
     <string name="unsupported">Niet-ondersteunde</string>
@@ -77,6 +76,7 @@
     <!-- WelcomeDialog -->
     <string name="create_shortcut">Snelkoppeling maken</string>
     <string name="never_show">Nooit tonen</string>
+    <string name="app_welcome">Parasitaire manager aanbevolen</string>
     <!-- LogsActivity -->
     <string name="menuSaveToSd">Opslaan</string>
     <string name="nav_item_logs_verbose">Uitgebreide logs</string>
@@ -159,7 +159,7 @@
     <string name="list_empty">¯\\\\_(ツ)_\/¯\nNiets hier</string>
     <!-- SettingsActivity -->
     <string name="settings_group_framework">Framework</string>
-    <string name="pref_title_disable_verbose_log">Schakel uitgebreide logboeken uit</string>
+    <string name="settings_disable_verbose_log">Schakel uitgebreide logboeken uit</string>
     <string name="pure_black_dark_theme">Zwarte donkere thema</string>
     <string name="pure_black_dark_theme_summary">Gebruik het pure zwarte thema als het donkere thema is ingeschakeld</string>
     <string name="settings_group_theme">Thema</string>
@@ -183,13 +183,10 @@
     <string name="settings_translation_contributors">Bijdragers van vertalingen</string>
     <string name="settings_translation">Deelnemen aan vertaling</string>
     <string name="settings_translation_summary">Help ons %s te vertalen in uw taal</string>
-    <string name="create_shortcut_summary">Maak handmatig een snelkoppeling naar parasitic manager</string>
     <string name="settings_update_channel">Kanaal bijwerken</string>
     <string name="update_channel_stable">Stabiel</string>
     <string name="update_channel_bate">Bèta</string>
     <string name="update_channel_nightly">Nachtelijke bouw</string>
-    <string name="pref_title_restrict_classloader">Alleen module classloader kan Xposed API gebruiken</string>
-    <string name="pref_summary_restrict_classloader">Dit kan sommige modules breken maar de veiligheid ten goede komen (experimentele functie)</string>
     <!-- Module Repo -->
     <string name="module_readme">Leesmij</string>
     <string name="module_releases">Publicaties</string>
