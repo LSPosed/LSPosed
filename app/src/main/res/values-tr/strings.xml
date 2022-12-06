@@ -63,8 +63,9 @@
     <string name="info_system_version">Sistem sürümü</string>
     <string name="info_device">Cihaz</string>
     <string name="info_system_abi">Sistem ABI\'si</string>
-    <string name="info_api">Enjeksiyon Arayüzü</string>
     <string name="info_dex2oat_wrapper">Dex Optimize Edici Sarıcısı</string>
+    <string name="enabled">Etkin</string>
+    <string name="not_enabled">Etkin değil</string>
     <string name="supported">Desteklenen</string>
     <string name="unsupported">Desteklenmiyor</string>
     <string name="android_version_unsatisfied">Android sürümü tatmin edici değil</string>
@@ -75,8 +76,12 @@
     <string name="update_lsposed">LSPosed\'ı güncelle</string>
     <string name="update_lsposed_msg">LSPosed\'ı güncellemek istediğinize emin misiniz? Bu cihaz güncelleme tamamlandıktan sonra yeniden başlatılacak</string>
     <!-- WelcomeDialog -->
+    <string name="parasitic_welcome">LSPosed\'a hoş geldiniz</string>
+    <string name="parasitic_welcome_summary">Parazit yöneticiyi kullanıyorsunuz, bu da kısayol oluşturabileceğinizi veya hala bildirimden açabileceğinizi gösterir.</string>
     <string name="create_shortcut">Kısayol oluştur</string>
     <string name="never_show">Asla gösterme</string>
+    <string name="app_welcome">Parazit Yönetici Önerilir</string>
+    <string name="app_welcome_summary">LSPosed tespit edilmeyi önlemek için sistem parazitlemeyi destekliyor, parazit yöneticiyi bildirimden açabilirsiniz. Şu anki uygulamayı kaldırmanız önerilir.</string>
     <!-- LogsActivity -->
     <string name="menuSaveToSd">Kaydet</string>
     <string name="nav_item_logs_verbose">Ayrıntılı Günlükler</string>
@@ -159,7 +164,8 @@
     <string name="list_empty">¯\\\\_(ツ)_\/¯\nModül bulunamadı</string>
     <!-- SettingsActivity -->
     <string name="settings_group_framework">Çerçeve</string>
-    <string name="pref_title_disable_verbose_log">Ayrıntılı günlükleri devre dışı bırak</string>
+    <string name="settings_disable_verbose_log">Ayrıntılı günlükleri devre dışı bırak</string>
+    <string name="settings_disable_verbose_log_summary">Ayrıntılı günlükleri dahil etme isteğini raporlayın</string>
     <string name="pure_black_dark_theme">Siyah koyu tema</string>
     <string name="pure_black_dark_theme_summary">Koyu tema etkinse saf siyah temayı kullanın</string>
     <string name="settings_group_theme">Tema</string>
@@ -183,13 +189,17 @@
     <string name="settings_translation_contributors">Çeviri katılımcıları</string>
     <string name="settings_translation">Çeviriye katılın</string>
     <string name="settings_translation_summary">%s yazılımını çevirmemize yardım edin</string>
-    <string name="create_shortcut_summary">Parazit yönetici kısayolunu manuel olarak oluşturun</string>
+    <string name="settings_create_shortcut_summary">Parazit yöneticiyi açmak için bir kısayol oluşturun</string>
+    <string name="settings_created_shortcut_summary">Parazit yöneticiyi başlatmak için bir kısayol oluşturulur</string>
+    <string name="settings_enable_status_notification">Durum Bildirimi</string>
+    <string name="settings_enable_status_notification_summary">Parazit yöneticiyi açabilmek için bir bildirim göster</string>
+    <string name="disable_status_notification_error">Kısayol yok, bildirim devre dışı bırakılamaz</string>
     <string name="settings_update_channel">Güncelleme kanalı</string>
     <string name="update_channel_stable">Stabil</string>
     <string name="update_channel_bate">Beta</string>
     <string name="update_channel_nightly">Gecelik</string>
-    <string name="pref_title_restrict_classloader">Yalnızca modül sınıf yükleyicisi Xposed API\'yi kullanabilir</string>
-    <string name="pref_summary_restrict_classloader">Bu, bazı modülleri bozabilir ancak güvenlikten faydalanabilir (deneysel özellik)</string>
+    <string name="settings_xposed_api_call_protection">Xposed API çağrı koruması</string>
+    <string name="settings_xposed_api_call_protection_summary">Xposed API kullanmak için dinamik olarak yüklenen modül kodunu engelleyin, bu bazı modülleri bozabilir ancak güvenliğe faydalı da olabilir (deneysel özellik)</string>
     <!-- Module Repo -->
     <string name="module_readme">Beni oku</string>
     <string name="module_releases">Sürümler</string>
