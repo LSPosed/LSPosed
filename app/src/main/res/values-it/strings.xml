@@ -63,8 +63,9 @@
     <string name="info_system_version">Versione del sistema</string>
     <string name="info_device">Dispositivo</string>
     <string name="info_system_abi">ABI del sistema</string>
-    <string name="info_api">Interfaccia di iniezione</string>
     <string name="info_dex2oat_wrapper">Dex Optimizer Wrapper</string>
+    <string name="enabled">Abilitato</string>
+    <string name="not_enabled">Non abilitato</string>
     <string name="supported">Supportato</string>
     <string name="unsupported">Non supportato</string>
     <string name="android_version_unsatisfied">Versione di Android non soddisfatta</string>
@@ -80,6 +81,7 @@
     <string name="create_shortcut">Crea scorciatoia</string>
     <string name="never_show">Non mostrare mai</string>
     <string name="app_welcome">Manager parassitario consigliato</string>
+    <string name="app_welcome_summary">LSPosed ora supporta la parassitazione del sistema per evitarne il rilevamento, è possibile aprire il manager parassitario dalla notifica. Si consiglia di disinstallare l\'applicazione attuale.</string>
     <!-- LogsActivity -->
     <string name="menuSaveToSd">Salva</string>
     <string name="nav_item_logs_verbose">Log verbosi</string>
@@ -162,7 +164,8 @@
     <string name="list_empty">¯\\\\_(ツ)_\\/¯\nNon c\'è nulla qui</string>
     <!-- SettingsActivity -->
     <string name="settings_group_framework">Framework</string>
-    <string name="pref_title_disable_verbose_log">Disabilita il log verboso</string>
+    <string name="settings_disable_verbose_log">Disabilita il log verboso</string>
+    <string name="settings_disable_verbose_log_summary">La segnalazione di problemi richiede l\'inclusione di log dettagliati</string>
     <string name="pure_black_dark_theme">Tema nero scuro</string>
     <string name="pure_black_dark_theme_summary">Usa il tema nero puro quando è abilitato il tema scuro</string>
     <string name="settings_group_theme">Tema</string>
@@ -186,16 +189,17 @@
     <string name="settings_translation_contributors">Contributori alla traduzione</string>
     <string name="settings_translation">Partecipa alla traduzione</string>
     <string name="settings_translation_summary">Aiutaci a tradurre %s nella tua lingua</string>
-    <string name="create_shortcut_summary">Crea manualmente la scorciatoia del manager parassitario</string>
-    <string name="open_parasitic_summary">Consigliato l\'uso del manager parassitario</string>
+    <string name="settings_create_shortcut_summary">Crea una scorciatoia che può aprire il manager parassitario</string>
+    <string name="settings_created_shortcut_summary">È stata creata una scorciatoia per aprire il manager parassitario</string>
     <string name="settings_enable_status_notification">Notifica di stato</string>
+    <string name="settings_enable_status_notification_summary">Mostra una notifica che può aprire il manager parassitario</string>
     <string name="disable_status_notification_error">Nessuna scorciatoia, impossibile disattivare la notifica</string>
     <string name="settings_update_channel">Canale di aggiornamento</string>
     <string name="update_channel_stable">Stabile</string>
     <string name="update_channel_bate">Beta</string>
     <string name="update_channel_nightly">Nightly</string>
-    <string name="pref_title_restrict_classloader">Solo il classloader del modulo può utilizzare le API Xposed</string>
-    <string name="pref_summary_restrict_classloader">Questo potrebbe causare il malfunzionamento di alcuni moduli, ma a vantaggio della sicurezza (funzione sperimentale)</string>
+    <string name="settings_xposed_api_call_protection">API di protezione delle chiamate di Xposed</string>
+    <string name="settings_xposed_api_call_protection_summary">Blocca dinamicamente il codice del modulo caricato per utilizzare l\'API di Xposed, questo potrebbe interrompere alcuni moduli ma favorire la sicurezza (funzionalità sperimentale)</string>
     <!-- Module Repo -->
     <string name="module_readme">Leggimi</string>
     <string name="module_releases">Versioni</string>
