@@ -64,7 +64,6 @@
     <string name="info_system_version">Rendszer verzió</string>
     <string name="info_device">Eszköz</string>
     <string name="info_system_abi">Rendszer ABI</string>
-    <string name="info_api">Injekciós felület</string>
     <string name="info_dex2oat_wrapper">Dex Optimizer Wrapper</string>
     <string name="supported">Támogatott</string>
     <string name="unsupported">Nem támogatott</string>
@@ -78,6 +77,7 @@
     <!-- WelcomeDialog -->
     <string name="create_shortcut">Parancsikon létrehozása</string>
     <string name="never_show">Soha ne mutassa</string>
+    <string name="app_welcome">Parazita menedzser Ajánlott</string>
     <!-- LogsActivity -->
     <string name="menuSaveToSd">Mentés</string>
     <string name="nav_item_logs_verbose">Szöveges naplók</string>
@@ -160,7 +160,7 @@
     <string name="list_empty">¯\\\\_(ツ)_\/¯\nItt nincs semmi</string>
     <!-- SettingsActivity -->
     <string name="settings_group_framework">Keretrendszer</string>
-    <string name="pref_title_disable_verbose_log">A szöveges naplózás kikapcsolása</string>
+    <string name="settings_disable_verbose_log">A szöveges naplózás kikapcsolása</string>
     <string name="pure_black_dark_theme">Fekete sötét téma</string>
     <string name="pure_black_dark_theme_summary">Teljesen fekete téma használata, ha a sötét téma engedélyezve van</string>
     <string name="settings_group_theme">Téma</string>
@@ -184,13 +184,10 @@
     <string name="settings_translation_contributors">A fordításban közreműködők</string>
     <string name="settings_translation">Részvétel a fordításban</string>
     <string name="settings_translation_summary">Segítsen nekünk lefordítani az %s -t az Ön nyelvére</string>
-    <string name="create_shortcut_summary">Kézzel hozzon létre parazita menedzser parancsikont</string>
     <string name="settings_update_channel">Frissítési csatorna</string>
     <string name="update_channel_stable">Stabil</string>
     <string name="update_channel_bate">Béta</string>
     <string name="update_channel_nightly">Nightly</string>
-    <string name="pref_title_restrict_classloader">Csak a modul classloader használhatja az Xposed API-t</string>
-    <string name="pref_summary_restrict_classloader">Ez megtörhet néhány modult, de a biztonság javára válik (kísérleti funkció).</string>
     <!-- Module Repo -->
     <string name="module_readme">Olvass el</string>
     <string name="module_releases">Kiadások</string>
