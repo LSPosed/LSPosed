@@ -63,7 +63,6 @@
     <string name="info_system_version">Версия на системата</string>
     <string name="info_device">Устройство</string>
     <string name="info_system_abi">ABI на системата</string>
-    <string name="info_api">Интерфейс за впръскване</string>
     <string name="info_dex2oat_wrapper">Обвивка на Dex Optimizer</string>
     <string name="supported">Поддържан</string>
     <string name="unsupported">Неподдържан</string>
@@ -159,7 +158,6 @@
     <string name="list_empty">¯\\\\_(ツ)_\/¯\nНищо тук</string>
     <!-- SettingsActivity -->
     <string name="settings_group_framework">Рамка</string>
-    <string name="pref_title_disable_verbose_log">Деактивиране на подробните дневници</string>
     <string name="pure_black_dark_theme">Черна тъмна тема</string>
     <string name="pure_black_dark_theme_summary">Използвайте чисто черната тема, ако е активирана тъмна тема</string>
     <string name="settings_group_theme">Тема</string>
@@ -183,13 +181,10 @@
     <string name="settings_translation_contributors">Преводачи, които допринасят за превода</string>
     <string name="settings_translation">Участие в превод</string>
     <string name="settings_translation_summary">Помогнете ни да преведем %s на вашия език</string>
-    <string name="create_shortcut_summary">Ръчно създаване на пряк път към паразитен мениджър</string>
     <string name="settings_update_channel">Актуализиране на канала</string>
     <string name="update_channel_stable">Стабилен</string>
     <string name="update_channel_bate">Бета</string>
     <string name="update_channel_nightly">Нощно изграждане</string>
-    <string name="pref_title_restrict_classloader">Само модулът classloader може да използва Xposed API</string>
-    <string name="pref_summary_restrict_classloader">Това може да наруши работата на някои модули, но да е от полза за сигурността (експериментална функция)</string>
     <!-- Module Repo -->
     <string name="module_readme">Readme</string>
     <string name="module_releases">Освобождава</string>
