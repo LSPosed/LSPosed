@@ -64,7 +64,6 @@ https://github.com/tclement0922</string>
     <string name="info_system_version">Version du système</string>
     <string name="info_device">Périphérique</string>
     <string name="info_system_abi">Architecture du système</string>
-    <string name="info_api">Interface d\'injection</string>
     <string name="info_dex2oat_wrapper">Enveloppeur Dex Optimizer</string>
     <string name="supported">Supporté</string>
     <string name="unsupported">Non supporté</string>
@@ -164,7 +163,7 @@ https://github.com/tclement0922</string>
     <string name="list_empty">¯\\\\_(ツ)_\/¯\nIl n\’y a rien ici</string>
     <!-- SettingsActivity -->
     <string name="settings_group_framework">Sous-système</string>
-    <string name="pref_title_disable_verbose_log">Désactiver les journaux détaillés</string>
+    <string name="settings_disable_verbose_log">Désactiver les journaux détaillés</string>
     <string name="pure_black_dark_theme">Thème noir et sombre</string>
     <string name="pure_black_dark_theme_summary">Utiliser le thème noir pur si le thème noir est activé</string>
     <string name="settings_group_theme">Thème</string>
@@ -188,8 +187,6 @@ https://github.com/tclement0922</string>
     <string name="settings_translation_contributors">Contributeurs de traduction</string>
     <string name="settings_translation">Participer à la traduction</string>
     <string name="settings_translation_summary">Aidez-nous à traduire %s dans votre langue</string>
-    <string name="create_shortcut_summary">Créer le raccourci du gestionnaire parasitaire manuellement</string>
-    <string name="open_parasitic_summary">Utilisation recommandée du gestionnaire parasite</string>
     <string name="settings_enable_status_notification">Notification d\'état</string>
     <string name="settings_enable_status_notification_summary">Afficher une notification pouvant ouvrir le gestionnaire parasite</string>
     <string name="disable_status_notification_error">Pas de raccourcis, la notification ne peut pas être désactivée</string>
@@ -197,8 +194,6 @@ https://github.com/tclement0922</string>
     <string name="update_channel_stable">Stable</string>
     <string name="update_channel_bate">Bêta</string>
     <string name="update_channel_nightly">Version alpha</string>
-    <string name="pref_title_restrict_classloader">Seul le classloader du module peut utiliser l\'API Xposed</string>
-    <string name="pref_summary_restrict_classloader">Ceci pourrait casser certains modules mais être bénéfique à la sécurité (fonction expérimentale)</string>
     <!-- Module Repo -->
     <string name="module_readme">Lisez-moi</string>
     <string name="module_releases">Versions</string>
