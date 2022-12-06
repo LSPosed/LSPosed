@@ -71,7 +71,6 @@
     <string name="info_system_version">إصدار النظام</string>
     <string name="info_device">الجهاز</string>
     <string name="info_system_abi">نظام ABI</string>
-    <string name="info_api">واجهة الحقن</string>
     <string name="info_dex2oat_wrapper">غلاف محسّن Dex</string>
     <string name="supported">مدعوم</string>
     <string name="unsupported">غير متوافق</string>
@@ -85,6 +84,7 @@
     <!-- WelcomeDialog -->
     <string name="create_shortcut">إنشاء إختصار</string>
     <string name="never_show">لا تظهر أبداً</string>
+    <string name="app_welcome">مدير طفيلي موصي به</string>
     <!-- LogsActivity -->
     <string name="menuSaveToSd">احفظ</string>
     <string name="nav_item_logs_verbose">سجلات مفصّلة</string>
@@ -167,7 +167,7 @@
     <string name="list_empty">¯\\\\_(ツ)_\/¯\n لا شيء هنا</string>
     <!-- SettingsActivity -->
     <string name="settings_group_framework">إطار العمل</string>
-    <string name="pref_title_disable_verbose_log">تعطيل السجلات المفصّلة</string>
+    <string name="settings_disable_verbose_log">تعطيل السجلات المفصّلة</string>
     <string name="pure_black_dark_theme">السمة السوداء المظلمة</string>
     <string name="pure_black_dark_theme_summary">استخدام السمة السوداء الخالصة إذا تم تمكين السمة المظلمة</string>
     <string name="settings_group_theme">السمة</string>
@@ -191,13 +191,10 @@
     <string name="settings_translation_contributors">المساهمون بالترجمة</string>
     <string name="settings_translation">المشاركة في الترجمة</string>
     <string name="settings_translation_summary">ساعدنا في ترجمة %s إلى لغتك</string>
-    <string name="create_shortcut_summary">إنشاء اختصار المدير الطفيلي يدويًا</string>
     <string name="settings_update_channel">قناة التحديث</string>
     <string name="update_channel_stable">مستقر</string>
     <string name="update_channel_bate">تجريبي</string>
     <string name="update_channel_nightly">البناء الليلي</string>
-    <string name="pref_title_restrict_classloader">يمكن فقط لمحمل فئة الوحدة استخدام Xposed API</string>
-    <string name="pref_summary_restrict_classloader">قد يؤدي هذا إلى كسر بعض الوحدات ولكنه يفيد الأمان (ميزة تجريبية)</string>
     <!-- Module Repo -->
     <string name="module_readme">اقرأني</string>
     <string name="module_releases">إصدارات</string>
