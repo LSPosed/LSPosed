@@ -37,7 +37,9 @@
         <item name="android:colorControlActivated">?colorPrimary</item>
     </style>
 
-    <style name="Theme.Light" parent="Base.AppTheme.Light" />
+    <style name="Theme.Light" parent="Base.AppTheme.Light">
+        <item name="android:windowLayoutInDisplayCutoutMode">always</item>
+    </style>
 
     <style name="Base.AppTheme" parent="Theme.Material3.DynamicColors.Dark.Rikka">
         <item name="android:windowActionBar">false</item>
@@ -53,7 +55,9 @@
         <item name="android:colorControlActivated">?colorPrimary</item>
     </style>
 
-    <style name="Theme" parent="Base.AppTheme" />
+    <style name="Theme" parent="Base.AppTheme">
+        <item name="android:windowLayoutInDisplayCutoutMode">always</item>
+    </style>
 
     <style name="DeviceInfoDialogLabel">
         <item name="android:textAlignment">viewStart</item>
