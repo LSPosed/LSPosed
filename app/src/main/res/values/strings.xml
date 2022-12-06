@@ -64,8 +64,9 @@
     <string name="info_system_version">System version</string>
     <string name="info_device">Device</string>
     <string name="info_system_abi">System ABI</string>
-    <string name="info_api">Injection Interface</string>
     <string name="info_dex2oat_wrapper">Dex Optimizer Wrapper</string>
+    <string name="enabled">Enabled</string>
+    <string name="not_enabled">Not enabled</string>
     <string name="supported">Supported</string>
     <string name="unsupported">Unsupported</string>
     <string name="android_version_unsatisfied">Android version unsatisfied</string>
@@ -170,7 +171,8 @@
 
     <!-- SettingsActivity -->
     <string name="settings_group_framework">Framework</string>
-    <string name="pref_title_disable_verbose_log">Disable verbose logs</string>
+    <string name="settings_disable_verbose_log">Disable verbose logs</string>
+    <string name="settings_disable_verbose_log_summary">Report issues request to include verbose logs</string>
     <string name="pure_black_dark_theme">Black dark theme</string>
     <string name="pure_black_dark_theme_summary">Use the pure black theme if dark theme is enabled</string>
     <string name="settings_group_theme">Theme</string>
@@ -194,7 +196,8 @@
     <string name="settings_translation_contributors">Translation contributors</string>
     <string name="settings_translation">Participate in translation</string>
     <string name="settings_translation_summary">Help us translate %s into your language</string>
-    <string name="create_shortcut_summary">Manually create parasitic manager shortcut</string>
+    <string name="settings_create_shortcut_summary">Create a shortcut that can open parasitic manager</string>
+    <string name="settings_created_shortcut_summary">A shortcut has been created to open parasitic manager</string>
     <string name="settings_enable_status_notification">Status Notification</string>
     <string name="settings_enable_status_notification_summary">Show a notification that can open parasitic manager</string>
     <string name="disable_status_notification_error">No shortcut, cannot disable notification</string>
@@ -202,8 +205,8 @@
     <string name="update_channel_stable">Stable</string>
     <string name="update_channel_bate">Beta</string>
     <string name="update_channel_nightly">Nightly build</string>
-    <string name="pref_title_restrict_classloader">Only module classloader can use Xposed API</string>
-    <string name="pref_summary_restrict_classloader">This may break some modules but benefit security (experimental feature)</string>
+    <string name="settings_xposed_api_call_protection">Xposed API call protection</string>
+    <string name="settings_xposed_api_call_protection_summary">Block dynamically loaded module code to use Xposed API, this may break some modules but benefit security (experimental feature)</string>
 
     <!-- Module Repo -->
     <string name="module_readme">Readme</string>
