@@ -67,7 +67,6 @@
     <string name="info_system_version">Wersja systemu</string>
     <string name="info_device">Urządzenie</string>
     <string name="info_system_abi">System ABI</string>
-    <string name="info_api">Interfejs wstrzykiwania</string>
     <string name="info_dex2oat_wrapper">Optymalizator Dex Optimizer Wrapper</string>
     <string name="supported">Obsługiwana strona</string>
     <string name="unsupported">Nieobsługiwana strona</string>
@@ -79,8 +78,10 @@
     <string name="update_lsposed">Aktualizuj LSPosed</string>
     <string name="update_lsposed_msg">Czy chcesz zatwierdzić aktualizację LSPosed? Urządzenie zostanie uruchomione ponownie po zakończeniu aktualizacji</string>
     <!-- WelcomeDialog -->
+    <string name="parasitic_welcome">Witamy w LSPosed</string>
     <string name="create_shortcut">Utwórz skrót</string>
     <string name="never_show">Nigdy nie pokazuj</string>
+    <string name="app_welcome">Rekomendowany menadżer Parasitic</string>
     <!-- LogsActivity -->
     <string name="menuSaveToSd">Zapisz</string>
     <string name="nav_item_logs_verbose">Logi verbose</string>
@@ -163,7 +164,7 @@
     <string name="list_empty">¯\\\\_(ツ)_\/¯\nNic tu nie ma</string>
     <!-- SettingsActivity -->
     <string name="settings_group_framework">Framework</string>
-    <string name="pref_title_disable_verbose_log">Wyłącz logi</string>
+    <string name="settings_disable_verbose_log">Wyłącz logi</string>
     <string name="pure_black_dark_theme">Czarny ciemny motyw</string>
     <string name="pure_black_dark_theme_summary">Użyj czarnego motywu, jeśli ciemny motyw jest włączony</string>
     <string name="settings_group_theme">Motyw</string>
@@ -187,13 +188,10 @@
     <string name="settings_translation_contributors">Tłumacze</string>
     <string name="settings_translation">Weź udział w tłumaczeniu</string>
     <string name="settings_translation_summary">Pomóż nam przetłumaczyć %s na Twój język</string>
-    <string name="create_shortcut_summary">Ręcznie utwórz skrót do menedżera pasożytów</string>
     <string name="settings_update_channel">Kanał aktualizacji</string>
     <string name="update_channel_stable">Stabilny</string>
     <string name="update_channel_bate">Beta</string>
     <string name="update_channel_nightly">Wersja nocna</string>
-    <string name="pref_title_restrict_classloader">Tylko moduł classloader może korzystać z Xposed API</string>
-    <string name="pref_summary_restrict_classloader">Może to złamać niektóre moduły, ale przyniesie korzyści dla bezpieczeństwa (funkcja eksperymentalna)</string>
     <!-- Module Repo -->
     <string name="module_readme">Readme</string>
     <string name="module_releases">Wersje</string>
