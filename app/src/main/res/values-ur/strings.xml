@@ -63,7 +63,6 @@
     <string name="info_system_version">سسٹم ورژن۔</string>
     <string name="info_device">ڈیوائس۔</string>
     <string name="info_system_abi">ABI سسٹم۔</string>
-    <string name="info_api">انجیکشن انٹرفیس</string>
     <string name="info_dex2oat_wrapper">ڈیکس آپٹیمائزر ریپر</string>
     <string name="supported">حمایت یافتہ</string>
     <string name="unsupported">غیر تعاون یافتہ</string>
@@ -77,6 +76,7 @@
     <!-- WelcomeDialog -->
     <string name="create_shortcut">شارٹ کٹ بنانا</string>
     <string name="never_show">کبھی نہ دکھائیں۔</string>
+    <string name="app_welcome">پرجیوی مینیجر کی سفارش</string>
     <!-- LogsActivity -->
     <string name="menuSaveToSd">محفوظ کریں</string>
     <string name="nav_item_logs_verbose">وربوز لاگز</string>
@@ -159,7 +159,6 @@
     <string name="list_empty">¯\\\\_(ツ)_\/¯\nیہاں کچھ نہیں ہے۔</string>
     <!-- SettingsActivity -->
     <string name="settings_group_framework">فریم ورک</string>
-    <string name="pref_title_disable_verbose_log">وربوز لاگز کو غیر فعال کریں۔</string>
     <string name="pure_black_dark_theme">سیاہ سیاہ تھیم</string>
     <string name="pure_black_dark_theme_summary">اگر سیاہ تھیم فعال ہو تو خالص سیاہ تھیم استعمال کریں۔</string>
     <string name="settings_group_theme">خیالیہ</string>
@@ -183,13 +182,10 @@
     <string name="settings_translation_contributors">ترجمہ کرنے والے</string>
     <string name="settings_translation">ترجمہ میں حصہ لیں۔</string>
     <string name="settings_translation_summary">%s کا اپنی زبان میں ترجمہ کرنے میں ہماری مدد کریں۔</string>
-    <string name="create_shortcut_summary">دستی طور پر پرجیوی مینیجر شارٹ کٹ بنائیں</string>
     <string name="settings_update_channel">چینل کو اپ ڈیٹ کریں۔</string>
     <string name="update_channel_stable">مستحکم</string>
     <string name="update_channel_bate">بیٹا</string>
     <string name="update_channel_nightly">رات کی تعمیر</string>
-    <string name="pref_title_restrict_classloader">صرف ماڈیول کلاس لوڈر ہی Xposed API استعمال کر سکتا ہے۔</string>
-    <string name="pref_summary_restrict_classloader">اس سے کچھ ماڈیول ٹوٹ سکتے ہیں لیکن سیکورٹی کو فائدہ پہنچ سکتا ہے (تجرباتی خصوصیت)</string>
     <!-- Module Repo -->
     <string name="module_readme">ریڈمی</string>
     <string name="module_releases">جاری کرتا ہے۔</string>
