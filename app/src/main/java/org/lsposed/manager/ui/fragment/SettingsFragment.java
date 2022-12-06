@@ -182,7 +182,6 @@ public class SettingsFragment extends BaseFragment {
                     shortcut.setEnabled(true);
                     shortcut.setSummary(R.string.settings_create_shortcut_summary);
                 }
-                shortcut.setEnabled(!ShortcutUtil.isLaunchShortcutPinned());
                 shortcut.setOnPreferenceClickListener(preference -> {
                     ShortcutUtil.requestPinLaunchShortcut(() -> {
                         shortcut.setEnabled(false);
@@ -191,6 +190,7 @@ public class SettingsFragment extends BaseFragment {
                             notification.setEnabled(true);
                             notification.setSummaryOn(R.string.settings_enable_status_notification_summary);
                         }
+                        App.getPreferences().edit().putBoolean("never_show_welcome", true).apply();
                     });
                     return true;
                 });
