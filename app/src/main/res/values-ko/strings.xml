@@ -61,7 +61,6 @@
     <string name="info_system_version">System 버전</string>
     <string name="info_device">장치</string>
     <string name="info_system_abi">시스템 ABI</string>
-    <string name="info_api">주입 인터페이스</string>
     <string name="info_dex2oat_wrapper">Dex 옵티마이저 래퍼</string>
     <string name="supported">지원</string>
     <string name="unsupported">지원되지 않음</string>
@@ -157,7 +156,7 @@
     <string name="list_empty">¯\\\\_(ツ)_\/¯\n아무것도 없음</string>
     <!-- SettingsActivity -->
     <string name="settings_group_framework">프레임워크</string>
-    <string name="pref_title_disable_verbose_log">상세한 로그 비활성화</string>
+    <string name="settings_disable_verbose_log">상세한 로그 비활성화</string>
     <string name="pure_black_dark_theme">블랙 다크 테마</string>
     <string name="pure_black_dark_theme_summary">다크 테마가 활성화된 경우 순수 검은색 테마를 사용합니다.</string>
     <string name="settings_group_theme">테마</string>
@@ -181,13 +180,10 @@
     <string name="settings_translation_contributors">번역 기여자</string>
     <string name="settings_translation">번역 참여</string>
     <string name="settings_translation_summary">%s를 귀하의 언어로 번역하는 데 도움을 주세요.</string>
-    <string name="create_shortcut_summary">수동으로 기생 관리자 바로 가기 만들기</string>
     <string name="settings_update_channel">업데이트 채널</string>
     <string name="update_channel_stable">안정</string>
     <string name="update_channel_bate">베타</string>
     <string name="update_channel_nightly">야간 빌드</string>
-    <string name="pref_title_restrict_classloader">모듈 클래스 로더만 Xposed API를 사용할 수 있습니다.</string>
-    <string name="pref_summary_restrict_classloader">이것은 일부 모듈을 손상시킬 수 있지만 보안에 도움이 됩니다(실험 기능)</string>
     <!-- Module Repo -->
     <string name="module_readme">읽어보기</string>
     <string name="module_releases">릴리스</string>
