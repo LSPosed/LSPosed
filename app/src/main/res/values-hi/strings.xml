@@ -63,7 +63,6 @@
     <string name="info_system_version">सिस्टम संस्करण</string>
     <string name="info_device">उपकरण</string>
     <string name="info_system_abi">सिस्टम एबीआई</string>
-    <string name="info_api">इंजेक्शन इंटरफ़ेस</string>
     <string name="info_dex2oat_wrapper">डेक्स ऑप्टिमाइज़र रैपर</string>
     <string name="supported">समर्थित</string>
     <string name="unsupported">असमर्थित</string>
@@ -159,7 +158,6 @@
     <string name="list_empty">¯\\\\_(ツ)_\/¯\nयहाँ कुछ भी नहीं</string>
     <!-- SettingsActivity -->
     <string name="settings_group_framework">रूपरेखा</string>
-    <string name="pref_title_disable_verbose_log">वर्बोज़ लॉग अक्षम करें</string>
     <string name="pure_black_dark_theme">ब्लैक डार्क थीम</string>
     <string name="pure_black_dark_theme_summary">यदि डार्क थीम सक्षम है तो शुद्ध काली थीम का उपयोग करें</string>
     <string name="settings_group_theme">थीम</string>
@@ -183,13 +181,10 @@
     <string name="settings_translation_contributors">अनुवाद योगदानकर्ता</string>
     <string name="settings_translation">अनुवाद में भाग लें</string>
     <string name="settings_translation_summary">%s को अपनी भाषा में अनुवाद करने में हमारी सहायता करें</string>
-    <string name="create_shortcut_summary">मैन्युअल रूप से परजीवी प्रबंधक शॉर्टकट बनाएं</string>
     <string name="settings_update_channel">चैनल अपडेट करें</string>
     <string name="update_channel_stable">स्थिर</string>
     <string name="update_channel_bate">बीटा</string>
     <string name="update_channel_nightly">सॉफ़्टवेयर की स्थिरता</string>
-    <string name="pref_title_restrict_classloader">केवल मॉड्यूल क्लासलोडर Xposed API का उपयोग कर सकता है</string>
-    <string name="pref_summary_restrict_classloader">यह कुछ मॉड्यूल को तोड़ सकता है लेकिन सुरक्षा को लाभ देता है (प्रायोगिक सुविधा)</string>
     <!-- Module Repo -->
     <string name="module_readme">रीडमी</string>
     <string name="module_releases">विज्ञप्ति</string>
