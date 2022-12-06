@@ -8,4 +8,8 @@
     <string name="xposed_module_updated_notification_content">%s güncellendi, lütfen kapsamındaki uygulamaları durdurmaya ve yeniden başlatmaya zorlayın</string>
     <string name="xposed_module_updated_notification_title_system">Xposed modülü güncellendi, sistemin yeniden başlatılması gerekiyor</string>
     <string name="xposed_module_updated_notification_content_system">%s Güncelleme kapsamı Sistem Çerçevesi içerdiğinden, değişiklikleri uygulamak için yeniden başlatma gereklidir</string>
+    <string name="module_updated_channel_name">Modül güncellemesi tamamlandı</string>
+    <string name="status_channel_name">LSPosed durumu</string>
+    <string name="lsposed_running_notification_title">LSPosed yüklendi</string>
+    <string name="lsposed_running_notification_content">Yöneticiyi açmak için bildirime dokunun</string>
 </resources>

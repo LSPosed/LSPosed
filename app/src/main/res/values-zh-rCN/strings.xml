@@ -61,8 +61,9 @@
     <string name="info_system_version">系统版本</string>
     <string name="info_device">设备</string>
     <string name="info_system_abi">系统架构</string>
-    <string name="info_api">注入接口</string>
     <string name="info_dex2oat_wrapper">Dex 优化器包装</string>
+    <string name="enabled">已启用</string>
+    <string name="not_enabled">未启用</string>
     <string name="supported">支持</string>
     <string name="unsupported">不支持</string>
     <string name="android_version_unsatisfied">系统版本不受支持</string>
@@ -161,7 +162,8 @@
     <string name="list_empty">¯\\\\_(ツ)_\/¯\n空空如也</string>
     <!-- SettingsActivity -->
     <string name="settings_group_framework">框架</string>
-    <string name="pref_title_disable_verbose_log">禁用详细日志</string>
+    <string name="settings_disable_verbose_log">禁用详细日志</string>
+    <string name="settings_disable_verbose_log_summary">报告问题要求包含详细日志</string>
     <string name="pure_black_dark_theme">纯黑主题</string>
     <string name="pure_black_dark_theme_summary">当深色主题启用时使用纯黑主题</string>
     <string name="settings_group_theme">主题</string>
@@ -185,8 +187,8 @@
     <string name="settings_translation_contributors">译者</string>
     <string name="settings_translation">参与翻译</string>
     <string name="settings_translation_summary">帮助我们把 %s 翻译到你的语言</string>
-    <string name="create_shortcut_summary">手动创建寄生管理器快捷方式</string>
-    <string name="open_parasitic_summary">推荐使用寄生管理器</string>
+    <string name="settings_create_shortcut_summary">创建一个能打开寄生管理器的快捷方式</string>
+    <string name="settings_created_shortcut_summary">已创建快捷方式以打开寄生管理器</string>
     <string name="settings_enable_status_notification">状态通知</string>
     <string name="settings_enable_status_notification_summary">显示一个通知以打开寄生管理器</string>
     <string name="disable_status_notification_error">没有快捷方式，无法禁用通知</string>
@@ -194,8 +196,8 @@
     <string name="update_channel_stable">稳定版</string>
     <string name="update_channel_bate">测试版</string>
     <string name="update_channel_nightly">每夜版</string>
-    <string name="pref_title_restrict_classloader">仅允许模块类加载器使用 Xposed API</string>
-    <string name="pref_summary_restrict_classloader">这会使某些模块失效，但有利于安全性（实验性功能）</string>
+    <string name="settings_xposed_api_call_protection">Xposed API 调用保护</string>
+    <string name="settings_xposed_api_call_protection_summary">阻止模块动态加载的代码使用 Xposed API，这会使某些模块失效，但有利于安全性（实验性功能）</string>
     <!-- Module Repo -->
     <string name="module_readme">自述文件</string>
     <string name="module_releases">版本</string>

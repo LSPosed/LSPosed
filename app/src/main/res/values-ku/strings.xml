@@ -63,7 +63,6 @@
     <string name="info_system_version">Guhertoya pergalê</string>
     <string name="info_device">Sazî</string>
     <string name="info_system_abi">Pergala ABI</string>
-    <string name="info_api">Interface derzîlêdanê</string>
     <string name="info_dex2oat_wrapper">Dex Optimizer Wrapper</string>
     <string name="supported">Piştgirî kirin</string>
     <string name="unsupported">Piştgirî nekirin</string>
@@ -159,7 +158,6 @@
     <string name="list_empty">¯\\\\_(ツ)_\/¯\nLi vir tiştek tune</string>
     <!-- SettingsActivity -->
     <string name="settings_group_framework">Çarçove</string>
-    <string name="pref_title_disable_verbose_log">Têketinên devkî neçalak bike</string>
     <string name="pure_black_dark_theme">Mijara reş reş</string>
     <string name="pure_black_dark_theme_summary">Ger mijara tarî çalak be, mijara reş a paqij bikar bînin</string>
     <string name="settings_group_theme">Mijad</string>
@@ -183,13 +181,10 @@
     <string name="settings_translation_contributors">Beşdarên wergerê</string>
     <string name="settings_translation">Beşdarî wergerê bibin</string>
     <string name="settings_translation_summary">Alîkariya me bikin ku %s wergerînin zimanê we</string>
-    <string name="create_shortcut_summary">Bi destan kurteya rêveberê parazît biafirînin</string>
     <string name="settings_update_channel">Kanalê nûve bikin</string>
     <string name="update_channel_stable">Stewr</string>
     <string name="update_channel_bate">Beta</string>
     <string name="update_channel_nightly">Avakirina şevê</string>
-    <string name="pref_title_restrict_classloader">Tenê classloader module dikare Xposed API bikar bîne</string>
-    <string name="pref_summary_restrict_classloader">Dibe ku ev hin modulan bişkîne lê ji ewlehiyê sûd werdigire (taybetmendiya ezmûnî)</string>
     <!-- Module Repo -->
     <string name="module_readme">Readme</string>
     <string name="module_releases">Releases</string>

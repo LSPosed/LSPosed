@@ -68,7 +68,6 @@
     <string name="info_system_version">גרסת מערכת</string>
     <string name="info_device">מכשיר</string>
     <string name="info_system_abi">ABI מערכת</string>
-    <string name="info_api">ממשק הזרקה</string>
     <string name="info_dex2oat_wrapper">עטיפה של Dex Optimizer</string>
     <string name="supported">נתמך</string>
     <string name="unsupported">לא נתמך</string>
@@ -82,6 +81,7 @@
     <!-- WelcomeDialog -->
     <string name="create_shortcut">צור קיצור דרך</string>
     <string name="never_show">לעולם על תראה</string>
+    <string name="app_welcome">מנהל טפילים מומלץ</string>
     <!-- LogsActivity -->
     <string name="menuSaveToSd">שמור</string>
     <string name="nav_item_logs_verbose">יומנים מפורשים</string>
@@ -164,7 +164,7 @@
     <string name="list_empty">¯\\\\_(ツ)_\/¯\n אין פה כלום</string>
     <!-- SettingsActivity -->
     <string name="settings_group_framework">Framework</string>
-    <string name="pref_title_disable_verbose_log">בטל verbose logs</string>
+    <string name="settings_disable_verbose_log">בטל verbose logs</string>
     <string name="pure_black_dark_theme">ערכת נושא שחור כהה</string>
     <string name="pure_black_dark_theme_summary">השתמש בערכת נושא שחור טהור אם ערכת נושא כהה מופעלת</string>
     <string name="settings_group_theme">ערכת נושא</string>
@@ -188,13 +188,10 @@
     <string name="settings_translation_contributors">תורמים לתרגום</string>
     <string name="settings_translation">השתתף בתרגום</string>
     <string name="settings_translation_summary">עזור לנו לתרגם את %s לשפה שלך</string>
-    <string name="create_shortcut_summary">צור באופן ידני קיצור דרך למנהל טפילי</string>
     <string name="settings_update_channel">ערוץ עדכון</string>
     <string name="update_channel_stable">יציב</string>
     <string name="update_channel_bate">בטא</string>
     <string name="update_channel_nightly">בניה לילית</string>
-    <string name="pref_title_restrict_classloader">רק מטען כיתות מודול יכול להשתמש ב-Xposed API</string>
-    <string name="pref_summary_restrict_classloader">זה עשוי לשבור מודולים מסוימים אך יועיל לאבטחה (תכונה נסיונית)</string>
     <!-- Module Repo -->
     <string name="module_readme">קרא אותי</string>
     <string name="module_releases">גרסאות</string>

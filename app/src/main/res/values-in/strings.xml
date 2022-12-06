@@ -61,7 +61,6 @@
     <string name="info_system_version">Versi sistem</string>
     <string name="info_device">Perangkat</string>
     <string name="info_system_abi">Sistem ABI</string>
-    <string name="info_api">Antarmuka Injeksi</string>
     <string name="info_dex2oat_wrapper">Pembungkus Pengoptimal Dex</string>
     <string name="supported">Didukung</string>
     <string name="unsupported">Tidak didukung</string>
@@ -75,6 +74,7 @@
     <!-- WelcomeDialog -->
     <string name="create_shortcut">Buat pintasan</string>
     <string name="never_show">Jangan pernah tampilkan</string>
+    <string name="app_welcome">Manajer Parasit Direkomendasikan</string>
     <!-- LogsActivity -->
     <string name="menuSaveToSd">Simpan</string>
     <string name="nav_item_logs_verbose">Log Verbose</string>
@@ -157,7 +157,7 @@
     <string name="list_empty">¯\\\\_(ツ)_\/¯\nTidak ada apa-apa di sini</string>
     <!-- SettingsActivity -->
     <string name="settings_group_framework">Kerangka</string>
-    <string name="pref_title_disable_verbose_log">Nonaktifkan log verbose</string>
+    <string name="settings_disable_verbose_log">Nonaktifkan log verbose</string>
     <string name="pure_black_dark_theme">Tema hitam gelap</string>
     <string name="pure_black_dark_theme_summary">Gunakan tema hitam murni jika tema gelap diaktifkan</string>
     <string name="settings_group_theme">Tema</string>
@@ -181,13 +181,10 @@
     <string name="settings_translation_contributors">Kontributor terjemahan</string>
     <string name="settings_translation">Berpartisipasi dalam terjemahan</string>
     <string name="settings_translation_summary">Bantu kami menerjemahkan %s kedalam bahasamu</string>
-    <string name="create_shortcut_summary">Buat pintasan manajer parasit secara manual</string>
     <string name="settings_update_channel">Perbarui saluran</string>
     <string name="update_channel_stable">Stabil</string>
     <string name="update_channel_bate">Beta</string>
     <string name="update_channel_nightly">Rilis harian</string>
-    <string name="pref_title_restrict_classloader">Hanya modul classloader yang dapat menggunakan API Xposed</string>
-    <string name="pref_summary_restrict_classloader">Ini mungkin merusak beberapa modul tetapi bermanfaat bagi keamanan (fitur percobaan)</string>
     <!-- Module Repo -->
     <string name="module_readme">Baca aku</string>
     <string name="module_releases">Rilis</string>

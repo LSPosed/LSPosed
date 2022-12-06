@@ -63,7 +63,6 @@
     <string name="info_system_version">Järjestelmän versio</string>
     <string name="info_device">Laite</string>
     <string name="info_system_abi">Järjestelmä ABI</string>
-    <string name="info_api">Pistoksen Käyttöliittymä</string>
     <string name="info_dex2oat_wrapper">Dex Optimizer Wrapper</string>
     <string name="supported">Tuettu</string>
     <string name="unsupported">Ei tuettu</string>
@@ -159,7 +158,6 @@
     <string name="list_empty">¶ \\\\_(konferenssissa)_\/ ¶\nEi mitään tässä</string>
     <!-- SettingsActivity -->
     <string name="settings_group_framework">Framework</string>
-    <string name="pref_title_disable_verbose_log">Poista verbose lokit käytöstä</string>
     <string name="pure_black_dark_theme">Musta tumma teema</string>
     <string name="pure_black_dark_theme_summary">Käytä puhdas musta teema, jos tumma teema on käytössä</string>
     <string name="settings_group_theme">Teema</string>
@@ -183,13 +181,10 @@
     <string name="settings_translation_contributors">Käännöksen osallistujat</string>
     <string name="settings_translation">Osallistu käännökseen</string>
     <string name="settings_translation_summary">Auta meitä kääntämään %s kielellesi</string>
-    <string name="create_shortcut_summary">Luo manuaalisesti parasiittisen managerin pikakuvake</string>
     <string name="settings_update_channel">Päivitä kanava</string>
     <string name="update_channel_stable">Vakaa</string>
     <string name="update_channel_bate">Beeta</string>
     <string name="update_channel_nightly">Yöllinen rakentaminen</string>
-    <string name="pref_title_restrict_classloader">Vain moduulin luokkienlataaja voi käyttää Xposed API:ta.</string>
-    <string name="pref_summary_restrict_classloader">Tämä saattaa rikkoa joitakin moduuleja, mutta hyödyttää turvallisuutta (kokeellinen ominaisuus).</string>
     <!-- Module Repo -->
     <string name="module_readme">Luennot</string>
     <string name="module_releases">Julkaisut</string>

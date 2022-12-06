@@ -63,7 +63,6 @@
     <string name="info_system_version">Versió del sistema</string>
     <string name="info_device">Dispositiu</string>
     <string name="info_system_abi">Sistema ABI</string>
-    <string name="info_api">Interfície d\'injecció</string>
     <string name="info_dex2oat_wrapper">Embolcall de Dex Optimizer</string>
     <string name="supported">Admet</string>
     <string name="unsupported">Sense suport</string>
@@ -159,7 +158,6 @@
     <string name="list_empty">¯\\\\_(ツ)_\/¯\nAquí no hi ha res</string>
     <!-- SettingsActivity -->
     <string name="settings_group_framework">Marc</string>
-    <string name="pref_title_disable_verbose_log">Desactiva els registres detallats</string>
     <string name="pure_black_dark_theme">Tema negre fosc</string>
     <string name="pure_black_dark_theme_summary">Utilitzeu el tema negre pur si el tema fosc està habilitat</string>
     <string name="settings_group_theme">Tema</string>
@@ -183,13 +181,10 @@
     <string name="settings_translation_contributors">Col·laboradors de traducció</string>
     <string name="settings_translation">Participar en la traducció</string>
     <string name="settings_translation_summary">Ajuda\'ns a traduir %s al teu idioma</string>
-    <string name="create_shortcut_summary">Crea manualment la drecera del gestor de paràsits</string>
     <string name="settings_update_channel">Actualitza el canal</string>
     <string name="update_channel_stable">Estable</string>
     <string name="update_channel_bate">Beta</string>
     <string name="update_channel_nightly">Construcció nocturna</string>
-    <string name="pref_title_restrict_classloader">Només el carregador de classes de mòduls pot utilitzar l\'API Xposed</string>
-    <string name="pref_summary_restrict_classloader">Això pot trencar alguns mòduls però beneficiar la seguretat (funció experimental)</string>
     <!-- Module Repo -->
     <string name="module_readme">Llegiu-me</string>
     <string name="module_releases">Alliberaments</string>

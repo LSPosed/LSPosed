@@ -61,7 +61,6 @@
     <string name="info_system_version">システムバージョン</string>
     <string name="info_device">デバイス</string>
     <string name="info_system_abi">システムABI</string>
-    <string name="info_api">インジェクションインターフェイス</string>
     <string name="info_dex2oat_wrapper">Dex最適化ラッパー</string>
     <string name="supported">対応</string>
     <string name="unsupported">非対応</string>
@@ -75,6 +74,7 @@
     <!-- WelcomeDialog -->
     <string name="create_shortcut">ショートカットを作成</string>
     <string name="never_show">表示しない</string>
+    <string name="app_welcome">寄生マネージャーがおすすめです</string>
     <!-- LogsActivity -->
     <string name="menuSaveToSd">保存</string>
     <string name="nav_item_logs_verbose">詳細ログ</string>
@@ -157,7 +157,7 @@
     <string name="list_empty">¯\\\\_(ツ)_\/¯\nリストは空です</string>
     <!-- SettingsActivity -->
     <string name="settings_group_framework">フレームワーク</string>
-    <string name="pref_title_disable_verbose_log">詳細ログの無効化</string>
+    <string name="settings_disable_verbose_log">詳細ログの無効化</string>
     <string name="pure_black_dark_theme">ブラックダークテーマ</string>
     <string name="pure_black_dark_theme_summary">ダークテーマ有効時にピュアブラックのテーマを使用</string>
     <string name="settings_group_theme">テーマ</string>
@@ -181,13 +181,10 @@
     <string name="settings_translation_contributors">翻訳貢献者</string>
     <string name="settings_translation">翻訳に参加する</string>
     <string name="settings_translation_summary">%s をあなたの言語に翻訳するのを手伝ってください</string>
-    <string name="create_shortcut_summary">寄生マネージャーのショートカットを手動で作成する</string>
     <string name="settings_update_channel">更新チャンネル</string>
     <string name="update_channel_stable">安定版</string>
     <string name="update_channel_bate">ベータ版</string>
     <string name="update_channel_nightly">ナイトリービルド</string>
-    <string name="pref_title_restrict_classloader">モジュールクラスローダーのみがXposedAPIを使用できます</string>
-    <string name="pref_summary_restrict_classloader">セキュリティ上のメリットがありますが、一部のモジュールが正しく動作しない可能性があります(実験的機能)</string>
     <!-- Module Repo -->
     <string name="module_readme">Readme</string>
     <string name="module_releases">リリース</string>

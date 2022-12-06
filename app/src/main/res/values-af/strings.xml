@@ -63,7 +63,6 @@
     <string name="info_system_version">Stelsel weergawe</string>
     <string name="info_device">Toestel</string>
     <string name="info_system_abi">Stelsel ABI</string>
-    <string name="info_api">Inspuitingskoppelvlak</string>
     <string name="info_dex2oat_wrapper">Dex Optimizer Wrapper</string>
     <string name="supported">Ondersteun</string>
     <string name="unsupported">Ongesteun</string>
@@ -159,7 +158,6 @@
     <string name="list_empty">¯\\\\_(ツ)_\/¯\nNiks hier nie</string>
     <!-- SettingsActivity -->
     <string name="settings_group_framework">Raamwerk</string>
-    <string name="pref_title_disable_verbose_log">Deaktiveer verbose logs</string>
     <string name="pure_black_dark_theme">Swart donker tema</string>
     <string name="pure_black_dark_theme_summary">Gebruik die suiwer swart tema as donker tema geaktiveer is</string>
     <string name="settings_group_theme">Tema</string>
@@ -183,13 +181,10 @@
     <string name="settings_translation_contributors">Vertaling bydraers</string>
     <string name="settings_translation">Neem deel aan vertaling</string>
     <string name="settings_translation_summary">Help ons om %s in jou taal te vertaal</string>
-    <string name="create_shortcut_summary">Skep parasitiese bestuurder kortpad handmatig</string>
     <string name="settings_update_channel">Dateer kanaal op</string>
     <string name="update_channel_stable">Stabiel</string>
     <string name="update_channel_bate">Beta</string>
     <string name="update_channel_nightly">Nag bou</string>
-    <string name="pref_title_restrict_classloader">Slegs module klaslaaier kan Xposed API gebruik</string>
-    <string name="pref_summary_restrict_classloader">Dit kan sommige modules breek, maar bevoordeel sekuriteit (eksperimentele kenmerk)</string>
     <!-- Module Repo -->
     <string name="module_readme">Lees my</string>
     <string name="module_releases">Vrystellings</string>

@@ -67,7 +67,6 @@
     <string name="info_system_version">Версия Android</string>
     <string name="info_device">Устройство</string>
     <string name="info_system_abi">Разрядность системы (ABI)</string>
-    <string name="info_api">Способ внедрения</string>
     <string name="info_dex2oat_wrapper">Оптимизатор Dex</string>
     <string name="supported">Поддерживается</string>
     <string name="unsupported">Не поддерживается</string>
@@ -167,7 +166,7 @@
     <string name="list_empty">¯\\\\_(ツ)_\/¯\nЗдесь ничего нет</string>
     <!-- SettingsActivity -->
     <string name="settings_group_framework">Фреймворк</string>
-    <string name="pref_title_disable_verbose_log">Выключить подробные логи</string>
+    <string name="settings_disable_verbose_log">Выключить подробные логи</string>
     <string name="pure_black_dark_theme">Черная тема</string>
     <string name="pure_black_dark_theme_summary">Использовать черную тему, когда включена темная тема</string>
     <string name="settings_group_theme">Тема</string>
@@ -191,8 +190,6 @@
     <string name="settings_translation_contributors">Автор перевода</string>
     <string name="settings_translation">Принять участие в переводе</string>
     <string name="settings_translation_summary">Помогите нам перевести %s на ваш язык</string>
-    <string name="create_shortcut_summary">Вручную создать ярлык LSPosed</string>
-    <string name="open_parasitic_summary">Рекомендуется скрыть приложение LSPosed</string>
     <string name="settings_enable_status_notification">Уведомление о состоянии</string>
     <string name="settings_enable_status_notification_summary">Показывать уведомление, через которое можно открыть LSPosed</string>
     <string name="disable_status_notification_error">Не найден ярлык, выключить уведомление нельзя</string>
@@ -200,8 +197,6 @@
     <string name="update_channel_stable">Стабильные версии</string>
     <string name="update_channel_bate">Бета-версии</string>
     <string name="update_channel_nightly">Ночные версии</string>
-    <string name="pref_title_restrict_classloader">Только модуль classloader может использовать Xposed API</string>
-    <string name="pref_summary_restrict_classloader">Это может сломать некоторые модули, но повысит безопасность (экспериментальная функция)</string>
     <!-- Module Repo -->
     <string name="module_readme">Описание</string>
     <string name="module_releases">Версии</string>

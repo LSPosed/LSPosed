@@ -63,7 +63,6 @@
     <string name="info_system_version">Έκδοση συστήματος</string>
     <string name="info_device">Συσκευή</string>
     <string name="info_system_abi">Σύστημα ABI</string>
-    <string name="info_api">Διεπαφή Έγχυσης</string>
     <string name="info_dex2oat_wrapper">Dex Optimizer Wrapper</string>
     <string name="supported">Υποστηριζόμενο</string>
     <string name="unsupported">Μη υποστηριζόμενο</string>
@@ -77,6 +76,7 @@
     <!-- WelcomeDialog -->
     <string name="create_shortcut">Δημιουργία συντόμευσης</string>
     <string name="never_show">Να μην εμφανίζεται ποτέ</string>
+    <string name="app_welcome">Προτεινόμενος Παρασιτικός Διαχειριστής</string>
     <!-- LogsActivity -->
     <string name="menuSaveToSd">Αποθήκευση</string>
     <string name="nav_item_logs_verbose">Λεπτομερείς Καταγραφές</string>
@@ -159,7 +159,6 @@
     <string name="list_empty">◆ \\\\_(\")_\/ \"\nΤίποτα εδώ</string>
     <!-- SettingsActivity -->
     <string name="settings_group_framework">Framework</string>
-    <string name="pref_title_disable_verbose_log">Απενεργοποίηση λεπτομερειακών αρχείων καταγραφής</string>
     <string name="pure_black_dark_theme">Μαύρο σκούρο θέμα</string>
     <string name="pure_black_dark_theme_summary">Χρησιμοποιήστε το καθαρό μαύρο θέμα αν το σκούρο θέμα είναι ενεργοποιημένο</string>
     <string name="settings_group_theme">Θέμα</string>
@@ -183,13 +182,10 @@
     <string name="settings_translation_contributors">Συντελεστές μετάφρασης</string>
     <string name="settings_translation">Συμμετοχή στη μετάφραση</string>
     <string name="settings_translation_summary">Βοηθήστε μας να μεταφράσουμε το %s στη γλώσσα σας</string>
-    <string name="create_shortcut_summary">Χειροκίνητη δημιουργία συντόμευσης παρασιτικού διαχειριστή</string>
     <string name="settings_update_channel">Ενημέρωση καναλιού</string>
     <string name="update_channel_stable">Σταθερό</string>
     <string name="update_channel_bate">Βήτα</string>
     <string name="update_channel_nightly">Νυχτερινή κατασκευή</string>
-    <string name="pref_title_restrict_classloader">Μόνο ο φορτωτής κλάσεων της μονάδας μπορεί να χρησιμοποιήσει το Xposed API</string>
-    <string name="pref_summary_restrict_classloader">Αυτό μπορεί να σπάσει κάποιες ενότητες αλλά να ωφελήσει την ασφάλεια (πειραματικό χαρακτηριστικό)</string>
     <!-- Module Repo -->
     <string name="module_readme">Έτοιμο</string>
     <string name="module_releases">Εκδόσεις</string>

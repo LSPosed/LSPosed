@@ -63,8 +63,9 @@
     <string name="info_system_version">Versão do Sistema</string>
     <string name="info_device">Aparelho</string>
     <string name="info_system_abi">Interfaces Binárias do Sistema</string>
-    <string name="info_api">Interface de Injeção</string>
     <string name="info_dex2oat_wrapper">Otimização Encapsulamento Dex</string>
+    <string name="enabled">Ativado</string>
+    <string name="not_enabled">Desativado</string>
     <string name="supported">Compatível</string>
     <string name="unsupported">Incompatível</string>
     <string name="android_version_unsatisfied">Versão do Android insuficiente</string>
@@ -75,8 +76,12 @@
     <string name="update_lsposed">Atualizar o LSPosed</string>
     <string name="update_lsposed_msg">Confirmar atualização do LSPosed? O aparelho irá reiniciar após completar a atualização</string>
     <!-- WelcomeDialog -->
+    <string name="parasitic_welcome">Bem-vindo ao LSPosed</string>
+    <string name="parasitic_welcome_summary">Você está usando o gerenciador parasita, você pode criar o atalho ou então abrir a partir da notificação.</string>
     <string name="create_shortcut">Criar Atalho do Gerenciador Parasita</string>
     <string name="never_show">Não mostrar novamente</string>
+    <string name="app_welcome">É recomendado o gerenciador parasita</string>
+    <string name="app_welcome_summary">O LSPosed agora oferece suporte a parasitização do sistema para evitar detecções, você pode abrir o gerenciador parasita a partir da notificação. É recomendado desinstalar o aplicativo atual.</string>
     <!-- LogsActivity -->
     <string name="menuSaveToSd">Salvar</string>
     <string name="nav_item_logs_verbose">Registros Detalhados</string>
@@ -159,7 +164,8 @@
     <string name="list_empty">¯\\\\_(ツ)_\/¯\nNada encontrado</string>
     <!-- SettingsActivity -->
     <string name="settings_group_framework">Framework</string>
-    <string name="pref_title_disable_verbose_log">Desativar os Registros Detalhados</string>
+    <string name="settings_disable_verbose_log">Desativar registros detalhados</string>
+    <string name="settings_disable_verbose_log_summary">Relate o problema para incluir os registros detalhados</string>
     <string name="pure_black_dark_theme">Usar Tema Preto Puro</string>
     <string name="pure_black_dark_theme_summary">Use o tema preto puro se o tema noturno estiver ativo</string>
     <string name="settings_group_theme">Tema</string>
@@ -183,13 +189,17 @@
     <string name="settings_translation_contributors">Tradutores</string>
     <string name="settings_translation">Participe das Traduções</string>
     <string name="settings_translation_summary">Ajude a traduzir o %s para o Português 🇧🇷🇵🇹</string>
-    <string name="create_shortcut_summary">Crie manualmente o atalho do gerenciador parasita</string>
+    <string name="settings_create_shortcut_summary">Criar um atalho para abrir gerenciador parasita</string>
+    <string name="settings_created_shortcut_summary">Um atalho para abrir o gerenciador parasita foi criado</string>
+    <string name="settings_enable_status_notification">Notificação de estado</string>
+    <string name="settings_enable_status_notification_summary">Mostrar uma notificação que possa abrir o gerenciador parasita</string>
+    <string name="disable_status_notification_error">Nenhum atalho, não é possível desativar a notificação</string>
     <string name="settings_update_channel">Canal de Atualizações</string>
     <string name="update_channel_stable">Estável</string>
     <string name="update_channel_bate">Beta</string>
     <string name="update_channel_nightly">Nightly</string>
-    <string name="pref_title_restrict_classloader">Restringir uso da API do Xposed</string>
-    <string name="pref_summary_restrict_classloader">Isto pode impedir algum módulo de funcionar, mas beneficia a segurança (Função experimental)</string>
+    <string name="settings_xposed_api_call_protection">Proteção da API do Xposed</string>
+    <string name="settings_xposed_api_call_protection_summary">Bloquear módulos carregados dinamicamente de usarem a API do Xposed, isso pode travar alguns módulos, mas melhora a segurança (recurso experimental)</string>
     <!-- Module Repo -->
     <string name="module_readme">Leia-me</string>
     <string name="module_releases">Versões</string>
@@ -231,7 +241,7 @@
     <string name="color_brown">Marrom</string>
     <string name="color_blue_grey">Azul-acinzentado</string>
     <plurals name="module_release_assets_download_count">
-        <item quantity="one">%d Descarregar</item>
-        <item quantity="other">%d Transferências</item>
+        <item quantity="one">%d baixado</item>
+        <item quantity="other">%d baixados</item>
     </plurals>
 </resources>

@@ -63,7 +63,6 @@
     <string name="info_system_version">Süsteemi versioon</string>
     <string name="info_device">Seade</string>
     <string name="info_system_abi">Süsteemi ABI</string>
-    <string name="info_api">Süstimisliides</string>
     <string name="info_dex2oat_wrapper">Dex Optimizer Wrapper</string>
     <string name="supported">Toetatud</string>
     <string name="unsupported">Toetamata</string>
@@ -159,7 +158,6 @@
     <string name="list_empty">¯\\\\_(ツ)_\/¯\nSiin pole midagi.</string>
     <!-- SettingsActivity -->
     <string name="settings_group_framework">Raamistik</string>
-    <string name="pref_title_disable_verbose_log">Lülita sõnalised logid välja</string>
     <string name="pure_black_dark_theme">Must tume teema</string>
     <string name="pure_black_dark_theme_summary">Kasutage puhast musta teemat, kui tume teema on lubatud.</string>
     <string name="settings_group_theme">Teema</string>
@@ -183,13 +181,10 @@
     <string name="settings_translation_contributors">Tõlkimise toetajad</string>
     <string name="settings_translation">Osalege tõlkimises</string>
     <string name="settings_translation_summary">Aita meil tõlkida %s sinu keelde</string>
-    <string name="create_shortcut_summary">Käsitsi luua parasiitide halduri otsetee</string>
     <string name="settings_update_channel">Uuenduskanal</string>
     <string name="update_channel_stable">Stabiilne</string>
     <string name="update_channel_bate">Beeta</string>
     <string name="update_channel_nightly">Nightly build</string>
-    <string name="pref_title_restrict_classloader">Ainult moodulite klassilaadija saab kasutada Xposed API-d.</string>
-    <string name="pref_summary_restrict_classloader">See võib rikkuda mõned moodulid, kuid toob kasu turvalisusele (eksperimentaalne funktsioon).</string>
     <!-- Module Repo -->
     <string name="module_readme">Readme</string>
     <string name="module_releases">Väljaanded</string>
