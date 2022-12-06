@@ -67,7 +67,6 @@
     <string name="info_system_version">Sistemos versija</string>
     <string name="info_device">Įrenginys</string>
     <string name="info_system_abi">Sistemos ABI</string>
-    <string name="info_api">Injekcijos sąsaja</string>
     <string name="info_dex2oat_wrapper">\"Dex Optimizer Wrapper</string>
     <string name="supported">Palaikomas</string>
     <string name="unsupported">Nepalaikomas</string>
@@ -163,7 +162,6 @@
     <string name="list_empty">\\\\_(ツ)_\/¯\nČia nieko nėra</string>
     <!-- SettingsActivity -->
     <string name="settings_group_framework">Sistema</string>
-    <string name="pref_title_disable_verbose_log">Išjungti verbalinius žurnalus</string>
     <string name="pure_black_dark_theme">Juoda tamsi tema</string>
     <string name="pure_black_dark_theme_summary">Naudokite grynai juodą temą, jei įjungta tamsi tema</string>
     <string name="settings_group_theme">Tema</string>
@@ -187,13 +185,10 @@
     <string name="settings_translation_contributors">Vertimo paslaugų teikėjai</string>
     <string name="settings_translation">Dalyvaukite vertimo procese</string>
     <string name="settings_translation_summary">Padėkite mums išversti %s į savo kalbą</string>
-    <string name="create_shortcut_summary">Rankiniu būdu sukurkite parazitinio tvarkytuvo nuorodą</string>
     <string name="settings_update_channel">Atnaujinti kanalą</string>
     <string name="update_channel_stable">Stabilus</string>
     <string name="update_channel_bate">Beta</string>
     <string name="update_channel_nightly">Naktinis kūrimas</string>
-    <string name="pref_title_restrict_classloader">Tik modulio klasių įkroviklis gali naudoti \"Xposed API</string>
-    <string name="pref_summary_restrict_classloader">Tai gali sugadinti kai kuriuos modulius, tačiau bus naudinga saugumui (eksperimentinė funkcija)</string>
     <!-- Module Repo -->
     <string name="module_readme">Readme</string>
     <string name="module_releases">Leidiniai</string>
