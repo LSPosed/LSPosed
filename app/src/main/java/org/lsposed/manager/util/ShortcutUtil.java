@@ -9,7 +9,6 @@ import android.content.Intent;
 import android.content.IntentFilter;
 import android.content.IntentSender;
 import android.content.pm.PackageManager;
-import android.content.pm.ShortcutManager;
 import android.graphics.Bitmap;
 import android.graphics.Canvas;
 import android.graphics.drawable.AdaptiveIconDrawable;
@@ -130,8 +129,9 @@ public class ShortcutUtil {
     public static void requestPinLaunchShortcut(Runnable afterPinned) {
         if (!App.isParasitic()) throw new RuntimeException();
         var context = App.getInstance();
-        var sm = context.getSystemService(ShortcutManager.class);
-        sm.requestPinShortcut(getShortcutBuilder(context).build().toShortcutInfo(), registerReceiver(context, afterPinned));
+        if(!ShortcutManagerCompat.isRequestPinShortcutSupported(context)) return;
+        ShortcutManagerCompat.requestPinShortcut(context, getShortcutBuilder(context).build(),
+                registerReceiver(context, afterPinned));
     }
 
     public static boolean updateShortcut() {
@@ -145,9 +145,8 @@ public class ShortcutUtil {
 
     public static boolean isLaunchShortcutPinned() {
         var context = App.getInstance();
-        var sm = context.getSystemService(ShortcutManager.class);
         boolean pinned = false;
-        for (var info : sm.getPinnedShortcuts()) {
+        for (var info : ShortcutManagerCompat.getShortcuts(context, ShortcutManagerCompat.FLAG_MATCH_PINNED)) {
             if (SHORTCUT_ID.equals(info.getId())) {
                 pinned = true;
                 break;
