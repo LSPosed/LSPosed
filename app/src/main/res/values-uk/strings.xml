@@ -67,7 +67,6 @@
     <string name="info_system_version">Версія Android</string>
     <string name="info_device">Пристрій</string>
     <string name="info_system_abi">Розрядність процесора</string>
-    <string name="info_api">Метод ін\'єкції</string>
     <string name="info_dex2oat_wrapper">Обгортка Dex Optimizer</string>
     <string name="supported">Підтримується</string>
     <string name="unsupported">Не підтримується</string>
@@ -81,6 +80,7 @@
     <!-- WelcomeDialog -->
     <string name="create_shortcut">Створити ярлик</string>
     <string name="never_show">Ніколи не показувати</string>
+    <string name="app_welcome">Рекомендується менеджер-паразит</string>
     <!-- LogsActivity -->
     <string name="menuSaveToSd">Зберегти</string>
     <string name="nav_item_logs_verbose">Детальні звіти</string>
@@ -163,7 +163,7 @@
     <string name="list_empty">¯\\\\_(ツ)_\/¯\nТут нічого немає</string>
     <!-- SettingsActivity -->
     <string name="settings_group_framework">Framework</string>
-    <string name="pref_title_disable_verbose_log">Вимкнути детальні звіти</string>
+    <string name="settings_disable_verbose_log">Вимкнути детальні журнали</string>
     <string name="pure_black_dark_theme">Чорна тема</string>
     <string name="pure_black_dark_theme_summary">Використовувати повністю чорну тему, коли темну тему увімкнено</string>
     <string name="settings_group_theme">Тема</string>
@@ -187,13 +187,10 @@
     <string name="settings_translation_contributors">Автори перекладу</string>
     <string name="settings_translation">Допомогти з перекладом</string>
     <string name="settings_translation_summary">Доповнити український переклад %s</string>
-    <string name="create_shortcut_summary">Вручну створити ярлик менеджера LSPosed</string>
     <string name="settings_update_channel">Канал оновлень</string>
     <string name="update_channel_stable">Стабільний</string>
     <string name="update_channel_bate">Бета-версія</string>
     <string name="update_channel_nightly">Нічна збірка</string>
-    <string name="pref_title_restrict_classloader">Тільки classloader модуля може використовувати Xposed API</string>
-    <string name="pref_summary_restrict_classloader">Може порушити роботу деяких модулів, але посилить безпеку (експериментальна функція)</string>
     <!-- Module Repo -->
     <string name="module_readme">Опис</string>
     <string name="module_releases">Релізи</string>
