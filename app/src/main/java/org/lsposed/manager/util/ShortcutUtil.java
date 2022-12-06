@@ -9,18 +9,17 @@ import android.content.Intent;
 import android.content.IntentFilter;
 import android.content.IntentSender;
 import android.content.pm.PackageManager;
+import android.content.pm.ShortcutInfo;
+import android.content.pm.ShortcutManager;
 import android.graphics.Bitmap;
 import android.graphics.Canvas;
 import android.graphics.drawable.AdaptiveIconDrawable;
 import android.graphics.drawable.BitmapDrawable;
 import android.graphics.drawable.Drawable;
+import android.graphics.drawable.Icon;
 import android.graphics.drawable.LayerDrawable;
 import android.os.Build;
 import android.util.Log;
-
-import androidx.core.content.pm.ShortcutInfoCompat;
-import androidx.core.content.pm.ShortcutManagerCompat;
-import androidx.core.graphics.drawable.IconCompat;
 
 import org.lsposed.manager.App;
 import org.lsposed.manager.R;
@@ -112,11 +111,11 @@ public class ShortcutUtil {
         return PendingIntent.getBroadcast(context, 0, intent, flags).getIntentSender();
     }
 
-    private static ShortcutInfoCompat.Builder getShortcutBuilder(Context context) {
-        var builder = new ShortcutInfoCompat.Builder(context, SHORTCUT_ID)
+    private static ShortcutInfo.Builder getShortcutBuilder(Context context) {
+        var builder = new ShortcutInfo.Builder(context, SHORTCUT_ID)
                 .setShortLabel(context.getString(R.string.app_name))
                 .setIntent(getLaunchIntent(context))
-                .setIcon(IconCompat.createWithAdaptiveBitmap(getBitmap(context,
+                .setIcon(Icon.createWithAdaptiveBitmap(getBitmap(context,
                         R.drawable.ic_launcher)));
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.Q) {
             var activity = new ComponentName(context.getPackageName(),
@@ -129,8 +128,9 @@ public class ShortcutUtil {
     public static void requestPinLaunchShortcut(Runnable afterPinned) {
         if (!App.isParasitic()) throw new RuntimeException();
         var context = App.getInstance();
-        if(!ShortcutManagerCompat.isRequestPinShortcutSupported(context)) return;
-        ShortcutManagerCompat.requestPinShortcut(context, getShortcutBuilder(context).build(),
+        var sm = context.getSystemService(ShortcutManager.class);
+        if(!sm.isRequestPinShortcutSupported()) return;
+        sm.requestPinShortcut(getShortcutBuilder(context).build(),
                 registerReceiver(context, afterPinned));
     }
 
@@ -138,15 +138,17 @@ public class ShortcutUtil {
         if(!isLaunchShortcutPinned()) return false;
         Log.d(App.TAG, "update shortcut");
         var context = App.getInstance();
-        List<ShortcutInfoCompat> shortcutInfoList = new ArrayList<>();
+        var sm = context.getSystemService(ShortcutManager.class);
+        List<ShortcutInfo> shortcutInfoList = new ArrayList<>();
         shortcutInfoList.add(getShortcutBuilder(context).build());
-        return ShortcutManagerCompat.updateShortcuts(context, shortcutInfoList);
+        return sm.updateShortcuts(shortcutInfoList);
     }
 
     public static boolean isLaunchShortcutPinned() {
         var context = App.getInstance();
+        var sm = context.getSystemService(ShortcutManager.class);
         boolean pinned = false;
-        for (var info : ShortcutManagerCompat.getShortcuts(context, ShortcutManagerCompat.FLAG_MATCH_PINNED)) {
+        for (var info : sm.getPinnedShortcuts()) {
             if (SHORTCUT_ID.equals(info.getId())) {
                 pinned = true;
                 break;
