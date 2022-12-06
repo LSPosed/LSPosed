@@ -67,7 +67,6 @@
     <string name="info_system_version">Verze systému</string>
     <string name="info_device">Zařízení</string>
     <string name="info_system_abi">Systémové ABI (architektura)</string>
-    <string name="info_api">Závislost modulu</string>
     <string name="info_dex2oat_wrapper">Dex Optimizer Wrapper</string>
     <string name="supported">Podporováno</string>
     <string name="unsupported">Nepodporováno</string>
@@ -167,7 +166,7 @@
     <string name="list_empty">&lt;unk&gt; \\\\_(&lt;unk&gt; )_\/ &lt;unk&gt;\nTady nic není</string>
     <!-- SettingsActivity -->
     <string name="settings_group_framework">Framework</string>
-    <string name="pref_title_disable_verbose_log">Zakázat podrobné protokoly</string>
+    <string name="settings_disable_verbose_log">Zakázat podrobné protokoly</string>
     <string name="pure_black_dark_theme">Čistě černý motiv</string>
     <string name="pure_black_dark_theme_summary">Použít čistý černý motiv, pokud je tmavý motiv povolen</string>
     <string name="settings_group_theme">Vzhled</string>
@@ -191,8 +190,6 @@
     <string name="settings_translation_contributors">Přispěvatelé překladu</string>
     <string name="settings_translation">Účast na překladu</string>
     <string name="settings_translation_summary">Pomozte nám přeložit %s do vašeho jazyka</string>
-    <string name="create_shortcut_summary">Ručně vytvořit zástupce parazitického manažera</string>
-    <string name="open_parasitic_summary">Doporučené použití parazitního manažera</string>
     <string name="settings_enable_status_notification">Oznámení o stavu</string>
     <string name="settings_enable_status_notification_summary">Zobrazení oznámení, které může otevřít parazitního správce</string>
     <string name="disable_status_notification_error">Žádný zástupce, nelze zakázat oznámení</string>
@@ -200,8 +197,6 @@
     <string name="update_channel_stable">Stabilní</string>
     <string name="update_channel_bate">Beta</string>
     <string name="update_channel_nightly">Noční sestavení</string>
-    <string name="pref_title_restrict_classloader">Pouze modul classloader může používat rozhraní Xposed API</string>
-    <string name="pref_summary_restrict_classloader">Může to narušit některé moduly, ale prospěje to zabezpečení (experimentální funkce)</string>
     <!-- Module Repo -->
     <string name="module_readme">Přečti si mě</string>
     <string name="module_releases">Vydání</string>
