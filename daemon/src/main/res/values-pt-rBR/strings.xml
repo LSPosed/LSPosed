@@ -8,4 +8,8 @@
     <string name="xposed_module_updated_notification_content">%s foi atualizado. Force a parada do módulo e reinicie os apps que estão em seu escopo</string>
     <string name="xposed_module_updated_notification_title_system">Módulo Atualizado. É necessário reiniciar o sistema</string>
     <string name="xposed_module_updated_notification_content_system">%s foi atualizado. Como o escopo contém o Framework do Sistema, é necessário reiniciar para aplicar as mudanças</string>
+    <string name="module_updated_channel_name">Atualização do módulo concluída</string>
+    <string name="status_channel_name">Estado do LSPosed</string>
+    <string name="lsposed_running_notification_title">LSPosed carregado</string>
+    <string name="lsposed_running_notification_content">Toque na notificação para abrir o gerenciador</string>
 </resources>
