@@ -164,11 +164,11 @@ public class ScopeAdapter extends EmptyStateRecyclerView.EmptyStateAdapter<Scope
         return new ViewHolder(ItemModuleBinding.inflate(activity.getLayoutInflater(), parent, false));
     }
 
-    private boolean shouldHideApp(PackageInfo info, ApplicationWithEquals app) {
+    private boolean shouldHideApp(PackageInfo info, ApplicationWithEquals app, HashSet<ScopeAdapter.ApplicationWithEquals> tmpChkList) {
         if (info.packageName.equals("android")) {
             return false;
         }
-        if (checkedList.contains(app)) {
+        if (tmpChkList.contains(app)) {
             return false;
         }
         if (preferences.getBoolean("filter_denylist", false)) {
@@ -547,7 +547,7 @@ public class ScopeAdapter extends EmptyStateRecyclerView.EmptyStateAdapter<Scope
                             tmpChkList.add(application);
                         }
                     }
-                } else if (shouldHideApp(info, application)) {
+                } else if (shouldHideApp(info, application, tmpChkList)) {
                     return;
                 }
 
