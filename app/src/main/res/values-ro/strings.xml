@@ -65,7 +65,6 @@
     <string name="info_system_version">Versiune sistem</string>
     <string name="info_device">Dispozitiv</string>
     <string name="info_system_abi">Sistem ABI</string>
-    <string name="info_api">Interfață de injectare</string>
     <string name="info_dex2oat_wrapper">Dex Optimizer Wrapper</string>
     <string name="supported">Suportă</string>
     <string name="unsupported">Nesuportat</string>
@@ -79,6 +78,7 @@
     <!-- WelcomeDialog -->
     <string name="create_shortcut">Creează scurtătură</string>
     <string name="never_show">Nu arăta niciodată</string>
+    <string name="app_welcome">Manager parazitar recomandat</string>
     <!-- LogsActivity -->
     <string name="menuSaveToSd">Salvează</string>
     <string name="nav_item_logs_verbose">Jurnalele Verbose</string>
@@ -161,7 +161,7 @@
     <string name="list_empty">¯\\\\_(ツ)_\/¯\nNimic aici</string>
     <!-- SettingsActivity -->
     <string name="settings_group_framework">Framework</string>
-    <string name="pref_title_disable_verbose_log">Dezactivează jurnalele verbose</string>
+    <string name="settings_disable_verbose_log">Dezactivează jurnalele verbose</string>
     <string name="pure_black_dark_theme">Temă întunecată</string>
     <string name="pure_black_dark_theme_summary">Utilizați tema pur neagră dacă tema întunecată este activată</string>
     <string name="settings_group_theme">Temă</string>
@@ -185,13 +185,10 @@
     <string name="settings_translation_contributors">Contribuitori la traducere</string>
     <string name="settings_translation">Participă în traducere</string>
     <string name="settings_translation_summary">Ajută-ne să traducem %s în limba ta</string>
-    <string name="create_shortcut_summary">Creați manual o comandă rapidă pentru managerul de paraziți</string>
     <string name="settings_update_channel">Canal de actualizare</string>
     <string name="update_channel_stable">Stabil</string>
     <string name="update_channel_bate">Beta</string>
     <string name="update_channel_nightly">Construire nocturnă</string>
-    <string name="pref_title_restrict_classloader">Numai modulul classloader poate utiliza Xposed API</string>
-    <string name="pref_summary_restrict_classloader">Acest lucru poate distruge unele module, dar este în beneficiul securității (caracteristică experimentală)</string>
     <!-- Module Repo -->
     <string name="module_readme">Citește-mă</string>
     <string name="module_releases">Lansări</string>
