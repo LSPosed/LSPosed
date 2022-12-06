@@ -17,19 +17,24 @@ public class WelcomeDialog extends DialogFragment {
     private static boolean shown = false;
 
     private Dialog parasiticDialog(BlurBehindDialogBuilder builder) {
-        return builder
+        var shortcutSupported = ShortcutUtil.isRequestPinShortcutSupported(requireContext());
+        builder
                 .setTitle(R.string.parasitic_welcome)
-                .setMessage(R.string.parasitic_welcome_summary)
+                .setMessage(shortcutSupported ? R.string.parasitic_welcome_summary :
+                        R.string.parasitic_welcome_summary_no_shortcut_support)
                 .setNegativeButton(R.string.never_show, (dialog, which) ->
                         App.getPreferences().edit().putBoolean("never_show_welcome", true).apply())
-                .setNeutralButton(R.string.create_shortcut, (dialog, which) ->
-                        ShortcutUtil.requestPinLaunchShortcut(() ->
-                                App.getPreferences().edit().putBoolean("never_show_welcome", true).apply()))
-                .setPositiveButton(android.R.string.ok, null)
-                .create();
+                .setPositiveButton(android.R.string.ok, null);
+        if (shortcutSupported)
+            builder.setNeutralButton(R.string.create_shortcut, (dialog, which) ->
+                    ShortcutUtil.requestPinLaunchShortcut(() ->
+                            App.getPreferences().edit().putBoolean("never_show_welcome",
+                                    true).apply()));
+        return builder.create();
     }
 
     private Dialog appDialog(BlurBehindDialogBuilder builder) {
+
         return builder
                 .setTitle(R.string.app_welcome)
                 .setMessage(R.string.app_welcome_summary)

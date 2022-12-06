@@ -125,17 +125,22 @@ public class ShortcutUtil {
         return builder;
     }
 
+    public static boolean isRequestPinShortcutSupported(Context context) {
+        var sm = context.getSystemService(ShortcutManager.class);
+        return sm.isRequestPinShortcutSupported();
+    }
+
     public static void requestPinLaunchShortcut(Runnable afterPinned) {
         if (!App.isParasitic()) throw new RuntimeException();
         var context = App.getInstance();
         var sm = context.getSystemService(ShortcutManager.class);
-        if(!sm.isRequestPinShortcutSupported()) return;
+        if (!isRequestPinShortcutSupported(context)) return;
         sm.requestPinShortcut(getShortcutBuilder(context).build(),
                 registerReceiver(context, afterPinned));
     }
 
     public static boolean updateShortcut() {
-        if(!isLaunchShortcutPinned()) return false;
+        if (!isLaunchShortcutPinned()) return false;
         Log.d(App.TAG, "update shortcut");
         var context = App.getInstance();
         var sm = context.getSystemService(ShortcutManager.class);
