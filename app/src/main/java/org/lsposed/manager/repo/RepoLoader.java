@@ -76,9 +76,7 @@ public class RepoLoader {
     private final Path repoFile = Paths.get(App.getInstance().getFilesDir().getAbsolutePath(), "repo.json");
     private final Set<RepoListener> listeners = ConcurrentHashMap.newKeySet();
     private boolean repoLoaded = false;
-    private static final String originRepoUrl = "https://modules.lsposed.org/";
-    private static final String backupRepoUrl = "https://cdn.jsdelivr.net/gh/Xposed-Modules-Repo/modules@gh-pages/";
-    private static String repoUrl = originRepoUrl;
+    private static final String repoUrl = "https://modules.lsposed.org/";
     private final Resources resources = App.getInstance().getResources();
     private final String[] channels = resources.getStringArray(R.array.update_channel_values);
 
@@ -96,8 +94,8 @@ public class RepoLoader {
 
     synchronized public void loadRemoteData() {
         repoLoaded = false;
-        try {
-            var response = App.getOkHttpClient().newCall(new Request.Builder().url(repoUrl + "modules.json").build()).execute();
+        var request = new Request.Builder().url(repoUrl + "modules.json").build();
+        try (var response = App.getOkHttpClient().newCall(request).execute()) {
 
             if (response.isSuccessful()) {
                 ResponseBody body = response.body();
@@ -118,10 +116,6 @@ public class RepoLoader {
             Log.e(App.TAG, "load remote data", e);
             for (RepoListener listener : listeners) {
                 listener.onThrowable(e);
-            }
-            if (!repoUrl.equals(backupRepoUrl)) {
-                repoUrl = backupRepoUrl;
-                loadRemoteData();
             }
         }
     }
@@ -246,13 +240,8 @@ public class RepoLoader {
             @Override
             public void onFailure(@NonNull Call call, @NonNull IOException e) {
                 Log.e(App.TAG, call.request().url() + e.getMessage());
-                if (!repoUrl.equals(backupRepoUrl)) {
-                    repoUrl = backupRepoUrl;
-                    loadRemoteReleases(packageName);
-                } else {
-                    for (RepoListener listener : listeners) {
-                        listener.onThrowable(e);
-                    }
+                for (RepoListener listener : listeners) {
+                    listener.onThrowable(e);
                 }
             }
 
