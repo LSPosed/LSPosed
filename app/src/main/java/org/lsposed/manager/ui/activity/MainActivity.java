@@ -23,13 +23,13 @@ import android.annotation.SuppressLint;
 import android.content.Context;
 import android.content.Intent;
 import android.net.Uri;
+import android.os.Build;
 import android.os.Bundle;
 import android.text.TextUtils;
 import android.view.KeyEvent;
 import android.view.MotionEvent;
 
 import androidx.annotation.NonNull;
-import androidx.core.os.BuildCompat;
 import androidx.navigation.NavController;
 import androidx.navigation.NavOptions;
 import androidx.navigation.Navigation;
@@ -45,6 +45,7 @@ import org.lsposed.manager.databinding.ActivityMainBinding;
 import org.lsposed.manager.repo.RepoLoader;
 import org.lsposed.manager.ui.activity.base.BaseActivity;
 import org.lsposed.manager.util.ModuleUtil;
+import org.lsposed.manager.util.ShortcutUtil;
 import org.lsposed.manager.util.UpdateUtil;
 
 import java.util.HashSet;
@@ -153,7 +154,7 @@ public class MainActivity extends BaseActivity implements RepoLoader.RepoListene
     }
 
     public void restart() {
-        if (BuildCompat.isAtLeastS() || App.isParasitic()) {
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.S || App.isParasitic()) {
             recreate();
         } else {
             try {
@@ -261,6 +262,9 @@ public class MainActivity extends BaseActivity implements RepoLoader.RepoListene
                     nav.getMenu().removeItem(R.id.repo_nav);
                 }
             }
+        }
+        if(App.isParasitic()){
+            ShortcutUtil.updateShortcut();
         }
     }
 

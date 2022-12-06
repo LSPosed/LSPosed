@@ -174,7 +174,7 @@ public class SettingsFragment extends BaseFragment {
 
             Preference shortcut = findPreference("add_shortcut");
             if (shortcut != null) {
-                shortcut.setVisible(App.isParasitic());
+                shortcut.setVisible(App.isParasitic() && ShortcutUtil.isRequestPinShortcutSupported(requireContext()));
                 if (ShortcutUtil.isLaunchShortcutPinned()) {
                     shortcut.setEnabled(false);
                     shortcut.setSummary(R.string.settings_created_shortcut_summary);

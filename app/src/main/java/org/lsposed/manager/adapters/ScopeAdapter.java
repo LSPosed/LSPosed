@@ -164,7 +164,7 @@ public class ScopeAdapter extends EmptyStateRecyclerView.EmptyStateAdapter<Scope
         return new ViewHolder(ItemModuleBinding.inflate(activity.getLayoutInflater(), parent, false));
     }
 
-    private boolean shouldHideApp(PackageInfo info, ApplicationWithEquals app, HashSet<ScopeAdapter.ApplicationWithEquals> tmpChkList) {
+    private boolean shouldHideApp(PackageInfo info, ApplicationWithEquals app, HashSet<ApplicationWithEquals> tmpChkList) {
         if (info.packageName.equals("android")) {
             return false;
         }
