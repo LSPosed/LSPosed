@@ -63,7 +63,6 @@
     <string name="info_system_version">نسخه سیستم</string>
     <string name="info_device">دستگاه</string>
     <string name="info_system_abi">سیستم ABI (رابط باینری برنامه)</string>
-    <string name="info_api">رابط تزریق</string>
     <string name="info_dex2oat_wrapper">بهینه‌ ساز dex wrapper</string>
     <string name="supported">پشتیبانی می شود</string>
     <string name="unsupported">پشتیبانی نمی شود</string>
@@ -77,6 +76,7 @@
     <!-- WelcomeDialog -->
     <string name="create_shortcut">ساخت میانبر</string>
     <string name="never_show">هرگز نشان نده</string>
+    <string name="app_welcome">Parasitic Manager توصیه شده</string>
     <!-- LogsActivity -->
     <string name="menuSaveToSd">ذخیره</string>
     <string name="nav_item_logs_verbose">گزارش های کامل</string>
@@ -159,7 +159,7 @@
     <string name="list_empty">چیزی در اینجا موجود نیست</string>
     <!-- SettingsActivity -->
     <string name="settings_group_framework">Framework</string>
-    <string name="pref_title_disable_verbose_log">غیرفعال کردن گزارش های کامل</string>
+    <string name="settings_disable_verbose_log">غیرفعال کردن گزارش های کامل</string>
     <string name="pure_black_dark_theme">پس زمینه سیاه تاریک</string>
     <string name="pure_black_dark_theme_summary">اگر پس زمینه تاریک فعال است از پس زمینه سیاه خالص استفاده کنید</string>
     <string name="settings_group_theme">پس زمینه</string>
@@ -183,13 +183,10 @@
     <string name="settings_translation_contributors">مترجم زبان پارسی</string>
     <string name="settings_translation">در ترجمه شرکت کنید</string>
     <string name="settings_translation_summary">به ما کمک کنید تا %s را به زبان شما ترجمه کنیم</string>
-    <string name="create_shortcut_summary">به صورت دستی میانبر parasitic manager را بسازید</string>
     <string name="settings_update_channel">نوع به روز رسانی </string>
     <string name="update_channel_stable">نسخه پایدار</string>
     <string name="update_channel_bate">نسخه آزمایشی</string>
     <string name="update_channel_nightly">نسخه ساخت شبانه</string>
-    <string name="pref_title_restrict_classloader">فقط ماژول classloader می تواند از Xposed API استفاده کند</string>
-    <string name="pref_summary_restrict_classloader">این کار ممکن است برخی از ماژول ها را خراب کند اما به نفع امنیت است (ویژگی آزمایشی)</string>
     <!-- Module Repo -->
     <string name="module_readme">اطلاعات ماژول</string>
     <string name="module_releases">نسخه های منتشر شده</string>
