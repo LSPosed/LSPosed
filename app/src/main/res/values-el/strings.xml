@@ -64,6 +64,8 @@
     <string name="info_device">Συσκευή</string>
     <string name="info_system_abi">Σύστημα ABI</string>
     <string name="info_dex2oat_wrapper">Dex Optimizer Wrapper</string>
+    <string name="enabled">Ενεργό</string>
+    <string name="not_enabled">Μη ενεργό</string>
     <string name="supported">Υποστηριζόμενο</string>
     <string name="unsupported">Μη υποστηριζόμενο</string>
     <string name="android_version_unsatisfied">Ανικανοποίητη έκδοση Android</string>
@@ -74,9 +76,13 @@
     <string name="update_lsposed">Ενημέρωση LSPosed</string>
     <string name="update_lsposed_msg">Επιβεβαίωση ενημέρωσης του LSPosed? Αυτή η συσκευή θα επανεκκινηθεί μετά την ολοκλήρωση της ενημέρωσης</string>
     <!-- WelcomeDialog -->
+    <string name="parasitic_welcome">Καλωσορίσατε στο LSPosed</string>
+    <string name="parasitic_welcome_summary">Χρησιμοποιείτε τον παρασιτικό διαχειριστή, ο οποίος μπορεί να δημιουργήσει συντόμευση ή να παραμένει ανοικτός από την ειδοποίηση.</string>
+    <string name="parasitic_welcome_summary_no_shortcut_support">Χρησιμοποιείτε τον παρασιτικό διαχειριστή, ο οποίος μπορεί να δημιουργήσει συντόμευση ή να παραμένει ανοικτός από την ειδοποίηση.</string>
     <string name="create_shortcut">Δημιουργία συντόμευσης</string>
     <string name="never_show">Να μην εμφανίζεται ποτέ</string>
     <string name="app_welcome">Προτεινόμενος Παρασιτικός Διαχειριστής</string>
+    <string name="app_welcome_summary">Το LSPosed υποστηρίζει τώρα την παρασιτοποίηση του συστήματος για να αποφύγετε την ανίχνευση, μπορείτε να ανοίξετε τον παρασιτικό διαχειριστή από την ειδοποίηση. Συνιστάται να απεγκαταστήσετε την τρέχουσα εφαρμογή.</string>
     <!-- LogsActivity -->
     <string name="menuSaveToSd">Αποθήκευση</string>
     <string name="nav_item_logs_verbose">Λεπτομερείς Καταγραφές</string>
@@ -159,6 +165,8 @@
     <string name="list_empty">◆ \\\\_(\")_\/ \"\nΤίποτα εδώ</string>
     <!-- SettingsActivity -->
     <string name="settings_group_framework">Framework</string>
+    <string name="settings_disable_verbose_log">Απενεργοποιήστε αναλυτικά στοιχεία καταγραφής</string>
+    <string name="settings_disable_verbose_log_summary">Αναφορά προβλημάτων ζητάει να συμπεριλαμβάνεται τα αναλυτικά στοιχεία καταγραφής</string>
     <string name="pure_black_dark_theme">Μαύρο σκούρο θέμα</string>
     <string name="pure_black_dark_theme_summary">Χρησιμοποιήστε το καθαρό μαύρο θέμα αν το σκούρο θέμα είναι ενεργοποιημένο</string>
     <string name="settings_group_theme">Θέμα</string>
@@ -182,10 +190,17 @@
     <string name="settings_translation_contributors">Συντελεστές μετάφρασης</string>
     <string name="settings_translation">Συμμετοχή στη μετάφραση</string>
     <string name="settings_translation_summary">Βοηθήστε μας να μεταφράσουμε το %s στη γλώσσα σας</string>
+    <string name="settings_create_shortcut_summary">Δημιουργήστε μια συντόμευση που μπορεί να ανοίξει τον παρασιτικό διαχειριστή</string>
+    <string name="settings_created_shortcut_summary">Έχει δημιουργηθεί μια συντόμευση για το άνοιγμα του παρασιτικού διαχειριστή</string>
+    <string name="settings_enable_status_notification">Ειδοποίηση καταστάσεως</string>
+    <string name="settings_enable_status_notification_summary">Εμφάνιση μιας ειδοποίησης που μπορεί να ανοίξει τον διαχειριστή παρασιτικής</string>
+    <string name="disable_status_notification_error">Δεν υπάρχει συντόμευση, δεν είναι δυνατή η απενεργοποίηση της ειδοποίησης</string>
     <string name="settings_update_channel">Ενημέρωση καναλιού</string>
     <string name="update_channel_stable">Σταθερό</string>
     <string name="update_channel_bate">Βήτα</string>
     <string name="update_channel_nightly">Νυχτερινή κατασκευή</string>
+    <string name="settings_xposed_api_call_protection">Προστασία κλήσεων Xposed API</string>
+    <string name="settings_xposed_api_call_protection_summary">Αποκλείστε τον δυναμικά φορτωμένο κώδικα μονάδας για να χρησιμοποιήσετε το Xposed API, αυτό μπορεί να σπάσει ορισμένες μονάδες αλλά να ωφελήσει την ασφάλεια (πειραματική δυνατότητα)</string>
     <!-- Module Repo -->
     <string name="module_readme">Έτοιμο</string>
     <string name="module_releases">Εκδόσεις</string>
