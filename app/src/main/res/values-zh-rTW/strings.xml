@@ -62,6 +62,8 @@
     <string name="info_device">裝置版本</string>
     <string name="info_system_abi">系統架構</string>
     <string name="info_dex2oat_wrapper">Dex 優化器包裝器</string>
+    <string name="enabled">已啟用</string>
+    <string name="not_enabled">未啟用</string>
     <string name="supported">支援</string>
     <string name="unsupported">不支援</string>
     <string name="android_version_unsatisfied">系統版本不受支援</string>
@@ -161,6 +163,7 @@
     <!-- SettingsActivity -->
     <string name="settings_group_framework">框架</string>
     <string name="settings_disable_verbose_log">停用詳細日誌</string>
+    <string name="settings_disable_verbose_log_summary">回報問題要求包含詳細日誌</string>
     <string name="pure_black_dark_theme">黑色主題</string>
     <string name="pure_black_dark_theme_summary">當深色主題啟用時使用純黑色主題</string>
     <string name="settings_group_theme">主題</string>
@@ -184,6 +187,8 @@
     <string name="settings_translation_contributors">譯者</string>
     <string name="settings_translation">參與翻譯</string>
     <string name="settings_translation_summary">幫助我們翻譯 %s 到您的語言</string>
+    <string name="settings_create_shortcut_summary">建立可以開啟寄生管理員的捷徑</string>
+    <string name="settings_created_shortcut_summary">已建立可以開啟寄生管理員的捷徑</string>
     <string name="settings_enable_status_notification">狀態通知</string>
     <string name="settings_enable_status_notification_summary">顯示通知以便開啟寄生管理員</string>
     <string name="disable_status_notification_error">沒有捷徑，無法停用通知</string>
@@ -191,6 +196,8 @@
     <string name="update_channel_stable">穩定版</string>
     <string name="update_channel_bate">測試版</string>
     <string name="update_channel_nightly">每夜構建</string>
+    <string name="settings_xposed_api_call_protection">Xposed API 呼叫保護</string>
+    <string name="settings_xposed_api_call_protection_summary">封鎖動態載入的模組代碼以使用 Xposed API，這可能會損毀某些模組但有益於安全性 (實驗性功能)</string>
     <!-- Module Repo -->
     <string name="module_readme">自述檔案</string>
     <string name="module_releases">版本</string>
