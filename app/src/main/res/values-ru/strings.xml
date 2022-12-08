@@ -68,6 +68,8 @@
     <string name="info_device">Устройство</string>
     <string name="info_system_abi">Разрядность системы (ABI)</string>
     <string name="info_dex2oat_wrapper">Оптимизатор Dex</string>
+    <string name="enabled">Включена</string>
+    <string name="not_enabled">Не включена</string>
     <string name="supported">Поддерживается</string>
     <string name="unsupported">Не поддерживается</string>
     <string name="android_version_unsatisfied">Версия Android не подходит</string>
@@ -79,8 +81,9 @@
     <string name="update_lsposed_msg">Вы точно хотите обновить LSPosed?\nУстройство перезагрузится после завершения обновления</string>
     <!-- WelcomeDialog -->
     <string name="parasitic_welcome">Добро пожаловать в LSPosed</string>
-    <string name="parasitic_welcome_summary">Вы используете скрытый режим. Для открытия LSPosed, можно создать ярлык на рабочем столе или открывать из уведомлений</string>
-    <string name="create_shortcut">Создать ярлык</string>
+    <string name="parasitic_welcome_summary">Вы используете скрытый режим. Для открытия LSPosed, можно создать ярлык на рабочем столе или открывать через уведомление</string>
+    <string name="parasitic_welcome_summary_no_shortcut_support">Вы используете скрытый режим. LSPosed можно открыть через уведомление</string>
+    <string name="create_shortcut">Ярлык</string>
     <string name="never_show">Больше не показывать</string>
     <string name="app_welcome">Скрытие приложения LSPosed</string>
     <string name="app_welcome_summary">LSPosed теперь поддерживает скрытие, чтобы избежать различные обнаружения системой, вы можете открыть LSPosed из уведомления. Рекомендуется удалить текущее приложение</string>
@@ -167,6 +170,7 @@
     <!-- SettingsActivity -->
     <string name="settings_group_framework">Фреймворк</string>
     <string name="settings_disable_verbose_log">Выключить подробные логи</string>
+    <string name="settings_disable_verbose_log_summary">Выключение подробных логов</string>
     <string name="pure_black_dark_theme">Черная тема</string>
     <string name="pure_black_dark_theme_summary">Использовать черную тему, когда включена темная тема</string>
     <string name="settings_group_theme">Тема</string>
@@ -190,13 +194,17 @@
     <string name="settings_translation_contributors">Автор перевода</string>
     <string name="settings_translation">Принять участие в переводе</string>
     <string name="settings_translation_summary">Помогите нам перевести %s на ваш язык</string>
-    <string name="settings_enable_status_notification">Уведомление о состоянии</string>
+    <string name="settings_create_shortcut_summary">Создать ярлык, с помощью которого можно открыть LSPosed</string>
+    <string name="settings_created_shortcut_summary">Для открытия LSPosed был создан ярлык</string>
+    <string name="settings_enable_status_notification">Уведомление</string>
     <string name="settings_enable_status_notification_summary">Показывать уведомление, через которое можно открыть LSPosed</string>
     <string name="disable_status_notification_error">Не найден ярлык, выключить уведомление нельзя</string>
     <string name="settings_update_channel">Источник обновлений</string>
     <string name="update_channel_stable">Стабильные версии</string>
     <string name="update_channel_bate">Бета-версии</string>
     <string name="update_channel_nightly">Ночные версии</string>
+    <string name="settings_xposed_api_call_protection">Защита использования Xposed API</string>
+    <string name="settings_xposed_api_call_protection_summary">Блокировать динамически загружаемый код модуля для использования Xposed API, это может нарушить работу некоторых модулей, но повысит безопасность (экспериментальная функция)</string>
     <!-- Module Repo -->
     <string name="module_readme">Описание</string>
     <string name="module_releases">Версии</string>
