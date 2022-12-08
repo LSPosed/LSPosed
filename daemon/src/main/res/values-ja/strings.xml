@@ -8,4 +8,8 @@
     <string name="xposed_module_updated_notification_content">%s が更新されました。スコープ内のアプリを強制停止してから再起動してください</string>
     <string name="xposed_module_updated_notification_title_system">Xposedモジュールを更新しました。システム再起動が必要です</string>
     <string name="xposed_module_updated_notification_content_system">%s が更新されました。スコープにシステムフレームワークが含まれているため、変更を適用するには再起動が必要です</string>
+    <string name="module_updated_channel_name">モジュールの更新完了</string>
+    <string name="status_channel_name">LSPosed ステータス</string>
+    <string name="lsposed_running_notification_title">LSPosed ロード完了</string>
+    <string name="lsposed_running_notification_content">通知をタップするとマネージャーが開きます</string>
 </resources>
