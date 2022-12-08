@@ -62,6 +62,8 @@
     <string name="info_device">デバイス</string>
     <string name="info_system_abi">システムABI</string>
     <string name="info_dex2oat_wrapper">Dex最適化ラッパー</string>
+    <string name="enabled">有効</string>
+    <string name="not_enabled">無効</string>
     <string name="supported">対応</string>
     <string name="unsupported">非対応</string>
     <string name="android_version_unsatisfied">Androidのバージョンが適合しません</string>
@@ -72,6 +74,7 @@
     <string name="update_lsposed">LSPossedをアップデート</string>
     <string name="update_lsposed_msg">LSPosedをアップデートしてもよろしいですか？アップデート完了後、このデバイスは再起動します</string>
     <!-- WelcomeDialog -->
+    <string name="parasitic_welcome">LSPosedへようこそ</string>
     <string name="create_shortcut">ショートカットを作成</string>
     <string name="never_show">表示しない</string>
     <string name="app_welcome">寄生マネージャーがおすすめです</string>
@@ -181,10 +184,12 @@
     <string name="settings_translation_contributors">翻訳貢献者</string>
     <string name="settings_translation">翻訳に参加する</string>
     <string name="settings_translation_summary">%s をあなたの言語に翻訳するのを手伝ってください</string>
+    <string name="settings_enable_status_notification">ステータス通知</string>
     <string name="settings_update_channel">更新チャンネル</string>
     <string name="update_channel_stable">安定版</string>
     <string name="update_channel_bate">ベータ版</string>
     <string name="update_channel_nightly">ナイトリービルド</string>
+    <string name="settings_xposed_api_call_protection">Xposed APIの呼び出し保護</string>
     <!-- Module Repo -->
     <string name="module_readme">Readme</string>
     <string name="module_releases">リリース</string>
