@@ -76,6 +76,7 @@
     <!-- WelcomeDialog -->
     <string name="parasitic_welcome">Chào mừng đến với LSPosed</string>
     <string name="parasitic_welcome_summary">Bạn đang sử dụng trình quản lý ký sinh, có thể tạo lối tắt hoặc mở từ thông báo.</string>
+    <string name="parasitic_welcome_summary_no_shortcut_support">Bạn đang sử dụng trình quản lý ký sinh, có thể tạo lối tắt hoặc mở từ thông báo.</string>
     <string name="create_shortcut">Tạo lối tắt</string>
     <string name="never_show">Không hiện nữa</string>
     <string name="app_welcome">Quản lý ký sinh khuyến nghị</string>
