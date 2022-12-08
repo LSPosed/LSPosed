@@ -78,6 +78,7 @@
     <!-- WelcomeDialog -->
     <string name="parasitic_welcome">Bem-vindo ao LSPosed</string>
     <string name="parasitic_welcome_summary">Você está usando o gerenciador parasita, você pode criar o atalho ou então abrir a partir da notificação.</string>
+    <string name="parasitic_welcome_summary_no_shortcut_support">Você está usando o gerenciador parasita, ele pode ser aberto a partir da notificação.</string>
     <string name="create_shortcut">Criar Atalho do Gerenciador Parasita</string>
     <string name="never_show">Não mostrar novamente</string>
     <string name="app_welcome">É recomendado o gerenciador parasita</string>
