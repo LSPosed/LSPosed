@@ -68,6 +68,8 @@
     <string name="info_device">Zařízení</string>
     <string name="info_system_abi">Systémové ABI (architektura)</string>
     <string name="info_dex2oat_wrapper">Dex Optimizer Wrapper</string>
+    <string name="enabled">Povoleno</string>
+    <string name="not_enabled">Není povoleno</string>
     <string name="supported">Podporováno</string>
     <string name="unsupported">Nepodporováno</string>
     <string name="android_version_unsatisfied">Verze Androidu není spokojena</string>
@@ -80,6 +82,7 @@
     <!-- WelcomeDialog -->
     <string name="parasitic_welcome">Vítejte v LSPosed</string>
     <string name="parasitic_welcome_summary">Používáte parazitního správce, který může vytvořit zástupce nebo se stále otevírat z oznámení.</string>
+    <string name="parasitic_welcome_summary_no_shortcut_support">Používáte parazitního správce, který se může otevřít z oznámení.</string>
     <string name="create_shortcut">Vytvořit zástupce</string>
     <string name="never_show">Nikdy nezobrazovat</string>
     <string name="app_welcome">Doporučený parazitický manažer</string>
@@ -167,6 +170,7 @@
     <!-- SettingsActivity -->
     <string name="settings_group_framework">Framework</string>
     <string name="settings_disable_verbose_log">Zakázat podrobné protokoly</string>
+    <string name="settings_disable_verbose_log_summary">Nahlásit požadavek na problémy a zahrnout detailní záznamy</string>
     <string name="pure_black_dark_theme">Čistě černý motiv</string>
     <string name="pure_black_dark_theme_summary">Použít čistý černý motiv, pokud je tmavý motiv povolen</string>
     <string name="settings_group_theme">Vzhled</string>
@@ -190,6 +194,8 @@
     <string name="settings_translation_contributors">Přispěvatelé překladu</string>
     <string name="settings_translation">Účast na překladu</string>
     <string name="settings_translation_summary">Pomozte nám přeložit %s do vašeho jazyka</string>
+    <string name="settings_create_shortcut_summary">Vytvoření zástupce, který může otevřít parazitního správce</string>
+    <string name="settings_created_shortcut_summary">Byl vytvořen zástupce pro otevření parazitního správce</string>
     <string name="settings_enable_status_notification">Oznámení o stavu</string>
     <string name="settings_enable_status_notification_summary">Zobrazení oznámení, které může otevřít parazitního správce</string>
     <string name="disable_status_notification_error">Žádný zástupce, nelze zakázat oznámení</string>
@@ -197,6 +203,8 @@
     <string name="update_channel_stable">Stabilní</string>
     <string name="update_channel_bate">Beta</string>
     <string name="update_channel_nightly">Noční sestavení</string>
+    <string name="settings_xposed_api_call_protection">Ochrana volání rozhraní Xposed API</string>
+    <string name="settings_xposed_api_call_protection_summary">Blokování dynamicky načítaného kódu modulu pro použití rozhraní Xposed API, což může narušit některé moduly, ale prospěje bezpečnosti (experimentální funkce)</string>
     <!-- Module Repo -->
     <string name="module_readme">Přečti si mě</string>
     <string name="module_releases">Vydání</string>
