@@ -64,6 +64,8 @@
     <string name="info_device">Apparaat</string>
     <string name="info_system_abi">Systeem ABI</string>
     <string name="info_dex2oat_wrapper">Dex Optimizer Wrapper</string>
+    <string name="enabled">Ingeschakeld</string>
+    <string name="not_enabled">Niet ingeschakeld</string>
     <string name="supported">Ondersteund</string>
     <string name="unsupported">Niet-ondersteunde</string>
     <string name="android_version_unsatisfied">Android versie onbevredigd</string>
@@ -74,9 +76,12 @@
     <string name="update_lsposed">Update LSPosed</string>
     <string name="update_lsposed_msg">Bevestig bijwerken van LSPosed? Dit apparaat zal opnieuw opstarten nadat de update is voltooid</string>
     <!-- WelcomeDialog -->
+    <string name="parasitic_welcome">Welkom bij LSPosed</string>
+    <string name="parasitic_welcome_summary">U gebruikt de parasitaire manager, die een snelkoppeling kan maken of nog steeds kan openen vanuit een melding.</string>
     <string name="create_shortcut">Snelkoppeling maken</string>
     <string name="never_show">Nooit tonen</string>
     <string name="app_welcome">Parasitaire manager aanbevolen</string>
+    <string name="app_welcome_summary">LSPosed ondersteunt nu systeemparasitisatie om detectie te voorkomen, u kunt parasitaire manager openen vanuit een melding. Het wordt aanbevolen om de huidige applicatie te verwijderen.</string>
     <!-- LogsActivity -->
     <string name="menuSaveToSd">Opslaan</string>
     <string name="nav_item_logs_verbose">Uitgebreide logs</string>
@@ -160,6 +165,7 @@
     <!-- SettingsActivity -->
     <string name="settings_group_framework">Framework</string>
     <string name="settings_disable_verbose_log">Schakel uitgebreide logboeken uit</string>
+    <string name="settings_disable_verbose_log_summary">Rapporteer problemen verzoek om uitgebreide logboeken op te nemen</string>
     <string name="pure_black_dark_theme">Zwarte donkere thema</string>
     <string name="pure_black_dark_theme_summary">Gebruik het pure zwarte thema als het donkere thema is ingeschakeld</string>
     <string name="settings_group_theme">Thema</string>
@@ -183,10 +189,17 @@
     <string name="settings_translation_contributors">Bijdragers van vertalingen</string>
     <string name="settings_translation">Deelnemen aan vertaling</string>
     <string name="settings_translation_summary">Help ons %s te vertalen in uw taal</string>
+    <string name="settings_create_shortcut_summary">Maak een snelkoppeling die parasitaire manager kan openen</string>
+    <string name="settings_created_shortcut_summary">Er is een snelkoppeling gemaakt om parasitaire manager te openen</string>
+    <string name="settings_enable_status_notification">Statusmelding</string>
+    <string name="settings_enable_status_notification_summary">Toon een melding die parasitaire manager kan openen</string>
+    <string name="disable_status_notification_error">Geen snelkoppeling, kan melding niet uitschakelen</string>
     <string name="settings_update_channel">Kanaal bijwerken</string>
     <string name="update_channel_stable">Stabiel</string>
     <string name="update_channel_bate">Bèta</string>
     <string name="update_channel_nightly">Nachtelijke bouw</string>
+    <string name="settings_xposed_api_call_protection">Xposed API-oproepbeveiliging</string>
+    <string name="settings_xposed_api_call_protection_summary">Blokkeer dynamisch geladen modulecode om Xposed API te gebruiken, dit kan sommige modules breken maar komt de veiligheid ten goede (experimentele functie)</string>
     <!-- Module Repo -->
     <string name="module_readme">Leesmij</string>
     <string name="module_releases">Publicaties</string>
