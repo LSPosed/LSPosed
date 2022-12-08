@@ -65,6 +65,8 @@ https://github.com/tclement0922</string>
     <string name="info_device">Périphérique</string>
     <string name="info_system_abi">Architecture du système</string>
     <string name="info_dex2oat_wrapper">Enveloppeur Dex Optimizer</string>
+    <string name="enabled">Activé</string>
+    <string name="not_enabled">Non actif</string>
     <string name="supported">Supporté</string>
     <string name="unsupported">Non supporté</string>
     <string name="android_version_unsatisfied">Version d\'Android non satisfaisante</string>
@@ -77,6 +79,7 @@ https://github.com/tclement0922</string>
     <!-- WelcomeDialog -->
     <string name="parasitic_welcome">Bienvenue dans LSPosed</string>
     <string name="parasitic_welcome_summary">Vous utilisez le gestionnaire parasité, qui ne peut pas créer de raccourcis ou même être ouvert à partir d\'une notification.</string>
+    <string name="parasitic_welcome_summary_no_shortcut_support">Vous utilisez le gestionnaire parasité, qui peut être ouvert depuis la notification.</string>
     <string name="create_shortcut">Créer le raccourci</string>
     <string name="never_show">Ne jamais afficher</string>
     <string name="app_welcome">Gestionnaire parasité recommandé</string>
@@ -164,6 +167,7 @@ https://github.com/tclement0922</string>
     <!-- SettingsActivity -->
     <string name="settings_group_framework">Sous-système</string>
     <string name="settings_disable_verbose_log">Désactiver les journaux détaillés</string>
+    <string name="settings_disable_verbose_log_summary">Demande de rapports sur les problèmes pour inclure les journaux détaillés</string>
     <string name="pure_black_dark_theme">Thème noir et sombre</string>
     <string name="pure_black_dark_theme_summary">Utiliser le thème noir pur si le thème noir est activé</string>
     <string name="settings_group_theme">Thème</string>
@@ -187,6 +191,8 @@ https://github.com/tclement0922</string>
     <string name="settings_translation_contributors">Contributeurs de traduction</string>
     <string name="settings_translation">Participer à la traduction</string>
     <string name="settings_translation_summary">Aidez-nous à traduire %s dans votre langue</string>
+    <string name="settings_create_shortcut_summary">Créer un raccourcis pouvant ouvrir le gestionnaire parasitaire</string>
+    <string name="settings_created_shortcut_summary">Un raccourcis a été créé pour ouvrir le gestionnaire parasitaire</string>
     <string name="settings_enable_status_notification">Notification d\'état</string>
     <string name="settings_enable_status_notification_summary">Afficher une notification pouvant ouvrir le gestionnaire parasite</string>
     <string name="disable_status_notification_error">Pas de raccourcis, la notification ne peut pas être désactivée</string>
@@ -194,6 +200,8 @@ https://github.com/tclement0922</string>
     <string name="update_channel_stable">Stable</string>
     <string name="update_channel_bate">Bêta</string>
     <string name="update_channel_nightly">Version alpha</string>
+    <string name="settings_xposed_api_call_protection">Protection d\'appels de l\'API Xposed</string>
+    <string name="settings_xposed_api_call_protection_summary">Bloquer dynamiquement le code de module chargé pour utiliser l\'API Xposed, celà peut casser certains modules mais être bénéfique à la sécurité (fonction expérimentale)</string>
     <!-- Module Repo -->
     <string name="module_readme">Lisez-moi</string>
     <string name="module_releases">Versions</string>
