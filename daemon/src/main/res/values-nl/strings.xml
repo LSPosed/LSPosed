@@ -8,4 +8,8 @@
     <string name="xposed_module_updated_notification_content">%1$s is geupdate</string>
     <string name="xposed_module_updated_notification_title_system">Xposed-module bijgewerkt, systeem opnieuw opstarten vereist</string>
     <string name="xposed_module_updated_notification_content_system">%s is bijgewerkt, omdat het bereik een systeemkader bevat, moet je opnieuw opstarten om wijzigingen toe te passen</string>
+    <string name="module_updated_channel_name">Module update voltooid</string>
+    <string name="status_channel_name">LSPosed status</string>
+    <string name="lsposed_running_notification_title">LSPosed geladen</string>
+    <string name="lsposed_running_notification_content">Tik op de melding om manager te openen</string>
 </resources>
