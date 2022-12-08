@@ -64,6 +64,8 @@
     <string name="info_device">उपकरण</string>
     <string name="info_system_abi">सिस्टम एबीआई</string>
     <string name="info_dex2oat_wrapper">डेक्स ऑप्टिमाइज़र रैपर</string>
+    <string name="enabled">सक्रिय</string>
+    <string name="not_enabled">निष्क्रिय</string>
     <string name="supported">समर्थित</string>
     <string name="unsupported">असमर्थित</string>
     <string name="android_version_unsatisfied">Android संस्करण असंतुष्ट</string>
@@ -74,8 +76,13 @@
     <string name="update_lsposed">अद्यतन LSPosed</string>
     <string name="update_lsposed_msg">LSPosed को अपडेट करने की पुष्टि करें? अपडेट पूरा होने के बाद यह डिवाइस रीबूट हो जाएगा</string>
     <!-- WelcomeDialog -->
+    <string name="parasitic_welcome">LSPosed में आपका स्वागत है</string>
+    <string name="parasitic_welcome_summary">आप परजीवी प्रबंधक का उपयोग कर रहे हैं, जो शॉर्टकट बना सकता है या सूचना से अभी भी खुला हो सकता है।</string>
+    <string name="parasitic_welcome_summary_no_shortcut_support">आप परजीवी प्रबंधक का उपयोग कर रहे हैं, जो सूचना से खुल सकता है।</string>
     <string name="create_shortcut">शॉर्टकट बनाएं</string>
     <string name="never_show">कभी भी न दिखाओ</string>
+    <string name="app_welcome">परजीवी प्रबंधक की सिफारिश की</string>
+    <string name="app_welcome_summary">LSPosed अब पता लगाने से बचने के लिए सिस्टम परजीवीकरण का समर्थन करता है, आप अधिसूचना से परजीवी प्रबंधक खोल सकते हैं। वर्तमान एप्लिकेशन को अनइंस्टॉल करने की अनुशंसा की जाती है।</string>
     <!-- LogsActivity -->
     <string name="menuSaveToSd">बचाना</string>
     <string name="nav_item_logs_verbose">वर्बोज़ लॉग्स</string>
