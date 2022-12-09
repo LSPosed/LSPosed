@@ -62,6 +62,8 @@
     <string name="info_device">장치</string>
     <string name="info_system_abi">시스템 ABI</string>
     <string name="info_dex2oat_wrapper">Dex 옵티마이저 래퍼</string>
+    <string name="enabled">활성화됨</string>
+    <string name="not_enabled">비활성화됨</string>
     <string name="supported">지원</string>
     <string name="unsupported">지원되지 않음</string>
     <string name="android_version_unsatisfied">안드로이드 버전 불만족</string>
@@ -72,6 +74,7 @@
     <string name="update_lsposed">LSPosed 업데이트</string>
     <string name="update_lsposed_msg">LSPosed를 업데이트 하시겠습니까? 업데이트 완료 후에 재부팅합니다.</string>
     <!-- WelcomeDialog -->
+    <string name="parasitic_welcome_summary_no_shortcut_support">알림에서 열 수 있는 내부 관리자를 사용 중 입니다.</string>
     <string name="create_shortcut">바로 가기 만들기</string>
     <string name="never_show">표시 안 함</string>
     <!-- LogsActivity -->
@@ -157,6 +160,7 @@
     <!-- SettingsActivity -->
     <string name="settings_group_framework">프레임워크</string>
     <string name="settings_disable_verbose_log">상세한 로그 비활성화</string>
+    <string name="settings_disable_verbose_log_summary">자세한 로그를 포함한 오류 신고 요청</string>
     <string name="pure_black_dark_theme">블랙 다크 테마</string>
     <string name="pure_black_dark_theme_summary">다크 테마가 활성화된 경우 순수 검은색 테마를 사용합니다.</string>
     <string name="settings_group_theme">테마</string>
@@ -180,10 +184,14 @@
     <string name="settings_translation_contributors">번역 기여자</string>
     <string name="settings_translation">번역 참여</string>
     <string name="settings_translation_summary">%s를 귀하의 언어로 번역하는 데 도움을 주세요.</string>
+    <string name="settings_create_shortcut_summary">내부 관리자를 열 수 있는 바로가기 생성</string>
+    <string name="settings_created_shortcut_summary">내부 관리자를 여는 바로 가기가 생성되었습니다.</string>
     <string name="settings_update_channel">업데이트 채널</string>
     <string name="update_channel_stable">안정</string>
     <string name="update_channel_bate">베타</string>
     <string name="update_channel_nightly">야간 빌드</string>
+    <string name="settings_xposed_api_call_protection">Xposed API 호출 보호</string>
+    <string name="settings_xposed_api_call_protection_summary">Xposed API를 사용하기 위해 로드된 모듈 코드를 동적으로 차단하면 일부 모듈이 손상될 수 있지만 보안에 도움이 됩니다(실험 기능).</string>
     <!-- Module Repo -->
     <string name="module_readme">읽어보기</string>
     <string name="module_releases">릴리스</string>

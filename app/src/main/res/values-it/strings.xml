@@ -78,6 +78,7 @@
     <!-- WelcomeDialog -->
     <string name="parasitic_welcome">Benvenuto in LSPosed</string>
     <string name="parasitic_welcome_summary">Stai usando il manager parassitario, che può creare scorciatoie o essere aperto dalla notifica.</string>
+    <string name="parasitic_welcome_summary_no_shortcut_support">Stai usando il manager parassitario, che può essere aperto dalla notifica.</string>
     <string name="create_shortcut">Crea scorciatoia</string>
     <string name="never_show">Non mostrare mai</string>
     <string name="app_welcome">Manager parassitario consigliato</string>

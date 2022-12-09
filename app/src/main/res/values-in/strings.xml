@@ -62,19 +62,25 @@
     <string name="info_device">Perangkat</string>
     <string name="info_system_abi">Sistem ABI</string>
     <string name="info_dex2oat_wrapper">Pembungkus Pengoptimal Dex</string>
+    <string name="enabled">Diaktifkan</string>
+    <string name="not_enabled">Tidak diaktifkan</string>
     <string name="supported">Didukung</string>
     <string name="unsupported">Tidak didukung</string>
-    <string name="android_version_unsatisfied">Versi Android tidak puas</string>
-    <string name="crashed">Hancur</string>
-    <string name="mount_failed">Pemasangan gagal</string>
+    <string name="android_version_unsatisfied">Versi Android tidak terpenuhi</string>
+    <string name="crashed">Gagal</string>
+    <string name="mount_failed">Pengaitan gagal</string>
     <string name="selinux_permissive">SELinux permisif</string>
     <string name="sepolicy_incorrect">Kebijakan SELinux salah</string>
     <string name="update_lsposed">Perbarui LSPosed</string>
-    <string name="update_lsposed_msg">Konfirmasi untuk pembaharuan LSPosed? Perangkat ini akan mulai ulang setelah pembaharuan selesai</string>
+    <string name="update_lsposed_msg">Konfirmasi untuk pembaruan LSPosed? Perangkat ini akan mulai ulang setelah pembaruan selesai</string>
     <!-- WelcomeDialog -->
+    <string name="parasitic_welcome">Selamat datang di LSPosed</string>
+    <string name="parasitic_welcome_summary">Anda menggunakan pengelola siluman, yang dapat membuat pintasan atau masih bisa dibuka melalui notifikasi.</string>
+    <string name="parasitic_welcome_summary_no_shortcut_support">Anda menggunakan pengelola siluman, yang dapat dibuka melalui notifikasi.</string>
     <string name="create_shortcut">Buat pintasan</string>
     <string name="never_show">Jangan pernah tampilkan</string>
-    <string name="app_welcome">Manajer Parasit Direkomendasikan</string>
+    <string name="app_welcome">Pengelola Siluman Direkomendasikan</string>
+    <string name="app_welcome_summary">LSPosed sekarang mendukung sistem siluman untuk menghindari deteksi, Anda dapat membuka pengelola siluman dari notifikasi. Direkomendasikan untuk membongkar aplikasi ini.</string>
     <!-- LogsActivity -->
     <string name="menuSaveToSd">Simpan</string>
     <string name="nav_item_logs_verbose">Log Verbose</string>
@@ -96,21 +102,21 @@
     <string name="module_empty_description">(tidak ada deskripsi yang diberikan)</string>
     <string name="warning_xposed_min_version">Modul ini membutuhkan versi Xposed yang lebih baru (%d) dan oleh karena itu tidak dapat diaktifkan</string>
     <string name="no_min_version_specified">Modul ini tidak menentukan versi Xposed yang dibutuhkan.</string>
-    <string name="warning_min_version_too_low">Modul ini dibuat untuk Xposed versi %1$d, tetapi karena perubahan yang tidak kompatibel di versi %2$d, modul ini telah dinonaktifkan</string>
+    <string name="warning_min_version_too_low">Modul ini dibuat untuk Xposed versi %1$d, tetapi karena perubahan yang tidak cocok di versi %2$d, modul ini telah dinonaktifkan</string>
     <string name="warning_installed_on_external_storage">Modul ini tidak dapat dimuat karena terpasang di kartu SD, harap pindahkan ke penyimpanan internal</string>
     <string name="module_uninstall">Copot</string>
     <string name="module_settings">Pengaturan modul</string>
     <string name="view_in_repo">Lihat di Repo</string>
     <string name="module_uninstall_message">Apakah Anda ingin mencopot modul ini?</string>
-    <string name="module_uninstalled">Tidak terpasang %1$s</string>
+    <string name="module_uninstalled">Tercopot %1$s</string>
     <string name="module_uninstall_failed">Copot pemasangan tidak berhasil</string>
     <string name="add_module_to_user">Tambahkan modul ke pengguna</string>
     <string name="module_installed">Ditambahkan %1$s ke pengguna %2$s</string>
     <string name="module_install_failed">Gagal menambahkan modul</string>
     <string name="install_to_user">Pasang ke pengguna %s</string>
     <string name="install_to_user_message">Ingin memasang %1$s ke pengguna %2$s? Disarankan untuk memasang secara manual, memaksa pemasangan melalui LSPosed dapat menyebabkan masalah.</string>
-    <string name="expand">perjelas</string>
-    <string name="collapse">menciutkan</string>
+    <string name="expand">perluas</string>
+    <string name="collapse">ciutkan</string>
     <!-- AppListActivity -->
     <string name="compile_speed">Mengoptimalkan ulang</string>
     <string name="compile_speed_msg">Mengoptimalkan…</string>
@@ -129,7 +135,7 @@
     <string name="no_scope_selected">Anda tidak memilih aplikasi apa pun. Lanjutkan?</string>
     <string name="menu_show_games">Permainan</string>
     <string name="menu_show_modules">Modul</string>
-    <string name="menu_show_denylist">Penyangkalan</string>
+    <string name="menu_show_denylist">Daftar tolak</string>
     <string name="failed_to_save_scope_list">Gagal menyimpan ke daftar cakupan</string>
     <string name="app_version">Versi: %1$s</string>
     <string name="use_recommended">Direkomendasikan</string>
@@ -139,7 +145,7 @@
     <string name="requested_by_module">Direkomendasikan</string>
     <string name="update_available">Pembaruan tersedia: %1$s</string>
     <string name="module_disabled_no_selection">Modul %s telah dinonaktifkan karena tidak ada aplikasi yang dipilih.</string>
-    <string name="android_framework">Kerangka Sistem</string>
+    <string name="android_framework">System Framework</string>
     <string name="menu_backup_and_restore">Cadangan</string>
     <string name="menu_backup">Cadangkan</string>
     <string name="menu_restore">Pulihkan</string>
@@ -149,21 +155,22 @@
     <string name="reboot_required">Mulai ulang diperlukan agar perubahan ini dapat diterapkan</string>
     <string name="reboot">Mulai ulang</string>
     <string name="menu_hide">Sembunyikan</string>
-    <string name="deny_list">%s berada di daftar penyangkalan. Kemungkinan tidak akan merubah apapun.</string>
-    <string name="deny_list_info">Berada di daftar penyangkalan</string>
+    <string name="deny_list">%s berada di daftar tolak. Kemungkinan tidak akan merubah apapun.</string>
+    <string name="deny_list_info">Berada di daftar tolak</string>
     <!-- ModulesActivity and AppListActivity -->
     <string name="modules_other_app">Lihat di aplikasi lain</string>
     <string name="module_app_info">Informasi aplikasi</string>
     <string name="list_empty">¯\\\\_(ツ)_\/¯\nTidak ada apa-apa di sini</string>
     <!-- SettingsActivity -->
-    <string name="settings_group_framework">Kerangka</string>
+    <string name="settings_group_framework">Framework</string>
     <string name="settings_disable_verbose_log">Nonaktifkan log verbose</string>
+    <string name="settings_disable_verbose_log_summary">Permintaan laporan masalah dengan menyertakan log-log verbose</string>
     <string name="pure_black_dark_theme">Tema hitam gelap</string>
     <string name="pure_black_dark_theme_summary">Gunakan tema hitam murni jika tema gelap diaktifkan</string>
     <string name="settings_group_theme">Tema</string>
     <string name="settings_backup_and_restore">Cadangkan dan pulihkan</string>
-    <string name="settings_backup_summery">Cadangkan atau pulihkan daftar modul dan daftar cakupan.</string>
-    <string name="settings_restore_summery">Cadangkan atau pulihkan daftar modul dan daftar cakupan.</string>
+    <string name="settings_backup_summery">Cadangkan daftar modul dan daftar cakupan.</string>
+    <string name="settings_restore_summery">Pulihkan daftar modul dan daftar cakupan.</string>
     <string name="settings_backup">Cadangkan</string>
     <string name="settings_backup_failed2">Gagal mencadangkan:\n%s</string>
     <string name="enable_documentui">Harap aktifkan DocumentUI</string>
@@ -171,7 +178,7 @@
     <string name="settings_restore_failed2">Gagal memulihkan:\n%s</string>
     <string name="group_network">Jaringan</string>
     <string name="dns_over_http">DNS melalui HTTPS</string>
-    <string name="dns_over_http_summary">Mengatasi peracunan DNS di beberapa negara</string>
+    <string name="dns_over_http_summary">Mengatasi pencampuran DNS di beberapa negara</string>
     <string name="theme_color">Warna tema</string>
     <string name="theme_color_system">Warna aksen sistem</string>
     <string name="settings_show_hidden_icon_apps_enabled">Paksa aplikasi untuk menampilkan ikon peluncur</string>
@@ -181,10 +188,17 @@
     <string name="settings_translation_contributors">Kontributor terjemahan</string>
     <string name="settings_translation">Berpartisipasi dalam terjemahan</string>
     <string name="settings_translation_summary">Bantu kami menerjemahkan %s kedalam bahasamu</string>
+    <string name="settings_create_shortcut_summary">Buat sebuah pintasan yang dapat membuka pengelola siluman</string>
+    <string name="settings_created_shortcut_summary">Sebuah pintasan telah dibuat untuk membuka pengelola siluman</string>
+    <string name="settings_enable_status_notification">Notifikasi Status</string>
+    <string name="settings_enable_status_notification_summary">Menampilkan sebuah notifikasi yang dapat membuka pengelola siluman</string>
+    <string name="disable_status_notification_error">Tidak ada pintasan, tidak dapat mematikan notifikasi</string>
     <string name="settings_update_channel">Perbarui saluran</string>
     <string name="update_channel_stable">Stabil</string>
     <string name="update_channel_bate">Beta</string>
     <string name="update_channel_nightly">Rilis harian</string>
+    <string name="settings_xposed_api_call_protection">Perlindungan panggilan Xposed API</string>
+    <string name="settings_xposed_api_call_protection_summary">Blokir kode modul yang dimuat secara dinamis untuk menggunakan Xposed API, ini mungkin mengganggu beberapa modul namun lebih aman (fitur percobaan)</string>
     <!-- Module Repo -->
     <string name="module_readme">Baca aku</string>
     <string name="module_releases">Rilis</string>
@@ -193,17 +207,17 @@
     <string name="module_information_source_url">Kode sumber</string>
     <string name="module_information_collaborators">Kolaborator</string>
     <string name="module_release_view_assets">Aset</string>
-    <string name="menu_open_in_browser">Buka di pramban</string>
+    <string name="menu_open_in_browser">Buka di peramban</string>
     <string name="refresh">Segarkan</string>
     <string name="module_release_load_more">Tampilkan versi lama</string>
     <string name="module_release_no_more">Tidak ada rilis</string>
     <string name="repo_load_failed">Gagal memuat repo modul: %s</string>
     <string name="sort_upgradable_first">Dapat diupgrade terlebih dahulu</string>
     <!-- CrashReportActivity -->
-    <string name="version_mismatch">Versi dari LSPosed framework (%1$d) tidak cocok dengan manajer (%2$d). Mohon untuk menginstal ulang LSPosed.</string>
-    <string name="manager_crashed">Manajer rusak</string>
-    <string name="send_crash_info">Kirim info kerusakan</string>
-    <string name="crash_info_copied">Info kerusakan disalin ke papan klip</string>
+    <string name="version_mismatch">Versi dari LSPosed framework (%1$d) tidak cocok dengan pengelola (%2$d). Mohon untuk pasang ulang LSPosed.</string>
+    <string name="manager_crashed">Pengelola gagal</string>
+    <string name="send_crash_info">Kirim info gagal</string>
+    <string name="crash_info_copied">Info kegagalan disalin ke papan klip</string>
     <string name="info_copied">Disalin ke papan klip</string>
     <!-- Colors -->
     <string name="color_sakura">Sakura</string>

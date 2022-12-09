@@ -78,6 +78,7 @@
     <!-- WelcomeDialog -->
     <string name="parasitic_welcome">LSPosed\'a hoş geldiniz</string>
     <string name="parasitic_welcome_summary">Parazit yöneticiyi kullanıyorsunuz, bu da kısayol oluşturabileceğinizi veya hala bildirimden açabileceğinizi gösterir.</string>
+    <string name="parasitic_welcome_summary_no_shortcut_support">Parazit yöneticiyi kullanıyorsunuz ve bu da hala bildirimden açabileceğinizi gösterir.</string>
     <string name="create_shortcut">Kısayol oluştur</string>
     <string name="never_show">Asla gösterme</string>
     <string name="app_welcome">Parazit Yönetici Önerilir</string>

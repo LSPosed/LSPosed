@@ -40,7 +40,7 @@
         <item quantity="one">%d Modul Update verfügbar</item>
         <item quantity="other">%d Modul Updates verfügbar</item>
     </plurals>
-    <string name="about_view_source_code"><![CDATA[Den Quellcode finden Sie unter %1$s<br/>Folgen Sie unserem %2$s-Kanal]]></string>
+    <string name="about_view_source_code"><![CDATA[Den Quellcode auf %1$s ansehen<br/>Folge unserem %2$s-Kanal]]></string>
     <string name="translators" comment="Dear translators, please add your home page here following the format. There can be more than one translator. So feel free to append yourself.">mshinni80, 
 JJ108</string>
     <string name="install">Installieren</string>
@@ -68,17 +68,18 @@ JJ108</string>
     <string name="enabled">Aktiviert</string>
     <string name="not_enabled">Deaktiviert</string>
     <string name="supported">Unterstützt</string>
-    <string name="unsupported">Nicht unterstützte</string>
-    <string name="android_version_unsatisfied">Android-Version unzufrieden</string>
+    <string name="unsupported">Nicht unterstützt</string>
+    <string name="android_version_unsatisfied">Android-Version passt nicht</string>
     <string name="crashed">Abgestürzt</string>
-    <string name="mount_failed">Montage fehlgeschlagen</string>
-    <string name="selinux_permissive">SELinux ist freizügig</string>
+    <string name="mount_failed">Mounten fehlgeschlagen</string>
+    <string name="selinux_permissive">SELinux ist permissiv</string>
     <string name="sepolicy_incorrect">SELinux-Richtlinie ist falsch</string>
-    <string name="update_lsposed">LSPosed aktualisieren</string>
+    <string name="update_lsposed">Bitte LSPosed aktualisieren</string>
     <string name="update_lsposed_msg">Soll LSPosed aktualisiert werden? Dieses Gerät wird nach dem Update neu gestartet</string>
     <!-- WelcomeDialog -->
     <string name="parasitic_welcome">Willkommen bei LSPosed</string>
     <string name="parasitic_welcome_summary">Sie verwenden den parasitären Manager, der eine Verknüpfung erstellen oder über eine Benachrichtigung noch geöffnet werden kann.</string>
+    <string name="parasitic_welcome_summary_no_shortcut_support">Sie verwenden den parasitären Manager, der von der Benachrichtigung geöffnet werden kann.</string>
     <string name="create_shortcut">Verknüpfung erstellen</string>
     <string name="never_show">Niemals anzeigen</string>
     <string name="app_welcome">Parasitärer Manager empfohlen</string>
@@ -188,10 +189,10 @@ JJ108</string>
     <string name="settings_group_system">System</string>
     <string name="settings_language">Sprache</string>
     <string name="settings_translation_contributors">Übersetzer</string>
-    <string name="settings_translation">An der Übersetzung beteiligen</string>
+    <string name="settings_translation">Beim Übersetzen mitmachen</string>
     <string name="settings_translation_summary">Helfen Sie uns, %s in Ihre Sprache zu übersetzen</string>
     <string name="settings_create_shortcut_summary">Eine Verknüpfung zum Öffnen des parasitären Managers erstellen</string>
-    <string name="settings_created_shortcut_summary">Eine Verknüpfung zum Öffnen des parasitären Managers wurde erzeugt</string>
+    <string name="settings_created_shortcut_summary">Eine Verknüpfung zum Öffnen des parasitären Managers wurde erstellt</string>
     <string name="settings_enable_status_notification">Status-Benachrichtigung</string>
     <string name="settings_enable_status_notification_summary">Eine Benachrichtigung anzeigen, die den parasitären Manager öffnen kann</string>
     <string name="disable_status_notification_error">Keine Verknüpfung, Benachrichtigung kann nicht deaktiviert werden</string>
@@ -234,15 +235,15 @@ JJ108</string>
     <string name="color_teal">Blaugrün</string>
     <string name="color_green">Grün</string>
     <string name="color_light_green">Hellgrün</string>
-    <string name="color_lime">Hellgrün</string>
+    <string name="color_lime">Limette</string>
     <string name="color_yellow">Gelb</string>
-    <string name="color_amber">Gelborange</string>
+    <string name="color_amber">Bernstein</string>
     <string name="color_orange">Orange</string>
     <string name="color_deep_orange">Dunkelorange</string>
     <string name="color_brown">Braun</string>
     <string name="color_blue_grey">Blaugrau</string>
     <plurals name="module_release_assets_download_count">
-        <item quantity="one">%d herunterladen</item>
+        <item quantity="one">%d Download</item>
         <item quantity="other">%d Downloads</item>
     </plurals>
 </resources>

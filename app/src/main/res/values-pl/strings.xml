@@ -68,6 +68,8 @@
     <string name="info_device">Urządzenie</string>
     <string name="info_system_abi">System ABI</string>
     <string name="info_dex2oat_wrapper">Optymalizator Dex Optimizer Wrapper</string>
+    <string name="enabled">Włączone</string>
+    <string name="not_enabled">Wyłączone</string>
     <string name="supported">Obsługiwana strona</string>
     <string name="unsupported">Nieobsługiwana strona</string>
     <string name="android_version_unsatisfied">Niezadowolenie z wersji na Androida</string>
@@ -79,6 +81,8 @@
     <string name="update_lsposed_msg">Czy chcesz zatwierdzić aktualizację LSPosed? Urządzenie zostanie uruchomione ponownie po zakończeniu aktualizacji</string>
     <!-- WelcomeDialog -->
     <string name="parasitic_welcome">Witamy w LSPosed</string>
+    <string name="parasitic_welcome_summary">Używasz menedżera pasożytów, który może utworzyć skrót na ekranie głównym lub nadal być otwieranym z powiadomienia.</string>
+    <string name="parasitic_welcome_summary_no_shortcut_support">Używasz menedżera pasożytów, który może być otwierany z powiadomienia.</string>
     <string name="create_shortcut">Utwórz skrót</string>
     <string name="never_show">Nigdy nie pokazuj</string>
     <string name="app_welcome">Rekomendowany menadżer Parasitic</string>

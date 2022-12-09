@@ -76,6 +76,7 @@
     <!-- WelcomeDialog -->
     <string name="parasitic_welcome">欢迎使用 LSPosed</string>
     <string name="parasitic_welcome_summary">你正在使用寄生管理器，可创建快捷方式或继续从通知中打开。</string>
+    <string name="parasitic_welcome_summary_no_shortcut_support">你正在使用寄生管理器，可以从通知打开它。</string>
     <string name="create_shortcut">创建快捷方式</string>
     <string name="never_show">不再显示</string>
     <string name="app_welcome">推荐使用寄生管理器</string>
@@ -188,7 +189,7 @@
     <string name="settings_translation">参与翻译</string>
     <string name="settings_translation_summary">帮助我们把 %s 翻译到你的语言</string>
     <string name="settings_create_shortcut_summary">创建一个能打开寄生管理器的快捷方式</string>
-    <string name="settings_created_shortcut_summary">已创建快捷方式以打开寄生管理器</string>
+    <string name="settings_created_shortcut_summary">已经创建了用于打开寄生管理器的快捷方式</string>
     <string name="settings_enable_status_notification">状态通知</string>
     <string name="settings_enable_status_notification_summary">显示一个通知以打开寄生管理器</string>
     <string name="disable_status_notification_error">没有快捷方式，无法禁用通知</string>

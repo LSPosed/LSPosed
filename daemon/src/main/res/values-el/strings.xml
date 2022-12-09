@@ -8,4 +8,8 @@
     <string name="xposed_module_updated_notification_content">%s ενημερώθηκε, παρακαλώ κλείστε εξαναγκαστικά και επανεκκινήστε τις εφαρμογές στο πεδίο εφαρμογής της</string>
     <string name="xposed_module_updated_notification_title_system">Το πρόσθετο Xposed ενημερώθηκε, απαιτείται επανεκκίνηση συστήματος</string>
     <string name="xposed_module_updated_notification_content_system">%s έχει ενημερωθεί, δεδομένου ότι το πεδίο εφαρμογής περιέχει Πλαίσιο Συστήματος, απαιτείται επανεκκίνηση για να εφαρμοστούν οι αλλαγές</string>
+    <string name="module_updated_channel_name">Η ενημέρωση πρόσθετου ολοκληρώθηκε</string>
+    <string name="status_channel_name">Κατάσταση LSPosed</string>
+    <string name="lsposed_running_notification_title">LSPosed φορτώθηκε</string>
+    <string name="lsposed_running_notification_content">Πατήστε την ειδοποίηση για άνοιγμα διαχειριστή</string>
 </resources>
