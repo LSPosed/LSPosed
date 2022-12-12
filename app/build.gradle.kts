@@ -90,7 +90,7 @@ android {
             }
         }
     }
-    namespace = "org.lsposed.manager"
+    namespace = defaultManagerPackageName
 }
 
 autoResConfig {

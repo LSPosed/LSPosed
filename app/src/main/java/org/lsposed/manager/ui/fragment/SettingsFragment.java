@@ -48,6 +48,7 @@ import org.lsposed.manager.databinding.FragmentSettingsBinding;
 import org.lsposed.manager.repo.RepoLoader;
 import org.lsposed.manager.ui.activity.MainActivity;
 import org.lsposed.manager.util.BackupUtils;
+import org.lsposed.manager.util.CloudflareDNS;
 import org.lsposed.manager.util.LangList;
 import org.lsposed.manager.util.NavUtil;
 import org.lsposed.manager.util.ShortcutUtil;
@@ -281,6 +282,22 @@ public class SettingsFragment extends BaseFragment {
                     if (activity != null) {
                         activity.restart();
                     }
+                    return true;
+                });
+            }
+
+            MaterialSwitchPreference prefDoH = findPreference("doh");
+            if (prefDoH != null) {
+                var dns = (CloudflareDNS) App.getOkHttpClient().dns();
+                if (!dns.noProxy) {
+                    prefDoH.setEnabled(false);
+                    prefDoH.setVisible(false);
+                    var group = prefDoH.getParent();
+                    assert group != null;
+                    group.setVisible(false);
+                }
+                prefDoH.setOnPreferenceChangeListener((p, v) -> {
+                    dns.DoH = (boolean) v;
                     return true;
                 });
             }
