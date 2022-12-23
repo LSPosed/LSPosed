@@ -365,8 +365,14 @@ public class ConfigFileManager {
         var moduleLibraryNames = new ArrayList<String>(1);
         try (var apkFile = new ZipFile(toGlobalNamespace(path))) {
             readDexes(apkFile, preLoadedDexes, obfuscate);
-            readName(apkFile, "assets/xposed_init", moduleClassNames);
-            readName(apkFile, "assets/native_init", moduleLibraryNames);
+            // TODO: we can store more info like api version, module description, etc. in META-INF
+            readName(apkFile, "META-INF/xposed/xposed_init", moduleClassNames);
+            if (moduleClassNames.isEmpty()) {
+                readName(apkFile, "assets/xposed_init", moduleClassNames);
+                readName(apkFile, "assets/native_init", moduleLibraryNames);
+            } else {
+                readName(apkFile, "META-INF/xposed/native_init", moduleLibraryNames);
+            }
         } catch (IOException e) {
             Log.e(TAG, "Can not open " + path, e);
             return null;
