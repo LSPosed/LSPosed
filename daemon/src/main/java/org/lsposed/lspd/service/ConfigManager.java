@@ -25,7 +25,9 @@ import static org.lsposed.lspd.service.ServiceManager.TAG;
 import static org.lsposed.lspd.service.ServiceManager.existsInGlobalNamespace;
 import static org.lsposed.lspd.service.ServiceManager.toGlobalNamespace;
 
+import android.app.ActivityThread;
 import android.content.ContentValues;
+import android.content.Context;
 import android.content.pm.ApplicationInfo;
 import android.content.pm.PackageInfo;
 import android.database.Cursor;
@@ -192,6 +194,8 @@ public class ConfigManager {
 
     public List<Module> getModulesForSystemServer() {
         List<Module> modules = new LinkedList<>();
+        Context context = ActivityThread.currentActivityThread().getSystemContext();
+        var pm = context.getPackageManager();
         try (Cursor cursor = db.query("scope INNER JOIN modules ON scope.mid = modules.mid", new String[]{"module_pkg_name", "apk_path"}, "app_pkg_name=? AND enabled=1", new String[]{"android"}, null, null, null)) {
             int apkPathIdx = cursor.getColumnIndex("apk_path");
             int pkgNameIdx = cursor.getColumnIndex("module_pkg_name");
@@ -199,7 +203,13 @@ public class ConfigManager {
                 var module = new Module();
                 module.apkPath = cursor.getString(apkPathIdx);
                 module.packageName = cursor.getString(pkgNameIdx);
-                module.appId = -1;
+                try {
+                    module.appId = Os.stat(toGlobalNamespace("/data/user_de/0/" + module.packageName).getAbsolutePath()).st_uid;
+                } catch (ErrnoException e) {
+                    Log.w(TAG, "cannot stat " + module.apkPath, e);
+                    module.appId = -1;
+                }
+                module.applicationInfo = pm.getPackageArchiveInfo(module.apkPath, 0).applicationInfo;
                 modules.add(module);
             }
         }
@@ -514,6 +524,7 @@ public class ConfigManager {
                     obsoletePaths.put(m.packageName, m.apkPath);
                 }
                 m.appId = pkgInfo.applicationInfo.uid;
+                m.applicationInfo = pkgInfo.applicationInfo;
                 return true;
             }).forEach(m -> {
                 var file = ConfigFileManager.loadModule(m.apkPath, dexObfuscate);
