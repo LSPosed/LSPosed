@@ -6,4 +6,5 @@ parcelable Module {
     int appId;
     String apkPath;
     PreLoadedApk file;
+    ApplicationInfo applicationInfo;
 }
