@@ -37,6 +37,7 @@ import java.util.Collections;
 import java.util.List;
 import java.util.Map;
 import java.util.concurrent.ConcurrentHashMap;
+import java.util.stream.Collectors;
 
 public class LSPApplicationService extends ILSPApplicationService.Stub {
     final static int DEX_TRANSACTION_CODE = 1310096052;
@@ -115,8 +116,7 @@ public class LSPApplicationService extends ILSPApplicationService.Stub {
         }
     }
 
-    @Override
-    public List<Module> getModulesList() throws RemoteException {
+    private List<Module> getAllModulesList() throws RemoteException {
         var processInfo = ensureRegistered();
         if (processInfo.uid == 1000 && processInfo.processName.equals("android")) {
             return ConfigManager.getInstance().getModulesForSystemServer();
@@ -124,6 +124,16 @@ public class LSPApplicationService extends ILSPApplicationService.Stub {
         if (ServiceManager.getManagerService().isRunningManager(processInfo.pid, processInfo.uid))
             return Collections.emptyList();
         return ConfigManager.getInstance().getModulesForProcess(processInfo.processName, processInfo.uid);
+    }
+
+    @Override
+    public List<Module> getLegacyModulesList() throws RemoteException {
+        return getAllModulesList().stream().filter(m -> !m.file.usingContext).collect(Collectors.toList());
+    }
+
+    @Override
+    public List<Module> getModulesList() throws RemoteException {
+        return getAllModulesList().stream().filter(m -> m.file.usingContext).collect(Collectors.toList());
     }
 
     @Override

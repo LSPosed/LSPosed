@@ -28,6 +28,7 @@ import android.content.res.CompatibilityInfo;
 import com.android.internal.os.ZygoteInit;
 
 import org.lsposed.lspd.deopt.PrebuiltMethodsDeopter;
+import org.lsposed.lspd.hooker.AttachHooker;
 import org.lsposed.lspd.hooker.CrashDumpHooker;
 import org.lsposed.lspd.hooker.HandleSystemServerProcessHooker;
 import org.lsposed.lspd.hooker.LoadedApkCtorHooker;
@@ -59,6 +60,8 @@ public class Startup {
                 ActivityThread.class, ApplicationInfo.class, CompatibilityInfo.class,
                 ClassLoader.class, boolean.class, boolean.class, boolean.class,
                 new LoadedApkCtorHooker());
+        XposedHelpers.findAndHookMethod(ActivityThread.class, "attach", boolean.class,
+                long.class, new AttachHooker());
     }
 
     public static void bootstrapXposed() {
