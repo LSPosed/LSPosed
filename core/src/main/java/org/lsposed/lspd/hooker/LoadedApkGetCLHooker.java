@@ -27,6 +27,7 @@ import android.app.AndroidAppHelper;
 import android.app.LoadedApk;
 import android.os.IBinder;
 
+import org.lsposed.lspd.impl.LSPosedContext;
 import org.lsposed.lspd.util.Hookers;
 import org.lsposed.lspd.util.MetaDataReader;
 import org.lsposed.lspd.util.Utils;
@@ -40,6 +41,7 @@ import de.robv.android.xposed.XC_MethodReplacement;
 import de.robv.android.xposed.XposedBridge;
 import de.robv.android.xposed.XposedHelpers;
 import de.robv.android.xposed.callbacks.XC_LoadPackage;
+import io.github.libxposed.XposedModuleInterface;
 
 public class LoadedApkGetCLHooker extends XC_MethodHook {
     private final LoadedApk loadedApk;
@@ -95,6 +97,13 @@ public class LoadedApkGetCLHooker extends XC_MethodHook {
             Hookers.logD("Call handleLoadedPackage: packageName=" + lpparam.packageName + " processName=" + lpparam.processName + " isFirstApplication=" + isFirstApplication + " classLoader=" + lpparam.classLoader + " appInfo=" + lpparam.appInfo);
             XC_LoadPackage.callAll(lpparam);
 
+            var plparam = new XposedModuleInterface.PackageLoadedParam();
+            plparam.packageName = packageName;
+            plparam.processName = processName;
+            plparam.classLoader = classLoader;
+            plparam.appInfo = loadedApk.getApplicationInfo();
+            plparam.isFirstApplication = isFirstApplication;
+            LSPosedContext.callOnPackageLoaded(plparam, null);
         } catch (Throwable t) {
             Hookers.logE("error when hooking LoadedApk#getClassLoader", t);
         } finally {

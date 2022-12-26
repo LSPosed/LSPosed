@@ -39,6 +39,7 @@ import android.os.IBinder;
 import android.os.Process;
 import android.util.Log;
 
+import org.lsposed.lspd.impl.LSPosedContext;
 import org.lsposed.lspd.models.PreLoadedApk;
 import org.lsposed.lspd.nativebridge.NativeAPI;
 import org.lsposed.lspd.nativebridge.ResourcesHook;
@@ -57,6 +58,9 @@ import java.util.concurrent.atomic.AtomicBoolean;
 import de.robv.android.xposed.callbacks.XC_InitPackageResources;
 import de.robv.android.xposed.callbacks.XCallback;
 import hidden.HiddenApiBridge;
+import io.github.libxposed.XposedInterface;
+import io.github.libxposed.XposedModuleInterface;
+import io.github.libxposed.XposedResource;
 
 public final class XposedInit {
     private static final String TAG = XposedBridge.TAG;
@@ -196,7 +200,7 @@ public final class XposedInit {
         }
 
         // Replace the returned resources with our subclass.
-        XResources newRes = new XResources(
+        var newRes = new XposedResource(
                 (ClassLoader) XposedHelpers.getObjectField(param.getResult(), "mClassLoader"));
         HiddenApiBridge.Resources_setImpl(newRes, (ResourcesImpl) XposedHelpers.getObjectField(param.getResult(), "mResourcesImpl"));
         newRes.initObject(resDir);
@@ -208,6 +212,11 @@ public final class XposedInit {
             resparam.packageName = packageName;
             resparam.res = newRes;
             XCallback.callAll(resparam);
+
+            var rlparam = new XposedModuleInterface.ResourceLoadedParam();
+            rlparam.packageName = packageName;
+            rlparam.res = newRes;
+            LSPosedContext.callOnResourceLoaded(rlparam, null);
         }
 
         param.setResult(newRes);
