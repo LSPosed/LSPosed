@@ -221,7 +221,7 @@ public final class XposedInit {
     }
 
     public static void loadModules() {
-        var moduleList = serviceClient.getModulesList();
+        var moduleList = serviceClient.getLegacyModulesList();
         moduleList.forEach(module -> {
             var apk = module.apkPath;
             var name = module.packageName;
@@ -286,7 +286,7 @@ public final class XposedInit {
      * in <code>assets/xposed_init</code>.
      */
     private static boolean loadModule(String name, String apk, PreLoadedApk file) {
-        Log.i(TAG, "Loading module " + name + " from " + apk);
+        Log.i(TAG, "Loading legacy module " + name + " from " + apk);
 
         var sb = new StringBuilder();
         var abis = Process.is64Bit() ? Build.SUPPORTED_64_BIT_ABIS : Build.SUPPORTED_32_BIT_ABIS;

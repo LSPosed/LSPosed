@@ -40,6 +40,9 @@ public class LoadedApkCtorHooker extends XC_MethodHook {
         try {
             LoadedApk loadedApk = (LoadedApk) param.thisObject;
             String packageName = loadedApk.getPackageName();
+            if (XposedInit.getLoadedModules().contains(packageName)) {
+                return;
+            }
             Object mAppDir = XposedHelpers.getObjectField(loadedApk, "mAppDir");
             Hookers.logD("LoadedApk#<init> ends: " + mAppDir);
 

@@ -4,4 +4,5 @@ parcelable PreLoadedApk {
     List<SharedMemory> preLoadedDexes;
     List<String> moduleClassNames;
     List<String> moduleLibraryNames;
+    boolean usingContext;
 }

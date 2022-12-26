@@ -67,6 +67,15 @@ public class ApplicationServiceClient implements ILSPApplicationService, IBinder
     }
 
     @Override
+    public List<Module> getLegacyModulesList() {
+        try {
+            return service.getLegacyModulesList();
+        } catch (RemoteException | NullPointerException ignored) {
+        }
+        return Collections.emptyList();
+    }
+
+    @Override
     public List<Module> getModulesList() {
         try {
             return service.getModulesList();
