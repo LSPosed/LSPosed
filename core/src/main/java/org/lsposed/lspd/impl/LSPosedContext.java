@@ -43,6 +43,8 @@ import java.io.FileNotFoundException;
 import java.io.FileOutputStream;
 import java.io.IOException;
 import java.io.InputStream;
+import java.util.Set;
+import java.util.concurrent.ConcurrentHashMap;
 
 import de.robv.android.xposed.XposedHelpers;
 import de.robv.android.xposed.XposedInit;
@@ -54,10 +56,34 @@ public class LSPosedContext extends XposedContext {
 
     public static final String TAG = "LSPosedContext";
 
-    private final Context base;
+    static final Set<XposedModule> modules = ConcurrentHashMap.newKeySet();
 
-    LSPosedContext(Context base) {
+    private final Context base;
+    private final String packageName;
+
+    LSPosedContext(Context base, String packageName) {
         this.base = base;
+        this.packageName = packageName;
+    }
+
+    public static void callOnPackageLoaded(XposedModuleInterface.PackageLoadedParam param, Bundle extra) {
+        for (XposedModule module : modules) {
+            try {
+                module.onPackageLoaded(param, extra);
+            } catch (Throwable t) {
+                Log.e(TAG, "Error when calling onPackageLoaded of " + ((LSPosedContext) module.getBaseContext()).packageName, t);
+            }
+        }
+    }
+
+    public static void callOnResourceLoaded(XposedModuleInterface.ResourceLoadedParam param, Bundle extra) {
+        for (XposedModule module : modules) {
+            try {
+                module.onResourceLoaded(param, extra);
+            } catch (Throwable t) {
+                Log.e(TAG, "Error when calling onResourceLoaded of " + ((LSPosedContext) module.getBaseContext()).packageName, t);
+            }
+        }
     }
 
     public static boolean loadModules(ActivityThread at, Module module) {
@@ -104,7 +130,7 @@ public class LSPosedContext extends XposedContext {
                 }
                 args[i] = null;
             }
-            var ctx = new LSPosedContext((Context) ctor.newInstance(args));
+            var ctx = new LSPosedContext((Context) ctor.newInstance(args), module.packageName);
             for (var entry : module.file.moduleClassNames) {
                 var moduleClass = ctx.getClassLoader().loadClass(entry);
                 Log.d(TAG, "  Loading class " + moduleClass);
@@ -112,11 +138,12 @@ public class LSPosedContext extends XposedContext {
                     Log.e(TAG, "    This class doesn't implement any sub-interface of XposedModule, skipping it");
                 }
                 try {
-                    if (moduleClass.getMethod("onResourceLoaded").getDeclaringClass() != XposedModuleInterface.class) {
+                    if (moduleClass.getMethod("onResourceLoaded", XposedModuleInterface.ResourceLoadedParam.class, Bundle.class).getDeclaringClass() != XposedModuleInterface.class) {
                         XposedInit.hookResources();
                     }
                     var moduleEntry = moduleClass.getConstructor(XposedContext.class);
-                    moduleEntry.newInstance(ctx);
+                    var moduleContext = (XposedModule) moduleEntry.newInstance(ctx);
+                    modules.add(moduleContext);
                 } catch (Throwable e) {
                     Log.e(TAG, "    Failed to load class " + moduleClass, e);
                 }
@@ -656,5 +683,15 @@ public class LSPosedContext extends XposedContext {
     @Override
     public void hook() {
         throw new UnsupportedOperationException("Not implemented");
+    }
+
+    @Override
+    public void log(String message) {
+        Log.i(TAG, packageName + ": " + message);
+    }
+
+    @Override
+    public void log(String message, Throwable throwable) {
+        Log.e(TAG, packageName + ": " + message, throwable);
     }
 }

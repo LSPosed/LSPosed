@@ -10,13 +10,23 @@ public class XposedContextWrapper extends ContextWrapper implements XposedInterf
     }
 
     @Override
-    public XposedContext getBaseContext() {
+    final public XposedContext getBaseContext() {
         return (XposedContext) super.getBaseContext();
     }
 
     @Override
-    public void hook() {
+    final public void hook() {
         getBaseContext().hook();
+    }
+
+    @Override
+    final public void log(String message) {
+        getBaseContext().log(message);
+    }
+
+    @Override
+    final public void log(String message, Throwable throwable) {
+        getBaseContext().log(message, throwable);
     }
 
     @Override
