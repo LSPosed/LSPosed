@@ -5,7 +5,11 @@ import android.content.ContextWrapper;
 
 public class XposedContextWrapper extends ContextWrapper implements XposedInterface {
 
-    public XposedContextWrapper(XposedContext base) {
+    XposedContextWrapper(XposedContext base) {
+        super(base);
+    }
+
+    public XposedContextWrapper(XposedContextWrapper base) {
         super(base);
     }
 
@@ -31,7 +35,7 @@ public class XposedContextWrapper extends ContextWrapper implements XposedInterf
 
     @Override
     final protected void attachBaseContext(Context base) {
-        if (base instanceof XposedContext) {
+        if (base instanceof XposedContext || base instanceof XposedContextWrapper) {
             super.attachBaseContext(base);
         } else {
             throw new IllegalArgumentException();
