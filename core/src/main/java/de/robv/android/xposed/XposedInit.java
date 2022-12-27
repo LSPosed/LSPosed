@@ -58,9 +58,7 @@ import java.util.concurrent.atomic.AtomicBoolean;
 import de.robv.android.xposed.callbacks.XC_InitPackageResources;
 import de.robv.android.xposed.callbacks.XCallback;
 import hidden.HiddenApiBridge;
-import io.github.libxposed.XposedInterface;
 import io.github.libxposed.XposedModuleInterface;
-import io.github.libxposed.XposedResource;
 
 public final class XposedInit {
     private static final String TAG = XposedBridge.TAG;
@@ -200,7 +198,7 @@ public final class XposedInit {
         }
 
         // Replace the returned resources with our subclass.
-        var newRes = new XposedResource(
+        var newRes = new XResources(
                 (ClassLoader) XposedHelpers.getObjectField(param.getResult(), "mClassLoader"));
         HiddenApiBridge.Resources_setImpl(newRes, (ResourcesImpl) XposedHelpers.getObjectField(param.getResult(), "mResourcesImpl"));
         newRes.initObject(resDir);

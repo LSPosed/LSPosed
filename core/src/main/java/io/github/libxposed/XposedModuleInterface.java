@@ -18,7 +18,7 @@ public interface XposedModuleInterface {
 
     class ResourceLoadedParam {
         public String packageName;
-        public XposedResource res;
+        public XposedResources res;
     }
 
     default void onPackageLoaded(@NonNull PackageLoadedParam param, @Nullable Bundle extra) {
