@@ -168,7 +168,7 @@ public class LSPosedContext extends XposedContext {
 
     @Override
     public PackageManager getPackageManager() {
-        throw new UnsupportedOperationException("Not implemented");
+        return base.getPackageManager();
     }
 
     @Override
@@ -178,12 +178,12 @@ public class LSPosedContext extends XposedContext {
 
     @Override
     public Looper getMainLooper() {
-        throw new UnsupportedOperationException("Not implemented");
+        return base.getMainLooper();
     }
 
     @Override
     public Context getApplicationContext() {
-        throw new UnsupportedOperationException("Not implemented");
+        return base.getApplicationContext();
     }
 
     @Override
@@ -198,17 +198,17 @@ public class LSPosedContext extends XposedContext {
 
     @Override
     public ClassLoader getClassLoader() {
-        throw new UnsupportedOperationException("Not implemented");
+        return base.getClassLoader();
     }
 
     @Override
     public String getPackageName() {
-        throw new UnsupportedOperationException("Not implemented");
+        return base.getPackageName();
     }
 
     @Override
     public ApplicationInfo getApplicationInfo() {
-        throw new UnsupportedOperationException("Not implemented");
+        return base.getApplicationInfo();
     }
 
     @Override
@@ -218,7 +218,7 @@ public class LSPosedContext extends XposedContext {
 
     @Override
     public String getPackageCodePath() {
-        throw new UnsupportedOperationException("Not implemented");
+        return base.getPackageCodePath();
     }
 
     @Override
@@ -551,7 +551,7 @@ public class LSPosedContext extends XposedContext {
 
     @Override
     public Object getSystemService(@NonNull String name) {
-        throw new UnsupportedOperationException("Not implemented");
+        return base.getSystemService(name);
     }
 
     @Nullable
