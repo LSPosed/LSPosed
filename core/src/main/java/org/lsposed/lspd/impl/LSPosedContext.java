@@ -158,12 +158,12 @@ public class LSPosedContext extends XposedContext {
 
     @Override
     public AssetManager getAssets() {
-        throw new UnsupportedOperationException("Not implemented");
+        throw new AbstractMethodError();
     }
 
     @Override
     public Resources getResources() {
-        throw new UnsupportedOperationException("Not implemented");
+        throw new AbstractMethodError();
     }
 
     @Override
@@ -173,7 +173,7 @@ public class LSPosedContext extends XposedContext {
 
     @Override
     public ContentResolver getContentResolver() {
-        throw new UnsupportedOperationException("Not implemented");
+        throw new AbstractMethodError();
     }
 
     @Override
@@ -183,17 +183,17 @@ public class LSPosedContext extends XposedContext {
 
     @Override
     public Context getApplicationContext() {
-        return base.getApplicationContext();
+        throw new AbstractMethodError();
     }
 
     @Override
     public void setTheme(int resid) {
-        throw new UnsupportedOperationException("Not implemented");
+        throw new AbstractMethodError();
     }
 
     @Override
     public Resources.Theme getTheme() {
-        throw new UnsupportedOperationException("Not implemented");
+        throw new AbstractMethodError();
     }
 
     @Override
@@ -213,7 +213,7 @@ public class LSPosedContext extends XposedContext {
 
     @Override
     public String getPackageResourcePath() {
-        throw new UnsupportedOperationException("Not implemented");
+        throw new AbstractMethodError();
     }
 
     @Override
@@ -223,330 +223,330 @@ public class LSPosedContext extends XposedContext {
 
     @Override
     public SharedPreferences getSharedPreferences(String name, int mode) {
-        throw new UnsupportedOperationException("Not implemented");
+        throw new AbstractMethodError();
     }
 
     @Override
     public boolean moveSharedPreferencesFrom(Context sourceContext, String name) {
-        throw new UnsupportedOperationException("Not implemented");
+        throw new AbstractMethodError();
     }
 
     @Override
     public boolean deleteSharedPreferences(String name) {
-        throw new UnsupportedOperationException("Not implemented");
+        throw new AbstractMethodError();
     }
 
     @Override
     public FileInputStream openFileInput(String name) throws FileNotFoundException {
-        throw new UnsupportedOperationException("Not implemented");
+        throw new AbstractMethodError();
     }
 
     @Override
     public FileOutputStream openFileOutput(String name, int mode) throws FileNotFoundException {
-        throw new UnsupportedOperationException("Not implemented");
+        throw new AbstractMethodError();
     }
 
     @Override
     public boolean deleteFile(String name) {
-        throw new UnsupportedOperationException("Not implemented");
+        throw new AbstractMethodError();
     }
 
     @Override
     public File getFileStreamPath(String name) {
-        throw new UnsupportedOperationException("Not implemented");
+        throw new AbstractMethodError();
     }
 
     @Override
     public File getDataDir() {
-        throw new UnsupportedOperationException("Not implemented");
+        throw new AbstractMethodError();
     }
 
     @Override
     public File getFilesDir() {
-        throw new UnsupportedOperationException("Not implemented");
+        throw new AbstractMethodError();
     }
 
     @Override
     public File getNoBackupFilesDir() {
-        throw new UnsupportedOperationException("Not implemented");
+        throw new AbstractMethodError();
     }
 
     @Nullable
     @Override
     public File getExternalFilesDir(@Nullable String type) {
-        throw new UnsupportedOperationException("Not implemented");
+        throw new AbstractMethodError();
     }
 
     @Override
     public File[] getExternalFilesDirs(String type) {
-        throw new UnsupportedOperationException("Not implemented");
+        throw new AbstractMethodError();
     }
 
     @Override
     public File getObbDir() {
-        throw new UnsupportedOperationException("Not implemented");
+        throw new AbstractMethodError();
     }
 
     @Override
     public File[] getObbDirs() {
-        throw new UnsupportedOperationException("Not implemented");
+        throw new AbstractMethodError();
     }
 
     @Override
     public File getCacheDir() {
-        throw new UnsupportedOperationException("Not implemented");
+        throw new AbstractMethodError();
     }
 
     @Override
     public File getCodeCacheDir() {
-        throw new UnsupportedOperationException("Not implemented");
+        throw new AbstractMethodError();
     }
 
     @Nullable
     @Override
     public File getExternalCacheDir() {
-        throw new UnsupportedOperationException("Not implemented");
+        throw new AbstractMethodError();
     }
 
     @Override
     public File[] getExternalCacheDirs() {
-        throw new UnsupportedOperationException("Not implemented");
+        throw new AbstractMethodError();
     }
 
     @Override
     public File[] getExternalMediaDirs() {
-        throw new UnsupportedOperationException("Not implemented");
+        throw new AbstractMethodError();
     }
 
     @Override
     public String[] fileList() {
-        throw new UnsupportedOperationException("Not implemented");
+        throw new AbstractMethodError();
     }
 
     @Override
     public File getDir(String name, int mode) {
-        throw new UnsupportedOperationException("Not implemented");
+        throw new AbstractMethodError();
     }
 
     @Override
     public SQLiteDatabase openOrCreateDatabase(String name, int mode, SQLiteDatabase.CursorFactory factory) {
-        throw new UnsupportedOperationException("Not implemented");
+        throw new AbstractMethodError();
     }
 
     @Override
     public SQLiteDatabase openOrCreateDatabase(String name, int mode, SQLiteDatabase.CursorFactory factory, @Nullable DatabaseErrorHandler errorHandler) {
-        throw new UnsupportedOperationException("Not implemented");
+        throw new AbstractMethodError();
     }
 
     @Override
     public boolean moveDatabaseFrom(Context sourceContext, String name) {
-        throw new UnsupportedOperationException("Not implemented");
+        throw new AbstractMethodError();
     }
 
     @Override
     public boolean deleteDatabase(String name) {
-        throw new UnsupportedOperationException("Not implemented");
+        throw new AbstractMethodError();
     }
 
     @Override
     public File getDatabasePath(String name) {
-        throw new UnsupportedOperationException("Not implemented");
+        throw new AbstractMethodError();
     }
 
     @Override
     public String[] databaseList() {
-        throw new UnsupportedOperationException("Not implemented");
+        throw new AbstractMethodError();
     }
 
     @Override
     public Drawable getWallpaper() {
-        throw new UnsupportedOperationException("Not implemented");
+        throw new AbstractMethodError();
     }
 
     @Override
     public Drawable peekWallpaper() {
-        throw new UnsupportedOperationException("Not implemented");
+        throw new AbstractMethodError();
     }
 
     @Override
     public int getWallpaperDesiredMinimumWidth() {
-        throw new UnsupportedOperationException("Not implemented");
+        throw new AbstractMethodError();
     }
 
     @Override
     public int getWallpaperDesiredMinimumHeight() {
-        throw new UnsupportedOperationException("Not implemented");
+        throw new AbstractMethodError();
     }
 
     @Override
     public void setWallpaper(Bitmap bitmap) throws IOException {
-        throw new UnsupportedOperationException("Not implemented");
+        throw new AbstractMethodError();
     }
 
     @Override
     public void setWallpaper(InputStream data) throws IOException {
-        throw new UnsupportedOperationException("Not implemented");
+        throw new AbstractMethodError();
     }
 
     @Override
     public void clearWallpaper() throws IOException {
-        throw new UnsupportedOperationException("Not implemented");
+        throw new AbstractMethodError();
     }
 
     @Override
     public void startActivity(Intent intent) {
-        throw new UnsupportedOperationException("Not implemented");
+        throw new AbstractMethodError();
     }
 
     @Override
     public void startActivity(Intent intent, @Nullable Bundle options) {
-        throw new UnsupportedOperationException("Not implemented");
+        throw new AbstractMethodError();
     }
 
     @Override
     public void startActivities(Intent[] intents) {
-        throw new UnsupportedOperationException("Not implemented");
+        throw new AbstractMethodError();
     }
 
     @Override
     public void startActivities(Intent[] intents, Bundle options) {
-        throw new UnsupportedOperationException("Not implemented");
+        throw new AbstractMethodError();
     }
 
     @Override
     public void startIntentSender(IntentSender intent, @Nullable Intent fillInIntent, int flagsMask, int flagsValues, int extraFlags) throws IntentSender.SendIntentException {
-        throw new UnsupportedOperationException("Not implemented");
+        throw new AbstractMethodError();
     }
 
     @Override
     public void startIntentSender(IntentSender intent, @Nullable Intent fillInIntent, int flagsMask, int flagsValues, int extraFlags, @Nullable Bundle options) throws IntentSender.SendIntentException {
-        throw new UnsupportedOperationException("Not implemented");
+        throw new AbstractMethodError();
     }
 
     @Override
     public void sendBroadcast(Intent intent) {
-        throw new UnsupportedOperationException("Not implemented");
+        throw new AbstractMethodError();
     }
 
     @Override
     public void sendBroadcast(Intent intent, @Nullable String receiverPermission) {
-        throw new UnsupportedOperationException("Not implemented");
+        throw new AbstractMethodError();
     }
 
     @Override
     public void sendOrderedBroadcast(Intent intent, @Nullable String receiverPermission) {
-        throw new UnsupportedOperationException("Not implemented");
+        throw new AbstractMethodError();
     }
 
     @Override
     public void sendOrderedBroadcast(@NonNull Intent intent, @Nullable String receiverPermission, @Nullable BroadcastReceiver resultReceiver, @Nullable Handler scheduler, int initialCode, @Nullable String initialData, @Nullable Bundle initialExtras) {
-        throw new UnsupportedOperationException("Not implemented");
+        throw new AbstractMethodError();
     }
 
     @Override
     public void sendBroadcastAsUser(Intent intent, UserHandle user) {
-        throw new UnsupportedOperationException("Not implemented");
+        throw new AbstractMethodError();
     }
 
     @Override
     public void sendBroadcastAsUser(Intent intent, UserHandle user, @Nullable String receiverPermission) {
-        throw new UnsupportedOperationException("Not implemented");
+        throw new AbstractMethodError();
     }
 
     @Override
     public void sendOrderedBroadcastAsUser(Intent intent, UserHandle user, @Nullable String receiverPermission, BroadcastReceiver resultReceiver, @Nullable Handler scheduler, int initialCode, @Nullable String initialData, @Nullable Bundle initialExtras) {
-        throw new UnsupportedOperationException("Not implemented");
+        throw new AbstractMethodError();
     }
 
     @Override
     public void sendStickyBroadcast(Intent intent) {
-        throw new UnsupportedOperationException("Not implemented");
+        throw new AbstractMethodError();
     }
 
     @Override
     public void sendStickyOrderedBroadcast(Intent intent, BroadcastReceiver resultReceiver, @Nullable Handler scheduler, int initialCode, @Nullable String initialData, @Nullable Bundle initialExtras) {
-        throw new UnsupportedOperationException("Not implemented");
+        throw new AbstractMethodError();
     }
 
     @Override
     public void removeStickyBroadcast(Intent intent) {
-        throw new UnsupportedOperationException("Not implemented");
+        throw new AbstractMethodError();
     }
 
     @Override
     public void sendStickyBroadcastAsUser(Intent intent, UserHandle user) {
-        throw new UnsupportedOperationException("Not implemented");
+        throw new AbstractMethodError();
     }
 
     @Override
     public void sendStickyOrderedBroadcastAsUser(Intent intent, UserHandle user, BroadcastReceiver resultReceiver, @Nullable Handler scheduler, int initialCode, @Nullable String initialData, @Nullable Bundle initialExtras) {
-        throw new UnsupportedOperationException("Not implemented");
+        throw new AbstractMethodError();
     }
 
     @Override
     public void removeStickyBroadcastAsUser(Intent intent, UserHandle user) {
-        throw new UnsupportedOperationException("Not implemented");
+        throw new AbstractMethodError();
     }
 
     @Nullable
     @Override
     public Intent registerReceiver(@Nullable BroadcastReceiver receiver, IntentFilter filter) {
-        throw new UnsupportedOperationException("Not implemented");
+        throw new AbstractMethodError();
     }
 
     @Nullable
     @Override
     public Intent registerReceiver(@Nullable BroadcastReceiver receiver, IntentFilter filter, int flags) {
-        throw new UnsupportedOperationException("Not implemented");
+        throw new AbstractMethodError();
     }
 
     @Nullable
     @Override
     public Intent registerReceiver(BroadcastReceiver receiver, IntentFilter filter, @Nullable String broadcastPermission, @Nullable Handler scheduler) {
-        throw new UnsupportedOperationException("Not implemented");
+        throw new AbstractMethodError();
     }
 
     @Nullable
     @Override
     public Intent registerReceiver(BroadcastReceiver receiver, IntentFilter filter, @Nullable String broadcastPermission, @Nullable Handler scheduler, int flags) {
-        throw new UnsupportedOperationException("Not implemented");
+        throw new AbstractMethodError();
     }
 
     @Override
     public void unregisterReceiver(BroadcastReceiver receiver) {
-        throw new UnsupportedOperationException("Not implemented");
+        throw new AbstractMethodError();
     }
 
     @Nullable
     @Override
     public ComponentName startService(Intent service) {
-        throw new UnsupportedOperationException("Not implemented");
+        throw new AbstractMethodError();
     }
 
     @Nullable
     @Override
     public ComponentName startForegroundService(Intent service) {
-        throw new UnsupportedOperationException("Not implemented");
+        throw new AbstractMethodError();
     }
 
     @Override
     public boolean stopService(Intent service) {
-        throw new UnsupportedOperationException("Not implemented");
+        throw new AbstractMethodError();
     }
 
     @Override
     public boolean bindService(Intent service, @NonNull ServiceConnection conn, int flags) {
-        throw new UnsupportedOperationException("Not implemented");
+        throw new AbstractMethodError();
     }
 
     @Override
     public void unbindService(@NonNull ServiceConnection conn) {
-        throw new UnsupportedOperationException("Not implemented");
+        throw new AbstractMethodError();
     }
 
     @Override
     public boolean startInstrumentation(@NonNull ComponentName className, @Nullable String profileFile, @Nullable Bundle arguments) {
-        throw new UnsupportedOperationException("Not implemented");
+        throw new AbstractMethodError();
     }
 
     @Override
@@ -557,132 +557,132 @@ public class LSPosedContext extends XposedContext {
     @Nullable
     @Override
     public String getSystemServiceName(@NonNull Class<?> serviceClass) {
-        throw new UnsupportedOperationException("Not implemented");
+        throw new AbstractMethodError();
     }
 
     @Override
     public int checkPermission(@NonNull String permission, int pid, int uid) {
-        throw new UnsupportedOperationException("Not implemented");
+        throw new AbstractMethodError();
     }
 
     @Override
     public int checkCallingPermission(@NonNull String permission) {
-        throw new UnsupportedOperationException("Not implemented");
+        throw new AbstractMethodError();
     }
 
     @Override
     public int checkCallingOrSelfPermission(@NonNull String permission) {
-        throw new UnsupportedOperationException("Not implemented");
+        throw new AbstractMethodError();
     }
 
     @Override
     public int checkSelfPermission(@NonNull String permission) {
-        throw new UnsupportedOperationException("Not implemented");
+        throw new AbstractMethodError();
     }
 
     @Override
     public void enforcePermission(@NonNull String permission, int pid, int uid, @Nullable String message) {
-        throw new UnsupportedOperationException("Not implemented");
+        throw new AbstractMethodError();
     }
 
     @Override
     public void enforceCallingPermission(@NonNull String permission, @Nullable String message) {
-        throw new UnsupportedOperationException("Not implemented");
+        throw new AbstractMethodError();
     }
 
     @Override
     public void enforceCallingOrSelfPermission(@NonNull String permission, @Nullable String message) {
-        throw new UnsupportedOperationException("Not implemented");
+        throw new AbstractMethodError();
     }
 
     @Override
     public void grantUriPermission(String toPackage, Uri uri, int modeFlags) {
-        throw new UnsupportedOperationException("Not implemented");
+        throw new AbstractMethodError();
     }
 
     @Override
     public void revokeUriPermission(Uri uri, int modeFlags) {
-        throw new UnsupportedOperationException("Not implemented");
+        throw new AbstractMethodError();
     }
 
     @Override
     public void revokeUriPermission(String toPackage, Uri uri, int modeFlags) {
-        throw new UnsupportedOperationException("Not implemented");
+        throw new AbstractMethodError();
     }
 
     @Override
     public int checkUriPermission(Uri uri, int pid, int uid, int modeFlags) {
-        throw new UnsupportedOperationException("Not implemented");
+        throw new AbstractMethodError();
     }
 
     @Override
     public int checkCallingUriPermission(Uri uri, int modeFlags) {
-        throw new UnsupportedOperationException("Not implemented");
+        throw new AbstractMethodError();
     }
 
     @Override
     public int checkCallingOrSelfUriPermission(Uri uri, int modeFlags) {
-        throw new UnsupportedOperationException("Not implemented");
+        throw new AbstractMethodError();
     }
 
     @Override
     public int checkUriPermission(@Nullable Uri uri, @Nullable String readPermission, @Nullable String writePermission, int pid, int uid, int modeFlags) {
-        throw new UnsupportedOperationException("Not implemented");
+        throw new AbstractMethodError();
     }
 
     @Override
     public void enforceUriPermission(Uri uri, int pid, int uid, int modeFlags, String message) {
-        throw new UnsupportedOperationException("Not implemented");
+        throw new AbstractMethodError();
     }
 
     @Override
     public void enforceCallingUriPermission(Uri uri, int modeFlags, String message) {
-        throw new UnsupportedOperationException("Not implemented");
+        throw new AbstractMethodError();
     }
 
     @Override
     public void enforceCallingOrSelfUriPermission(Uri uri, int modeFlags, String message) {
-        throw new UnsupportedOperationException("Not implemented");
+        throw new AbstractMethodError();
     }
 
     @Override
     public void enforceUriPermission(@Nullable Uri uri, @Nullable String readPermission, @Nullable String writePermission, int pid, int uid, int modeFlags, @Nullable String message) {
-        throw new UnsupportedOperationException("Not implemented");
+        throw new AbstractMethodError();
     }
 
     @Override
     public Context createPackageContext(String packageName, int flags) throws PackageManager.NameNotFoundException {
-        throw new UnsupportedOperationException("Not implemented");
+        throw new AbstractMethodError();
     }
 
     @Override
     public Context createContextForSplit(String splitName) throws PackageManager.NameNotFoundException {
-        throw new UnsupportedOperationException("Not implemented");
+        throw new AbstractMethodError();
     }
 
     @Override
     public Context createConfigurationContext(@NonNull Configuration overrideConfiguration) {
-        throw new UnsupportedOperationException("Not implemented");
+        throw new AbstractMethodError();
     }
 
     @Override
     public Context createDisplayContext(@NonNull Display display) {
-        throw new UnsupportedOperationException("Not implemented");
+        throw new AbstractMethodError();
     }
 
     @Override
     public Context createDeviceProtectedStorageContext() {
-        throw new UnsupportedOperationException("Not implemented");
+        throw new AbstractMethodError();
     }
 
     @Override
     public boolean isDeviceProtectedStorage() {
-        throw new UnsupportedOperationException("Not implemented");
+        throw new AbstractMethodError();
     }
 
     @Override
     public void hook() {
-        throw new UnsupportedOperationException("Not implemented");
+        throw new AbstractMethodError();
     }
 
     @Override
