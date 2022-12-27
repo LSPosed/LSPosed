@@ -13,7 +13,7 @@ public class AttachHooker extends XC_MethodHook {
     @Override
     protected void afterHookedMethod(MethodHookParam param) throws Throwable {
         serviceClient.getModulesList().forEach(module -> {
-            if (LSPosedContext.loadModules((ActivityThread) param.thisObject, module)) {
+            if (LSPosedContext.loadModule((ActivityThread) param.thisObject, module)) {
                 XposedInit.getLoadedModules().add(module.packageName);
             }
         });

@@ -86,7 +86,7 @@ public class LSPosedContext extends XposedContext {
         }
     }
 
-    public static boolean loadModules(ActivityThread at, Module module) {
+    public static boolean loadModule(ActivityThread at, Module module) {
         try {
             Log.d(TAG, "Loading module " + module.packageName);
             var sb = new StringBuilder();
