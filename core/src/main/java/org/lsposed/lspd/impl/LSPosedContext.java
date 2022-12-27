@@ -59,14 +59,16 @@ public class LSPosedContext extends XposedContext {
 
     static final Set<XposedModule> modules = ConcurrentHashMap.newKeySet();
 
+    private final Object mSync = new Object();
+
     private final Context mBase;
     private final String mPackageName;
-    private final Object mSync = new Object();
-    private Resources mResources;
+    private final String mApkPath;
 
-    LSPosedContext(Context base, String packageName) {
+    LSPosedContext(Context base, String packageName, String apkPath) {
         this.mBase = base;
         this.mPackageName = packageName;
+        this.mApkPath = apkPath;
     }
 
     public static void callOnPackageLoaded(XposedModuleInterface.PackageLoadedParam param, Bundle extra) {
@@ -133,7 +135,7 @@ public class LSPosedContext extends XposedContext {
                 }
                 args[i] = null;
             }
-            var ctx = new LSPosedContext((Context) ctor.newInstance(args), module.packageName);
+            var ctx = new LSPosedContext((Context) ctor.newInstance(args), module.packageName, module.apkPath);
             for (var entry : module.file.moduleClassNames) {
                 var moduleClass = ctx.getClassLoader().loadClass(entry);
                 Log.d(TAG, "  Loading class " + moduleClass);
@@ -161,16 +163,18 @@ public class LSPosedContext extends XposedContext {
 
     @Override
     public AssetManager getAssets() {
-        throw new AbstractMethodError();
+        return getResources().getAssets();
     }
 
     @Override
     public Resources getResources() {
         synchronized (mSync) {
-            if (mResources == null) {
-                mResources = XModuleResources.createInstance(mBase.getPackageCodePath(), null);
+            var res = mBase.getResources();
+            if (res == null) {
+                res = XModuleResources.createInstance(mBase.getPackageCodePath(), null);
+                XposedHelpers.setObjectField(mBase, "mResources", res);
             }
-            return mResources;
+            return res;
         }
     }
 
@@ -196,12 +200,12 @@ public class LSPosedContext extends XposedContext {
 
     @Override
     public void setTheme(int resid) {
-        throw new AbstractMethodError();
+        mBase.setTheme(resid);
     }
 
     @Override
     public Resources.Theme getTheme() {
-        throw new AbstractMethodError();
+        return mBase.getTheme();
     }
 
     @Override
@@ -221,12 +225,12 @@ public class LSPosedContext extends XposedContext {
 
     @Override
     public String getPackageResourcePath() {
-        throw new AbstractMethodError();
+        return mApkPath;
     }
 
     @Override
     public String getPackageCodePath() {
-        return mBase.getPackageCodePath();
+        return mApkPath;
     }
 
     @Override
