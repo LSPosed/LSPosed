@@ -17,6 +17,7 @@ import android.content.pm.PackageManager;
 import android.content.res.AssetManager;
 import android.content.res.Configuration;
 import android.content.res.Resources;
+import android.content.res.XModuleResources;
 import android.database.DatabaseErrorHandler;
 import android.database.sqlite.SQLiteDatabase;
 import android.graphics.Bitmap;
@@ -58,12 +59,14 @@ public class LSPosedContext extends XposedContext {
 
     static final Set<XposedModule> modules = ConcurrentHashMap.newKeySet();
 
-    private final Context base;
-    private final String packageName;
+    private final Context mBase;
+    private final String mPackageName;
+    private final Object mSync = new Object();
+    private Resources mResources;
 
     LSPosedContext(Context base, String packageName) {
-        this.base = base;
-        this.packageName = packageName;
+        this.mBase = base;
+        this.mPackageName = packageName;
     }
 
     public static void callOnPackageLoaded(XposedModuleInterface.PackageLoadedParam param, Bundle extra) {
@@ -71,7 +74,7 @@ public class LSPosedContext extends XposedContext {
             try {
                 module.onPackageLoaded(param, extra);
             } catch (Throwable t) {
-                Log.e(TAG, "Error when calling onPackageLoaded of " + ((LSPosedContext) module.getBaseContext()).packageName, t);
+                Log.e(TAG, "Error when calling onPackageLoaded of " + ((LSPosedContext) module.getBaseContext()).mPackageName, t);
             }
         }
     }
@@ -81,7 +84,7 @@ public class LSPosedContext extends XposedContext {
             try {
                 module.onResourceLoaded(param, extra);
             } catch (Throwable t) {
-                Log.e(TAG, "Error when calling onResourceLoaded of " + ((LSPosedContext) module.getBaseContext()).packageName, t);
+                Log.e(TAG, "Error when calling onResourceLoaded of " + ((LSPosedContext) module.getBaseContext()).mPackageName, t);
             }
         }
     }
@@ -163,12 +166,17 @@ public class LSPosedContext extends XposedContext {
 
     @Override
     public Resources getResources() {
-        throw new AbstractMethodError();
+        synchronized (mSync) {
+            if (mResources == null) {
+                mResources = XModuleResources.createInstance(mBase.getPackageCodePath(), null);
+            }
+            return mResources;
+        }
     }
 
     @Override
     public PackageManager getPackageManager() {
-        return base.getPackageManager();
+        return mBase.getPackageManager();
     }
 
     @Override
@@ -178,7 +186,7 @@ public class LSPosedContext extends XposedContext {
 
     @Override
     public Looper getMainLooper() {
-        return base.getMainLooper();
+        return mBase.getMainLooper();
     }
 
     @Override
@@ -198,17 +206,17 @@ public class LSPosedContext extends XposedContext {
 
     @Override
     public ClassLoader getClassLoader() {
-        return base.getClassLoader();
+        return mBase.getClassLoader();
     }
 
     @Override
     public String getPackageName() {
-        return base.getPackageName();
+        return mBase.getPackageName();
     }
 
     @Override
     public ApplicationInfo getApplicationInfo() {
-        return base.getApplicationInfo();
+        return mBase.getApplicationInfo();
     }
 
     @Override
@@ -218,7 +226,7 @@ public class LSPosedContext extends XposedContext {
 
     @Override
     public String getPackageCodePath() {
-        return base.getPackageCodePath();
+        return mBase.getPackageCodePath();
     }
 
     @Override
@@ -551,7 +559,7 @@ public class LSPosedContext extends XposedContext {
 
     @Override
     public Object getSystemService(@NonNull String name) {
-        return base.getSystemService(name);
+        return mBase.getSystemService(name);
     }
 
     @Nullable
@@ -687,11 +695,11 @@ public class LSPosedContext extends XposedContext {
 
     @Override
     public void log(String message) {
-        Log.i(TAG, packageName + ": " + message);
+        Log.i(TAG, mPackageName + ": " + message);
     }
 
     @Override
     public void log(String message, Throwable throwable) {
-        Log.e(TAG, packageName + ": " + message, throwable);
+        Log.e(TAG, mPackageName + ": " + message, throwable);
     }
 }
