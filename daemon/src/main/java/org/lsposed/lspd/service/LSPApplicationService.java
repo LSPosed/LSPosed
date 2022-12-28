@@ -143,7 +143,7 @@ public class LSPApplicationService extends ILSPApplicationService.Stub {
     }
 
     @Override
-    public Bundle requestRemotePreference(String packageName, int userId, String group, IBinder callback) throws RemoteException {
+    public Bundle requestRemotePreferences(String packageName, int userId, String group, IBinder callback) throws RemoteException {
         ensureRegistered();
         // TODO: Handle callback
         var bundle = new Bundle();

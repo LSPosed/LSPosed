@@ -15,17 +15,16 @@ import java.util.WeakHashMap;
 import java.util.concurrent.ConcurrentHashMap;
 
 import de.robv.android.xposed.XposedBridge;
-import io.github.xposed.xposedservice.IXRemotePreferenceCallback;
 
 @SuppressWarnings("unchecked")
-public class LSPosedRemotePreference implements SharedPreferences {
+public class LSPosedRemotePreferences implements SharedPreferences {
 
     private final Map<String, Object> mMap = new ConcurrentHashMap<>();
 
     private static final Object CONTENT = new Object();
     final WeakHashMap<OnSharedPreferenceChangeListener, Object> mListeners = new WeakHashMap<>();
 
-    IXRemotePreferenceCallback callback = new IXRemotePreferenceCallback.Stub() {
+    IRemotePreferenceCallback callback = new IRemotePreferenceCallback.Stub() {
         @Override
         synchronized public void onUpdate(Bundle bundle) {
             if (bundle.containsKey("map"))
@@ -33,18 +32,16 @@ public class LSPosedRemotePreference implements SharedPreferences {
             if (bundle.containsKey("diff")) {
                 for (var key : bundle.getStringArrayList("diff")) {
                     synchronized (mListeners) {
-                        mListeners.forEach((listener, __) -> {
-                            listener.onSharedPreferenceChanged(LSPosedRemotePreference.this, key);
-                        });
+                        mListeners.forEach((listener, __) -> listener.onSharedPreferenceChanged(LSPosedRemotePreferences.this, key));
                     }
                 }
             }
         }
     };
 
-    public LSPosedRemotePreference(String packageName, int userId, String group) {
+    public LSPosedRemotePreferences(String packageName, int userId, String group) {
         try {
-            Bundle output = serviceClient.requestRemotePreference(packageName, userId, group, callback.asBinder());
+            Bundle output = serviceClient.requestRemotePreferences(packageName, userId, group, callback.asBinder());
             callback.onUpdate(output);
         } catch (RemoteException e) {
             XposedBridge.log(e);
