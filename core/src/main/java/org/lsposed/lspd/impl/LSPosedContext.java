@@ -44,6 +44,7 @@ import java.io.FileNotFoundException;
 import java.io.FileOutputStream;
 import java.io.IOException;
 import java.io.InputStream;
+import java.util.Map;
 import java.util.Set;
 import java.util.concurrent.ConcurrentHashMap;
 
@@ -56,6 +57,7 @@ import io.github.libxposed.XposedModuleInterface;
 public class LSPosedContext extends XposedContext {
 
     public static final String TAG = "LSPosedContext";
+    public static final int PER_USER_RANGE = 100000;
 
     static final Set<XposedModule> modules = ConcurrentHashMap.newKeySet();
 
@@ -64,6 +66,7 @@ public class LSPosedContext extends XposedContext {
     private final Context mBase;
     private final String mPackageName;
     private final String mApkPath;
+    private final Map<String, SharedPreferences> mRemotePrefs = new ConcurrentHashMap<>();
 
     LSPosedContext(Context base, String packageName, String apkPath) {
         this.mBase = base;
@@ -235,7 +238,8 @@ public class LSPosedContext extends XposedContext {
 
     @Override
     public SharedPreferences getSharedPreferences(String name, int mode) {
-        throw new AbstractMethodError();
+        if (name == null) throw new IllegalArgumentException("name must not be null");
+        return mRemotePrefs.computeIfAbsent(name, __ -> new LSPosedRemotePreference(mPackageName, Process.myPid() / PER_USER_RANGE, name));
     }
 
     @Override
