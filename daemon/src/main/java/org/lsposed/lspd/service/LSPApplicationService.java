@@ -46,10 +46,10 @@ public class LSPApplicationService extends ILSPApplicationService.Stub {
     private final static Map<Pair<Integer, Integer>, ProcessInfo> processes = new ConcurrentHashMap<>();
 
     static class ProcessInfo implements DeathRecipient {
-        int uid;
-        int pid;
-        String processName;
-        IBinder heartBeat;
+        final int uid;
+        final int pid;
+        final String processName;
+        final IBinder heartBeat;
 
         ProcessInfo(int uid, int pid, String processName, IBinder heartBeat) throws RemoteException {
             this.uid = uid;
@@ -96,7 +96,7 @@ public class LSPApplicationService extends ILSPApplicationService.Stub {
                 var obfuscation = ConfigManager.getInstance().dexObfuscate();
                 var signatures = ObfuscationManager.getSignatures();
                 reply.writeInt(signatures.size() * 2);
-                for(Map.Entry<String,String> entry : signatures.entrySet()){
+                for (Map.Entry<String, String> entry : signatures.entrySet()) {
                     reply.writeString(entry.getKey());
                     // return val = key if obfuscation disabled
                     reply.writeString(obfuscation ? entry.getValue() : entry.getKey());
@@ -143,9 +143,12 @@ public class LSPApplicationService extends ILSPApplicationService.Stub {
     }
 
     @Override
-    public Bundle requestRemotePreference(String packageName, int userId, IBinder callback) throws RemoteException {
+    public Bundle requestRemotePreference(String packageName, int userId, String group, IBinder callback) throws RemoteException {
         ensureRegistered();
-        return null;
+        // TODO: Handle callback
+        var bundle = new Bundle();
+        bundle.putSerializable("map", ConfigManager.getInstance().getModulePrefs(packageName, userId, group));
+        return bundle;
     }
 
     @Override

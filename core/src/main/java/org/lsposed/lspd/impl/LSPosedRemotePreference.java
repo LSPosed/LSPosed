@@ -1,6 +1,7 @@
-package de.robv.android.xposed;
+package org.lsposed.lspd.impl;
 
 import static org.lsposed.lspd.core.ApplicationServiceClient.serviceClient;
+
 import android.content.SharedPreferences;
 import android.os.Bundle;
 import android.os.RemoteException;
@@ -13,12 +14,13 @@ import java.util.TreeMap;
 import java.util.WeakHashMap;
 import java.util.concurrent.ConcurrentHashMap;
 
+import de.robv.android.xposed.XposedBridge;
 import io.github.xposed.xposedservice.IXRemotePreferenceCallback;
 
 @SuppressWarnings("unchecked")
-public class XRemotePreference implements SharedPreferences {
+public class LSPosedRemotePreference implements SharedPreferences {
 
-    private Map<String, Object> mMap = new ConcurrentHashMap<>();
+    private final Map<String, Object> mMap = new ConcurrentHashMap<>();
 
     private static final Object CONTENT = new Object();
     final WeakHashMap<OnSharedPreferenceChangeListener, Object> mListeners = new WeakHashMap<>();
@@ -27,12 +29,12 @@ public class XRemotePreference implements SharedPreferences {
         @Override
         synchronized public void onUpdate(Bundle bundle) {
             if (bundle.containsKey("map"))
-                mMap = (ConcurrentHashMap<String, Object>) bundle.getSerializable("map");
+                mMap.putAll((Map<String, ?>) bundle.getSerializable("map"));
             if (bundle.containsKey("diff")) {
                 for (var key : bundle.getStringArrayList("diff")) {
                     synchronized (mListeners) {
                         mListeners.forEach((listener, __) -> {
-                            listener.onSharedPreferenceChanged(XRemotePreference.this, key);
+                            listener.onSharedPreferenceChanged(LSPosedRemotePreference.this, key);
                         });
                     }
                 }
@@ -40,13 +42,9 @@ public class XRemotePreference implements SharedPreferences {
         }
     };
 
-    public XRemotePreference(String packageName) {
-        this(packageName, 0);
-    }
-
-    public XRemotePreference(String packageName, int userId) {
+    public LSPosedRemotePreference(String packageName, int userId, String group) {
         try {
-            Bundle output = serviceClient.requestRemotePreference(packageName, userId, callback.asBinder());
+            Bundle output = serviceClient.requestRemotePreference(packageName, userId, group, callback.asBinder());
             callback.onUpdate(output);
         } catch (RemoteException e) {
             XposedBridge.log(e);
@@ -124,6 +122,5 @@ public class XRemotePreference implements SharedPreferences {
         synchronized (mListeners) {
             mListeners.remove(listener);
         }
-
     }
 }
