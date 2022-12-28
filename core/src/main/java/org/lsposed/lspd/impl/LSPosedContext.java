@@ -239,7 +239,7 @@ public class LSPosedContext extends XposedContext {
     @Override
     public SharedPreferences getSharedPreferences(String name, int mode) {
         if (name == null) throw new IllegalArgumentException("name must not be null");
-        return mRemotePrefs.computeIfAbsent(name, __ -> new LSPosedRemotePreference(mPackageName, Process.myPid() / PER_USER_RANGE, name));
+        return mRemotePrefs.computeIfAbsent(name, __ -> new LSPosedRemotePreferences(mPackageName, Process.myPid() / PER_USER_RANGE, name));
     }
 
     @Override
