@@ -25,11 +25,12 @@ import static org.lsposed.lspd.service.ServiceManager.TAG;
 import static org.lsposed.lspd.service.ServiceManager.existsInGlobalNamespace;
 import static org.lsposed.lspd.service.ServiceManager.toGlobalNamespace;
 
+import android.annotation.SuppressLint;
 import android.app.ActivityThread;
 import android.content.ContentValues;
-import android.content.Context;
 import android.content.pm.ApplicationInfo;
 import android.content.pm.PackageInfo;
+import android.content.pm.PackageParser;
 import android.database.Cursor;
 import android.database.sqlite.SQLiteDatabase;
 import android.database.sqlite.SQLiteStatement;
@@ -40,6 +41,7 @@ import android.os.RemoteException;
 import android.os.SELinux;
 import android.os.SharedMemory;
 import android.os.SystemClock;
+import android.permission.IPermissionManager;
 import android.system.ErrnoException;
 import android.system.Os;
 import android.util.Log;
@@ -57,6 +59,7 @@ import java.io.File;
 import java.io.FileNotFoundException;
 import java.io.IOException;
 import java.io.Serializable;
+import java.lang.reflect.Field;
 import java.nio.charset.StandardCharsets;
 import java.nio.file.FileVisitResult;
 import java.nio.file.Files;
@@ -192,10 +195,19 @@ public class ConfigManager {
         }
     }
 
+    @SuppressLint("BlockedPrivateApi")
     public List<Module> getModulesForSystemServer() {
+        var at = ActivityThread.currentActivityThread();
+        Field permissionManager = null;
+        try {
+            // PackageParser need to access PermissionManager, but it's not initialized yet
+            permissionManager = ActivityThread.class.getDeclaredField("sPermissionManager");
+            permissionManager.setAccessible(true);
+            permissionManager.set(at, (IPermissionManager) ArrayList::new);
+        } catch (NoSuchFieldException | IllegalAccessException ignored) {
+        }
+
         List<Module> modules = new LinkedList<>();
-        Context context = ActivityThread.currentActivityThread().getSystemContext();
-        var pm = context.getPackageManager();
         try (Cursor cursor = db.query("scope INNER JOIN modules ON scope.mid = modules.mid", new String[]{"module_pkg_name", "apk_path"}, "app_pkg_name=? AND enabled=1", new String[]{"android"}, null, null, null)) {
             int apkPathIdx = cursor.getColumnIndex("apk_path");
             int pkgNameIdx = cursor.getColumnIndex("module_pkg_name");
@@ -203,16 +215,31 @@ public class ConfigManager {
                 var module = new Module();
                 module.apkPath = cursor.getString(apkPathIdx);
                 module.packageName = cursor.getString(pkgNameIdx);
+                var statPath = toGlobalNamespace("/data/user_de/0/" + module.packageName).getAbsolutePath();
                 try {
-                    module.appId = Os.stat(toGlobalNamespace("/data/user_de/0/" + module.packageName).getAbsolutePath()).st_uid;
+                    module.appId = Os.stat(statPath).st_uid;
                 } catch (ErrnoException e) {
-                    Log.w(TAG, "cannot stat " + module.apkPath, e);
+                    Log.w(TAG, "cannot stat " + statPath, e);
                     module.appId = -1;
                 }
-                module.applicationInfo = pm.getPackageArchiveInfo(module.apkPath, 0).applicationInfo;
+                try {
+                    var apkFile = new File(module.apkPath);
+                    var pkg = new PackageParser().parsePackage(apkFile, 0, false);
+                    module.applicationInfo = pkg.applicationInfo;
+                } catch (PackageParser.PackageParserException e) {
+                    Log.w(TAG, "failed to parse parse " + module.apkPath, e);
+                }
                 modules.add(module);
             }
         }
+
+        if (permissionManager != null) {
+            try {
+                permissionManager.set(at, null);
+            } catch (IllegalAccessException ignored) {
+            }
+        }
+
         return modules.parallelStream().filter(m -> {
             var file = ConfigFileManager.loadModule(m.apkPath, dexObfuscate);
             if (file == null) {
