@@ -152,15 +152,6 @@ public class LSPApplicationService extends ILSPApplicationService.Stub {
     }
 
     @Override
-    public IBinder requestModuleBinder(String name) throws RemoteException {
-        var processInfo = ensureRegistered();
-        if (ConfigManager.getInstance().isModule(processInfo.uid, name)) {
-            ConfigManager.getInstance().ensureModulePrefsPermission(processInfo.uid, name);
-            return ServiceManager.getModuleService(name);
-        } else return null;
-    }
-
-    @Override
     public ParcelFileDescriptor requestInjectedManagerBinder(List<IBinder> binder) throws RemoteException {
         var processInfo = ensureRegistered();
         if (ServiceManager.getManagerService().postStartManager(processInfo.pid, processInfo.uid) ||

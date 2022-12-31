@@ -25,6 +25,7 @@ import android.annotation.SuppressLint;
 import android.app.IActivityManager;
 import android.app.IApplicationThread;
 import android.app.IServiceConnection;
+import android.app.IUidObserver;
 import android.app.ProfilerInfo;
 import android.content.Context;
 import android.content.IContentProvider;
@@ -194,4 +195,9 @@ public class ActivityManagerService {
         }
     }
 
+    public static void registerUidObserver(IUidObserver observer, int which, int cutpoint, String callingPackage) throws RemoteException {
+        IActivityManager am = getActivityManager();
+        if (am == null) return;
+        am.registerUidObserver(observer, which, cutpoint, callingPackage);
+    }
 }

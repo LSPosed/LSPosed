@@ -40,6 +40,7 @@ public interface IActivityManager extends IInterface {
                                    String[] requiredPermissions, String[] excludedPermissions,
                                    String[] excludePackages, int appOp, Bundle bOptions,
                                    boolean serialized, boolean sticky, int userId) throws RemoteException;
+
     @RequiresApi(31)
     int broadcastIntentWithFeature(IApplicationThread caller, String callingFeatureId,
                                    Intent intent, String resolvedType, IIntentReceiver resultTo,
@@ -121,6 +122,8 @@ public interface IActivityManager extends IInterface {
                                                      IBinder token);
 
     Configuration getConfiguration() throws RemoteException;
+
+    void registerUidObserver(IUidObserver observer, int which, int cutpoint, String callingPackage) throws RemoteException;
 
     abstract class Stub extends Binder implements IActivityManager {
         public static int TRANSACTION_setActivityController;

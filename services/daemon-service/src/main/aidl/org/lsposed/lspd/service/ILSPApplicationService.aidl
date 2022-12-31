@@ -3,8 +3,6 @@ package org.lsposed.lspd.service;
 import org.lsposed.lspd.models.Module;
 
 interface ILSPApplicationService {
-    IBinder requestModuleBinder(String name);
-
     List<Module> getLegacyModulesList();
 
     List<Module> getModulesList();

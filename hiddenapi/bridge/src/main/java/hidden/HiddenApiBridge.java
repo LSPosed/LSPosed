@@ -19,6 +19,7 @@
 
 package hidden;
 
+import android.app.ActivityManager;
 import android.content.BroadcastReceiver;
 import android.content.Context;
 import android.content.Intent;
@@ -126,5 +127,25 @@ public class HiddenApiBridge {
         } else {
             return Os.ioctlInt(fd, cmd);
         }
+    }
+
+    public static int ActivityManager_UID_OBSERVER_GONE() {
+        return ActivityManager.UID_OBSERVER_GONE;
+    }
+
+    public static int ActivityManager_UID_OBSERVER_ACTIVE() {
+        return ActivityManager.UID_OBSERVER_ACTIVE;
+    }
+
+    public static int ActivityManager_UID_OBSERVER_IDLE() {
+        return ActivityManager.UID_OBSERVER_IDLE;
+    }
+
+    public static int ActivityManager_UID_OBSERVER_CACHED() {
+        return ActivityManager.UID_OBSERVER_CACHED;
+    }
+
+    public static int ActivityManager_PROCESS_STATE_UNKNOWN() {
+        return ActivityManager.PROCESS_STATE_UNKNOWN;
     }
 }
