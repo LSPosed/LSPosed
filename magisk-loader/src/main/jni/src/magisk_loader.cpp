@@ -138,8 +138,8 @@ namespace lspd {
                 InitHooks(env);
                 SetupEntryClass(env);
                 FindAndCall(env, "forkCommon",
-                            "(ZLjava/lang/String;Landroid/os/IBinder;)V",
-                            JNI_TRUE, JNI_NewStringUTF(env, "android"), application_binder);
+                            "(ZLjava/lang/String;Ljava/lang/String;Landroid/os/IBinder;)V",
+                            JNI_TRUE, JNI_NewStringUTF(env, "android"), nullptr, application_binder);
                 GetArt(true);
             } else {
                 LOGI("skipped system server");
@@ -188,7 +188,7 @@ namespace lspd {
     }
 
     void
-    MagiskLoader::OnNativeForkAndSpecializePost(JNIEnv *env, jstring nice_name) {
+    MagiskLoader::OnNativeForkAndSpecializePost(JNIEnv *env, jstring nice_name, jstring app_dir) {
         const JUTFString process_name(env, nice_name);
         auto *instance = Service::instance();
         auto binder = skip_ ? ScopedLocalRef<jobject>{env, nullptr}
@@ -219,7 +219,7 @@ namespace lspd {
             SetupEntryClass(env);
             LOGD("Done prepare");
             FindAndCall(env, "forkCommon",
-                        "(ZLjava/lang/String;Landroid/os/IBinder;)V",
+                        "(ZLjava/lang/String;Ljava/lang/String;Landroid/os/IBinder;)V",
                         JNI_FALSE, nice_name, binder);
             LOGD("injected xposed into {}", process_name.get());
             setAllowUnload(false);

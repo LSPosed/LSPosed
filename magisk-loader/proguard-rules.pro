@@ -1,5 +1,5 @@
 -keepclasseswithmembers class org.lsposed.lspd.core.Main {
-    public static void forkCommon(boolean, java.lang.String, android.os.IBinder);
+    public static void forkCommon(boolean, java.lang.String, java.lang.String, android.os.IBinder);
 }
 -keepclasseswithmembers,includedescriptorclasses class * {
     native <methods>;
