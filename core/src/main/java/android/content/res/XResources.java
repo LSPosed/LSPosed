@@ -66,7 +66,6 @@ import de.robv.android.xposed.XposedInit;
 import de.robv.android.xposed.callbacks.XC_LayoutInflated;
 import de.robv.android.xposed.callbacks.XC_LayoutInflated.LayoutInflatedParam;
 import de.robv.android.xposed.callbacks.XCallback;
-import io.github.libxposed.XposedResources;
 import xposed.dummy.XTypedArraySuperClass;
 
 /**
