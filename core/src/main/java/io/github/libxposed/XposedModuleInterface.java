@@ -1,6 +1,7 @@
 package io.github.libxposed;
 
 import android.content.pm.ApplicationInfo;
+import android.content.res.XposedResources;
 import android.os.Bundle;
 
 import androidx.annotation.NonNull;
