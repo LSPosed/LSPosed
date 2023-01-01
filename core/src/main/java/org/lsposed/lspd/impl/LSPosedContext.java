@@ -152,8 +152,8 @@ public class LSPosedContext extends XposedContext {
                     if (moduleClass.getMethod("onResourceLoaded", XposedModuleInterface.ResourceLoadedParam.class, Bundle.class).getDeclaringClass() != XposedModuleInterface.class) {
                         XposedInit.hookResources();
                     }
-                    var moduleEntry = moduleClass.getConstructor(XposedContext.class);
-                    var moduleContext = (XposedModule) moduleEntry.newInstance(ctx);
+                    var moduleEntry = moduleClass.getConstructor(XposedContext.class, boolean.class, String.class, Bundle.class);
+                    var moduleContext = (XposedModule) moduleEntry.newInstance(ctx, isSystemServer, processName, null);
                     modules.add(moduleContext);
                 } catch (Throwable e) {
                     Log.e(TAG, "    Failed to load class " + moduleClass, e);
