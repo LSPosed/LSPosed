@@ -56,8 +56,11 @@ import io.github.libxposed.XposedModuleInterface;
 
 public class LSPosedContext extends XposedContext {
 
-    public static final String TAG = "LSPosedContext";
-    public static final int PER_USER_RANGE = 100000;
+    private static final String TAG = "LSPosedContext";
+    private static final int PER_USER_RANGE = 100000;
+    public static boolean isSystemServer;
+    public static String appDir;
+    public static String processName;
 
     static final Set<XposedModule> modules = ConcurrentHashMap.newKeySet();
 
@@ -274,7 +277,7 @@ public class LSPosedContext extends XposedContext {
 
     @Override
     public File getDataDir() {
-        throw new AbstractMethodError();
+        return new File(appDir);
     }
 
     @Override

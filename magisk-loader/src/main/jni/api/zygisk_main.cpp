@@ -316,7 +316,7 @@ namespace lspd {
         }
 
         void postAppSpecialize(const zygisk::AppSpecializeArgs *args) override {
-            MagiskLoader::GetInstance()->OnNativeForkAndSpecializePost(env_, args->nice_name);
+            MagiskLoader::GetInstance()->OnNativeForkAndSpecializePost(env_, args->nice_name, args->app_data_dir);
             if (*allowUnload) api_->setOption(zygisk::DLCLOSE_MODULE_LIBRARY);
         }
 

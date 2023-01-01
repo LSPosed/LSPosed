@@ -39,7 +39,7 @@ namespace lspd {
         void OnNativeForkAndSpecializePre(JNIEnv *env, jint uid, jintArray &gids, jstring nice_name,
                                           jboolean is_child_zygote, jstring app_data_dir);
 
-        void OnNativeForkAndSpecializePost(JNIEnv *env, jstring nice_name);
+        void OnNativeForkAndSpecializePost(JNIEnv *env, jstring nice_name, jstring app_dir);
 
         void OnNativeForkSystemServerPost(JNIEnv *env);
 
