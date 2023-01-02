@@ -85,6 +85,12 @@ public class XposedContextWrapper extends ContextWrapper implements XposedInterf
         return getBaseContext().deoptimize(constructor);
     }
 
+    @Nullable
+    @Override
+    public XposedUtils getUtils() {
+        return getBaseContext().getUtils();
+    }
+
     @Override
     final public void log(@NonNull String message) {
         getBaseContext().log(message);
