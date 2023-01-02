@@ -338,7 +338,7 @@ public class LSPosedContext extends XposedContext {
 
     @Override
     public File getCacheDir() {
-        throw new AbstractMethodError();
+        return mBase.getCacheDir();
     }
 
     @Override
