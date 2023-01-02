@@ -743,12 +743,12 @@ public class LSPosedContext extends XposedContext {
     }
 
     @Override
-    public void log(String message) {
+    public void log(@NonNull String message) {
         Log.i(TAG, mPackageName + ": " + message);
     }
 
     @Override
-    public void log(String message, Throwable throwable) {
+    public void log(@NonNull String message, @NonNull Throwable throwable) {
         Log.e(TAG, mPackageName + ": " + message, throwable);
     }
 }

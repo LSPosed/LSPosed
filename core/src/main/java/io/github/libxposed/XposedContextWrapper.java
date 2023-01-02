@@ -27,28 +27,28 @@ public class XposedContextWrapper extends ContextWrapper implements XposedInterf
 
     @NonNull
     @Override
-    public String implementationName() {
+    final public String implementationName() {
         return getBaseContext().implementationVersion();
     }
 
     @NonNull
     @Override
-    public String implementationVersion() {
+    final public String implementationVersion() {
         return getBaseContext().implementationVersion();
     }
 
     @Override
-    public long implementationVersionCode() {
+    final public long implementationVersionCode() {
         return getBaseContext().implementationVersionCode();
     }
 
     @Override
-    final public void log(String message) {
+    final public void log(@NonNull String message) {
         getBaseContext().log(message);
     }
 
     @Override
-    final public void log(String message, Throwable throwable) {
+    final public void log(@NonNull String message, @NonNull Throwable throwable) {
         getBaseContext().log(message, throwable);
     }
 

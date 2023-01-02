@@ -12,6 +12,6 @@ public interface XposedInterface {
     @NonNull String implementationVersion();
     long implementationVersionCode();
 
-    void log(String message);
-    void log(String message, Throwable throwable);
+    void log(@NonNull String message);
+    void log(@NonNull String message, @NonNull Throwable throwable);
 }
