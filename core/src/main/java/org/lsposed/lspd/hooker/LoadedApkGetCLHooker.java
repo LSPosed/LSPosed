@@ -93,13 +93,7 @@ public class LoadedApkGetCLHooker extends XC_MethodHook {
             Hookers.logD("Call handleLoadedPackage: packageName=" + lpparam.packageName + " processName=" + lpparam.processName + " isFirstApplication=" + isFirstApplication + " classLoader=" + lpparam.classLoader + " appInfo=" + lpparam.appInfo);
             XC_LoadPackage.callAll(lpparam);
 
-            var plparam = new XposedModuleInterface.PackageLoadedParam();
-            plparam.packageName = packageName;
-            plparam.processName = processName;
-            plparam.classLoader = classLoader;
-            plparam.appInfo = loadedApk.getApplicationInfo();
-            plparam.isFirstApplication = isFirstApplication;
-            LSPosedContext.callOnPackageLoaded(plparam, null);
+            LSPosedContext.callOnPackageLoaded(lpparam);
         } catch (Throwable t) {
             Hookers.logE("error when hooking LoadedApk#getClassLoader", t);
         } finally {

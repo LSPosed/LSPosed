@@ -9,24 +9,33 @@ import androidx.annotation.Nullable;
 
 @SuppressWarnings("unused")
 public interface XposedModuleInterface {
-    class PackageLoadedParam {
-        public String packageName;
-        public String processName;
-        public ClassLoader classLoader;
-        public ApplicationInfo appInfo;
-        public boolean isFirstApplication;
+    interface ModuleLoadedParam {
+        boolean isSystemServer();
+        @NonNull String getProcessName();
+        @NonNull String getAppDataDir();
+        @Nullable Bundle getExtras();
     }
 
-    class ResourceLoadedParam {
-        public String packageName;
-        public XposedResources res;
+    interface PackageLoadedParam {
+        @NonNull String getPackageName();
+        @NonNull ApplicationInfo getAppInfo();
+        @NonNull ClassLoader getClassLoader();
+        @NonNull String getProcessName();
+        boolean isFirstApplication();
+        @Nullable Bundle getExtras();
     }
 
-    default void onPackageLoaded(@NonNull PackageLoadedParam param, @Nullable Bundle extra) {
+    interface ResourcesLoadedParam {
+        @NonNull String getPackageName();
+        @NonNull XposedResources getResources();
+        @Nullable Bundle getExtras();
+    }
+
+    default void onPackageLoaded(@NonNull PackageLoadedParam param) {
 
     }
 
-    default void onResourceLoaded(@NonNull ResourceLoadedParam param, @Nullable Bundle extra) {
+    default void onResourceLoaded(@NonNull ResourcesLoadedParam param) {
 
     }
 

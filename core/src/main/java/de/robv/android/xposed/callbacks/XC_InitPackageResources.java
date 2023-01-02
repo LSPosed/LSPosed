@@ -21,10 +21,16 @@
 package de.robv.android.xposed.callbacks;
 
 import android.content.res.XResources;
+import android.content.res.XposedResources;
+import android.os.Bundle;
+
+import androidx.annotation.NonNull;
+import androidx.annotation.Nullable;
 
 import java.util.concurrent.CopyOnWriteArraySet;
 
 import de.robv.android.xposed.IXposedHookInitPackageResources;
+import io.github.libxposed.XposedModuleInterface;
 
 /**
  * This class is only used for internal purposes, except for the {@link InitPackageResourcesParam}
@@ -54,7 +60,7 @@ public abstract class XC_InitPackageResources extends XCallback implements IXpos
     /**
      * Wraps information about the resources being initialized.
      */
-    public static final class InitPackageResourcesParam extends XCallback.Param {
+    public static final class InitPackageResourcesParam extends XCallback.Param implements XposedModuleInterface.ResourcesLoadedParam {
         /**
          * @hide
          */
@@ -72,6 +78,24 @@ public abstract class XC_InitPackageResources extends XCallback implements IXpos
          * {@link XResources#setReplacement(String, String, String, Object)}.
          */
         public XResources res;
+
+        @NonNull
+        @Override
+        public String getPackageName() {
+            return packageName;
+        }
+
+        @NonNull
+        @Override
+        public XposedResources getResources() {
+            return res;
+        }
+
+        @Nullable
+        @Override
+        public Bundle getExtras() {
+            return null;
+        }
     }
 
     /**
