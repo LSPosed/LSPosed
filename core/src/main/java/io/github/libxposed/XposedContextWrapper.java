@@ -4,6 +4,7 @@ import android.content.Context;
 import android.content.ContextWrapper;
 
 import androidx.annotation.NonNull;
+import androidx.annotation.Nullable;
 
 import java.lang.reflect.Constructor;
 import java.lang.reflect.Method;
@@ -72,6 +73,16 @@ public class XposedContextWrapper extends ContextWrapper implements XposedInterf
     @Override
     public <T> MethodUnhooker<MethodHooker<Constructor<T>>, Constructor<T>> hook(@NonNull Constructor<T> origin, @NonNull MethodHooker<Constructor<T>> hooker) {
         return getBaseContext().hook(origin, hooker);
+    }
+
+    @Override
+    public boolean deoptimize(@Nullable Method method) {
+        return getBaseContext().deoptimize(method);
+    }
+
+    @Override
+    public <T> boolean deoptimize(@Nullable Constructor<T> constructor) {
+        return getBaseContext().deoptimize(constructor);
     }
 
     @Override

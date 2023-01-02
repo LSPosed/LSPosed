@@ -105,6 +105,10 @@ public interface XposedInterface {
 
     <T> MethodUnhooker<MethodHooker<Constructor<T>>, Constructor<T>> hook(@NonNull Constructor<T> origin, @NonNull MethodHooker<Constructor<T>> hooker);
 
+    boolean deoptimize(@Nullable Method method);
+
+    <T> boolean deoptimize(@Nullable Constructor<T> constructor);
+
     void log(@NonNull String message);
 
     void log(@NonNull String message, @NonNull Throwable throwable);

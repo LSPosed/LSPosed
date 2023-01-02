@@ -775,6 +775,18 @@ public class LSPosedContext extends XposedContext {
         return null;
     }
 
+    // TODO
+    @Override
+    public boolean deoptimize(@Nullable Method method) {
+        return false;
+    }
+
+    // TODO
+    @Override
+    public <T> boolean deoptimize(@Nullable Constructor<T> constructor) {
+        return false;
+    }
+
     @Override
     public void log(@NonNull String message) {
         Log.i(TAG, mPackageName + ": " + message);
