@@ -19,11 +19,14 @@
 
 package org.lsposed.lspd.service;
 
+import static android.content.Intent.EXTRA_UID;
 import static org.lsposed.lspd.service.PackageService.PER_USER_RANGE;
 import static org.lsposed.lspd.service.ServiceManager.TAG;
 import static org.lsposed.lspd.service.ServiceManager.getExecutorService;
 
+import android.app.ActivityManager;
 import android.app.IApplicationThread;
+import android.app.IUidObserver;
 import android.content.IIntentReceiver;
 import android.content.Intent;
 import android.content.IntentFilter;
@@ -45,6 +48,8 @@ import java.util.Arrays;
 import java.util.List;
 import java.util.function.Consumer;
 
+import hidden.HiddenApiBridge;
+
 public class LSPosedService extends ILSPosedService.Stub {
     private static final int AID_NOBODY = 9999;
     private static final int USER_NULL = -10000;
@@ -63,8 +68,7 @@ public class LSPosedService extends ILSPosedService.Stub {
             Log.d(TAG, "Skipped duplicated request for uid " + uid + " pid " + pid);
             return null;
         }
-        if (!ServiceManager.getManagerService().shouldStartManager(pid, uid, processName) &&
-                ConfigManager.getInstance().shouldSkipProcess(new ConfigManager.ProcessScope(processName, uid))) {
+        if (!ServiceManager.getManagerService().shouldStartManager(pid, uid, processName) && ConfigManager.getInstance().shouldSkipProcess(new ConfigManager.ProcessScope(processName, uid))) {
             Log.d(TAG, "Skipped " + processName + "/" + uid);
             return null;
         }
@@ -85,7 +89,7 @@ public class LSPosedService extends ILSPosedService.Stub {
 
     private void dispatchPackageChanged(Intent intent) {
         if (intent == null) return;
-        int uid = intent.getIntExtra(Intent.EXTRA_UID, AID_NOBODY);
+        int uid = intent.getIntExtra(EXTRA_UID, AID_NOBODY);
         if (uid == AID_NOBODY || uid <= 0) return;
         int userId = intent.getIntExtra("android.intent.extra.user_handle", USER_NULL);
         var intentAction = intent.getAction();
@@ -102,9 +106,7 @@ public class LSPosedService extends ILSPosedService.Stub {
             }
         }
 
-        boolean isXposedModule = applicationInfo != null &&
-                applicationInfo.metaData != null &&
-                applicationInfo.metaData.containsKey("xposedminversion");
+        boolean isXposedModule = applicationInfo != null && applicationInfo.metaData != null && applicationInfo.metaData.containsKey("xposedminversion");
 
         switch (intentAction) {
             case Intent.ACTION_PACKAGE_FULLY_REMOVED: {
@@ -160,8 +162,7 @@ public class LSPosedService extends ILSPosedService.Stub {
                 break;
             }
         }
-        boolean removed = Intent.ACTION_PACKAGE_FULLY_REMOVED.equals(intentAction) ||
-                Intent.ACTION_UID_REMOVED.equals(intentAction);
+        boolean removed = Intent.ACTION_PACKAGE_FULLY_REMOVED.equals(intentAction) || Intent.ACTION_UID_REMOVED.equals(intentAction);
 
         Log.d(TAG, "Package changed: uid=" + uid + " userId=" + userId + " action=" + intentAction + " isXposedModule=" + isXposedModule + " isAllUsers=" + allUsers);
 
@@ -182,8 +183,7 @@ public class LSPosedService extends ILSPosedService.Stub {
         if (isXposedModule) {
             var enabledModules = ConfigManager.getInstance().enabledModules();
             var scope = ConfigManager.getInstance().getModuleScope(packageName);
-            boolean systemModule = scope != null &&
-                    scope.parallelStream().anyMatch(app -> app.packageName.equals("android"));
+            boolean systemModule = scope != null && scope.parallelStream().anyMatch(app -> app.packageName.equals("android"));
             boolean enabled = Arrays.asList(enabledModules).contains(packageName);
             if (!(Intent.ACTION_UID_REMOVED.equals(action) || Intent.ACTION_PACKAGE_FULLY_REMOVED.equals(action) || allUsers))
                 LSPNotificationManager.notifyModuleUpdated(packageName, userId, enabled, systemModule);
@@ -314,9 +314,36 @@ public class LSPosedService extends ILSPosedService.Stub {
         var moduleFilter = new IntentFilter(intentFilter);
         moduleFilter.addDataScheme("module");
 
-        registerReceiver(List.of(intentFilter, moduleFilter),
-                "android.permission.BRICK", 0, this::dispatchOpenManager);
+        registerReceiver(List.of(intentFilter, moduleFilter), "android.permission.BRICK", 0, this::dispatchOpenManager);
         Log.d(TAG, "registered open manager receiver");
+    }
+
+    private void registerUidObserver() {
+        try {
+            ActivityManagerService.registerUidObserver(new IUidObserver.Stub() {
+                @Override
+                public void onUidActive(int uid) {
+                    LSPModuleService.uidStarts(uid);
+                }
+
+                @Override
+                public void onUidCachedChanged(int uid, boolean cached) {
+                    if (!cached) LSPModuleService.uidStarts(uid);
+                }
+
+                @Override
+                public void onUidIdle(int uid, boolean disabled) {
+                    LSPModuleService.uidStarts(uid);
+                }
+
+                @Override
+                public void onUidGone(int uid, boolean disabled) {
+                    LSPModuleService.uidGone(uid);
+                }
+            }, HiddenApiBridge.ActivityManager_UID_OBSERVER_ACTIVE() | HiddenApiBridge.ActivityManager_UID_OBSERVER_GONE() | HiddenApiBridge.ActivityManager_UID_OBSERVER_IDLE() | HiddenApiBridge.ActivityManager_UID_OBSERVER_CACHED(), HiddenApiBridge.ActivityManager_PROCESS_STATE_UNKNOWN(), null);
+        } catch (RemoteException e) {
+            Log.e(TAG, "registerUidObserver", e);
+        }
     }
 
     @Override
@@ -330,6 +357,7 @@ public class LSPosedService extends ILSPosedService.Stub {
         registerBootCompleteReceiver();
         registerUserChangeReceiver();
         registerOpenManagerReceiver();
+        registerUidObserver();
     }
 
     @Override

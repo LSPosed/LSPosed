@@ -23,65 +23,40 @@ import android.app.IUidObserver;
 import android.content.AttributionSource;
 import android.os.Build;
 import android.os.Bundle;
-import android.os.RemoteException;
 import android.util.Log;
 
+import java.util.Map;
 import java.util.Set;
 import java.util.concurrent.ConcurrentHashMap;
 
-import hidden.HiddenApiBridge;
-import io.github.libxposed.service.XposedService;
+import io.github.libxposed.service.IXposedService;
 
-public class LSPModuleService extends XposedService {
+public class LSPModuleService extends IXposedService.Stub {
 
-    private static final String TAG = "LSPosedModuleService";
+    private final static String TAG = "LSPosedModuleService";
 
-    private final Set<Integer> uidSet = ConcurrentHashMap.newKeySet();
-    private final IUidObserver uidObserver = new IUidObserver.Stub() {
-        @Override
-        public void onUidActive(int uid) {
-            uidStarts(uid);
-        }
 
-        @Override
-        public void onUidCachedChanged(int uid, boolean cached) {
-            if (!cached) uidStarts(uid);
-        }
+    private final static Set<Integer> uidSet = ConcurrentHashMap.newKeySet();
+    private final static Map<Integer, LSPModuleService> serviceMap = new ConcurrentHashMap<>();
 
-        @Override
-        public void onUidIdle(int uid, boolean disabled) {
-            uidStarts(uid);
-        }
+    private final int uid;
+    private final String packageName;
 
-        @Override
-        public void onUidGone(int uid, boolean disabled) {
-            uidSet.remove(uid);
-        }
-    };
-
-    void registerObserver() {
-        uidSet.clear();
-        int flags = HiddenApiBridge.ActivityManager_UID_OBSERVER_ACTIVE()
-                | HiddenApiBridge.ActivityManager_UID_OBSERVER_GONE()
-                | HiddenApiBridge.ActivityManager_UID_OBSERVER_IDLE()
-                | HiddenApiBridge.ActivityManager_UID_OBSERVER_CACHED();
-        try {
-            ActivityManagerService.registerUidObserver(uidObserver, flags, HiddenApiBridge.ActivityManager_PROCESS_STATE_UNKNOWN(), null);
-            Log.i(TAG, "registered uid observer");
-        } catch (RemoteException e) {
-            Log.e(TAG, "failed to register uid observer", e);
-        }
-    }
-
-    private void uidStarts(int uid) {
+    static void uidStarts(int uid) {
         if (!uidSet.contains(uid)) {
             uidSet.add(uid);
-            var module = ConfigManager.getInstance().getModule(uid);
-            if (module != null) sendBinder(uid, module);
+            sendBinder(getService(uid));
         }
     }
 
-    private void sendBinder(int uid, String name) {
+    static void uidGone(int uid) {
+        uidSet.remove(uid);
+    }
+
+    private static void sendBinder(LSPModuleService service) {
+        if (service == null) return;
+        var uid = service.uid;
+        var name = service.packageName;
         try {
             int userId = uid / PackageService.PER_USER_RANGE;
             var authority = name + AUTHORITY_SUFFIX;
@@ -91,7 +66,7 @@ public class LSPModuleService extends XposedService {
                 return;
             }
             var extra = new Bundle();
-            extra.putBinder("binder", asBinder());
+            extra.putBinder("binder", service.asBinder());
             Bundle reply = null;
             if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.S) {
                 reply = provider.call(new AttributionSource.Builder(1000).setPackageName("android").build(),
@@ -106,8 +81,28 @@ public class LSPModuleService extends XposedService {
             } else {
                 Log.w(TAG, "failed to send module binder to " + name);
             }
-        } catch (RemoteException | NoSuchMethodError e) {
+        } catch (Throwable e) {
             Log.w(TAG, "failed to send module binder for uid " + uid, e);
         }
+    }
+
+    public static LSPModuleService getService(int uid) {
+        var module = ConfigManager.getInstance().getModule(uid);
+        if (module == null) return null;
+        return serviceMap.computeIfAbsent(uid, __ -> new LSPModuleService(module, uid));
+    }
+
+    public static void removeService(int uid) {
+        serviceMap.remove(uid);
+    }
+
+    private LSPModuleService(String name, int uid) {
+        this.uid = uid;
+        this.packageName = name;
+    }
+
+    @Override
+    public long getAPIVersion() {
+        return API;
     }
 }

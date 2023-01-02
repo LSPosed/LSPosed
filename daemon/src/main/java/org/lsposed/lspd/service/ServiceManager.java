@@ -48,7 +48,6 @@ public class ServiceManager {
     private static LSPosedService mainService = null;
     private static LSPApplicationService applicationService = null;
     private static LSPManagerService managerService = null;
-    private static LSPModuleService moduleService = null;
     private static LSPSystemServerService systemServerService = null;
     private static LogcatService logcatService = null;
     private static Dex2OatService dex2OatService = null;
@@ -113,7 +112,6 @@ public class ServiceManager {
         mainService = new LSPosedService();
         applicationService = new LSPApplicationService();
         managerService = new LSPManagerService();
-        moduleService = new LSPModuleService();
         systemServerService = new LSPSystemServerService(systemServerMaxRetry);
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.Q) {
             dex2OatService = new Dex2OatService();
@@ -142,7 +140,6 @@ public class ServiceManager {
             @Override
             public void onSystemServerRestarted() {
                 Log.w(TAG, "system restarted...");
-                moduleService.registerObserver();
             }
 
             @Override
@@ -153,7 +150,6 @@ public class ServiceManager {
                     Log.w(TAG, "no response from bridge");
                 }
                 systemServerService.maybeRetryInject();
-                moduleService.registerObserver();
             }
 
             @Override
