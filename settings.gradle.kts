@@ -30,7 +30,8 @@ dependencyResolutionManagement {
 rootProject.name = "LSPosed"
 include(
     ":app",
-    ":api",
+    ":libxposed:api",
+    ":stubs",
     ":core",
     ":daemon",
     ":dex2oat",
@@ -41,3 +42,5 @@ include(
     ":services:daemon-service",
     ":services:xposed-service:interface",
 )
+
+project(":stubs").projectDir = file("libxposed/stubs")
