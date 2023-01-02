@@ -21,11 +21,16 @@
 package de.robv.android.xposed.callbacks;
 
 import android.content.pm.ApplicationInfo;
+import android.os.Bundle;
+
+import androidx.annotation.NonNull;
+import androidx.annotation.Nullable;
 
 import java.util.concurrent.CopyOnWriteArraySet;
 
 import de.robv.android.xposed.IXposedHookLoadPackage;
 import de.robv.android.xposed.XposedBridge.CopyOnWriteSortedSet;
+import io.github.libxposed.XposedModuleInterface;
 
 /**
  * This class is only used for internal purposes, except for the {@link LoadPackageParam}
@@ -55,7 +60,7 @@ public abstract class XC_LoadPackage extends XCallback implements IXposedHookLoa
     /**
      * Wraps information about the app being loaded.
      */
-    public static final class LoadPackageParam extends XCallback.Param {
+    public static final class LoadPackageParam extends XCallback.Param implements XposedModuleInterface.PackageLoadedParam {
         /**
          * @hide
          */
@@ -87,6 +92,41 @@ public abstract class XC_LoadPackage extends XCallback implements IXposedHookLoa
          * Set to {@code true} if this is the first (and main) application for this process.
          */
         public boolean isFirstApplication;
+
+        @NonNull
+        @Override
+        public String getPackageName() {
+            return packageName;
+        }
+
+        @NonNull
+        @Override
+        public ApplicationInfo getAppInfo() {
+            return appInfo;
+        }
+
+        @NonNull
+        @Override
+        public ClassLoader getClassLoader() {
+            return classLoader;
+        }
+
+        @NonNull
+        @Override
+        public String getProcessName() {
+            return processName;
+        }
+
+        @Override
+        public boolean isFirstApplication() {
+            return isFirstApplication;
+        }
+
+        @Nullable
+        @Override
+        public Bundle getExtras() {
+            return null;
+        }
     }
 
     /**

@@ -130,7 +130,6 @@ abstract class ExampleClassVisitorFactory : AsmClassVisitorFactory<Instrumentati
                     ) {
                         if (opcode == Opcodes.INVOKESPECIAL) {
                             for (i in 0 .. Type.getMethodType(descriptor).argumentTypes.size) {
-                                println("load param $i")
                                 super.visitVarInsn(Opcodes.ALOAD, i)
                             }
                             val newOwner =

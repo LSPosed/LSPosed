@@ -77,20 +77,20 @@ public class LSPosedContext extends XposedContext {
         this.mApkPath = apkPath;
     }
 
-    public static void callOnPackageLoaded(XposedModuleInterface.PackageLoadedParam param, Bundle extra) {
+    public static void callOnPackageLoaded(XposedModuleInterface.PackageLoadedParam param) {
         for (XposedModule module : modules) {
             try {
-                module.onPackageLoaded(param, extra);
+                module.onPackageLoaded(param);
             } catch (Throwable t) {
                 Log.e(TAG, "Error when calling onPackageLoaded of " + ((LSPosedContext) module.getBaseContext()).mPackageName, t);
             }
         }
     }
 
-    public static void callOnResourceLoaded(XposedModuleInterface.ResourceLoadedParam param, Bundle extra) {
+    public static void callOnResourceLoaded(XposedModuleInterface.ResourcesLoadedParam param) {
         for (XposedModule module : modules) {
             try {
-                module.onResourceLoaded(param, extra);
+                module.onResourceLoaded(param);
             } catch (Throwable t) {
                 Log.e(TAG, "Error when calling onResourceLoaded of " + ((LSPosedContext) module.getBaseContext()).mPackageName, t);
             }
@@ -149,11 +149,34 @@ public class LSPosedContext extends XposedContext {
                     Log.e(TAG, "    This class doesn't implement any sub-interface of XposedModule, skipping it");
                 }
                 try {
-                    if (moduleClass.getMethod("onResourceLoaded", XposedModuleInterface.ResourceLoadedParam.class, Bundle.class).getDeclaringClass() != XposedModuleInterface.class) {
+                    if (moduleClass.getMethod("onResourceLoaded", XposedModuleInterface.ResourcesLoadedParam.class).getDeclaringClass() != XposedModuleInterface.class) {
                         XposedInit.hookResources();
                     }
-                    var moduleEntry = moduleClass.getConstructor(XposedContext.class, boolean.class, String.class, Bundle.class);
-                    var moduleContext = (XposedModule) moduleEntry.newInstance(ctx, isSystemServer, processName, null);
+                    var moduleEntry = moduleClass.getConstructor(XposedContext.class, XposedModuleInterface.ModuleLoadedParam.class);
+                    var moduleContext = (XposedModule) moduleEntry.newInstance(ctx, new XposedModuleInterface.ModuleLoadedParam() {
+                        @Override
+                        public boolean isSystemServer() {
+                            return isSystemServer;
+                        }
+
+                        @NonNull
+                        @Override
+                        public String getProcessName() {
+                            return processName;
+                        }
+
+                        @NonNull
+                        @Override
+                        public String getAppDataDir() {
+                            return appDir;
+                        }
+
+                        @Nullable
+                        @Override
+                        public Bundle getExtras() {
+                            return null;
+                        }
+                    });
                     modules.add(moduleContext);
                 } catch (Throwable e) {
                     Log.e(TAG, "    Failed to load class " + moduleClass, e);

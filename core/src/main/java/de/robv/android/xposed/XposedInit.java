@@ -211,10 +211,7 @@ public final class XposedInit {
             resparam.res = newRes;
             XCallback.callAll(resparam);
 
-            var rlparam = new XposedModuleInterface.ResourceLoadedParam();
-            rlparam.packageName = packageName;
-            rlparam.res = newRes;
-            LSPosedContext.callOnResourceLoaded(rlparam, null);
+            LSPosedContext.callOnResourceLoaded(resparam);
         }
 
         param.setResult(newRes);
