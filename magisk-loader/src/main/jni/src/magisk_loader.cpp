@@ -220,7 +220,7 @@ namespace lspd {
             LOGD("Done prepare");
             FindAndCall(env, "forkCommon",
                         "(ZLjava/lang/String;Ljava/lang/String;Landroid/os/IBinder;)V",
-                        JNI_FALSE, nice_name, binder);
+                        JNI_FALSE, nice_name, app_dir, binder);
             LOGD("injected xposed into {}", process_name.get());
             setAllowUnload(false);
             GetArt(true);
