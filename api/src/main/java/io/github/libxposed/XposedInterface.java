@@ -57,19 +57,11 @@ public interface XposedInterface {
         <U> U getExtra(@NonNull String key);
     }
 
-    interface PriorityMethodHooker {
-        int PRIORITY_DEFAULT = 50;
-
-        default int getPriority() {
-            return PRIORITY_DEFAULT;
-        }
-    }
-
-    interface BeforeMethodHooker<T> extends PriorityMethodHooker {
+    interface BeforeMethodHooker<T> {
         void before(@NonNull BeforeHookCallback<T> callback);
     }
 
-    interface AfterMethodHooker<T> extends PriorityMethodHooker {
+    interface AfterMethodHooker<T> {
         void after(@NonNull AfterHookCallback<T> callback);
     }
 
@@ -100,11 +92,23 @@ public interface XposedInterface {
 
     MethodUnhooker<MethodHooker<Method>, Method> hook(@NonNull Method origin, @NonNull MethodHooker<Method> hooker);
 
+    MethodUnhooker<BeforeMethodHooker<Method>, Method> hookBefore(@NonNull Method origin, int priority, @NonNull BeforeMethodHooker<Method> hooker);
+
+    MethodUnhooker<AfterMethodHooker<Method>, Method> hookAfter(@NonNull Method origin, int priority, @NonNull AfterMethodHooker<Method> hooker);
+
+    MethodUnhooker<MethodHooker<Method>, Method> hook(@NonNull Method origin, int priority, @NonNull MethodHooker<Method> hooker);
+
     <T> MethodUnhooker<BeforeMethodHooker<Constructor<T>>, Constructor<T>> hookBefore(@NonNull Constructor<T> origin, @NonNull BeforeMethodHooker<Constructor<T>> hooker);
 
     <T> MethodUnhooker<AfterMethodHooker<Constructor<T>>, Constructor<T>> hookAfter(@NonNull Constructor<T> origin, @NonNull AfterMethodHooker<Constructor<T>> hooker);
 
     <T> MethodUnhooker<MethodHooker<Constructor<T>>, Constructor<T>> hook(@NonNull Constructor<T> origin, @NonNull MethodHooker<Constructor<T>> hooker);
+
+    <T> MethodUnhooker<BeforeMethodHooker<Constructor<T>>, Constructor<T>> hookBefore(@NonNull Constructor<T> origin, int priority, @NonNull BeforeMethodHooker<Constructor<T>> hooker);
+
+    <T> MethodUnhooker<AfterMethodHooker<Constructor<T>>, Constructor<T>> hookAfter(@NonNull Constructor<T> origin, int priority, @NonNull AfterMethodHooker<Constructor<T>> hooker);
+
+    <T> MethodUnhooker<MethodHooker<Constructor<T>>, Constructor<T>> hook(@NonNull Constructor<T> origin, int priority, @NonNull MethodHooker<Constructor<T>> hooker);
 
     boolean deoptimize(@Nullable Method method);
 

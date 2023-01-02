@@ -150,7 +150,7 @@ public class LSPosedContext extends XposedContext {
                     Log.e(TAG, "    This class doesn't implement any sub-interface of XposedModule, skipping it");
                 }
                 try {
-                    if (moduleClass.getMethod("onResourceLoaded", XposedModuleInterface.ResourcesLoadedParam.class).getDeclaringClass() != XposedModuleInterface.class) {
+                    if (moduleClass.getMethod("onResourceLoaded", XposedModuleInterface.ResourcesLoadedParam.class).getDeclaringClass() != XposedModule.class) {
                         XposedInit.hookResources();
                     }
                     var moduleEntry = moduleClass.getConstructor(XposedContext.class, XposedModuleInterface.ModuleLoadedParam.class);
@@ -760,6 +760,24 @@ public class LSPosedContext extends XposedContext {
 
     // TODO
     @Override
+    public MethodUnhooker<BeforeMethodHooker<Method>, Method> hookBefore(@NonNull Method origin, int priority, @NonNull BeforeMethodHooker<Method> hooker) {
+        return null;
+    }
+
+    // TODO
+    @Override
+    public MethodUnhooker<AfterMethodHooker<Method>, Method> hookAfter(@NonNull Method origin, int priority, @NonNull AfterMethodHooker<Method> hooker) {
+        return null;
+    }
+
+    // TODO
+    @Override
+    public MethodUnhooker<MethodHooker<Method>, Method> hook(@NonNull Method origin, int priority, @NonNull MethodHooker<Method> hooker) {
+        return null;
+    }
+
+    // TODO
+    @Override
     public <T> MethodUnhooker<BeforeMethodHooker<Constructor<T>>, Constructor<T>> hookBefore(@NonNull Constructor<T> origin, @NonNull BeforeMethodHooker<Constructor<T>> hooker) {
         return null;
     }
@@ -773,6 +791,24 @@ public class LSPosedContext extends XposedContext {
     // TODO
     @Override
     public <T> MethodUnhooker<MethodHooker<Constructor<T>>, Constructor<T>> hook(@NonNull Constructor<T> origin, @NonNull MethodHooker<Constructor<T>> hooker) {
+        return null;
+    }
+
+    // TODO
+    @Override
+    public <T> MethodUnhooker<BeforeMethodHooker<Constructor<T>>, Constructor<T>> hookBefore(@NonNull Constructor<T> origin, int priority, @NonNull BeforeMethodHooker<Constructor<T>> hooker) {
+        return null;
+    }
+
+    // TODO
+    @Override
+    public <T> MethodUnhooker<AfterMethodHooker<Constructor<T>>, Constructor<T>> hookAfter(@NonNull Constructor<T> origin, int priority, @NonNull AfterMethodHooker<Constructor<T>> hooker) {
+        return null;
+    }
+
+    // TODO
+    @Override
+    public <T> MethodUnhooker<MethodHooker<Constructor<T>>, Constructor<T>> hook(@NonNull Constructor<T> origin, int priority, @NonNull MethodHooker<Constructor<T>> hooker) {
         return null;
     }
 
