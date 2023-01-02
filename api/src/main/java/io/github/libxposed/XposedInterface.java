@@ -110,7 +110,8 @@ public interface XposedInterface {
 
     <T> boolean deoptimize(@Nullable Constructor<T> constructor);
 
-    @Nullable XposedUtils getUtils();
+    @Nullable
+    XposedUtils getUtils();
 
     void log(@NonNull String message);
 
