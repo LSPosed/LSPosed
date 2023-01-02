@@ -117,6 +117,7 @@ public class LSPosedContext extends XposedContext {
             }
             var loadedApk = at.getPackageInfoNoCheck(module.applicationInfo, null);
             XposedHelpers.setObjectField(loadedApk, "mClassLoader", mcl);
+            XposedHelpers.setObjectField(loadedApk, "mDataDir", appDir);
             var c = Class.forName("android.app.ContextImpl");
             var ctor = c.getDeclaredConstructors()[0];
             ctor.setAccessible(true);
@@ -301,7 +302,7 @@ public class LSPosedContext extends XposedContext {
 
     @Override
     public File getDataDir() {
-        return new File(appDir);
+        return mBase.getDataDir();
     }
 
     @Override
