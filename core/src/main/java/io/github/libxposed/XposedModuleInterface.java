@@ -11,32 +11,50 @@ import androidx.annotation.Nullable;
 public interface XposedModuleInterface {
     interface ModuleLoadedParam {
         boolean isSystemServer();
-        @NonNull String getProcessName();
-        @NonNull String getAppDataDir();
-        @Nullable Bundle getExtras();
+
+        @NonNull
+        String getProcessName();
+
+        @NonNull
+        String getAppDataDir();
+
+        @Nullable
+        Bundle getExtras();
     }
 
     interface PackageLoadedParam {
-        @NonNull String getPackageName();
-        @NonNull ApplicationInfo getAppInfo();
-        @NonNull ClassLoader getClassLoader();
-        @NonNull String getProcessName();
+        @NonNull
+        String getPackageName();
+
+        @NonNull
+        ApplicationInfo getAppInfo();
+
+        @NonNull
+        ClassLoader getClassLoader();
+
+        @NonNull
+        String getProcessName();
+
         boolean isFirstApplication();
-        @Nullable Bundle getExtras();
+
+        @Nullable
+        Bundle getExtras();
     }
 
     interface ResourcesLoadedParam {
-        @NonNull String getPackageName();
-        @NonNull XposedResources getResources();
-        @Nullable Bundle getExtras();
+        @NonNull
+        String getPackageName();
+
+        @NonNull
+        XposedResources getResources();
+
+        @Nullable
+        Bundle getExtras();
     }
 
     default void onPackageLoaded(@NonNull PackageLoadedParam param) {
-
     }
 
     default void onResourceLoaded(@NonNull ResourcesLoadedParam param) {
-
     }
-
 }
