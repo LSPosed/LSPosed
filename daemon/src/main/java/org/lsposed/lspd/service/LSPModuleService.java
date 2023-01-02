@@ -19,13 +19,19 @@
 
 package org.lsposed.lspd.service;
 
-import android.app.IUidObserver;
 import android.content.AttributionSource;
 import android.os.Build;
 import android.os.Bundle;
+import android.os.ParcelFileDescriptor;
+import android.os.RemoteException;
 import android.util.Log;
 
-import java.util.Map;
+import org.lsposed.daemon.BuildConfig;
+import org.lsposed.lspd.models.Module;
+
+import java.io.IOException;
+import java.util.ArrayList;
+import java.util.List;
 import java.util.Set;
 import java.util.concurrent.ConcurrentHashMap;
 
@@ -37,15 +43,16 @@ public class LSPModuleService extends IXposedService.Stub {
 
 
     private final static Set<Integer> uidSet = ConcurrentHashMap.newKeySet();
-    private final static Map<Integer, LSPModuleService> serviceMap = new ConcurrentHashMap<>();
 
-    private final int uid;
-    private final String packageName;
+    private final Module loadedModule;
 
     static void uidStarts(int uid) {
         if (!uidSet.contains(uid)) {
             uidSet.add(uid);
-            sendBinder(getService(uid));
+            var module = ConfigManager.getInstance().getModule(uid);
+            if (module != null) {
+                ((LSPInjectedModuleService) module.service).getModuleService().sendBinder(uid);
+            }
         }
     }
 
@@ -53,10 +60,8 @@ public class LSPModuleService extends IXposedService.Stub {
         uidSet.remove(uid);
     }
 
-    private static void sendBinder(LSPModuleService service) {
-        if (service == null) return;
-        var uid = service.uid;
-        var name = service.packageName;
+    private void sendBinder(int uid) {
+        var name = loadedModule.packageName;
         try {
             int userId = uid / PackageService.PER_USER_RANGE;
             var authority = name + AUTHORITY_SUFFIX;
@@ -66,11 +71,10 @@ public class LSPModuleService extends IXposedService.Stub {
                 return;
             }
             var extra = new Bundle();
-            extra.putBinder("binder", service.asBinder());
+            extra.putBinder("binder", asBinder());
             Bundle reply = null;
             if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.S) {
-                reply = provider.call(new AttributionSource.Builder(1000).setPackageName("android").build(),
-                        authority, SEND_BINDER, null, extra);
+                reply = provider.call(new AttributionSource.Builder(1000).setPackageName("android").build(), authority, SEND_BINDER, null, extra);
             } else if (Build.VERSION.SDK_INT == Build.VERSION_CODES.R) {
                 reply = provider.call("android", null, authority, SEND_BINDER, null, extra);
             } else if (Build.VERSION.SDK_INT == Build.VERSION_CODES.Q) {
@@ -86,23 +90,78 @@ public class LSPModuleService extends IXposedService.Stub {
         }
     }
 
-    public static LSPModuleService getService(int uid) {
-        var module = ConfigManager.getInstance().getModule(uid);
-        if (module == null) return null;
-        return serviceMap.computeIfAbsent(uid, __ -> new LSPModuleService(module, uid));
-    }
-
-    public static void removeService(int uid) {
-        serviceMap.remove(uid);
-    }
-
-    private LSPModuleService(String name, int uid) {
-        this.uid = uid;
-        this.packageName = name;
+    LSPModuleService(Module module) {
+        loadedModule = module;
     }
 
     @Override
     public long getAPIVersion() {
         return API;
+    }
+
+    @Override
+    public String implementationName() {
+        return "LSPosed";
+    }
+
+    @Override
+    public String implementationVersion() throws RemoteException {
+        return BuildConfig.VERSION_NAME;
+    }
+
+    @Override
+    public long implementationVersionCode() throws RemoteException {
+        return BuildConfig.VERSION_CODE;
+    }
+
+    @Override
+    public List<String> getScope() {
+        ArrayList<String> res = new ArrayList<>();
+        var scope = ConfigManager.getInstance().getModuleScope(loadedModule.packageName);
+        if (scope == null) return res;
+        for (var s : scope) {
+            res.add(s.packageName);
+        }
+        return res;
+    }
+
+    @Override
+    public void requestScope(String packageName) {
+        // TODO
+    }
+
+    @Override
+    public Bundle requestRemotePreferences(String group) throws RemoteException {
+        // TODO
+        return null;
+    }
+
+    @Override
+    public void updateRemotePreferences(String group, Bundle diff) throws RemoteException {
+        // TODO
+        ((LSPInjectedModuleService) loadedModule.service).onUpdateRemotePreferences(group, diff);
+    }
+
+    @Override
+    public ParcelFileDescriptor openRemoteFile(String path, int mode) throws RemoteException {
+        try {
+            var absolutePath = ConfigFileManager.resolveModulePath(loadedModule.packageName, path);
+            if (!absolutePath.getParent().toFile().mkdirs()) {
+                throw new IOException("failed to create parent dir");
+            }
+            return ParcelFileDescriptor.open(absolutePath.toFile(), mode);
+        } catch (Throwable e) {
+            throw new RemoteException(e.getMessage());
+        }
+    }
+
+    @Override
+    public boolean deleteRemoteFile(String path) throws RemoteException {
+        try {
+            var absolutePath = ConfigFileManager.resolveModulePath(loadedModule.packageName, path);
+            return absolutePath.toFile().delete();
+        } catch (Throwable e) {
+            throw new RemoteException(e.getMessage());
+        }
     }
 }

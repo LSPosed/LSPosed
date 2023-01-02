@@ -1,12 +1,13 @@
 package org.lsposed.lspd.impl;
 
-import static org.lsposed.lspd.core.ApplicationServiceClient.serviceClient;
-
 import android.content.SharedPreferences;
 import android.os.Bundle;
 import android.os.RemoteException;
 
 import androidx.annotation.Nullable;
+
+import org.lsposed.lspd.service.ILSPInjectedModuleService;
+import org.lsposed.lspd.service.IRemotePreferenceCallback;
 
 import java.util.Map;
 import java.util.Set;
@@ -29,6 +30,14 @@ public class LSPosedRemotePreferences implements SharedPreferences {
         synchronized public void onUpdate(Bundle bundle) {
             if (bundle.containsKey("map"))
                 mMap.putAll((Map<String, ?>) bundle.getSerializable("map"));
+            if (bundle.containsKey("delete")) {
+                for (var key : bundle.getStringArrayList("delete")) {
+                    mMap.remove(key);
+                    synchronized (mListeners) {
+                        mListeners.forEach((listener, __) -> listener.onSharedPreferenceChanged(LSPosedRemotePreferences.this, key));
+                    }
+                }
+            }
             if (bundle.containsKey("diff")) {
                 for (var key : bundle.getStringArrayList("diff")) {
                     synchronized (mListeners) {
@@ -39,9 +48,9 @@ public class LSPosedRemotePreferences implements SharedPreferences {
         }
     };
 
-    public LSPosedRemotePreferences(String packageName, int userId, String group) {
+    public LSPosedRemotePreferences(ILSPInjectedModuleService service, String group) {
         try {
-            Bundle output = serviceClient.requestRemotePreferences(packageName, userId, group, callback.asBinder());
+            Bundle output = service.requestRemotePreferences(group, callback);
             callback.onUpdate(output);
         } catch (RemoteException e) {
             XposedBridge.log(e);

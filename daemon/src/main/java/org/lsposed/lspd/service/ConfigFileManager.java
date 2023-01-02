@@ -26,6 +26,7 @@ import android.content.res.AssetManager;
 import android.content.res.Resources;
 import android.os.ParcelFileDescriptor;
 import android.os.Process;
+import android.os.RemoteException;
 import android.os.SELinux;
 import android.os.SharedMemory;
 import android.system.ErrnoException;
@@ -77,6 +78,7 @@ import hidden.HiddenApiBridge;
 
 public class ConfigFileManager {
     static final Path basePath = Paths.get("/data/adb/lspd");
+    static final Path modulePath = basePath.resolve("modules");
     static final Path daemonApkPath = Paths.get(System.getProperty("java.class.path", null));
     static final Path managerApkPath = basePath.resolve("manager.apk");
     static final File magiskDbPath = new File("/data/adb/magisk.db");
@@ -425,6 +427,19 @@ public class ConfigFileManager {
             }
         }
         return preloadDex;
+    }
+
+    static Path resolveModulePath(String packageName, String path) throws IOException {
+        var requestPath = Paths.get(path);
+        if (requestPath.isAbsolute()) {
+            throw new IOException("path must be relative");
+        }
+        var moduleDir = modulePath.resolve(packageName).normalize();
+        var absolutePath = moduleDir.resolve(requestPath).normalize();
+        if (!absolutePath.startsWith(moduleDir)) {
+            throw new IOException("path must be in module dir");
+        }
+        return absolutePath;
     }
 
     private static class FileLocker {

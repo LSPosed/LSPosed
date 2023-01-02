@@ -21,7 +21,6 @@ package org.lsposed.lspd.service;
 
 import static org.lsposed.lspd.service.ServiceManager.TAG;
 
-import android.os.Bundle;
 import android.os.IBinder;
 import android.os.Parcel;
 import android.os.ParcelFileDescriptor;
@@ -140,15 +139,6 @@ public class LSPApplicationService extends ILSPApplicationService.Stub {
     public String getPrefsPath(String packageName) throws RemoteException {
         ensureRegistered();
         return ConfigManager.getInstance().getPrefsPath(packageName, getCallingUid());
-    }
-
-    @Override
-    public Bundle requestRemotePreferences(String packageName, int userId, String group, IBinder callback) throws RemoteException {
-        ensureRegistered();
-        // TODO: Handle callback
-        var bundle = new Bundle();
-        bundle.putSerializable("map", ConfigManager.getInstance().getModulePrefs(packageName, userId, group));
-        return bundle;
     }
 
     @Override
