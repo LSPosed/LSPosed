@@ -53,6 +53,7 @@ import de.robv.android.xposed.XposedInit;
 import io.github.libxposed.XposedContext;
 import io.github.libxposed.XposedModule;
 import io.github.libxposed.XposedModuleInterface;
+import io.github.libxposed.XposedUtils;
 
 public class LSPosedContext extends XposedContext {
 
@@ -787,13 +788,20 @@ public class LSPosedContext extends XposedContext {
         return false;
     }
 
+    // TODO
+    @Nullable
     @Override
-    public void log(@NonNull String message) {
+    public XposedUtils getUtils() {
+        return null;
+    }
+
+    @Override
+    public synchronized void log(@NonNull String message) {
         Log.i(TAG, mPackageName + ": " + message);
     }
 
     @Override
-    public void log(@NonNull String message, @NonNull Throwable throwable) {
+    public synchronized void log(@NonNull String message, @NonNull Throwable throwable) {
         Log.e(TAG, mPackageName + ": " + message, throwable);
     }
 }

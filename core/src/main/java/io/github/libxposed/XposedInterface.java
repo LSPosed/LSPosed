@@ -5,6 +5,7 @@ import androidx.annotation.Nullable;
 
 import java.lang.reflect.Constructor;
 import java.lang.reflect.Method;
+import java.util.ConcurrentModificationException;
 
 public interface XposedInterface {
     interface BeforeHookCallback<T> {
@@ -24,7 +25,7 @@ public interface XposedInterface {
         @Nullable
         Object invokeOrigin(@Nullable Object thisObject, Object[] args);
 
-        <U> void setExtra(String key, @Nullable U value);
+        <U> void setExtra(@NonNull String key, @Nullable U value) throws ConcurrentModificationException;
     }
 
     interface AfterHookCallback<T> {
@@ -53,7 +54,7 @@ public interface XposedInterface {
         Object invokeOrigin(@Nullable Object thisObject, Object[] args);
 
         @Nullable
-        <U> U getExtra(String key);
+        <U> U getExtra(@NonNull String key);
     }
 
     interface PriorityMethodHooker {
@@ -108,6 +109,8 @@ public interface XposedInterface {
     boolean deoptimize(@Nullable Method method);
 
     <T> boolean deoptimize(@Nullable Constructor<T> constructor);
+
+    @Nullable XposedUtils getUtils();
 
     void log(@NonNull String message);
 
