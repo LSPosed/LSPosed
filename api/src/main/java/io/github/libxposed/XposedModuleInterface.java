@@ -51,9 +51,7 @@ public interface XposedModuleInterface {
         Bundle getExtras();
     }
 
-    default void onPackageLoaded(@NonNull PackageLoadedParam param) {
-    }
+    void onPackageLoaded(@NonNull PackageLoadedParam param);
 
-    default void onResourceLoaded(@NonNull ResourcesLoadedParam param) {
-    }
+    void onResourceLoaded(@NonNull ResourcesLoadedParam param);
 }
