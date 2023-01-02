@@ -21,7 +21,6 @@
 package de.robv.android.xposed.callbacks;
 
 import android.content.res.XResources;
-import android.content.res.XposedResources;
 import android.os.Bundle;
 
 import androidx.annotation.NonNull;
@@ -31,6 +30,7 @@ import java.util.concurrent.CopyOnWriteArraySet;
 
 import de.robv.android.xposed.IXposedHookInitPackageResources;
 import io.github.libxposed.XposedModuleInterface;
+import io.github.libxposed.XposedResources;
 
 /**
  * This class is only used for internal purposes, except for the {@link InitPackageResourcesParam}
