@@ -47,6 +47,7 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 
+import androidx.annotation.NonNull;
 import androidx.annotation.RequiresApi;
 
 import org.xmlpull.v1.XmlPullParser;
@@ -168,6 +169,8 @@ public class XResources extends XposedResources {
 	/**
 	 * Returns the name of the package that these resources belong to, or "android" for system resources.
 	 */
+	@NonNull
+	@Override
 	public String getPackageName() {
 		return mPackageName;
 	}
