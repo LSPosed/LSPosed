@@ -42,6 +42,8 @@ import java.io.File;
 import java.io.FileInputStream;
 import java.io.FileOutputStream;
 import java.io.InputStream;
+import java.lang.reflect.Constructor;
+import java.lang.reflect.Method;
 import java.util.Map;
 import java.util.Set;
 import java.util.concurrent.ConcurrentHashMap;
@@ -720,11 +722,6 @@ public class LSPosedContext extends XposedContext {
         throw new AbstractMethodError();
     }
 
-    @Override
-    public void hook() {
-        throw new AbstractMethodError();
-    }
-
     @NonNull
     @Override
     public String implementationName() {
@@ -740,6 +737,42 @@ public class LSPosedContext extends XposedContext {
     @Override
     public long implementationVersionCode() {
         return 0;
+    }
+
+    // TODO
+    @Override
+    public MethodUnhooker<BeforeMethodHooker<Method>, Method> hookBefore(@NonNull Method origin, @NonNull BeforeMethodHooker<Method> hooker) {
+        return null;
+    }
+
+    // TODO
+    @Override
+    public MethodUnhooker<AfterMethodHooker<Method>, Method> hookAfter(@NonNull Method origin, @NonNull AfterMethodHooker<Method> hooker) {
+        return null;
+    }
+
+    // TODO
+    @Override
+    public MethodUnhooker<MethodHooker<Method>, Method> hook(@NonNull Method origin, @NonNull MethodHooker<Method> hooker) {
+        return null;
+    }
+
+    // TODO
+    @Override
+    public <T> MethodUnhooker<BeforeMethodHooker<Constructor<T>>, Constructor<T>> hookBefore(@NonNull Constructor<T> origin, @NonNull BeforeMethodHooker<Constructor<T>> hooker) {
+        return null;
+    }
+
+    // TODO
+    @Override
+    public <T> MethodUnhooker<AfterMethodHooker<Constructor<T>>, Constructor<T>> hookAfter(@NonNull Constructor<T> origin, @NonNull AfterMethodHooker<Constructor<T>> hooker) {
+        return null;
+    }
+
+    // TODO
+    @Override
+    public <T> MethodUnhooker<MethodHooker<Constructor<T>>, Constructor<T>> hook(@NonNull Constructor<T> origin, @NonNull MethodHooker<Constructor<T>> hooker) {
+        return null;
     }
 
     @Override

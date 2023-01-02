@@ -5,6 +5,9 @@ import android.content.ContextWrapper;
 
 import androidx.annotation.NonNull;
 
+import java.lang.reflect.Constructor;
+import java.lang.reflect.Method;
+
 public class XposedContextWrapper extends ContextWrapper implements XposedInterface {
 
     XposedContextWrapper(XposedContext base) {
@@ -15,14 +18,13 @@ public class XposedContextWrapper extends ContextWrapper implements XposedInterf
         super(base);
     }
 
-    @Override
-    final public XposedContext getBaseContext() {
-        return (XposedContext) super.getBaseContext();
+    final long getAPIVersion() {
+        return 100;
     }
 
     @Override
-    final public void hook() {
-        getBaseContext().hook();
+    final public XposedContext getBaseContext() {
+        return (XposedContext) super.getBaseContext();
     }
 
     @NonNull
@@ -40,6 +42,36 @@ public class XposedContextWrapper extends ContextWrapper implements XposedInterf
     @Override
     final public long implementationVersionCode() {
         return getBaseContext().implementationVersionCode();
+    }
+
+    @Override
+    public MethodUnhooker<BeforeMethodHooker<Method>, Method> hookBefore(@NonNull Method origin, @NonNull BeforeMethodHooker<Method> hooker) {
+        return getBaseContext().hookBefore(origin, hooker);
+    }
+
+    @Override
+    public MethodUnhooker<AfterMethodHooker<Method>, Method> hookAfter(@NonNull Method origin, @NonNull AfterMethodHooker<Method> hooker) {
+        return getBaseContext().hookAfter(origin, hooker);
+    }
+
+    @Override
+    public MethodUnhooker<MethodHooker<Method>, Method> hook(@NonNull Method origin, @NonNull MethodHooker<Method> hooker) {
+        return getBaseContext().hook(origin, hooker);
+    }
+
+    @Override
+    public <T> MethodUnhooker<BeforeMethodHooker<Constructor<T>>, Constructor<T>> hookBefore(@NonNull Constructor<T> origin, @NonNull BeforeMethodHooker<Constructor<T>> hooker) {
+        return getBaseContext().hookBefore(origin, hooker);
+    }
+
+    @Override
+    public <T> MethodUnhooker<AfterMethodHooker<Constructor<T>>, Constructor<T>> hookAfter(@NonNull Constructor<T> origin, @NonNull AfterMethodHooker<Constructor<T>> hooker) {
+        return getBaseContext().hookAfter(origin, hooker);
+    }
+
+    @Override
+    public <T> MethodUnhooker<MethodHooker<Constructor<T>>, Constructor<T>> hook(@NonNull Constructor<T> origin, @NonNull MethodHooker<Constructor<T>> hooker) {
+        return getBaseContext().hook(origin, hooker);
     }
 
     @Override

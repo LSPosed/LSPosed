@@ -1275,7 +1275,7 @@ public class XResources extends XposedResources {
 	 * Mainly used when inflating layouts.
 	 * @hide
 	 */
-	public static class XTypedArray extends XTypedArraySuperClass {
+	public static class XTypedArray extends XposedTypedArray {
 
         public XTypedArray(Resources resources) {
             super(resources);
