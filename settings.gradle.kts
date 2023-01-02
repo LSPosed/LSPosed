@@ -31,6 +31,7 @@ rootProject.name = "LSPosed"
 include(
     ":app",
     ":libxposed:api",
+    ":libxposed:service",
     ":stubs",
     ":core",
     ":daemon",
@@ -40,7 +41,6 @@ include(
     ":magisk-loader",
     ":services:manager-service",
     ":services:daemon-service",
-    ":services:xposed-service:interface",
 )
 
 project(":stubs").projectDir = file("libxposed/stubs")
