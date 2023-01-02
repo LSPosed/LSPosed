@@ -4,7 +4,6 @@ import static org.lsposed.lspd.service.PackageService.PER_USER_RANGE;
 
 import android.os.Binder;
 import android.os.Bundle;
-import android.os.IBinder;
 import android.os.RemoteException;
 
 import org.lsposed.lspd.models.Module;
