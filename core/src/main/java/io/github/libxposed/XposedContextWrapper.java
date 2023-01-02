@@ -3,6 +3,8 @@ package io.github.libxposed;
 import android.content.Context;
 import android.content.ContextWrapper;
 
+import androidx.annotation.NonNull;
+
 public class XposedContextWrapper extends ContextWrapper implements XposedInterface {
 
     XposedContextWrapper(XposedContext base) {
@@ -21,6 +23,23 @@ public class XposedContextWrapper extends ContextWrapper implements XposedInterf
     @Override
     final public void hook() {
         getBaseContext().hook();
+    }
+
+    @NonNull
+    @Override
+    public String implementationName() {
+        return getBaseContext().implementationVersion();
+    }
+
+    @NonNull
+    @Override
+    public String implementationVersion() {
+        return getBaseContext().implementationVersion();
+    }
+
+    @Override
+    public long implementationVersionCode() {
+        return getBaseContext().implementationVersionCode();
     }
 
     @Override
