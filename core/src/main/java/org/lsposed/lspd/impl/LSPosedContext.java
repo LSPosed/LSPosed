@@ -40,9 +40,7 @@ import org.lsposed.lspd.util.LspModuleClassLoader;
 
 import java.io.File;
 import java.io.FileInputStream;
-import java.io.FileNotFoundException;
 import java.io.FileOutputStream;
-import java.io.IOException;
 import java.io.InputStream;
 import java.util.Map;
 import java.util.Set;
@@ -279,12 +277,12 @@ public class LSPosedContext extends XposedContext {
     }
 
     @Override
-    public FileInputStream openFileInput(String name) throws FileNotFoundException {
+    public FileInputStream openFileInput(String name) {
         throw new AbstractMethodError();
     }
 
     @Override
-    public FileOutputStream openFileOutput(String name, int mode) throws FileNotFoundException {
+    public FileOutputStream openFileOutput(String name, int mode) {
         throw new AbstractMethodError();
     }
 
@@ -421,17 +419,17 @@ public class LSPosedContext extends XposedContext {
     }
 
     @Override
-    public void setWallpaper(Bitmap bitmap) throws IOException {
+    public void setWallpaper(Bitmap bitmap) {
         throw new AbstractMethodError();
     }
 
     @Override
-    public void setWallpaper(InputStream data) throws IOException {
+    public void setWallpaper(InputStream data) {
         throw new AbstractMethodError();
     }
 
     @Override
-    public void clearWallpaper() throws IOException {
+    public void clearWallpaper() {
         throw new AbstractMethodError();
     }
 
@@ -456,12 +454,12 @@ public class LSPosedContext extends XposedContext {
     }
 
     @Override
-    public void startIntentSender(IntentSender intent, @Nullable Intent fillInIntent, int flagsMask, int flagsValues, int extraFlags) throws IntentSender.SendIntentException {
+    public void startIntentSender(IntentSender intent, @Nullable Intent fillInIntent, int flagsMask, int flagsValues, int extraFlags) {
         throw new AbstractMethodError();
     }
 
     @Override
-    public void startIntentSender(IntentSender intent, @Nullable Intent fillInIntent, int flagsMask, int flagsValues, int extraFlags, @Nullable Bundle options) throws IntentSender.SendIntentException {
+    public void startIntentSender(IntentSender intent, @Nullable Intent fillInIntent, int flagsMask, int flagsValues, int extraFlags, @Nullable Bundle options) {
         throw new AbstractMethodError();
     }
 
@@ -693,12 +691,12 @@ public class LSPosedContext extends XposedContext {
     }
 
     @Override
-    public Context createPackageContext(String packageName, int flags) throws PackageManager.NameNotFoundException {
+    public Context createPackageContext(String packageName, int flags) {
         throw new AbstractMethodError();
     }
 
     @Override
-    public Context createContextForSplit(String splitName) throws PackageManager.NameNotFoundException {
+    public Context createContextForSplit(String splitName) {
         throw new AbstractMethodError();
     }
 
@@ -725,6 +723,23 @@ public class LSPosedContext extends XposedContext {
     @Override
     public void hook() {
         throw new AbstractMethodError();
+    }
+
+    @NonNull
+    @Override
+    public String implementationName() {
+        return "LSPosed";
+    }
+
+    @NonNull
+    @Override
+    public String implementationVersion() {
+        return "";
+    }
+
+    @Override
+    public long implementationVersionCode() {
+        return 0;
     }
 
     @Override
