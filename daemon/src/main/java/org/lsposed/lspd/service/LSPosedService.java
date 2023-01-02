@@ -24,7 +24,6 @@ import static org.lsposed.lspd.service.PackageService.PER_USER_RANGE;
 import static org.lsposed.lspd.service.ServiceManager.TAG;
 import static org.lsposed.lspd.service.ServiceManager.getExecutorService;
 
-import android.app.ActivityManager;
 import android.app.IApplicationThread;
 import android.app.IUidObserver;
 import android.content.IIntentReceiver;
@@ -96,7 +95,7 @@ public class LSPosedService extends ILSPosedService.Stub {
         var allUsers = intent.getBooleanExtra(EXTRA_REMOVED_FOR_ALL_USERS, false);
         if (userId == USER_NULL) userId = uid % PER_USER_RANGE;
         Uri uri = intent.getData();
-        String moduleName = (uri != null) ? uri.getSchemeSpecificPart() : ConfigManager.getInstance().getModule(uid);
+        String moduleName = (uri != null) ? uri.getSchemeSpecificPart() : ConfigManager.getInstance().getModule(uid).packageName;
 
         ApplicationInfo applicationInfo = null;
         if (moduleName != null) {

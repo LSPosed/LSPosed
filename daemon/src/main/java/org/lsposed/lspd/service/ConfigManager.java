@@ -229,6 +229,7 @@ public class ConfigManager {
                 } catch (PackageParser.PackageParserException e) {
                     Log.w(TAG, "failed to parse parse " + module.apkPath, e);
                 }
+                module.service = new LSPInjectedModuleService(module);
                 modules.add(module);
             }
         }
@@ -1003,9 +1004,9 @@ public class ConfigManager {
     }
 
     // this is slow, avoid using it
-    public String getModule(int uid) {
+    public Module getModule(int uid) {
         for (var module : cachedModule.values()) {
-            if (module.appId == uid % PER_USER_RANGE) return module.packageName;
+            if (module.appId == uid % PER_USER_RANGE) return module;
         }
         return null;
     }

@@ -36,6 +36,7 @@ import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 
 import org.lsposed.lspd.models.Module;
+import org.lsposed.lspd.service.ILSPInjectedModuleService;
 import org.lsposed.lspd.util.LspModuleClassLoader;
 
 import java.io.File;
@@ -70,12 +71,14 @@ public class LSPosedContext extends XposedContext {
     private final Context mBase;
     private final String mPackageName;
     private final String mApkPath;
+    private final ILSPInjectedModuleService service;
     private final Map<String, SharedPreferences> mRemotePrefs = new ConcurrentHashMap<>();
 
-    LSPosedContext(Context base, String packageName, String apkPath) {
+    LSPosedContext(Context base, String packageName, String apkPath, ILSPInjectedModuleService service) {
         this.mBase = base;
         this.mPackageName = packageName;
         this.mApkPath = apkPath;
+        this.service = service;
     }
 
     public static void callOnPackageLoaded(XposedModuleInterface.PackageLoadedParam param) {
@@ -143,7 +146,7 @@ public class LSPosedContext extends XposedContext {
                 }
                 args[i] = null;
             }
-            var ctx = new LSPosedContext((Context) ctor.newInstance(args), module.packageName, module.apkPath);
+            var ctx = new LSPosedContext((Context) ctor.newInstance(args), module.packageName, module.apkPath, module.service);
             for (var entry : module.file.moduleClassNames) {
                 var moduleClass = ctx.getClassLoader().loadClass(entry);
                 Log.d(TAG, "  Loading class " + moduleClass);
@@ -267,7 +270,7 @@ public class LSPosedContext extends XposedContext {
     @Override
     public SharedPreferences getSharedPreferences(String name, int mode) {
         if (name == null) throw new IllegalArgumentException("name must not be null");
-        return mRemotePrefs.computeIfAbsent(name, __ -> new LSPosedRemotePreferences(mPackageName, Process.myPid() / PER_USER_RANGE, name));
+        return mRemotePrefs.computeIfAbsent(name, __ -> new LSPosedRemotePreferences(service, name));
     }
 
     @Override

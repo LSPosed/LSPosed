@@ -85,15 +85,6 @@ public class ApplicationServiceClient implements ILSPApplicationService, IBinder
     }
 
     @Override
-    public Bundle requestRemotePreferences(String packageName, int userId, String group, IBinder callback) {
-        try {
-            return service.requestRemotePreferences(packageName, userId, group, callback);
-        } catch (RemoteException | NullPointerException ignored) {
-        }
-        return null;
-    }
-
-    @Override
     public ParcelFileDescriptor requestInjectedManagerBinder(List<IBinder> binder) {
         try {
             return service.requestInjectedManagerBinder(binder);

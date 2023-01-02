@@ -9,7 +9,5 @@ interface ILSPApplicationService {
 
     String getPrefsPath(String packageName);
 
-    Bundle requestRemotePreferences(String packageName, int userId, String group, IBinder callback);
-
     ParcelFileDescriptor requestInjectedManagerBinder(out List<IBinder> binder);
 }
