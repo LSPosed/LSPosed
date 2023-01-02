@@ -5,7 +5,7 @@ import android.content.res.Configuration;
 import android.content.res.Resources;
 import android.util.DisplayMetrics;
 
-public abstract class XposedResources extends Resources {
+public abstract class XposedResources extends Resources implements XposedResourcesInterface {
     public XposedResources(AssetManager assets, DisplayMetrics metrics, Configuration config) {
         super(assets, metrics, config);
     }
