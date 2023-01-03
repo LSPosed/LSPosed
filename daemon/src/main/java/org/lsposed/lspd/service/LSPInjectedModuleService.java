@@ -4,6 +4,7 @@ import static org.lsposed.lspd.service.PackageService.PER_USER_RANGE;
 
 import android.os.Binder;
 import android.os.Bundle;
+import android.os.ParcelFileDescriptor;
 import android.os.RemoteException;
 
 import org.lsposed.lspd.models.Module;
@@ -38,6 +39,16 @@ public class LSPInjectedModuleService extends ILSPInjectedModuleService.Stub {
             callback.asBinder().unlinkToDeath(() -> groupCallbacks.remove(callback), 0);
         }
         return bundle;
+    }
+
+    @Override
+    public ParcelFileDescriptor openRemoteFile(String path) throws RemoteException {
+        try {
+            var absolutePath = ConfigFileManager.resolveModulePath(loadedModule.packageName, path);
+            return ParcelFileDescriptor.open(absolutePath.toFile(), ParcelFileDescriptor.MODE_READ_ONLY);
+        } catch (Throwable e) {
+            throw new RemoteException(e.getMessage());
+        }
     }
 
     void onUpdateRemotePreferences(String group, Bundle diff) {
