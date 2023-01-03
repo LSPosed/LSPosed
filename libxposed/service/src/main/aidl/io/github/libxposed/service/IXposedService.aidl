@@ -6,10 +6,10 @@ interface IXposedService {
     const String SEND_BINDER = "SendBinder";
 
     // framework details
-    long getAPIVersion() = 1;
-    String implementationName() = 2;
-    String implementationVersion() = 3;
-    long implementationVersionCode() = 4;
+    int getAPIVersion() = 1;
+    String getFrameworkName() = 2;
+    String getFrameworkVersion() = 3;
+    long getFrameworkVersionCode() = 4;
 
     // scope utilities
     List<String> getScope() = 10;

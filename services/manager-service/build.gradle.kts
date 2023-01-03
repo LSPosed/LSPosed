@@ -35,6 +35,5 @@ android {
 }
 
 dependencies {
-    api(projects.libxposed.service)
     api("dev.rikka.rikkax.parcelablelist:parcelablelist:2.0.1")
 }

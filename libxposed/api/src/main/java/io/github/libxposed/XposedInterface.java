@@ -8,6 +8,8 @@ import java.lang.reflect.Method;
 import java.util.ConcurrentModificationException;
 
 public interface XposedInterface {
+    int API = 100;
+
     interface BeforeHookCallback<T> {
         @NonNull
         T getOrigin();
@@ -79,12 +81,12 @@ public interface XposedInterface {
     }
 
     @NonNull
-    String implementationName();
+    String getFrameworkName();
 
     @NonNull
-    String implementationVersion();
+    String getFrameworkVersion();
 
-    long implementationVersionCode();
+    long getFrameworkVersionCode();
 
     MethodUnhooker<BeforeMethodHooker<Method>, Method> hookBefore(@NonNull Method origin, @NonNull BeforeMethodHooker<Method> hooker);
 
