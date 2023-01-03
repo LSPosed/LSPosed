@@ -95,22 +95,22 @@ public class LSPModuleService extends IXposedService.Stub {
     }
 
     @Override
-    public long getAPIVersion() {
+    public int getAPIVersion() {
         return API;
     }
 
     @Override
-    public String implementationName() {
+    public String getFrameworkName() {
         return "LSPosed";
     }
 
     @Override
-    public String implementationVersion() throws RemoteException {
+    public String getFrameworkVersion() {
         return BuildConfig.VERSION_NAME;
     }
 
     @Override
-    public long implementationVersionCode() throws RemoteException {
+    public long getFrameworkVersionCode() {
         return BuildConfig.VERSION_CODE;
     }
 
@@ -131,13 +131,13 @@ public class LSPModuleService extends IXposedService.Stub {
     }
 
     @Override
-    public Bundle requestRemotePreferences(String group) throws RemoteException {
+    public Bundle requestRemotePreferences(String group) {
         // TODO
         return null;
     }
 
     @Override
-    public void updateRemotePreferences(String group, Bundle diff) throws RemoteException {
+    public void updateRemotePreferences(String group, Bundle diff) {
         // TODO
         ((LSPInjectedModuleService) loadedModule.service).onUpdateRemotePreferences(group, diff);
     }

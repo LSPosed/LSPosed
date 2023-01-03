@@ -35,6 +35,7 @@ import android.view.Display;
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 
+import org.lsposed.lspd.core.BuildConfig;
 import org.lsposed.lspd.models.Module;
 import org.lsposed.lspd.service.ILSPInjectedModuleService;
 import org.lsposed.lspd.util.LspModuleClassLoader;
@@ -729,19 +730,19 @@ public class LSPosedContext extends XposedContext {
 
     @NonNull
     @Override
-    public String implementationName() {
+    public String getFrameworkName() {
         return "LSPosed";
     }
 
     @NonNull
     @Override
-    public String implementationVersion() {
-        return "";
+    public String getFrameworkVersion() {
+        return BuildConfig.VERSION_NAME;
     }
 
     @Override
-    public long implementationVersionCode() {
-        return 0;
+    public long getFrameworkVersionCode() {
+        return BuildConfig.VERSION_CODE;
     }
 
     // TODO

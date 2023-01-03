@@ -19,8 +19,8 @@ public class XposedContextWrapper extends ContextWrapper implements XposedInterf
         super(base);
     }
 
-    final long getAPIVersion() {
-        return 100;
+    final public int getAPIVersion() {
+        return API;
     }
 
     @Override
@@ -30,19 +30,19 @@ public class XposedContextWrapper extends ContextWrapper implements XposedInterf
 
     @NonNull
     @Override
-    final public String implementationName() {
-        return getBaseContext().implementationVersion();
+    final public String getFrameworkName() {
+        return getBaseContext().getFrameworkName();
     }
 
     @NonNull
     @Override
-    final public String implementationVersion() {
-        return getBaseContext().implementationVersion();
+    final public String getFrameworkVersion() {
+        return getBaseContext().getFrameworkVersion();
     }
 
     @Override
-    final public long implementationVersionCode() {
-        return getBaseContext().implementationVersionCode();
+    final public long getFrameworkVersionCode() {
+        return getBaseContext().getFrameworkVersionCode();
     }
 
     @Override

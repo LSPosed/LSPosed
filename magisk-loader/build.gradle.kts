@@ -50,7 +50,6 @@ val injectedPackageName: String by rootProject.extra
 val injectedPackageUid: Int by rootProject.extra
 
 val defaultManagerPackageName: String by rootProject.extra
-val apiCode: Int by rootProject.extra
 val verCode: Int by rootProject.extra
 val verName: String by rootProject.extra
 
@@ -65,7 +64,6 @@ android {
         applicationId = "org.lsposed.lspd"
         multiDexEnabled = false
 
-        buildConfigField("int", "API_CODE", "$apiCode")
         buildConfigField(
             "String",
             "DEFAULT_MANAGER_PACKAGE_NAME",

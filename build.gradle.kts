@@ -58,7 +58,6 @@ val injectedPackageName by extra("com.android.shell")
 val injectedPackageUid by extra(2000)
 
 val defaultManagerPackageName by extra("org.lsposed.manager")
-val apiCode by extra(93)
 val verCode by extra(commitCount)
 val verName by extra(latestTag)
 val androidTargetSdkVersion by extra(33)

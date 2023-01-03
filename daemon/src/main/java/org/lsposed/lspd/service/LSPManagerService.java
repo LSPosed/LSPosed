@@ -63,6 +63,7 @@ import java.util.UUID;
 import java.util.concurrent.TimeUnit;
 
 import hidden.HiddenApiBridge;
+import io.github.libxposed.service.IXposedService;
 import rikka.parcelablelist.ParcelableListSlice;
 
 public class LSPManagerService extends ILSPManagerService.Stub {
@@ -362,7 +363,7 @@ public class LSPManagerService extends ILSPManagerService.Stub {
 
     @Override
     public int getXposedApiVersion() {
-        return BuildConfig.API_CODE;
+        return IXposedService.API;
     }
 
     @Override
@@ -559,7 +560,7 @@ public class LSPManagerService extends ILSPManagerService.Stub {
     }
 
     @Override
-    public void getLogs(ParcelFileDescriptor zipFd) throws RemoteException {
+    public void getLogs(ParcelFileDescriptor zipFd) {
         ConfigFileManager.getLogs(zipFd);
     }
 

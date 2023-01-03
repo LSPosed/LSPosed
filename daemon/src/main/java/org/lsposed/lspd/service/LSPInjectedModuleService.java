@@ -28,7 +28,7 @@ public class LSPInjectedModuleService extends ILSPInjectedModuleService.Stub {
     }
 
     @Override
-    public Bundle requestRemotePreferences(String group, IRemotePreferenceCallback callback) throws RemoteException {
+    public Bundle requestRemotePreferences(String group, IRemotePreferenceCallback callback) {
         var bundle = new Bundle();
         var userId = Binder.getCallingUid() % PER_USER_RANGE;
         bundle.putSerializable("map", ConfigManager.getInstance().getModulePrefs(loadedModule.packageName, userId, group));
