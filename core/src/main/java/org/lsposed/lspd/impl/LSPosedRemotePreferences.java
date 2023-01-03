@@ -3,6 +3,7 @@ package org.lsposed.lspd.impl;
 import android.content.SharedPreferences;
 import android.os.Bundle;
 import android.os.RemoteException;
+import android.util.ArraySet;
 
 import androidx.annotation.Nullable;
 
@@ -28,21 +29,22 @@ public class LSPosedRemotePreferences implements SharedPreferences {
     IRemotePreferenceCallback callback = new IRemotePreferenceCallback.Stub() {
         @Override
         synchronized public void onUpdate(Bundle bundle) {
-            if (bundle.containsKey("map"))
-                mMap.putAll((Map<String, ?>) bundle.getSerializable("map"));
+            Set<String> changes = new ArraySet<>();
             if (bundle.containsKey("delete")) {
-                for (var key : bundle.getStringArrayList("delete")) {
+                var deletes = bundle.getStringArrayList("delete");
+                changes.addAll(deletes);
+                for (var key : deletes) {
                     mMap.remove(key);
-                    synchronized (mListeners) {
-                        mListeners.forEach((listener, __) -> listener.onSharedPreferenceChanged(LSPosedRemotePreferences.this, key));
-                    }
                 }
             }
-            if (bundle.containsKey("diff")) {
-                for (var key : bundle.getStringArrayList("diff")) {
-                    synchronized (mListeners) {
-                        mListeners.forEach((listener, __) -> listener.onSharedPreferenceChanged(LSPosedRemotePreferences.this, key));
-                    }
+            if (bundle.containsKey("put")) {
+                var puts = (Map<String, Object>) bundle.getSerializable("put");
+                mMap.putAll(puts);
+                changes.addAll(puts.keySet());
+            }
+            synchronized (mListeners) {
+                for (var key : changes) {
+                    mListeners.keySet().forEach(listener -> listener.onSharedPreferenceChanged(LSPosedRemotePreferences.this, key));
                 }
             }
         }
