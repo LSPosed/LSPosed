@@ -38,6 +38,7 @@ import androidx.annotation.Nullable;
 
 import org.lsposed.lspd.core.BuildConfig;
 import org.lsposed.lspd.models.Module;
+import org.lsposed.lspd.nativebridge.HookBridge;
 import org.lsposed.lspd.service.ILSPInjectedModuleService;
 import org.lsposed.lspd.util.LspModuleClassLoader;
 
@@ -47,7 +48,10 @@ import java.io.FileNotFoundException;
 import java.io.FileOutputStream;
 import java.io.InputStream;
 import java.lang.reflect.Constructor;
+import java.lang.reflect.Executable;
 import java.lang.reflect.Method;
+import java.lang.reflect.Modifier;
+import java.lang.reflect.Proxy;
 import java.util.Map;
 import java.util.Set;
 import java.util.concurrent.ConcurrentHashMap;
@@ -822,16 +826,23 @@ public class LSPosedContext extends XposedContext {
         return null;
     }
 
-    // TODO
-    @Override
-    public boolean deoptimize(@Nullable Method method) {
-        return false;
+    private static boolean deoptimize(@NonNull Executable method) {
+        if (Modifier.isAbstract(method.getModifiers())) {
+            throw new IllegalArgumentException("Cannot deoptimize abstract methods: " + method);
+        } else if (Proxy.isProxyClass(method.getDeclaringClass())) {
+            throw new IllegalArgumentException("Cannot deoptimize methods from proxy class: " + method);
+        }
+        return HookBridge.deoptimizeMethod(method);
     }
 
-    // TODO
     @Override
-    public <T> boolean deoptimize(@Nullable Constructor<T> constructor) {
-        return false;
+    public boolean deoptimize(@NonNull Method method) {
+        return deoptimize((Executable) method);
+    }
+
+    @Override
+    public <T> boolean deoptimize(@NonNull Constructor<T> constructor) {
+        return deoptimize((Executable) constructor);
     }
 
     // TODO

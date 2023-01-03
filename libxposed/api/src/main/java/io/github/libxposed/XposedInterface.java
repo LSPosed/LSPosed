@@ -112,9 +112,9 @@ public interface XposedInterface {
 
     <T> MethodUnhooker<MethodHooker<Constructor<T>>, Constructor<T>> hook(@NonNull Constructor<T> origin, int priority, @NonNull MethodHooker<Constructor<T>> hooker);
 
-    boolean deoptimize(@Nullable Method method);
+    boolean deoptimize(@NonNull Method method);
 
-    <T> boolean deoptimize(@Nullable Constructor<T> constructor);
+    <T> boolean deoptimize(@NonNull Constructor<T> constructor);
 
     @Nullable
     XposedUtils getUtils();
