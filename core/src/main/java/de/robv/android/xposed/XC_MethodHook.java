@@ -20,10 +20,20 @@
 
 package de.robv.android.xposed;
 
+import androidx.annotation.NonNull;
+import androidx.annotation.Nullable;
+
+import org.lsposed.lspd.nativebridge.HookBridge;
+
+import java.lang.reflect.Executable;
+import java.lang.reflect.InvocationTargetException;
 import java.lang.reflect.Member;
+import java.util.ConcurrentModificationException;
+import java.util.HashMap;
 
 import de.robv.android.xposed.callbacks.IXUnhook;
 import de.robv.android.xposed.callbacks.XCallback;
+import io.github.libxposed.XposedInterface;
 
 /**
  * Callback class for method hooks.
@@ -93,7 +103,7 @@ public abstract class XC_MethodHook extends XCallback {
     /**
      * Wraps information about the method call and allows to influence it.
      */
-    public static final class MethodHookParam extends XCallback.Param {
+    public static final class MethodHookParam <T> extends XCallback.Param implements XposedInterface.BeforeHookCallback<T>, XposedInterface.AfterHookCallback<T> {
         /**
          * @hide
          */
@@ -121,6 +131,8 @@ public abstract class XC_MethodHook extends XCallback {
         private Throwable throwable = null;
         public boolean returnEarly = false;
 
+        private final HashMap<String, Object> extras = new HashMap<>();
+
         /**
          * Returns the result of the method call.
          */
@@ -144,6 +156,11 @@ public abstract class XC_MethodHook extends XCallback {
          */
         public Throwable getThrowable() {
             return throwable;
+        }
+
+        @Override
+        public boolean isSkipped() {
+            return returnEarly;
         }
 
         /**
@@ -171,6 +188,51 @@ public abstract class XC_MethodHook extends XCallback {
             if (throwable != null)
                 throw throwable;
             return result;
+        }
+
+        @NonNull
+        @Override
+        public T getOrigin() {
+            return (T) method;
+        }
+
+        @Nullable
+        @Override
+        public Object getThis() {
+            return thisObject;
+        }
+
+        @NonNull
+        @Override
+        public Object[] getArgs() {
+            return args;
+        }
+
+        @Override
+        public void returnAndSkip(@Nullable Object returnValue) {
+            setResult(returnValue);
+        }
+
+        @Override
+        public void throwAndSkip(@Nullable Throwable throwable) {
+            setThrowable(throwable);
+        }
+
+        @Nullable
+        @Override
+        public Object invokeOrigin(@Nullable Object thisObject, Object[] args) throws InvocationTargetException, IllegalAccessException {
+            return HookBridge.invokeOriginalMethod((Executable) method, thisObject, args);
+        }
+
+        @Nullable
+        @Override
+        public <U> U getExtra(@NonNull String key) {
+            return (U) extras.get(key);
+        }
+
+        @Override
+        public <U> void setExtra(@NonNull String key, @Nullable U value) throws ConcurrentModificationException {
+            extras.put(key, value);
         }
     }
 

@@ -43,6 +43,7 @@ import java.util.concurrent.CopyOnWriteArraySet;
 import de.robv.android.xposed.callbacks.XC_InitPackageResources;
 import de.robv.android.xposed.callbacks.XC_LoadPackage;
 import io.github.libxposed.XposedInterface;
+import io.github.libxposed.XposedModuleInterface;
 
 /**
  * This class contains most of Xposed's central logic, such as initialization and callbacks used by
@@ -395,7 +396,7 @@ public final class XposedBridge {
         }
     }
 
-    public static class AdditionalHookInfo {
+    public static class AdditionalHookInfo<T> {
         private final Object params;
 
         private AdditionalHookInfo(Executable method) {
@@ -416,7 +417,7 @@ public final class XposedBridge {
         // This method is quite critical. We should try not to use system methods to avoid
         // endless recursive
         public Object callback(Object[] args) throws Throwable {
-            XC_MethodHook.MethodHookParam param = new XC_MethodHook.MethodHookParam();
+            XC_MethodHook.MethodHookParam<T> param = new XC_MethodHook.MethodHookParam<>();
 
             var array = ((Object[]) params);
 
@@ -451,7 +452,12 @@ public final class XposedBridge {
             int beforeIdx = 0;
             do {
                 try {
-                    ((XC_MethodHook) callbacksSnapshot[beforeIdx]).beforeHookedMethod(param);
+                    var cb = callbacksSnapshot[beforeIdx];
+                    if (HookBridge.instanceOf(cb, XC_MethodHook.class)) {
+                        ((XC_MethodHook) cb).beforeHookedMethod(param);
+                    } else if (HookBridge.instanceOf(cb, XposedInterface.BeforeMethodHooker.class)) {
+                        ((XposedInterface.BeforeMethodHooker<T>) cb).before(param);
+                    }
                 } catch (Throwable t) {
                     XposedBridge.log(t);
 
@@ -483,8 +489,13 @@ public final class XposedBridge {
                 Object lastResult = param.getResult();
                 Throwable lastThrowable = param.getThrowable();
 
+                var cb = callbacksSnapshot[afterIdx];
                 try {
-                    ((XC_MethodHook) callbacksSnapshot[afterIdx]).afterHookedMethod(param);
+                    if (HookBridge.instanceOf(cb, XC_MethodHook.class)) {
+                        ((XC_MethodHook) cb).afterHookedMethod(param);
+                    } else if (HookBridge.instanceOf(cb, XposedInterface.AfterHookCallback.class)) {
+                        ((XposedInterface.AfterMethodHooker<T>) cb).after(param);
+                    }
                 } catch (Throwable t) {
                     XposedBridge.log(t);
 
