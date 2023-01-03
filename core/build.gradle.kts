@@ -61,5 +61,5 @@ dependencies {
     implementation(projects.hiddenapi.bridge)
     implementation(projects.services.daemonService)
     implementation(projects.services.managerService)
-    implementation(projects.libxposed.api)
+    api(projects.libxposed.api)
 }

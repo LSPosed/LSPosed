@@ -408,7 +408,7 @@ abstract class ExampleClassVisitorFactory :
     }
 
     override fun isInstrumentable(classData: ClassData): Boolean {
-        return classData.className == "io.github.libxposed.XposedResources" || classData.className == "io.github.libxposed.XposedTypedArray"
+        return classData.className == "io.github.libxposed.XposedResources"
     }
 }
 

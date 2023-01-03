@@ -68,7 +68,7 @@ import de.robv.android.xposed.callbacks.XC_LayoutInflated;
 import de.robv.android.xposed.callbacks.XC_LayoutInflated.LayoutInflatedParam;
 import de.robv.android.xposed.callbacks.XCallback;
 import io.github.libxposed.XposedResources;
-import io.github.libxposed.XposedTypedArray;
+import xposed.dummy.XTypedArraySuperClass;
 
 /**
  * {@link android.content.res.Resources} subclass that allows replacing individual resources.
@@ -1279,7 +1279,7 @@ public class XResources extends XposedResources {
 	 * Mainly used when inflating layouts.
 	 * @hide
 	 */
-	public static class XTypedArray extends XposedTypedArray {
+	public static class XTypedArray extends XTypedArraySuperClass {
 
         public XTypedArray(Resources resources) {
             super(resources);
