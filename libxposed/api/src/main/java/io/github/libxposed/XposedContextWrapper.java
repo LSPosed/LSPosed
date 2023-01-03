@@ -106,12 +106,12 @@ public class XposedContextWrapper extends ContextWrapper implements XposedInterf
     }
 
     @Override
-    public boolean deoptimize(@Nullable Method method) {
+    public boolean deoptimize(@NonNull Method method) {
         return getBaseContext().deoptimize(method);
     }
 
     @Override
-    public <T> boolean deoptimize(@Nullable Constructor<T> constructor) {
+    public <T> boolean deoptimize(@NonNull Constructor<T> constructor) {
         return getBaseContext().deoptimize(constructor);
     }
 
