@@ -42,6 +42,7 @@ import java.util.Map;
 import java.util.Set;
 import java.util.concurrent.ConcurrentHashMap;
 
+import io.github.libxposed.service.IXposedScopeCallback;
 import io.github.libxposed.service.IXposedService;
 
 public class LSPModuleService extends IXposedService.Stub {
@@ -147,9 +148,23 @@ public class LSPModuleService extends IXposedService.Stub {
     }
 
     @Override
-    public void requestScope(String packageName) throws RemoteException {
-        ensureModule();
-        // TODO
+    public void requestScope(String packageName, IXposedScopeCallback callback) throws RemoteException {
+        var userId = ensureModule();
+        LSPNotificationManager.requestModuleScope(loadedModule.packageName, userId, packageName, callback);
+        callback.onScopeRequestPrompted(packageName);
+    }
+
+    @Override
+    public String removeScope(String packageName) throws RemoteException {
+        var userId = ensureModule();
+        try {
+            if (!ConfigManager.getInstance().removeModuleScope(loadedModule.packageName, packageName, userId)) {
+                return "Invalid request";
+            }
+            return null;
+        } catch (Throwable e) {
+            return e.getMessage();
+        }
     }
 
     @Override

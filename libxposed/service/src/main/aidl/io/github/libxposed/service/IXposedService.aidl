@@ -1,4 +1,5 @@
 package io.github.libxposed.service;
+import io.github.libxposed.service.IXposedScopeCallback;
 
 interface IXposedService {
     const int API = 100;
@@ -13,7 +14,8 @@ interface IXposedService {
 
     // scope utilities
     List<String> getScope() = 10;
-    oneway void requestScope(String packageName) = 11;
+    oneway void requestScope(String packageName, IXposedScopeCallback callback) = 11;
+    String removeScope(String packageName) = 12;
 
     // remote preference utilities
     Bundle requestRemotePreferences(String group) = 20;

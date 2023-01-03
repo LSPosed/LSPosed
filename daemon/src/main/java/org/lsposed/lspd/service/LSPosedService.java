@@ -26,6 +26,7 @@ import static org.lsposed.lspd.service.ServiceManager.getExecutorService;
 
 import android.app.IApplicationThread;
 import android.app.IUidObserver;
+import android.content.ContentValues;
 import android.content.IIntentReceiver;
 import android.content.Intent;
 import android.content.IntentFilter;
@@ -48,6 +49,7 @@ import java.util.List;
 import java.util.function.Consumer;
 
 import hidden.HiddenApiBridge;
+import io.github.libxposed.service.IXposedScopeCallback;
 
 public class LSPosedService extends ILSPosedService.Stub {
     private static final int AID_NOBODY = 9999;
@@ -225,6 +227,50 @@ public class LSPosedService extends ILSPosedService.Stub {
         LSPManagerService.openManager(intent.getData());
     }
 
+    private void dispatchModuleScope(Intent intent) {
+        Log.d(TAG, "dispatchModuleScope: " + intent);
+        var data = intent.getData();
+        var extras = intent.getExtras();
+        if (extras == null || data == null) return;
+        var callback = extras.getBinder("callback");
+        var s = data.getEncodedAuthority().split(":", 2);
+        if (s.length != 2) return;
+        var packageName = s[0];
+        int userId;
+        try {
+            userId = Integer.parseInt(s[1]);
+        } catch (NumberFormatException e) {
+            return;
+        }
+        var scopePackageName = data.getPath();
+        var action = data.getQueryParameter("action");
+        if (scopePackageName == null || action == null) return;
+
+        try {
+            switch (action) {
+                case "allow":
+                    ConfigManager.getInstance().setModuleScope(packageName, scopePackageName, userId);
+                    IXposedScopeCallback.Stub.asInterface(callback).onScopeRequestApproved(scopePackageName);
+                    break;
+                case "deny":
+                    IXposedScopeCallback.Stub.asInterface(callback).onScopeRequestDenied(scopePackageName);
+                    break;
+                case "delete":
+                    IXposedScopeCallback.Stub.asInterface(callback).onScopeRequestTimeout(scopePackageName);
+                    break;
+                case "block":
+                    // TODO
+                    break;
+            }
+        } catch (Throwable e) {
+            try {
+                IXposedScopeCallback.Stub.asInterface(callback).onScopeRequestFailed(scopePackageName, e.getMessage());
+            } catch (Throwable ignored) {
+                // callback died
+            }
+        }
+    }
+
     private void registerReceiver(List<IntentFilter> filters, String requiredPermission, int userId, Consumer<Intent> task) {
         var receiver = new IIntentReceiver.Stub() {
             @Override
@@ -317,6 +363,15 @@ public class LSPosedService extends ILSPosedService.Stub {
         Log.d(TAG, "registered open manager receiver");
     }
 
+    private void registerModuleScopeReceiver() {
+        var intentFilter = new IntentFilter(LSPNotificationManager.moduleScope);
+        var moduleFilter = new IntentFilter(intentFilter);
+        moduleFilter.addDataScheme("module");
+
+        registerReceiver(List.of(intentFilter, moduleFilter), "android.permission.BRICK", 0, this::dispatchModuleScope);
+        Log.d(TAG, "registered module scope receiver");
+    }
+
     private void registerUidObserver() {
         try {
             ActivityManagerService.registerUidObserver(new IUidObserver.Stub() {
@@ -356,6 +411,7 @@ public class LSPosedService extends ILSPosedService.Stub {
         registerBootCompleteReceiver();
         registerUserChangeReceiver();
         registerOpenManagerReceiver();
+        registerModuleScopeReceiver();
         registerUidObserver();
     }
 
