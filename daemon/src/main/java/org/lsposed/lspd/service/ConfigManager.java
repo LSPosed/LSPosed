@@ -44,6 +44,7 @@ import android.os.SystemClock;
 import android.permission.IPermissionManager;
 import android.system.ErrnoException;
 import android.system.Os;
+import android.util.ArrayMap;
 import android.util.Log;
 import android.util.Pair;
 
@@ -447,21 +448,35 @@ public class ConfigManager {
     }
 
     public void updateModulePrefs(String moduleName, int userId, String group, String key, Object value) {
+        Map<String, Object> values = new HashMap<>();
+        values.put(key, value);
+        updateModulePrefs(moduleName, userId, group, values);
+    }
+
+    public void updateModulePrefs(String moduleName, int userId, String group, Map<String, Object> values) {
         var config = cachedConfig.computeIfAbsent(new Pair<>(moduleName, userId), module -> fetchModuleConfig(module.first, module.second));
         var prefs = config.computeIfAbsent(group, g -> new ConcurrentHashMap<>());
-        if (value instanceof Serializable) {
-            prefs.put(key, value);
-            var values = new ContentValues();
-            values.put("`group`", group);
-            values.put("`key`", key);
-            values.put("data", SerializationUtils.serialize((Serializable) value));
-            values.put("module_pkg_name", moduleName);
-            values.put("user_id", String.valueOf(userId));
-            db.insertWithOnConflict("configs", null, values, SQLiteDatabase.CONFLICT_REPLACE);
-        } else {
-            prefs.remove(key);
-            db.delete("configs", "module_pkg_name=? and user_id=? and `group`=? and `key`=?", new String[]{moduleName, String.valueOf(userId), group, key});
-        }
+        executeInTransaction(() -> {
+            var contents = new ContentValues();
+            for (var entry : values.entrySet()) {
+                var key = entry.getKey();
+                var value = entry.getValue();
+                if (value instanceof Serializable) {
+                    prefs.put(key, value);
+                    contents.put("`group`", group);
+                    contents.put("`key`", key);
+                    contents.put("data", SerializationUtils.serialize((Serializable) value));
+                    contents.put("module_pkg_name", moduleName);
+                    contents.put("user_id", String.valueOf(userId));
+                } else {
+                    prefs.remove(key);
+                    db.delete("configs", "module_pkg_name=? and user_id=? and `group`=? and `key`=?", new String[]{moduleName, String.valueOf(userId), group, key});
+                }
+                if (contents.size() > 0) {
+                    db.insertWithOnConflict("configs", null, contents, SQLiteDatabase.CONFLICT_REPLACE);
+                }
+            }
+        });
     }
 
     public ConcurrentHashMap<String, Object> getModulePrefs(String moduleName, int userId, String group) {
