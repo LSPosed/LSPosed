@@ -11,4 +11,10 @@
     <string name="status_channel_name">LSPosed status</string>
     <string name="lsposed_running_notification_title">LSPosed loaded</string>
     <string name="lsposed_running_notification_content">Tap the notification to open manager</string>
+    <string name="xposed_module_request_scope_title">Scope Request</string>
+    <string name="xposed_module_request_scope_content">%1$s on user %2$s requests to add %3$s to its scope.</string>
+    <string name="scope_channel_name">Scope request</string>
+    <string name="scope_approve">Approve</string>
+    <string name="scope_deny">Deny</string>
+    <string name="nerver_ask_again">Never Ask Again</string>
 </resources>

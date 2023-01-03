@@ -45,7 +45,6 @@ import java.io.File;
 import java.io.FileInputStream;
 import java.io.FileNotFoundException;
 import java.io.FileOutputStream;
-import java.io.IOException;
 import java.io.InputStream;
 import java.lang.reflect.Constructor;
 import java.lang.reflect.Method;
@@ -63,7 +62,6 @@ import io.github.libxposed.XposedUtils;
 public class LSPosedContext extends XposedContext {
 
     private static final String TAG = "LSPosedContext";
-    private static final int PER_USER_RANGE = 100000;
     public static boolean isSystemServer;
     public static String appDir;
     public static String processName;

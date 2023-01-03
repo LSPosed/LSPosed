@@ -458,23 +458,21 @@ public class ConfigManager {
         config.compute(group, (g, prefs) -> {
             HashMap<String, Object> newPrefs = prefs == null ? new HashMap<>() : new HashMap<>(prefs);
             executeInTransaction(() -> {
-                var contents = new ContentValues();
                 for (var entry : values.entrySet()) {
                     var key = entry.getKey();
                     var value = entry.getValue();
                     if (value instanceof Serializable) {
                         newPrefs.put(key, value);
+                        var contents = new ContentValues();
                         contents.put("`group`", group);
                         contents.put("`key`", key);
                         contents.put("data", SerializationUtils.serialize((Serializable) value));
                         contents.put("module_pkg_name", moduleName);
                         contents.put("user_id", String.valueOf(userId));
+                        db.insertWithOnConflict("configs", null, contents, SQLiteDatabase.CONFLICT_REPLACE);
                     } else {
                         newPrefs.remove(key);
                         db.delete("configs", "module_pkg_name=? and user_id=? and `group`=? and `key`=?", new String[]{moduleName, String.valueOf(userId), group, key});
-                    }
-                    if (contents.size() > 0) {
-                        db.insertWithOnConflict("configs", null, contents, SQLiteDatabase.CONFLICT_REPLACE);
                     }
                 }
                 var bundle = new Bundle();
@@ -840,6 +838,37 @@ public class ConfigManager {
         updateCaches(false);
         return true;
     }
+
+    public boolean setModuleScope(String packageName, String scopePackageName, int userId) {
+        if (scopePackageName == null) return false;
+        int mid = getModuleId(packageName);
+        if (mid == -1) return false;
+        if (scopePackageName.equals("android") && userId != 0) return false;
+        executeInTransaction(() -> {
+            ContentValues values = new ContentValues();
+            values.put("mid", mid);
+            values.put("app_pkg_name", scopePackageName);
+            values.put("user_id", userId);
+            db.insertWithOnConflict("scope", null, values, SQLiteDatabase.CONFLICT_IGNORE);
+        });
+        // Called by xposed service, should be async
+        updateCaches(false);
+        return true;
+    }
+
+    public boolean removeModuleScope(String packageName, String scopePackageName, int userId) {
+        if (scopePackageName == null) return false;
+        int mid = getModuleId(packageName);
+        if (mid == -1) return false;
+        if (scopePackageName.equals("android") && userId != 0) return false;
+        executeInTransaction(() -> {
+            db.delete("scope", "mid = ? AND app_pkg_name = ? AND user_id = ?", new String[]{String.valueOf(mid), scopePackageName, String.valueOf(userId)});
+        });
+        // Called by xposed service, should be async
+        updateCaches(false);
+        return true;
+    }
+
 
     public String[] enabledModules() {
         try (Cursor cursor = db.query("modules", new String[]{"module_pkg_name"}, "enabled = 1", null, null, null, null)) {
