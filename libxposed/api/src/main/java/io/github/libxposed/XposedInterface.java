@@ -4,6 +4,7 @@ import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 
 import java.lang.reflect.Constructor;
+import java.lang.reflect.InvocationTargetException;
 import java.lang.reflect.Method;
 import java.util.ConcurrentModificationException;
 
@@ -25,7 +26,7 @@ public interface XposedInterface {
         void throwAndSkip(@Nullable Throwable throwable);
 
         @Nullable
-        Object invokeOrigin(@Nullable Object thisObject, Object[] args);
+        Object invokeOrigin(@Nullable Object thisObject, Object[] args) throws InvocationTargetException, IllegalAccessException;
 
         <U> void setExtra(@NonNull String key, @Nullable U value) throws ConcurrentModificationException;
     }
@@ -53,7 +54,7 @@ public interface XposedInterface {
         void setThrowable(@Nullable Throwable throwable);
 
         @Nullable
-        Object invokeOrigin(@Nullable Object thisObject, Object[] args);
+        Object invokeOrigin(@Nullable Object thisObject, Object[] args) throws InvocationTargetException, IllegalAccessException;
 
         @Nullable
         <U> U getExtra(@NonNull String key);
