@@ -16,5 +16,5 @@
     <string name="scope_channel_name">Scope request</string>
     <string name="scope_approve">Approve</string>
     <string name="scope_deny">Deny</string>
-    <string name="nerver_ask_again">Never Ask Again</string>
+    <string name="nerver_ask_again">Never Ask</string>
 </resources>
