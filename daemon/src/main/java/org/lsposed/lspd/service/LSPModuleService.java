@@ -102,11 +102,12 @@ public class LSPModuleService extends IXposedService.Stub {
         loadedModule = module;
     }
 
-    private void ensureModule() throws RemoteException {
-        var appId = Binder.getCallingUid() % PackageService.PER_USER_RANGE;
+    private int ensureModule() throws RemoteException {
+        var appId = Binder.getCallingUid() % PER_USER_RANGE;
         if (loadedModule.appId != appId) {
             throw new RemoteException("Module " + loadedModule.packageName + " is not for uid " + Binder.getCallingUid());
         }
+        return Binder.getCallingUid() / PER_USER_RANGE;
     }
 
     @Override
@@ -153,17 +154,15 @@ public class LSPModuleService extends IXposedService.Stub {
 
     @Override
     public Bundle requestRemotePreferences(String group) throws RemoteException {
-        ensureModule();
+        var userId = ensureModule();
         var bundle = new Bundle();
-        var userId = Binder.getCallingUid() % PER_USER_RANGE;
         bundle.putSerializable("map", ConfigManager.getInstance().getModulePrefs(loadedModule.packageName, userId, group));
         return bundle;
     }
 
     @Override
     public void updateRemotePreferences(String group, Bundle diff) throws RemoteException {
-        ensureModule();
-        var userId = Binder.getCallingUid() / PackageService.PER_USER_RANGE;
+        var userId = ensureModule();
         Map<String, Object> values = new ArrayMap<>();
         if (diff.containsKey("delete")) {
             var deletes = diff.getStringArrayList("delete");
@@ -181,8 +180,18 @@ public class LSPModuleService extends IXposedService.Stub {
                 Log.e(TAG, "updateRemotePreferences: ", e);
             }
         }
-        ConfigManager.getInstance().updateModulePrefs(loadedModule.packageName, userId, group, values);
-        ((LSPInjectedModuleService) loadedModule.service).onUpdateRemotePreferences(group, diff);
+        try {
+            ConfigManager.getInstance().updateModulePrefs(loadedModule.packageName, userId, group, values);
+            ((LSPInjectedModuleService) loadedModule.service).onUpdateRemotePreferences(group, diff);
+        } catch (Throwable e) {
+            throw new RemoteException(e.getMessage());
+        }
+    }
+
+    @Override
+    public void deleteRemotePreferences(String group) throws RemoteException {
+        var userId = ensureModule();
+        ConfigManager.getInstance().deleteModulePrefs(loadedModule.packageName, userId, group);
     }
 
     @Override

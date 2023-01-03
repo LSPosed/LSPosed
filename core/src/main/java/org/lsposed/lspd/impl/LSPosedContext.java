@@ -28,6 +28,7 @@ import android.os.Bundle;
 import android.os.Handler;
 import android.os.Looper;
 import android.os.Process;
+import android.os.RemoteException;
 import android.os.UserHandle;
 import android.util.Log;
 import android.view.Display;
@@ -42,7 +43,9 @@ import org.lsposed.lspd.util.LspModuleClassLoader;
 
 import java.io.File;
 import java.io.FileInputStream;
+import java.io.FileNotFoundException;
 import java.io.FileOutputStream;
+import java.io.IOException;
 import java.io.InputStream;
 import java.lang.reflect.Constructor;
 import java.lang.reflect.Method;
@@ -285,8 +288,12 @@ public class LSPosedContext extends XposedContext {
     }
 
     @Override
-    public FileInputStream openFileInput(String name) {
-        throw new AbstractMethodError();
+    public FileInputStream openFileInput(String name) throws FileNotFoundException {
+        try {
+            return new FileInputStream(service.openRemoteFile(name).getFileDescriptor());
+        } catch (RemoteException e) {
+            throw new FileNotFoundException(e.getMessage());
+        }
     }
 
     @Override

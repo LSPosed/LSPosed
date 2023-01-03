@@ -34,6 +34,7 @@ import android.content.pm.PackageParser;
 import android.database.Cursor;
 import android.database.sqlite.SQLiteDatabase;
 import android.database.sqlite.SQLiteStatement;
+import android.os.Bundle;
 import android.os.Handler;
 import android.os.HandlerThread;
 import android.os.ParcelFileDescriptor;
@@ -44,7 +45,6 @@ import android.os.SystemClock;
 import android.permission.IPermissionManager;
 import android.system.ErrnoException;
 import android.system.Os;
-import android.util.ArrayMap;
 import android.util.Log;
 import android.util.Pair;
 
@@ -172,7 +172,7 @@ public class ConfigManager {
     private final Map<String, Module> cachedModule = new ConcurrentHashMap<>();
 
     // packageName, userId, group, key, value
-    private final Map<Pair<String, Integer>, Map<String, ConcurrentHashMap<String, Object>>> cachedConfig = new ConcurrentHashMap<>();
+    private final Map<Pair<String, Integer>, Map<String, HashMap<String, Object>>> cachedConfig = new ConcurrentHashMap<>();
 
     private void updateCaches(boolean sync) {
         synchronized (cacheHandler) {
@@ -423,8 +423,8 @@ public class ConfigManager {
     }
 
     private @NonNull
-    Map<String, ConcurrentHashMap<String, Object>> fetchModuleConfig(String name, int user_id) {
-        var config = new ConcurrentHashMap<String, ConcurrentHashMap<String, Object>>();
+    Map<String, HashMap<String, Object>> fetchModuleConfig(String name, int user_id) {
+        var config = new ConcurrentHashMap<String, HashMap<String, Object>>();
 
         try (Cursor cursor = db.query("configs", new String[]{"`group`", "`key`", "data"},
                 "module_pkg_name = ? and user_id = ?", new String[]{name, String.valueOf(user_id)}, null, null, null)) {
@@ -441,7 +441,7 @@ public class ConfigManager {
                 var data = cursor.getBlob(dataIdx);
                 var object = SerializationUtils.deserialize(data);
                 if (object == null) continue;
-                config.computeIfAbsent(group, g -> new ConcurrentHashMap<>()).put(key, object);
+                config.computeIfAbsent(group, g -> new HashMap<>()).put(key, object);
             }
         }
         return config;
@@ -455,33 +455,49 @@ public class ConfigManager {
 
     public void updateModulePrefs(String moduleName, int userId, String group, Map<String, Object> values) {
         var config = cachedConfig.computeIfAbsent(new Pair<>(moduleName, userId), module -> fetchModuleConfig(module.first, module.second));
-        var prefs = config.computeIfAbsent(group, g -> new ConcurrentHashMap<>());
-        executeInTransaction(() -> {
-            var contents = new ContentValues();
-            for (var entry : values.entrySet()) {
-                var key = entry.getKey();
-                var value = entry.getValue();
-                if (value instanceof Serializable) {
-                    prefs.put(key, value);
-                    contents.put("`group`", group);
-                    contents.put("`key`", key);
-                    contents.put("data", SerializationUtils.serialize((Serializable) value));
-                    contents.put("module_pkg_name", moduleName);
-                    contents.put("user_id", String.valueOf(userId));
-                } else {
-                    prefs.remove(key);
-                    db.delete("configs", "module_pkg_name=? and user_id=? and `group`=? and `key`=?", new String[]{moduleName, String.valueOf(userId), group, key});
+        config.compute(group, (g, prefs) -> {
+            HashMap<String, Object> newPrefs = prefs == null ? new HashMap<>() : new HashMap<>(prefs);
+            executeInTransaction(() -> {
+                var contents = new ContentValues();
+                for (var entry : values.entrySet()) {
+                    var key = entry.getKey();
+                    var value = entry.getValue();
+                    if (value instanceof Serializable) {
+                        newPrefs.put(key, value);
+                        contents.put("`group`", group);
+                        contents.put("`key`", key);
+                        contents.put("data", SerializationUtils.serialize((Serializable) value));
+                        contents.put("module_pkg_name", moduleName);
+                        contents.put("user_id", String.valueOf(userId));
+                    } else {
+                        newPrefs.remove(key);
+                        db.delete("configs", "module_pkg_name=? and user_id=? and `group`=? and `key`=?", new String[]{moduleName, String.valueOf(userId), group, key});
+                    }
+                    if (contents.size() > 0) {
+                        db.insertWithOnConflict("configs", null, contents, SQLiteDatabase.CONFLICT_REPLACE);
+                    }
                 }
-                if (contents.size() > 0) {
-                    db.insertWithOnConflict("configs", null, contents, SQLiteDatabase.CONFLICT_REPLACE);
+                var bundle = new Bundle();
+                bundle.putSerializable("config", (Serializable) config);
+                if (bundle.size() > 1024 * 1024) {
+                    throw new IllegalArgumentException("Preference too large");
                 }
-            }
+            });
+            return newPrefs;
         });
     }
 
-    public ConcurrentHashMap<String, Object> getModulePrefs(String moduleName, int userId, String group) {
+    public void deleteModulePrefs(String moduleName, int userId, String group) {
+        db.delete("configs", "module_pkg_name=? and user_id=? and `group`=?", new String[]{moduleName, String.valueOf(userId), group});
+        var config = cachedConfig.getOrDefault(new Pair<>(moduleName, userId), null);
+        if (config != null) {
+            config.remove(group);
+        }
+    }
+
+    public HashMap<String, Object> getModulePrefs(String moduleName, int userId, String group) {
         var config = cachedConfig.computeIfAbsent(new Pair<>(moduleName, userId), module -> fetchModuleConfig(module.first, module.second));
-        return config.getOrDefault(group, new ConcurrentHashMap<>());
+        return config.getOrDefault(group, new HashMap<>());
     }
 
     private synchronized void clearCache() {
@@ -1026,11 +1042,6 @@ public class ConfigManager {
         return null;
     }
 
-    public boolean isModule(int uid, String name) {
-        var module = cachedModule.getOrDefault(name, null);
-        return module != null && module.appId == uid % PER_USER_RANGE;
-    }
-
     private void walkFileTree(Path rootDir, Consumer<Path> action) throws IOException {
         if (Files.notExists(rootDir)) return;
         Files.walkFileTree(rootDir, new SimpleFileVisitor<>() {
@@ -1046,24 +1057,6 @@ public class ConfigManager {
                 return FileVisitResult.CONTINUE;
             }
         });
-    }
-
-    public void ensureModulePrefsPermission(int uid, String packageName) {
-        if (packageName == null) return;
-        var path = Paths.get(getPrefsPath(packageName, uid));
-        try {
-            var perms = PosixFilePermissions.fromString("rwx--x--x");
-            Files.createDirectories(path, PosixFilePermissions.asFileAttribute(perms));
-            walkFileTree(path, p -> {
-                try {
-                    Os.chown(p.toString(), uid, uid);
-                } catch (ErrnoException e) {
-                    Log.e(TAG, Log.getStackTraceString(e));
-                }
-            });
-        } catch (IOException e) {
-            Log.e(TAG, Log.getStackTraceString(e));
-        }
     }
 
     private void removeModulePrefs(int uid, String packageName) throws IOException {

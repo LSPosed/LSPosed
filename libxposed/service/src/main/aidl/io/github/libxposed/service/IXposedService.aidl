@@ -18,6 +18,7 @@ interface IXposedService {
     // remote preference utilities
     Bundle requestRemotePreferences(String group) = 20;
     void updateRemotePreferences(String group, in Bundle diff) = 21;
+    void deleteRemotePreferences(String group) = 22;
 
     // remote file utilities
     ParcelFileDescriptor openRemoteFile(String path, int mode) = 30;
