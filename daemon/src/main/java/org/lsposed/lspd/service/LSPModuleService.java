@@ -19,12 +19,18 @@
 
 package org.lsposed.lspd.service;
 
+import static org.lsposed.lspd.service.PackageService.PER_USER_RANGE;
+
 import android.content.AttributionSource;
+import android.os.Binder;
 import android.os.Build;
 import android.os.Bundle;
 import android.os.ParcelFileDescriptor;
 import android.os.RemoteException;
+import android.util.ArrayMap;
 import android.util.Log;
+
+import androidx.annotation.NonNull;
 
 import org.lsposed.daemon.BuildConfig;
 import org.lsposed.lspd.models.Module;
@@ -32,6 +38,7 @@ import org.lsposed.lspd.models.Module;
 import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Map;
 import java.util.Set;
 import java.util.concurrent.ConcurrentHashMap;
 
@@ -44,7 +51,8 @@ public class LSPModuleService extends IXposedService.Stub {
 
     private final static Set<Integer> uidSet = ConcurrentHashMap.newKeySet();
 
-    private final Module loadedModule;
+    private final @NonNull
+    Module loadedModule;
 
     static void uidStarts(int uid) {
         if (!uidSet.contains(uid)) {
@@ -90,32 +98,44 @@ public class LSPModuleService extends IXposedService.Stub {
         }
     }
 
-    LSPModuleService(Module module) {
+    LSPModuleService(@NonNull Module module) {
         loadedModule = module;
     }
 
+    private void ensureModule() throws RemoteException {
+        var appId = Binder.getCallingUid() % PackageService.PER_USER_RANGE;
+        if (loadedModule.appId != appId) {
+            throw new RemoteException("Module " + loadedModule.packageName + " is not for uid " + Binder.getCallingUid());
+        }
+    }
+
     @Override
-    public int getAPIVersion() {
+    public int getAPIVersion() throws RemoteException {
+        ensureModule();
         return API;
     }
 
     @Override
-    public String getFrameworkName() {
+    public String getFrameworkName() throws RemoteException {
+        ensureModule();
         return "LSPosed";
     }
 
     @Override
-    public String getFrameworkVersion() {
+    public String getFrameworkVersion() throws RemoteException {
+        ensureModule();
         return BuildConfig.VERSION_NAME;
     }
 
     @Override
-    public long getFrameworkVersionCode() {
+    public long getFrameworkVersionCode() throws RemoteException {
+        ensureModule();
         return BuildConfig.VERSION_CODE;
     }
 
     @Override
-    public List<String> getScope() {
+    public List<String> getScope() throws RemoteException {
+        ensureModule();
         ArrayList<String> res = new ArrayList<>();
         var scope = ConfigManager.getInstance().getModuleScope(loadedModule.packageName);
         if (scope == null) return res;
@@ -126,19 +146,42 @@ public class LSPModuleService extends IXposedService.Stub {
     }
 
     @Override
-    public void requestScope(String packageName) {
+    public void requestScope(String packageName) throws RemoteException {
+        ensureModule();
         // TODO
     }
 
     @Override
-    public Bundle requestRemotePreferences(String group) {
-        // TODO
-        return null;
+    public Bundle requestRemotePreferences(String group) throws RemoteException {
+        ensureModule();
+        var bundle = new Bundle();
+        var userId = Binder.getCallingUid() % PER_USER_RANGE;
+        bundle.putSerializable("map", ConfigManager.getInstance().getModulePrefs(loadedModule.packageName, userId, group));
+        return bundle;
     }
 
     @Override
-    public void updateRemotePreferences(String group, Bundle diff) {
-        // TODO
+    public void updateRemotePreferences(String group, Bundle diff) throws RemoteException {
+        ensureModule();
+        var userId = Binder.getCallingUid() / PackageService.PER_USER_RANGE;
+        Map<String, Object> values = new ArrayMap<>();
+        if (diff.containsKey("delete")) {
+            var deletes = diff.getStringArrayList("delete");
+            for (var key : deletes) {
+                values.put(key, null);
+            }
+        }
+        if (diff.containsKey("put")) {
+            try {
+                var puts = (Map<?, ?>) diff.getSerializable("put");
+                for (var entry : puts.entrySet()) {
+                    values.put((String) entry.getKey(), entry.getValue());
+                }
+            } catch (Throwable e) {
+                Log.e(TAG, "updateRemotePreferences: ", e);
+            }
+        }
+        ConfigManager.getInstance().updateModulePrefs(loadedModule.packageName, userId, group, values);
         ((LSPInjectedModuleService) loadedModule.service).onUpdateRemotePreferences(group, diff);
     }
 
