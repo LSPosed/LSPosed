@@ -103,7 +103,7 @@ public abstract class XC_MethodHook extends XCallback {
     /**
      * Wraps information about the method call and allows to influence it.
      */
-    public static final class MethodHookParam <T> extends XCallback.Param implements XposedInterface.BeforeHookCallback<T>, XposedInterface.AfterHookCallback<T> {
+    public static final class MethodHookParam <T extends Executable> extends XCallback.Param implements XposedInterface.BeforeHookCallback<T>, XposedInterface.AfterHookCallback<T> {
         /**
          * @hide
          */
@@ -115,7 +115,7 @@ public abstract class XC_MethodHook extends XCallback {
         /**
          * The hooked method/constructor.
          */
-        public Member method;
+        public T method;
 
         /**
          * The {@code this} reference for an instance method, or {@code null} for static methods.
@@ -193,7 +193,7 @@ public abstract class XC_MethodHook extends XCallback {
         @NonNull
         @Override
         public T getOrigin() {
-            return (T) method;
+            return method;
         }
 
         @Nullable
@@ -206,6 +206,17 @@ public abstract class XC_MethodHook extends XCallback {
         @Override
         public Object[] getArgs() {
             return args;
+        }
+
+        @Nullable
+        @Override
+        public <U> U getArg(int index) {
+            return (U) args[index];
+        }
+
+        @Override
+        public <U> void setArg(int index, U value) {
+            args[index] = value;
         }
 
         @Override
@@ -221,7 +232,13 @@ public abstract class XC_MethodHook extends XCallback {
         @Nullable
         @Override
         public Object invokeOrigin(@Nullable Object thisObject, Object[] args) throws InvocationTargetException, IllegalAccessException {
-            return HookBridge.invokeOriginalMethod((Executable) method, thisObject, args);
+            return HookBridge.invokeOriginalMethod(method, thisObject, args);
+        }
+
+        @Nullable
+        @Override
+        public Object invokeOrigin() throws InvocationTargetException, IllegalAccessException {
+            return HookBridge.invokeOriginalMethod(method, thisObject, args);
         }
 
         @Nullable

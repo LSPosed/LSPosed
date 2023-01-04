@@ -51,7 +51,6 @@ import java.io.FileOutputStream;
 import java.io.InputStream;
 import java.lang.reflect.Constructor;
 import java.lang.reflect.Executable;
-import java.lang.reflect.Member;
 import java.lang.reflect.Method;
 import java.lang.reflect.Modifier;
 import java.lang.reflect.Proxy;
@@ -59,7 +58,6 @@ import java.util.Map;
 import java.util.Set;
 import java.util.concurrent.ConcurrentHashMap;
 
-import de.robv.android.xposed.XC_MethodHook;
 import de.robv.android.xposed.XposedBridge;
 import de.robv.android.xposed.XposedHelpers;
 import de.robv.android.xposed.XposedInit;
@@ -762,14 +760,14 @@ public class LSPosedContext extends XposedContext {
     private <T, U extends Executable> MethodUnhooker<T, U> doHook(U hookMethod, int priority, T callback) {
         if (Modifier.isAbstract(hookMethod.getModifiers())) {
             throw new IllegalArgumentException("Cannot hook abstract methods: " + hookMethod);
-        } else if (hookMethod.getDeclaringClass().getClassLoader() == XposedBridge.class.getClassLoader()) {
+        } else if (hookMethod.getDeclaringClass().getClassLoader() == LSPosedContext.class.getClassLoader()) {
             throw new IllegalArgumentException("Do not allow hooking inner methods");
         } else if (hookMethod.getDeclaringClass() == Method.class && hookMethod.getName().equals("invoke")) {
             throw new IllegalArgumentException("Cannot hook Method.invoke");
         }
 
         if (callback == null) {
-            throw new IllegalArgumentException("callback should not be null!");
+            throw new IllegalArgumentException("hooker should not be null!");
         }
 
         if (HookBridge.hookMethod(hookMethod, XposedBridge.AdditionalHookInfo.class, priority, callback)) {
@@ -857,7 +855,7 @@ public class LSPosedContext extends XposedContext {
         return doHook(origin, priority, hooker);
     }
 
-    private static boolean deoptimize(@NonNull Executable method) {
+    private static boolean doDeoptimize(@NonNull Executable method) {
         if (Modifier.isAbstract(method.getModifiers())) {
             throw new IllegalArgumentException("Cannot deoptimize abstract methods: " + method);
         } else if (Proxy.isProxyClass(method.getDeclaringClass())) {
@@ -868,12 +866,12 @@ public class LSPosedContext extends XposedContext {
 
     @Override
     public boolean deoptimize(@NonNull Method method) {
-        return deoptimize((Executable) method);
+        return doDeoptimize(method);
     }
 
     @Override
     public <T> boolean deoptimize(@NonNull Constructor<T> constructor) {
-        return deoptimize((Executable) constructor);
+        return doDeoptimize(constructor);
     }
 
     @Nullable
