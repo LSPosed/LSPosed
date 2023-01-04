@@ -396,7 +396,7 @@ public final class XposedBridge {
         }
     }
 
-    public static class AdditionalHookInfo<T> {
+    public static class AdditionalHookInfo<T extends Executable> {
         private final Object params;
 
         private AdditionalHookInfo(Executable method) {
@@ -421,7 +421,7 @@ public final class XposedBridge {
 
             var array = ((Object[]) params);
 
-            var method = (Executable) array[0];
+            var method = (T) array[0];
             var returnType = (Class<?>) array[1];
             var isStatic = (Boolean) array[2];
 

@@ -21,12 +21,20 @@ public interface XposedInterface {
         @NonNull
         Object[] getArgs();
 
+        @Nullable
+        <U> U getArg(int index);
+
+        <U> void setArg(int index, U value);
+
         void returnAndSkip(@Nullable Object returnValue);
 
         void throwAndSkip(@Nullable Throwable throwable);
 
         @Nullable
         Object invokeOrigin(@Nullable Object thisObject, Object[] args) throws InvocationTargetException, IllegalAccessException;
+
+        @Nullable
+        Object invokeOrigin() throws InvocationTargetException, IllegalAccessException;
 
         <U> void setExtra(@NonNull String key, @Nullable U value) throws ConcurrentModificationException;
     }
@@ -55,6 +63,9 @@ public interface XposedInterface {
 
         @Nullable
         Object invokeOrigin(@Nullable Object thisObject, Object[] args) throws InvocationTargetException, IllegalAccessException;
+
+        @Nullable
+        Object invokeOrigin() throws InvocationTargetException, IllegalAccessException;
 
         @Nullable
         <U> U getExtra(@NonNull String key);
