@@ -160,6 +160,7 @@ public class LSPosedContext extends XposedContext {
                 Log.d(TAG, "  Loading class " + moduleClass);
                 if (!XposedModule.class.isAssignableFrom(moduleClass)) {
                     Log.e(TAG, "    This class doesn't implement any sub-interface of XposedModule, skipping it");
+                    continue;
                 }
                 try {
                     if (moduleClass.getMethod("onResourceLoaded", XposedModuleInterface.ResourcesLoadedParam.class).getDeclaringClass() != XposedModule.class) {
