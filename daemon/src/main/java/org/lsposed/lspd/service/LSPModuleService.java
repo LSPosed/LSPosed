@@ -40,6 +40,7 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
 import java.util.Set;
+import java.util.WeakHashMap;
 import java.util.concurrent.ConcurrentHashMap;
 
 import io.github.libxposed.service.IXposedScopeCallback;
@@ -49,8 +50,8 @@ public class LSPModuleService extends IXposedService.Stub {
 
     private final static String TAG = "LSPosedModuleService";
 
-
     private final static Set<Integer> uidSet = ConcurrentHashMap.newKeySet();
+    private final static Map<Module, LSPModuleService> serviceMap = new WeakHashMap<>();
 
     private final @NonNull
     Module loadedModule;
@@ -60,7 +61,8 @@ public class LSPModuleService extends IXposedService.Stub {
             uidSet.add(uid);
             var module = ConfigManager.getInstance().getModule(uid);
             if (module != null) {
-                ((LSPInjectedModuleService) module.service).getModuleService().sendBinder(uid);
+                var service = serviceMap.computeIfAbsent(module, LSPModuleService::new);
+                service.sendBinder(uid);
             }
         }
     }

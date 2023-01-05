@@ -15,17 +15,11 @@ import java.util.concurrent.ConcurrentHashMap;
 
 public class LSPInjectedModuleService extends ILSPInjectedModuleService.Stub {
     private final Module loadedModule;
-    private final LSPModuleService moduleService;
 
     Map<String, Set<IRemotePreferenceCallback>> callbacks = new ConcurrentHashMap<>();
 
     LSPInjectedModuleService(Module module) {
         loadedModule = module;
-        moduleService = new LSPModuleService(module);
-    }
-
-    LSPModuleService getModuleService() {
-        return moduleService;
     }
 
     @Override

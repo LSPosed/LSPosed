@@ -22,6 +22,7 @@ package org.lsposed.lspd.service;
 import static org.lsposed.lspd.service.ServiceManager.TAG;
 
 import android.annotation.SuppressLint;
+import android.app.ContentProviderHolder;
 import android.app.IActivityManager;
 import android.app.IApplicationThread;
 import android.app.IServiceConnection;
@@ -188,11 +189,13 @@ public class ActivityManagerService {
     public static IContentProvider getContentProvider(String auth, int userId) throws RemoteException {
         IActivityManager am = getActivityManager();
         if (am == null) return null;
+        ContentProviderHolder holder;
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.Q) {
-            return am.getContentProviderExternal(auth, userId, token, null).provider;
+            holder = am.getContentProviderExternal(auth, userId, token, null);
         } else {
-            return am.getContentProviderExternal(auth, userId, token).provider;
+            holder = am.getContentProviderExternal(auth, userId, token);
         }
+        return holder != null ? holder.provider : null;
     }
 
     public static void registerUidObserver(IUidObserver observer, int which, int cutpoint, String callingPackage) throws RemoteException {
