@@ -21,6 +21,7 @@ android {
 
     buildFeatures {
         androidResources = false
+        buildConfig = false
     }
 
     compileOptions {
