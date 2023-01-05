@@ -6,6 +6,7 @@ import androidx.annotation.Nullable;
 import java.nio.ByteBuffer;
 
 public interface DexParser extends AutoCloseable {
+    int NO_INDEX = 0xffffffff;
 
     interface ClassDef {
         @NonNull
@@ -17,7 +18,7 @@ public interface DexParser extends AutoCloseable {
         TypeId getSuperClass();
 
         @Nullable
-        TypeList getInterfaces();
+        TypeId[] getInterfaces();
 
         @Nullable
         StringId getSourceFile();
@@ -49,7 +50,7 @@ public interface DexParser extends AutoCloseable {
         FieldId getField();
 
         @NonNull
-        AnnotationItem[] getAnnotations();
+        Annotation[] getAnnotations();
     }
 
     interface MethodAnnotation {
@@ -57,7 +58,7 @@ public interface DexParser extends AutoCloseable {
         MethodId getMethod();
 
         @NonNull
-        AnnotationItem[] getAnnotations();
+        Annotation[] getAnnotations();
     }
 
     interface ParameterAnnotation {
@@ -65,22 +66,12 @@ public interface DexParser extends AutoCloseable {
         MethodId getMethod();
 
         @NonNull
-        AnnotationList getAnnotations();
-    }
-
-    interface AnnotationList {
-        @NonNull
-        AnnotationItem[] getAnnotations();
-    }
-
-    interface AnnotationItem {
-        int getVisibility();
-
-        @NonNull
-        Annotation getAnnotation();
+        Annotation[][] getAnnotations();
     }
 
     interface Annotation {
+        int getVisibility();
+
         @NonNull
         TypeId getType();
 
@@ -89,14 +80,14 @@ public interface DexParser extends AutoCloseable {
     }
 
     interface AnnotationElement {
-        int getType();
-
-        ByteBuffer value();
-    }
-
-    interface TypeList {
         @NonNull
-        TypeId[] getTypes();
+        StringId getName();
+
+        @NonNull
+        int getValueType();
+
+        @Nullable
+        byte[] getValue();
     }
 
     interface TypeId {
@@ -130,11 +121,11 @@ public interface DexParser extends AutoCloseable {
         int[] getOpcodes();
 
         @NonNull
-        StringId getReferencedString();
+        StringId[] getReferredString();
     }
 
     interface Id {
-        int getIndex();
+        int getId();
     }
 
     interface StringId extends Id {
@@ -158,7 +149,7 @@ public interface DexParser extends AutoCloseable {
         TypeId getDeclaringClass();
 
         @NonNull
-        ProtoId getProtoType();
+        ProtoId getPrototype();
 
         @NonNull
         StringId getName();
@@ -170,6 +161,9 @@ public interface DexParser extends AutoCloseable {
 
         @NonNull
         TypeId getReturnType();
+
+        @Nullable
+        TypeId[] getParameters();
     }
 
     @NonNull
@@ -189,7 +183,4 @@ public interface DexParser extends AutoCloseable {
 
     @NonNull
     ProtoId[] getProtoId();
-
-    @NonNull
-    TypeList[] getTypeList();
 }
