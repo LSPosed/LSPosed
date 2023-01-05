@@ -899,7 +899,7 @@ public class LSPosedContext extends XposedContext {
 
     @Nullable
     @Override
-    public DexFile openDexFile(ByteBuffer dexData) throws IOException {
+    public DexParser parseDex(ByteBuffer dexData) throws IOException {
         return null;
     }
 }

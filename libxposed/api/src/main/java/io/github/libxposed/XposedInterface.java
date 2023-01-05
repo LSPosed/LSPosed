@@ -147,9 +147,9 @@ public interface XposedInterface {
     void log(@NonNull String message, @NonNull Throwable throwable);
 
     @Nullable
-    DexFile openDexFile(ByteBuffer dexData) throws IOException;
+    DexParser parseDex(ByteBuffer dexData) throws IOException;
 
-    interface DexFile extends AutoCloseable {
+    interface DexParser extends AutoCloseable {
         interface ClassDef {
             @NonNull
             TypeId getType();
@@ -277,7 +277,7 @@ public interface XposedInterface {
         }
 
         interface Id {
-            long getIndex();
+            int getIndex();
         }
 
         interface StringId extends Id {
