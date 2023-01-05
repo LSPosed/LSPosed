@@ -541,6 +541,7 @@ public class ConfigManager {
                 var module = new Module();
                 module.packageName = packageName;
                 module.apkPath = apkPath;
+                module.service = new LSPInjectedModuleService(module);
                 modules.add(module);
             }
 

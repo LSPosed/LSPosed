@@ -26,7 +26,6 @@ import static org.lsposed.lspd.service.ServiceManager.getExecutorService;
 
 import android.app.IApplicationThread;
 import android.app.IUidObserver;
-import android.content.ContentValues;
 import android.content.IIntentReceiver;
 import android.content.Intent;
 import android.content.IntentFilter;
@@ -374,6 +373,10 @@ public class LSPosedService extends ILSPosedService.Stub {
 
     private void registerUidObserver() {
         try {
+            var which = HiddenApiBridge.ActivityManager_UID_OBSERVER_ACTIVE()
+                    | HiddenApiBridge.ActivityManager_UID_OBSERVER_GONE()
+                    | HiddenApiBridge.ActivityManager_UID_OBSERVER_IDLE()
+                    | HiddenApiBridge.ActivityManager_UID_OBSERVER_CACHED();
             ActivityManagerService.registerUidObserver(new IUidObserver.Stub() {
                 @Override
                 public void onUidActive(int uid) {
@@ -394,7 +397,7 @@ public class LSPosedService extends ILSPosedService.Stub {
                 public void onUidGone(int uid, boolean disabled) {
                     LSPModuleService.uidGone(uid);
                 }
-            }, HiddenApiBridge.ActivityManager_UID_OBSERVER_ACTIVE() | HiddenApiBridge.ActivityManager_UID_OBSERVER_GONE() | HiddenApiBridge.ActivityManager_UID_OBSERVER_IDLE() | HiddenApiBridge.ActivityManager_UID_OBSERVER_CACHED(), HiddenApiBridge.ActivityManager_PROCESS_STATE_UNKNOWN(), null);
+            }, which, HiddenApiBridge.ActivityManager_PROCESS_STATE_UNKNOWN(), null);
         } catch (RemoteException e) {
             Log.e(TAG, "registerUidObserver", e);
         }
