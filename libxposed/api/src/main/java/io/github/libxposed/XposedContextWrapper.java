@@ -6,8 +6,10 @@ import android.content.ContextWrapper;
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 
+import java.io.IOException;
 import java.lang.reflect.Constructor;
 import java.lang.reflect.Method;
+import java.nio.ByteBuffer;
 
 public class XposedContextWrapper extends ContextWrapper implements XposedInterface {
 
@@ -123,6 +125,12 @@ public class XposedContextWrapper extends ContextWrapper implements XposedInterf
     @Override
     final public void log(@NonNull String message, @NonNull Throwable throwable) {
         getBaseContext().log(message, throwable);
+    }
+
+    @Nullable
+    @Override
+    public DexFile openDexFile(ByteBuffer dexData) throws IOException {
+        return getBaseContext().openDexFile(dexData);
     }
 
     @Override

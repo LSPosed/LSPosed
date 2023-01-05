@@ -48,12 +48,14 @@ import java.io.File;
 import java.io.FileInputStream;
 import java.io.FileNotFoundException;
 import java.io.FileOutputStream;
+import java.io.IOException;
 import java.io.InputStream;
 import java.lang.reflect.Constructor;
 import java.lang.reflect.Executable;
 import java.lang.reflect.Method;
 import java.lang.reflect.Modifier;
 import java.lang.reflect.Proxy;
+import java.nio.ByteBuffer;
 import java.util.Map;
 import java.util.Set;
 import java.util.concurrent.ConcurrentHashMap;
@@ -893,5 +895,11 @@ public class LSPosedContext extends XposedContext {
     @Override
     public synchronized void log(@NonNull String message, @NonNull Throwable throwable) {
         Log.e(TAG, mPackageName + ": " + message, throwable);
+    }
+
+    @Nullable
+    @Override
+    public DexFile openDexFile(ByteBuffer dexData) throws IOException {
+        return null;
     }
 }
