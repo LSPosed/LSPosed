@@ -115,7 +115,7 @@ public abstract class XC_MethodHook extends XCallback {
         /**
          * The hooked method/constructor.
          */
-        public T method;
+        public Member method;
 
         /**
          * The {@code this} reference for an instance method, or {@code null} for static methods.
@@ -193,7 +193,7 @@ public abstract class XC_MethodHook extends XCallback {
         @NonNull
         @Override
         public T getOrigin() {
-            return method;
+            return (T) method;
         }
 
         @Nullable
@@ -232,13 +232,13 @@ public abstract class XC_MethodHook extends XCallback {
         @Nullable
         @Override
         public Object invokeOrigin(@Nullable Object thisObject, Object[] args) throws InvocationTargetException, IllegalAccessException {
-            return HookBridge.invokeOriginalMethod(method, thisObject, args);
+            return HookBridge.invokeOriginalMethod((Executable) method, thisObject, args);
         }
 
         @Nullable
         @Override
         public Object invokeOrigin() throws InvocationTargetException, IllegalAccessException {
-            return HookBridge.invokeOriginalMethod(method, thisObject, args);
+            return HookBridge.invokeOriginalMethod((Executable) method, thisObject, args);
         }
 
         @Nullable
