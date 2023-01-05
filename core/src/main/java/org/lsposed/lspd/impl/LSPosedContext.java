@@ -39,6 +39,7 @@ import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 
 import org.lsposed.lspd.core.BuildConfig;
+import org.lsposed.lspd.impl.utils.LSPosedDexParser;
 import org.lsposed.lspd.models.Module;
 import org.lsposed.lspd.nativebridge.HookBridge;
 import org.lsposed.lspd.service.ILSPInjectedModuleService;
@@ -901,6 +902,6 @@ public class LSPosedContext extends XposedContext {
     @Nullable
     @Override
     public DexParser parseDex(ByteBuffer dexData) throws IOException {
-        return null;
+        return new LSPosedDexParser(dexData);
     }
 }
