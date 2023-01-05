@@ -43,7 +43,6 @@ import java.util.concurrent.CopyOnWriteArraySet;
 import de.robv.android.xposed.callbacks.XC_InitPackageResources;
 import de.robv.android.xposed.callbacks.XC_LoadPackage;
 import io.github.libxposed.XposedInterface;
-import io.github.libxposed.XposedModuleInterface;
 
 /**
  * This class contains most of Xposed's central logic, such as initialization and callbacks used by
@@ -455,8 +454,8 @@ public final class XposedBridge {
                     var cb = callbacksSnapshot[beforeIdx];
                     if (HookBridge.instanceOf(cb, XC_MethodHook.class)) {
                         ((XC_MethodHook) cb).beforeHookedMethod(param);
-                    } else if (HookBridge.instanceOf(cb, XposedInterface.BeforeMethodHooker.class)) {
-                        ((XposedInterface.BeforeMethodHooker<T>) cb).before(param);
+                    } else if (HookBridge.instanceOf(cb, XposedInterface.BeforeHooker.class)) {
+                        ((XposedInterface.BeforeHooker<T>) cb).before(param);
                     }
                 } catch (Throwable t) {
                     XposedBridge.log(t);
@@ -494,7 +493,7 @@ public final class XposedBridge {
                     if (HookBridge.instanceOf(cb, XC_MethodHook.class)) {
                         ((XC_MethodHook) cb).afterHookedMethod(param);
                     } else if (HookBridge.instanceOf(cb, XposedInterface.AfterHookCallback.class)) {
-                        ((XposedInterface.AfterMethodHooker<T>) cb).after(param);
+                        ((XposedInterface.AfterHooker<T>) cb).after(param);
                     }
                 } catch (Throwable t) {
                     XposedBridge.log(t);
