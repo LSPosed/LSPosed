@@ -20,6 +20,8 @@
 package org.lsposed.lspd.service;
 
 import static android.content.Intent.EXTRA_UID;
+import static org.lsposed.lspd.service.LSPNotificationManager.SCOPE_CHANNEL_ID;
+import static org.lsposed.lspd.service.LSPNotificationManager.UPDATED_CHANNEL_ID;
 import static org.lsposed.lspd.service.PackageService.PER_USER_RANGE;
 import static org.lsposed.lspd.service.ServiceManager.TAG;
 import static org.lsposed.lspd.service.ServiceManager.getExecutorService;
@@ -118,13 +120,13 @@ public class LSPosedService extends ILSPosedService.Stub {
                         broadcastAndShowNotification(moduleName, userId, intent, true);
                     }
                 if (moduleName != null) {
-                    LSPNotificationManager.cancelUpdatedNotification(moduleName, userId);
+                    LSPNotificationManager.cancelNotification(UPDATED_CHANNEL_ID, moduleName, userId);
                 }
                 break;
             }
             case Intent.ACTION_PACKAGE_REMOVED:
                 if (moduleName != null) {
-                    LSPNotificationManager.cancelUpdatedNotification(moduleName, userId);
+                    LSPNotificationManager.cancelNotification(UPDATED_CHANNEL_ID, moduleName, userId);
                 }
                 break;
             case Intent.ACTION_PACKAGE_ADDED:
@@ -242,32 +244,47 @@ public class LSPosedService extends ILSPosedService.Stub {
             return;
         }
         var scopePackageName = data.getPath();
+        if (scopePackageName == null) return;
+        scopePackageName = scopePackageName.substring(1);
         var action = data.getQueryParameter("action");
-        if (scopePackageName == null || action == null) return;
+        if (action == null) return;
 
+        var iCallback = IXposedScopeCallback.Stub.asInterface(callback);
         try {
+            ApplicationInfo applicationInfo = null;
+            try {
+                applicationInfo = PackageService.getApplicationInfo(scopePackageName, 0, userId);
+            } catch (Throwable ignored) {
+            }
+            if (applicationInfo == null) {
+                iCallback.onScopeRequestFailed(scopePackageName, "Package not found");
+                return;
+            }
+
             switch (action) {
-                case "allow":
+                case "approve":
                     ConfigManager.getInstance().setModuleScope(packageName, scopePackageName, userId);
-                    IXposedScopeCallback.Stub.asInterface(callback).onScopeRequestApproved(scopePackageName);
+                    iCallback.onScopeRequestApproved(scopePackageName);
                     break;
                 case "deny":
-                    IXposedScopeCallback.Stub.asInterface(callback).onScopeRequestDenied(scopePackageName);
+                    iCallback.onScopeRequestDenied(scopePackageName);
                     break;
                 case "delete":
-                    IXposedScopeCallback.Stub.asInterface(callback).onScopeRequestTimeout(scopePackageName);
+                    iCallback.onScopeRequestTimeout(scopePackageName);
                     break;
                 case "block":
                     // TODO
                     break;
             }
+            Log.i(TAG, action + " scope " + scopePackageName + " for " + packageName + " in user " + userId);
         } catch (Throwable e) {
             try {
-                IXposedScopeCallback.Stub.asInterface(callback).onScopeRequestFailed(scopePackageName, e.getMessage());
+                iCallback.onScopeRequestFailed(scopePackageName, e.getMessage());
             } catch (Throwable ignored) {
                 // callback died
             }
         }
+        LSPNotificationManager.cancelNotification(SCOPE_CHANNEL_ID, packageName, userId);
     }
 
     private void registerReceiver(List<IntentFilter> filters, String requiredPermission, int userId, Consumer<Intent> task) {
