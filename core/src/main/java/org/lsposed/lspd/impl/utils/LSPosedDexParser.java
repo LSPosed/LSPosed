@@ -7,14 +7,11 @@ import org.lsposed.lspd.nativebridge.DexParserBridge;
 
 import java.io.IOException;
 import java.nio.ByteBuffer;
-import java.util.concurrent.locks.ReadWriteLock;
-import java.util.concurrent.locks.ReentrantReadWriteLock;
 
 import io.github.libxposed.utils.DexParser;
 
 public class LSPosedDexParser implements DexParser {
-    ReadWriteLock lock = new ReentrantReadWriteLock();
-    long cookie;
+    ByteBuffer data;
     StringId[] strings;
     TypeId[] typeIds;
     ProtoId[] protoIds;
@@ -23,67 +20,59 @@ public class LSPosedDexParser implements DexParser {
     ClassDef[] classDefs;
 
     public LSPosedDexParser(ByteBuffer buffer) throws IOException {
-        lock.writeLock().lock();
         if (!buffer.isDirect() || !buffer.asReadOnlyBuffer().hasArray()) {
-            var newBuffer = ByteBuffer.allocateDirect(buffer.capacity());
-            newBuffer.put(buffer);
-            buffer = newBuffer;
+            data = ByteBuffer.allocateDirect(buffer.capacity());
+            data.put(buffer);
+        } else {
+            data = buffer;
         }
         try {
             var out = (Object[]) DexParserBridge.parseDex(buffer);
-            // out[0]: Long
-            // out[1]: String[]
+            // out[0]: String[]
+            // out[1]: int[]
             // out[2]: int[][]
-            // out[3]: int[][3]
+            // out[3]: int[]
             // out[4]: int[][3]
-            // out[5]: int[][3]
-            // out[6]: int[][]
-            // out[7]: Object[][][][]
-            cookie = (Long) out[0];
-            var strings = (Object[]) out[1];
+            // out[5]: int[][]
+            // out[6]: Object[][][][]
+            var strings = (Object[]) out[0];
             this.strings = new StringId[strings.length];
             for (int i = 0; i < strings.length; ++i) {
                 this.strings[i] = new LSPosedStringId(i, strings[i]);
             }
 
-            var typeIds = (int[]) out[2];
+            var typeIds = (int[]) out[1];
             this.typeIds = new TypeId[typeIds.length];
             for (int i = 0; i < typeIds.length; ++i) {
                 this.typeIds[i] = new LSPosedTypeId(i, typeIds[i]);
             }
 
-            var protoIds = (int[][]) out[3];
+            var protoIds = (int[][]) out[2];
             this.protoIds = new ProtoId[protoIds.length];
             for (int i = 0; i < protoIds.length; ++i) {
                 this.protoIds[i] = new LSPosedProtoId(i, protoIds[i]);
             }
 
-            var fieldIds = (int[][]) out[4];
+            var fieldIds = (int[]) out[3];
             this.fieldIds = new FieldId[fieldIds.length];
             for (int i = 0; i < fieldIds.length; ++i) {
-                this.fieldIds[i] = new LSPosedFieldId(i, fieldIds[i]);
+                this.fieldIds[i] = new LSPosedFieldId(i, fieldIds[3 * i], fieldIds[3 * i + 1], fieldIds[3 * i + 2]);
             }
 
-            var methodIds = (int[][]) out[5];
+            var methodIds = (int[]) out[4];
             this.methodIds = new MethodId[methodIds.length];
             for (int i = 0; i < methodIds.length; ++i) {
-                this.methodIds[i] = new LSPosedMethodId(i, methodIds[i]);
+                this.methodIds[i] = new LSPosedMethodId(i, methodIds[3 * i], methodIds[3 * i + 1], methodIds[3 * i + 2]);
             }
 
-            var classDefs = (int[][]) out[6];
+            var classDefs = (int[][]) out[5];
             this.classDefs = new ClassDef[classDefs.length];
-            var annotations = (Object[][][][]) out[7];
+            var annotations = (Object[][]) out[6];
             for (int i = 0; i < classDefs.length; ++i) {
-                this.classDefs[i] = new LSPosedClassDef(classDefs[i], annotations[i]);
+                this.classDefs[i] = new LSPosedClassDef(classDefs[i], annotations[4 * i], annotations[4 * i + 1], annotations[4 * i + 2], annotations[4 * i + 3]);
             }
-        } catch (IOException e) {
-            close();
-            throw e;
         } catch (Throwable e) {
-            close();
             throw new IOException("Invalid dex file", e);
-        } finally {
-            lock.writeLock().unlock();
         }
     }
 
@@ -181,11 +170,11 @@ public class LSPosedDexParser implements DexParser {
         @NonNull
         final StringId name;
 
-        LSPosedFieldId(int id, @NonNull int[] fieldId) {
+        LSPosedFieldId(int id, int type, int declaringClass, int name) {
             super(id);
-            this.type = typeIds[fieldId[0]];
-            this.declaringClass = typeIds[fieldId[1]];
-            this.name = strings[fieldId[2]];
+            this.type = typeIds[type];
+            this.declaringClass = typeIds[declaringClass];
+            this.name = strings[name];
         }
 
         @NonNull
@@ -215,11 +204,11 @@ public class LSPosedDexParser implements DexParser {
         @NonNull
         final StringId name;
 
-        LSPosedMethodId(int id, @NonNull int[] methodId) {
+        LSPosedMethodId(int id, int declaringClass, int prototype, int name) {
             super(id);
-            declaringClass = typeIds[methodId[0]];
-            prototype = protoIds[methodId[1]];
-            name = strings[methodId[2]];
+            this.declaringClass = typeIds[declaringClass];
+            this.prototype = protoIds[prototype];
+            this.name = strings[name];
         }
 
         @NonNull
@@ -272,7 +261,7 @@ public class LSPosedDexParser implements DexParser {
         FieldId[] accessedFields = null;
         FieldId[] assignedFields = null;
         StringId[] referredStrings = null;
-        int[] opcodes = null;
+        byte[] opcodes = null;
 
         LSPosedEncodedMethod(int method, int accessFlags, int code) {
             this.method = methodIds[method];
@@ -282,34 +271,36 @@ public class LSPosedDexParser implements DexParser {
 
         synchronized void parseMethod() {
             if (invokedMethods != null) return;
-            lock.readLock().lock();
-            try {
-                if (cookie == 0) throw new IllegalStateException("DexParser is closed");
-                var out = (Object[]) DexParserBridge.parseMethod(cookie, code);
-                var invokedMethods = (int[]) out[0];
-                this.invokedMethods = new MethodId[invokedMethods.length];
-                for (int i = 0; i < invokedMethods.length; ++i) {
-                    this.invokedMethods[i] = methodIds[invokedMethods[i]];
-                }
-                var accessedFields = (int[]) out[1];
-                this.accessedFields = new FieldId[accessedFields.length];
-                for (int i = 0; i < accessedFields.length; ++i) {
-                    this.accessedFields[i] = fieldIds[accessedFields[i]];
-                }
-                var assignedFields = (int[]) out[2];
-                this.assignedFields = new FieldId[assignedFields.length];
-                for (int i = 0; i < assignedFields.length; ++i) {
-                    this.assignedFields[i] = fieldIds[assignedFields[i]];
-                }
-                var referredStrings = (int[]) out[3];
-                this.referredStrings = new StringId[referredStrings.length];
-                for (int i = 0; i < referredStrings.length; ++i) {
-                    this.referredStrings[i] = strings[referredStrings[i]];
-                }
-                opcodes = (int[]) out[4];
-            } finally {
-                lock.readLock().unlock();
+            var out = (Object[]) DexParserBridge.parseMethod(data, code);
+            if (out == null) {
+                invokedMethods = new MethodId[0];
+                accessedFields = new FieldId[0];
+                assignedFields = new FieldId[0];
+                referredStrings = new StringId[0];
+                opcodes = new byte[0];
+                return;
             }
+            var invokedMethods = (int[]) out[0];
+            this.invokedMethods = new MethodId[invokedMethods.length];
+            for (int i = 0; i < invokedMethods.length; ++i) {
+                this.invokedMethods[i] = methodIds[invokedMethods[i]];
+            }
+            var accessedFields = (int[]) out[1];
+            this.accessedFields = new FieldId[accessedFields.length];
+            for (int i = 0; i < accessedFields.length; ++i) {
+                this.accessedFields[i] = fieldIds[accessedFields[i]];
+            }
+            var assignedFields = (int[]) out[2];
+            this.assignedFields = new FieldId[assignedFields.length];
+            for (int i = 0; i < assignedFields.length; ++i) {
+                this.assignedFields[i] = fieldIds[assignedFields[i]];
+            }
+            var referredStrings = (int[]) out[3];
+            this.referredStrings = new StringId[referredStrings.length];
+            for (int i = 0; i < referredStrings.length; ++i) {
+                this.referredStrings[i] = strings[referredStrings[i]];
+            }
+            opcodes = (byte[]) out[4];
         }
 
         @NonNull
@@ -352,7 +343,7 @@ public class LSPosedDexParser implements DexParser {
 
         @NonNull
         @Override
-        public int[] getOpcodes() {
+        public byte[] getOpcodes() {
             if (opcodes == null) {
                 parseMethod();
             }
@@ -551,15 +542,16 @@ public class LSPosedDexParser implements DexParser {
         final EncodedMethod[] virtualMethods;
 
         @NonNull
+        final Annotation[] classAnnotations;
+
+        @NonNull
         final FieldAnnotation[] fieldAnnotations;
         @NonNull
         final MethodAnnotation[] methodAnnotations;
         @NonNull
         final ParameterAnnotation[] parameterAnnotations;
 
-        LSPosedClassDef(int[] classDef, Object[][][] annotation) {
-            // annotation[0]: int[]
-            // annotation[1]: int[]
+        LSPosedClassDef(int[] classDef, Object[] classAnnotations, Object[] fieldAnnotations, Object[] methodAnnotations, Object[] parameterAnnotations) {
             var iter = 0;
             type = typeIds[classDef[iter++]];
             accessFlags = classDef[iter++];
@@ -603,25 +595,35 @@ public class LSPosedDexParser implements DexParser {
                 virtualMethods[i] = new LSPosedEncodedMethod(method, accessFlags, code);
             }
 
+            var num_class_annotations = classDef[iter++];
+            this.classAnnotations = new LSPosedAnnotation[num_class_annotations];
+            if (num_class_annotations > 0) {
+                var a = (int[]) classAnnotations[0];
+                var b = (Object[][]) classAnnotations[1];
+                for (int i = 0; i < num_class_annotations; ++i) {
+                    this.classAnnotations[i] = new LSPosedAnnotation(a[2 * i], a[2 * i + 1], b[i]);
+                }
+            }
+
             var num_field_annotations = classDef[iter++];
-            fieldAnnotations = new FieldAnnotation[num_field_annotations];
+            this.fieldAnnotations = new FieldAnnotation[num_field_annotations];
             for (int i = 0; i < num_field_annotations; ++i) {
                 var field = classDef[iter++];
-                fieldAnnotations[i] = new LSPosedFieldAnnotation(field, annotation[0][i]);
+                this.fieldAnnotations[i] = new LSPosedFieldAnnotation(field, (Object[]) fieldAnnotations[i]);
             }
 
             var num_method_annotations = classDef[iter++];
-            methodAnnotations = new MethodAnnotation[num_method_annotations];
+            this.methodAnnotations = new MethodAnnotation[num_method_annotations];
             for (int i = 0; i < num_method_annotations; ++i) {
                 var method = classDef[iter++];
-                methodAnnotations[i] = new LSPosedMethodAnnotation(method, annotation[1][i]);
+                this.methodAnnotations[i] = new LSPosedMethodAnnotation(method, (Object[]) methodAnnotations[i]);
             }
 
             var num_parameter_annotations = classDef[iter++];
-            parameterAnnotations = new ParameterAnnotation[num_parameter_annotations];
+            this.parameterAnnotations = new ParameterAnnotation[num_parameter_annotations];
             for (int i = 0; i < num_parameter_annotations; ++i) {
                 var method = classDef[iter++];
-                parameterAnnotations[i] = new LSPosedParameterAnnotation(method, (Object[][]) annotation[2][i]);
+                this.parameterAnnotations[i] = new LSPosedParameterAnnotation(method, (Object[][]) parameterAnnotations[i]);
             }
         }
 
@@ -680,6 +682,12 @@ public class LSPosedDexParser implements DexParser {
 
         @Nullable
         @Override
+        public Annotation[] getClassAnnotations() {
+            return classAnnotations;
+        }
+
+        @Nullable
+        @Override
         public FieldAnnotation[] getFieldAnnotations() {
             return fieldAnnotations;
         }
@@ -731,22 +739,5 @@ public class LSPosedDexParser implements DexParser {
     @Override
     public ProtoId[] getProtoId() {
         return protoIds;
-    }
-
-    @Override
-    public void close() {
-        lock.writeLock().lock();
-        try {
-            if (cookie == 0) return;
-            DexParserBridge.closeDex(cookie);
-            cookie = 0L;
-        } finally {
-            lock.writeLock().unlock();
-        }
-    }
-
-    @Override
-    protected void finalize() {
-        close();
     }
 }
