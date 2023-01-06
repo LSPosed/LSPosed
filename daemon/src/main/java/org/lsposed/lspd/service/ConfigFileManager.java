@@ -369,11 +369,11 @@ public class ConfigFileManager {
             // TODO: we can store more info like api version, module description, etc. in META-INF
             readName(apkFile, "META-INF/xposed/xposed_init", moduleClassNames);
             if (moduleClassNames.isEmpty()) {
-                file.usingContext = false;
+                file.legacy = true;
                 readName(apkFile, "assets/xposed_init", moduleClassNames);
                 readName(apkFile, "assets/native_init", moduleLibraryNames);
             } else {
-                file.usingContext = true;
+                file.legacy = false;
                 readName(apkFile, "META-INF/xposed/native_init", moduleLibraryNames);
             }
         } catch (IOException e) {
