@@ -82,6 +82,10 @@ public class XResources extends XposedResources {
 	private static final SparseArray<HashMap<String, Object>> sReplacements = new SparseArray<>();
 	private static final SparseArray<HashMap<String, ResourceNames>> sResourceNames = new SparseArray<>();
 
+	// A resource ID is a 32 bit number of the form: PPTTNNNN. PP is the package the resource is for;
+	// TT is the type of the resource;
+	// NNNN is the name of the resource in that type.
+	// For applications resources, PP is always 0x7f.
 	private static final byte[] sSystemReplacementsCache = new byte[256]; // bitmask: 0x000700ff => 2048 bit => 256 bytes
 	private byte[] mReplacementsCache; // bitmask: 0x0007007f => 1024 bit => 128 bytes
 	private static final HashMap<String, byte[]> sReplacementsCacheMap = new HashMap<>();

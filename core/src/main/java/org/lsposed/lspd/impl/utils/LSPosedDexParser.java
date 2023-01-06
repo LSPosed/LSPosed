@@ -368,14 +368,12 @@ public class LSPosedDexParser implements DexParser {
         @Nullable
         final AnnotationElement[] elements;
 
-        LSPosedAnnotation(int visibility, int type, @NonNull Object[] elements) {
+        LSPosedAnnotation(int visibility, int type, @NonNull int[] elements, @NonNull ByteBuffer[] elementValues) {
             this.visibility = visibility;
             this.type = typeIds[type];
-            var a = (int[]) elements[0];
-            var b = (ByteBuffer[]) elements[1];
-            this.elements = new AnnotationElement[b.length];
-            for (int i = 0; i < b.length; ++i) {
-                this.elements[i] = new LSPosedAnnotationElement(a[i * 2], a[i * 2 + 1], b[i]);
+            this.elements = new AnnotationElement[elementValues.length];
+            for (int i = 0; i < elementValues.length; ++i) {
+                this.elements[i] = new LSPosedAnnotationElement(elements[i * 2], elements[i * 2 + 1], elementValues[i]);
             }
         }
 
@@ -441,10 +439,10 @@ public class LSPosedDexParser implements DexParser {
         LSPosedFieldAnnotation(int field, @NonNull Object[] annotations) {
             this.field = fieldIds[field];
             var a = (int[]) annotations[0];
-            var b = (Object[][]) annotations[1];
+            var b = (Object[]) annotations[1];
             this.annotations = new Annotation[b.length];
             for (int i = 0; i < b.length; ++i) {
-                this.annotations[i] = new LSPosedAnnotation(a[2 * i], a[2 * i + 1], b[i]);
+                this.annotations[i] = new LSPosedAnnotation(a[2 * i], a[2 * i + 1], (int[]) b[2 * i], (ByteBuffer[]) b[2 * i + 1]);
             }
         }
 
@@ -470,10 +468,10 @@ public class LSPosedDexParser implements DexParser {
         LSPosedMethodAnnotation(int method, @NonNull Object[] annotations) {
             this.method = methodIds[method];
             var a = (int[]) annotations[0];
-            var b = (Object[][]) annotations[1];
+            var b = (Object[]) annotations[1];
             this.annotations = new Annotation[b.length];
             for (int i = 0; i < b.length; ++i) {
-                this.annotations[i] = new LSPosedAnnotation(a[2 * i], a[2 * i + 1], b[i]);
+                this.annotations[i] = new LSPosedAnnotation(a[2 * i], a[2 * i + 1], (int[]) b[2 * i], (ByteBuffer[]) b[2 * i + 1]);
             }
         }
 
@@ -501,10 +499,10 @@ public class LSPosedDexParser implements DexParser {
             this.annotations = new Annotation[annotations.length][];
             for (int i = 0; i < annotations.length; ++i) {
                 var a = (int[]) annotations[i][0];
-                var b = (Object[][]) annotations[i][1];
+                var b = (Object[]) annotations[i][1];
                 this.annotations[i] = new Annotation[b.length];
                 for (int j = 0; j < b.length; ++j) {
-                    this.annotations[i][j] = new LSPosedAnnotation(a[2 * j], a[2 * j + 1], b[j]);
+                    this.annotations[i][j] = new LSPosedAnnotation(a[2 * j], a[2 * j + 1], (int[]) b[2 * j], (ByteBuffer[]) b[2 * j + 1]);
                 }
             }
         }
@@ -599,9 +597,9 @@ public class LSPosedDexParser implements DexParser {
             this.classAnnotations = new LSPosedAnnotation[num_class_annotations];
             if (num_class_annotations > 0) {
                 var a = (int[]) classAnnotations[0];
-                var b = (Object[][]) classAnnotations[1];
+                var b = (Object[]) classAnnotations[1];
                 for (int i = 0; i < num_class_annotations; ++i) {
-                    this.classAnnotations[i] = new LSPosedAnnotation(a[2 * i], a[2 * i + 1], b[i]);
+                    this.classAnnotations[i] = new LSPosedAnnotation(a[2 * i], a[2 * i + 1], (int[]) b[2 * i], (ByteBuffer[]) b[2 * i + 1]);
                 }
             }
 
