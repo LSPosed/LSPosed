@@ -183,9 +183,8 @@ public final class XposedInit {
 
         // Replace system resources
         XResources systemRes = new XResources(
-                (ClassLoader) XposedHelpers.getObjectField(Resources.getSystem(), "mClassLoader"));
+                (ClassLoader) XposedHelpers.getObjectField(Resources.getSystem(), "mClassLoader"), null);
         HiddenApiBridge.Resources_setImpl(systemRes, (ResourcesImpl) XposedHelpers.getObjectField(Resources.getSystem(), "mResourcesImpl"));
-        systemRes.initObject(null);
         setStaticObjectField(Resources.class, "mSystem", systemRes);
 
         XResources.init(latestResKey);
@@ -199,9 +198,8 @@ public final class XposedInit {
 
         // Replace the returned resources with our subclass.
         var newRes = new XResources(
-                (ClassLoader) XposedHelpers.getObjectField(param.getResult(), "mClassLoader"));
+                (ClassLoader) XposedHelpers.getObjectField(param.getResult(), "mClassLoader"), resDir);
         HiddenApiBridge.Resources_setImpl(newRes, (ResourcesImpl) XposedHelpers.getObjectField(param.getResult(), "mResourcesImpl"));
-        newRes.initObject(resDir);
 
         // Invoke handleInitPackageResources().
         if (newRes.isFirstLoad()) {
