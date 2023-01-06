@@ -310,12 +310,14 @@ namespace lspd {
                 auto out6i3i = env->NewObjectArray(
                         static_cast<jint>(parameter_annotation->size), object_class, nullptr);
                 for (size_t l = 0; l < parameter_annotation->size; ++l) {
-                    auto *parameter_annotation_item = dex.dataPtr<dex::AnnotationSetItem>(
-                            parameter_annotation->list[l].annotations_off);
-                    auto out6i3ii = ParseAnnotation(env, dex, object_class,
-                                                    parameter_annotation_item);
-                    env->SetObjectArrayElement(out6i3i, static_cast<jint>(l), out6i3ii);
-                    env->DeleteLocalRef(out6i3ii);
+                    if (parameter_annotation->list[l].annotations_off != 0) {
+                        auto *parameter_annotation_item = dex.dataPtr<dex::AnnotationSetItem>(
+                                parameter_annotation->list[l].annotations_off);
+                        auto out6i3ii = ParseAnnotation(env, dex, object_class,
+                                                        parameter_annotation_item);
+                        env->SetObjectArrayElement(out6i3i, static_cast<jint>(l), out6i3ii);
+                        env->DeleteLocalRef(out6i3ii);
+                    }
                 }
                 env->SetObjectArrayElement(out6i3, static_cast<jint>(k), out6i3i);
                 env->DeleteLocalRef(out6i3i);
