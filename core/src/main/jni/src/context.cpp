@@ -26,6 +26,7 @@
 #include "jni/hook_bridge.h"
 #include "jni/native_api.h"
 #include "jni/resources_hook.h"
+#include "jni/dex_parser.h"
 #include "symbol_cache.h"
 
 using namespace lsplant;
@@ -87,6 +88,7 @@ namespace lspd {
         RegisterResourcesHook(env);
         RegisterHookBridge(env);
         RegisterNativeAPI(env);
+        RegisterDexParserBridge(env);
     }
 
     ScopedLocalRef<jclass>

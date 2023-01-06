@@ -84,7 +84,6 @@ public interface DexParser {
         @NonNull
         StringId getName();
 
-        @NonNull
         int getValueType();
 
         @Nullable
