@@ -11,7 +11,7 @@ import java.lang.reflect.Constructor;
 import java.lang.reflect.Method;
 import java.nio.ByteBuffer;
 
-import io.github.libxposed.util.DexParser;
+import io.github.libxposed.utils.DexParser;
 
 public class XposedContextWrapper extends ContextWrapper implements XposedInterface {
 

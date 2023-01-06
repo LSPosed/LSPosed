@@ -67,7 +67,7 @@ import de.robv.android.xposed.XposedInit;
 import io.github.libxposed.XposedContext;
 import io.github.libxposed.XposedModule;
 import io.github.libxposed.XposedModuleInterface;
-import io.github.libxposed.util.DexParser;
+import io.github.libxposed.utils.DexParser;
 
 public class LSPosedContext extends XposedContext {
 

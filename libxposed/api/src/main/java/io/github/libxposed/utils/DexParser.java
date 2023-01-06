@@ -1,9 +1,7 @@
-package io.github.libxposed.util;
+package io.github.libxposed.utils;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
-
-import java.nio.ByteBuffer;
 
 public interface DexParser extends AutoCloseable {
     int NO_INDEX = 0xffffffff;
