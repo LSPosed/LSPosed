@@ -10,7 +10,7 @@ import java.lang.reflect.Method;
 import java.nio.ByteBuffer;
 import java.util.ConcurrentModificationException;
 
-import io.github.libxposed.util.DexParser;
+import io.github.libxposed.utils.DexParser;
 
 public interface XposedInterface {
     int API = 100;

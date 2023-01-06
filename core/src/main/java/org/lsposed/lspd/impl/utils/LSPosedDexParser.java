@@ -10,7 +10,7 @@ import java.nio.ByteBuffer;
 import java.util.concurrent.locks.ReadWriteLock;
 import java.util.concurrent.locks.ReentrantReadWriteLock;
 
-import io.github.libxposed.util.DexParser;
+import io.github.libxposed.utils.DexParser;
 
 public class LSPosedDexParser implements DexParser {
     ReadWriteLock lock = new ReentrantReadWriteLock();
