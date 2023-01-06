@@ -91,34 +91,17 @@ public class XResources extends XposedResources {
 	private static final WeakHashMap<XmlResourceParser, XMLInstanceDetails> sXmlInstanceDetails = new WeakHashMap<>();
 
 	private static final String EXTRA_XML_INSTANCE_DETAILS = "xmlInstanceDetails";
-	private static final ThreadLocal<LinkedList<MethodHookParam>> sIncludedLayouts = new ThreadLocal<LinkedList<MethodHookParam>>() {
-		@Override
-		protected LinkedList<MethodHookParam> initialValue() {
-			return new LinkedList<>();
-		}
-	};
+	private static final ThreadLocal<LinkedList<MethodHookParam>> sIncludedLayouts = ThreadLocal.withInitial(() -> new LinkedList<>());
 
 	private static final HashMap<String, Long> sResDirLastModified = new HashMap<>();
 	private static final HashMap<String, String> sResDirPackageNames = new HashMap<>();
 	private static ThreadLocal<Object> sLatestResKey = null;
 
-	private boolean mIsObjectInited;
 	private String mResDir;
 	private String mPackageName;
 
-	public XResources(ClassLoader classLoader) {
+	public XResources(ClassLoader classLoader, String resDir) {
 		super(classLoader);
-	}
-
-	/** Dummy, will never be called (objects are transferred to this class only). */
-//	private XResources() {
-//		throw new UnsupportedOperationException();
-//	}
-
-	/** @hide */
-	public void initObject(String resDir) {
-		if (mIsObjectInited)
-			throw new IllegalStateException("Object has already been initialized");
 
 		this.mResDir = resDir;
 		this.mPackageName = getPackageName(resDir);
@@ -128,9 +111,12 @@ public class XResources extends XposedResources {
 				mReplacementsCache = sReplacementsCacheMap.computeIfAbsent(resDir, k -> new byte[128]);
 			}
 		}
-
-		this.mIsObjectInited = true;
 	}
+
+	/** Dummy, will never be called (objects are transferred to this class only). */
+//	private XResources() {
+//		throw new UnsupportedOperationException();
+//	}
 
 	/** @hide */
 	public boolean isFirstLoad() {
