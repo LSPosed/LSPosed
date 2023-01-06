@@ -50,6 +50,16 @@ public class XposedContextWrapper extends ContextWrapper implements XposedInterf
     }
 
     @Override
+    final public int getFrameworkPrivilege() {
+        return getBaseContext().getFrameworkPrivilege();
+    }
+
+    @Override
+    final public Object featuredMethod(String name, Object... args) {
+        return getBaseContext().featuredMethod(name, args);
+    }
+
+    @Override
     final public MethodUnhooker<BeforeHooker<Method>, Method> hookBefore(@NonNull Method origin, @NonNull BeforeHooker<Method> hooker) {
         return getBaseContext().hookBefore(origin, hooker);
     }

@@ -15,6 +15,11 @@ import io.github.libxposed.utils.DexParser;
 public interface XposedInterface {
     int API = 100;
 
+    int FRAMEWORK_PRIVILEGE_ROOT = 0;
+    int FRAMEWORK_PRIVILEGE_CONTAINER = 1;
+    int FRAMEWORK_PRIVILEGE_APP = 2;
+    int FRAMEWORK_PRIVILEGE_EMBEDDED = 3;
+
     interface BeforeHookCallback<T> {
         @NonNull
         T getOrigin();
@@ -103,6 +108,10 @@ public interface XposedInterface {
     String getFrameworkVersion();
 
     long getFrameworkVersionCode();
+
+    int getFrameworkPrivilege();
+
+    Object featuredMethod(String name, Object... args);
 
     @Nullable
     MethodUnhooker<BeforeHooker<Method>, Method> hookBefore(@NonNull Method origin, @NonNull BeforeHooker<Method> hooker);
