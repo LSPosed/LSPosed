@@ -35,8 +35,8 @@ import java.util.concurrent.ConcurrentHashMap;
 import io.github.libxposed.service.IXposedScopeCallback;
 
 public class LSPNotificationManager {
-    private static final String UPDATED_CHANNEL_ID = "lsposed_module_updated";
-    private static final String SCOPE_CHANNEL_ID = "lsposed_module_scope";
+    static final String UPDATED_CHANNEL_ID = "lsposed_module_updated";
+    static final String SCOPE_CHANNEL_ID = "lsposed_module_scope";
     private static final String STATUS_CHANNEL_ID = "lsposed_status";
     private static final int STATUS_NOTIFICATION_ID = 2000;
     private static final String opPkg = Build.VERSION.SDK_INT >= Build.VERSION_CODES.Q ?
@@ -251,23 +251,6 @@ public class LSPNotificationManager {
         }
     }
 
-    static void cancelUpdatedNotification(String modulePackageName, int moduleUserId) {
-        try {
-            var idKey = getNotificationIdKey(UPDATED_CHANNEL_ID, modulePackageName, moduleUserId);
-            var idValue = notificationIds.get(idKey);
-            if (idValue == null) return;
-            var nm = getNotificationManager();
-            if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.R) {
-                nm.cancelNotificationWithTag("android", "android", modulePackageName, idValue, 0);
-            } else {
-                nm.cancelNotificationWithTag("android", modulePackageName, idValue, 0);
-            }
-            notificationIds.remove(idKey);
-        } catch (RemoteException e) {
-            Log.e(TAG, "cancel notification", e);
-        }
-    }
-
     static void requestModuleScope(String modulePackageName, int moduleUserId, String scopePackageName, IXposedScopeCallback callback) {
         try {
             var context = new FakeContext();
@@ -313,6 +296,23 @@ public class LSPNotificationManager {
                     notification, 0);
         } catch (RemoteException e) {
             Log.e(TAG, "request module scope", e);
+        }
+    }
+
+    static void cancelNotification(String channel, String modulePackageName, int moduleUserId) {
+        try {
+            var idKey = getNotificationIdKey(channel, modulePackageName, moduleUserId);
+            var idValue = notificationIds.get(idKey);
+            if (idValue == null) return;
+            var nm = getNotificationManager();
+            if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.R) {
+                nm.cancelNotificationWithTag("android", "android", modulePackageName, idValue, 0);
+            } else {
+                nm.cancelNotificationWithTag("android", modulePackageName, idValue, 0);
+            }
+            notificationIds.remove(idKey);
+        } catch (RemoteException e) {
+            Log.e(TAG, "cancel notification", e);
         }
     }
 }
