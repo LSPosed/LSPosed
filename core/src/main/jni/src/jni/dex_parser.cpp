@@ -29,18 +29,22 @@ namespace {
         }
         auto a = env->NewIntArray(static_cast<jint>(2 * annotation->size));
         auto *a_ptr = env->GetIntArrayElements(a, nullptr);
-        auto b = env->NewObjectArray(static_cast<jint>(annotation->size), object_class, nullptr);
+        auto b = env->NewObjectArray(static_cast<jint>(2 * annotation->size), object_class,
+                                     nullptr);
         for (size_t i = 0; i < annotation->size; ++i) {
             auto *item = dex.dataPtr<dex::AnnotationItem>(annotation->entries[i]);
             a_ptr[2 * i] = item->visibility;
             auto *annotation_data = item->annotation;
             a_ptr[2 * i + 1] = static_cast<jint>(dex::ReadULeb128(&annotation_data));
             auto size = dex::ReadULeb128(&annotation_data);
-            auto bi = env->NewObjectArray(static_cast<jint>(size), object_class, nullptr);
+            auto b2i0 = env->NewIntArray(static_cast<jint>(2 * size));
+            auto *b2i0_ptr = env->GetIntArrayElements(b2i0, nullptr);
+            auto b2i1 = env->NewObjectArray(static_cast<jint>(size), object_class, nullptr);
             for (size_t j = 0; j < size; ++j) {
-                auto name = dex::ReadULeb128(&annotation_data);
+                b2i0_ptr[2 * j] = static_cast<jint>(dex::ReadULeb128(&annotation_data));
                 auto arg_and_type = *annotation_data++;
                 auto value_type = arg_and_type & 0x1f;
+                b2i0_ptr[2 * j + 1] = value_type;
                 auto value_arg = arg_and_type >> 5;
                 jobject value = nullptr;
                 switch (value_type) {
@@ -74,11 +78,13 @@ namespace {
                     default:
                         break;
                 }
-                env->SetObjectArrayElement(bi, static_cast<jint>(j), value);
+                env->SetObjectArrayElement(b2i1, static_cast<jint>(j), value);
                 env->DeleteLocalRef(value);
             }
-            env->SetObjectArrayElement(b, static_cast<jint>(i), bi);
-            env->DeleteLocalRef(bi);
+            env->SetObjectArrayElement(b, static_cast<jint>(2 * i), b2i0);
+            env->SetObjectArrayElement(b, static_cast<jint>(2 * i + 1), b2i1);
+            env->DeleteLocalRef(b2i0);
+            env->DeleteLocalRef(b2i1);
         }
         env->ReleaseIntArrayElements(a, a_ptr, 0);
         auto res = env->NewObjectArray(2, object_class, nullptr);
