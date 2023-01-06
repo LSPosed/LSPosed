@@ -1,4 +1,5 @@
 -keep class de.robv.android.xposed.** {*;}
+-keep class io.github.libxposed.** {*;}
 -keep class android.** { *; }
 -keepclasseswithmembers,includedescriptorclasses class * {
     native <methods>;
