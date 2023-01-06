@@ -127,12 +127,12 @@ public class LSPApplicationService extends ILSPApplicationService.Stub {
 
     @Override
     public List<Module> getLegacyModulesList() throws RemoteException {
-        return getAllModulesList().stream().filter(m -> !m.file.usingContext).collect(Collectors.toList());
+        return getAllModulesList().stream().filter(m -> m.file.legacy).collect(Collectors.toList());
     }
 
     @Override
     public List<Module> getModulesList() throws RemoteException {
-        return getAllModulesList().stream().filter(m -> m.file.usingContext).collect(Collectors.toList());
+        return getAllModulesList().stream().filter(m -> !m.file.legacy).collect(Collectors.toList());
     }
 
     @Override
