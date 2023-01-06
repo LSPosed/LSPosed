@@ -761,6 +761,20 @@ public class LSPosedContext extends XposedContext {
         return BuildConfig.VERSION_CODE;
     }
 
+    @Override
+    public int getFrameworkPrivilege() {
+        try {
+            return service.getFrameworkPrivilege();
+        } catch (RemoteException ignored) {
+            return -1;
+        }
+    }
+
+    @Override
+    public Object featuredMethod(String name, Object... args) {
+        throw new UnsupportedOperationException();
+    }
+
     private <T, U extends Executable> MethodUnhooker<T, U> doHook(U hookMethod, int priority, T callback) {
         if (Modifier.isAbstract(hookMethod.getModifiers())) {
             throw new IllegalArgumentException("Cannot hook abstract methods: " + hookMethod);

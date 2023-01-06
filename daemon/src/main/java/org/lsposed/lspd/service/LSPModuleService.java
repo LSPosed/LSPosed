@@ -138,6 +138,17 @@ public class LSPModuleService extends IXposedService.Stub {
     }
 
     @Override
+    public int getFrameworkPrivilege() throws RemoteException {
+        ensureModule();
+        return IXposedService.FRAMEWORK_PRIVILEGE_ROOT;
+    }
+
+    @Override
+    public Bundle featuredMethod(String name, Bundle args) {
+        throw new UnsupportedOperationException();
+    }
+
+    @Override
     public List<String> getScope() throws RemoteException {
         ensureModule();
         ArrayList<String> res = new ArrayList<>();

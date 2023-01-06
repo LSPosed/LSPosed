@@ -3,6 +3,12 @@ import io.github.libxposed.service.IXposedScopeCallback;
 
 interface IXposedService {
     const int API = 100;
+
+    const int FRAMEWORK_PRIVILEGE_ROOT = 0;
+    const int FRAMEWORK_PRIVILEGE_CONTAINER = 1;
+    const int FRAMEWORK_PRIVILEGE_APP = 2;
+    const int FRAMEWORK_PRIVILEGE_EMBEDDED = 3;
+
     const String AUTHORITY_SUFFIX = ".XposedService";
     const String SEND_BINDER = "SendBinder";
 
@@ -11,6 +17,8 @@ interface IXposedService {
     String getFrameworkName() = 2;
     String getFrameworkVersion() = 3;
     long getFrameworkVersionCode() = 4;
+    int getFrameworkPrivilege() = 5;
+    Bundle featuredMethod(String name, in Bundle args) = 6;
 
     // scope utilities
     List<String> getScope() = 10;
