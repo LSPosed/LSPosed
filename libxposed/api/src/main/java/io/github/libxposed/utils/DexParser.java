@@ -3,7 +3,7 @@ package io.github.libxposed.utils;
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 
-public interface DexParser extends AutoCloseable {
+public interface DexParser {
     int NO_INDEX = 0xffffffff;
 
     interface ClassDef {
@@ -32,6 +32,9 @@ public interface DexParser extends AutoCloseable {
 
         @NonNull
         EncodedMethod[] getVirtualMethods();
+
+        @Nullable
+        Annotation[] getClassAnnotations();
 
         @Nullable
         FieldAnnotation[] getFieldAnnotations();
@@ -116,7 +119,7 @@ public interface DexParser extends AutoCloseable {
         FieldId[] getAssignedFields();
 
         @NonNull
-        int[] getOpcodes();
+        byte[] getOpcodes();
 
         @NonNull
         StringId[] getReferredString();
