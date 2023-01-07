@@ -15,5 +15,5 @@ public class DexParserBridge {
     public static native void closeDex(long cookie);
 
     @FastNative
-    public static native void visitClass(long cookie, DexParser.ClassVisitor visitor, Class<DexParser.FieldVisitor> fieldVisitorClass, Class<DexParser.MethodVisitor> methodVisitorClass, Method classVisitMethod, Method fieldVisitMethod, Method methodVisitMethod, Method methodBodyVisitMethod, Method stopMethod);
+    public static native void visitClass(long cookie, Object visitor, Class<DexParser.FieldVisitor> fieldVisitorClass, Class<DexParser.MethodVisitor> methodVisitorClass, Method classVisitMethod, Method fieldVisitMethod, Method methodVisitMethod, Method methodBodyVisitMethod, Method stopMethod);
 }
