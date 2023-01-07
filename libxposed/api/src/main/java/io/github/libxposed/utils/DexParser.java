@@ -3,72 +3,10 @@ package io.github.libxposed.utils;
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 
-public interface DexParser {
+import java.io.Closeable;
+
+public interface DexParser extends Closeable {
     int NO_INDEX = 0xffffffff;
-
-    interface ClassDef {
-        @NonNull
-        TypeId getType();
-
-        int getAccessFlags();
-
-        @Nullable
-        TypeId getSuperClass();
-
-        @Nullable
-        TypeId[] getInterfaces();
-
-        @Nullable
-        StringId getSourceFile();
-
-        @NonNull
-        EncodedField[] getStaticFields();
-
-        @NonNull
-        EncodedField[] getInstanceFields();
-
-        @NonNull
-        EncodedMethod[] getDirectMethods();
-
-        @NonNull
-        EncodedMethod[] getVirtualMethods();
-
-        @Nullable
-        Annotation[] getClassAnnotations();
-
-        @Nullable
-        FieldAnnotation[] getFieldAnnotations();
-
-        @Nullable
-        MethodAnnotation[] getMethodAnnotations();
-
-        @Nullable
-        ParameterAnnotation[] getParameterAnnotations();
-    }
-
-    interface FieldAnnotation {
-        @NonNull
-        FieldId getField();
-
-        @NonNull
-        Annotation[] getAnnotations();
-    }
-
-    interface MethodAnnotation {
-        @NonNull
-        MethodId getMethod();
-
-        @NonNull
-        Annotation[] getAnnotations();
-    }
-
-    interface ParameterAnnotation {
-        @NonNull
-        MethodId getMethod();
-
-        @NonNull
-        Annotation[][] getAnnotations();
-    }
 
     interface Annotation {
         int getVisibility();
@@ -93,35 +31,6 @@ public interface DexParser {
     interface TypeId {
         @NonNull
         StringId getDescriptor();
-    }
-
-    interface EncodedField {
-        @NonNull
-        FieldId getField();
-
-        int getAccessFlags();
-    }
-
-    interface EncodedMethod {
-        @NonNull
-        MethodId getMethod();
-
-        int getAccessFlags();
-
-        @NonNull
-        MethodId[] getInvokedMethods();
-
-        @NonNull
-        FieldId[] getAccessedFields();
-
-        @NonNull
-        FieldId[] getAssignedFields();
-
-        @NonNull
-        byte[] getOpcodes();
-
-        @NonNull
-        StringId[] getReferredString();
     }
 
     interface Id {
@@ -167,9 +76,6 @@ public interface DexParser {
     }
 
     @NonNull
-    ClassDef[] getClassDef();
-
-    @NonNull
     StringId[] getStringId();
 
     @NonNull
@@ -183,4 +89,34 @@ public interface DexParser {
 
     @NonNull
     ProtoId[] getProtoId();
+
+    @NonNull
+    Annotation[] getAnnotations();
+
+    interface EarlyStopVisitor {
+        void stop();
+    }
+
+    interface MemberVisitor extends EarlyStopVisitor {
+    }
+
+    interface ClassVisitor {
+        @Nullable
+        MemberVisitor visit(int clazz, int accessFlags, int superClass, @NonNull int[] interfaces, int sourceFile, @NonNull int[] staticFields, @NonNull int[] staticFieldsAccessFlags, @NonNull int[] instanceFields, @NonNull int[] instanceFieldsAccessFlags, @NonNull int[] directMethods, @NonNull int[] directMethodsAccessFlags, @NonNull int[] virtualMethods, @NonNull int[] virtualMethodsAccessFlags, @NonNull int[] annotations);
+    }
+
+    interface FieldVisitor extends MemberVisitor {
+        boolean visit(int field, int accessFlags, @NonNull int[] annotations);
+    }
+
+    interface MethodVisitor extends MemberVisitor {
+        @Nullable
+        MethodBodyVisitor visit(int method, int accessFlags, boolean hasBody, @NonNull int[] annotations, @NonNull int[] parameterAnnotations);
+    }
+
+    interface MethodBodyVisitor extends MemberVisitor {
+        boolean visit(int method, int accessFlags, @NonNull int[] referredStrings, @NonNull int[] invokedMethods, @NonNull int[] accessedFields, @NonNull int[] assignedFields, @NonNull byte[] opcodes);
+    }
+
+    void visitDefinedClasses(@NonNull ClassVisitor visitor) throws IllegalStateException;
 }

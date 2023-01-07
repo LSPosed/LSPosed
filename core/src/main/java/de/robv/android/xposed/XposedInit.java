@@ -58,7 +58,6 @@ import java.util.concurrent.atomic.AtomicBoolean;
 import de.robv.android.xposed.callbacks.XC_InitPackageResources;
 import de.robv.android.xposed.callbacks.XCallback;
 import hidden.HiddenApiBridge;
-import io.github.libxposed.XposedModuleInterface;
 
 public final class XposedInit {
     private static final String TAG = XposedBridge.TAG;
