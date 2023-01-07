@@ -13,15 +13,24 @@ import io.github.libxposed.utils.DexParser;
 public class LSPosedDexParser implements DexParser {
     long cookie;
 
+    @NonNull
     final ByteBuffer data;
+    @NonNull
     final StringId[] strings;
+    @NonNull
     final TypeId[] typeIds;
+    @NonNull
     final ProtoId[] protoIds;
+    @NonNull
     final FieldId[] fieldIds;
+    @NonNull
     final MethodId[] methodIds;
+    @NonNull
     final Annotation[] annotations;
+    @NonNull
+    final Array[] arrays;
 
-    public LSPosedDexParser(ByteBuffer buffer) throws IOException {
+    public LSPosedDexParser(@NonNull ByteBuffer buffer, boolean includeAnnotations) throws IOException {
         if (!buffer.isDirect() || !buffer.asReadOnlyBuffer().hasArray()) {
             data = ByteBuffer.allocateDirect(buffer.capacity());
             data.put(buffer);
@@ -29,7 +38,8 @@ public class LSPosedDexParser implements DexParser {
             data = buffer;
         }
         try {
-            long[] args = new long[1];
+            long[] args = new long[2];
+            args[1] = includeAnnotations ? 1 : 0;
             var out = (Object[]) DexParserBridge.openDex(buffer, args);
             cookie = args[0];
             // out[0]: String[]
@@ -37,7 +47,9 @@ public class LSPosedDexParser implements DexParser {
             // out[2]: int[][]
             // out[3]: int[]
             // out[4]: int[]
+            // out[5]: int[]
             // out[6]: Object[]
+            // out[7]: Object[]
             var strings = (Object[]) out[0];
             this.strings = new StringId[strings.length];
             for (int i = 0; i < strings.length; ++i) {
@@ -77,6 +89,15 @@ public class LSPosedDexParser implements DexParser {
                 }
             } else {
                 this.annotations = new Annotation[0];
+            }
+            if (out[7] != null) {
+                var b = (Object[]) out[7];
+                this.arrays = new Array[b.length / 2];
+                for (int i = 0; i < this.arrays.length; ++i) {
+                    this.arrays[i] = new LSPosedArray((int[]) b[2 * i], (Object[]) b[2 * i + 1]);
+                }
+            } else {
+                this.arrays = new Array[0];
             }
         } catch (Throwable e) {
             throw new IOException("Invalid dex file", e);
@@ -245,19 +266,37 @@ public class LSPosedDexParser implements DexParser {
         }
     }
 
+    static class LSPosedArray implements Array {
+        @NonNull
+        final Value[] values;
+
+        LSPosedArray(int[] elements, @NonNull Object[] values) {
+            this.values = new Value[values.length];
+            for (int i = 0; i < values.length; ++i) {
+                this.values[i] = new LSPosedValue(elements[i], (ByteBuffer) values[i]);
+            }
+        }
+
+        @NonNull
+        @Override
+        public Value[] getValues() {
+            return values;
+        }
+    }
+
     class LSPosedAnnotation implements Annotation {
         int visibility;
         @NonNull
         final TypeId type;
-        @Nullable
-        final AnnotationElement[] elements;
+        @NonNull
+        final Element[] elements;
 
         LSPosedAnnotation(int visibility, int type, @NonNull int[] elements, @NonNull Object[] elementValues) {
             this.visibility = visibility;
             this.type = typeIds[type];
-            this.elements = new AnnotationElement[elementValues.length];
+            this.elements = new Element[elementValues.length];
             for (int i = 0; i < elementValues.length; ++i) {
-                this.elements[i] = new LSPosedAnnotationElement(elements[i * 2], elements[i * 2 + 1], (ByteBuffer) elementValues[i]);
+                this.elements[i] = new LSPosedElement(elements[i * 2], elements[i * 2 + 1], (ByteBuffer) elementValues[i]);
             }
         }
 
@@ -272,22 +311,19 @@ public class LSPosedDexParser implements DexParser {
             return type;
         }
 
-        @Nullable
+        @NonNull
         @Override
-        public AnnotationElement[] getElements() {
+        public Element[] getElements() {
             return elements;
         }
     }
 
-    class LSPosedAnnotationElement implements AnnotationElement {
-        @NonNull
-        final StringId name;
+    static class LSPosedValue implements Value {
         final int valueType;
         @Nullable
         final byte[] value;
 
-        LSPosedAnnotationElement(int name, int valueType, @Nullable ByteBuffer value) {
-            this.name = strings[name];
+        LSPosedValue(int valueType, @Nullable ByteBuffer value) {
             this.valueType = valueType;
             if (value != null) {
                 this.value = new byte[value.remaining()];
@@ -297,21 +333,31 @@ public class LSPosedDexParser implements DexParser {
             }
         }
 
-        @NonNull
+        @Nullable
         @Override
-        public StringId getName() {
-            return name;
+        public byte[] getValue() {
+            return value;
         }
 
         @Override
         public int getValueType() {
             return valueType;
         }
+    }
 
-        @Nullable
+    class LSPosedElement extends LSPosedValue implements Element {
+        @NonNull
+        final StringId name;
+
+        LSPosedElement(int name, int valueType, @Nullable ByteBuffer value) {
+            super(valueType, value);
+            this.name = strings[name];
+        }
+
+        @NonNull
         @Override
-        public byte[] getValue() {
-            return value;
+        public StringId getName() {
+            return name;
         }
     }
 
@@ -349,6 +395,12 @@ public class LSPosedDexParser implements DexParser {
     @Override
     public Annotation[] getAnnotations() {
         return annotations;
+    }
+
+    @NonNull
+    @Override
+    public Array[] getArrays() {
+        return arrays;
     }
 
     @Override

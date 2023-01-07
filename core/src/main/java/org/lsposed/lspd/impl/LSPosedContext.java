@@ -913,9 +913,8 @@ public class LSPosedContext extends XposedContext {
         Log.e(TAG, mPackageName + ": " + message, throwable);
     }
 
-    @Nullable
     @Override
-    public DexParser parseDex(ByteBuffer dexData) throws IOException {
-        return new LSPosedDexParser(dexData);
+    public DexParser parseDex(@NonNull ByteBuffer dexData, boolean includeAnnotations) throws IOException {
+        return new LSPosedDexParser(dexData, includeAnnotations);
     }
 }

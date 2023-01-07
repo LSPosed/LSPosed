@@ -8,24 +8,32 @@ import java.io.Closeable;
 public interface DexParser extends Closeable {
     int NO_INDEX = 0xffffffff;
 
+    interface Array {
+        @NonNull
+        Value[] getValues();
+    }
+
     interface Annotation {
         int getVisibility();
 
         @NonNull
         TypeId getType();
 
-        @Nullable
-        AnnotationElement[] getElements();
+        @NonNull
+        Element[] getElements();
     }
 
-    interface AnnotationElement {
-        @NonNull
-        StringId getName();
-
-        int getValueType();
+    interface Value {
 
         @Nullable
         byte[] getValue();
+
+        int getValueType();
+    }
+
+    interface Element extends Value {
+        @NonNull
+        StringId getName();
     }
 
     interface TypeId {
@@ -92,6 +100,9 @@ public interface DexParser extends Closeable {
 
     @NonNull
     Annotation[] getAnnotations();
+
+    @NonNull
+    Array[] getArrays();
 
     interface EarlyStopVisitor {
         void stop();
