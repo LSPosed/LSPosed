@@ -794,7 +794,7 @@ namespace lspd {
                               "(Ljava/nio/buffer/ByteBuffer;[J)Ljava/lang/Object;"),
             LSP_NATIVE_METHOD(DexParserBridge, closeDex, "(J)V;"),
             LSP_NATIVE_METHOD(DexParserBridge, visitClass,
-                              "(JLio/github/libxposed/utils/DexParser$ClassVisitor;Ljava/lang/Class;Ljava/lang/Class;Ljava/lang/reflect/Method;Ljava/lang/reflect/Method;Ljava/lang/reflect/Method;Ljava/lang/reflect/Method;Ljava/lang/reflect/Method;)V"),
+                              "(JLjava/lang/Object;Ljava/lang/Class;Ljava/lang/Class;Ljava/lang/reflect/Method;Ljava/lang/reflect/Method;Ljava/lang/reflect/Method;Ljava/lang/reflect/Method;Ljava/lang/reflect/Method;)V"),
     };
 
 
