@@ -158,5 +158,5 @@ public interface XposedInterface {
     void log(@NonNull String message, @NonNull Throwable throwable);
 
     @Nullable
-    DexParser parseDex(ByteBuffer dexData) throws IOException;
+    DexParser parseDex(@NonNull ByteBuffer dexData, boolean includeAnnotations) throws IOException;
 }

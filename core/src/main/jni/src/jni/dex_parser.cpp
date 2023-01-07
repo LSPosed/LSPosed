@@ -25,61 +25,13 @@
 #include <absl/container/flat_hash_map.h>
 
 namespace {
-    using AnnotationList = std::vector<std::tuple<jint/*vis*/, jint /*type*/, std::vector<std::tuple<jint /*name*/, jint/*value_type*/, std::string_view/*value*/>>>>;
-
-    void ParseAnnotation(JNIEnv *env, dex::Reader &dex, AnnotationList &annotation_list,
-                         std::vector<jint> indices,
-                         const dex::AnnotationSetItem *annotation) {
-        if (annotation == nullptr) {
-            return;
-        }
-        for (size_t i = 0; i < annotation->size; ++i) {
-            auto *item = dex.dataPtr<dex::AnnotationItem>(annotation->entries[i]);
-            auto *annotation_data = item->annotation;
-            indices.emplace_back(annotation_list.size());
-            auto &[visibility, type, items] = annotation_list.emplace_back(item->visibility,
-                                                                           dex::ReadULeb128(
-                                                                                   &annotation_data),
-                                                                           std::vector<std::tuple<jint, jint, std::string_view>>());
-            auto size = dex::ReadULeb128(&annotation_data);
-            items.resize(size);
-            for (size_t j = 0; j < size; ++j) {
-                auto &[name, value_type, value] = items[j];
-                name = static_cast<jint>(dex::ReadULeb128(&annotation_data));
-                auto arg_and_type = *annotation_data++;
-                value_type = arg_and_type & 0x1f;
-                auto value_arg = arg_and_type >> 5;
-                switch (value_type) {
-                    case 0x00: // byte
-                    case 0x1f: // boolean
-                        value = {reinterpret_cast<char *>(const_cast<dex::u1 *>(annotation_data)),
-                                 1};
-                        break;
-                    case 0x02: // short
-                    case 0x03: // char
-                    case 0x04: // int
-                    case 0x06: // long
-                    case 0x10: // float
-                    case 0x11: // double
-                    case 0x17: // string
-                    case 0x18: // type
-                    case 0x19: // field
-                    case 0x1a: // method
-                    case 0x1b: // enum
-                        value = {
-                                reinterpret_cast<char *>(const_cast<dex::u1 *>(annotation_data)),
-                                static_cast<size_t>(value_arg)};
-                        break;
-                    case 0x1c: // array
-                    case 0x1d: // annotation
-                    case 0x1e: // null
-                    default:
-                        // not supported
-                        break;
-                }
-            }
-        }
-    }
+    using Value = std::tuple<jint /*type*/, std::vector<jbyte> /*data*/>;
+    using Array = std::vector<Value>;
+    using ArrayList = std::list<Array>;
+    using Element = std::tuple<jint /*name*/, Value>;
+    using ElementList = std::vector<Element>;
+    using Annotation = std::tuple<jint/*vis*/, jint /*type*/, ElementList>;
+    using AnnotationList = std::vector<Annotation>;
 
     class DexParser : public dex::Reader {
     public:
@@ -116,6 +68,145 @@ namespace {
 
         absl::flat_hash_map<jint, MethodBody> method_bodies;
     };
+
+    template<class T>
+    static std::vector<jbyte> ParseIntValue(const dex::u1 **pptr, size_t size) {
+        static_assert(std::is_integral<T>::value, "must be an integral type");
+        std::vector<jbyte> ret(sizeof(T));
+        T &value = *reinterpret_cast<T *>(ret.data());
+        for (size_t i = 0; i < size; ++i) {
+            value |= T(*(*pptr)++) << (i * 8);
+        }
+
+        // sign-extend?
+        if constexpr (std::is_signed_v<T>) {
+            size_t shift = (sizeof(T) - size) * 8;
+            value = T(value << shift) >> shift;
+        }
+        return ret;
+    }
+
+    template<class T>
+    static std::vector<jbyte> ParseFloatValue(const dex::u1 **pptr, size_t size) {
+        std::vector<jbyte> ret(sizeof(T));
+        T &value = *reinterpret_cast<T *>(ret.data());
+        int start_byte = sizeof(T) - size;
+        for (dex::u1 *p = reinterpret_cast<dex::u1 *>(&value) + start_byte; size > 0;
+             --size) {
+            *p++ = *(*pptr)++;
+        }
+        return ret;
+    }
+
+    Annotation
+    ParseAnnotation(const dex::u1 **annotation, AnnotationList &annotation_list,
+                    ArrayList &array_list);
+
+    Array
+    ParseArray(const dex::u1 **array, AnnotationList &annotation_list, ArrayList &array_list);
+
+    Value
+    ParseValue(const dex::u1 **value, AnnotationList &annotation_list, ArrayList &array_list) {
+        Value res;
+        auto &[type, value_content] = res;
+        auto header = *(*value)++;
+        type = header & dex::kEncodedValueTypeMask;
+        dex::u1 arg = header >> dex::kEncodedValueArgShift;
+        switch (type) {
+            case dex::kEncodedByte:
+                value_content = ParseIntValue<int8_t>(value, arg + 1);
+                break;
+            case dex::kEncodedShort:
+                value_content = ParseIntValue<int16_t>(value, arg + 1);
+                break;
+            case dex::kEncodedChar:
+                value_content = ParseIntValue<uint16_t>(value, arg + 1);
+                break;
+            case dex::kEncodedInt:
+                value_content = ParseIntValue<int32_t>(value, arg + 1);
+                break;
+            case dex::kEncodedLong:
+                value_content = ParseIntValue<int64_t>(value, arg + 1);
+                break;
+            case dex::kEncodedFloat:
+                value_content = ParseFloatValue<float>(value, arg + 1);
+                break;
+            case dex::kEncodedDouble:
+                value_content = ParseFloatValue<double>(value, arg + 1);
+                break;
+            case dex::kEncodedMethodType:
+            case dex::kEncodedMethodHandle:
+            case dex::kEncodedString:
+            case dex::kEncodedType:
+            case dex::kEncodedField:
+            case dex::kEncodedMethod:
+            case dex::kEncodedEnum:
+                value_content = ParseIntValue<uint32_t>(value, arg + 1);
+                break;
+            case dex::kEncodedArray:
+                value_content.resize(sizeof(jint));
+                *reinterpret_cast<jint *>(value_content.data()) = static_cast<jint>(array_list.size());
+                array_list.emplace_back(ParseArray(value, annotation_list, array_list));
+                break;
+            case dex::kEncodedAnnotation:
+                value_content.resize(sizeof(jint));
+                *reinterpret_cast<jint *>(value_content.data()) = static_cast<jint>(annotation_list.size());
+                annotation_list.emplace_back(ParseAnnotation(value, annotation_list, array_list));
+                break;
+            case dex::kEncodedNull:
+                break;
+            case dex::kEncodedBoolean:
+                value_content = {static_cast<jbyte>(arg == 1)};
+                break;
+            default:
+                __builtin_unreachable();
+        }
+        return res;
+    }
+
+    Annotation
+    ParseAnnotation(const dex::u1 **annotation, AnnotationList &annotation_list,
+                    ArrayList &array_list) {
+        Annotation ret = {dex::kVisibilityEncoded,
+                          dex::ReadULeb128(annotation),
+                          ElementList{}};
+        auto &[vis, type, element_list] = ret;
+        auto size = dex::ReadULeb128(annotation);
+        element_list.resize(size);
+        for (size_t j = 0; j < size; ++j) {
+            auto &[name, value] = element_list[j];
+            name = static_cast<jint>(dex::ReadULeb128(annotation));
+            value = ParseValue(annotation, annotation_list, array_list);
+        }
+        return ret;
+    }
+
+    Array
+    ParseArray(const dex::u1 **array, AnnotationList &annotation_list, ArrayList &array_list) {
+        auto size = dex::ReadULeb128(array);
+        Array ret;
+        ret.reserve(size);
+        for (size_t i = 0; i < size; ++i) {
+            ret.emplace_back(ParseValue(array, annotation_list, array_list));
+        }
+        return ret;
+    }
+
+    void ParseAnnotationSet(dex::Reader &dex, AnnotationList &annotation_list,
+                            ArrayList &array_list, std::vector<jint> &indices,
+                            const dex::AnnotationSetItem *annotation_set) {
+        if (annotation_set == nullptr) {
+            return;
+        }
+        for (size_t i = 0; i < annotation_set->size; ++i) {
+            auto *item = dex.dataPtr<dex::AnnotationItem>(annotation_set->entries[i]);
+            auto *annotation_data = item->annotation;
+            indices.emplace_back(annotation_list.size());
+            auto &[visibility, type, element_list] = annotation_list.emplace_back(
+                    ParseAnnotation(&annotation_data, annotation_list, array_list));
+            visibility = item->visibility;
+        }
+    }
 }
 
 namespace lspd {
@@ -128,6 +219,9 @@ namespace lspd {
         auto *dex_data = env->GetDirectBufferAddress(data);
 
         auto *dex_reader = new DexParser(reinterpret_cast<dex::u1 *>(dex_data), dex_size);
+        auto *args_ptr = env->GetLongArrayElements(args, nullptr);
+        auto include_annotations = args_ptr[1];
+        env->ReleaseLongArrayElements(args, args_ptr, JNI_ABORT);
         env->SetLongArrayRegion(args, 0, 1, reinterpret_cast<const jlong *>(&dex_reader));
         auto &dex = *dex_reader;
         if (dex.IsCompact()) {
@@ -137,7 +231,7 @@ namespace lspd {
         auto object_class = env->FindClass("java/lang/Object");
         auto string_class = env->FindClass("java/lang/String");
         auto int_array_class = env->FindClass("[I");
-        auto out = env->NewObjectArray(7, object_class, nullptr);
+        auto out = env->NewObjectArray(8, object_class, nullptr);
         auto out0 = env->NewObjectArray(static_cast<jint>(dex.StringIds().size()),
                                         string_class, nullptr);
         auto strings = dex.StringIds();
@@ -213,6 +307,7 @@ namespace lspd {
         dex.class_data.resize(classes.size());
 
         AnnotationList annotation_list;
+        ArrayList array_list;
 
         for (size_t i = 0; i < classes.size(); ++i) {
             auto &class_def = classes[i];
@@ -304,7 +399,9 @@ namespace lspd {
                 }
             }
 
-            ParseAnnotation(env, dex, annotation_list, class_data.annotations, class_annotation);
+            if (!include_annotations) continue;
+            ParseAnnotationSet(dex, annotation_list, array_list, class_data.annotations,
+                               class_annotation);
 
             auto *field_annotations = annotations
                                       ? reinterpret_cast<const dex::FieldAnnotationsItem *>(
@@ -312,9 +409,9 @@ namespace lspd {
             for (size_t k = 0; k < field_annotations_count; ++k) {
                 auto *field_annotation = dex.dataPtr<dex::AnnotationSetItem>(
                         field_annotations[k].annotations_off);
-                ParseAnnotation(env, dex, annotation_list,
-                                dex.field_annotations[static_cast<jint>(field_annotations[k].field_idx)],
-                                field_annotation);
+                ParseAnnotationSet(dex, annotation_list, array_list,
+                                   dex.field_annotations[static_cast<jint>(field_annotations[k].field_idx)],
+                                   field_annotation);
             }
 
             auto *method_annotations = field_annotations
@@ -324,9 +421,9 @@ namespace lspd {
             for (size_t k = 0; k < method_annotations_count; ++k) {
                 auto *method_annotation = dex.dataPtr<dex::AnnotationSetItem>(
                         method_annotations[k].annotations_off);
-                ParseAnnotation(env, dex, annotation_list,
-                                dex.method_annotations[static_cast<jint>(method_annotations[k].method_idx)],
-                                method_annotation);
+                ParseAnnotationSet(dex, annotation_list, array_list,
+                                   dex.method_annotations[static_cast<jint>(method_annotations[k].method_idx)],
+                                   method_annotation);
             }
 
             auto *parameter_annotations = method_annotations
@@ -341,14 +438,16 @@ namespace lspd {
                     if (parameter_annotation->list[l].annotations_off != 0) {
                         auto *parameter_annotation_item = dex.dataPtr<dex::AnnotationSetItem>(
                                 parameter_annotation->list[l].annotations_off);
-                        ParseAnnotation(env, dex, annotation_list, indices,
-                                        parameter_annotation_item);
+                        ParseAnnotationSet(dex, annotation_list, array_list, indices,
+                                           parameter_annotation_item);
                     }
                     indices.emplace_back(dex::kNoIndex);
                 }
             }
         }
-        return out;
+
+        if (!include_annotations) return out;
+
         auto out5 = env->NewIntArray(static_cast<jint>(2 * annotation_list.size()));
         auto out6 = env->NewObjectArray(static_cast<jint>(2 * annotation_list.size()), object_class,
                                         nullptr);
@@ -360,9 +459,10 @@ namespace lspd {
             auto out6i1 = env->NewObjectArray(static_cast<jint>(items.size()), object_class,
                                               nullptr);
             size_t j = 0;
-            for (auto&[name, value_type, value]: items) {
-                auto java_value = env->NewDirectByteBuffer(const_cast<char *>(value.data()),
-                                                           value.size());
+            for (auto&[name, value]: items) {
+                auto &[value_type, value_data] = value;
+                auto java_value = value_data.empty() ? nullptr : env->NewDirectByteBuffer(
+                        value_data.data(), value_data.size());
                 env->SetObjectArrayElement(out6i1, static_cast<jint>(j), java_value);
                 out6i0_ptr[2 * j] = name;
                 out6i0_ptr[2 * j + 1] = value_type;
@@ -383,6 +483,35 @@ namespace lspd {
         env->SetObjectArrayElement(out, 6, out6);
         env->DeleteLocalRef(out5);
         env->DeleteLocalRef(out6);
+
+        auto out7 = env->NewObjectArray(static_cast<jint>(2 * array_list.size()), object_class,
+                                        nullptr);
+        i = 0;
+        for (auto &array: array_list) {
+
+            auto out7i0 = env->NewIntArray(static_cast<jint>(array.size()));
+            auto out7i0_ptr = env->GetIntArrayElements(out7i0, nullptr);
+            auto out7i1 = env->NewObjectArray(static_cast<jint>(array.size()), object_class,
+                                              nullptr);
+            size_t j = 0;
+            for (auto &value: array) {
+                auto &[value_type, value_data] = value;
+                auto java_value = value_data.empty() ? nullptr : env->NewDirectByteBuffer(
+                        value_data.data(), value_data.size());
+                out7i0_ptr[j] = value_type;
+                env->SetObjectArrayElement(out7i1, static_cast<jint>(j), java_value);
+                env->DeleteLocalRef(java_value);
+                ++j;
+            }
+            env->ReleaseIntArrayElements(out7i0, out7i0_ptr, 0);
+            env->SetObjectArrayElement(out7, static_cast<jint>(2 * i), out7i0);
+            env->SetObjectArrayElement(out7, static_cast<jint>(2 * i + 1), out7i1);
+            env->DeleteLocalRef(out7i0);
+            env->DeleteLocalRef(out7i1);
+            ++i;
+        }
+        env->SetObjectArrayElement(out, 7, out7);
+        env->DeleteLocalRef(out7);
 
         return out;
     }
@@ -664,6 +793,8 @@ namespace lspd {
             LSP_NATIVE_METHOD(DexParserBridge, openDex,
                               "(Ljava/nio/buffer/ByteBuffer;[J)Ljava/lang/Object;"),
             LSP_NATIVE_METHOD(DexParserBridge, closeDex, "(J)V;"),
+            LSP_NATIVE_METHOD(DexParserBridge, visitClass,
+                              "(JLio/github/libxposed/utils/DexParser$ClassVisitor;Ljava/lang/Class;Ljava/lang/Class;Ljava/lang/reflect/Method;Ljava/lang/reflect/Method;Ljava/lang/reflect/Method;Ljava/lang/reflect/Method;Ljava/lang/reflect/Method;)V"),
     };
 
 

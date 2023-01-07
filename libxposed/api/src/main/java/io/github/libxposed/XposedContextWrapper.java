@@ -141,8 +141,8 @@ public class XposedContextWrapper extends ContextWrapper implements XposedInterf
 
     @Nullable
     @Override
-    final public DexParser parseDex(ByteBuffer dexData) throws IOException {
-        return getBaseContext().parseDex(dexData);
+    final public DexParser parseDex(@NonNull ByteBuffer dexData, boolean includeAnnotations) throws IOException {
+        return getBaseContext().parseDex(dexData, includeAnnotations);
     }
 
     @Override
