@@ -21,38 +21,39 @@
 #include "native_util.h"
 #include "slicer/reader.h"
 
+#include <list>
+#include <absl/container/flat_hash_map.h>
+
 namespace {
-    jobject ParseAnnotation(JNIEnv *env, dex::Reader &dex, jclass object_class,
-                            const dex::AnnotationSetItem *annotation) {
+    using AnnotationList = std::vector<std::tuple<jint/*vis*/, jint /*type*/, std::vector<std::tuple<jint /*name*/, jint/*value_type*/, std::string_view/*value*/>>>>;
+
+    void ParseAnnotation(JNIEnv *env, dex::Reader &dex, AnnotationList &annotation_list,
+                         std::vector<jint> indices,
+                         const dex::AnnotationSetItem *annotation) {
         if (annotation == nullptr) {
-            return nullptr;
+            return;
         }
-        auto a = env->NewIntArray(static_cast<jint>(2 * annotation->size));
-        auto *a_ptr = env->GetIntArrayElements(a, nullptr);
-        auto b = env->NewObjectArray(static_cast<jint>(2 * annotation->size), object_class,
-                                     nullptr);
         for (size_t i = 0; i < annotation->size; ++i) {
             auto *item = dex.dataPtr<dex::AnnotationItem>(annotation->entries[i]);
-            a_ptr[2 * i] = item->visibility;
             auto *annotation_data = item->annotation;
-            a_ptr[2 * i + 1] = static_cast<jint>(dex::ReadULeb128(&annotation_data));
+            indices.emplace_back(annotation_list.size());
+            auto &[visibility, type, items] = annotation_list.emplace_back(item->visibility,
+                                                                           dex::ReadULeb128(
+                                                                                   &annotation_data),
+                                                                           std::vector<std::tuple<jint, jint, std::string_view>>());
             auto size = dex::ReadULeb128(&annotation_data);
-            auto b2i0 = env->NewIntArray(static_cast<jint>(2 * size));
-            auto *b2i0_ptr = env->GetIntArrayElements(b2i0, nullptr);
-            auto b2i1 = env->NewObjectArray(static_cast<jint>(size), object_class, nullptr);
+            items.resize(size);
             for (size_t j = 0; j < size; ++j) {
-                b2i0_ptr[2 * j] = static_cast<jint>(dex::ReadULeb128(&annotation_data));
+                auto &[name, value_type, value] = items[j];
+                name = static_cast<jint>(dex::ReadULeb128(&annotation_data));
                 auto arg_and_type = *annotation_data++;
-                auto value_type = arg_and_type & 0x1f;
-                b2i0_ptr[2 * j + 1] = value_type;
+                value_type = arg_and_type & 0x1f;
                 auto value_arg = arg_and_type >> 5;
-                jobject value = nullptr;
                 switch (value_type) {
                     case 0x00: // byte
                     case 0x1f: // boolean
-                        value = env->NewDirectByteBuffer(
-                                reinterpret_cast<void *>(const_cast<dex::u1 *>(annotation_data)),
-                                1);
+                        value = {reinterpret_cast<char *>(const_cast<dex::u1 *>(annotation_data)),
+                                 1};
                         break;
                     case 0x02: // short
                     case 0x03: // char
@@ -65,38 +66,60 @@ namespace {
                     case 0x19: // field
                     case 0x1a: // method
                     case 0x1b: // enum
-                        value = env->NewDirectByteBuffer(
-                                reinterpret_cast<void *>(const_cast<dex::u1 *>(annotation_data)),
-                                value_arg);
+                        value = {
+                                reinterpret_cast<char *>(const_cast<dex::u1 *>(annotation_data)),
+                                static_cast<size_t>(value_arg)};
                         break;
                     case 0x1c: // array
                     case 0x1d: // annotation
                     case 0x1e: // null
-                        // not supported
-                        value = nullptr;
-                        break;
                     default:
+                        // not supported
                         break;
                 }
-                env->SetObjectArrayElement(b2i1, static_cast<jint>(j), value);
-                env->DeleteLocalRef(value);
             }
-            env->SetObjectArrayElement(b, static_cast<jint>(2 * i), b2i0);
-            env->SetObjectArrayElement(b, static_cast<jint>(2 * i + 1), b2i1);
-            env->DeleteLocalRef(b2i0);
-            env->DeleteLocalRef(b2i1);
         }
-        env->ReleaseIntArrayElements(a, a_ptr, 0);
-        auto res = env->NewObjectArray(2, object_class, nullptr);
-        env->SetObjectArrayElement(res, 0, a);
-        env->SetObjectArrayElement(res, 1, b);
-        env->DeleteLocalRef(a);
-        env->DeleteLocalRef(b);
-        return res;
     }
+
+    class DexParser : public dex::Reader {
+    public:
+        DexParser(const dex::u1 *data, size_t size) : dex::Reader(data, size, nullptr, 0) {}
+
+        struct ClassData {
+            std::vector<jint> interfaces;
+            std::vector<jint> static_fields;
+            std::vector<jint> static_fields_access_flags;
+            std::vector<jint> instance_fields;
+            std::vector<jint> instance_fields_access_flags;
+            std::vector<jint> direct_methods;
+            std::vector<jint> direct_methods_access_flags;
+            std::vector<const dex::Code *> direct_methods_code;
+            std::vector<jint> virtual_methods;
+            std::vector<jint> virtual_methods_access_flags;
+            std::vector<const dex::Code *> virtual_methods_code;
+            std::vector<jint> annotations;
+        };
+
+        struct MethodBody {
+            bool loaded;
+            std::vector<jint> referred_strings;
+            std::vector<jint> accessed_fields;
+            std::vector<jint> assigned_fields;
+            std::vector<jint> invoked_methods;
+            std::vector<jbyte> opcodes;
+        };
+
+        std::vector<ClassData> class_data;
+        absl::flat_hash_map<jint, std::vector<jint>> field_annotations;
+        absl::flat_hash_map<jint, std::vector<jint>> method_annotations;
+        absl::flat_hash_map<jint, std::vector<jint>> parameter_annotations;
+
+        absl::flat_hash_map<jint, MethodBody> method_bodies;
+    };
 }
+
 namespace lspd {
-    LSP_DEF_NATIVE_METHOD(jobject, DexParserBridge, parseDex, jobject data) {
+    LSP_DEF_NATIVE_METHOD(jobject, DexParserBridge, openDex, jobject data, jlongArray args) {
         auto dex_size = env->GetDirectBufferCapacity(data);
         if (dex_size == -1) {
             env->ThrowNew(env->FindClass("java/io/IOException"), "Invalid dex data");
@@ -104,7 +127,9 @@ namespace lspd {
         }
         auto *dex_data = env->GetDirectBufferAddress(data);
 
-        dex::Reader dex(reinterpret_cast<dex::u1 *>(dex_data), dex_size, nullptr, 0);
+        auto *dex_reader = new DexParser(reinterpret_cast<dex::u1 *>(dex_data), dex_size);
+        env->SetLongArrayRegion(args, 0, 1, reinterpret_cast<const jlong *>(&dex_reader));
+        auto &dex = *dex_reader;
         if (dex.IsCompact()) {
             env->ThrowNew(env->FindClass("java/io/IOException"), "Compact dex is not supported");
             return nullptr;
@@ -118,7 +143,7 @@ namespace lspd {
         auto strings = dex.StringIds();
         for (size_t i = 0; i < strings.size(); ++i) {
             const auto *ptr = dex.dataPtr<dex::u1>(strings[i].string_data_off);
-            size_t len = dex::ReadULeb128(&ptr);
+            [[maybe_unused]] size_t len = dex::ReadULeb128(&ptr);
             auto str = env->NewStringUTF(reinterpret_cast<const char *>(ptr));
             env->SetObjectArrayElement(out0, static_cast<jint>(i), str);
             env->DeleteLocalRef(str);
@@ -185,31 +210,33 @@ namespace lspd {
         env->DeleteLocalRef(out4);
 
         auto classes = dex.ClassDefs();
-        auto out5 = env->NewObjectArray(static_cast<jint>(classes.size()),
-                                        int_array_class, nullptr);
-        auto out6 = env->NewObjectArray(static_cast<jint>(4 * classes.size()),
-                                        object_class, nullptr);
+        dex.class_data.resize(classes.size());
+
+        AnnotationList annotation_list;
+
         for (size_t i = 0; i < classes.size(); ++i) {
             auto &class_def = classes[i];
-            auto &interfaces = class_def.interfaces_off ? *dex.dataPtr<dex::TypeList>(
-                    class_def.interfaces_off) : empty_type_list;
 
             dex::u4 static_fields_count = 0;
             dex::u4 instance_fields_count = 0;
             dex::u4 direct_methods_count = 0;
             dex::u4 virtual_methods_count = 0;
+            const dex::u1 *class_data_ptr = nullptr;
+
+            const dex::AnnotationsDirectoryItem *annotations = nullptr;
+            const dex::AnnotationSetItem *class_annotation = nullptr;
             dex::u4 field_annotations_count = 0;
             dex::u4 method_annotations_count = 0;
             dex::u4 parameter_annotations_count = 0;
-            const dex::u1 *class_data = nullptr;
-            const dex::AnnotationsDirectoryItem *annotations = nullptr;
-            const dex::AnnotationSetItem *class_annotation = nullptr;
-            if (class_def.class_data_off != 0) {
-                class_data = dex.dataPtr<dex::u1>(class_def.class_data_off);
-                static_fields_count = dex::ReadULeb128(&class_data);
-                instance_fields_count = dex::ReadULeb128(&class_data);
-                direct_methods_count = dex::ReadULeb128(&class_data);
-                virtual_methods_count = dex::ReadULeb128(&class_data);
+
+            auto &class_data = dex.class_data[i];
+
+            if (class_def.interfaces_off) {
+                auto defined_interfaces = dex.dataPtr<dex::TypeList>(class_def.interfaces_off);
+                class_data.interfaces.resize(defined_interfaces->size);
+                for (size_t k = 0; k < class_data.interfaces.size(); ++k) {
+                    class_data.interfaces[k] = defined_interfaces->list[k].type_idx;
+                }
             }
 
             if (class_def.annotations_off != 0) {
@@ -223,131 +250,156 @@ namespace lspd {
                 parameter_annotations_count = annotations->parameters_size;
             }
 
-            auto array_size = 4 + 1 + interfaces.size + 1 + 2 * static_fields_count +
-                              1 + 2 * instance_fields_count + 1 + 3 * direct_methods_count +
-                              1 + 3 * virtual_methods_count + 1 +
-                              1 + field_annotations_count + 1 + method_annotations_count +
-                              1 + parameter_annotations_count;
-            auto out5i = env->NewIntArray(static_cast<int>(array_size));
-            auto *out5i_ptr = env->GetIntArrayElements(out5i, nullptr);
-            size_t j = 0;
-            out5i_ptr[j++] = static_cast<jint>(class_def.class_idx);
-            out5i_ptr[j++] = static_cast<jint>(class_def.access_flags);
-            out5i_ptr[j++] = static_cast<jint>(class_def.superclass_idx);
-            out5i_ptr[j++] = static_cast<jint>(class_def.source_file_idx);
-            out5i_ptr[j++] = static_cast<jint>(interfaces.size);
-            for (size_t k = 0; k < interfaces.size; ++k) {
-                out5i_ptr[j++] = static_cast<jint>(interfaces.list[k].type_idx);
-            }
-            out5i_ptr[j++] = static_cast<jint>(static_fields_count);
-            for (size_t k = 0, field_idx = 0; k < static_fields_count; ++k) {
-                out5i_ptr[j++] = static_cast<jint>(field_idx += dex::ReadULeb128(&class_data));
-                out5i_ptr[j++] = static_cast<jint>(dex::ReadULeb128(&class_data));
-            }
-            out5i_ptr[j++] = static_cast<jint>(instance_fields_count);
-            for (size_t k = 0, field_idx = 0; k < instance_fields_count; ++k) {
-                out5i_ptr[j++] = static_cast<jint>(field_idx += dex::ReadULeb128(&class_data));
-                out5i_ptr[j++] = static_cast<jint>(dex::ReadULeb128(&class_data));
-            }
-            out5i_ptr[j++] = static_cast<jint>(direct_methods_count);
-            for (size_t k = 0, method_idx = 0; k < direct_methods_count; ++k) {
-                out5i_ptr[j++] = static_cast<jint>(method_idx += dex::ReadULeb128(&class_data));
-                out5i_ptr[j++] = static_cast<jint>(dex::ReadULeb128(&class_data));
-                out5i_ptr[j++] = static_cast<jint>(dex::ReadULeb128(&class_data));
-            }
-            out5i_ptr[j++] = static_cast<jint>(virtual_methods_count);
-            for (size_t k = 0, method_idx = 0; k < virtual_methods_count; ++k) {
-                out5i_ptr[j++] = static_cast<jint>(method_idx += dex::ReadULeb128(&class_data));
-                out5i_ptr[j++] = static_cast<jint>(dex::ReadULeb128(&class_data));
-                out5i_ptr[j++] = static_cast<jint>(dex::ReadULeb128(&class_data));
+            if (class_def.class_data_off != 0) {
+                class_data_ptr = dex.dataPtr<dex::u1>(class_def.class_data_off);
+                static_fields_count = dex::ReadULeb128(&class_data_ptr);
+                instance_fields_count = dex::ReadULeb128(&class_data_ptr);
+                direct_methods_count = dex::ReadULeb128(&class_data_ptr);
+                virtual_methods_count = dex::ReadULeb128(&class_data_ptr);
+                class_data.static_fields.resize(static_fields_count);
+                class_data.static_fields_access_flags.resize(static_fields_count);
+                class_data.instance_fields.resize(instance_fields_count);
+                class_data.instance_fields_access_flags.resize(instance_fields_count);
+                class_data.direct_methods.resize(direct_methods_count);
+                class_data.direct_methods_access_flags.resize(direct_methods_count);
+                class_data.direct_methods_code.resize(direct_methods_count);
+                class_data.virtual_methods.resize(virtual_methods_count);
+                class_data.virtual_methods_access_flags.resize(virtual_methods_count);
+                class_data.virtual_methods_code.resize(virtual_methods_count);
             }
 
-            auto out6i0 = ParseAnnotation(env, dex, object_class, class_annotation);
-            env->SetObjectArrayElement(out6, static_cast<jint>(4 * i), out6i0);
-            env->DeleteLocalRef(out6i0);
+            if (class_data_ptr) {
+                for (size_t k = 0, field_idx = 0; k < static_fields_count; ++k) {
+                    class_data.static_fields[k] = static_cast<jint>(field_idx += dex::ReadULeb128(
+                            &class_data_ptr));
+                    class_data.static_fields_access_flags[k] = static_cast<jint>(dex::ReadULeb128(
+                            &class_data_ptr));
+                }
 
-            out5i_ptr[j++] = static_cast<jint>(class_annotation ? class_annotation->size : 0);
+                for (size_t k = 0, field_idx = 0; k < instance_fields_count; ++k) {
+                    class_data.instance_fields[k] = static_cast<jint>(field_idx += dex::ReadULeb128(
+                            &class_data_ptr));
+                    class_data.instance_fields_access_flags[k] = static_cast<jint>(dex::ReadULeb128(
+                            &class_data_ptr));
+                }
 
-            out5i_ptr[j++] = static_cast<jint>(field_annotations_count);
+                for (size_t k = 0, method_idx = 0; k < direct_methods_count; ++k) {
+                    class_data.direct_methods[k] = static_cast<jint>(method_idx += dex::ReadULeb128(
+                            &class_data_ptr));
+                    class_data.direct_methods_access_flags[k] = static_cast<jint>(dex::ReadULeb128(
+                            &class_data_ptr));
+                    auto code_off = dex::ReadULeb128(&class_data_ptr);
+                    class_data.direct_methods_code[k] = code_off ? dex.dataPtr<dex::Code>(code_off)
+                                                                 : nullptr;
+                }
+
+                for (size_t k = 0, method_idx = 0; k < virtual_methods_count; ++k) {
+                    class_data.virtual_methods[k] = static_cast<jint>(method_idx += dex::ReadULeb128(
+                            &class_data_ptr));
+                    class_data.virtual_methods_access_flags[k] = static_cast<jint>(dex::ReadULeb128(
+                            &class_data_ptr));
+                    auto code_off = dex::ReadULeb128(&class_data_ptr);
+                    class_data.virtual_methods_code[k] = code_off ? dex.dataPtr<dex::Code>(code_off)
+                                                                  : nullptr;
+                }
+            }
+
+            ParseAnnotation(env, dex, annotation_list, class_data.annotations, class_annotation);
+
             auto *field_annotations = annotations
                                       ? reinterpret_cast<const dex::FieldAnnotationsItem *>(
                                               annotations + 1) : nullptr;
-            auto out6i1 = env->NewObjectArray(static_cast<jint>(field_annotations_count),
-                                              object_class, nullptr);
             for (size_t k = 0; k < field_annotations_count; ++k) {
-                out5i_ptr[j++] = static_cast<jint>(field_annotations[k].field_idx);
                 auto *field_annotation = dex.dataPtr<dex::AnnotationSetItem>(
                         field_annotations[k].annotations_off);
-                auto out6i1i = ParseAnnotation(env, dex, object_class, field_annotation);
-                env->SetObjectArrayElement(out6i1, static_cast<jint>(k), out6i1i);
-                env->DeleteLocalRef(out6i1i);
+                ParseAnnotation(env, dex, annotation_list,
+                                dex.field_annotations[static_cast<jint>(field_annotations[k].field_idx)],
+                                field_annotation);
             }
-            env->SetObjectArrayElement(out6, static_cast<jint>(4 * i + 1), out6i1);
-            env->DeleteLocalRef(out6i1);
 
-            out5i_ptr[j++] = static_cast<jint>(method_annotations_count);
             auto *method_annotations = field_annotations
                                        ? reinterpret_cast<const dex::MethodAnnotationsItem *>(
                                                field_annotations + field_annotations_count)
                                        : nullptr;
-            auto out6i2 = env->NewObjectArray(static_cast<jint>(method_annotations_count),
-                                              object_class, nullptr);
             for (size_t k = 0; k < method_annotations_count; ++k) {
-                out5i_ptr[j++] = static_cast<jint>(method_annotations[k].method_idx);
                 auto *method_annotation = dex.dataPtr<dex::AnnotationSetItem>(
                         method_annotations[k].annotations_off);
-                auto out6i2i = ParseAnnotation(env, dex, object_class, method_annotation);
-                env->SetObjectArrayElement(out6i2, static_cast<jint>(k), out6i2i);
-                env->DeleteLocalRef(out6i2i);
+                ParseAnnotation(env, dex, annotation_list,
+                                dex.method_annotations[static_cast<jint>(method_annotations[k].method_idx)],
+                                method_annotation);
             }
-            env->SetObjectArrayElement(out6, static_cast<jint>(4 * i + 2), out6i2);
 
-            out5i_ptr[j++] = static_cast<jint>(parameter_annotations_count);
             auto *parameter_annotations = method_annotations
                                           ? reinterpret_cast<const dex::ParameterAnnotationsItem *>(
                                                   method_annotations + method_annotations_count)
                                           : nullptr;
-            auto out6i3 = env->NewObjectArray(static_cast<jint>(parameter_annotations_count),
-                                              object_class, nullptr);
             for (size_t k = 0; k < parameter_annotations_count; ++k) {
-                out5i_ptr[j++] = static_cast<jint>(parameter_annotations[k].method_idx);
                 auto *parameter_annotation = dex.dataPtr<dex::AnnotationSetRefList>(
                         parameter_annotations[k].annotations_off);
-                auto out6i3i = env->NewObjectArray(
-                        static_cast<jint>(parameter_annotation->size), object_class, nullptr);
+                auto &indices = dex.parameter_annotations[static_cast<jint>(parameter_annotations[k].method_idx)];
                 for (size_t l = 0; l < parameter_annotation->size; ++l) {
                     if (parameter_annotation->list[l].annotations_off != 0) {
                         auto *parameter_annotation_item = dex.dataPtr<dex::AnnotationSetItem>(
                                 parameter_annotation->list[l].annotations_off);
-                        auto out6i3ii = ParseAnnotation(env, dex, object_class,
-                                                        parameter_annotation_item);
-                        env->SetObjectArrayElement(out6i3i, static_cast<jint>(l), out6i3ii);
-                        env->DeleteLocalRef(out6i3ii);
+                        ParseAnnotation(env, dex, annotation_list, indices,
+                                        parameter_annotation_item);
                     }
+                    indices.emplace_back(dex::kNoIndex);
                 }
-                env->SetObjectArrayElement(out6i3, static_cast<jint>(k), out6i3i);
-                env->DeleteLocalRef(out6i3i);
             }
-            env->SetObjectArrayElement(out6, static_cast<jint>(4 * i + 3), out6i3);
-            env->DeleteLocalRef(out6i3);
-
-            env->ReleaseIntArrayElements(out5i, out5i_ptr, 0);
-            env->SetObjectArrayElement(out5, static_cast<jint>(i), out5i);
-            env->DeleteLocalRef(out5i);
         }
+        return out;
+        auto out5 = env->NewIntArray(static_cast<jint>(2 * annotation_list.size()));
+        auto out6 = env->NewObjectArray(static_cast<jint>(2 * annotation_list.size()), object_class,
+                                        nullptr);
+        auto out5_ptr = env->GetIntArrayElements(out5, nullptr);
+        size_t i = 0;
+        for (auto &[visibility, type, items]: annotation_list) {
+            auto out6i0 = env->NewIntArray(static_cast<jint>(2 * items.size()));
+            auto out6i0_ptr = env->GetIntArrayElements(out6i0, nullptr);
+            auto out6i1 = env->NewObjectArray(static_cast<jint>(items.size()), object_class,
+                                              nullptr);
+            size_t j = 0;
+            for (auto&[name, value_type, value]: items) {
+                auto java_value = env->NewDirectByteBuffer(const_cast<char *>(value.data()),
+                                                           value.size());
+                env->SetObjectArrayElement(out6i1, static_cast<jint>(j), java_value);
+                out6i0_ptr[2 * j] = name;
+                out6i0_ptr[2 * j + 1] = value_type;
+                env->DeleteLocalRef(java_value);
+                ++j;
+            }
+            env->ReleaseIntArrayElements(out6i0, out6i0_ptr, 0);
+            env->SetObjectArrayElement(out6, static_cast<jint>(2 * i), out6i0);
+            env->SetObjectArrayElement(out6, static_cast<jint>(2 * i + 1), out6i1);
+            out5_ptr[2 * i] = visibility;
+            out5_ptr[2 * i + 1] = type;
+            env->DeleteLocalRef(out6i0);
+            env->DeleteLocalRef(out6i1);
+            ++i;
+        }
+        env->ReleaseIntArrayElements(out5, out5_ptr, 0);
+        env->SetObjectArrayElement(out, 5, out5);
+        env->SetObjectArrayElement(out, 6, out6);
+        env->DeleteLocalRef(out5);
+        env->DeleteLocalRef(out6);
 
         return out;
     }
 
-    LSP_DEF_NATIVE_METHOD(jobject, DexParserBridge, parseMethod, jobject data, jint code_offset) {
-        auto dex_size = env->GetDirectBufferCapacity(data);
-        auto *dex_data = env->GetDirectBufferAddress(data);
-        if (dex_size < 0 || dex_data == nullptr || code_offset >= dex_size) {
-            return nullptr;
-        }
-        auto *code = reinterpret_cast<dex::Code *>(reinterpret_cast<dex::u1 *>(dex_data) +
-                                                   code_offset);
+    LSP_DEF_NATIVE_METHOD(void, DexParserBridge, closeDex, jlong cookie) {
+        if (cookie != 0)
+            delete reinterpret_cast<DexParser *>(cookie);
+    }
 
+    LSP_DEF_NATIVE_METHOD(void, DexParserBridge, visitClass, jlong cookie, jobject visitor,
+                          jclass field_visitor_class,
+                          jclass method_visitor_class,
+                          jobject class_visit_method,
+                          jobject field_visit_method,
+                          jobject method_visit_method,
+                          jobject method_body_visit_method,
+                          jobject stop_method) {
         static constexpr dex::u1 kOpcodeMask = 0xff;
         static constexpr dex::u1 kOpcodeNoOp = 0x00;
         static constexpr dex::u1 kOpcodeConstString = 0x1a;
@@ -367,90 +419,251 @@ namespace lspd {
         static constexpr dex::u2 kInstPackedSwitchPlayLoad = 0x0100;
         static constexpr dex::u2 kInstSparseSwitchPlayLoad = 0x0200;
         static constexpr dex::u2 kInstFillArrayDataPlayLoad = 0x0300;
-        const dex::u2 *inst = code->insns;
-        const dex::u2 *end = inst + code->insns_size;
-        std::vector<jint> invoked_methods;
-        std::vector<jint> referred_strings;
-        std::vector<jint> accessed_fields;
-        std::vector<jint> assigned_fields;
-        std::vector<jbyte> opcodes;
-        while (inst < end) {
-            dex::u1 opcode = *inst & kOpcodeMask;
-            opcodes.push_back(static_cast<jbyte>(opcode));
-            if (opcode == kOpcodeConstString) {
-                auto str_idx = inst[1];
-                referred_strings.push_back(str_idx);
-            }
-            if (opcode == kOpcodeConstStringJumbo) {
-                auto str_idx = *reinterpret_cast<const dex::u4 *>(&inst[1]);
-                referred_strings.push_back(static_cast<jint>(str_idx));
-            }
-            if ((opcode >= kOpcodeIGetStart && opcode <= kOpcodeIGetEnd) ||
-                (opcode >= kOpcodeSGetStart && opcode <= kOpcodeSGetEnd)) {
-                auto field_idx = inst[1];
-                accessed_fields.push_back(field_idx);
-            }
-            if ((opcode >= kOpcodeIPutStart && opcode <= kOpcodeIPutEnd) ||
-                (opcode >= kOpcodeSPutStart && opcode <= kOpcodeSPutEnd)) {
-                auto field_idx = inst[1];
-                assigned_fields.push_back(field_idx);
-            }
-            if ((opcode >= kOpcodeInvokeStart && opcode <= kOpcodeInvokeEnd) ||
-                (opcode >= kOpcodeInvokeRangeStart && opcode <= kOpcodeInvokeRangeEnd)) {
-                auto callee = inst[1];
-                invoked_methods.push_back(callee);
-            }
-            if (opcode == kOpcodeNoOp) {
-                if (*inst == kInstPackedSwitchPlayLoad) {
-                    inst += inst[1] * 2 + 3;
-                } else if (*inst == kInstSparseSwitchPlayLoad) {
-                    inst += inst[1] * 4 + 1;
-                } else if (*inst == kInstFillArrayDataPlayLoad) {
-                    inst += (*reinterpret_cast<const dex::u4 *>(&inst[2]) * inst[1] + 1) / 2 + 3;
+
+        if (cookie == 0) {
+            return;
+        }
+        auto &dex = *reinterpret_cast<DexParser *>(cookie);
+        auto *visit_class = env->FromReflectedMethod(class_visit_method);
+        auto *visit_field = env->FromReflectedMethod(field_visit_method);
+        auto *visit_method = env->FromReflectedMethod(method_visit_method);
+        auto *visit_method_body = env->FromReflectedMethod(method_body_visit_method);
+        auto *stop = env->FromReflectedMethod(stop_method);
+
+        auto classes = dex.ClassDefs();
+
+
+        for (size_t i = 0; i < classes.size(); ++i) {
+            auto &class_def = classes[i];
+            auto &class_data = dex.class_data[i];
+            auto interfaces = env->NewIntArray(
+                    static_cast<jint>(class_data.interfaces.size()));
+            env->SetIntArrayRegion(interfaces, 0,
+                                   static_cast<jint>(class_data.interfaces.size()),
+                                   class_data.interfaces.data());
+            auto static_fields = env->NewIntArray(
+                    static_cast<jint>(class_data.static_fields.size()));
+            env->SetIntArrayRegion(static_fields, 0,
+                                   static_cast<jint>(class_data.static_fields.size()),
+                                   class_data.static_fields.data());
+            auto static_fields_access_flags = env->NewIntArray(
+                    static_cast<jint>(class_data.static_fields_access_flags.size()));
+            env->SetIntArrayRegion(static_fields_access_flags, 0,
+                                   static_cast<jint>(
+                                           class_data.static_fields_access_flags.size()),
+                                   class_data.static_fields_access_flags.data());
+            auto instance_fields = env->NewIntArray(
+                    static_cast<jint>(class_data.instance_fields.size()));
+            env->SetIntArrayRegion(instance_fields, 0,
+                                   static_cast<jint>(class_data.instance_fields.size()),
+                                   class_data.instance_fields.data());
+            auto instance_fields_access_flags = env->NewIntArray(
+                    static_cast<jint>(class_data.instance_fields_access_flags.size()));
+            env->SetIntArrayRegion(instance_fields_access_flags, 0,
+                                   static_cast<jint>(
+                                           class_data.instance_fields_access_flags.size()),
+                                   class_data.instance_fields_access_flags.data());
+            auto direct_methods = env->NewIntArray(
+                    static_cast<jint>(class_data.direct_methods.size()));
+            env->SetIntArrayRegion(direct_methods, 0,
+                                   static_cast<jint>(class_data.direct_methods.size()),
+                                   class_data.direct_methods.data());
+            auto direct_methods_access_flags = env->NewIntArray(
+                    static_cast<jint>(class_data.direct_methods_access_flags.size()));
+            env->SetIntArrayRegion(direct_methods_access_flags, 0,
+                                   static_cast<jint>(
+                                           class_data.direct_methods_access_flags.size()),
+                                   class_data.direct_methods_access_flags.data());
+            auto virtual_methods = env->NewIntArray(
+                    static_cast<jint>(class_data.virtual_methods.size()));
+            env->SetIntArrayRegion(virtual_methods, 0,
+                                   static_cast<jint>(class_data.virtual_methods.size()),
+                                   class_data.virtual_methods.data());
+            auto virtual_methods_access_flags = env->NewIntArray(
+                    static_cast<jint>(class_data.virtual_methods_access_flags.size()));
+            env->SetIntArrayRegion(virtual_methods_access_flags, 0,
+                                   static_cast<jint>(
+                                           class_data.virtual_methods_access_flags.size()),
+                                   class_data.virtual_methods_access_flags.data());
+            auto class_annotations = env->NewIntArray(
+                    static_cast<jint>(class_data.annotations.size()));
+            env->SetIntArrayRegion(class_annotations, 0,
+                                   static_cast<jint>(class_data.annotations.size()),
+                                   class_data.annotations.data());
+            jobject member_visitor = env->CallObjectMethod(visitor, visit_class,
+                                                           static_cast<jint>(class_def.class_idx),
+                                                           static_cast<jint>(class_def.access_flags),
+                                                           static_cast<jint>(class_def.superclass_idx),
+                                                           interfaces,
+                                                           static_cast<jint>(class_def.source_file_idx),
+                                                           static_fields,
+                                                           static_fields_access_flags,
+                                                           instance_fields,
+                                                           instance_fields_access_flags,
+                                                           direct_methods,
+                                                           direct_methods_access_flags,
+                                                           virtual_methods,
+                                                           virtual_methods_access_flags,
+                                                           class_annotations
+            );
+            env->DeleteLocalRef(interfaces);
+            env->DeleteLocalRef(static_fields);
+            env->DeleteLocalRef(static_fields_access_flags);
+            env->DeleteLocalRef(instance_fields);
+            env->DeleteLocalRef(instance_fields_access_flags);
+            env->DeleteLocalRef(direct_methods);
+            env->DeleteLocalRef(direct_methods_access_flags);
+            env->DeleteLocalRef(virtual_methods);
+            env->DeleteLocalRef(virtual_methods_access_flags);
+            env->DeleteLocalRef(class_annotations);
+            if (member_visitor && env->IsInstanceOf(member_visitor, field_visitor_class)) {
+                jboolean stopped = JNI_FALSE;
+                for (auto &[fields, fields_access_flags]: {
+                        std::make_tuple(class_data.static_fields,
+                                        class_data.static_fields_access_flags),
+                        std::make_tuple(class_data.instance_fields,
+                                        class_data.instance_fields_access_flags)}) {
+                    for (size_t j = 0; j < fields.size(); j++) {
+                        auto field_idx = fields[j];
+                        auto access_flags = fields_access_flags[j];
+                        auto &field_annotations = dex.field_annotations[field_idx];
+                        auto annotations = env->NewIntArray(
+                                static_cast<jint>(field_annotations.size()));
+                        env->SetIntArrayRegion(annotations, 0,
+                                               static_cast<jint>(field_annotations.size()),
+                                               field_annotations.data());
+                        stopped = env->CallBooleanMethod(member_visitor, visit_field, field_idx,
+                                                         access_flags, annotations);
+                        env->DeleteLocalRef(annotations);
+                        if (stopped == JNI_TRUE) break;
+                    }
+                    if (stopped == JNI_TRUE) break;
                 }
             }
-            inst += dex::opcode_len[opcode];
+            if (member_visitor && env->IsInstanceOf(member_visitor, method_visitor_class)) {
+                jboolean stopped = JNI_FALSE;
+                for (auto &[methods, methods_access_flags, methods_code]: {
+                        std::make_tuple(class_data.direct_methods,
+                                        class_data.direct_methods_access_flags,
+                                        class_data.direct_methods_code),
+                        std::make_tuple(class_data.virtual_methods,
+                                        class_data.virtual_methods_access_flags,
+                                        class_data.virtual_methods_code)}) {
+                    for (size_t j = 0; j < methods.size(); j++) {
+                        auto method_idx = methods[j];
+                        auto access_flags = methods_access_flags[j];
+                        auto code = methods_code[j];
+                        auto method_annotation = dex.method_annotations[method_idx];
+                        auto method_annotations = env->NewIntArray(
+                                static_cast<jint>(method_annotation.size()));
+                        env->SetIntArrayRegion(method_annotations, 0,
+                                               static_cast<jint>(method_annotation.size()),
+                                               method_annotation.data());
+                        auto parameter_annotation = dex.parameter_annotations[method_idx];
+                        auto parameter_annotations = env->NewIntArray(
+                                static_cast<jint>(parameter_annotation.size()));
+                        env->SetIntArrayRegion(parameter_annotations, 0,
+                                               static_cast<jint>(parameter_annotation.size()),
+                                               parameter_annotation.data());
+                        auto body_visitor = env->CallObjectMethod(member_visitor, visit_method,
+                                                                  method_idx,
+                                                                  access_flags, code != nullptr,
+                                                                  method_annotations,
+                                                                  parameter_annotations);
+                        env->DeleteLocalRef(method_annotations);
+                        env->DeleteLocalRef(parameter_annotations);
+                        if (body_visitor && code != nullptr) {
+                            auto body = dex.method_bodies[method_idx];
+                            if (!body.loaded) {
+                                const dex::u2 *inst = code->insns;
+                                const dex::u2 *end = inst + code->insns_size;
+                                while (inst < end) {
+                                    dex::u1 opcode = *inst & kOpcodeMask;
+                                    body.opcodes.push_back(static_cast<jbyte>(opcode));
+                                    if (opcode == kOpcodeConstString) {
+                                        auto str_idx = inst[1];
+                                        body.referred_strings.push_back(str_idx);
+                                    }
+                                    if (opcode == kOpcodeConstStringJumbo) {
+                                        auto str_idx = *reinterpret_cast<const dex::u4 *>(&inst[1]);
+                                        body.referred_strings.push_back(static_cast<jint>(str_idx));
+                                    }
+                                    if ((opcode >= kOpcodeIGetStart && opcode <= kOpcodeIGetEnd) ||
+                                        (opcode >= kOpcodeSGetStart && opcode <= kOpcodeSGetEnd)) {
+                                        auto field_idx = inst[1];
+                                        body.accessed_fields.push_back(field_idx);
+                                    }
+                                    if ((opcode >= kOpcodeIPutStart && opcode <= kOpcodeIPutEnd) ||
+                                        (opcode >= kOpcodeSPutStart && opcode <= kOpcodeSPutEnd)) {
+                                        auto field_idx = inst[1];
+                                        body.assigned_fields.push_back(field_idx);
+                                    }
+                                    if ((opcode >= kOpcodeInvokeStart &&
+                                         opcode <= kOpcodeInvokeEnd) ||
+                                        (opcode >= kOpcodeInvokeRangeStart &&
+                                         opcode <= kOpcodeInvokeRangeEnd)) {
+                                        auto callee = inst[1];
+                                        body.invoked_methods.push_back(callee);
+                                    }
+                                    if (opcode == kOpcodeNoOp) {
+                                        if (*inst == kInstPackedSwitchPlayLoad) {
+                                            inst += inst[1] * 2 + 3;
+                                        } else if (*inst == kInstSparseSwitchPlayLoad) {
+                                            inst += inst[1] * 4 + 1;
+                                        } else if (*inst == kInstFillArrayDataPlayLoad) {
+                                            inst += (*reinterpret_cast<const dex::u4 *>(&inst[2]) *
+                                                     inst[1] + 1) /
+                                                    2 + 3;
+                                        }
+                                    }
+                                    inst += dex::opcode_len[opcode];
+                                }
+                                body.loaded = true;
+                            }
+                            auto referred_strings = env->NewIntArray(
+                                    static_cast<jint>(body.referred_strings.size()));
+                            env->SetIntArrayRegion(referred_strings, 0,
+                                                   static_cast<jint>(body.referred_strings.size()),
+                                                   body.referred_strings.data());
+                            auto accessed_fields = env->NewIntArray(
+                                    static_cast<jint>(body.accessed_fields.size()));
+                            env->SetIntArrayRegion(accessed_fields, 0,
+                                                   static_cast<jint>(body.accessed_fields.size()),
+                                                   body.accessed_fields.data());
+                            auto assigned_fields = env->NewIntArray(
+                                    static_cast<jint>(body.assigned_fields.size()));
+                            env->SetIntArrayRegion(assigned_fields, 0,
+                                                   static_cast<jint>(body.assigned_fields.size()),
+                                                   body.assigned_fields.data());
+                            auto invoked_methods = env->NewIntArray(
+                                    static_cast<jint>(body.invoked_methods.size()));
+                            env->SetIntArrayRegion(invoked_methods, 0,
+                                                   static_cast<jint>(body.invoked_methods.size()),
+                                                   body.invoked_methods.data());
+                            auto opcodes = env->NewByteArray(
+                                    static_cast<jint>(body.opcodes.size()));
+                            env->SetByteArrayRegion(opcodes, 0,
+                                                    static_cast<jint>(body.opcodes.size()),
+                                                    body.opcodes.data());
+                            env->CallVoidMethod(body_visitor, visit_method_body,
+                                                referred_strings,
+                                                invoked_methods,
+                                                accessed_fields, assigned_fields, opcodes);
+                        }
+                        stopped = env->CallBooleanMethod(member_visitor, stop);
+                        if (stopped == JNI_TRUE) break;
+                    }
+                    if (stopped == JNI_TRUE) break;
+                }
+            }
+            if (env->CallBooleanMethod(visitor, stop) == JNI_TRUE) break;
         }
-        auto res = env->NewObjectArray(5, env->FindClass("java/lang/Object"), nullptr);
-        auto res0 = env->NewIntArray(static_cast<jint>(invoked_methods.size()));
-        auto res0_ptr = env->GetIntArrayElements(res0, nullptr);
-        memcpy(res0_ptr, invoked_methods.data(), invoked_methods.size() * sizeof(jint));
-        env->ReleaseIntArrayElements(res0, res0_ptr, 0);
-        env->SetObjectArrayElement(res, 0, res0);
-        env->DeleteLocalRef(res0);
-        auto res1 = env->NewIntArray(static_cast<jint>(accessed_fields.size()));
-        auto res1_ptr = env->GetIntArrayElements(res1, nullptr);
-        memcpy(res1_ptr, accessed_fields.data(), accessed_fields.size() * sizeof(jint));
-        env->ReleaseIntArrayElements(res1, res1_ptr, 0);
-        env->SetObjectArrayElement(res, 1, res1);
-        env->DeleteLocalRef(res1);
-        auto res2 = env->NewIntArray(static_cast<jint>(assigned_fields.size()));
-        auto res2_ptr = env->GetIntArrayElements(res2, nullptr);
-        memcpy(res2_ptr, assigned_fields.data(), assigned_fields.size() * sizeof(jint));
-        env->ReleaseIntArrayElements(res2, res2_ptr, 0);
-        env->SetObjectArrayElement(res, 2, res2);
-        env->DeleteLocalRef(res2);
-        auto res3 = env->NewIntArray(static_cast<jint>(referred_strings.size()));
-        auto res3_ptr = env->GetIntArrayElements(res3, nullptr);
-        memcpy(res3_ptr, referred_strings.data(), referred_strings.size() * sizeof(jint));
-        env->ReleaseIntArrayElements(res3, res3_ptr, 0);
-        env->SetObjectArrayElement(res, 3, res3);
-        env->DeleteLocalRef(res3);
-        auto res4 = env->NewByteArray(static_cast<jint>(opcodes.size()));
-        auto res4_ptr = env->GetByteArrayElements(res4, nullptr);
-        memcpy(res4_ptr, opcodes.data(), opcodes.size() * sizeof(jbyte));
-        env->ReleaseByteArrayElements(res4, res4_ptr, 0);
-        env->SetObjectArrayElement(res, 4, res4);
-        env->DeleteLocalRef(res4);
-
-        return res;
     }
 
     static JNINativeMethod gMethods[] = {
-            LSP_NATIVE_METHOD(DexParserBridge, parseDex,
-                              "(Ljava/nio/buffer/ByteBuffer;)Ljava/lang/Object;"),
-            LSP_NATIVE_METHOD(DexParserBridge, parseDex,
-                              "(Ljava/nio/buffer/ByteBuffer;I)Ljava/lang/Object;"),
+            LSP_NATIVE_METHOD(DexParserBridge, openDex,
+                              "(Ljava/nio/buffer/ByteBuffer;[J)Ljava/lang/Object;"),
+            LSP_NATIVE_METHOD(DexParserBridge, closeDex, "(J)V;"),
     };
 
 
