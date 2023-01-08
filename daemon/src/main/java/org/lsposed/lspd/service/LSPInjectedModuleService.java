@@ -52,6 +52,16 @@ public class LSPInjectedModuleService extends ILSPInjectedModuleService.Stub {
         }
     }
 
+    @Override
+    public String[] getRemoteFileList() throws RemoteException {
+        try {
+            var absolutePath = ConfigFileManager.resolveModulePath(loadedModule.packageName, ".");
+            return absolutePath.toFile().list();
+        } catch (Throwable e) {
+            throw new RemoteException(e.getMessage());
+        }
+    }
+
     void onUpdateRemotePreferences(String group, Bundle diff) {
         var groupCallbacks = callbacks.get(group);
         if (groupCallbacks != null) {
