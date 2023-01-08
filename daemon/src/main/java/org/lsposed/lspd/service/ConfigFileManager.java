@@ -438,15 +438,14 @@ public class ConfigFileManager {
     static Path resolveModuleDir(String packageName, String dir, int userId, int uid) throws IOException {
         var path = modulePath.resolve(String.valueOf(userId)).resolve(packageName).resolve(dir).normalize();
         if (uid != -1) {
-            if (!path.toFile().mkdirs()) {
-                throw new IOException("Can not create " + dir + " for " + packageName);
-            }
-            SELinux.setFileContext(path.toString(), "u:object_r::s0");
-            try {
-                Os.chown(path.toString(), uid, uid);
-                Os.chmod(path.toString(), 0755);
-            } catch (ErrnoException e) {
-                throw new IOException(e);
+            if (path.toFile().mkdirs()) {
+                try {
+                    SELinux.setFileContext(path.toString(), "u:object_r:magisk_file:s0");
+                    Os.chown(path.toString(), uid, uid);
+                    Os.chmod(path.toString(), 0755);
+                } catch (ErrnoException e) {
+                    throw new IOException(e);
+                }
             }
         }
         return path;
