@@ -35,8 +35,6 @@ import androidx.annotation.NonNull;
 import org.lsposed.daemon.BuildConfig;
 import org.lsposed.lspd.models.Module;
 
-import java.io.File;
-import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
@@ -53,6 +51,8 @@ public class LSPModuleService extends IXposedService.Stub {
 
     private final static Set<Integer> uidSet = ConcurrentHashMap.newKeySet();
     private final static Map<Module, LSPModuleService> serviceMap = new WeakHashMap<>();
+
+    public final static String FILES_DIR = "files";
 
     private final @NonNull
     Module loadedModule;
@@ -226,9 +226,9 @@ public class LSPModuleService extends IXposedService.Stub {
     @Override
     public ParcelFileDescriptor openRemoteFile(String path, int mode) throws RemoteException {
         var userId = ensureModule();
-        ConfigFileManager.ensureValidPath(path);
+        ConfigFileManager.ensureModuleFilePath(path);
         try {
-            var dir = ConfigFileManager.resolveModuleDir(loadedModule.packageName, "files", userId, Binder.getCallingUid());
+            var dir = ConfigFileManager.resolveModuleDir(loadedModule.packageName, FILES_DIR, userId, Binder.getCallingUid());
             return ParcelFileDescriptor.open(dir.resolve(path).toFile(), mode);
         } catch (Throwable e) {
             throw new RemoteException(e.getMessage());
@@ -238,9 +238,9 @@ public class LSPModuleService extends IXposedService.Stub {
     @Override
     public boolean deleteRemoteFile(String path) throws RemoteException {
         var userId = ensureModule();
-        ConfigFileManager.ensureValidPath(path);
+        ConfigFileManager.ensureModuleFilePath(path);
         try {
-            var dir = ConfigFileManager.resolveModuleDir(loadedModule.packageName, "files", userId, Binder.getCallingUid());
+            var dir = ConfigFileManager.resolveModuleDir(loadedModule.packageName, FILES_DIR, userId, Binder.getCallingUid());
             return dir.resolve(path).toFile().delete();
         } catch (Throwable e) {
             throw new RemoteException(e.getMessage());
@@ -251,7 +251,7 @@ public class LSPModuleService extends IXposedService.Stub {
     public String[] listRemoteFiles() throws RemoteException {
         var userId = ensureModule();
         try {
-            var dir = ConfigFileManager.resolveModuleDir(loadedModule.packageName, "files", userId, Binder.getCallingUid());
+            var dir = ConfigFileManager.resolveModuleDir(loadedModule.packageName, FILES_DIR, userId, Binder.getCallingUid());
             var files = dir.toFile().list();
             return files == null ? new String[0] : files;
         } catch (Throwable e) {
