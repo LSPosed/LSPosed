@@ -322,8 +322,13 @@ public class LSPosedContext extends XposedContext {
     }
 
     @Override
-    public FileOutputStream openFileOutput(String name, int mode) {
-        throw new AbstractMethodError();
+    public FileOutputStream openFileOutput(String name, int mode) throws FileNotFoundException {
+        if (name == null) throw new IllegalArgumentException("name must not be null");
+        if (name.startsWith("remote://")) {
+            throw new FileNotFoundException("Read only implementation");
+        } else {
+            return mBase.openFileOutput(name, mode);
+        }
     }
 
     @Override
@@ -333,7 +338,7 @@ public class LSPosedContext extends XposedContext {
 
     @Override
     public File getFileStreamPath(String name) {
-        throw new AbstractMethodError();
+        return mBase.getFileStreamPath(name);
     }
 
     @Override
@@ -343,12 +348,12 @@ public class LSPosedContext extends XposedContext {
 
     @Override
     public File getFilesDir() {
-        throw new AbstractMethodError();
+        return mBase.getFilesDir();
     }
 
     @Override
     public File getNoBackupFilesDir() {
-        throw new AbstractMethodError();
+        return mBase.getNoBackupFilesDir();
     }
 
     @Nullable
@@ -379,7 +384,7 @@ public class LSPosedContext extends XposedContext {
 
     @Override
     public File getCodeCacheDir() {
-        throw new AbstractMethodError();
+        return mBase.getCodeCacheDir();
     }
 
     @Nullable
@@ -417,7 +422,7 @@ public class LSPosedContext extends XposedContext {
 
     @Override
     public File getDir(String name, int mode) {
-        throw new AbstractMethodError();
+        return mBase.getDir(name, mode);
     }
 
     @Override
@@ -649,7 +654,7 @@ public class LSPosedContext extends XposedContext {
     @Nullable
     @Override
     public String getSystemServiceName(@NonNull Class<?> serviceClass) {
-        throw new AbstractMethodError();
+        return mBase.getSystemServiceName(serviceClass);
     }
 
     @Override
@@ -743,8 +748,8 @@ public class LSPosedContext extends XposedContext {
     }
 
     @Override
-    public Context createPackageContext(String packageName, int flags) {
-        throw new AbstractMethodError();
+    public Context createPackageContext(String packageName, int flags) throws PackageManager.NameNotFoundException {
+        return mBase.createPackageContext(packageName, flags);
     }
 
     @Override
@@ -754,12 +759,12 @@ public class LSPosedContext extends XposedContext {
 
     @Override
     public Context createConfigurationContext(@NonNull Configuration overrideConfiguration) {
-        throw new AbstractMethodError();
+        return new LSPosedContext(mBase.createConfigurationContext(overrideConfiguration), mPackageName, mApkPath, service);
     }
 
     @Override
     public Context createDisplayContext(@NonNull Display display) {
-        throw new AbstractMethodError();
+        return new LSPosedContext(mBase.createDisplayContext(display), mPackageName, mApkPath, service);
     }
 
     @Override
