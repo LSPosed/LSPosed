@@ -2,6 +2,7 @@ package org.lsposed.lspd.impl;
 
 import android.content.SharedPreferences;
 import android.os.Bundle;
+import android.os.RemoteException;
 import android.util.ArraySet;
 
 import androidx.annotation.Nullable;
@@ -49,14 +50,10 @@ public class LSPosedRemotePreferences implements SharedPreferences {
         }
     };
 
-    public LSPosedRemotePreferences(ILSPInjectedModuleService service, String group) {
-        try {
-            Bundle output = service.requestRemotePreferences(group, callback);
-            if (output.containsKey("map")) {
-                mMap.putAll((Map<String, Object>) output.getSerializable("map"));
-            }
-        } catch (Throwable e) {
-            XposedBridge.log(e);
+    public LSPosedRemotePreferences(ILSPInjectedModuleService service, String group) throws RemoteException {
+        Bundle output = service.requestRemotePreferences(group, callback);
+        if (output.containsKey("map")) {
+            mMap.putAll((Map<String, Object>) output.getSerializable("map"));
         }
     }
 
