@@ -36,6 +36,7 @@ import org.lsposed.daemon.BuildConfig;
 import org.lsposed.lspd.models.Module;
 
 import java.util.ArrayList;
+import java.util.Collections;
 import java.util.List;
 import java.util.Map;
 import java.util.Set;
@@ -50,12 +51,16 @@ public class LSPModuleService extends IXposedService.Stub {
     private final static String TAG = "LSPosedModuleService";
 
     private final static Set<Integer> uidSet = ConcurrentHashMap.newKeySet();
-    private final static Map<Module, LSPModuleService> serviceMap = new WeakHashMap<>();
+    private final static Map<Module, LSPModuleService> serviceMap = Collections.synchronizedMap(new WeakHashMap<>());
 
     public final static String FILES_DIR = "files";
 
     private final @NonNull
     Module loadedModule;
+
+    static void uidClear() {
+        uidSet.clear();
+    }
 
     static void uidStarts(int uid) {
         if (!uidSet.contains(uid)) {
