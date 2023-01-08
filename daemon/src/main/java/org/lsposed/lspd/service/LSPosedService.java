@@ -394,6 +394,7 @@ public class LSPosedService extends ILSPosedService.Stub {
                     | HiddenApiBridge.ActivityManager_UID_OBSERVER_GONE()
                     | HiddenApiBridge.ActivityManager_UID_OBSERVER_IDLE()
                     | HiddenApiBridge.ActivityManager_UID_OBSERVER_CACHED();
+            LSPModuleService.uidClear();
             ActivityManagerService.registerUidObserver(new IUidObserver.Stub() {
                 @Override
                 public void onUidActive(int uid) {
