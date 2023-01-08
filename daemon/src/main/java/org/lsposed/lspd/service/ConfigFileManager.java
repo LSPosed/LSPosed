@@ -26,6 +26,7 @@ import android.content.res.AssetManager;
 import android.content.res.Resources;
 import android.os.ParcelFileDescriptor;
 import android.os.Process;
+import android.os.RemoteException;
 import android.os.SELinux;
 import android.os.SharedMemory;
 import android.system.ErrnoException;
@@ -428,17 +429,27 @@ public class ConfigFileManager {
         return preloadDex;
     }
 
-    static Path resolveModulePath(String packageName, String path) throws IOException {
-        var requestPath = Paths.get(path);
-        if (requestPath.isAbsolute()) {
-            throw new IOException("path must be relative");
+    static void ensureValidPath(String path) throws RemoteException {
+        if (path == null || path.indexOf(File.separatorChar) >= 0 || ".".equals(path) || "..".equals(path)) {
+            throw new RemoteException("Invalid path: " + path);
         }
-        var moduleDir = modulePath.resolve(packageName).normalize();
-        var absolutePath = moduleDir.resolve(requestPath).normalize();
-        if (!absolutePath.startsWith(moduleDir)) {
-            throw new IOException("path must be in module dir");
+    }
+
+    static Path resolveModuleDir(String packageName, String dir, int userId, int uid) throws IOException {
+        var path = modulePath.resolve(String.valueOf(userId)).resolve(packageName).resolve(dir).normalize();
+        if (uid != -1) {
+            if (!path.toFile().mkdirs()) {
+                throw new IOException("Can not create " + dir + " for " + packageName);
+            }
+            SELinux.setFileContext(path.toString(), "u:object_r::s0");
+            try {
+                Os.chown(path.toString(), uid, uid);
+                Os.chmod(path.toString(), 0755);
+            } catch (ErrnoException e) {
+                throw new IOException(e);
+            }
         }
-        return absolutePath;
+        return path;
     }
 
     private static class FileLocker {

@@ -35,6 +35,7 @@ import androidx.annotation.NonNull;
 import org.lsposed.daemon.BuildConfig;
 import org.lsposed.lspd.models.Module;
 
+import java.io.File;
 import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
@@ -224,12 +225,11 @@ public class LSPModuleService extends IXposedService.Stub {
 
     @Override
     public ParcelFileDescriptor openRemoteFile(String path, int mode) throws RemoteException {
+        var userId = ensureModule();
+        ConfigFileManager.ensureValidPath(path);
         try {
-            var absolutePath = ConfigFileManager.resolveModulePath(loadedModule.packageName, path);
-            if (!absolutePath.getParent().toFile().mkdirs()) {
-                throw new IOException("failed to create parent dir");
-            }
-            return ParcelFileDescriptor.open(absolutePath.toFile(), mode);
+            var dir = ConfigFileManager.resolveModuleDir(loadedModule.packageName, "files", userId, Binder.getCallingUid());
+            return ParcelFileDescriptor.open(dir.resolve(path).toFile(), mode);
         } catch (Throwable e) {
             throw new RemoteException(e.getMessage());
         }
@@ -237,9 +237,23 @@ public class LSPModuleService extends IXposedService.Stub {
 
     @Override
     public boolean deleteRemoteFile(String path) throws RemoteException {
+        var userId = ensureModule();
+        ConfigFileManager.ensureValidPath(path);
         try {
-            var absolutePath = ConfigFileManager.resolveModulePath(loadedModule.packageName, path);
-            return absolutePath.toFile().delete();
+            var dir = ConfigFileManager.resolveModuleDir(loadedModule.packageName, "files", userId, Binder.getCallingUid());
+            return dir.resolve(path).toFile().delete();
+        } catch (Throwable e) {
+            throw new RemoteException(e.getMessage());
+        }
+    }
+
+    @Override
+    public String[] listRemoteFiles() throws RemoteException {
+        var userId = ensureModule();
+        try {
+            var dir = ConfigFileManager.resolveModuleDir(loadedModule.packageName, "files", userId, Binder.getCallingUid());
+            var files = dir.toFile().list();
+            return files == null ? new String[0] : files;
         } catch (Throwable e) {
             throw new RemoteException(e.getMessage());
         }
