@@ -661,9 +661,10 @@ namespace lspd {
                         env->SetIntArrayRegion(annotations, 0,
                                                static_cast<jint>(field_annotations.size()),
                                                field_annotations.data());
-                        stopped = env->CallBooleanMethod(member_visitor, visit_field, field_idx,
-                                                         access_flags, annotations);
+                        env->CallVoidMethod(member_visitor, visit_field, field_idx,
+                                            access_flags, annotations);
                         env->DeleteLocalRef(annotations);
+                        stopped = env->CallBooleanMethod(member_visitor, stop);
                         if (stopped == JNI_TRUE) break;
                     }
                     if (stopped == JNI_TRUE) break;

@@ -105,19 +105,19 @@ public interface DexParser extends Closeable {
     Array[] getArrays();
 
     interface EarlyStopVisitor {
-        void stop();
+        boolean stop();
     }
 
     interface MemberVisitor extends EarlyStopVisitor {
     }
 
-    interface ClassVisitor {
+    interface ClassVisitor extends EarlyStopVisitor {
         @Nullable
         MemberVisitor visit(int clazz, int accessFlags, int superClass, @NonNull int[] interfaces, int sourceFile, @NonNull int[] staticFields, @NonNull int[] staticFieldsAccessFlags, @NonNull int[] instanceFields, @NonNull int[] instanceFieldsAccessFlags, @NonNull int[] directMethods, @NonNull int[] directMethodsAccessFlags, @NonNull int[] virtualMethods, @NonNull int[] virtualMethodsAccessFlags, @NonNull int[] annotations);
     }
 
     interface FieldVisitor extends MemberVisitor {
-        boolean visit(int field, int accessFlags, @NonNull int[] annotations);
+        void visit(int field, int accessFlags, @NonNull int[] annotations);
     }
 
     interface MethodVisitor extends MemberVisitor {
@@ -125,8 +125,8 @@ public interface DexParser extends Closeable {
         MethodBodyVisitor visit(int method, int accessFlags, boolean hasBody, @NonNull int[] annotations, @NonNull int[] parameterAnnotations);
     }
 
-    interface MethodBodyVisitor extends MemberVisitor {
-        boolean visit(int method, int accessFlags, @NonNull int[] referredStrings, @NonNull int[] invokedMethods, @NonNull int[] accessedFields, @NonNull int[] assignedFields, @NonNull byte[] opcodes);
+    interface MethodBodyVisitor {
+        void visit(int method, int accessFlags, @NonNull int[] referredStrings, @NonNull int[] invokedMethods, @NonNull int[] accessedFields, @NonNull int[] assignedFields, @NonNull byte[] opcodes);
     }
 
     void visitDefinedClasses(@NonNull ClassVisitor visitor) throws IllegalStateException;
