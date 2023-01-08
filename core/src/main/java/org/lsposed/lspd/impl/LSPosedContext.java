@@ -283,7 +283,18 @@ public class LSPosedContext extends XposedContext {
     @Override
     public SharedPreferences getSharedPreferences(String name, int mode) {
         if (name == null) throw new IllegalArgumentException("name must not be null");
-        return mRemotePrefs.computeIfAbsent(name, __ -> new LSPosedRemotePreferences(service, name));
+        if (name.startsWith("remote://")) {
+            return mRemotePrefs.computeIfAbsent(name.substring(9), n -> {
+                try {
+                    return new LSPosedRemotePreferences(service, n);
+                } catch (Throwable e) {
+                    Log.e(TAG, "Failed to get remote preferences", e);
+                    return null;
+                }
+            });
+        } else {
+            return mBase.getSharedPreferences(name, mode);
+        }
     }
 
     @Override
@@ -298,10 +309,14 @@ public class LSPosedContext extends XposedContext {
 
     @Override
     public FileInputStream openFileInput(String name) throws FileNotFoundException {
-        try {
-            return new FileInputStream(service.openRemoteFile(name).getFileDescriptor());
-        } catch (RemoteException e) {
-            throw new FileNotFoundException(e.getMessage());
+        if (name.startsWith("remote://")) {
+            try {
+                return new FileInputStream(service.openRemoteFile(name.substring(9)).getFileDescriptor());
+            } catch (RemoteException e) {
+                throw new FileNotFoundException(e.getMessage());
+            }
+        } else {
+            return mBase.openFileInput(name);
         }
     }
 
