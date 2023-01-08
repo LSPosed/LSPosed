@@ -69,6 +69,7 @@ import java.util.ArrayList;
 import java.util.HashSet;
 import java.util.List;
 import java.util.Locale;
+import java.util.UUID;
 import java.util.zip.Deflater;
 import java.util.zip.ZipEntry;
 import java.util.zip.ZipFile;
@@ -81,6 +82,7 @@ public class ConfigFileManager {
     static final Path modulePath = basePath.resolve("modules");
     static final Path daemonApkPath = Paths.get(System.getProperty("java.class.path", null));
     static final Path managerApkPath = basePath.resolve("manager.apk");
+    static final Path dummyPath = Paths.get("/", UUID.randomUUID().toString());
     static final File magiskDbPath = new File("/data/adb/magisk.db");
     private static final Path lockPath = basePath.resolve("lock");
     private static final Path configDirPath = basePath.resolve("config");
@@ -429,7 +431,7 @@ public class ConfigFileManager {
         return preloadDex;
     }
 
-    static void ensureValidPath(String path) throws RemoteException {
+    static void ensureModuleFilePath(String path) throws RemoteException {
         if (path == null || path.indexOf(File.separatorChar) >= 0 || ".".equals(path) || "..".equals(path)) {
             throw new RemoteException("Invalid path: " + path);
         }
