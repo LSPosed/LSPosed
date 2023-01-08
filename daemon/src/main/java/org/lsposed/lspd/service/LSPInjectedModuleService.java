@@ -9,6 +9,7 @@ import android.os.RemoteException;
 
 import org.lsposed.lspd.models.Module;
 
+import java.io.File;
 import java.util.Map;
 import java.util.Set;
 import java.util.concurrent.ConcurrentHashMap;
@@ -44,9 +45,11 @@ public class LSPInjectedModuleService extends ILSPInjectedModuleService.Stub {
 
     @Override
     public ParcelFileDescriptor openRemoteFile(String path) throws RemoteException {
+        ConfigFileManager.ensureValidPath(path);
+        var userId = Binder.getCallingUid() / PER_USER_RANGE;
         try {
-            var absolutePath = ConfigFileManager.resolveModulePath(loadedModule.packageName, path);
-            return ParcelFileDescriptor.open(absolutePath.toFile(), ParcelFileDescriptor.MODE_READ_ONLY);
+            var dirPath = ConfigFileManager.resolveModuleDir(loadedModule.packageName, "files", userId, -1);
+            return ParcelFileDescriptor.open(dirPath.resolve(path).toFile(), ParcelFileDescriptor.MODE_READ_ONLY);
         } catch (Throwable e) {
             throw new RemoteException(e.getMessage());
         }
@@ -55,8 +58,11 @@ public class LSPInjectedModuleService extends ILSPInjectedModuleService.Stub {
     @Override
     public String[] getRemoteFileList() throws RemoteException {
         try {
-            var absolutePath = ConfigFileManager.resolveModulePath(loadedModule.packageName, ".");
-            return absolutePath.toFile().list();
+            var userId = Binder.getCallingUid() / PER_USER_RANGE;
+            var dir = ConfigFileManager.resolveModuleDir(loadedModule.packageName, "files", userId, -1);
+            var files = dir.toFile().list();
+            return files == null ? new String[0] : files;
+
         } catch (Throwable e) {
             throw new RemoteException(e.getMessage());
         }

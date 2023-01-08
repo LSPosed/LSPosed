@@ -299,12 +299,22 @@ public class LSPosedContext extends XposedContext {
 
     @Override
     public boolean moveSharedPreferencesFrom(Context sourceContext, String name) {
-        throw new AbstractMethodError();
+        if (name == null) throw new IllegalArgumentException("name must not be null");
+        if (name.startsWith("remote://")) {
+            throw new IllegalArgumentException("Moving remote preferences is not supported");
+        } else {
+            return mBase.moveSharedPreferencesFrom(sourceContext, name);
+        }
     }
 
     @Override
     public boolean deleteSharedPreferences(String name) {
-        throw new AbstractMethodError();
+        if (name == null) throw new IllegalArgumentException("name must not be null");
+        if (name.startsWith("remote://")) {
+            throw new IllegalArgumentException("Read only implementation");
+        } else {
+            return mBase.deleteSharedPreferences(name);
+        }
     }
 
     @Override
@@ -325,7 +335,7 @@ public class LSPosedContext extends XposedContext {
     public FileOutputStream openFileOutput(String name, int mode) throws FileNotFoundException {
         if (name == null) throw new IllegalArgumentException("name must not be null");
         if (name.startsWith("remote://")) {
-            throw new FileNotFoundException("Read only implementation");
+            throw new IllegalArgumentException("Read only implementation");
         } else {
             return mBase.openFileOutput(name, mode);
         }
@@ -333,12 +343,22 @@ public class LSPosedContext extends XposedContext {
 
     @Override
     public boolean deleteFile(String name) {
-        throw new AbstractMethodError();
+        if (name == null) throw new IllegalArgumentException("name must not be null");
+        if (name.startsWith("remote://")) {
+            throw new IllegalArgumentException("Read only implementation");
+        } else {
+            return mBase.deleteFile(name);
+        }
     }
 
     @Override
     public File getFileStreamPath(String name) {
-        return mBase.getFileStreamPath(name);
+        if (name == null) throw new IllegalArgumentException("name must not be null");
+        if (name.startsWith("remote://")) {
+            throw new IllegalArgumentException("Getting remote file path is not supported");
+        } else {
+            return mBase.getFileStreamPath(name);
+        }
     }
 
     @Override
@@ -427,32 +447,64 @@ public class LSPosedContext extends XposedContext {
 
     @Override
     public SQLiteDatabase openOrCreateDatabase(String name, int mode, SQLiteDatabase.CursorFactory factory) {
-        throw new AbstractMethodError();
+        if (name == null) throw new IllegalArgumentException("name must not be null");
+        if (name.startsWith("remote://")) {
+            return openOrCreateDatabase(name, mode, factory, null);
+        } else {
+            return mBase.openOrCreateDatabase(name, mode, factory);
+        }
     }
 
     @Override
     public SQLiteDatabase openOrCreateDatabase(String name, int mode, SQLiteDatabase.CursorFactory factory, @Nullable DatabaseErrorHandler errorHandler) {
-        throw new AbstractMethodError();
+        if (name == null) throw new IllegalArgumentException("name must not be null");
+        if (name.startsWith("remote://")) {
+            throw new IllegalArgumentException("Opening remote database is not supported");
+        } else {
+            return mBase.openOrCreateDatabase(name, mode, factory, errorHandler);
+        }
     }
 
     @Override
     public boolean moveDatabaseFrom(Context sourceContext, String name) {
-        throw new AbstractMethodError();
+        if (name == null) throw new IllegalArgumentException("name must not be null");
+        if (name.startsWith("remote://")) {
+            throw new IllegalArgumentException("Moving remote database is not supported");
+        } else {
+            return mBase.moveDatabaseFrom(sourceContext, name);
+        }
     }
 
     @Override
     public boolean deleteDatabase(String name) {
-        throw new AbstractMethodError();
+        if (name == null) throw new IllegalArgumentException("name must not be null");
+        if (name.startsWith("remote://")) {
+            throw new IllegalArgumentException("Read only implementation");
+        } else {
+            return mBase.deleteDatabase(name);
+        }
     }
 
     @Override
     public File getDatabasePath(String name) {
-        throw new AbstractMethodError();
+        if (name == null) throw new IllegalArgumentException("name must not be null");
+        if (name.startsWith("remote://")) {
+            throw new IllegalArgumentException("Getting remote database path is not supported");
+        } else {
+            return mBase.getDatabasePath(name);
+        }
     }
 
     @Override
     public String[] databaseList() {
-        throw new AbstractMethodError();
+        var remoteFiles = new String[0]; // TODO
+        var localFiles = mBase.databaseList();
+        var files = new String[remoteFiles.length + localFiles.length];
+        for (int i = 0; i < remoteFiles.length; i++) {
+            files[i] = "remote://" + remoteFiles[i];
+        }
+        System.arraycopy(localFiles, 0, files, remoteFiles.length, localFiles.length);
+        return files;
     }
 
     @Override
