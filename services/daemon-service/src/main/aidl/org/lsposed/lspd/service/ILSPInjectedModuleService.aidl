@@ -8,4 +8,6 @@ interface ILSPInjectedModuleService {
     Bundle requestRemotePreferences(String group, IRemotePreferenceCallback callback);
 
     ParcelFileDescriptor openRemoteFile(String path);
+
+    String[] getRemoteFileList();
 }

@@ -288,7 +288,7 @@ public class LSPosedContext extends XposedContext {
                 try {
                     return new LSPosedRemotePreferences(service, n);
                 } catch (Throwable e) {
-                    Log.e(TAG, "Failed to get remote preferences", e);
+                    log("Failed to get remote preferences", e);
                     return null;
                 }
             });
@@ -309,6 +309,7 @@ public class LSPosedContext extends XposedContext {
 
     @Override
     public FileInputStream openFileInput(String name) throws FileNotFoundException {
+        if (name == null) throw new IllegalArgumentException("name must not be null");
         if (name.startsWith("remote://")) {
             try {
                 return new FileInputStream(service.openRemoteFile(name.substring(9)).getFileDescriptor());
@@ -399,7 +400,19 @@ public class LSPosedContext extends XposedContext {
 
     @Override
     public String[] fileList() {
-        throw new AbstractMethodError();
+        String[] remoteFiles = new String[0];
+        try {
+            remoteFiles = service.getRemoteFileList();
+        } catch (RemoteException e) {
+            log("Failed to get remote file list", e);
+        }
+        var localFiles = mBase.fileList();
+        var files = new String[remoteFiles.length + localFiles.length];
+        for (int i = 0; i < remoteFiles.length; i++) {
+            files[i] = "remote://" + remoteFiles[i];
+        }
+        System.arraycopy(localFiles, 0, files, remoteFiles.length, localFiles.length);
+        return files;
     }
 
     @Override
