@@ -207,8 +207,6 @@ public final class XposedInit {
             resparam.packageName = packageName;
             resparam.res = newRes;
             XCallback.callAll(resparam);
-
-            LSPosedContext.callOnResourceLoaded(resparam);
         }
 
         param.setResult(newRes);

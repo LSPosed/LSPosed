@@ -40,18 +40,5 @@ public interface XposedModuleInterface {
         Bundle getExtras();
     }
 
-    interface ResourcesLoadedParam {
-        @NonNull
-        String getPackageName();
-
-        @NonNull
-        XposedResources getResources();
-
-        @Nullable
-        Bundle getExtras();
-    }
-
     void onPackageLoaded(@NonNull PackageLoadedParam param);
-
-    void onResourceLoaded(@NonNull ResourcesLoadedParam param);
 }

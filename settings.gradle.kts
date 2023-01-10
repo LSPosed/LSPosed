@@ -32,7 +32,6 @@ include(
     ":app",
     ":libxposed:api",
     ":libxposed:service",
-    ":stubs",
     ":core",
     ":daemon",
     ":dex2oat",
@@ -42,5 +41,3 @@ include(
     ":services:manager-service",
     ":services:daemon-service",
 )
-
-project(":stubs").projectDir = file("libxposed/stubs")

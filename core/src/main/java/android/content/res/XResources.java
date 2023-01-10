@@ -67,7 +67,7 @@ import de.robv.android.xposed.XposedInit;
 import de.robv.android.xposed.callbacks.XC_LayoutInflated;
 import de.robv.android.xposed.callbacks.XC_LayoutInflated.LayoutInflatedParam;
 import de.robv.android.xposed.callbacks.XCallback;
-import io.github.libxposed.XposedResources;
+import xposed.dummy.XResourcesSuperClass;
 import xposed.dummy.XTypedArraySuperClass;
 
 /**
@@ -78,7 +78,7 @@ import xposed.dummy.XTypedArraySuperClass;
  * be set using the methods made available via the API methods in this class.
  */
 @SuppressWarnings("JniMissingFunction")
-public class XResources extends XposedResources {
+public class XResources extends XResourcesSuperClass {
 	private static final SparseArray<HashMap<String, Object>> sReplacements = new SparseArray<>();
 	private static final SparseArray<HashMap<String, ResourceNames>> sResourceNames = new SparseArray<>();
 
@@ -160,7 +160,6 @@ public class XResources extends XposedResources {
 	 * Returns the name of the package that these resources belong to, or "android" for system resources.
 	 */
 	@NonNull
-	@Override
 	public String getPackageName() {
 		return mPackageName;
 	}
