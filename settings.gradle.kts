@@ -24,14 +24,13 @@ dependencyResolutionManagement {
     repositories {
         google()
         mavenCentral()
+        mavenLocal()
     }
 }
 
 rootProject.name = "LSPosed"
 include(
     ":app",
-    ":libxposed:api",
-    ":libxposed:service",
     ":core",
     ":daemon",
     ":dex2oat",

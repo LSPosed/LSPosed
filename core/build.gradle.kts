@@ -55,6 +55,7 @@ copy {
 }
 
 dependencies {
+    api("io.github.libxposed:api:100")
     implementation("org.apache.commons:commons-lang3:3.12.0")
     implementation("de.upb.cs.swt:axml:2.1.3")
     compileOnly("androidx.annotation:annotation:1.5.0")
@@ -62,5 +63,4 @@ dependencies {
     implementation(projects.hiddenapi.bridge)
     implementation(projects.services.daemonService)
     implementation(projects.services.managerService)
-    api(projects.libxposed.api)
 }
