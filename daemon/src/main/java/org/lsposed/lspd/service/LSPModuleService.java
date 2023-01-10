@@ -66,7 +66,7 @@ public class LSPModuleService extends IXposedService.Stub {
         if (!uidSet.contains(uid)) {
             uidSet.add(uid);
             var module = ConfigManager.getInstance().getModule(uid);
-            if (module != null) {
+            if (module != null && module.file != null && !module.file.legacy) {
                 var service = serviceMap.computeIfAbsent(module, LSPModuleService::new);
                 service.sendBinder(uid);
             }
