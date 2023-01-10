@@ -63,7 +63,6 @@ import java.util.concurrent.ConcurrentHashMap;
 
 import de.robv.android.xposed.XposedBridge;
 import de.robv.android.xposed.XposedHelpers;
-import de.robv.android.xposed.XposedInit;
 import io.github.libxposed.XposedContext;
 import io.github.libxposed.XposedModule;
 import io.github.libxposed.XposedModuleInterface;
@@ -99,16 +98,6 @@ public class LSPosedContext extends XposedContext {
                 module.onPackageLoaded(param);
             } catch (Throwable t) {
                 Log.e(TAG, "Error when calling onPackageLoaded of " + ((LSPosedContext) module.getBaseContext()).mPackageName, t);
-            }
-        }
-    }
-
-    public static void callOnResourceLoaded(XposedModuleInterface.ResourcesLoadedParam param) {
-        for (XposedModule module : modules) {
-            try {
-                module.onResourceLoaded(param);
-            } catch (Throwable t) {
-                Log.e(TAG, "Error when calling onResourceLoaded of " + ((LSPosedContext) module.getBaseContext()).mPackageName, t);
             }
         }
     }
@@ -167,9 +156,6 @@ public class LSPosedContext extends XposedContext {
                     continue;
                 }
                 try {
-                    if (moduleClass.getMethod("onResourceLoaded", XposedModuleInterface.ResourcesLoadedParam.class).getDeclaringClass() != XposedModule.class) {
-                        XposedInit.hookResources();
-                    }
                     var moduleEntry = moduleClass.getConstructor(XposedContext.class, XposedModuleInterface.ModuleLoadedParam.class);
                     var moduleContext = (XposedModule) moduleEntry.newInstance(ctx, new XposedModuleInterface.ModuleLoadedParam() {
                         @Override
