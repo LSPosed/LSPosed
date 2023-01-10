@@ -71,6 +71,8 @@ import io.github.libxposed.utils.DexParser;
 public class LSPosedContext extends XposedContext {
 
     private static final String TAG = "LSPosedContext";
+    private static final String REMOTE_PREFIX = "remote://";
+
     public static boolean isSystemServer;
     public static String appDir;
     public static String processName;
@@ -269,8 +271,8 @@ public class LSPosedContext extends XposedContext {
     @Override
     public SharedPreferences getSharedPreferences(String name, int mode) {
         if (name == null) throw new IllegalArgumentException("name must not be null");
-        if (name.startsWith("remote://")) {
-            return mRemotePrefs.computeIfAbsent(name.substring(9), n -> {
+        if (name.startsWith(REMOTE_PREFIX)) {
+            return mRemotePrefs.computeIfAbsent(name.substring(REMOTE_PREFIX.length()), n -> {
                 try {
                     return new LSPosedRemotePreferences(service, n);
                 } catch (Throwable e) {
@@ -286,7 +288,7 @@ public class LSPosedContext extends XposedContext {
     @Override
     public boolean moveSharedPreferencesFrom(Context sourceContext, String name) {
         if (name == null) throw new IllegalArgumentException("name must not be null");
-        if (name.startsWith("remote://")) {
+        if (name.startsWith(REMOTE_PREFIX)) {
             throw new IllegalArgumentException("Moving remote preferences is not supported");
         } else {
             return mBase.moveSharedPreferencesFrom(sourceContext, name);
@@ -296,7 +298,7 @@ public class LSPosedContext extends XposedContext {
     @Override
     public boolean deleteSharedPreferences(String name) {
         if (name == null) throw new IllegalArgumentException("name must not be null");
-        if (name.startsWith("remote://")) {
+        if (name.startsWith(REMOTE_PREFIX)) {
             throw new IllegalArgumentException("Read only implementation");
         } else {
             return mBase.deleteSharedPreferences(name);
@@ -306,9 +308,9 @@ public class LSPosedContext extends XposedContext {
     @Override
     public FileInputStream openFileInput(String name) throws FileNotFoundException {
         if (name == null) throw new IllegalArgumentException("name must not be null");
-        if (name.startsWith("remote://")) {
+        if (name.startsWith(REMOTE_PREFIX)) {
             try {
-                return new FileInputStream(service.openRemoteFile(name.substring(9)).getFileDescriptor());
+                return new FileInputStream(service.openRemoteFile(name.substring(REMOTE_PREFIX.length())).getFileDescriptor());
             } catch (RemoteException e) {
                 throw new FileNotFoundException(e.getMessage());
             }
@@ -320,7 +322,7 @@ public class LSPosedContext extends XposedContext {
     @Override
     public FileOutputStream openFileOutput(String name, int mode) throws FileNotFoundException {
         if (name == null) throw new IllegalArgumentException("name must not be null");
-        if (name.startsWith("remote://")) {
+        if (name.startsWith(REMOTE_PREFIX)) {
             throw new IllegalArgumentException("Read only implementation");
         } else {
             return mBase.openFileOutput(name, mode);
@@ -330,7 +332,7 @@ public class LSPosedContext extends XposedContext {
     @Override
     public boolean deleteFile(String name) {
         if (name == null) throw new IllegalArgumentException("name must not be null");
-        if (name.startsWith("remote://")) {
+        if (name.startsWith(REMOTE_PREFIX)) {
             throw new IllegalArgumentException("Read only implementation");
         } else {
             return mBase.deleteFile(name);
@@ -340,7 +342,7 @@ public class LSPosedContext extends XposedContext {
     @Override
     public File getFileStreamPath(String name) {
         if (name == null) throw new IllegalArgumentException("name must not be null");
-        if (name.startsWith("remote://")) {
+        if (name.startsWith(REMOTE_PREFIX)) {
             throw new IllegalArgumentException("Getting remote file path is not supported");
         } else {
             return mBase.getFileStreamPath(name);
@@ -420,7 +422,7 @@ public class LSPosedContext extends XposedContext {
         var localFiles = mBase.fileList();
         var files = new String[remoteFiles.length + localFiles.length];
         for (int i = 0; i < remoteFiles.length; i++) {
-            files[i] = "remote://" + remoteFiles[i];
+            files[i] = REMOTE_PREFIX + remoteFiles[i];
         }
         System.arraycopy(localFiles, 0, files, remoteFiles.length, localFiles.length);
         return files;
@@ -434,7 +436,7 @@ public class LSPosedContext extends XposedContext {
     @Override
     public SQLiteDatabase openOrCreateDatabase(String name, int mode, SQLiteDatabase.CursorFactory factory) {
         if (name == null) throw new IllegalArgumentException("name must not be null");
-        if (name.startsWith("remote://")) {
+        if (name.startsWith(REMOTE_PREFIX)) {
             return openOrCreateDatabase(name, mode, factory, null);
         } else {
             return mBase.openOrCreateDatabase(name, mode, factory);
@@ -444,7 +446,7 @@ public class LSPosedContext extends XposedContext {
     @Override
     public SQLiteDatabase openOrCreateDatabase(String name, int mode, SQLiteDatabase.CursorFactory factory, @Nullable DatabaseErrorHandler errorHandler) {
         if (name == null) throw new IllegalArgumentException("name must not be null");
-        if (name.startsWith("remote://")) {
+        if (name.startsWith(REMOTE_PREFIX)) {
             throw new IllegalArgumentException("Opening remote database is not supported");
         } else {
             return mBase.openOrCreateDatabase(name, mode, factory, errorHandler);
@@ -454,7 +456,7 @@ public class LSPosedContext extends XposedContext {
     @Override
     public boolean moveDatabaseFrom(Context sourceContext, String name) {
         if (name == null) throw new IllegalArgumentException("name must not be null");
-        if (name.startsWith("remote://")) {
+        if (name.startsWith(REMOTE_PREFIX)) {
             throw new IllegalArgumentException("Moving remote database is not supported");
         } else {
             return mBase.moveDatabaseFrom(sourceContext, name);
@@ -464,7 +466,7 @@ public class LSPosedContext extends XposedContext {
     @Override
     public boolean deleteDatabase(String name) {
         if (name == null) throw new IllegalArgumentException("name must not be null");
-        if (name.startsWith("remote://")) {
+        if (name.startsWith(REMOTE_PREFIX)) {
             throw new IllegalArgumentException("Read only implementation");
         } else {
             return mBase.deleteDatabase(name);
@@ -474,7 +476,7 @@ public class LSPosedContext extends XposedContext {
     @Override
     public File getDatabasePath(String name) {
         if (name == null) throw new IllegalArgumentException("name must not be null");
-        if (name.startsWith("remote://")) {
+        if (name.startsWith(REMOTE_PREFIX)) {
             throw new IllegalArgumentException("Getting remote database path is not supported");
         } else {
             return mBase.getDatabasePath(name);
