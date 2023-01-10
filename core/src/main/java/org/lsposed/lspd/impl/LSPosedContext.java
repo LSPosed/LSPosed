@@ -483,14 +483,7 @@ public class LSPosedContext extends XposedContext {
 
     @Override
     public String[] databaseList() {
-        var remoteFiles = new String[0]; // TODO
-        var localFiles = mBase.databaseList();
-        var files = new String[remoteFiles.length + localFiles.length];
-        for (int i = 0; i < remoteFiles.length; i++) {
-            files[i] = "remote://" + remoteFiles[i];
-        }
-        System.arraycopy(localFiles, 0, files, remoteFiles.length, localFiles.length);
-        return files;
+        return mBase.databaseList();
     }
 
     @Override
