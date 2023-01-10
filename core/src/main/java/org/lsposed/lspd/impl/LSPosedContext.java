@@ -813,7 +813,7 @@ public class LSPosedContext extends XposedContext {
     @NonNull
     @Override
     public String getFrameworkName() {
-        return "LSPosed";
+        return BuildConfig.FRAMEWORK_NAME;
     }
 
     @NonNull
