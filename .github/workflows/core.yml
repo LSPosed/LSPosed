@@ -58,11 +58,13 @@ jobs:
         cd libxposed
         git clone https://github.com/libxposed/api.git
         cd api
+        echo 'org.gradle.jvmargs=-Xmx2048m' >> gradle.properties
         ./gradlew :api:publishApiPublicationToMavenLocal
         cd ..
         git clone https://github.com/libxposed/service.git
         cd service
-        ./gradlew :interface:publishApiPublicationToMavenLocal
+        echo 'org.gradle.jvmargs=-Xmx2048m' >> gradle.properties
+        ./gradlew :interface:publishInterfacePublicationToMavenLocal
         cd ../..
       env:
         ORG_GRADLE_PROJECT_signingKey: ${{ secrets.maven_pgp_signingKey }}
