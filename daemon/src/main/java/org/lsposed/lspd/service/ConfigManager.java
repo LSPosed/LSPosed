@@ -174,6 +174,8 @@ public class ConfigManager {
     // packageName, userId, group, key, value
     private final Map<Pair<String, Integer>, Map<String, HashMap<String, Object>>> cachedConfig = new ConcurrentHashMap<>();
 
+    private Set<String> scopeRequestBlocked = new HashSet<>();
+
     private void updateCaches(boolean sync) {
         synchronized (cacheHandler) {
             requestScopeCacheTime = requestModuleCacheTime = SystemClock.elapsedRealtime();
@@ -271,6 +273,8 @@ public class ConfigManager {
 
         bool = config.get("enable_status_notification");
         enableStatusNotification = bool == null || (boolean) bool;
+
+        scopeRequestBlocked = (HashSet<String>) config.get("scope_request_blocked");
 
         // Don't migrate to ConfigFileManager, as XSharedPreferences will be restored soon
         String string = (String) config.get("misc_path");
@@ -996,6 +1000,24 @@ public class ConfigManager {
 
     public void setDexObfuscate(boolean on) {
         updateModulePrefs("lspd", 0, "config", "enable_dex_obfuscate", on);
+    }
+
+    public boolean scopeRequestBlocked(String packageName) {
+        return scopeRequestBlocked.contains(packageName);
+    }
+
+    public void blockScopeRequest(String packageName) {
+        var set = new HashSet<>(scopeRequestBlocked);
+        set.add(packageName);
+        updateModulePrefs("lspd", 0, "config", "scope_request_blocked", set);
+        scopeRequestBlocked = set;
+    }
+
+    public void removeBlockedScopeRequest(String packageName) {
+        var set = new HashSet<>(scopeRequestBlocked);
+        set.remove(packageName);
+        updateModulePrefs("lspd", 0, "config", "scope_request_blocked", set);
+        scopeRequestBlocked = set;
     }
 
     // this is for manager and should not use the cache result
