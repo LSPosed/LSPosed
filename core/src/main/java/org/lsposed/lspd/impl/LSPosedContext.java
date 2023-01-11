@@ -1,7 +1,5 @@
 package org.lsposed.lspd.impl;
 
-import static de.robv.android.xposed.callbacks.XCallback.PRIORITY_DEFAULT;
-
 import android.app.ActivityThread;
 import android.app.LoadedApk;
 import android.content.BroadcastReceiver;
@@ -852,110 +850,115 @@ public class LSPosedContext extends XposedContext {
     }
 
     private <T, U extends Executable> MethodUnhooker<T, U> doHook(U hookMethod, int priority, T callback) {
-        if (Modifier.isAbstract(hookMethod.getModifiers())) {
-            throw new IllegalArgumentException("Cannot hook abstract methods: " + hookMethod);
-        } else if (hookMethod.getDeclaringClass().getClassLoader() == LSPosedContext.class.getClassLoader()) {
-            throw new IllegalArgumentException("Do not allow hooking inner methods");
-        } else if (hookMethod.getDeclaringClass() == Method.class && hookMethod.getName().equals("invoke")) {
-            throw new IllegalArgumentException("Cannot hook Method.invoke");
+        try {
+            if (Modifier.isAbstract(hookMethod.getModifiers())) {
+                throw new IllegalArgumentException("Cannot hook abstract methods: " + hookMethod);
+            } else if (hookMethod.getDeclaringClass().getClassLoader() == LSPosedContext.class.getClassLoader()) {
+                throw new IllegalArgumentException("Do not allow hooking inner methods");
+            } else if (hookMethod.getDeclaringClass() == Method.class && hookMethod.getName().equals("invoke")) {
+                throw new IllegalArgumentException("Cannot hook Method.invoke");
+            }
+
+            if (callback == null) {
+                throw new IllegalArgumentException("hooker should not be null!");
+            }
+
+            if (HookBridge.hookMethod(hookMethod, XposedBridge.AdditionalHookInfo.class, priority, callback)) {
+                return new MethodUnhooker<>() {
+                    @NonNull
+                    @Override
+                    public U getOrigin() {
+                        return hookMethod;
+                    }
+
+                    @NonNull
+                    @Override
+                    public T getHooker() {
+                        return callback;
+                    }
+
+                    @Override
+                    public void unhook() {
+                        HookBridge.unhookMethod(hookMethod, callback);
+                    }
+                };
+            }
+        } catch (Throwable t) {
+            throw new HookFailedException(t);
         }
 
-        if (callback == null) {
-            throw new IllegalArgumentException("hooker should not be null!");
-        }
-
-        if (HookBridge.hookMethod(hookMethod, XposedBridge.AdditionalHookInfo.class, priority, callback)) {
-            return new MethodUnhooker<>() {
-                @NonNull
-                @Override
-                public U getOrigin() {
-                    return hookMethod;
-                }
-
-                @NonNull
-                @Override
-                public T getHooker() {
-                    return callback;
-                }
-
-                @Override
-                public void unhook() {
-                    HookBridge.unhookMethod(hookMethod, callback);
-                }
-            };
-        }
         log("Cannot hook " + hookMethod);
-        return null;
+        throw new HookFailedException("Cannot hook " + hookMethod);
     }
 
     @Override
-    @Nullable
+    @NonNull
     public MethodUnhooker<BeforeHooker<Method>, Method> hookBefore(@NonNull Method origin, @NonNull BeforeHooker<Method> hooker) {
         return doHook(origin, PRIORITY_DEFAULT, hooker);
     }
 
     @Override
-    @Nullable
+    @NonNull
     public MethodUnhooker<AfterHooker<Method>, Method> hookAfter(@NonNull Method origin, @NonNull AfterHooker<Method> hooker) {
         return doHook(origin, PRIORITY_DEFAULT, hooker);
     }
 
     @Override
-    @Nullable
+    @NonNull
     public MethodUnhooker<Hooker<Method>, Method> hook(@NonNull Method origin, @NonNull Hooker<Method> hooker) {
         return doHook(origin, PRIORITY_DEFAULT, hooker);
     }
 
     @Override
-    @Nullable
+    @NonNull
     public MethodUnhooker<BeforeHooker<Method>, Method> hookBefore(@NonNull Method origin, int priority, @NonNull BeforeHooker<Method> hooker) {
         return doHook(origin, priority, hooker);
     }
 
     @Override
-    @Nullable
+    @NonNull
     public MethodUnhooker<AfterHooker<Method>, Method> hookAfter(@NonNull Method origin, int priority, @NonNull AfterHooker<Method> hooker) {
         return doHook(origin, priority, hooker);
     }
 
     @Override
-    @Nullable
+    @NonNull
     public MethodUnhooker<Hooker<Method>, Method> hook(@NonNull Method origin, int priority, @NonNull Hooker<Method> hooker) {
         return doHook(origin, priority, hooker);
     }
 
     @Override
-    @Nullable
+    @NonNull
     public <T> MethodUnhooker<BeforeHooker<Constructor<T>>, Constructor<T>> hookBefore(@NonNull Constructor<T> origin, @NonNull BeforeHooker<Constructor<T>> hooker) {
         return doHook(origin, PRIORITY_DEFAULT, hooker);
     }
 
     @Override
-    @Nullable
+    @NonNull
     public <T> MethodUnhooker<AfterHooker<Constructor<T>>, Constructor<T>> hookAfter(@NonNull Constructor<T> origin, @NonNull AfterHooker<Constructor<T>> hooker) {
         return doHook(origin, PRIORITY_DEFAULT, hooker);
     }
 
     @Override
-    @Nullable
+    @NonNull
     public <T> MethodUnhooker<Hooker<Constructor<T>>, Constructor<T>> hook(@NonNull Constructor<T> origin, @NonNull Hooker<Constructor<T>> hooker) {
         return doHook(origin, PRIORITY_DEFAULT, hooker);
     }
 
     @Override
-    @Nullable
+    @NonNull
     public <T> MethodUnhooker<BeforeHooker<Constructor<T>>, Constructor<T>> hookBefore(@NonNull Constructor<T> origin, int priority, @NonNull BeforeHooker<Constructor<T>> hooker) {
         return doHook(origin, priority, hooker);
     }
 
     @Override
-    @Nullable
+    @NonNull
     public <T> MethodUnhooker<AfterHooker<Constructor<T>>, Constructor<T>> hookAfter(@NonNull Constructor<T> origin, int priority, @NonNull AfterHooker<Constructor<T>> hooker) {
         return doHook(origin, priority, hooker);
     }
 
     @Override
-    @Nullable
+    @NonNull
     public <T> MethodUnhooker<Hooker<Constructor<T>>, Constructor<T>> hook(@NonNull Constructor<T> origin, int priority, @NonNull Hooker<Constructor<T>> hooker) {
         return doHook(origin, priority, hooker);
     }
