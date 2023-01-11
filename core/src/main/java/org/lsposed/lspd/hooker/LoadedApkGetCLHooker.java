@@ -25,6 +25,11 @@ import static org.lsposed.lspd.core.ApplicationServiceClient.serviceClient;
 import android.app.ActivityThread;
 import android.app.AndroidAppHelper;
 import android.app.LoadedApk;
+import android.content.pm.ApplicationInfo;
+import android.os.Bundle;
+
+import androidx.annotation.NonNull;
+import androidx.annotation.Nullable;
 
 import org.lsposed.lspd.impl.LSPosedContext;
 import org.lsposed.lspd.util.Hookers;
@@ -93,7 +98,36 @@ public class LoadedApkGetCLHooker extends XC_MethodHook {
             Hookers.logD("Call handleLoadedPackage: packageName=" + lpparam.packageName + " processName=" + lpparam.processName + " isFirstApplication=" + isFirstApplication + " classLoader=" + lpparam.classLoader + " appInfo=" + lpparam.appInfo);
             XC_LoadPackage.callAll(lpparam);
 
-            LSPosedContext.callOnPackageLoaded(lpparam);
+            LSPosedContext.callOnPackageLoaded(new XposedModuleInterface.PackageLoadedParam() {
+                @NonNull
+                @Override
+                public String getPackageName() {
+                    return loadedApk.getPackageName();
+                }
+
+                @NonNull
+                @Override
+                public ApplicationInfo getAppInfo() {
+                    return loadedApk.getApplicationInfo();
+                }
+
+                @NonNull
+                @Override
+                public ClassLoader getClassLoader() {
+                    return classLoader;
+                }
+
+                @Override
+                public boolean isFirstApplication() {
+                    return isFirstApplication;
+                }
+
+                @Nullable
+                @Override
+                public Bundle getExtras() {
+                    return null;
+                }
+            });
         } catch (Throwable t) {
             Hookers.logE("error when hooking LoadedApk#getClassLoader", t);
         } finally {

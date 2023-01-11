@@ -60,7 +60,7 @@ public abstract class XC_LoadPackage extends XCallback implements IXposedHookLoa
     /**
      * Wraps information about the app being loaded.
      */
-    public static final class LoadPackageParam extends XCallback.Param implements XposedModuleInterface.PackageLoadedParam {
+    public static final class LoadPackageParam extends XCallback.Param {
         /**
          * @hide
          */
@@ -92,41 +92,6 @@ public abstract class XC_LoadPackage extends XCallback implements IXposedHookLoa
          * Set to {@code true} if this is the first (and main) application for this process.
          */
         public boolean isFirstApplication;
-
-        @NonNull
-        @Override
-        public String getPackageName() {
-            return packageName;
-        }
-
-        @NonNull
-        @Override
-        public ApplicationInfo getAppInfo() {
-            return appInfo;
-        }
-
-        @NonNull
-        @Override
-        public ClassLoader getClassLoader() {
-            return classLoader;
-        }
-
-        @NonNull
-        @Override
-        public String getProcessName() {
-            return processName;
-        }
-
-        @Override
-        public boolean isFirstApplication() {
-            return isFirstApplication;
-        }
-
-        @Nullable
-        @Override
-        public Bundle getExtras() {
-            return null;
-        }
     }
 
     /**
