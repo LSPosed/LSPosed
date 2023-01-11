@@ -705,6 +705,11 @@ namespace lspd {
                         if (body_visitor && code != nullptr) {
                             auto body = dex.method_bodies[method_idx];
                             if (!body.loaded) {
+                                std::set<jint> referred_strings;
+                                std::set<jint> assigned_fields;
+                                std::set<jint> accessed_fields;
+                                std::set<jint> invoked_methods;
+
                                 const dex::u2 *inst = code->insns;
                                 const dex::u2 *end = inst + code->insns_size;
                                 while (inst < end) {
@@ -712,28 +717,28 @@ namespace lspd {
                                     body.opcodes.push_back(static_cast<jbyte>(opcode));
                                     if (opcode == kOpcodeConstString) {
                                         auto str_idx = inst[1];
-                                        body.referred_strings.push_back(str_idx);
+                                        referred_strings.emplace(str_idx);
                                     }
                                     if (opcode == kOpcodeConstStringJumbo) {
                                         auto str_idx = *reinterpret_cast<const dex::u4 *>(&inst[1]);
-                                        body.referred_strings.push_back(static_cast<jint>(str_idx));
+                                        referred_strings.emplace(static_cast<jint>(str_idx));
                                     }
                                     if ((opcode >= kOpcodeIGetStart && opcode <= kOpcodeIGetEnd) ||
                                         (opcode >= kOpcodeSGetStart && opcode <= kOpcodeSGetEnd)) {
                                         auto field_idx = inst[1];
-                                        body.accessed_fields.push_back(field_idx);
+                                        accessed_fields.emplace(field_idx);
                                     }
                                     if ((opcode >= kOpcodeIPutStart && opcode <= kOpcodeIPutEnd) ||
                                         (opcode >= kOpcodeSPutStart && opcode <= kOpcodeSPutEnd)) {
                                         auto field_idx = inst[1];
-                                        body.assigned_fields.push_back(field_idx);
+                                        assigned_fields.emplace(field_idx);
                                     }
                                     if ((opcode >= kOpcodeInvokeStart &&
                                          opcode <= kOpcodeInvokeEnd) ||
                                         (opcode >= kOpcodeInvokeRangeStart &&
                                          opcode <= kOpcodeInvokeRangeEnd)) {
                                         auto callee = inst[1];
-                                        body.invoked_methods.push_back(callee);
+                                        invoked_methods.emplace(callee);
                                     }
                                     if (opcode == kOpcodeNoOp) {
                                         if (*inst == kInstPackedSwitchPlayLoad) {
@@ -748,6 +753,18 @@ namespace lspd {
                                     }
                                     inst += dex::opcode_len[opcode];
                                 }
+                                body.referred_strings.insert(body.referred_strings.end(),
+                                                             referred_strings.begin(),
+                                                             referred_strings.end());
+                                body.assigned_fields.insert(body.assigned_fields.end(),
+                                                            assigned_fields.begin(),
+                                                            assigned_fields.end());
+                                body.accessed_fields.insert(body.accessed_fields.end(),
+                                                            accessed_fields.begin(),
+                                                            accessed_fields.end());
+                                body.invoked_methods.insert(body.invoked_methods.end(),
+                                                            invoked_methods.begin(),
+                                                            invoked_methods.end());
                                 body.loaded = true;
                             }
                             auto referred_strings = env->NewIntArray(
