@@ -104,6 +104,16 @@ public class LSPosedContext extends XposedContext {
         }
     }
 
+    public static void callOnSystemServerLoaded(XposedModuleInterface.SystemServerLoadedParam param) {
+        for (XposedModule module : modules) {
+            try {
+                module.onSystemServerLoaded(param);
+            } catch (Throwable t) {
+                Log.e(TAG, "Error when calling onSystemServerLoaded of " + ((LSPosedContext) module.getBaseContext()).mPackageName, t);
+            }
+        }
+    }
+
     public static boolean loadModule(ActivityThread at, Module module) {
         try {
             Log.d(TAG, "Loading module " + module.packageName);
