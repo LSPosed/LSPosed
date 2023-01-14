@@ -274,7 +274,8 @@ public class ConfigManager {
         bool = config.get("enable_status_notification");
         enableStatusNotification = bool == null || (boolean) bool;
 
-        scopeRequestBlocked = (HashSet<String>) config.get("scope_request_blocked");
+        var set = (Set<String>) config.get("scope_request_blocked");
+        scopeRequestBlocked = set == null ? new HashSet<>() : set;
 
         // Don't migrate to ConfigFileManager, as XSharedPreferences will be restored soon
         String string = (String) config.get("misc_path");
@@ -705,6 +706,7 @@ public class ConfigManager {
                 for (Application obsoleteModule : obsoleteModules) {
                     Log.d(TAG, "removing obsolete module: " + obsoleteModule.packageName + "/" + obsoleteModule.userId);
                     removeModuleScopeWithoutCache(obsoleteModule);
+                    removeBlockedScopeRequest(obsoleteModule.packageName);
                 }
             } else {
                 Log.w(TAG, "pm is dead while caching. invalidating...");

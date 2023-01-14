@@ -273,7 +273,8 @@ public class LSPosedService extends ILSPosedService.Stub {
                     iCallback.onScopeRequestTimeout(scopePackageName);
                     break;
                 case "block":
-                    // TODO
+                    ConfigManager.getInstance().blockScopeRequest(packageName);
+                    iCallback.onScopeRequestDenied(scopePackageName);
                     break;
             }
             Log.i(TAG, action + " scope " + scopePackageName + " for " + packageName + " in user " + userId);
