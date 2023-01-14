@@ -16,8 +16,6 @@ import java.util.TreeMap;
 import java.util.WeakHashMap;
 import java.util.concurrent.ConcurrentHashMap;
 
-import de.robv.android.xposed.XposedBridge;
-
 @SuppressWarnings("unchecked")
 public class LSPosedRemotePreferences implements SharedPreferences {
 

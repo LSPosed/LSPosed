@@ -34,7 +34,7 @@ import de.robv.android.xposed.XC_MethodHook;
 import de.robv.android.xposed.XposedBridge;
 import de.robv.android.xposed.XposedInit;
 import de.robv.android.xposed.callbacks.XC_LoadPackage;
-import io.github.libxposed.XposedModuleInterface;
+import io.github.libxposed.api.XposedModuleInterface;
 
 public class StartBootstrapServicesHooker extends XC_MethodHook {
 

@@ -8,7 +8,7 @@ import org.lsposed.lspd.nativebridge.DexParserBridge;
 import java.io.IOException;
 import java.nio.ByteBuffer;
 
-import io.github.libxposed.utils.DexParser;
+import io.github.libxposed.api.utils.DexParser;
 
 public class LSPosedDexParser implements DexParser {
     long cookie;
