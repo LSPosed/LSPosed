@@ -33,7 +33,7 @@ import java.util.HashMap;
 
 import de.robv.android.xposed.callbacks.IXUnhook;
 import de.robv.android.xposed.callbacks.XCallback;
-import io.github.libxposed.XposedInterface;
+import io.github.libxposed.api.XposedInterface;
 
 /**
  * Callback class for method hooks.

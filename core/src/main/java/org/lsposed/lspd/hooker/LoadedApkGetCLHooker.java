@@ -45,7 +45,7 @@ import de.robv.android.xposed.XC_MethodReplacement;
 import de.robv.android.xposed.XposedBridge;
 import de.robv.android.xposed.XposedHelpers;
 import de.robv.android.xposed.callbacks.XC_LoadPackage;
-import io.github.libxposed.XposedModuleInterface;
+import io.github.libxposed.api.XposedModuleInterface;
 
 public class LoadedApkGetCLHooker extends XC_MethodHook {
     private final LoadedApk loadedApk;

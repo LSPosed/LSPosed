@@ -61,11 +61,11 @@ import java.util.concurrent.ConcurrentHashMap;
 
 import de.robv.android.xposed.XposedBridge;
 import de.robv.android.xposed.XposedHelpers;
-import io.github.libxposed.XposedContext;
-import io.github.libxposed.XposedModule;
-import io.github.libxposed.XposedModuleInterface;
-import io.github.libxposed.errors.HookFailedError;
-import io.github.libxposed.utils.DexParser;
+import io.github.libxposed.api.XposedContext;
+import io.github.libxposed.api.XposedModule;
+import io.github.libxposed.api.XposedModuleInterface;
+import io.github.libxposed.api.errors.HookFailedError;
+import io.github.libxposed.api.utils.DexParser;
 
 public class LSPosedContext extends XposedContext {
 
@@ -883,7 +883,6 @@ public class LSPosedContext extends XposedContext {
                 }
             };
         }
-        log("Cannot hook " + hookMethod);
         throw new HookFailedError("Cannot hook " + hookMethod);
     }
 
