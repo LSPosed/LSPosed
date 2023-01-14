@@ -169,8 +169,12 @@ public class LSPModuleService extends IXposedService.Stub {
     @Override
     public void requestScope(String packageName, IXposedScopeCallback callback) throws RemoteException {
         var userId = ensureModule();
-        LSPNotificationManager.requestModuleScope(loadedModule.packageName, userId, packageName, callback);
-        callback.onScopeRequestPrompted(packageName);
+        if (ConfigManager.getInstance().scopeRequestBlocked(loadedModule.packageName)) {
+            callback.onScopeRequestDenied(packageName);
+        } else {
+            LSPNotificationManager.requestModuleScope(loadedModule.packageName, userId, packageName, callback);
+            callback.onScopeRequestPrompted(packageName);
+        }
     }
 
     @Override
