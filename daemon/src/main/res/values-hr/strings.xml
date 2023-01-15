@@ -8,4 +8,8 @@
     <string name="xposed_module_updated_notification_content">%s je ažuriran, prisilno zaustavite i ponovno pokrenite aplikacije u njegovom opsegu</string>
     <string name="xposed_module_updated_notification_title_system">Xposed modul je ažuriran, potrebno je ponovno pokretanje sustava</string>
     <string name="xposed_module_updated_notification_content_system">%s je ažuriran, budući da opseg sadrži System Framework, potrebno je ponovno pokretanje za primjenu promjena</string>
+    <string name="module_updated_channel_name">Ažuriranje modula dovršeno</string>
+    <string name="status_channel_name">LSPosed status</string>
+    <string name="lsposed_running_notification_title">LSPosed je učitan</string>
+    <string name="lsposed_running_notification_content">Dodirnite obavijest da otvorite upravitelja</string>
 </resources>
