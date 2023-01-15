@@ -8,4 +8,8 @@
     <string name="xposed_module_updated_notification_content">%s ha sido actualizado, por favor fuerza el cierre y reinicia las apps que le afectan</string>
     <string name="xposed_module_updated_notification_title_system">Módulo de Xposed actualizado, es necesario reiniciar el sistema</string>
     <string name="xposed_module_updated_notification_content_system">%s ha sido actualizado, ya que afecta al System Framework, es necesario reiniciar para aplicar cambios</string>
+    <string name="module_updated_channel_name">Módulo de actualización completo</string>
+    <string name="status_channel_name">LSPosición de estado</string>
+    <string name="lsposed_running_notification_title">LSPosed loaded</string>
+    <string name="lsposed_running_notification_content">Toca la notificación para abrir el gestor</string>
 </resources>
