@@ -75,9 +75,12 @@
     <string name="update_lsposed_msg">LSPosedをアップデートしてもよろしいですか？アップデート完了後、このデバイスは再起動します</string>
     <!-- WelcomeDialog -->
     <string name="parasitic_welcome">LSPosedへようこそ</string>
+    <string name="parasitic_welcome_summary">ショートカットを作成したり、通知からまだ開くことができる寄生虫マネージャを使用しています。</string>
+    <string name="parasitic_welcome_summary_no_shortcut_support">通知から開くことができる寄生虫マネージャを使用していますね。</string>
     <string name="create_shortcut">ショートカットを作成</string>
     <string name="never_show">表示しない</string>
     <string name="app_welcome">寄生マネージャーがおすすめです</string>
+    <string name="app_welcome_summary">LSPosedは検出を回避するためのシステム寄生に対応し、通知から寄生虫マネージャを開くことができるようになりました。現在のアプリケーションをアンインストールすることをお勧めします。</string>
     <!-- LogsActivity -->
     <string name="menuSaveToSd">保存</string>
     <string name="nav_item_logs_verbose">詳細ログ</string>
@@ -161,6 +164,7 @@
     <!-- SettingsActivity -->
     <string name="settings_group_framework">フレームワーク</string>
     <string name="settings_disable_verbose_log">詳細ログの無効化</string>
+    <string name="settings_disable_verbose_log_summary">冗長なログを含むように要望する問題を報告する</string>
     <string name="pure_black_dark_theme">ブラックダークテーマ</string>
     <string name="pure_black_dark_theme_summary">ダークテーマ有効時にピュアブラックのテーマを使用</string>
     <string name="settings_group_theme">テーマ</string>
@@ -184,12 +188,17 @@
     <string name="settings_translation_contributors">翻訳貢献者</string>
     <string name="settings_translation">翻訳に参加する</string>
     <string name="settings_translation_summary">%s をあなたの言語に翻訳するのを手伝ってください</string>
+    <string name="settings_create_shortcut_summary">パラサイトマネージャーを開くことができるショートカットを作成する</string>
+    <string name="settings_created_shortcut_summary">パラサイトマネージャーを開くためのショートカットが作成されました。</string>
     <string name="settings_enable_status_notification">ステータス通知</string>
+    <string name="settings_enable_status_notification_summary">寄生虫マネージャを開くことができる通知を表示する</string>
+    <string name="disable_status_notification_error">ショートカットがない、通知を無効化できない</string>
     <string name="settings_update_channel">更新チャンネル</string>
     <string name="update_channel_stable">安定版</string>
     <string name="update_channel_bate">ベータ版</string>
     <string name="update_channel_nightly">ナイトリービルド</string>
     <string name="settings_xposed_api_call_protection">Xposed APIの呼び出し保護</string>
+    <string name="settings_xposed_api_call_protection_summary">Xposed APIを使用するために、動的にロードされるモジュールコードをブロックします。</string>
     <!-- Module Repo -->
     <string name="module_readme">Readme</string>
     <string name="module_releases">リリース</string>
