@@ -8,4 +8,8 @@
     <string name="xposed_module_updated_notification_content">%s został zaktualizowany, wymuś zatrzymanie i ponownie uruchom aplikacje w jego zakresie</string>
     <string name="xposed_module_updated_notification_title_system">Zaktualizowano moduł Xposed, wymagane ponowne uruchomienie systemu</string>
     <string name="xposed_module_updated_notification_content_system">%s został zaktualizowany, ponieważ zakres zawiera System Framework, wymagany restart aby zastosować zmiany</string>
+    <string name="module_updated_channel_name">Aktualizowanie modułu zakończone</string>
+    <string name="status_channel_name">Status LSPosed</string>
+    <string name="lsposed_running_notification_title">LSPosed załadowany</string>
+    <string name="lsposed_running_notification_content">Kliknij powiadomienie, by włączyć menadżer</string>
 </resources>
