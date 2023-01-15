@@ -101,7 +101,7 @@ public class HomeFragment extends BaseFragment {
                     if (UpdateUtil.canInstall()) {
                         new FlashDialogBuilder(activity, null).show();
                     } else {
-                        NavUtil.startURL(activity, getString(R.string.about_source));
+                        NavUtil.startURL(activity, getString(R.string.latest_url));
                     }
                 });
                 binding.updateCard.setVisibility(View.VISIBLE);
