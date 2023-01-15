@@ -8,4 +8,8 @@
     <string name="xposed_module_updated_notification_content">%s이(가) 업데이트되었습니다.</string>
     <string name="xposed_module_updated_notification_title_system">Xposed 모듈이 업데이트되었습니다, 재부팅이 필요합니다.</string>
     <string name="xposed_module_updated_notification_content_system">범위에 시스템 프레임워크가 포함되어 있으므로 %s 이 업데이트되었습니다. 변경 사항을 적용하려면 재부팅해야 합니다.</string>
+    <string name="module_updated_channel_name">모듈 업데이트 완료</string>
+    <string name="status_channel_name">LS포즈 상태</string>
+    <string name="lsposed_running_notification_title">LSPosed 로드됨</string>
+    <string name="lsposed_running_notification_content">알림을 탭하여 관리자 열기</string>
 </resources>

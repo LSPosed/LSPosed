@@ -8,4 +8,8 @@
     <string name="xposed_module_updated_notification_content">%s تم تحديثه، يرجى فرض إيقاف وإعادة تشغيل التطبيقات في نطاقه</string>
     <string name="xposed_module_updated_notification_title_system">تم تحديث وحدة Xposed، مطلوب إعادة تشغيل النظام</string>
     <string name="xposed_module_updated_notification_content_system">%s تم تحديثه، نظراً لأن النطاق يحتوي على إطار النظام، يتطلب إعادة التشغيل لتطبيق التغييرات</string>
+    <string name="module_updated_channel_name">اكتمل تحديث الوحدة</string>
+    <string name="status_channel_name">حالة LSPosed</string>
+    <string name="lsposed_running_notification_title">تم تحميل LSPosed</string>
+    <string name="lsposed_running_notification_content">اضغط على الإشعار لفتح المدير</string>
 </resources>

@@ -64,6 +64,8 @@
     <string name="info_device">Dispositiu</string>
     <string name="info_system_abi">Sistema ABI</string>
     <string name="info_dex2oat_wrapper">Embolcall de Dex Optimizer</string>
+    <string name="enabled">Habilitat</string>
+    <string name="not_enabled">No habilitat</string>
     <string name="supported">Admet</string>
     <string name="unsupported">Sense suport</string>
     <string name="android_version_unsatisfied">La versió d\'Android no està satisfeta</string>
@@ -74,8 +76,13 @@
     <string name="update_lsposed">Actualització LSPosed</string>
     <string name="update_lsposed_msg">Confirmeu per actualitzar LSPosed? Aquest dispositiu es reiniciarà un cop finalitzada l\'actualització</string>
     <!-- WelcomeDialog -->
+    <string name="parasitic_welcome">Benvingut a LSPosed</string>
+    <string name="parasitic_welcome_summary">Esteu utilitzant el gestor de paràsits, que pot crear dreceres o encara obrir-se des de la notificació.</string>
+    <string name="parasitic_welcome_summary_no_shortcut_support">Esteu utilitzant el gestor de paràsits, que es pot obrir des de la notificació.</string>
     <string name="create_shortcut">Crear accès directe</string>
     <string name="never_show">No mostris mai</string>
+    <string name="app_welcome">Administrador de paràsits recomanat</string>
+    <string name="app_welcome_summary">LSPosed ara admet la parasitització del sistema per evitar la detecció, podeu obrir el gestor de paràsits des de la notificació. Es recomana desinstal·lar l\'aplicació actual.</string>
     <!-- LogsActivity -->
     <string name="menuSaveToSd">Desa</string>
     <string name="nav_item_logs_verbose">Registres detallats</string>
@@ -158,6 +165,8 @@
     <string name="list_empty">¯\\\\_(ツ)_\/¯\nAquí no hi ha res</string>
     <!-- SettingsActivity -->
     <string name="settings_group_framework">Marc</string>
+    <string name="settings_disable_verbose_log">Desactiva els registres detallats</string>
+    <string name="settings_disable_verbose_log_summary">Sol·licitud d\'informes de problemes per incloure registres detallats</string>
     <string name="pure_black_dark_theme">Tema negre fosc</string>
     <string name="pure_black_dark_theme_summary">Utilitzeu el tema negre pur si el tema fosc està habilitat</string>
     <string name="settings_group_theme">Tema</string>
@@ -181,10 +190,17 @@
     <string name="settings_translation_contributors">Col·laboradors de traducció</string>
     <string name="settings_translation">Participar en la traducció</string>
     <string name="settings_translation_summary">Ajuda\'ns a traduir %s al teu idioma</string>
+    <string name="settings_create_shortcut_summary">Creeu una drecera que pugui obrir el gestor de paràsits</string>
+    <string name="settings_created_shortcut_summary">S\'ha creat una drecera per obrir el gestor de paràsits</string>
+    <string name="settings_enable_status_notification">Notificació d\'estat</string>
+    <string name="settings_enable_status_notification_summary">Mostra una notificació que pugui obrir el gestor de paràsits</string>
+    <string name="disable_status_notification_error">Sense drecera, no es pot desactivar la notificació</string>
     <string name="settings_update_channel">Actualitza el canal</string>
     <string name="update_channel_stable">Estable</string>
     <string name="update_channel_bate">Beta</string>
     <string name="update_channel_nightly">Construcció nocturna</string>
+    <string name="settings_xposed_api_call_protection">Protecció de trucades de l\'API Xposed</string>
+    <string name="settings_xposed_api_call_protection_summary">Bloqueja el codi del mòdul carregat dinàmicament per utilitzar l\'API Xposed, això pot trencar alguns mòduls però beneficiar la seguretat (funció experimental)</string>
     <!-- Module Repo -->
     <string name="module_readme">Llegiu-me</string>
     <string name="module_releases">Alliberaments</string>

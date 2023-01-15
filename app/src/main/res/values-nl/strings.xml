@@ -78,6 +78,7 @@
     <!-- WelcomeDialog -->
     <string name="parasitic_welcome">Welkom bij LSPosed</string>
     <string name="parasitic_welcome_summary">U gebruikt de parasitaire manager, die een snelkoppeling kan maken of nog steeds kan openen vanuit een melding.</string>
+    <string name="parasitic_welcome_summary_no_shortcut_support">Je gebruikt de parasiterende manager, die kan openen vanuit de melding.</string>
     <string name="create_shortcut">Snelkoppeling maken</string>
     <string name="never_show">Nooit tonen</string>
     <string name="app_welcome">Parasitaire manager aanbevolen</string>

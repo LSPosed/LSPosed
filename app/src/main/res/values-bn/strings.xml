@@ -65,6 +65,8 @@
     <string name="info_device">যন্ত্র</string>
     <string name="info_system_abi">সিস্টেম ABI</string>
     <string name="info_dex2oat_wrapper">ডেক্স অপ্টিমাইজার মোড়ক</string>
+    <string name="enabled">সক্রিয়</string>
+    <string name="not_enabled">সক্রিয় না</string>
     <string name="supported">সমর্থিত</string>
     <string name="unsupported">অসমর্থিত</string>
     <string name="android_version_unsatisfied">অ্যান্ড্রয়েড সংস্করণ অসন্তুষ্ট</string>
@@ -75,8 +77,13 @@
     <string name="update_lsposed">আপডেট LSPosed</string>
     <string name="update_lsposed_msg">LSPosed আপডেট করার জন্য নিশ্চিত? আপডেট সম্পূর্ণ হওয়ার পরে এই ডিভাইসটি রিবুট হবে</string>
     <!-- WelcomeDialog -->
+    <string name="parasitic_welcome">LSPosed স্বাগতম</string>
+    <string name="parasitic_welcome_summary">আপনি পরজীবী ম্যানেজার ব্যবহার করছেন, যা শর্টকাট তৈরি করতে পারে বা এখনও বিজ্ঞপ্তি থেকে খুলতে পারে।</string>
+    <string name="parasitic_welcome_summary_no_shortcut_support">আপনি পরজীবী ম্যানেজার ব্যবহার করছেন, যা বিজ্ঞপ্তি থেকে খুলতে পারে।</string>
     <string name="create_shortcut">শর্টকাট তৈরি করুন</string>
     <string name="never_show">কখনও দেখাবে না</string>
+    <string name="app_welcome">পরজীবী ব্যবস্থাপক প্রস্তাবিত</string>
+    <string name="app_welcome_summary">LSPosed এখন সনাক্তকরণ এড়াতে সিস্টেম প্যারাসাইটাইজেশন সমর্থন করে, আপনি বিজ্ঞপ্তি থেকে পরজীবী ম্যানেজার খুলতে পারেন। বর্তমান অ্যাপ্লিকেশনটি আনইনস্টল করার পরামর্শ দেওয়া হচ্ছে।</string>
     <!-- LogsActivity -->
     <string name="menuSaveToSd">সংরক্ষণ</string>
     <string name="nav_item_logs_verbose">ভার্বোস লগ</string>
@@ -159,6 +166,8 @@
     <string name="list_empty">¯\\\\_(ツ)_\/¯\nএখানে কিছুই নেই</string>
     <!-- SettingsActivity -->
     <string name="settings_group_framework">ফ্রেমওয়ার্ক</string>
+    <string name="settings_disable_verbose_log">ভার্বোস লগ অক্ষম করুন</string>
+    <string name="settings_disable_verbose_log_summary">ভার্বোস লগগুলি অন্তর্ভুক্ত করার জন্য সমস্যার প্রতিবেদন করুন</string>
     <string name="pure_black_dark_theme">কালো অন্ধকার থিম</string>
     <string name="pure_black_dark_theme_summary">অন্ধকার থিম সক্ষম থাকলে খাঁটি কালো থিম ব্যবহার করুন</string>
     <string name="settings_group_theme">থিম</string>
@@ -182,10 +191,17 @@
     <string name="settings_translation_contributors">অনুবাদ অবদানকারী</string>
     <string name="settings_translation">অনুবাদে অংশগ্রহণ করুন</string>
     <string name="settings_translation_summary">আপনার ভাষায় %s অনুবাদ করতে আমাদের সাহায্য করুন</string>
+    <string name="settings_create_shortcut_summary">একটি শর্টকাট তৈরি করুন যা পরজীবী ম্যানেজার খুলতে পারে</string>
+    <string name="settings_created_shortcut_summary">পরজীবী ম্যানেজার খোলার জন্য একটি শর্টকাট তৈরি করা হয়েছে</string>
+    <string name="settings_enable_status_notification">স্থিতি বিজ্ঞপ্তি</string>
+    <string name="settings_enable_status_notification_summary">পরজীবী ম্যানেজার খুলতে পারে এমন একটি বিজ্ঞপ্তি দেখান</string>
+    <string name="disable_status_notification_error">কোন শর্টকাট, বিজ্ঞপ্তি নিষ্ক্রিয় করতে পারবেন না</string>
     <string name="settings_update_channel">চ্যানেল আপডেট করুন</string>
     <string name="update_channel_stable">স্থিতিশীল</string>
     <string name="update_channel_bate">বেটা</string>
     <string name="update_channel_nightly">রাতারাতি নির্মাণ</string>
+    <string name="settings_xposed_api_call_protection">Xposed API কল সুরক্ষা</string>
+    <string name="settings_xposed_api_call_protection_summary">এক্সপোজড এপিআই ব্যবহার করার জন্য গতিশীলভাবে লোড করা মডিউল কোড ব্লক করুন, এটি কিছু মডিউল ভেঙে ফেলতে পারে কিন্তু নিরাপত্তা লাভ করতে পারে (পরীক্ষামূলক বৈশিষ্ট্য)</string>
     <!-- Module Repo -->
     <string name="module_readme">রিডমি</string>
     <string name="module_releases">মুক্তি দেয়</string>

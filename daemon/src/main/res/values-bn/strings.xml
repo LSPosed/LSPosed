@@ -8,4 +8,8 @@
     <string name="xposed_module_updated_notification_content">%s আপডেট করা হয়েছে, অনুগ্রহ করে এর সুযোগে অ্যাপগুলিকে জোর করে থামান এবং পুনরায় চালু করুন</string>
     <string name="xposed_module_updated_notification_title_system">Xposed মডিউল আপডেট করা হয়েছে, সিস্টেম রিবুট প্রয়োজন</string>
     <string name="xposed_module_updated_notification_content_system">%s আপডেট করা হয়েছে, যেহেতু সুযোগে সিস্টেম ফ্রেমওয়ার্ক রয়েছে, পরিবর্তনগুলি প্রয়োগ করার জন্য রিবুট প্রয়োজন</string>
+    <string name="module_updated_channel_name">মডিউল আপডেট সম্পূর্ণ</string>
+    <string name="status_channel_name">LSPপোজড স্ট্যাটাস</string>
+    <string name="lsposed_running_notification_title">LSPosed লোড</string>
+    <string name="lsposed_running_notification_content">ম্যানেজার খুলতে বিজ্ঞপ্তিতে ট্যাপ করুন</string>
 </resources>

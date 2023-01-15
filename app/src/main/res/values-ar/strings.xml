@@ -72,19 +72,25 @@
     <string name="info_device">الجهاز</string>
     <string name="info_system_abi">نظام ABI</string>
     <string name="info_dex2oat_wrapper">غلاف محسّن Dex</string>
+    <string name="enabled">مفعل</string>
+    <string name="not_enabled">غير مفعل</string>
     <string name="supported">مدعوم</string>
     <string name="unsupported">غير متوافق</string>
     <string name="android_version_unsatisfied">نسخة أندرويد غير راضية</string>
-    <string name="crashed">تحطم</string>
+    <string name="crashed">تعطّل</string>
     <string name="mount_failed">فشل التحميل</string>
     <string name="selinux_permissive">SELinux متساهل</string>
     <string name="sepolicy_incorrect">سياسة SELinux غير صحيحة</string>
     <string name="update_lsposed">تحديث LSPosed</string>
     <string name="update_lsposed_msg">تأكيد تحديث LSPosed؟ سيتم إعـادة تشغيل هذا الجهاز بعد اكتمال التحديث</string>
     <!-- WelcomeDialog -->
+    <string name="parasitic_welcome">مرحباً بك في LSPosed</string>
+    <string name="parasitic_welcome_summary">أنت تستخدم مدير الطفيليات، الذي يمكنه إنشاء اختصار أو لا يزال مفتوحا من الإشعارات.</string>
+    <string name="parasitic_welcome_summary_no_shortcut_support">أنت تستخدم المدير الطفيلي، الذي يمكن فتحه من الإشعار.</string>
     <string name="create_shortcut">إنشاء إختصار</string>
     <string name="never_show">لا تظهر أبداً</string>
     <string name="app_welcome">مدير طفيلي موصي به</string>
+    <string name="app_welcome_summary">يدعم LSPosed الآن تطهير النظام لتجنب الكشف، يمكنك فتح مدير الطفيليات من الإشعار. من المستحسن إلغاء تثبيت التطبيق الحالي.</string>
     <!-- LogsActivity -->
     <string name="menuSaveToSd">احفظ</string>
     <string name="nav_item_logs_verbose">سجلات مفصّلة</string>
@@ -168,6 +174,7 @@
     <!-- SettingsActivity -->
     <string name="settings_group_framework">إطار العمل</string>
     <string name="settings_disable_verbose_log">تعطيل السجلات المفصّلة</string>
+    <string name="settings_disable_verbose_log_summary">الإبلاغ عن مشاكل طلب لتضمين السجلات المفصولة</string>
     <string name="pure_black_dark_theme">السمة السوداء المظلمة</string>
     <string name="pure_black_dark_theme_summary">استخدام السمة السوداء الخالصة إذا تم تمكين السمة المظلمة</string>
     <string name="settings_group_theme">السمة</string>
@@ -191,10 +198,17 @@
     <string name="settings_translation_contributors">المساهمون بالترجمة</string>
     <string name="settings_translation">المشاركة في الترجمة</string>
     <string name="settings_translation_summary">ساعدنا في ترجمة %s إلى لغتك</string>
+    <string name="settings_create_shortcut_summary">إنشاء اختصار يمكنه فتح مدير الطفيليات</string>
+    <string name="settings_created_shortcut_summary">تم إنشاء اختصار لفتح مدير الطفيليات</string>
+    <string name="settings_enable_status_notification">إشعارات الحالة</string>
+    <string name="settings_enable_status_notification_summary">إظهار إشعار يمكنه فتح مدير الطفيليات</string>
+    <string name="disable_status_notification_error">لا يوجد اختصار، لا يمكن تعطيل الإشعار</string>
     <string name="settings_update_channel">قناة التحديث</string>
     <string name="update_channel_stable">مستقر</string>
     <string name="update_channel_bate">تجريبي</string>
     <string name="update_channel_nightly">البناء الليلي</string>
+    <string name="settings_xposed_api_call_protection">حماية استدعاء Xposed API</string>
+    <string name="settings_xposed_api_call_protection_summary">حظر رمز الوحدة النمطية المحمل ديناميكيا لاستخدام Xposed API ، قد يؤدي هذا إلى كسر بعض الوحدات النمطية ولكن يستفيد من الأمان (ميزة تجريبية)</string>
     <!-- Module Repo -->
     <string name="module_readme">اقرأني</string>
     <string name="module_releases">إصدارات</string>

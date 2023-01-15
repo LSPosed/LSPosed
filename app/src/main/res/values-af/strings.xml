@@ -64,6 +64,8 @@
     <string name="info_device">Toestel</string>
     <string name="info_system_abi">Stelsel ABI</string>
     <string name="info_dex2oat_wrapper">Dex Optimizer Wrapper</string>
+    <string name="enabled">Geaktiveer</string>
+    <string name="not_enabled">Nie geaktiveer nie</string>
     <string name="supported">Ondersteun</string>
     <string name="unsupported">Ongesteun</string>
     <string name="android_version_unsatisfied">Android-weergawe nie tevrede nie</string>
@@ -74,8 +76,13 @@
     <string name="update_lsposed">Dateer LSPosed op</string>
     <string name="update_lsposed_msg">Bevestig om LSPosed op te dateer? Hierdie toestel sal herlaai nadat die opdatering voltooi is</string>
     <!-- WelcomeDialog -->
+    <string name="parasitic_welcome">Welkom by LSPosed</string>
+    <string name="parasitic_welcome_summary">Jy gebruik die parasitiese bestuurder, wat kortpad kan skep of steeds oopmaak vanaf kennisgewing.</string>
+    <string name="parasitic_welcome_summary_no_shortcut_support">Jy gebruik die parasitiese bestuurder, wat kan oopmaak vanaf kennisgewing.</string>
     <string name="create_shortcut">Skep kortpad</string>
     <string name="never_show">Moet nooit wys nie</string>
+    <string name="app_welcome">Parasitiese Bestuurder Aanbeveel</string>
+    <string name="app_welcome_summary">LSPosed ondersteun nou stelselparasitering om opsporing te vermy, jy kan parasitiese bestuurder oopmaak vanaf kennisgewing. Dit word aanbeveel om die huidige toepassing te verwyder.</string>
     <!-- LogsActivity -->
     <string name="menuSaveToSd">Stoor</string>
     <string name="nav_item_logs_verbose">Uitgebreide logs</string>
@@ -158,6 +165,8 @@
     <string name="list_empty">¯\\\\_(ツ)_\/¯\nNiks hier nie</string>
     <!-- SettingsActivity -->
     <string name="settings_group_framework">Raamwerk</string>
+    <string name="settings_disable_verbose_log">Deaktiveer verbose logs</string>
+    <string name="settings_disable_verbose_log_summary">Rapporteer kwessies versoek om verbose logs in te sluit</string>
     <string name="pure_black_dark_theme">Swart donker tema</string>
     <string name="pure_black_dark_theme_summary">Gebruik die suiwer swart tema as donker tema geaktiveer is</string>
     <string name="settings_group_theme">Tema</string>
@@ -181,10 +190,17 @@
     <string name="settings_translation_contributors">Vertaling bydraers</string>
     <string name="settings_translation">Neem deel aan vertaling</string>
     <string name="settings_translation_summary">Help ons om %s in jou taal te vertaal</string>
+    <string name="settings_create_shortcut_summary">Skep \'n kortpad wat parasitiese bestuurder kan oopmaak</string>
+    <string name="settings_created_shortcut_summary">\'n Kortpad is geskep om parasitiese bestuurder oop te maak</string>
+    <string name="settings_enable_status_notification">Statuskennisgewing</string>
+    <string name="settings_enable_status_notification_summary">Wys \'n kennisgewing wat parasitiese bestuurder kan oopmaak</string>
+    <string name="disable_status_notification_error">Geen kortpad nie, kan nie kennisgewing deaktiveer nie</string>
     <string name="settings_update_channel">Dateer kanaal op</string>
     <string name="update_channel_stable">Stabiel</string>
     <string name="update_channel_bate">Beta</string>
     <string name="update_channel_nightly">Nag bou</string>
+    <string name="settings_xposed_api_call_protection">Xposed API-oproepbeskerming</string>
+    <string name="settings_xposed_api_call_protection_summary">Blokkeer dinamies gelaaide modulekode om Xposed API te gebruik, dit kan sommige modules breek, maar bevoordeel sekuriteit (eksperimentele kenmerk)</string>
     <!-- Module Repo -->
     <string name="module_readme">Lees my</string>
     <string name="module_releases">Vrystellings</string>

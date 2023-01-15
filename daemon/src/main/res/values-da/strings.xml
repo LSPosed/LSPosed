@@ -8,4 +8,8 @@
     <string name="xposed_module_updated_notification_content">%s er blevet opdateret, gennemtving stop og genstart apps i dets anvendelsesområde</string>
     <string name="xposed_module_updated_notification_title_system">Xposed modul opdateret, system genstart kræves</string>
     <string name="xposed_module_updated_notification_content_system">%s er blevet opdateret, da anvendelsesområdet indeholder System Framework, krævede genstart for at anvende ændringer</string>
+    <string name="module_updated_channel_name">Modulopdatering afsluttet</string>
+    <string name="status_channel_name">LSPosed status</string>
+    <string name="lsposed_running_notification_title">LSPosed indlæst</string>
+    <string name="lsposed_running_notification_content">Tryk på meddelelsen for at åbne administratoren</string>
 </resources>

@@ -64,6 +64,8 @@
     <string name="info_device">Enhed</string>
     <string name="info_system_abi">System ABI</string>
     <string name="info_dex2oat_wrapper">Dex Optimizer Wrapper</string>
+    <string name="enabled">Aktiveret</string>
+    <string name="not_enabled">Ikke aktiveret</string>
     <string name="supported">Understøttet</string>
     <string name="unsupported">Ikke understøttet</string>
     <string name="android_version_unsatisfied">Android-version utilfreds</string>
@@ -74,8 +76,13 @@
     <string name="update_lsposed">Opdater LSPosed</string>
     <string name="update_lsposed_msg">Bekræft opdatering af LSPosed? Denne enhed vil genstarte efter opdateringsfuldførelse</string>
     <!-- WelcomeDialog -->
+    <string name="parasitic_welcome">Velkommen til LSPosed</string>
+    <string name="parasitic_welcome_summary">Du bruger den parasitære manager, som kan oprette genvej eller stadig åbne fra meddelelsen.</string>
+    <string name="parasitic_welcome_summary_no_shortcut_support">Du bruger den parasitære manager, som kan åbnes fra notifikationen.</string>
     <string name="create_shortcut">Opret genvej</string>
     <string name="never_show">Vis aldrig</string>
+    <string name="app_welcome">Parasitic Manager Anbefalet</string>
+    <string name="app_welcome_summary">LSPosed understøtter nu systemparasitering for at undgå registrering, du kan åbne parasitmanager fra meddelelsen. Det anbefales at afinstallere det aktuelle program.</string>
     <!-- LogsActivity -->
     <string name="menuSaveToSd">Gem</string>
     <string name="nav_item_logs_verbose">Verbose Logs</string>
@@ -158,6 +165,8 @@
     <string name="list_empty">Spredning \\\\_(Ι)_\/ Ι\nIntet her</string>
     <!-- SettingsActivity -->
     <string name="settings_group_framework">Framework</string>
+    <string name="settings_disable_verbose_log">Deaktivere udførlige logfiler</string>
+    <string name="settings_disable_verbose_log_summary">Anmodning om at medtage verbose logs i rapporten om problemer</string>
     <string name="pure_black_dark_theme">Sort mørkt tema</string>
     <string name="pure_black_dark_theme_summary">Brug det rene sorte tema, hvis mørkt tema er aktiveret</string>
     <string name="settings_group_theme">Tema</string>
@@ -181,10 +190,17 @@
     <string name="settings_translation_contributors">Oversættelsesbidragsydere</string>
     <string name="settings_translation">Deltag i oversættelse</string>
     <string name="settings_translation_summary">Hjælp os med at oversætte %s til dit sprog</string>
+    <string name="settings_create_shortcut_summary">Opret en genvej, der kan åbne parasitic manager</string>
+    <string name="settings_created_shortcut_summary">Der er oprettet en genvej til at åbne parasitic manager</string>
+    <string name="settings_enable_status_notification">Meddelelse om status</string>
+    <string name="settings_enable_status_notification_summary">Vis en meddelelse, der kan åbne parasitic manager</string>
+    <string name="disable_status_notification_error">Ingen genvej, kan ikke deaktivere meddelelse</string>
     <string name="settings_update_channel">Opdater kanal</string>
     <string name="update_channel_stable">Stabil</string>
     <string name="update_channel_bate">Beta</string>
     <string name="update_channel_nightly">Nightly build</string>
+    <string name="settings_xposed_api_call_protection">Beskyttelse af Xposed API-opkald</string>
+    <string name="settings_xposed_api_call_protection_summary">Bloker dynamisk indlæst modulkode for at bruge Xposed API, hvilket kan ødelægge nogle moduler, men gavner sikkerheden (eksperimentel funktion)</string>
     <!-- Module Repo -->
     <string name="module_readme">Læs</string>
     <string name="module_releases">Udgivelser</string>

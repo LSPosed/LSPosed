@@ -64,6 +64,8 @@
     <string name="info_device">دستگاه</string>
     <string name="info_system_abi">سیستم ABI (رابط باینری برنامه)</string>
     <string name="info_dex2oat_wrapper">بهینه‌ ساز dex wrapper</string>
+    <string name="enabled">فعال شده</string>
+    <string name="not_enabled">فعال نشده</string>
     <string name="supported">پشتیبانی می شود</string>
     <string name="unsupported">پشتیبانی نمی شود</string>
     <string name="android_version_unsatisfied">از این نسخه اندروید پشتیبانی نمی شود</string>
@@ -74,9 +76,13 @@
     <string name="update_lsposed">به روز رسانی LSPosed</string>
     <string name="update_lsposed_msg">آیا می خواهید LSPosed به‌روزرسانی شود؟ این دستگاه پس از تکمیل به روز رسانی خاموش و روشن می شود</string>
     <!-- WelcomeDialog -->
+    <string name="parasitic_welcome">به LSPosed خوش آمدید</string>
+    <string name="parasitic_welcome_summary">شما از برنامه مدیریت lsposed استفاده می کنید که می تواند یک میانبر بسازد یا همچنان از طریق اعلان باز باشد</string>
+    <string name="parasitic_welcome_summary_no_shortcut_support">شما از برنامه مدیریت lsposed استفاده می کنید که می تواند از طریق اعلان باز شود</string>
     <string name="create_shortcut">ساخت میانبر</string>
     <string name="never_show">هرگز نشان نده</string>
     <string name="app_welcome">Parasitic Manager توصیه شده</string>
+    <string name="app_welcome_summary">LSPosed اکنون از پارازیتیزاسیون سیستم برای جلوگیری از شناسایی پشتیبانی می کند، می توانید مدیر انگلی را از اعلان باز کنید. توصیه می شود برنامه فعلی را حذف نصب کنید.</string>
     <!-- LogsActivity -->
     <string name="menuSaveToSd">ذخیره</string>
     <string name="nav_item_logs_verbose">گزارش های کامل</string>
@@ -160,6 +166,7 @@
     <!-- SettingsActivity -->
     <string name="settings_group_framework">Framework</string>
     <string name="settings_disable_verbose_log">غیرفعال کردن گزارش های کامل</string>
+    <string name="settings_disable_verbose_log_summary">گزارش درخواست مشکلات برای گنجاندن گزارش های پرمخاطب</string>
     <string name="pure_black_dark_theme">پس زمینه سیاه تاریک</string>
     <string name="pure_black_dark_theme_summary">اگر پس زمینه تاریک فعال است از پس زمینه سیاه خالص استفاده کنید</string>
     <string name="settings_group_theme">پس زمینه</string>
@@ -183,10 +190,17 @@
     <string name="settings_translation_contributors">مترجم زبان پارسی</string>
     <string name="settings_translation">در ترجمه شرکت کنید</string>
     <string name="settings_translation_summary">به ما کمک کنید تا %s را به زبان شما ترجمه کنیم</string>
+    <string name="settings_create_shortcut_summary">میانبری ایجاد کنید که بتواند مدیر انگلی را باز کند</string>
+    <string name="settings_created_shortcut_summary">یک میانبر برای باز کردن مدیر انگلی ایجاد شده است</string>
+    <string name="settings_enable_status_notification">اطلاع رسانی وضعیت</string>
+    <string name="settings_enable_status_notification_summary">نمایش اعلانی که می‌تواند مدیر انگلی را باز کند</string>
+    <string name="disable_status_notification_error">بدون میانبر، نمی توان اعلان را غیرفعال کرد</string>
     <string name="settings_update_channel">نوع به روز رسانی </string>
     <string name="update_channel_stable">نسخه پایدار</string>
     <string name="update_channel_bate">نسخه آزمایشی</string>
     <string name="update_channel_nightly">نسخه ساخت شبانه</string>
+    <string name="settings_xposed_api_call_protection">حفاظت از تماس API Xposed</string>
+    <string name="settings_xposed_api_call_protection_summary">برای استفاده از Xposed API کد ماژول بارگذاری شده پویا را مسدود کنید، ممکن است برخی از ماژول‌ها را خراب کند اما امنیت را به همراه داشته باشد (ویژگی آزمایشی)</string>
     <!-- Module Repo -->
     <string name="module_readme">اطلاعات ماژول</string>
     <string name="module_releases">نسخه های منتشر شده</string>

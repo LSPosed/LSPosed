@@ -8,4 +8,8 @@
     <string name="xposed_module_updated_notification_content">%s עודכן</string>
     <string name="xposed_module_updated_notification_title_system">מודול Xposed עודכן, נדרש אתחול המערכת</string>
     <string name="xposed_module_updated_notification_content_system">%s עודכן, מכיוון שההיקף מכיל System Framework, נדרש אתחול כדי להחיל שינויים</string>
+    <string name="module_updated_channel_name">עדכון המודול הושלם</string>
+    <string name="status_channel_name">סטטוס LSPost</string>
+    <string name="lsposed_running_notification_title">LSPosed נטען</string>
+    <string name="lsposed_running_notification_content">הקש על ההודעה כדי לפתוח את המנהל</string>
 </resources>

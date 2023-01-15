@@ -24,11 +24,11 @@
     <string name="Modules">Moduły</string>
     <plurals name="modules_enabled_count">
         <item quantity="one">%d moduł aktywowany</item>
-        <item quantity="few">Włączono %d moduły/ów</item>
+        <item quantity="few">Aktywowano %d modułu/ów</item>
         <item quantity="many">Włączono %d moduły/ów</item>
         <item quantity="other">Włączono %d moduły/ów</item>
     </plurals>
-    <string name="Logs">Logi</string>
+    <string name="Logs">Dziennik</string>
     <string name="Settings">Ustawienia</string>
     <string name="feedback_or_suggestion">Opinie lub sugestie</string>
     <string name="About">O aplikacji</string>
@@ -86,6 +86,7 @@
     <string name="create_shortcut">Utwórz skrót</string>
     <string name="never_show">Nigdy nie pokazuj</string>
     <string name="app_welcome">Rekomendowany menadżer Parasitic</string>
+    <string name="app_welcome_summary">LSPosed teraz obsługuje \"pasożytowanie\" systemowe by uniknąć wykrycia, możesz otworzyć menedżera pasożytów z okna powiadomień. Zalecane jest odinstalowanie obecnej aplikacji.</string>
     <!-- LogsActivity -->
     <string name="menuSaveToSd">Zapisz</string>
     <string name="nav_item_logs_verbose">Logi verbose</string>
@@ -169,6 +170,7 @@
     <!-- SettingsActivity -->
     <string name="settings_group_framework">Framework</string>
     <string name="settings_disable_verbose_log">Wyłącz logi</string>
+    <string name="settings_disable_verbose_log_summary">Zgłaszanie problemów wymaga dołączenia pełnych dzienników</string>
     <string name="pure_black_dark_theme">Czarny ciemny motyw</string>
     <string name="pure_black_dark_theme_summary">Użyj czarnego motywu, jeśli ciemny motyw jest włączony</string>
     <string name="settings_group_theme">Motyw</string>
@@ -192,10 +194,17 @@
     <string name="settings_translation_contributors">Tłumacze</string>
     <string name="settings_translation">Weź udział w tłumaczeniu</string>
     <string name="settings_translation_summary">Pomóż nam przetłumaczyć %s na Twój język</string>
+    <string name="settings_create_shortcut_summary">Utwórz skrót, za pomocą którego otworzysz menadżera \"pasożytów\"</string>
+    <string name="settings_created_shortcut_summary">Skrót do otwierania menadżera pasożytów został utworzony</string>
+    <string name="settings_enable_status_notification">Status powiadomień</string>
+    <string name="settings_enable_status_notification_summary">Pokazuj powiadomienie, za pomocą którego otworzysz menadżera pasożytów</string>
+    <string name="disable_status_notification_error">Brak skrótu, nie można wyłączyć powiadomienia</string>
     <string name="settings_update_channel">Kanał aktualizacji</string>
     <string name="update_channel_stable">Stabilny</string>
     <string name="update_channel_bate">Beta</string>
     <string name="update_channel_nightly">Wersja nocna</string>
+    <string name="settings_xposed_api_call_protection">Ochrona wywołania Xposed API</string>
+    <string name="settings_xposed_api_call_protection_summary">Zablokuj dynamiczne ładowanie kodu modułu do używania Xposed API, wzmocni to ochronę kosztem możliwego uszkodzenia niektórych modułów (funkcja eksperymentalna)</string>
     <!-- Module Repo -->
     <string name="module_readme">Readme</string>
     <string name="module_releases">Wersje</string>

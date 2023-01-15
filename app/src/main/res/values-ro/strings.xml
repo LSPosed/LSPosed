@@ -66,6 +66,8 @@
     <string name="info_device">Dispozitiv</string>
     <string name="info_system_abi">Sistem ABI</string>
     <string name="info_dex2oat_wrapper">Dex Optimizer Wrapper</string>
+    <string name="enabled">Activat</string>
+    <string name="not_enabled">Neactivat</string>
     <string name="supported">Suportă</string>
     <string name="unsupported">Nesuportat</string>
     <string name="android_version_unsatisfied">Versiunea Android nesatisfăcută</string>
@@ -76,9 +78,13 @@
     <string name="update_lsposed">Actualizează LSPosed</string>
     <string name="update_lsposed_msg">Confirmați actualizarea LSPosed? Acest dispozitiv va reporni după finalizarea actualizării</string>
     <!-- WelcomeDialog -->
+    <string name="parasitic_welcome">Bine ați venit la LSPosed</string>
+    <string name="parasitic_welcome_summary">Folosiți managerul de paraziți, care poate crea o comandă rapidă sau poate fi deschis încă din notificare.</string>
+    <string name="parasitic_welcome_summary_no_shortcut_support">Folosiți managerul de paraziți, care se poate deschide din notificare.</string>
     <string name="create_shortcut">Creează scurtătură</string>
     <string name="never_show">Nu arăta niciodată</string>
     <string name="app_welcome">Manager parazitar recomandat</string>
+    <string name="app_welcome_summary">LSPosed suportă acum parazitarea sistemului pentru a evita detectarea, puteți deschide managerul de paraziți din notificare. Se recomandă dezinstalarea aplicației curente.</string>
     <!-- LogsActivity -->
     <string name="menuSaveToSd">Salvează</string>
     <string name="nav_item_logs_verbose">Jurnalele Verbose</string>
@@ -162,6 +168,7 @@
     <!-- SettingsActivity -->
     <string name="settings_group_framework">Framework</string>
     <string name="settings_disable_verbose_log">Dezactivează jurnalele verbose</string>
+    <string name="settings_disable_verbose_log_summary">Raportați problemele de solicitare a rapoartelor pentru a include jurnalele verbale</string>
     <string name="pure_black_dark_theme">Temă întunecată</string>
     <string name="pure_black_dark_theme_summary">Utilizați tema pur neagră dacă tema întunecată este activată</string>
     <string name="settings_group_theme">Temă</string>
@@ -185,10 +192,17 @@
     <string name="settings_translation_contributors">Contribuitori la traducere</string>
     <string name="settings_translation">Participă în traducere</string>
     <string name="settings_translation_summary">Ajută-ne să traducem %s în limba ta</string>
+    <string name="settings_create_shortcut_summary">Creați o comandă rapidă care poate deschide managerul de paraziți</string>
+    <string name="settings_created_shortcut_summary">A fost creată o comandă rapidă pentru a deschide Parasitic Manager</string>
+    <string name="settings_enable_status_notification">Notificare de stare</string>
+    <string name="settings_enable_status_notification_summary">Afișați o notificare care poate deschide managerul de paraziți</string>
+    <string name="disable_status_notification_error">Nu există scurtătură, nu se poate dezactiva notificarea</string>
     <string name="settings_update_channel">Canal de actualizare</string>
     <string name="update_channel_stable">Stabil</string>
     <string name="update_channel_bate">Beta</string>
     <string name="update_channel_nightly">Construire nocturnă</string>
+    <string name="settings_xposed_api_call_protection">Protecția apelurilor API Xposed</string>
+    <string name="settings_xposed_api_call_protection_summary">Blocați codul modulului încărcat dinamic pentru a utiliza API-ul Xposed, acest lucru poate întrerupe unele module, dar aduce beneficii în materie de securitate (caracteristică experimentală)</string>
     <!-- Module Repo -->
     <string name="module_readme">Citește-mă</string>
     <string name="module_releases">Lansări</string>

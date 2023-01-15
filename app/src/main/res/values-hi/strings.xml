@@ -165,6 +165,8 @@
     <string name="list_empty">¯\\\\_(ツ)_\/¯\nयहाँ कुछ भी नहीं</string>
     <!-- SettingsActivity -->
     <string name="settings_group_framework">रूपरेखा</string>
+    <string name="settings_disable_verbose_log">वर्बोज़ लॉग अक्षम करें</string>
+    <string name="settings_disable_verbose_log_summary">रिपोर्ट वर्बोज़ लॉग शामिल करने का अनुरोध जारी करती है</string>
     <string name="pure_black_dark_theme">ब्लैक डार्क थीम</string>
     <string name="pure_black_dark_theme_summary">यदि डार्क थीम सक्षम है तो शुद्ध काली थीम का उपयोग करें</string>
     <string name="settings_group_theme">थीम</string>
@@ -188,10 +190,17 @@
     <string name="settings_translation_contributors">अनुवाद योगदानकर्ता</string>
     <string name="settings_translation">अनुवाद में भाग लें</string>
     <string name="settings_translation_summary">%s को अपनी भाषा में अनुवाद करने में हमारी सहायता करें</string>
+    <string name="settings_create_shortcut_summary">एक शॉर्टकट बनाएं जो परजीवी प्रबंधक खोल सके</string>
+    <string name="settings_created_shortcut_summary">परजीवी प्रबंधक खोलने के लिए एक शॉर्टकट बनाया गया है</string>
+    <string name="settings_enable_status_notification">स्थिति अधिसूचना</string>
+    <string name="settings_enable_status_notification_summary">एक अधिसूचना दिखाएं जो परजीवी प्रबंधक खोल सकती है</string>
+    <string name="disable_status_notification_error">कोई शॉर्टकट नहीं, अधिसूचना अक्षम नहीं कर सकता</string>
     <string name="settings_update_channel">चैनल अपडेट करें</string>
     <string name="update_channel_stable">स्थिर</string>
     <string name="update_channel_bate">बीटा</string>
     <string name="update_channel_nightly">सॉफ़्टवेयर की स्थिरता</string>
+    <string name="settings_xposed_api_call_protection">Xposed API कॉल सुरक्षा</string>
+    <string name="settings_xposed_api_call_protection_summary">एक्सपोज़ेड एपीआई का उपयोग करने के लिए गतिशील रूप से लोड किए गए मॉड्यूल कोड को ब्लॉक करें, यह कुछ मॉड्यूल तोड़ सकता है लेकिन सुरक्षा को लाभ देता है (प्रायोगिक सुविधा)</string>
     <!-- Module Repo -->
     <string name="module_readme">रीडमी</string>
     <string name="module_releases">विज्ञप्ति</string>

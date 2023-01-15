@@ -74,9 +74,13 @@
     <string name="update_lsposed">LSPosed 업데이트</string>
     <string name="update_lsposed_msg">LSPosed를 업데이트 하시겠습니까? 업데이트 완료 후에 재부팅합니다.</string>
     <!-- WelcomeDialog -->
+    <string name="parasitic_welcome">LSPosed에 오신 것을 환영합니다</string>
+    <string name="parasitic_welcome_summary">바로 가기를 만들거나 알림에서 계속 열 수 있는 기생 관리자를 사용하고 있습니다.</string>
     <string name="parasitic_welcome_summary_no_shortcut_support">알림에서 열 수 있는 내부 관리자를 사용 중 입니다.</string>
     <string name="create_shortcut">바로 가기 만들기</string>
     <string name="never_show">표시 안 함</string>
+    <string name="app_welcome">기생 매니저 추천</string>
+    <string name="app_welcome_summary">LSPosed는 이제 탐지를 피하기 위해 시스템 기생을 지원하며 알림에서 기생 관리자를 열 수 있습니다. 현재 응용 프로그램을 제거하는 것이 좋습니다.</string>
     <!-- LogsActivity -->
     <string name="menuSaveToSd">저장</string>
     <string name="nav_item_logs_verbose">자세한 로그</string>
@@ -186,6 +190,9 @@
     <string name="settings_translation_summary">%s를 귀하의 언어로 번역하는 데 도움을 주세요.</string>
     <string name="settings_create_shortcut_summary">내부 관리자를 열 수 있는 바로가기 생성</string>
     <string name="settings_created_shortcut_summary">내부 관리자를 여는 바로 가기가 생성되었습니다.</string>
+    <string name="settings_enable_status_notification">상태 알림</string>
+    <string name="settings_enable_status_notification_summary">기생 관리자를 열 수 있는 알림 표시</string>
+    <string name="disable_status_notification_error">바로 가기 없음, 알림을 비활성화할 수 없음</string>
     <string name="settings_update_channel">업데이트 채널</string>
     <string name="update_channel_stable">안정</string>
     <string name="update_channel_bate">베타</string>

@@ -64,6 +64,8 @@
     <string name="info_device">Laite</string>
     <string name="info_system_abi">Järjestelmä ABI</string>
     <string name="info_dex2oat_wrapper">Dex Optimizer Wrapper</string>
+    <string name="enabled">Käytössä</string>
+    <string name="not_enabled">Ei käytössä</string>
     <string name="supported">Tuettu</string>
     <string name="unsupported">Ei tuettu</string>
     <string name="android_version_unsatisfied">Android-versio tyytymätön</string>
@@ -74,8 +76,13 @@
     <string name="update_lsposed">Päivitys LSPostettu</string>
     <string name="update_lsposed_msg">Vahvista LSPost-päivitys? Tämä laite käynnistyy uudelleen päivityksen jälkeen</string>
     <!-- WelcomeDialog -->
+    <string name="parasitic_welcome">Tervetuloa LSPosed</string>
+    <string name="parasitic_welcome_summary">Käytät loishallintaohjelmaa, joka voi luoda pikakuvakkeen tai silti avata ilmoituksen.</string>
+    <string name="parasitic_welcome_summary_no_shortcut_support">Käytät loishallintaohjelmaa, joka voidaan avata ilmoituksesta.</string>
     <string name="create_shortcut">Luo pikakuvake</string>
     <string name="never_show">Älä näytä koskaan</string>
+    <string name="app_welcome">Parasitic Manager Suositellaan</string>
+    <string name="app_welcome_summary">LSPosed tukee nyt järjestelmän loisimista havaitsemisen välttämiseksi, voit avata loishallinnan ilmoituksesta. On suositeltavaa poistaa nykyinen sovellus.</string>
     <!-- LogsActivity -->
     <string name="menuSaveToSd">Tallenna</string>
     <string name="nav_item_logs_verbose">Verbose Lokit</string>
@@ -158,6 +165,8 @@
     <string name="list_empty">¶ \\\\_(konferenssissa)_\/ ¶\nEi mitään tässä</string>
     <!-- SettingsActivity -->
     <string name="settings_group_framework">Framework</string>
+    <string name="settings_disable_verbose_log">Sanallisten lokien poistaminen käytöstä</string>
+    <string name="settings_disable_verbose_log_summary">Raportti pyytää sisällyttämään sanalliset lokit</string>
     <string name="pure_black_dark_theme">Musta tumma teema</string>
     <string name="pure_black_dark_theme_summary">Käytä puhdas musta teema, jos tumma teema on käytössä</string>
     <string name="settings_group_theme">Teema</string>
@@ -181,10 +190,17 @@
     <string name="settings_translation_contributors">Käännöksen osallistujat</string>
     <string name="settings_translation">Osallistu käännökseen</string>
     <string name="settings_translation_summary">Auta meitä kääntämään %s kielellesi</string>
+    <string name="settings_create_shortcut_summary">Luo pikakuvake, joka voi avata loishallintaohjelman.</string>
+    <string name="settings_created_shortcut_summary">On luotu pikakuvake, jolla voit avata loishallinnan</string>
+    <string name="settings_enable_status_notification">Tilailmoitus</string>
+    <string name="settings_enable_status_notification_summary">Näytä ilmoitus, joka voi avata loishallintaohjelman</string>
+    <string name="disable_status_notification_error">Ei pikakuvaketta, ilmoitusta ei voi poistaa käytöstä</string>
     <string name="settings_update_channel">Päivitä kanava</string>
     <string name="update_channel_stable">Vakaa</string>
     <string name="update_channel_bate">Beeta</string>
     <string name="update_channel_nightly">Yöllinen rakentaminen</string>
+    <string name="settings_xposed_api_call_protection">Xposedin API-kutsujen suojaus</string>
+    <string name="settings_xposed_api_call_protection_summary">Estää dynaamisesti ladatun moduulin koodin käyttö Xposed API:n avulla, tämä voi rikkoa joitakin moduuleja, mutta hyödyttää turvallisuutta (kokeellinen ominaisuus).</string>
     <!-- Module Repo -->
     <string name="module_readme">Luennot</string>
     <string name="module_releases">Julkaisut</string>

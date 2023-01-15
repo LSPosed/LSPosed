@@ -8,4 +8,8 @@
     <string name="xposed_module_updated_notification_content">%s buvo atnaujintas, priverstinai sustabdykite ir iš naujo paleiskite jo taikymo srityje esančias programas</string>
     <string name="xposed_module_updated_notification_title_system">Atnaujintas \"Xposed\" modulis, reikalingas sistemos perkrovimas</string>
     <string name="xposed_module_updated_notification_content_system">%s buvo atnaujintas, nes srityje yra System Framework, reikalingas perkrovimas, kad būtų galima taikyti pakeitimus</string>
+    <string name="module_updated_channel_name">Modulio atnaujinimas baigtas</string>
+    <string name="status_channel_name">LSPatvirtintas statusas</string>
+    <string name="lsposed_running_notification_title">LSPpateiktas pakrautas</string>
+    <string name="lsposed_running_notification_content">Bakstelėkite pranešimą, kad atidarytumėte tvarkytuvę</string>
 </resources>

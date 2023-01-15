@@ -8,4 +8,8 @@
     <string name="xposed_module_updated_notification_content">%s on päivitetty, paina pysäytä ja käynnistä sovellukset uudelleen sen laajuudessa</string>
     <string name="xposed_module_updated_notification_title_system">Xposed moduuli päivitetty, järjestelmän uudelleenkäynnistys vaaditaan</string>
     <string name="xposed_module_updated_notification_content_system">%s on päivitetty, koska soveltamisala sisältää järjestelmän kehyksen, vaaditaan uudelleenkäynnistys muutosten käyttöön</string>
+    <string name="module_updated_channel_name">Moduulin päivitys valmis</string>
+    <string name="status_channel_name">LSPosed status</string>
+    <string name="lsposed_running_notification_title">LSPosed ladattu</string>
+    <string name="lsposed_running_notification_content">Avaa manager napauttamalla ilmoitusta</string>
 </resources>

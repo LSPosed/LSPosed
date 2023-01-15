@@ -64,6 +64,8 @@
     <string name="info_device">Seade</string>
     <string name="info_system_abi">Süsteemi ABI</string>
     <string name="info_dex2oat_wrapper">Dex Optimizer Wrapper</string>
+    <string name="enabled">Lubatud</string>
+    <string name="not_enabled">Pole lubatud</string>
     <string name="supported">Toetatud</string>
     <string name="unsupported">Toetamata</string>
     <string name="android_version_unsatisfied">Android versioon rahulolematu</string>
@@ -74,8 +76,13 @@
     <string name="update_lsposed">LSPosedi uuendamine</string>
     <string name="update_lsposed_msg">Kas kinnitada LSPosed uuendamine? See seade taaskäivitub pärast uuendamise lõpetamist</string>
     <!-- WelcomeDialog -->
+    <string name="parasitic_welcome">Tere tulemast LSPosedisse</string>
+    <string name="parasitic_welcome_summary">Sa kasutad parasiitide haldurit, mis võib luua otsetee või ikka avada teateid.</string>
+    <string name="parasitic_welcome_summary_no_shortcut_support">Kasutate parasiitide haldurit, mida saab avada teatisest.</string>
     <string name="create_shortcut">Loo otsetee</string>
     <string name="never_show">Mitte kunagi ei näidata</string>
+    <string name="app_welcome">Parasiitide haldur Soovitatav</string>
+    <string name="app_welcome_summary">LSPosed toetab nüüd süsteemi parasiitide tuvastamise vältimiseks, saate avada parasiitide haldaja teatest. Praegune rakendus on soovitatav eemaldada.</string>
     <!-- LogsActivity -->
     <string name="menuSaveToSd">Salvesta</string>
     <string name="nav_item_logs_verbose">Põhjalikud logid</string>
@@ -158,6 +165,8 @@
     <string name="list_empty">¯\\\\_(ツ)_\/¯\nSiin pole midagi.</string>
     <!-- SettingsActivity -->
     <string name="settings_group_framework">Raamistik</string>
+    <string name="settings_disable_verbose_log">Lülita sõnalised logid välja</string>
+    <string name="settings_disable_verbose_log_summary">Aruande probleemid taotluse lisada sõnalogid</string>
     <string name="pure_black_dark_theme">Must tume teema</string>
     <string name="pure_black_dark_theme_summary">Kasutage puhast musta teemat, kui tume teema on lubatud.</string>
     <string name="settings_group_theme">Teema</string>
@@ -181,10 +190,17 @@
     <string name="settings_translation_contributors">Tõlkimise toetajad</string>
     <string name="settings_translation">Osalege tõlkimises</string>
     <string name="settings_translation_summary">Aita meil tõlkida %s sinu keelde</string>
+    <string name="settings_create_shortcut_summary">Loo otsetee, mis võib avada parasiitide halduri</string>
+    <string name="settings_created_shortcut_summary">Parasiitide halduri avamiseks on loodud otsetee</string>
+    <string name="settings_enable_status_notification">Staatuse teatamine</string>
+    <string name="settings_enable_status_notification_summary">Kuva teatis, mis võib avada parasiitide halduri</string>
+    <string name="disable_status_notification_error">Otsetee puudub, teavitust ei saa keelata</string>
     <string name="settings_update_channel">Uuenduskanal</string>
     <string name="update_channel_stable">Stabiilne</string>
     <string name="update_channel_bate">Beeta</string>
     <string name="update_channel_nightly">Nightly build</string>
+    <string name="settings_xposed_api_call_protection">Xposed API call protection</string>
+    <string name="settings_xposed_api_call_protection_summary">Blokeerige dünaamiliselt laaditud mooduli kood, et kasutada Xposed API-t, see võib mõne mooduli rikkuda, kuid toob kasu turvalisusele (eksperimentaalne funktsioon)</string>
     <!-- Module Repo -->
     <string name="module_readme">Readme</string>
     <string name="module_releases">Väljaanded</string>
@@ -226,7 +242,7 @@
     <string name="color_brown">Pruun</string>
     <string name="color_blue_grey">Sinine hall</string>
     <plurals name="module_release_assets_download_count">
-        <item quantity="one">%d Lae alla</item>
-        <item quantity="other">%d allalaadimine</item>
+        <item quantity="one">allalaaditud on %d kord</item>
+        <item quantity="other">allalaaditud on %d korda</item>
     </plurals>
 </resources>

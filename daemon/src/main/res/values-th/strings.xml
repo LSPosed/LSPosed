@@ -8,4 +8,8 @@
     <string name="xposed_module_updated_notification_content">%s ได้รับการอัปเดตแล้ว โปรดบังคับหยุดและรีสตาร์ทแอปที่อยู่ในขอบเขต</string>
     <string name="xposed_module_updated_notification_title_system">อัปเดตโมดูล Xposed จำเป็นต้องรีบูตระบบ</string>
     <string name="xposed_module_updated_notification_content_system">%s ได้รับการอัปเดตแล้ว เนื่องจากขอบเขตมี System Framework จำเป็นต้องรีบูตเพื่อใช้การเปลี่ยนแปลง</string>
+    <string name="module_updated_channel_name">การอัปเดตโมดูลเสร็จสมบูรณ์</string>
+    <string name="status_channel_name">สถานะ LSPosed</string>
+    <string name="lsposed_running_notification_title">LSPosed โหลดแล้ว</string>
+    <string name="lsposed_running_notification_content">แตะการแจ้งเตือนเพื่อเปิดผู้จัดการ</string>
 </resources>
