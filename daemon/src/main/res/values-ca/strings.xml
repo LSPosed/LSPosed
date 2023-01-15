@@ -8,4 +8,8 @@
     <string name="xposed_module_updated_notification_content">%s s\'ha actualitzat, si us plau, força l\'aturada i reinici de les aplicacions del seu abast</string>
     <string name="xposed_module_updated_notification_title_system">Mòdul Xposed actualitzat, cal reiniciar el sistema</string>
     <string name="xposed_module_updated_notification_content_system">%s s\'ha actualitzat, ja que l\'abast conté System Framework, cal reiniciar per aplicar els canvis</string>
+    <string name="module_updated_channel_name">S\'ha completat l\'actualització del mòdul</string>
+    <string name="status_channel_name">Estat LSPosed</string>
+    <string name="lsposed_running_notification_title">LSPosed carregat</string>
+    <string name="lsposed_running_notification_content">Toqueu la notificació per obrir el gestor</string>
 </resources>
