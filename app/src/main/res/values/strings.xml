@@ -107,6 +107,7 @@
     <!-- ModulesActivity -->
     <string name="module_empty_description">(no description provided)</string>
     <string name="warning_xposed_min_version">This module requires a newer Xposed version (%d) and thus cannot be activated</string>
+    <string name="warning_target_version_higher">This module is designed for a newer Xposed version (%d) and thus some functionalities may not work</string>
     <string name="no_min_version_specified">This module does not specify the Xposed version it needs.</string>
     <string name="warning_min_version_too_low">This module was created for Xposed version %1$d, but due to incompatible changes in version %2$d, it has been disabled</string>
     <string name="warning_installed_on_external_storage">This module cannot be loaded because it\'s installed on the SD card, please move it to internal storage</string>

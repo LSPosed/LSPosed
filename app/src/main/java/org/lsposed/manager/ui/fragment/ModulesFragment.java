@@ -550,9 +550,11 @@ public class ModulesFragment extends BaseFragment implements ModuleUtil.ModuleLi
             if (item.minVersion == 0) {
                 warningText = getString(R.string.no_min_version_specified);
             } else if (installXposedVersion > 0 && item.minVersion > installXposedVersion) {
-                warningText = String.format(getString(R.string.warning_xposed_min_version), item.minVersion);
+                warningText = getString(R.string.warning_xposed_min_version, item.minVersion);
+            } else if (item.targetVersion > installXposedVersion) {
+                warningText = getString(R.string.warning_target_version_higher, item.targetVersion);
             } else if (item.minVersion < ModuleUtil.MIN_MODULE_VERSION) {
-                warningText = String.format(getString(R.string.warning_min_version_too_low), item.minVersion, ModuleUtil.MIN_MODULE_VERSION);
+                warningText = getString(R.string.warning_min_version_too_low, item.minVersion, ModuleUtil.MIN_MODULE_VERSION);
             } else if (item.isInstalledOnExternalStorage()) {
                 warningText = getString(R.string.warning_installed_on_external_storage);
             }
