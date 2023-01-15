@@ -8,4 +8,8 @@
     <string name="xposed_module_updated_notification_content">%s hate nûve kirin, ji kerema xwe bi zorê sepanan rawestînin û di çarçoveya wê de ji nû ve bidin destpêkirin</string>
     <string name="xposed_module_updated_notification_title_system">Modula Xposed hate nûve kirin, pêdivî ye ku pergalê ji nû ve dest pê bike</string>
     <string name="xposed_module_updated_notification_content_system">%s hate nûve kirin, ji ber ku çarçove Çarçoveya Pergalê dihewîne, ji bo sepandina guhertinan ji nû ve destpêkirinê hewce dike</string>
+    <string name="module_updated_channel_name">Nûvekirina modulê qediya</string>
+    <string name="status_channel_name">statûya LSP</string>
+    <string name="lsposed_running_notification_title">LSP hate barkirin</string>
+    <string name="lsposed_running_notification_content">Daxuyaniyê bikirtînin da ku rêveberê vekin</string>
 </resources>
