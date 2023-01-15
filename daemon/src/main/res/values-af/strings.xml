@@ -8,4 +8,8 @@
     <string name="xposed_module_updated_notification_content">%s is opgedateer, forseer asseblief stop en herbegin programme binne die omvang daarvan</string>
     <string name="xposed_module_updated_notification_title_system">Xposed-module is opgedateer, stelselherlaai vereis</string>
     <string name="xposed_module_updated_notification_content_system">%s is opgedateer, aangesien die omvang System Framework bevat, vereis herlaai om veranderinge toe te pas</string>
+    <string name="module_updated_channel_name">Module-opdatering voltooi</string>
+    <string name="status_channel_name">LSPosed status</string>
+    <string name="lsposed_running_notification_title">LSPosed gelaai</string>
+    <string name="lsposed_running_notification_content">Tik die kennisgewing om bestuurder oop te maak</string>
 </resources>
