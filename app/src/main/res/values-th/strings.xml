@@ -62,6 +62,8 @@
     <string name="info_device">อุปกรณ์</string>
     <string name="info_system_abi">ระบบ ABI</string>
     <string name="info_dex2oat_wrapper">Dex Optimizer Wrapper</string>
+    <string name="enabled">เปิดใช้งาน</string>
+    <string name="not_enabled">ไม่ได้เปิดใช้งาน</string>
     <string name="supported">ได้รับการสนับสนุน</string>
     <string name="unsupported">ไม่รองรับ</string>
     <string name="android_version_unsatisfied">เวอร์ชัน Android ไม่พอใจ</string>
@@ -73,9 +75,12 @@
     <string name="update_lsposed_msg">ยืนยันการอัปเดต LSPosed? อุปกรณ์นี้จะรีบูตหลังจากอัปเดตเสร็จสิ้น</string>
     <!-- WelcomeDialog -->
     <string name="parasitic_welcome">ยินดีต้อนรับสู่ LSPosed</string>
+    <string name="parasitic_welcome_summary">คุณกำลังใช้ตัวจัดการปรสิตซึ่งสามารถสร้างทางลัดหรือยังคงเปิดจากการแจ้งเตือน</string>
+    <string name="parasitic_welcome_summary_no_shortcut_support">คุณกำลังใช้ตัวจัดการกาฝากซึ่งสามารถเปิดได้จากการแจ้งเตือน</string>
     <string name="create_shortcut">สร้างทางลัด</string>
     <string name="never_show">ไม่ต้องแสดง</string>
     <string name="app_welcome">แนะนำ กำจัดไวรัส</string>
+    <string name="app_welcome_summary">LSPosed รองรับการปรสิตของระบบเพื่อหลีกเลี่ยงการตรวจจับ คุณสามารถเปิดโปรแกรมจัดการปรสิตได้จากการแจ้งเตือน ขอแนะนำให้ถอนการติดตั้งแอปพลิเคชันปัจจุบัน</string>
     <!-- LogsActivity -->
     <string name="menuSaveToSd">บันทึก</string>
     <string name="nav_item_logs_verbose">บันทึกอย่างละเอียด</string>
@@ -158,6 +163,8 @@
     <string name="list_empty">¯\\\\_(ツ)_\/¯\nไม่มีอะไรที่นี่</string>
     <!-- SettingsActivity -->
     <string name="settings_group_framework">กรอบ</string>
+    <string name="settings_disable_verbose_log">ปิดใช้งานบันทึกอย่างละเอียด</string>
+    <string name="settings_disable_verbose_log_summary">แจ้งปัญหาขอรวมบันทึกอย่างละเอียด</string>
     <string name="pure_black_dark_theme">ธีมสีดำมืด</string>
     <string name="pure_black_dark_theme_summary">ใช้ธีมสีดำล้วนหากเปิดใช้งานธีมสีเข้ม</string>
     <string name="settings_group_theme">ธีม</string>
@@ -181,10 +188,17 @@
     <string name="settings_translation_contributors">ผู้ร่วมแปล</string>
     <string name="settings_translation">มีส่วนร่วมในการแปล</string>
     <string name="settings_translation_summary">ช่วยเราแปล %s เป็นภาษาของคุณ</string>
+    <string name="settings_create_shortcut_summary">สร้างทางลัดที่สามารถเปิดตัวจัดการปรสิต</string>
+    <string name="settings_created_shortcut_summary">มีการสร้างทางลัดเพื่อเปิดตัวจัดการปรสิต</string>
+    <string name="settings_enable_status_notification">การแจ้งเตือนสถานะ</string>
+    <string name="settings_enable_status_notification_summary">แสดงการแจ้งเตือนที่สามารถเปิดตัวจัดการปรสิต</string>
+    <string name="disable_status_notification_error">ไม่มีทางลัด ไม่สามารถปิดการแจ้งเตือนได้</string>
     <string name="settings_update_channel">อัพเดทช่อง</string>
     <string name="update_channel_stable">มั่นคง</string>
     <string name="update_channel_bate">เบต้า</string>
     <string name="update_channel_nightly">สร้างทุกคืน</string>
+    <string name="settings_xposed_api_call_protection">การป้องกันการโทร Xposed API</string>
+    <string name="settings_xposed_api_call_protection_summary">บล็อกรหัสโมดูลที่โหลดแบบไดนามิกเพื่อใช้ Xposed API ซึ่งอาจทำให้บางโมดูลเสียหาย แต่ได้ประโยชน์ด้านความปลอดภัย (ฟีเจอร์ทดลอง)</string>
     <!-- Module Repo -->
     <string name="module_readme">ต้องอ่าน</string>
     <string name="module_releases">เผยแพร่</string>
