@@ -29,8 +29,9 @@ import android.webkit.WebView;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
-import androidx.core.view.ScrollingView;
-import androidx.viewpager2.widget.ViewPager2;
+import androidx.recyclerview.widget.RecyclerView;
+
+import rikka.widget.borderview.BorderRecyclerView;
 
 public class ScrollWebView extends WebView {
     public ScrollWebView(@NonNull Context context) {
@@ -61,7 +62,7 @@ public class ScrollWebView extends WebView {
 
     @Override
     protected void onOverScrolled(int scrollX, int scrollY, boolean clampedX, boolean clampedY) {
-        if (clampedX || clampedY) {
+        if (clampedX) {
             var viewParent = findViewParentIfNeeds(this);
             if (viewParent != null) viewParent.requestDisallowInterceptTouchEvent(false);
         }
@@ -71,7 +72,7 @@ public class ScrollWebView extends WebView {
     private static ViewParent findViewParentIfNeeds(View v) {
         var parent = v.getParent();
         if (parent == null) return null;
-        if (parent instanceof ViewPager2 || parent instanceof ScrollingView) {
+        if (parent instanceof RecyclerView && !(parent instanceof BorderRecyclerView)) {
             return parent;
         } else if (parent instanceof View) {
             return findViewParentIfNeeds((View) parent);
