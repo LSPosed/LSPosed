@@ -8,4 +8,8 @@
     <string name="xposed_module_updated_notification_content">%s on uuendatud, siis peatage ja taaskäivitage rakendused, mis kuuluvad selle kohaldamisalasse.</string>
     <string name="xposed_module_updated_notification_title_system">Xposed moodul uuendatud, süsteemi taaskäivitamine vajalik</string>
     <string name="xposed_module_updated_notification_content_system">%s on uuendatud, kuna reguleerimisala sisaldab System Framework, vajalik taaskäivitamine, et rakendada muudatusi</string>
+    <string name="module_updated_channel_name">Mooduli uuendamine lõpetatud</string>
+    <string name="status_channel_name">LSPosedi staatus</string>
+    <string name="lsposed_running_notification_title">LSPosed laaditud</string>
+    <string name="lsposed_running_notification_content">Halduri avamiseks puudutage märguannet</string>
 </resources>
