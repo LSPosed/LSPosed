@@ -143,7 +143,7 @@ dependencies {
     implementation("androidx.browser:browser:1.4.0")
     implementation("androidx.constraintlayout:constraintlayout:2.1.4")
     implementation("androidx.core:core:1.9.0")
-    implementation("androidx.fragment:fragment:1.5.4")
+    implementation("androidx.fragment:fragment:1.5.5")
     implementation("androidx.navigation:navigation-fragment:$navVersion")
     implementation("androidx.navigation:navigation-ui:$navVersion")
     implementation("androidx.preference:preference:1.2.0")
