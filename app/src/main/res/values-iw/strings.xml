@@ -69,6 +69,8 @@
     <string name="info_device">מכשיר</string>
     <string name="info_system_abi">ABI מערכת</string>
     <string name="info_dex2oat_wrapper">עטיפה של Dex Optimizer</string>
+    <string name="enabled">מופעל</string>
+    <string name="not_enabled">לא מופעל</string>
     <string name="supported">נתמך</string>
     <string name="unsupported">לא נתמך</string>
     <string name="android_version_unsatisfied">גרסת אנדרואיד לא מרוצה</string>
@@ -79,9 +81,13 @@
     <string name="update_lsposed">עדכון LSPosed</string>
     <string name="update_lsposed_msg">לאשר לעדכן את LSPosed? מכשיר זה יאתחל לאחר השלמת העדכון</string>
     <!-- WelcomeDialog -->
+    <string name="parasitic_welcome">ברוכים הבאים לLSPosed</string>
+    <string name="parasitic_welcome_summary">אתה משתמש במנהל הטפילי, שיכול ליצור קיצור דרך או עדיין להיפתח מהתראה.</string>
+    <string name="parasitic_welcome_summary_no_shortcut_support">אתה משתמש במנהל הטפילי, שיכול להיפתח מהתראה.</string>
     <string name="create_shortcut">צור קיצור דרך</string>
     <string name="never_show">לעולם על תראה</string>
     <string name="app_welcome">מנהל טפילים מומלץ</string>
+    <string name="app_welcome_summary">LSPosed תומך כעת בטפילת מערכת כדי למנוע זיהוי, אתה יכול לפתוח מנהל טפילי מהתראה. מומלץ להסיר את האפליקציה הנוכחית.</string>
     <!-- LogsActivity -->
     <string name="menuSaveToSd">שמור</string>
     <string name="nav_item_logs_verbose">יומנים מפורשים</string>
@@ -165,6 +171,7 @@
     <!-- SettingsActivity -->
     <string name="settings_group_framework">Framework</string>
     <string name="settings_disable_verbose_log">בטל verbose logs</string>
+    <string name="settings_disable_verbose_log_summary">בקשת דיווח על בעיות לכלול יומנים מילוליים</string>
     <string name="pure_black_dark_theme">ערכת נושא שחור כהה</string>
     <string name="pure_black_dark_theme_summary">השתמש בערכת נושא שחור טהור אם ערכת נושא כהה מופעלת</string>
     <string name="settings_group_theme">ערכת נושא</string>
@@ -188,10 +195,17 @@
     <string name="settings_translation_contributors">תורמים לתרגום</string>
     <string name="settings_translation">השתתף בתרגום</string>
     <string name="settings_translation_summary">עזור לנו לתרגם את %s לשפה שלך</string>
+    <string name="settings_create_shortcut_summary">צור קיצור דרך שיכול לפתוח מנהל טפילי</string>
+    <string name="settings_created_shortcut_summary">נוצר קיצור דרך לפתיחת מנהל טפילי</string>
+    <string name="settings_enable_status_notification">הודעת סטטוס</string>
+    <string name="settings_enable_status_notification_summary">הצג הודעה שיכולה לפתוח מנהל טפילי</string>
+    <string name="disable_status_notification_error">אין קיצור דרך, לא ניתן להשבית הודעה</string>
     <string name="settings_update_channel">ערוץ עדכון</string>
     <string name="update_channel_stable">יציב</string>
     <string name="update_channel_bate">בטא</string>
     <string name="update_channel_nightly">בניה לילית</string>
+    <string name="settings_xposed_api_call_protection">הגנה מפני קריאות Xposed API</string>
+    <string name="settings_xposed_api_call_protection_summary">חסום קוד מודול שנטען באופן דינמי לשימוש ב-Xposed API, זה עשוי לשבור מודולים מסוימים אך יועיל לאבטחה (תכונה נסיונית)</string>
     <!-- Module Repo -->
     <string name="module_readme">קרא אותי</string>
     <string name="module_releases">גרסאות</string>
