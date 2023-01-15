@@ -138,6 +138,7 @@ materialThemeBuilder {
 dependencies {
     val glideVersion = "4.14.2"
     val navVersion: String by project
+    val kotlinVersion: String by project
     annotationProcessor("com.github.bumptech.glide:compiler:$glideVersion")
     implementation("androidx.activity:activity:1.6.1")
     implementation("androidx.browser:browser:1.4.0")
@@ -168,6 +169,8 @@ dependencies {
     implementation("dev.rikka.rikkax.layoutinflater:layoutinflater:1.2.0")
     implementation("me.zhanghai.android.appiconloader:appiconloader:1.5.0")
     implementation("org.lsposed.hiddenapibypass:hiddenapibypass:4.3")
+    implementation(kotlin("stdlib", kotlinVersion))
+    implementation("org.jetbrains.kotlinx:kotlinx-coroutines-core:1.6.4")
     implementation(projects.services.managerService)
 
     val appCenter = "5.0.0"
