@@ -221,10 +221,9 @@ public class LSPManagerService extends ILSPManagerService.Stub {
             if (pkgInfo != null) {
                 cacheDir = new File(HiddenApiBridge.ApplicationInfo_credentialProtectedDataDir(pkgInfo.applicationInfo) + "/cache");
             }
-
-            // The cache directory does not exist after `pm clear`
-            cacheDir.mkdirs();
-            ensureWebViewPermission(cacheDir);
+            var webviewDir = new File(cacheDir, "WebView");
+            webviewDir.mkdirs();
+            ensureWebViewPermission(webviewDir);
         } catch (Throwable e) {
             Log.w(TAG, "cannot ensure webview dir", e);
         }

@@ -11,6 +11,7 @@ pluginManagement {
     plugins {
         id("com.android.library") version agpVersion
         id("com.android.application") version agpVersion
+        id("org.jetbrains.kotlin.android") version "1.8.0"
         id("androidx.navigation.safeargs") version navVersion
         id("dev.rikka.tools.autoresconfig") version "1.2.2"
         id("dev.rikka.tools.materialthemebuilder") version "1.3.3"
