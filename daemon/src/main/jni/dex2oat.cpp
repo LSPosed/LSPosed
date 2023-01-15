@@ -32,6 +32,7 @@
 #include <sys/sendfile.h>
 #include <sys/stat.h>
 #include <sys/system_properties.h>
+#include <sys/wait.h>
 #include <unistd.h>
 
 #include "logging.h"
@@ -112,7 +113,9 @@ Java_org_lsposed_lspd_service_Dex2OatService_initNative(JNIEnv *env, jobject thi
 extern "C"
 JNIEXPORT void JNICALL
 Java_org_lsposed_lspd_service_Dex2OatService_setEnabled(JNIEnv *env, jobject thiz, jboolean enabled) {
-    if (vfork() == 0) {
+    if (pid_t pid = fork(); pid > 0) { // parent
+        waitpid(pid, nullptr, 0);
+    } else { // child
         int ns = open("/proc/1/ns/mnt", O_RDONLY);
         setns(ns, CLONE_NEWNS);
         close(ns);
