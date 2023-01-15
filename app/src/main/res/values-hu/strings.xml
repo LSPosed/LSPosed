@@ -65,6 +65,8 @@
     <string name="info_device">Eszköz</string>
     <string name="info_system_abi">Rendszer ABI</string>
     <string name="info_dex2oat_wrapper">Dex Optimizer Wrapper</string>
+    <string name="enabled">Engedélyezve</string>
+    <string name="not_enabled">Nincs engedélyezve</string>
     <string name="supported">Támogatott</string>
     <string name="unsupported">Nem támogatott</string>
     <string name="android_version_unsatisfied">Az Android verzió nem megfelelő</string>
@@ -75,9 +77,13 @@
     <string name="update_lsposed">Az LSPosed frissítése</string>
     <string name="update_lsposed_msg">Jóváhagyja az LSPosed frissítését? A készülék a frissítés befejezése után újra fog indulni</string>
     <!-- WelcomeDialog -->
+    <string name="parasitic_welcome">Üdvözöljük az LSPosed</string>
+    <string name="parasitic_welcome_summary">Ön használja a parazita menedzser, amely képes létrehozni parancsikont vagy még mindig nyitva értesítésből.</string>
+    <string name="parasitic_welcome_summary_no_shortcut_support">Ön a parazita-kezelőt használja, amely az értesítésből megnyitható.</string>
     <string name="create_shortcut">Parancsikon létrehozása</string>
     <string name="never_show">Soha ne mutassa</string>
     <string name="app_welcome">Parazita menedzser Ajánlott</string>
+    <string name="app_welcome_summary">Az LSPosed mostantól támogatja a rendszerparazitizációt a felismerés elkerülése érdekében, a parazita-kezelőt az értesítésből nyithatja meg. Javasoljuk, hogy távolítsa el az aktuális alkalmazást.</string>
     <!-- LogsActivity -->
     <string name="menuSaveToSd">Mentés</string>
     <string name="nav_item_logs_verbose">Szöveges naplók</string>
@@ -161,6 +167,7 @@
     <!-- SettingsActivity -->
     <string name="settings_group_framework">Keretrendszer</string>
     <string name="settings_disable_verbose_log">A szöveges naplózás kikapcsolása</string>
+    <string name="settings_disable_verbose_log_summary">Jelentési kérdések kérése a verbózus naplók felvételére</string>
     <string name="pure_black_dark_theme">Fekete sötét téma</string>
     <string name="pure_black_dark_theme_summary">Teljesen fekete téma használata, ha a sötét téma engedélyezve van</string>
     <string name="settings_group_theme">Téma</string>
@@ -184,10 +191,17 @@
     <string name="settings_translation_contributors">A fordításban közreműködők</string>
     <string name="settings_translation">Részvétel a fordításban</string>
     <string name="settings_translation_summary">Segítsen nekünk lefordítani az %s -t az Ön nyelvére</string>
+    <string name="settings_create_shortcut_summary">Hozzon létre egy parancsikont, amely képes megnyitni a parazita menedzser</string>
+    <string name="settings_created_shortcut_summary">A parazita-kezelő megnyitásához parancsikon jött létre</string>
+    <string name="settings_enable_status_notification">Állapot értesítés</string>
+    <string name="settings_enable_status_notification_summary">Értesítés megjelenítése, amely megnyithatja a parazita-kezelőt</string>
+    <string name="disable_status_notification_error">Nincs parancsikon, nem lehet letiltani az értesítést</string>
     <string name="settings_update_channel">Frissítési csatorna</string>
     <string name="update_channel_stable">Stabil</string>
     <string name="update_channel_bate">Béta</string>
     <string name="update_channel_nightly">Nightly</string>
+    <string name="settings_xposed_api_call_protection">Xposed API hívásvédelem</string>
+    <string name="settings_xposed_api_call_protection_summary">A dinamikusan betöltött modul kódjának blokkolása az Xposed API használatához, ez néhány modult megtörhet, de a biztonság javára válik (kísérleti funkció).</string>
     <!-- Module Repo -->
     <string name="module_readme">Olvass el</string>
     <string name="module_releases">Kiadások</string>
