@@ -110,7 +110,7 @@ jobs:
           daemon/build/symbols
           dex2oat/build/symbols
     - name: Post to channel
-      if: ${{ success() && ( ( github.event_name != 'pull_request' && github.ref == 'refs/heads/master' ) || github.ref_type == 'tag' ) }}
+      if: ${{ success() && ( ( github.event_name != 'pull_request' && github.ref == 'refs/heads/master' ) || github.ref_type != 'tag' ) }}
       env:
         CHANNEL_ID: ${{ secrets.CHANNEL_ID }}
         DISCUSSION_ID: ${{ secrets.DISCUSSION_ID }}
