@@ -66,6 +66,8 @@
     <string name="info_device">Uređaj</string>
     <string name="info_system_abi">System ABI</string>
     <string name="info_dex2oat_wrapper">Dex Optimizer Wrapper</string>
+    <string name="enabled">Omogućeno</string>
+    <string name="not_enabled">Nije omogućeno</string>
     <string name="supported">Podržano</string>
     <string name="unsupported">Nepodržano</string>
     <string name="android_version_unsatisfied">Verzija Androida nije zadovoljavajuća</string>
@@ -76,9 +78,13 @@
     <string name="update_lsposed">Ažurirajte LSPosed</string>
     <string name="update_lsposed_msg">Potvrditi ažuriranje LSPosed? Ovaj će se uređaj ponovno pokrenuti nakon završetka ažuriranja</string>
     <!-- WelcomeDialog -->
+    <string name="parasitic_welcome">Dobrodošli u LSPosed</string>
+    <string name="parasitic_welcome_summary">Koristite parazitski upravitelj, koji može stvoriti prečac ili još uvijek otvoriti iz obavijesti.</string>
+    <string name="parasitic_welcome_summary_no_shortcut_support">Koristite parazitski upravitelj koji se može otvoriti iz obavijesti.</string>
     <string name="create_shortcut">Napravi prečac</string>
     <string name="never_show">Nikad ne pokazuj</string>
     <string name="app_welcome">Parazitski Manager Preporučen</string>
+    <string name="app_welcome_summary">LSPosed sada podržava parazitizaciju sustava kako bi se izbjeglo otkrivanje, možete otvoriti parazitski upravitelj iz obavijesti. Preporuča se deinstalirati trenutnu aplikaciju.</string>
     <!-- LogsActivity -->
     <string name="menuSaveToSd">Sačuvaj</string>
     <string name="nav_item_logs_verbose">Opširni zapisi</string>
@@ -162,6 +168,7 @@
     <!-- SettingsActivity -->
     <string name="settings_group_framework">Framework</string>
     <string name="settings_disable_verbose_log">Onemogući opširne zapise</string>
+    <string name="settings_disable_verbose_log_summary">Izvješće o problemima zahtijeva uključivanje opširnih zapisa</string>
     <string name="pure_black_dark_theme">Crna tamna tema</string>
     <string name="pure_black_dark_theme_summary">Koristi čistu crnu temu ako je tamna tema omogućena</string>
     <string name="settings_group_theme">Tema</string>
@@ -185,10 +192,17 @@
     <string name="settings_translation_contributors">Suradnici prijevoda</string>
     <string name="settings_translation">Sudjelujte u prevođenju</string>
     <string name="settings_translation_summary">Pomozite nam prevesti %s na vaš jezik</string>
+    <string name="settings_create_shortcut_summary">Napravite prečac koji može otvoriti parazitski upravitelj</string>
+    <string name="settings_created_shortcut_summary">Stvoren je prečac za otvaranje parazitskog upravitelja</string>
+    <string name="settings_enable_status_notification">Obavijest o statusu</string>
+    <string name="settings_enable_status_notification_summary">Prikaži obavijest koja može otvoriti parazitski upravitelj</string>
+    <string name="disable_status_notification_error">Nema prečaca, nije moguće onemogućiti obavijest</string>
     <string name="settings_update_channel">Ažurirajte kanal</string>
     <string name="update_channel_stable">Stabilan</string>
     <string name="update_channel_bate">Beta</string>
     <string name="update_channel_nightly">Noćna izgradnja</string>
+    <string name="settings_xposed_api_call_protection">Xposed API zaštita poziva</string>
+    <string name="settings_xposed_api_call_protection_summary">Blokirajte dinamički učitani kod modula za korištenje Xposed API-ja, to može pokvariti neke module, ali ima koristi od sigurnosti (eksperimentalna značajka)</string>
     <!-- Module Repo -->
     <string name="module_readme">Pročitaj me</string>
     <string name="module_releases">Izdanja</string>
