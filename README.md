@@ -28,12 +28,13 @@ Android 8.1 ~ 13
 
 ## Download
 
-For stable releases, please go to [Github Releases page](https://github.com/LSPosed/LSPosed/releases)
-For canary build, please check [Github Actions](https://github.com/LSPosed/LSPosed/actions)
+- For stable releases, please go to [Github Releases page](https://github.com/LSPosed/LSPosed/releases)
+- For canary build, please check [Github Actions](https://github.com/LSPosed/LSPosed/actions)
+
 Note: debug builds are only available in Github Actions.
 
 ## Get Help
-
+**Only bug reports from **THE LATEST DEBUG BUILD** will be accepted.**
 - GitHub issues: [Issues](https://github.com/LSPosed/LSPosed/issues/)
 - (For Chinese speakers) 本项目只接受英语**标题**的issue。如果您不懂英语，请使用[翻译工具](https://www.deepl.com/zh/translator)
 
