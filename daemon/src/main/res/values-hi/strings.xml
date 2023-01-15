@@ -8,4 +8,8 @@
     <string name="xposed_module_updated_notification_content">%s अपडेट कर दिया गया है, कृपया बलपूर्वक रोकें और इसके दायरे में ऐप्स को पुनरारंभ करें</string>
     <string name="xposed_module_updated_notification_title_system">एक्सपोज़ड मॉड्यूल अपडेट किया गया, सिस्टम रीबूट की आवश्यकता है</string>
     <string name="xposed_module_updated_notification_content_system">%s को अपडेट कर दिया गया है, क्योंकि स्कोप में सिस्टम फ्रेमवर्क है, परिवर्तनों को लागू करने के लिए रीबूट की आवश्यकता है</string>
+    <string name="module_updated_channel_name">मॉड्यूल अद्यतन पूर्ण</string>
+    <string name="status_channel_name">एलएसपोस्ड स्थिति</string>
+    <string name="lsposed_running_notification_title">LSPosed लोड किया गया</string>
+    <string name="lsposed_running_notification_content">मैनेजर खोलने के लिए नोटिफिकेशन पर टैप करें</string>
 </resources>
