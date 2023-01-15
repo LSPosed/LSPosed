@@ -8,4 +8,8 @@
     <string name="xposed_module_updated_notification_content">%s به‌روزرسانی شده است لطفا برنامه‌ ها را متوقف کرده و سپس دوباره اجرا کنید</string>
     <string name="xposed_module_updated_notification_title_system">ماژول Xposed به روز رسانی شده است لطفا دستگاه را خاموش و روشن کنید</string>
     <string name="xposed_module_updated_notification_content_system">%s به‌روزرسانی شده است و چون محدوده شامل فریمورک سیستم است برای انجام تغییرات باید دستگاه خود را خاموش و روشن کنید</string>
+    <string name="module_updated_channel_name">به روز رسانی ماژول کامل شد</string>
+    <string name="status_channel_name">وضعیت LSP</string>
+    <string name="lsposed_running_notification_title">LSP بارگیری شد</string>
+    <string name="lsposed_running_notification_content">روی اعلان ضربه بزنید تا مدیر باز شود</string>
 </resources>
