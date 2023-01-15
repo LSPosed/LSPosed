@@ -68,6 +68,8 @@
     <string name="info_device">Įrenginys</string>
     <string name="info_system_abi">Sistemos ABI</string>
     <string name="info_dex2oat_wrapper">\"Dex Optimizer Wrapper</string>
+    <string name="enabled">Įjungta</string>
+    <string name="not_enabled">Neįjungta</string>
     <string name="supported">Palaikomas</string>
     <string name="unsupported">Nepalaikomas</string>
     <string name="android_version_unsatisfied">\"Android\" versija nepatenkinti</string>
@@ -78,8 +80,13 @@
     <string name="update_lsposed">Atnaujinti LSPosed</string>
     <string name="update_lsposed_msg">Patvirtinkite, kad atnaujintumėte LSPosed? Baigus atnaujinimą šis prietaisas bus perkrautas</string>
     <!-- WelcomeDialog -->
+    <string name="parasitic_welcome">Sveiki atvykę į LSPosed</string>
+    <string name="parasitic_welcome_summary">Jūs naudojate parazitinį tvarkytuvą, kuris gali sukurti nuorodą arba vis dar atidaryti iš pranešimo.</string>
+    <string name="parasitic_welcome_summary_no_shortcut_support">Naudojate parazitinį tvarkytuvą, kuris gali būti atidarytas iš pranešimo.</string>
     <string name="create_shortcut">Sukurti nuorodą</string>
     <string name="never_show">Niekada nerodykite</string>
+    <string name="app_welcome">Rekomenduojama parazitinė vadybininkė</string>
+    <string name="app_welcome_summary">\"LSPosed\" dabar palaiko sistemos parazitavimą, kad išvengtų aptikimo, galite atidaryti parazitų tvarkyklę iš pranešimo. Rekomenduojama pašalinti dabartinę programą.</string>
     <!-- LogsActivity -->
     <string name="menuSaveToSd">Išsaugoti</string>
     <string name="nav_item_logs_verbose">Žurnalai su verbaline informacija</string>
@@ -162,6 +169,8 @@
     <string name="list_empty">\\\\_(ツ)_\/¯\nČia nieko nėra</string>
     <!-- SettingsActivity -->
     <string name="settings_group_framework">Sistema</string>
+    <string name="settings_disable_verbose_log">Išjungti verbalinius žurnalus</string>
+    <string name="settings_disable_verbose_log_summary">Ataskaitos klausimų prašymas įtraukti verbalinius žurnalus</string>
     <string name="pure_black_dark_theme">Juoda tamsi tema</string>
     <string name="pure_black_dark_theme_summary">Naudokite grynai juodą temą, jei įjungta tamsi tema</string>
     <string name="settings_group_theme">Tema</string>
@@ -185,10 +194,17 @@
     <string name="settings_translation_contributors">Vertimo paslaugų teikėjai</string>
     <string name="settings_translation">Dalyvaukite vertimo procese</string>
     <string name="settings_translation_summary">Padėkite mums išversti %s į savo kalbą</string>
+    <string name="settings_create_shortcut_summary">Sukurti nuorodą, kuri gali atidaryti parazitinį tvarkytuvą</string>
+    <string name="settings_created_shortcut_summary">Sukurtas spartusis klavišas parazitų tvarkyklei atidaryti</string>
+    <string name="settings_enable_status_notification">Pranešimas apie būseną</string>
+    <string name="settings_enable_status_notification_summary">Rodyti pranešimą, kad galima atidaryti parazitinį tvarkytuvą</string>
+    <string name="disable_status_notification_error">Nėra sparčiųjų klavišų, negalima išjungti pranešimo</string>
     <string name="settings_update_channel">Atnaujinti kanalą</string>
     <string name="update_channel_stable">Stabilus</string>
     <string name="update_channel_bate">Beta</string>
     <string name="update_channel_nightly">Naktinis kūrimas</string>
+    <string name="settings_xposed_api_call_protection">\"Xposed API\" skambučių apsauga</string>
+    <string name="settings_xposed_api_call_protection_summary">Blokuoti dinamiškai įkeliamo modulio kodą, kad būtų naudojama \"Xposed API\", tai gali sugadinti kai kuriuos modulius, bet naudinga saugumui (eksperimentinė funkcija)</string>
     <!-- Module Repo -->
     <string name="module_readme">Readme</string>
     <string name="module_releases">Leidiniai</string>
