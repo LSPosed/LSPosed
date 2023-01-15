@@ -8,4 +8,8 @@
     <string name="xposed_module_updated_notification_content">%s کو اپ ڈیٹ کر دیا گیا ہے، براہ کرم اس کے دائرہ کار میں ایپس کو زبردستی روکنے اور دوبارہ شروع کریں۔</string>
     <string name="xposed_module_updated_notification_title_system">Xposed ماڈیول کو اپ ڈیٹ کر دیا گیا، سسٹم ریبوٹ درکار ہے۔</string>
     <string name="xposed_module_updated_notification_content_system">%s کو اپ ڈیٹ کر دیا گیا ہے، چونکہ دائرہ کار میں سسٹم فریم ورک ہے، تبدیلیاں لاگو کرنے کے لیے ریبوٹ کی ضرورت ہے۔</string>
+    <string name="module_updated_channel_name">ماڈیول اپ ڈیٹ مکمل ہو گیا۔</string>
+    <string name="status_channel_name">ایل ایس پیز کی حیثیت</string>
+    <string name="lsposed_running_notification_title">ایل ایس پیز لوڈ شدہ</string>
+    <string name="lsposed_running_notification_content">مینیجر کو کھولنے کے لیے نوٹیفکیشن کو تھپتھپائیں۔</string>
 </resources>
