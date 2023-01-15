@@ -215,6 +215,7 @@ public final class ModuleUtil {
         public final String versionName;
         public final long versionCode;
         public final int minVersion;
+        public final int targetVersion;
         public final long installTime;
         public final long updateTime;
         public ApplicationInfo app;
@@ -244,6 +245,14 @@ public final class ModuleUtil {
                 this.minVersion = extractIntPart((String) minVersionRaw);
             } else {
                 this.minVersion = 0;
+            }
+            Object targetVersionRaw = app.metaData.get("xposedtargetversion");
+            if (targetVersionRaw instanceof Integer) {
+                this.targetVersion = (Integer) targetVersionRaw;
+            } else if (targetVersionRaw instanceof String) {
+                this.targetVersion = extractIntPart((String) targetVersionRaw);
+            } else {
+                this.targetVersion = this.minVersion;
             }
         }
 
