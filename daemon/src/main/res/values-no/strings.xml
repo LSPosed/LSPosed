@@ -8,4 +8,8 @@
     <string name="xposed_module_updated_notification_content">%s har blitt oppdatert, vennligst tvang-stopp og start apper på nytt i virkeområdet</string>
     <string name="xposed_module_updated_notification_title_system">Xposed modul oppdatert, system-omstart kreves</string>
     <string name="xposed_module_updated_notification_content_system">%s er blitt oppdatert, siden omfanget inneholder systemramme, nødvendig for omstart av endringene</string>
+    <string name="module_updated_channel_name">Moduloppdatering fullført</string>
+    <string name="status_channel_name">LSPosert status</string>
+    <string name="lsposed_running_notification_title">LSPosert lastet</string>
+    <string name="lsposed_running_notification_content">Trykk på varselet for å åpne administrator</string>
 </resources>
