@@ -8,4 +8,8 @@
     <string name="xposed_module_updated_notification_content">%s a fost actualizat, vă rugăm să forțați oprirea și repornirea aplicațiilor din domeniul său de aplicare</string>
     <string name="xposed_module_updated_notification_title_system">Modulul Xposed a fost actualizat, este necesară repornirea sistemului</string>
     <string name="xposed_module_updated_notification_content_system">%s a fost actualizat, deoarece domeniul de aplicare conține System Framework, necesară repornirea pentru a aplica modificările</string>
+    <string name="module_updated_channel_name">Actualizarea modulelor este completă</string>
+    <string name="status_channel_name">LSPosed status</string>
+    <string name="lsposed_running_notification_title">LSPosed încărcat</string>
+    <string name="lsposed_running_notification_content">Atingeți ușor notificarea pentru a deschide managerul</string>
 </resources>
