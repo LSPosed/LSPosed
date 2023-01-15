@@ -61,7 +61,7 @@
     <string name="info_system_version">Versi sistem</string>
     <string name="info_device">Perangkat</string>
     <string name="info_system_abi">Sistem ABI</string>
-    <string name="info_dex2oat_wrapper">Pembungkus Pengoptimal Dex</string>
+    <string name="info_dex2oat_wrapper">Pembungkus Pengoptimalan Dex</string>
     <string name="enabled">Diaktifkan</string>
     <string name="not_enabled">Tidak diaktifkan</string>
     <string name="supported">Didukung</string>
@@ -75,12 +75,12 @@
     <string name="update_lsposed_msg">Konfirmasi untuk pembaruan LSPosed? Perangkat ini akan mulai ulang setelah pembaruan selesai</string>
     <!-- WelcomeDialog -->
     <string name="parasitic_welcome">Selamat datang di LSPosed</string>
-    <string name="parasitic_welcome_summary">Anda menggunakan pengelola siluman, yang dapat membuat pintasan atau masih bisa dibuka melalui notifikasi.</string>
-    <string name="parasitic_welcome_summary_no_shortcut_support">Anda menggunakan pengelola siluman, yang dapat dibuka melalui notifikasi.</string>
+    <string name="parasitic_welcome_summary">Anda menggunakan manajer parasit, yang dapat membuat pintasan atau masih terbuka dari notifikasi.</string>
+    <string name="parasitic_welcome_summary_no_shortcut_support">Anda menggunakan manajer parasit, yang dapat dibuka dari pemberitahuan.</string>
     <string name="create_shortcut">Buat pintasan</string>
     <string name="never_show">Jangan pernah tampilkan</string>
-    <string name="app_welcome">Pengelola Siluman Direkomendasikan</string>
-    <string name="app_welcome_summary">LSPosed sekarang mendukung sistem siluman untuk menghindari deteksi, Anda dapat membuka pengelola siluman dari notifikasi. Direkomendasikan untuk membongkar aplikasi ini.</string>
+    <string name="app_welcome">Manajer Parasit Direkomendasikan</string>
+    <string name="app_welcome_summary">LSPosed sekarang mendukung parasitisasi sistem untuk menghindari deteksi, Anda dapat membuka manajer parasit dari pemberitahuan. Disarankan untuk menghapus aplikasi saat ini.</string>
     <!-- LogsActivity -->
     <string name="menuSaveToSd">Simpan</string>
     <string name="nav_item_logs_verbose">Log Verbose</string>
@@ -188,10 +188,10 @@
     <string name="settings_translation_contributors">Kontributor terjemahan</string>
     <string name="settings_translation">Berpartisipasi dalam terjemahan</string>
     <string name="settings_translation_summary">Bantu kami menerjemahkan %s kedalam bahasamu</string>
-    <string name="settings_create_shortcut_summary">Buat sebuah pintasan yang dapat membuka pengelola siluman</string>
-    <string name="settings_created_shortcut_summary">Sebuah pintasan telah dibuat untuk membuka pengelola siluman</string>
+    <string name="settings_create_shortcut_summary">Buat pintasan yang dapat membuka manajer parasit</string>
+    <string name="settings_created_shortcut_summary">Pintasan telah dibuat untuk membuka manajer parasit</string>
     <string name="settings_enable_status_notification">Notifikasi Status</string>
-    <string name="settings_enable_status_notification_summary">Menampilkan sebuah notifikasi yang dapat membuka pengelola siluman</string>
+    <string name="settings_enable_status_notification_summary">Tampilkan notifikasi yang dapat membuka manajer parasit</string>
     <string name="disable_status_notification_error">Tidak ada pintasan, tidak dapat mematikan notifikasi</string>
     <string name="settings_update_channel">Perbarui saluran</string>
     <string name="update_channel_stable">Stabil</string>
