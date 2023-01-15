@@ -64,6 +64,8 @@
     <string name="info_device">Enhet</string>
     <string name="info_system_abi">System ABI</string>
     <string name="info_dex2oat_wrapper">Dex Optimizer Wrapper</string>
+    <string name="enabled">Aktivert</string>
+    <string name="not_enabled">Ikke aktivert</string>
     <string name="supported">Støttes</string>
     <string name="unsupported">Ustøttet</string>
     <string name="android_version_unsatisfied">Android-versjonen er ikke fornøyd</string>
@@ -74,8 +76,13 @@
     <string name="update_lsposed">Oppdateringen LSPosed</string>
     <string name="update_lsposed_msg">Bekreft oppdatering av LSPosed? Denne enheten vil starte på nytt etter fullført oppdatering</string>
     <!-- WelcomeDialog -->
+    <string name="parasitic_welcome">Velkommen til LSPosed</string>
+    <string name="parasitic_welcome_summary">Du bruker den parasittiske manageren, som kan opprette snarvei eller fortsatt åpne fra varsling.</string>
+    <string name="parasitic_welcome_summary_no_shortcut_support">Du bruker parasittbehandleren, som kan åpnes fra varsling.</string>
     <string name="create_shortcut">Opprett snarvei</string>
     <string name="never_show">Vis aldri</string>
+    <string name="app_welcome">Parasittisk leder anbefales</string>
+    <string name="app_welcome_summary">LSPosed støtter nå systemparasittering for å unngå deteksjon, du kan åpne parasitic manager fra varsling. Det anbefales å avinstallere gjeldende applikasjon.</string>
     <!-- LogsActivity -->
     <string name="menuSaveToSd">Lagre</string>
     <string name="nav_item_logs_verbose">Detaljert logg</string>
@@ -158,6 +165,8 @@
     <string name="list_empty">########\\\\_(∙)_\/ ″\nIngenting her</string>
     <!-- SettingsActivity -->
     <string name="settings_group_framework">Framework</string>
+    <string name="settings_disable_verbose_log">Deaktiver detaljerte logger</string>
+    <string name="settings_disable_verbose_log_summary">Rapporter problemer forespørsel om å inkludere detaljerte logger</string>
     <string name="pure_black_dark_theme">Svart mørkt tema</string>
     <string name="pure_black_dark_theme_summary">Bruk det svarte temaet hvis mørkt tema er aktivert</string>
     <string name="settings_group_theme">Tema</string>
@@ -181,10 +190,17 @@
     <string name="settings_translation_contributors">Oversettelse bidragsytere</string>
     <string name="settings_translation">Delta i oversettelse</string>
     <string name="settings_translation_summary">Hjelp oss med å oversette %s til ditt språk</string>
+    <string name="settings_create_shortcut_summary">Lag en snarvei som kan åpne parasitic manager</string>
+    <string name="settings_created_shortcut_summary">En snarvei er opprettet for å åpne parasitic manager</string>
+    <string name="settings_enable_status_notification">Statusvarsel</string>
+    <string name="settings_enable_status_notification_summary">Vis et varsel som kan åpne parasitic manager</string>
+    <string name="disable_status_notification_error">Ingen snarvei, kan ikke deaktivere varsling</string>
     <string name="settings_update_channel">Oppdater kanal</string>
     <string name="update_channel_stable">Stabil</string>
     <string name="update_channel_bate">beta</string>
     <string name="update_channel_nightly">Nattlig bygg</string>
+    <string name="settings_xposed_api_call_protection">Xposed API-anropsbeskyttelse</string>
+    <string name="settings_xposed_api_call_protection_summary">Blokker dynamisk lastet modulkode for å bruke Xposed API, dette kan ødelegge noen moduler, men gi fordeler for sikkerheten (eksperimentell funksjon)</string>
     <!-- Module Repo -->
     <string name="module_readme">Lesmeg</string>
     <string name="module_releases">Utgivelser</string>
