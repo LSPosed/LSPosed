@@ -64,7 +64,7 @@ public class BaseActivity extends MaterialActivity {
                     if (UpdateUtil.canInstall()) {
                         new FlashDialogBuilder(this, (d, i) -> finish()).show();
                     } else {
-                        NavUtil.startURL(this, getString(R.string.about_source));
+                        NavUtil.startURL(this, getString(R.string.install_url));
                         finish();
                     }
                 })
