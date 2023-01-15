@@ -68,6 +68,8 @@
     <string name="info_device">Пристрій</string>
     <string name="info_system_abi">Розрядність процесора</string>
     <string name="info_dex2oat_wrapper">Обгортка Dex Optimizer</string>
+    <string name="enabled">Увімкнено</string>
+    <string name="not_enabled">Не ввімкнено</string>
     <string name="supported">Підтримується</string>
     <string name="unsupported">Не підтримується</string>
     <string name="android_version_unsatisfied">Версія Android не підтримується</string>
@@ -78,9 +80,13 @@
     <string name="update_lsposed">Оновити LSPosed</string>
     <string name="update_lsposed_msg">Підтвердити оновлення LSPosed? Цей пристрій перезавантажиться після завершення оновлення</string>
     <!-- WelcomeDialog -->
+    <string name="parasitic_welcome">Ласкаво просимо до LSPosed</string>
+    <string name="parasitic_welcome_summary">Ви використовуєте паразитний менеджер, який може створювати ярлик або все одно відкриватися з повідомлення.</string>
+    <string name="parasitic_welcome_summary_no_shortcut_support">Ви використовуєте паразитний менеджер, який може відкриватися з повідомлення.</string>
     <string name="create_shortcut">Створити ярлик</string>
     <string name="never_show">Ніколи не показувати</string>
     <string name="app_welcome">Рекомендується менеджер-паразит</string>
+    <string name="app_welcome_summary">LSPosed тепер підтримує паразитування системи, щоб уникнути виявлення, ви можете відкрити диспетчер паразитів з повідомлення. Рекомендується видалити поточну програму.</string>
     <!-- LogsActivity -->
     <string name="menuSaveToSd">Зберегти</string>
     <string name="nav_item_logs_verbose">Детальні звіти</string>
@@ -164,6 +170,7 @@
     <!-- SettingsActivity -->
     <string name="settings_group_framework">Framework</string>
     <string name="settings_disable_verbose_log">Вимкнути детальні журнали</string>
+    <string name="settings_disable_verbose_log_summary">Вимоги до звітів про проблеми, що виникають, включати розгорнуті журнали</string>
     <string name="pure_black_dark_theme">Чорна тема</string>
     <string name="pure_black_dark_theme_summary">Використовувати повністю чорну тему, коли темну тему увімкнено</string>
     <string name="settings_group_theme">Тема</string>
@@ -187,10 +194,17 @@
     <string name="settings_translation_contributors">Автори перекладу</string>
     <string name="settings_translation">Допомогти з перекладом</string>
     <string name="settings_translation_summary">Доповнити український переклад %s</string>
+    <string name="settings_create_shortcut_summary">Створіть ярлик, який зможе відкрити паразитний менеджер</string>
+    <string name="settings_created_shortcut_summary">Створено ярлик для відкриття паразитного менеджера</string>
+    <string name="settings_enable_status_notification">Повідомлення про статус</string>
+    <string name="settings_enable_status_notification_summary">Показати повідомлення, яке може відкрити паразитний менеджер</string>
+    <string name="disable_status_notification_error">Немає ярлика, не можна відключити сповіщення</string>
     <string name="settings_update_channel">Канал оновлень</string>
     <string name="update_channel_stable">Стабільний</string>
     <string name="update_channel_bate">Бета-версія</string>
     <string name="update_channel_nightly">Нічна збірка</string>
+    <string name="settings_xposed_api_call_protection">Захист викликів Xposed API</string>
+    <string name="settings_xposed_api_call_protection_summary">Блокувати динамічно завантажений код модуля для використання Xposed API, це може призвести до поломки деяких модулів, але покращить безпеку (експериментальна функція)</string>
     <!-- Module Repo -->
     <string name="module_readme">Опис</string>
     <string name="module_releases">Релізи</string>
