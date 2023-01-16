@@ -69,8 +69,8 @@ public class LoadedApkGetCLHooker extends XC_MethodHook {
 
             String packageName = ActivityThread.currentPackageName();
             String processName = ActivityThread.currentProcessName();
-            boolean isFirstApplication = packageName != null && processName != null && packageName.equals(loadedApk.getPackageName());
-            if (!isFirstApplication) {
+            boolean isFirstPackage = packageName != null && processName != null && packageName.equals(loadedApk.getPackageName());
+            if (!isFirstPackage) {
                 packageName = loadedApk.getPackageName();
                 processName = AndroidAppHelper.currentProcessName();
             } else if (packageName.equals("android")) {
@@ -91,11 +91,11 @@ public class LoadedApkGetCLHooker extends XC_MethodHook {
             lpparam.processName = processName;
             lpparam.classLoader = classLoader;
             lpparam.appInfo = loadedApk.getApplicationInfo();
-            lpparam.isFirstApplication = isFirstApplication;
+            lpparam.isFirstApplication = isFirstPackage;
 
             hookNewXSP(lpparam);
 
-            Hookers.logD("Call handleLoadedPackage: packageName=" + lpparam.packageName + " processName=" + lpparam.processName + " isFirstApplication=" + isFirstApplication + " classLoader=" + lpparam.classLoader + " appInfo=" + lpparam.appInfo);
+            Hookers.logD("Call handleLoadedPackage: packageName=" + lpparam.packageName + " processName=" + lpparam.processName + " isFirstPackage=" + isFirstPackage + " classLoader=" + lpparam.classLoader + " appInfo=" + lpparam.appInfo);
             XC_LoadPackage.callAll(lpparam);
 
             LSPosedContext.callOnPackageLoaded(new XposedModuleInterface.PackageLoadedParam() {
@@ -118,14 +118,8 @@ public class LoadedApkGetCLHooker extends XC_MethodHook {
                 }
 
                 @Override
-                public boolean isFirstApplication() {
-                    return isFirstApplication;
-                }
-
-                @Nullable
-                @Override
-                public Bundle getExtras() {
-                    return null;
+                public boolean isFirstPackage() {
+                    return isFirstPackage;
                 }
             });
         } catch (Throwable t) {

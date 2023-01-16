@@ -22,10 +22,7 @@ package org.lsposed.lspd.hooker;
 
 import static org.lsposed.lspd.util.Utils.logD;
 
-import android.os.Bundle;
-
 import androidx.annotation.NonNull;
-import androidx.annotation.Nullable;
 
 import org.lsposed.lspd.impl.LSPosedContext;
 import org.lsposed.lspd.util.Hookers;
@@ -58,12 +55,6 @@ public class StartBootstrapServicesHooker extends XC_MethodHook {
                 @NonNull
                 public ClassLoader getClassLoader() {
                     return HandleSystemServerProcessHooker.systemServerCL;
-                }
-
-                @Override
-                @Nullable
-                public Bundle getExtras() {
-                    return null;
                 }
             });
         } catch (Throwable t) {

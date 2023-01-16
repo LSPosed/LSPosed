@@ -179,18 +179,6 @@ public class LSPosedContext extends XposedContext {
                         public String getProcessName() {
                             return processName;
                         }
-
-                        @NonNull
-                        @Override
-                        public String getAppDataDir() {
-                            return appDir;
-                        }
-
-                        @Nullable
-                        @Override
-                        public Bundle getExtras() {
-                            return null;
-                        }
                     });
                     modules.add(moduleContext);
                 } catch (Throwable e) {
