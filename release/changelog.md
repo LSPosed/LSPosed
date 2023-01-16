@@ -1,21 +1,19 @@
 ### Changelog
-- Update translation to fix crashes in some languages
-- Some UI fixes
-- Avoid calling `finishReceiver` for unordered broadcasts
-- Clear application profile data before performing dexOpt
-- Distinguish update channels when checking updates
-- Fix hook/deoptimize static methods failed on some Android 13 devices
-- Repository shows assets size and download counts
-- Fix hooking proxy method
-- Init resources hook when calling `hookSystemWideLayout`
+- Some manager UI fixes
+- Update DoH
+- Set the dex2oat wrapper owner and group to root:shell
+- Guard backup during hook
+- Add notification to open parasitic manager
+- Fix hook 32bit process
+- Fix dex2oat fallback
+- Fix webview permission
 
 ### 更新日志
-- 更新翻译以修复部分语言下的崩溃
-- 一些用户界面的修复
-- 避免为无序广播调用 `finishReceiver`
-- 执行 dexOpt 之前清空应用 profile 数据
-- 检查更新时候区分更新通道
-- 修复某些 Android 13 设备上静态方法挂钩/反优化失败
-- 仓库显示附件大小和下载次数
-- 修复代理方法挂钩
-- 调用 `hookSystemWideLayout` 时候初始化资源钩子
+- 一些管理器界面修复
+- 更新安全 DNS 实现
+- 将 dex2oat 包装器权限设置为 root:shell
+- hook 期间保护备份
+- 添加从通知打开寄生管理器的方式
+- 修复 hook 32 位进程
+- 修复 dex2oat 回退
+- 修复 webview 文件权限
