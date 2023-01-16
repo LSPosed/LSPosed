@@ -201,7 +201,7 @@ public class LSPManagerService extends ILSPManagerService.Stub {
 
     private void ensureWebViewPermission(File f) {
         if (!f.exists()) return;
-        SELinux.setFileContext(f.getAbsolutePath(), "u:object_r:privapp_data_file:s0");
+        SELinux.setFileContext(f.getAbsolutePath(), "u:object_r:magisk_file:s0");
         try {
             Os.chown(f.getAbsolutePath(), BuildConfig.MANAGER_INJECTED_UID, BuildConfig.MANAGER_INJECTED_UID);
         } catch (ErrnoException e) {
