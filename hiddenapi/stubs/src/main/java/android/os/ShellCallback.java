@@ -1,7 +1,7 @@
 package android.os;
 
 public class ShellCallback implements Parcelable {
-    public static final Parcelable.Creator<ShellCallback> CREATOR = new Creator<>() {
+    public static final Parcelable.Creator<ShellCallback> CREATOR = new Creator<ShellCallback>() {
         @Override
         public ShellCallback createFromParcel(Parcel source) {
             throw new IllegalArgumentException("STUB");

@@ -23,10 +23,10 @@ import java.util.Enumeration;
 import java.util.List;
 import java.util.Objects;
 import java.util.jar.JarFile;
-import java.util.stream.Collectors;
 import java.util.zip.ZipEntry;
 
 import hidden.ByteBufferDexClassLoader;
+import sun.misc.CompoundEnumeration;
 
 @SuppressWarnings("ConstantConditions")
 public final class LspModuleClassLoader extends ByteBufferDexClassLoader {
@@ -135,7 +135,12 @@ public final class LspModuleClassLoader extends ByteBufferDexClassLoader {
     protected URL findResource(String name) {
         try {
             var urlHandler = new ClassPathURLStreamHandler(apk);
-            return urlHandler.getEntryUrlOrNull(name);
+            var url = urlHandler.getEntryUrlOrNull(name);
+            if (url == null) {
+                // noinspection FinalizeCalledExplicitly
+                urlHandler.finalize();
+            }
+            return url;
         } catch (IOException e) {
             return null;
         }
@@ -171,16 +176,8 @@ public final class LspModuleClassLoader extends ByteBufferDexClassLoader {
     @NonNull
     @Override
     public String toString() {
-        if (apk == null) {
-            return "LspModuleClassLoader[instantiating]";
-        }
-        var nativeLibraryDirsString = nativeLibraryDirs.stream()
-                .map(File::getPath)
-                .collect(Collectors.joining(", "));
-        return "LspModuleClassLoader[" +
-                "module=" + apk + ", " +
-                "nativeLibraryDirs=" + nativeLibraryDirsString + ", " +
-                super.toString() + "]";
+        if (apk == null) return "LspModuleClassLoader[instantiating]";
+        return "LspModuleClassLoader[module=" + apk + ", " + super.toString() + "]";
     }
 
     public static ClassLoader loadApk(String apk,
