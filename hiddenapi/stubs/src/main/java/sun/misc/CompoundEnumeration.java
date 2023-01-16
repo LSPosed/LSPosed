@@ -1,4 +1,4 @@
-package org.lsposed.lspd.util;
+package sun.misc;
 
 import java.util.Enumeration;
 import java.util.NoSuchElementException;

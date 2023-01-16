@@ -89,6 +89,18 @@ public class ParasiticManagerHooker {
         return managerPkgInfo;
     }
 
+    private static void sendBinderToManager(final ClassLoader classLoader, IBinder binder) {
+        try {
+            var clazz = XposedHelpers.findClass("org.lsposed.manager.Constants", classLoader);
+            var ok = (boolean) XposedHelpers.callStaticMethod(clazz, "setBinder",
+                    new Class[]{IBinder.class}, binder);
+            if (ok) return;
+            throw new RuntimeException("setBinder: " + false);
+        } catch (Throwable t) {
+            Utils.logW("Could not send binder to LSPosed Manager", t);
+        }
+    }
+
     private static void hookForManager(ILSPManagerService managerService) {
         var managerApkHooker = new XC_MethodHook() {
             @Override
@@ -111,7 +123,7 @@ public class ParasiticManagerHooker {
                     protected void afterHookedMethod(MethodHookParam param) {
                         var pkgInfo = getManagerPkgInfo(null);
                         if (pkgInfo != null && XposedHelpers.getObjectField(param.thisObject, "mApplicationInfo") == pkgInfo.applicationInfo) {
-                            InstallerVerifier.sendBinderToManager((ClassLoader) param.getResult(), managerService.asBinder());
+                            sendBinderToManager((ClassLoader) param.getResult(), managerService.asBinder());
                             unhooks[0].unhook();
                         }
                     }

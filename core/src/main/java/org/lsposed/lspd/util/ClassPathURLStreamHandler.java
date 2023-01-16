@@ -13,6 +13,7 @@ import java.util.jar.JarFile;
 import java.util.zip.ZipEntry;
 
 import sun.net.www.ParseUtil;
+import sun.net.www.protocol.jar.Handler;
 
 final class ClassPathURLStreamHandler extends Handler {
     private final String fileUri;
@@ -41,7 +42,7 @@ final class ClassPathURLStreamHandler extends Handler {
     }
 
     @Override
-    protected void finalize() throws Throwable {
+    protected void finalize() throws IOException {
         jarFile.close();
     }
 
