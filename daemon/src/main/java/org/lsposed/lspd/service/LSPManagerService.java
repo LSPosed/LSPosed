@@ -263,6 +263,12 @@ public class LSPManagerService extends ILSPManagerService.Stub {
                     // or it's run by ourself after killing, resume it
                     return true;
                 } else {
+                    // Check the flag in case new launch comes before finishing
+                    // the previous one to avoid racing.
+                    if (pendingManager) {
+                        Log.d(TAG, "manager is still on its way when new launch comes, skipping");
+                        return false;
+                    }
                     // new parasitic manager launch, set the flag and kill
                     // old processes
                     // we do it by cancelling the launch (return false)
