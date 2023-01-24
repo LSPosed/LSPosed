@@ -968,14 +968,71 @@ public class LSPosedContext extends XposedContext {
 
     @Nullable
     @Override
-    public Object invokeOrigin(@NonNull Method method, @Nullable Object thisObject, Object[] args) throws InvocationTargetException, IllegalAccessException {
+    public Object invokeOrigin(@NonNull Method method, @Nullable Object thisObject, Object[] args) throws InvocationTargetException, IllegalArgumentException, IllegalAccessException {
         return HookBridge.invokeOriginalMethod(method, thisObject, args);
+    }
+
+    private static char getTypeShorty(Class<?> type) {
+        if (type == int.class) {
+            return 'I';
+        } else if (type == long.class) {
+            return 'J';
+        } else if (type == float.class) {
+            return 'F';
+        } else if (type == double.class) {
+            return 'D';
+        } else if (type == boolean.class) {
+            return 'Z';
+        } else if (type == byte.class) {
+            return 'B';
+        } else if (type == char.class) {
+            return 'C';
+        } else if (type == short.class) {
+            return 'S';
+        } else if (type == void.class) {
+            return 'V';
+        } else {
+            return 'L';
+        }
+    }
+
+    private static char[] getExecutableShorty(Executable executable) {
+        var parameterTypes = executable.getParameterTypes();
+        var shorty = new char[parameterTypes.length + 1];
+        shorty[0] = getTypeShorty(executable instanceof Method ? ((Method) executable).getReturnType() : void.class);
+        for (int i = 1; i < shorty.length; i++) {
+            shorty[i] = getTypeShorty(parameterTypes[i - 1]);
+        }
+        return shorty;
     }
 
     @Nullable
     @Override
-    public <T> T newInstanceOrigin(@NonNull Constructor<T> constructor, Object[] args) throws InvocationTargetException, IllegalAccessException, InstantiationException {
-        return HookBridge.invokeOriginalConstructor(constructor, constructor.getDeclaringClass(), args);
+    public Object invokeSpecial(@NonNull Method method, @NonNull Object thisObject, Object... args) throws InvocationTargetException, IllegalArgumentException, IllegalAccessException {
+        if (Modifier.isStatic(method.getModifiers())) {
+            throw new IllegalArgumentException("Cannot invoke special on static method: " + method);
+        }
+        return HookBridge.invokeSpecialMethod(method, getExecutableShorty(method), method.getDeclaringClass(), thisObject, args);
+    }
+
+    @NonNull
+    @Override
+    public <T> T newInstanceOrigin(@NonNull Constructor<T> constructor, Object... args) throws InvocationTargetException, IllegalAccessException, InstantiationException {
+        var obj = HookBridge.allocateObject(constructor.getDeclaringClass());
+        HookBridge.invokeOriginalMethod(constructor, obj, args);
+        return obj;
+    }
+
+    @NonNull
+    @Override
+    public <T, U extends T> U newInstanceSpecial(@NonNull Constructor<T> constructor, @NonNull Class<U> subClass, Object... args) throws InvocationTargetException, IllegalArgumentException, IllegalAccessException, InstantiationException {
+        var superClass = constructor.getDeclaringClass();
+        if (!superClass.isAssignableFrom(subClass)) {
+            throw new IllegalArgumentException(subClass + " is not inherited from " + superClass);
+        }
+        var obj = HookBridge.allocateObject(subClass);
+        HookBridge.invokeSpecialMethod(constructor, getExecutableShorty(constructor), superClass, obj, args);
+        return obj;
     }
 
     @Override
