@@ -3,8 +3,10 @@ package org.lsposed.lspd.util;
 import static org.lsposed.lspd.service.ServiceManager.TAG;
 
 import android.content.ContentResolver;
+import android.content.Context;
 import android.content.ContextWrapper;
 import android.content.pm.ApplicationInfo;
+import android.content.pm.PackageManager;
 import android.content.res.Resources;
 import android.os.UserHandle;
 import android.util.Log;
@@ -73,5 +75,10 @@ public class FakeContext extends ContextWrapper {
     @Override
     public String getAttributionTag() {
         return null;
+    }
+
+    @Override
+    public Context createPackageContext(String packageName, int flags) throws PackageManager.NameNotFoundException {
+        throw new PackageManager.NameNotFoundException(packageName);
     }
 }
