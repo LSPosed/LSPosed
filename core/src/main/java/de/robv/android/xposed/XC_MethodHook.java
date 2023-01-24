@@ -231,12 +231,6 @@ public abstract class XC_MethodHook extends XCallback {
 
         @Nullable
         @Override
-        public Object invokeOrigin(@Nullable Object thisObject, Object[] args) throws InvocationTargetException, IllegalAccessException {
-            return HookBridge.invokeOriginalMethod((Executable) method, thisObject, args);
-        }
-
-        @Nullable
-        @Override
         public Object invokeOrigin() throws InvocationTargetException, IllegalAccessException {
             return HookBridge.invokeOriginalMethod((Executable) method, thisObject, args);
         }

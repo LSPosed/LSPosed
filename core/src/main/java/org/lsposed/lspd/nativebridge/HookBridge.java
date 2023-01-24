@@ -13,9 +13,11 @@ public class HookBridge {
 
     public static native boolean deoptimizeMethod(Executable method);
 
+    public static native <T> T allocateObject(Class<T> clazz) throws InstantiationException;
+
     public static native Object invokeOriginalMethod(Executable method, Object thisObject, Object... args) throws IllegalAccessException, IllegalArgumentException, InvocationTargetException;
 
-    public static native <T> T invokeOriginalConstructor(Constructor<T> method, Class<T> clazz, Object... args) throws IllegalAccessException, IllegalArgumentException, InvocationTargetException;
+    public static native <T> Object invokeSpecialMethod(Executable method, char[] shorty, Class<T> clazz, Object thisObject, Object... args) throws IllegalAccessException, IllegalArgumentException, InvocationTargetException;
 
     @FastNative
     public static native boolean instanceOf(Object obj, Class<?> clazz);
