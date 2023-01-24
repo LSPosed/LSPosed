@@ -1025,7 +1025,7 @@ public class LSPosedContext extends XposedContext {
 
     @NonNull
     @Override
-    public <T, U extends T> U newInstanceSpecial(@NonNull Constructor<T> constructor, @NonNull Class<U> subClass, Object... args) throws InvocationTargetException, IllegalArgumentException, IllegalAccessException, InstantiationException {
+    public <T, U> U newInstanceSpecial(@NonNull Constructor<T> constructor, @NonNull Class<U> subClass, Object... args) throws InvocationTargetException, IllegalArgumentException, IllegalAccessException, InstantiationException {
         var superClass = constructor.getDeclaringClass();
         if (!superClass.isAssignableFrom(subClass)) {
             throw new IllegalArgumentException(subClass + " is not inherited from " + superClass);
