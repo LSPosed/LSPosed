@@ -294,7 +294,11 @@ public class LSPNotificationManager {
             nm.enqueueNotificationWithTag("android", opPkg, modulePackageName,
                     pushAndGetNotificationId(SCOPE_CHANNEL_ID, modulePackageName, moduleUserId),
                     notification, 0);
-        } catch (RemoteException e) {
+        } catch (Throwable e) {
+            try {
+                callback.onScopeRequestFailed(scopePackageName, e.getMessage());
+            } catch (RemoteException ignored) {
+            }
             Log.e(TAG, "request module scope", e);
         }
     }
