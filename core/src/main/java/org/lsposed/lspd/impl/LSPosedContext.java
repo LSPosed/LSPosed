@@ -51,6 +51,7 @@ import java.io.IOException;
 import java.io.InputStream;
 import java.lang.reflect.Constructor;
 import java.lang.reflect.Executable;
+import java.lang.reflect.InvocationTargetException;
 import java.lang.reflect.Method;
 import java.lang.reflect.Modifier;
 import java.lang.reflect.Proxy;
@@ -963,6 +964,18 @@ public class LSPosedContext extends XposedContext {
     @Override
     public <T> boolean deoptimize(@NonNull Constructor<T> constructor) {
         return doDeoptimize(constructor);
+    }
+
+    @Nullable
+    @Override
+    public Object invokeOrigin(@NonNull Method method, @Nullable Object thisObject, Object[] args) throws InvocationTargetException, IllegalAccessException {
+        return HookBridge.invokeOriginalMethod(method, thisObject, args);
+    }
+
+    @Nullable
+    @Override
+    public <T> T newInstanceOrigin(@NonNull Constructor<T> constructor, Object[] args) throws InvocationTargetException, IllegalAccessException, InstantiationException {
+        return HookBridge.invokeOriginalConstructor(constructor, constructor.getDeclaringClass(), args);
     }
 
     @Override

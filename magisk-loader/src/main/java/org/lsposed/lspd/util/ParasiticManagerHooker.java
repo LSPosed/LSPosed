@@ -236,7 +236,8 @@ public class ParasiticManagerHooker {
                         info.applicationInfo.packageName = packageName + ".origin";
                         var originalPkgInfo = ActivityThread.currentActivityThread().getPackageInfoNoCheck(info.applicationInfo, HiddenApiBridge.Resources_getCompatibilityInfo(ctx.getResources()));
                         XposedHelpers.setObjectField(originalPkgInfo, "mPackageName", packageName);
-                        originalContext = (Context) XposedHelpers.callStaticMethod(XposedHelpers.findClass("android.app.ContextImpl", null), "createAppContext", ActivityThread.currentActivityThread(), originalPkgInfo);
+                        originalContext = (Context) XposedHelpers.callStaticMethod(XposedHelpers.findClass("android.app.ContextImpl", null),
+                                "createAppContext", ActivityThread.currentActivityThread(), originalPkgInfo);
                         info.applicationInfo.packageName = packageName;
                     }
                     param.args[ctxIdx] = originalContext;

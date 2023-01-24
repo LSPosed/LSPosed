@@ -143,6 +143,25 @@ LSP_DEF_NATIVE_METHOD(jobject, HookBridge, invokeOriginalMethod, jobject hookMet
     return env->CallObjectMethod(to_call, invoke, thiz, args);
 }
 
+LSP_DEF_NATIVE_METHOD(jobject, HookBridge, invokeOriginalConstructor, jobject hookConstructor,
+                      jclass cls, jobjectArray args) {
+    auto target = env->FromReflectedMethod(hookConstructor);
+    HookItem * hook_item = nullptr;
+    {
+        std::shared_lock lk(hooked_lock);
+        if (auto found = hooked_methods.find(target); found != hooked_methods.end()) {
+            hook_item = found->second.get();
+        }
+    }
+    jobject to_call = hookConstructor;
+    if (hook_item) {
+        std::unique_lock lk(backup_lock);
+        if (hook_item->backup) to_call = hook_item->backup;
+    }
+    auto thiz = env->AllocObject(cls);
+    return env->CallObjectMethod(to_call, invoke, thiz, args);
+}
+
 LSP_DEF_NATIVE_METHOD(jboolean, HookBridge, instanceOf, jobject object, jclass expected_class) {
     return env->IsInstanceOf(object, expected_class);
 }
@@ -180,6 +199,7 @@ static JNINativeMethod gMethods[] = {
     LSP_NATIVE_METHOD(HookBridge, unhookMethod, "(Ljava/lang/reflect/Executable;Ljava/lang/Object;)Z"),
     LSP_NATIVE_METHOD(HookBridge, deoptimizeMethod, "(Ljava/lang/reflect/Executable;)Z"),
     LSP_NATIVE_METHOD(HookBridge, invokeOriginalMethod, "(Ljava/lang/reflect/Executable;Ljava/lang/Object;[Ljava/lang/Object;)Ljava/lang/Object;"),
+    LSP_NATIVE_METHOD(HookBridge, invokeOriginalConstructor, "(Ljava/lang/reflect/Constructor;Ljava/lang/Class;[Ljava/lang/Object;)Ljava/lang/Object;"),
     LSP_NATIVE_METHOD(HookBridge, instanceOf, "(Ljava/lang/Object;Ljava/lang/Class;)Z"),
     LSP_NATIVE_METHOD(HookBridge, setTrusted, "(Ljava/lang/Object;)Z"),
     LSP_NATIVE_METHOD(HookBridge, callbackSnapshot, "(Ljava/lang/reflect/Executable;)[Ljava/lang/Object;"),
