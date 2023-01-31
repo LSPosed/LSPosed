@@ -78,6 +78,8 @@ public class RepoLoader {
     private boolean repoLoaded = false;
     private static final String originRepoUrl = "https://modules.lsposed.org/";
     private static final String backupRepoUrl = "https://modules-vercel.lsposed.org/";
+
+    private static final String secondBackupRepoUrl = "https://modules-cloudflare.lsposed.org/";
     private static String repoUrl = originRepoUrl;
     private final Resources resources = App.getInstance().getResources();
     private final String[] channels = resources.getStringArray(R.array.update_channel_values);
@@ -119,8 +121,11 @@ public class RepoLoader {
             for (RepoListener listener : listeners) {
                 listener.onThrowable(e);
             }
-            if (!repoUrl.equals(backupRepoUrl)) {
+            if (repoUrl.equals(originRepoUrl)) {
                 repoUrl = backupRepoUrl;
+                loadRemoteData();
+            } else if (repoUrl.equals(backupRepoUrl)) {
+                repoUrl = secondBackupRepoUrl;
                 loadRemoteData();
             }
         }
@@ -246,8 +251,11 @@ public class RepoLoader {
             @Override
             public void onFailure(@NonNull Call call, @NonNull IOException e) {
                 Log.e(App.TAG, call.request().url() + e.getMessage());
-                if (!repoUrl.equals(backupRepoUrl)) {
+                if (repoUrl.equals(originRepoUrl)) {
                     repoUrl = backupRepoUrl;
+                    loadRemoteReleases(packageName);
+                } else if (repoUrl.equals(backupRepoUrl)) {
+                    repoUrl = secondBackupRepoUrl;
                     loadRemoteReleases(packageName);
                 } else {
                     for (RepoListener listener : listeners) {
