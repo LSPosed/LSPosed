@@ -77,7 +77,7 @@ public class RepoLoader {
     private final Set<RepoListener> listeners = ConcurrentHashMap.newKeySet();
     private boolean repoLoaded = false;
     private static final String originRepoUrl = "https://modules.lsposed.org/";
-    private static final String backupRepoUrl = "https://cdn.jsdelivr.net/gh/Xposed-Modules-Repo/modules@gh-pages/";
+    private static final String backupRepoUrl = "https://modules-vercel.lsposed.org/";
     private static String repoUrl = originRepoUrl;
     private final Resources resources = App.getInstance().getResources();
     private final String[] channels = resources.getStringArray(R.array.update_channel_values);
