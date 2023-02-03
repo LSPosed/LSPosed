@@ -112,7 +112,7 @@ public class LSPosedDexParser implements DexParser {
         }
     }
 
-    static class LSPosedId implements Id {
+    static class LSPosedId<Self extends Id<Self>> implements Id<Self> {
         final int id;
 
         LSPosedId(int id) {
@@ -123,9 +123,14 @@ public class LSPosedDexParser implements DexParser {
         public int getId() {
             return id;
         }
+
+        @Override
+        public int compareTo(Self o) {
+            return id - o.getId();
+        }
     }
 
-    static class LSPosedStringId extends LSPosedId implements StringId {
+    static class LSPosedStringId extends LSPosedId<StringId> implements StringId {
         @NonNull
         final String string;
 
@@ -141,7 +146,7 @@ public class LSPosedDexParser implements DexParser {
         }
     }
 
-    class LSPosedTypeId extends LSPosedId implements TypeId {
+    class LSPosedTypeId extends LSPosedId<TypeId> implements TypeId {
         @NonNull
         final StringId descriptor;
 
@@ -157,7 +162,7 @@ public class LSPosedDexParser implements DexParser {
         }
     }
 
-    class LSPosedProtoId extends LSPosedId implements ProtoId {
+    class LSPosedProtoId extends LSPosedId<ProtoId> implements ProtoId {
         @NonNull
         final StringId shorty;
         @NonNull
@@ -198,7 +203,7 @@ public class LSPosedDexParser implements DexParser {
         }
     }
 
-    class LSPosedFieldId extends LSPosedId implements FieldId {
+    class LSPosedFieldId extends LSPosedId<FieldId> implements FieldId {
         @NonNull
         final TypeId type;
         @NonNull
@@ -232,7 +237,7 @@ public class LSPosedDexParser implements DexParser {
         }
     }
 
-    class LSPosedMethodId extends LSPosedId implements MethodId {
+    class LSPosedMethodId extends LSPosedId<MethodId> implements MethodId {
         @NonNull
         final TypeId declaringClass;
         @NonNull
