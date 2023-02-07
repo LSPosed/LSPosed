@@ -1,1 +1,1 @@
-allow system_server system_server process execmem
+allow dex2oat dex2oat_exec file execute_no_trans

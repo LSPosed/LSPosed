@@ -147,7 +147,7 @@ fun afterEval() = android.applicationVariants.forEach { variant ->
         into(magiskDir)
         from("${rootProject.projectDir}/README.md")
         from("$projectDir/magisk_module") {
-            exclude("riru.sh", "module.prop", "customize.sh", "sepolicy.rule", "daemon")
+            exclude("riru.sh", "module.prop", "customize.sh", "daemon")
         }
         from("$projectDir/magisk_module") {
             include("module.prop")
@@ -177,7 +177,7 @@ fun afterEval() = android.applicationVariants.forEach { variant ->
         }
         if (flavorLowered == "riru") {
             from("${projectDir}/magisk_module") {
-                include("riru.sh", "sepolicy.rule")
+                include("riru.sh")
                 val tokens = mapOf(
                     "RIRU_MODULE_LIB_NAME" to "lspd",
                     "RIRU_MODULE_API_VERSION" to moduleMaxRiruApiVersion.toString(),

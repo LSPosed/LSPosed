@@ -22,8 +22,8 @@ import com.android.build.api.variant.ApplicationAndroidComponentsExtension
 import com.android.build.gradle.BaseExtension
 import org.eclipse.jgit.api.Git
 import org.eclipse.jgit.storage.file.FileRepositoryBuilder
-import java.nio.file.Paths
 import org.gradle.internal.os.OperatingSystem
+import java.nio.file.Paths
 
 plugins {
     id("com.android.application") apply false
@@ -122,7 +122,7 @@ fun Project.configureBaseExtension() {
                         "-DINJECTED_AID=$injectedPackageUid",
                     )
                     cppFlags("-std=c++20", *flags)
-                    cFlags("-std=c18", *flags)
+                    cFlags("-std=c2x", *flags)
                     arguments(
                         "-DANDROID_STL=none",
                     )

@@ -1,7 +1,6 @@
 #!/system/bin/sh
 
 dir=${0%/*}
-magiskPath=$(magisk --path)
 tmpLspdApk="/data/local/tmp/daemon.apk"
 debug=@DEBUG@
 flavor=@FLAVOR@

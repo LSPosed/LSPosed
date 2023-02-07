@@ -117,6 +117,7 @@ public class ServiceManager {
         systemServerService = new LSPSystemServerService(systemServerMaxRetry);
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.Q) {
             dex2OatService = new Dex2OatService();
+            dex2OatService.start();
         }
 
         systemServerService.putBinderForSystemServer();
