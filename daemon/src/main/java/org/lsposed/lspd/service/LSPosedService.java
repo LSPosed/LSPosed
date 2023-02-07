@@ -31,9 +31,12 @@ import android.content.pm.ApplicationInfo;
 import android.content.pm.PackageManager;
 import android.net.Uri;
 import android.os.Binder;
+import android.os.Build;
 import android.os.Bundle;
 import android.os.IBinder;
 import android.os.RemoteException;
+import android.provider.Telephony;
+import android.telephony.TelephonyManager;
 import android.util.Log;
 
 import org.lsposed.daemon.BuildConfig;
@@ -277,8 +280,12 @@ public class LSPosedService extends ILSPosedService.Stub {
 
     private void registerSecretCodeReceiver() {
         IntentFilter intentFilter = new IntentFilter();
-        intentFilter.addAction("android.provider.Telephony.SECRET_CODE");
-        intentFilter.addAction("android.telephony.action.SECRET_CODE");
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.Q) {
+            intentFilter.addAction(TelephonyManager.ACTION_SECRET_CODE);
+        } else {
+            // noinspection InlinedApi
+            intentFilter.addAction(Telephony.Sms.Intents.SECRET_CODE_ACTION);
+        }
         intentFilter.addDataAuthority("5776733", null);
         intentFilter.addDataScheme("android_secret_code");
 
