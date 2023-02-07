@@ -22,7 +22,7 @@ import org.apache.tools.ant.filters.FixCrLfFilter
 import org.apache.tools.ant.filters.ReplaceTokens
 import java.io.ByteArrayOutputStream
 import java.security.MessageDigest
-import java.util.*
+import java.util.Locale
 
 plugins {
     id("com.android.application")
@@ -87,7 +87,6 @@ android {
                     arguments += "-DAPI=${name.toLowerCase()}"
                 }
             }
-            buildConfigField("String", "API", """"$name"""")
         }
 
         create("Riru") {

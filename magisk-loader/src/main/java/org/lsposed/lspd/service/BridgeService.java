@@ -85,7 +85,7 @@ public class BridgeService {
         try {
             IApplicationThread at = ActivityThread.currentActivityThread().getApplicationThread();
             Context ctx = ActivityThread.currentActivityThread().getSystemContext();
-            service.dispatchSystemServerContext(at.asBinder(), Context_getActivityToken(ctx), BuildConfig.API);
+            service.dispatchSystemServerContext(at.asBinder(), Context_getActivityToken(ctx), BuildConfig.FLAVOR);
         } catch (Throwable e) {
             Log.e(TAG, "dispatch context: ", e);
         }
