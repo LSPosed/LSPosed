@@ -45,8 +45,13 @@ public class ActivityController extends IActivityController.Stub {
             Context ctx = ActivityThread.currentActivityThread().getSystemContext();
             var systemClassLoader = ctx.getClassLoader();
             @SuppressLint("PrivateApi") var myActivityControllerClass = Class.forName("com.android.server.am.ActivityManagerShellCommand$MyActivityController", false, systemClassLoader);
-            myActivityControllerConstructor = myActivityControllerClass.getDeclaredConstructor(IActivityManager.class, PrintWriter.class, InputStream.class,
-                    String.class, boolean.class);
+            try {
+                myActivityControllerConstructor = myActivityControllerClass.getDeclaredConstructor(IActivityManager.class, PrintWriter.class, InputStream.class,
+                        String.class, boolean.class);
+            } catch (NoSuchMethodException ignored) {
+                myActivityControllerConstructor = myActivityControllerClass.getDeclaredConstructor(IActivityManager.class, PrintWriter.class, InputStream.class,
+                        String.class, boolean.class, boolean.class, String.class, boolean.class);
+            }
             myActivityControllerConstructor.setAccessible(true);
             myActivityControllerRunner = myActivityControllerClass.getDeclaredMethod("run");
             myActivityControllerRunner.setAccessible(true);
@@ -91,18 +96,33 @@ public class ActivityController extends IActivityController.Stub {
                             String opt;
                             String gdbPort = null;
                             boolean monkey = false;
+                            boolean simpleMode = false;
+                            String target = null;
+                            boolean alwaysContinue = false;
                             while ((opt = getNextOption()) != null) {
                                 if (opt.equals("--gdb")) {
                                     gdbPort = getNextArgRequired();
                                 } else if (opt.equals("-m")) {
                                     monkey = true;
+                                } else if (myActivityControllerConstructor.getParameterCount() > 5) {
+                                    switch (opt) {
+                                        case "-p":
+                                            target = getNextArgRequired();
+                                            break;
+                                        case "-s":
+                                            simpleMode = true;
+                                            break;
+                                        case "-c":
+                                            alwaysContinue = true;
+                                            break;
+                                    }
                                 } else {
                                     getErrPrintWriter().println("Error: Unknown option: " + opt);
                                     return -1;
                                 }
                             }
 
-                            return replaceMyControllerActivity(pw, getRawInputStream(), gdbPort, monkey);
+                            return replaceMyControllerActivity(pw, getRawInputStream(), gdbPort, monkey, simpleMode, target, alwaysContinue);
                         }
 
                         @Override
@@ -141,7 +161,7 @@ public class ActivityController extends IActivityController.Stub {
         return false;
     }
 
-    static private int replaceMyControllerActivity(PrintWriter pw, InputStream stream, String gdbPort, boolean monkey) {
+    static private int replaceMyControllerActivity(PrintWriter pw, InputStream stream, String gdbPort, boolean monkey, boolean simpleMode, String target, boolean alwaysContinue) {
         try {
             InvocationHandler handler = (proxy, method, args1) -> {
                 if (method.getName().equals("setActivityController")) {
@@ -155,7 +175,12 @@ public class ActivityController extends IActivityController.Stub {
             };
             var amProxy = Proxy.newProxyInstance(BridgeService.class.getClassLoader(),
                     new Class[]{myActivityControllerConstructor.getParameterTypes()[0]}, handler);
-            var ctrl = myActivityControllerConstructor.newInstance(amProxy, pw, stream, gdbPort, monkey);
+            Object ctrl;
+            if (myActivityControllerConstructor.getParameterCount() == 5) {
+                ctrl = myActivityControllerConstructor.newInstance(amProxy, pw, stream, gdbPort, monkey);
+            } else {
+                ctrl = myActivityControllerConstructor.newInstance(amProxy, pw, stream, gdbPort, monkey, simpleMode, target, alwaysContinue);
+            }
             myActivityControllerRunner.invoke(ctrl);
             return 0;
         } catch (Throwable e) {
