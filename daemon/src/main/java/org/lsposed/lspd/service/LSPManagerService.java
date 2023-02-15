@@ -469,7 +469,8 @@ public class LSPManagerService extends ILSPManagerService.Stub {
 
     @Override
     public boolean isSepolicyLoaded() {
-        return ConfigManager.getInstance().isSepolicyLoaded();
+        return SELinux.checkSELinuxAccess("u:r:dex2oat:s0", "u:object_r:dex2oat_exec:s0",
+                "file", "execute_no_trans");
     }
 
     @Override
