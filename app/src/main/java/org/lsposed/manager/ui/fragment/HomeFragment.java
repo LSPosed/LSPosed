@@ -109,15 +109,17 @@ public class HomeFragment extends BaseFragment {
                 binding.updateCard.setVisibility(View.GONE);
             }
             boolean dex2oatAbnormal = ConfigManager.getDex2OatWrapperCompatibility() != ILSPManagerService.DEX2OAT_OK && !ConfigManager.dex2oatFlagsLoaded();
-            if (!ConfigManager.isSepolicyLoaded() || !ConfigManager.systemServerRequested() || dex2oatAbnormal) {
+            var sepolicyAbnormal = !ConfigManager.isSepolicyLoaded();
+            var systemServerAbnormal = !ConfigManager.systemServerRequested();
+            if (sepolicyAbnormal || systemServerAbnormal || dex2oatAbnormal) {
                 binding.statusTitle.setText(R.string.partial_activated);
                 binding.statusIcon.setImageResource(R.drawable.ic_round_warning_24);
                 binding.warningCard.setVisibility(View.VISIBLE);
-                if (!ConfigManager.isSepolicyLoaded()) {
+                if (sepolicyAbnormal) {
                     binding.warningTitle.setText(R.string.selinux_policy_not_loaded_summary);
                     binding.warningSummary.setText(HtmlCompat.fromHtml(getString(R.string.selinux_policy_not_loaded), HtmlCompat.FROM_HTML_MODE_LEGACY));
                 }
-                if (!ConfigManager.systemServerRequested()) {
+                if (systemServerAbnormal) {
                     binding.warningTitle.setText(R.string.system_inject_fail_summary);
                     binding.warningSummary.setText(HtmlCompat.fromHtml(getString(R.string.system_inject_fail), HtmlCompat.FROM_HTML_MODE_LEGACY));
                 }

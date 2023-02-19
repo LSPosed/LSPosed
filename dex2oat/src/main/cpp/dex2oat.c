@@ -38,7 +38,7 @@
 
 #define ID_VEC(is64, is_debug) (((is64) << 1) | (is_debug))
 
-char kTmpDir[] = "placeholder_/dev/0123456789abcdef";
+const char kSockName[] = "5291374ceda0aef7c5d86cd2a4f6a3ac\0";
 
 static ssize_t xrecvmsg(int sockfd, struct msghdr *msg, int flags) {
     int rec = recvmsg(sockfd, msg, flags);
@@ -99,20 +99,21 @@ static void write_int(int fd, int val) {
 }
 
 int main(int argc, char **argv) {
-    LOGD("dex2oat wrapper");
-    struct sockaddr_un sock;
+    LOGD("dex2oat wrapper ppid=%d", getppid());
+    struct sockaddr_un sock = {};
     sock.sun_family = AF_UNIX;
-    snprintf(sock.sun_path, sizeof(sock.sun_path), "%s/dex2oat.sock", kTmpDir + 12);
+    strlcpy(sock.sun_path + 1, kSockName, sizeof(sock.sun_path) - 1);
     int sock_fd = socket(AF_UNIX, SOCK_STREAM, 0);
-    if (-1 == connect(sock_fd, (struct sockaddr *) &sock, sizeof(sock))) {
-        PLOGE("failed to connect to %s", sock.sun_path);
+    size_t len = sizeof(sa_family_t) + strlen(sock.sun_path + 1) + 1;
+    if (connect(sock_fd, (struct sockaddr *) &sock, len)) {
+        PLOGE("failed to connect to %s", sock.sun_path + 1);
         return 1;
     }
     write_int(sock_fd, ID_VEC(LP_SELECT(0, 1), strstr(argv[0], "dex2oatd") != NULL));
     int stock_fd = recv_fd(sock_fd);
     read_int(sock_fd);
     close(sock_fd);
-    LOGD("sock: %s %d", sock.sun_path, stock_fd);
+    LOGD("sock: %s %d", sock.sun_path + 1, stock_fd);
 
     const char *new_argv[argc + 2];
     for (int i = 0; i < argc; i++) new_argv[i] = argv[i];

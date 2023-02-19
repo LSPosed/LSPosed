@@ -50,7 +50,7 @@
     <string name="activated">Activated</string>
     <string name="partial_activated">Partially activated</string>
     <string name="selinux_policy_not_loaded_summary">SEPolicy is not loaded properly</string>
-    <string name="selinux_policy_not_loaded"><![CDATA[Modules that hook System Framework will not work.<br/>Please report this to <a href="https://github.com/topjohnwu/Magisk/issues"><b>Magisk</b></a> developer.]]></string>
+    <string name="selinux_policy_not_loaded"><![CDATA[Some features will not work.<br/>Please report this to <a href="https://github.com/topjohnwu/Magisk/issues"><b>Magisk</b></a> developer.]]></string>
     <string name="system_inject_fail_summary">System Framework injection failed</string>
     <string name="system_inject_fail"><![CDATA[This is rare and may be caused by <b>Magisk</b> or some low-quality Magisk modules.<br/>Please try to disable Magisk modules other than Riru and LSPosed or submit full log to developers.]]></string>
     <string name="system_prop_incorrect_summary">System prop incorrect</string>

@@ -22,7 +22,7 @@ import org.apache.tools.ant.filters.FixCrLfFilter
 import org.apache.tools.ant.filters.ReplaceTokens
 import java.io.ByteArrayOutputStream
 import java.security.MessageDigest
-import java.util.*
+import java.util.Locale
 
 plugins {
     id("com.android.application")
@@ -87,7 +87,6 @@ android {
                     arguments += "-DAPI=${name.toLowerCase()}"
                 }
             }
-            buildConfigField("String", "API", """"$name"""")
         }
 
         create("Riru") {
@@ -148,7 +147,7 @@ fun afterEval() = android.applicationVariants.forEach { variant ->
         into(magiskDir)
         from("${rootProject.projectDir}/README.md")
         from("$projectDir/magisk_module") {
-            exclude("riru.sh", "module.prop", "customize.sh", "sepolicy.rule", "daemon")
+            exclude("riru.sh", "module.prop", "customize.sh", "daemon")
         }
         from("$projectDir/magisk_module") {
             include("module.prop")
@@ -178,7 +177,7 @@ fun afterEval() = android.applicationVariants.forEach { variant ->
         }
         if (flavorLowered == "riru") {
             from("${projectDir}/magisk_module") {
-                include("riru.sh", "sepolicy.rule")
+                include("riru.sh")
                 val tokens = mapOf(
                     "RIRU_MODULE_LIB_NAME" to "lspd",
                     "RIRU_MODULE_API_VERSION" to moduleMaxRiruApiVersion.toString(),
@@ -294,7 +293,7 @@ val reRunDaemon = task<Exec>("reRunDaemon") {
     dependsOn(pushDaemon, pushDaemonNative, killLspd)
     // tricky to pass a minus number to avoid the injection warning
     commandLine(
-        adb, "shell", "ASH_STANDALONE=1", "su", "-pc",
+        adb, "shell", "ASH_STANDALONE=1", "su", "-mm", "-pc",
         "/data/adb/magisk/busybox sh /data/adb/modules/*_lsposed/service.sh --system-server-max-retry=-1&"
     )
     isIgnoreExitValue = true
