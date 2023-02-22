@@ -3,6 +3,8 @@ package android.app;
 import android.content.pm.ApplicationInfo;
 
 public final class LoadedApk {
+	private ClassLoader mDefaultClassLoader;
+
 	public ApplicationInfo getApplicationInfo() {
 		throw new UnsupportedOperationException("STUB");
 	}
