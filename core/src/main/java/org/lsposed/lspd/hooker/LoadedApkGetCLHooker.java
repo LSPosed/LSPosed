@@ -22,14 +22,14 @@ package org.lsposed.lspd.hooker;
 
 import static org.lsposed.lspd.core.ApplicationServiceClient.serviceClient;
 
+import android.annotation.SuppressLint;
 import android.app.ActivityThread;
 import android.app.AndroidAppHelper;
 import android.app.LoadedApk;
 import android.content.pm.ApplicationInfo;
-import android.os.Bundle;
+import android.os.Build;
 
 import androidx.annotation.NonNull;
-import androidx.annotation.Nullable;
 
 import org.lsposed.lspd.impl.LSPosedContext;
 import org.lsposed.lspd.util.Hookers;
@@ -38,6 +38,7 @@ import org.lsposed.lspd.util.Utils;
 
 import java.io.File;
 import java.io.IOException;
+import java.lang.reflect.Field;
 import java.util.Map;
 
 import de.robv.android.xposed.XC_MethodHook;
@@ -47,7 +48,22 @@ import de.robv.android.xposed.XposedHelpers;
 import de.robv.android.xposed.callbacks.XC_LoadPackage;
 import io.github.libxposed.api.XposedModuleInterface;
 
+@SuppressLint("BlockedPrivateApi")
 public class LoadedApkGetCLHooker extends XC_MethodHook {
+    private final static Field defaultClassLoaderField;
+
+    static {
+        Field field = null;
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.Q) {
+            try {
+                field = LoadedApk.class.getDeclaredField("mDefaultClassLoader");
+                field.setAccessible(true);
+            } catch (Throwable ignored) {
+            }
+        }
+        defaultClassLoaderField = field;
+    }
+
     private final LoadedApk loadedApk;
     private final Unhook unhook;
 
@@ -109,6 +125,16 @@ public class LoadedApkGetCLHooker extends XC_MethodHook {
                 @Override
                 public ApplicationInfo getAppInfo() {
                     return loadedApk.getApplicationInfo();
+                }
+
+                @NonNull
+                @Override
+                public ClassLoader getDefaultClassLoader() {
+                    try {
+                        return (ClassLoader) defaultClassLoaderField.get(loadedApk);
+                    } catch (Throwable t) {
+                        throw new IllegalStateException(t);
+                    }
                 }
 
                 @NonNull
