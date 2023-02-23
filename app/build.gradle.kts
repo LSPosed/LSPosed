@@ -24,6 +24,7 @@ plugins {
     id("androidx.navigation.safeargs")
     id("dev.rikka.tools.autoresconfig")
     id("dev.rikka.tools.materialthemebuilder")
+    id("org.lsposed.lsplugin.resopt")
 }
 
 val defaultManagerPackageName: String by rootProject.extra
