@@ -46,8 +46,6 @@ import java.util.ArrayList;
 
 @RequiresApi(Build.VERSION_CODES.Q)
 public class Dex2OatService implements Runnable {
-    public static final String PROP_NAME = "dalvik.vm.dex2oat-flags";
-    public static final String PROP_VALUE = "--inline-max-code-units=0";
     private static final String TAG = "LSPosedDex2Oat";
     private static final String WRAPPER32 = "bin/dex2oat32";
     private static final String WRAPPER64 = "bin/dex2oat64";
