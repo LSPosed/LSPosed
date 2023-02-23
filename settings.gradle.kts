@@ -16,6 +16,7 @@ pluginManagement {
         id("androidx.navigation.safeargs") version navVersion
         id("dev.rikka.tools.autoresconfig") version "1.2.2"
         id("dev.rikka.tools.materialthemebuilder") version "1.3.3"
+        id("org.lsposed.lsplugin.resopt") version "1.2"
     }
 }
 

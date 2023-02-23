@@ -35,6 +35,7 @@ import org.objectweb.asm.Opcodes
 
 plugins {
     id("com.android.application")
+    id("org.lsposed.lsplugin.resopt")
 }
 
 val moduleName = "LSPosed"
@@ -115,6 +116,10 @@ android {
         }
     }
     namespace = "org.lsposed.lspd"
+}
+abstract class Injected @Inject constructor(val magiskDir: String) {
+    @get:Inject
+    abstract val factory: ObjectFactory
 }
 
 dependencies {
@@ -220,14 +225,16 @@ fun afterEval() = android.applicationVariants.forEach { variant ->
             from(dexOutPath)
             rename("classes.dex", "lspd.dex")
         }
+
+        val injected = objects.newInstance<Injected>(magiskDir)
         doLast {
-            fileTree(magiskDir).visit {
+            injected.factory.fileTree().from(injected.magiskDir).visit {
                 if (isDirectory) return@visit
                 val md = MessageDigest.getInstance("SHA-256")
                 file.forEachBlock(4096) { bytes, size ->
                     md.update(bytes, 0, size)
                 }
-                file(file.path + ".sha256").writeText(Hex.encodeHexString(md.digest()))
+                File(file.path + ".sha256").writeText(Hex.encodeHexString(md.digest()))
             }
         }
     }

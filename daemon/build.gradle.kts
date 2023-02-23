@@ -24,6 +24,7 @@ import java.util.*
 
 plugins {
     id("com.android.application")
+    id("org.lsposed.lsplugin.resopt")
 }
 
 val daemonName = "LSPosed"
@@ -87,14 +88,14 @@ fun afterEval() = android.applicationVariants.forEach { variant ->
     val variantCapped = variant.name.capitalize(Locale.ROOT)
     val variantLowered = variant.name.toLowerCase(Locale.ROOT)
 
-    val app = rootProject.project(":app").extensions.getByName<BaseExtension>("android")
     val outSrcDir = file("$buildDir/generated/source/signInfo/${variantLowered}")
-    val outSrc = file("$outSrcDir/org/lsposed/lspd/util/SignInfo.java")
     val signInfoTask = tasks.register("generate${variantCapped}SignInfo") {
         dependsOn(":app:validateSigning${variantCapped}")
+        val app = rootProject.project(":app").extensions.getByName<BaseExtension>("android")
+        val sign = app.buildTypes.named(variantLowered).get().signingConfig
+        val outSrc = file("$outSrcDir/org/lsposed/lspd/util/SignInfo.java")
         outputs.file(outSrc)
         doLast {
-            val sign = app.buildTypes.named(variantLowered).get().signingConfig
             outSrc.parentFile.mkdirs()
             val certificateInfo = KeystoreHelper.getCertificateInfo(
                 sign?.storeType,
