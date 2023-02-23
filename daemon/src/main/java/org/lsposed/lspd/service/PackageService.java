@@ -47,6 +47,7 @@ import android.util.Log;
 import android.util.Pair;
 
 import androidx.annotation.NonNull;
+import androidx.annotation.Nullable;
 
 import org.lsposed.lspd.models.Application;
 
@@ -105,6 +106,7 @@ public class PackageService {
         return pm;
     }
 
+    @Nullable
     public static PackageInfo getPackageInfo(String packageName, int flags, int userId) throws RemoteException {
         IPackageManager pm = getPackageManager();
         if (pm == null) return null;
@@ -126,6 +128,7 @@ public class PackageService {
         return res;
     }
 
+    @Nullable
     public static ApplicationInfo getApplicationInfo(String packageName, int flags, int userId) throws RemoteException {
         IPackageManager pm = getPackageManager();
         if (pm == null) return null;
@@ -206,6 +209,7 @@ public class PackageService {
     }
 
     @SuppressWarnings({"ConstantConditions", "SameParameterValue"})
+    @Nullable
     private static PackageInfo getPackageInfoWithComponents(String packageName, int flags, int userId) throws RemoteException {
         IPackageManager pm = getPackageManager();
         if (pm == null) return null;
@@ -291,18 +295,25 @@ public class PackageService {
         }
     }
 
-    public static ParcelableListSlice<ResolveInfo> queryIntentActivities(Intent intent, String resolvedType, int flags, int userId) throws RemoteException {
-        IPackageManager pm = getPackageManager();
-        if (pm == null) return null;
-        ParceledListSlice<ResolveInfo> infos;
-        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.TIRAMISU) {
-            infos = pm.queryIntentActivities(intent, resolvedType, (long) flags, userId);
-        } else {
-            infos = pm.queryIntentActivities(intent, resolvedType, flags, userId);
+    @Nullable
+    public static ParcelableListSlice<ResolveInfo> queryIntentActivities(Intent intent, String resolvedType, int flags, int userId) {
+        try {
+            IPackageManager pm = getPackageManager();
+            if (pm == null) return null;
+            ParceledListSlice<ResolveInfo> infos;
+            if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.TIRAMISU) {
+                infos = pm.queryIntentActivities(intent, resolvedType, (long) flags, userId);
+            } else {
+                infos = pm.queryIntentActivities(intent, resolvedType, flags, userId);
+            }
+            return new ParcelableListSlice<>(infos.getList());
+        } catch (Exception e) {
+            Log.e(TAG, "queryIntentActivities", e);
+            return new ParcelableListSlice<>(new ArrayList<>());
         }
-        return new ParcelableListSlice<>(infos.getList());
     }
 
+    @Nullable
     public static Intent getLaunchIntentForPackage(String packageName) throws RemoteException {
         Intent intentToResolve = new Intent(Intent.ACTION_MAIN);
         intentToResolve.addCategory(Intent.CATEGORY_INFO);
