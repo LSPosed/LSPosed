@@ -809,8 +809,8 @@ namespace lspd {
 
     static JNINativeMethod gMethods[] = {
             LSP_NATIVE_METHOD(DexParserBridge, openDex,
-                              "(Ljava/nio/buffer/ByteBuffer;[J)Ljava/lang/Object;"),
-            LSP_NATIVE_METHOD(DexParserBridge, closeDex, "(J)V;"),
+                              "(Ljava/nio/ByteBuffer;[J)Ljava/lang/Object;"),
+            LSP_NATIVE_METHOD(DexParserBridge, closeDex, "(J)V"),
             LSP_NATIVE_METHOD(DexParserBridge, visitClass,
                               "(JLjava/lang/Object;Ljava/lang/Class;Ljava/lang/Class;Ljava/lang/reflect/Method;Ljava/lang/reflect/Method;Ljava/lang/reflect/Method;Ljava/lang/reflect/Method;Ljava/lang/reflect/Method;)V"),
     };
