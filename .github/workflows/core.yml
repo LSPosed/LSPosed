@@ -16,6 +16,7 @@ jobs:
       CCACHE_NOHASHDIR: "true"
       CCACHE_MAXSIZE: "1G"
       CCACHE_HARDLINK: "true"
+      CCACHE_BASEDIR: "${{ github.workspace }}"
     steps:
     - name: Checkout
       uses: actions/checkout@v3

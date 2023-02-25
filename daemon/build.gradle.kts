@@ -17,7 +17,6 @@
  * Copyright (C) 2021 LSPosed Contributors
  */
 
-import com.android.build.gradle.BaseExtension
 import com.android.ide.common.signing.KeystoreHelper
 import java.io.PrintStream
 import java.util.*
@@ -84,15 +83,14 @@ android {
     namespace = "org.lsposed.daemon"
 }
 
-fun afterEval() = android.applicationVariants.forEach { variant ->
-    val variantCapped = variant.name.capitalize(Locale.ROOT)
-    val variantLowered = variant.name.toLowerCase(Locale.ROOT)
+android.applicationVariants.all {
+    val variantCapped = name.capitalize(Locale.ROOT)
+    val variantLowered = name.toLowerCase(Locale.ROOT)
 
     val outSrcDir = file("$buildDir/generated/source/signInfo/${variantLowered}")
     val signInfoTask = tasks.register("generate${variantCapped}SignInfo") {
         dependsOn(":app:validateSigning${variantCapped}")
-        val app = rootProject.project(":app").extensions.getByName<BaseExtension>("android")
-        val sign = app.buildTypes.named(variantLowered).get().signingConfig
+        val sign = signingConfig
         val outSrc = file("$outSrcDir/org/lsposed/lspd/util/SignInfo.java")
         outputs.file(outSrc)
         doLast {
@@ -115,11 +113,7 @@ fun afterEval() = android.applicationVariants.forEach { variant ->
             )
         }
     }
-    variant.registerJavaGeneratingTask(signInfoTask, outSrcDir)
-}
-
-afterEvaluate {
-    afterEval()
+    registerJavaGeneratingTask(signInfoTask, outSrcDir)
 }
 
 dependencies {
