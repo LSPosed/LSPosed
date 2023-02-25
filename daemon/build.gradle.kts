@@ -17,13 +17,15 @@
  * Copyright (C) 2021 LSPosed Contributors
  */
 
+import com.android.build.api.dsl.ApplicationExtension
 import com.android.ide.common.signing.KeystoreHelper
 import java.io.PrintStream
 import java.util.*
 
+@Suppress("DSL_SCOPE_VIOLATION")
 plugins {
-    id("com.android.application")
-    id("org.lsposed.lsplugin.resopt")
+    alias(libs.plugins.agp.app)
+    alias(libs.plugins.lsplugin.resopt)
 }
 
 val daemonName = "LSPosed"
@@ -31,7 +33,7 @@ val daemonName = "LSPosed"
 val injectedPackageName: String by rootProject.extra
 val injectedPackageUid: Int by rootProject.extra
 
-val agpVersion : String by project
+val agpVersion: String by project
 
 val defaultManagerPackageName: String by rootProject.extra
 
@@ -90,7 +92,7 @@ android.applicationVariants.all {
     val outSrcDir = file("$buildDir/generated/source/signInfo/${variantLowered}")
     val signInfoTask = tasks.register("generate${variantCapped}SignInfo") {
         dependsOn(":app:validateSigning${variantCapped}")
-        val sign = signingConfig
+        val sign = rootProject.project(":app").extensions.getByType(ApplicationExtension::class.java).buildTypes.named(variantLowered).get().signingConfig
         val outSrc = file("$outSrcDir/org/lsposed/lspd/util/SignInfo.java")
         outputs.file(outSrc)
         doLast {
@@ -117,12 +119,12 @@ android.applicationVariants.all {
 }
 
 dependencies {
-    implementation("io.github.libxposed:service-interface:100")
-    implementation("com.android.tools.build:apksig:$agpVersion")
-    implementation("org.apache.commons:commons-lang3:3.12.0")
-    compileOnly("androidx.annotation:annotation:1.5.0")
-    compileOnly(projects.hiddenapi.stubs)
+    implementation(libs.libxposed.service.`interface`)
+    implementation(libs.agp.apksig)
+    implementation(libs.commons.lang3)
     implementation(projects.hiddenapi.bridge)
     implementation(projects.services.daemonService)
     implementation(projects.services.managerService)
+    compileOnly(libs.androidx.annotation)
+    compileOnly(projects.hiddenapi.stubs)
 }
