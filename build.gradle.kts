@@ -17,41 +17,46 @@
  * Copyright (C) 2021 - 2022 LSPosed Contributors
  */
 
-import com.android.build.api.dsl.ApplicationExtension
-import com.android.build.gradle.BaseExtension
-import org.eclipse.jgit.api.Git
-import org.eclipse.jgit.storage.file.FileRepositoryBuilder
-import org.gradle.internal.os.OperatingSystem
-import java.nio.file.Paths
+import com.android.build.api.dsl.ApplicationDefaultConfig
+import com.android.build.api.dsl.CommonExtension
+import com.android.build.gradle.api.AndroidBasePlugin
 
+@Suppress("DSL_SCOPE_VIOLATION")
 plugins {
-    id("com.android.application") apply false
-    id("com.android.library") apply false
+    alias(libs.plugins.lsplugin.cmaker)
+    alias(libs.plugins.lsplugin.jgit)
+    alias(libs.plugins.agp.lib) apply false
+    alias(libs.plugins.agp.app) apply false
 }
 
-buildscript {
-    repositories {
-        google()
-        mavenCentral()
+cmaker {
+    default {
+        arguments.addAll(
+            arrayOf(
+                "-DEXTERNAL_ROOT=${File(rootDir.absolutePath, "external")}",
+                "-DCORE_ROOT=${File(rootDir.absolutePath, "core/src/main/jni")}",
+                "-DANDROID_STL=none"
+            )
+        )
+        val flags = arrayOf(
+            "-DINJECTED_AID=$injectedPackageUid",
+            "-Wno-gnu-string-literal-operator-template",
+            "-Wno-c++2b-extensions",
+        )
+        cFlags.addAll(flags)
+        cppFlags.addAll(flags)
+        abiFilters("arm64-v8a", "armeabi-v7a", "x86", "x86_64")
     }
-    dependencies {
-        classpath("org.eclipse.jgit:org.eclipse.jgit:6.4.0.202211300538-r")
+    buildTypes {
+        if (it.name == "release") {
+            arguments += "-DDEBUG_SYMBOLS_PATH=${buildDir.absolutePath}/symbols"
+        }
     }
 }
-val (commitCount, latestTag) = FileRepositoryBuilder().setGitDir(rootProject.file(".git"))
-    .runCatching {
-        build().use { repo ->
-            val git = Git(repo)
-            val commitCount =
-                git.log()
-                    .add(repo.refDatabase.exactRef("refs/remotes/origin/master").objectId)
-                    .call().count() + 4200
-            val ver = git.describe()
-                .setTags(true)
-                .setAbbrev(0).call().removePrefix("v")
-            commitCount to ver
-        }
-    }.getOrNull() ?: (1 to "1.0")
+
+val repo = jgit.repo()
+val commitCount = repo?.commitCount("refs/remotes/origin/master") ?: 1
+val latestTag = repo?.latestTag ?: "1.0"
 
 val injectedPackageName by extra("com.android.shell")
 val injectedPackageUid by extra(2000)
@@ -71,140 +76,43 @@ tasks.register("Delete", Delete::class) {
     delete(rootProject.buildDir)
 }
 
-fun findInPath(executable: String): String? {
-    val pathEnv = System.getenv("PATH")
-    return pathEnv.split(File.pathSeparator).map { folder ->
-        Paths.get("${folder}${File.separator}${executable}${if (OperatingSystem.current().isWindows) ".exe" else ""}")
-            .toFile()
-    }.firstOrNull { path ->
-        path.exists()
-    }?.absolutePath
-}
-
-fun Project.configureBaseExtension() {
-    extensions.findByType(BaseExtension::class)?.run {
-        compileSdkVersion(androidCompileSdkVersion)
-        ndkVersion = androidCompileNdkVersion
-        buildToolsVersion = androidBuildToolsVersion
-
-        externalNativeBuild {
-            cmake {
-                version = "3.22.1+"
-            }
-        }
-
-        defaultConfig {
-            minSdk = androidMinSdkVersion
-            targetSdk = androidTargetSdkVersion
-            versionCode = verCode
-            versionName = verName
+subprojects {
+    plugins.withType(AndroidBasePlugin::class.java) {
+        extensions.configure(CommonExtension::class.java) {
+            compileSdk = androidCompileSdkVersion
+            ndkVersion = androidCompileNdkVersion
+            buildToolsVersion = androidBuildToolsVersion
 
             externalNativeBuild {
                 cmake {
-                    arguments += "-DEXTERNAL_ROOT=${File(rootDir.absolutePath, "external")}"
-                    arguments += "-DCORE_ROOT=${File(rootDir.absolutePath, "core/src/main/jni")}"
-                    abiFilters("arm64-v8a", "armeabi-v7a", "x86", "x86_64")
-                    val flags = arrayOf(
-                        "-Wall",
-                        "-Qunused-arguments",
-                        "-Wno-gnu-string-literal-operator-template",
-                        "-fno-rtti",
-                        "-fvisibility=hidden",
-                        "-fvisibility-inlines-hidden",
-                        "-fno-exceptions",
-                        "-fno-stack-protector",
-                        "-fomit-frame-pointer",
-                        "-Wno-builtin-macro-redefined",
-                        "-Wno-unused-value",
-                        "-D__FILE__=__FILE_NAME__",
-                        "-DINJECTED_AID=$injectedPackageUid",
-                    )
-                    cppFlags("-std=c++20", *flags)
-                    cFlags("-std=c2x", *flags)
-                    arguments(
-                        "-DANDROID_STL=none",
-                    )
-                    findInPath("ccache")?.let {
-                        println("Using ccache $it")
-                        arguments += "-DANDROID_CCACHE=$it"
-                    }
+                    version = "3.22.1+"
                 }
             }
-        }
 
-        compileOptions {
-            targetCompatibility(androidTargetCompatibility)
-            sourceCompatibility(androidSourceCompatibility)
-        }
-
-        buildTypes {
-            named("debug") {
-                externalNativeBuild {
-                    cmake {
-                        arguments.addAll(
-                            arrayOf(
-                                "-DCMAKE_CXX_FLAGS_DEBUG=-Og",
-                                "-DCMAKE_C_FLAGS_DEBUG=-Og",
-                            )
-                        )
-                    }
+            defaultConfig {
+                minSdk = androidMinSdkVersion
+                if (this is ApplicationDefaultConfig) {
+                    targetSdk = androidTargetSdkVersion
+                    versionCode = verCode
+                    versionName = verName
                 }
             }
-            named("release") {
-                externalNativeBuild {
-                    cmake {
-                        val flags = arrayOf(
-                            "-Wl,--exclude-libs,ALL",
-                            "-ffunction-sections",
-                            "-fdata-sections",
-                            "-Wl,--gc-sections",
-                            "-fno-unwind-tables",
-                            "-fno-asynchronous-unwind-tables",
-                            "-flto=thin",
-                            "-Wl,--thinlto-cache-policy,cache_size_bytes=300m",
-                            "-Wl,--thinlto-cache-dir=${buildDir.absolutePath}/.lto-cache",
-                        )
-                        cppFlags.addAll(flags)
-                        cFlags.addAll(flags)
-                        val configFlags = arrayOf(
-                            "-Oz",
-                            "-DNDEBUG"
-                        ).joinToString(" ")
-                        arguments.addAll(
-                            arrayOf(
-                                "-DCMAKE_BUILD_TYPE=Release",
-                                "-DCMAKE_CXX_FLAGS_RELEASE=$configFlags",
-                                "-DCMAKE_C_FLAGS_RELEASE=$configFlags",
-                                "-DDEBUG_SYMBOLS_PATH=${buildDir.absolutePath}/symbols",
-                            )
-                        )
-                    }
-                }
+
+            lint {
+                abortOnError = true
+                checkReleaseBuilds = false
+            }
+
+            compileOptions {
+                sourceCompatibility = androidSourceCompatibility
+                targetCompatibility = androidTargetCompatibility
             }
         }
     }
-
-    extensions.findByType(ApplicationExtension::class)?.lint {
-        abortOnError = true
-        checkReleaseBuilds = false
-    }
-}
-
-fun Project.configureJavaExtension() {
-    extensions.findByType(JavaPluginExtension::class.java)?.run {
-        sourceCompatibility = androidSourceCompatibility
-        targetCompatibility = androidTargetCompatibility
-    }
-}
-
-subprojects {
-    plugins.withId("com.android.application") {
-        configureBaseExtension()
-    }
-    plugins.withId("com.android.library") {
-        configureBaseExtension()
-    }
-    plugins.withId("org.gradle.java-library") {
-        configureJavaExtension()
+    plugins.withType(JavaPlugin::class.java) {
+        extensions.configure(JavaPluginExtension::class.java) {
+            sourceCompatibility = androidSourceCompatibility
+            targetCompatibility = androidTargetCompatibility
+        }
     }
 }

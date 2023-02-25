@@ -20,8 +20,9 @@
 val verName: String by rootProject.extra
 val verCode: Int by rootProject.extra
 
+@Suppress("DSL_SCOPE_VIOLATION")
 plugins {
-    id("com.android.library")
+    alias(libs.plugins.agp.lib)
 }
 
 android {
@@ -55,12 +56,12 @@ copy {
 }
 
 dependencies {
-    api("io.github.libxposed:api:100")
-    implementation("org.apache.commons:commons-lang3:3.12.0")
-    implementation("de.upb.cs.swt:axml:2.1.3")
-    compileOnly("androidx.annotation:annotation:1.5.0")
-    compileOnly(projects.hiddenapi.stubs)
+    api(libs.libxposed.api)
+    implementation(libs.commons.lang3)
+    implementation(libs.axml)
     implementation(projects.hiddenapi.bridge)
     implementation(projects.services.daemonService)
     implementation(projects.services.managerService)
+    compileOnly(libs.androidx.annotation)
+    compileOnly(projects.hiddenapi.stubs)
 }

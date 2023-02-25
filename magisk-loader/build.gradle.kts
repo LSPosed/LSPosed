@@ -33,9 +33,10 @@ import org.objectweb.asm.ClassVisitor
 import org.objectweb.asm.MethodVisitor
 import org.objectweb.asm.Opcodes
 
+@Suppress("DSL_SCOPE_VIOLATION")
 plugins {
-    id("com.android.application")
-    id("org.lsposed.lsplugin.resopt")
+    alias(libs.plugins.agp.app)
+    alias(libs.plugins.lsplugin.resopt)
 }
 
 val moduleName = "LSPosed"
@@ -123,12 +124,12 @@ abstract class Injected @Inject constructor(val magiskDir: String) {
 }
 
 dependencies {
-    compileOnly("androidx.annotation:annotation:1.5.0")
-    compileOnly(projects.hiddenapi.stubs)
     implementation(projects.core)
     implementation(projects.hiddenapi.bridge)
     implementation(projects.services.managerService)
     implementation(projects.services.daemonService)
+    compileOnly(libs.androidx.annotation)
+    compileOnly(projects.hiddenapi.stubs)
 }
 
 val zipAll = task("zipAll") {

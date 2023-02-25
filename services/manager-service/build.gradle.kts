@@ -17,8 +17,9 @@
  * Copyright (C) 2021 LSPosed Contributors
  */
 
+@Suppress("DSL_SCOPE_VIOLATION")
 plugins {
-    id("com.android.library")
+    alias(libs.plugins.agp.lib)
 }
 
 android {
@@ -35,5 +36,5 @@ android {
 }
 
 dependencies {
-    api("dev.rikka.rikkax.parcelablelist:parcelablelist:2.0.1")
+    api(libs.rikkax.parcelablelist)
 }
