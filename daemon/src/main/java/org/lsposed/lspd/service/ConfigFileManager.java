@@ -356,7 +356,7 @@ public class ConfigFileManager {
                 if (name.isEmpty() || name.startsWith("#")) continue;
                 names.add(name);
             }
-        } catch (IOException e) {
+        } catch (IOException | OutOfMemoryError e) {
             Log.e(TAG, "Can not open " + initEntry, e);
         }
     }

@@ -38,12 +38,11 @@ import org.lsposed.manager.ConfigManager;
 import org.lsposed.manager.repo.RepoLoader;
 import org.lsposed.manager.repo.model.OnlineModule;
 
-import java.io.EOFException;
+import java.io.BufferedReader;
 import java.io.IOException;
-import java.nio.charset.StandardCharsets;
+import java.io.InputStreamReader;
 import java.util.ArrayList;
 import java.util.Arrays;
-import java.util.Collections;
 import java.util.HashMap;
 import java.util.HashSet;
 import java.util.List;
@@ -51,7 +50,7 @@ import java.util.Map;
 import java.util.Properties;
 import java.util.Set;
 import java.util.concurrent.ConcurrentHashMap;
-import java.util.zip.ZipEntry;
+import java.util.stream.Collectors;
 import java.util.zip.ZipFile;
 
 public final class ModuleUtil {
@@ -218,21 +217,6 @@ public final class ModuleUtil {
         return enabledModules.contains(packageName);
     }
 
-    private static String readZipEntryToString(ZipFile file, ZipEntry entry) throws IOException {
-        try (var is = file.getInputStream(entry)) {
-            var bytes = new byte[(int) entry.getSize()];
-            int offset = 0;
-            while (offset < bytes.length) {
-                int read = is.read(bytes, offset, bytes.length - offset);
-                if (read < 0) {
-                    throw new EOFException();
-                }
-                offset += read;
-            }
-            return new String(bytes, StandardCharsets.UTF_8);
-        }
-    }
-
     public int getEnabledModulesCount() {
         return modulesLoaded ? enabledModules.size() : -1;
     }
@@ -271,8 +255,8 @@ public final class ModuleUtil {
         public final boolean staticScope;
         public final long installTime;
         public final long updateTime;
-        public ApplicationInfo app;
-        public PackageInfo pkg;
+        public final ApplicationInfo app;
+        public final PackageInfo pkg;
         private String appName; // loaded lazyily
         private String description; // loaded lazyily
         private List<String> scopeList; // loaded lazyily
@@ -318,11 +302,11 @@ public final class ModuleUtil {
                     }
                     var scopeEntry = modernModuleApk.getEntry("META-INF/xposed/scope.list");
                     if (scopeEntry != null) {
-                        scopeList = Arrays.asList(readZipEntryToString(modernModuleApk, scopeEntry).split("\\n|\\r\\n"));
-                    } else {
-                        scopeList = Collections.emptyList();
+                        try (var reader = new BufferedReader(new InputStreamReader(modernModuleApk.getInputStream(scopeEntry)))) {
+                            scopeList = reader.lines().collect(Collectors.toList());
+                        }
                     }
-                } catch (IOException e) {
+                } catch (IOException | OutOfMemoryError e) {
                     Log.e(App.TAG, "Error while closing modern module APK", e);
                 }
                 this.minVersion = minVersion;
@@ -342,30 +326,31 @@ public final class ModuleUtil {
         }
 
         public String getDescription() {
-            if (this.description == null) {
-                String descriptionTmp = null;
-                if (legacy) {
-                    Object descriptionRaw = app.metaData.get("xposeddescription");
-                    if (descriptionRaw instanceof String) {
-                        descriptionTmp = ((String) descriptionRaw).trim();
-                    } else if (descriptionRaw instanceof Integer) {
-                        try {
-                            int resId = (Integer) descriptionRaw;
-                            if (resId != 0)
-                                descriptionTmp = pm.getResourcesForApplication(app).getString(resId).trim();
-                        } catch (Exception ignored) {
-                        }
+            if (this.description != null) return this.description;
+            String descriptionTmp = null;
+            if (legacy) {
+                Object descriptionRaw = app.metaData.get("xposeddescription");
+                if (descriptionRaw instanceof String) {
+                    descriptionTmp = ((String) descriptionRaw).trim();
+                } else if (descriptionRaw instanceof Integer) {
+                    try {
+                        int resId = (Integer) descriptionRaw;
+                        if (resId != 0)
+                            descriptionTmp = pm.getResourcesForApplication(app).getString(resId).trim();
+                    } catch (Exception ignored) {
                     }
-                } else {
-                    descriptionTmp = app.loadDescription(pm).toString();
                 }
-                this.description = (descriptionTmp != null) ? descriptionTmp : "";
+            } else {
+                var des = app.loadDescription(pm);
+                if (des != null) descriptionTmp = des.toString();
             }
+            this.description = (descriptionTmp != null) ? descriptionTmp : "";
             return this.description;
         }
 
         public List<String> getScopeList() {
-            if (scopeList == null) {
+            if (scopeList != null) return scopeList;
+            if (legacy) {
                 try {
                     int scopeListResourceId = app.metaData.getInt("xposedscope");
                     if (scopeListResourceId != 0) {
@@ -375,15 +360,13 @@ public final class ModuleUtil {
                         if (scopeListString != null)
                             scopeList = Arrays.asList(scopeListString.split(";"));
                     }
-                } catch (Exception e) {
-                    e.printStackTrace();
+                } catch (Exception ignored) {
                 }
-                RepoLoader repoLoader = RepoLoader.getInstance();
-                if (scopeList == null) {
-                    OnlineModule module = repoLoader.getOnlineModule(packageName);
-                    if (module != null && module.getScope() != null) {
-                        scopeList = module.getScope();
-                    }
+            }
+            if (scopeList == null) {
+                OnlineModule module = RepoLoader.getInstance().getOnlineModule(packageName);
+                if (module != null && module.getScope() != null) {
+                    scopeList = module.getScope();
                 }
             }
             return scopeList;
