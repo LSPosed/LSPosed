@@ -177,7 +177,7 @@ public class ScopeAdapter extends EmptyStateRecyclerView.EmptyStateAdapter<Scope
             }
         }
         if (preferences.getBoolean("filter_modules", true)) {
-            if (info.applicationInfo.metaData != null && info.applicationInfo.metaData.containsKey("xposedminversion")) {
+            if (ModuleUtil.getInstance().getModule(info.packageName, info.applicationInfo.uid / App.PER_USER_RANGE) != null) {
                 return true;
             }
         }
@@ -311,7 +311,7 @@ public class ScopeAdapter extends EmptyStateRecyclerView.EmptyStateAdapter<Scope
         }
         int itemId = item.getItemId();
         if (itemId == R.id.menu_launch) {
-            Intent launchIntent = AppHelper.getLaunchIntentForPackage(info.packageName, info.uid / 100000);
+            Intent launchIntent = AppHelper.getLaunchIntentForPackage(info.packageName, info.uid / App.PER_USER_RANGE);
             if (launchIntent != null) {
                 ConfigManager.startActivityAsUserWithFeature(launchIntent, module.userId);
             }
@@ -397,7 +397,7 @@ public class ScopeAdapter extends EmptyStateRecyclerView.EmptyStateAdapter<Scope
         holder.root.setAlpha(!deny && enabled ? 1.0f : .5f);
         boolean android = appInfo.packageName.equals("android");
         CharSequence appName;
-        int userId = appInfo.applicationInfo.uid / 100000;
+        int userId = appInfo.applicationInfo.uid / App.PER_USER_RANGE;
         appName = android ? activity.getString(R.string.android_framework) : appInfo.label;
         holder.appName.setText(appName);
         GlideApp.with(holder.appIcon).load(appInfo.packageInfo).into(new CustomTarget<Drawable>() {
@@ -490,7 +490,7 @@ public class ScopeAdapter extends EmptyStateRecyclerView.EmptyStateAdapter<Scope
     @Override
     public long getItemId(int position) {
         PackageInfo info = showList.get(position).packageInfo;
-        return (info.packageName + "!" + info.applicationInfo.uid / 100000).hashCode();
+        return (info.packageName + "!" + info.applicationInfo.uid / App.PER_USER_RANGE).hashCode();
     }
 
     @Override
@@ -520,7 +520,7 @@ public class ScopeAdapter extends EmptyStateRecyclerView.EmptyStateAdapter<Scope
             List<String> scopeList = module.getScopeList();
             boolean emptyCheckedList = tmpChkList.isEmpty();
             appList.parallelStream().forEach(info -> {
-                int userId = info.applicationInfo.uid / 100000;
+                int userId = info.applicationInfo.uid / App.PER_USER_RANGE;
                 String packageName = info.packageName;
                 if (packageName.equals("android") && userId != 0 ||
                         packageName.equals(module.packageName) ||

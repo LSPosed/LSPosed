@@ -35,6 +35,8 @@ import com.bumptech.glide.load.model.ModelLoaderFactory;
 import com.bumptech.glide.load.model.MultiModelLoaderFactory;
 import com.bumptech.glide.signature.ObjectKey;
 
+import org.lsposed.manager.App;
+
 import me.zhanghai.android.appiconloader.AppIconLoader;
 
 public class AppIconModelLoader implements ModelLoader<PackageInfo, Bitmap> {
@@ -42,8 +44,6 @@ public class AppIconModelLoader implements ModelLoader<PackageInfo, Bitmap> {
     private final AppIconLoader mLoader;
     @NonNull
     private final Context mContext;
-
-    private static final int PER_USER_RANGE = 100000;
 
     private AppIconModelLoader(@Px int iconSize, boolean shrinkNonAdaptiveIcons,
                                @NonNull Context context) {
@@ -61,7 +61,7 @@ public class AppIconModelLoader implements ModelLoader<PackageInfo, Bitmap> {
     public LoadData<Bitmap> buildLoadData(@NonNull PackageInfo model, int width, int height,
                                           @NonNull Options options) {
         var warpApplicationInfo = new ApplicationInfo(model.applicationInfo);
-        warpApplicationInfo.uid = warpApplicationInfo.uid % PER_USER_RANGE;
+        warpApplicationInfo.uid = warpApplicationInfo.uid % App.PER_USER_RANGE;
         var warpPackageInfo = new PackageInfo();
         warpPackageInfo.applicationInfo = warpApplicationInfo;
         warpPackageInfo.versionCode = model.versionCode;
