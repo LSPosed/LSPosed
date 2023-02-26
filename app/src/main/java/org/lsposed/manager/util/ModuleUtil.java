@@ -327,7 +327,7 @@ public final class ModuleUtil {
 
         public String getDescription() {
             if (this.description != null) return this.description;
-            String descriptionTmp = null;
+            String descriptionTmp = "";
             if (legacy) {
                 Object descriptionRaw = app.metaData.get("xposeddescription");
                 if (descriptionRaw instanceof String) {
@@ -344,7 +344,7 @@ public final class ModuleUtil {
                 var des = app.loadDescription(pm);
                 if (des != null) descriptionTmp = des.toString();
             }
-            this.description = (descriptionTmp != null) ? descriptionTmp : "";
+            this.description = descriptionTmp;
             return this.description;
         }
 
