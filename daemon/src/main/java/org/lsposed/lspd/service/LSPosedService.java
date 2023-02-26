@@ -45,9 +45,11 @@ import android.util.Log;
 
 import org.lsposed.daemon.BuildConfig;
 
+import java.io.IOException;
 import java.util.Arrays;
 import java.util.List;
 import java.util.function.Consumer;
+import java.util.zip.ZipFile;
 
 import hidden.HiddenApiBridge;
 import io.github.libxposed.service.IXposedScopeCallback;
@@ -59,6 +61,23 @@ public class LSPosedService extends ILSPosedService.Stub {
     public static final String ACTION_USER_REMOVED = "android.intent.action.USER_REMOVED";
     private static final String EXTRA_USER_HANDLE = "android.intent.extra.user_handle";
     private static final String EXTRA_REMOVED_FOR_ALL_USERS = "android.intent.extra.REMOVED_FOR_ALL_USERS";
+
+    private static boolean isModernModules(ApplicationInfo info) {
+        String[] apks;
+        if (info.splitSourceDirs != null) {
+            apks = Arrays.copyOf(info.splitSourceDirs, info.splitSourceDirs.length + 1);
+            apks[info.splitSourceDirs.length] = info.sourceDir;
+        } else apks = new String[]{info.sourceDir};
+        for (var apk : apks) {
+            try (var zip = new ZipFile(apk)) {
+                if (zip.getEntry("META-INF/xposed/java_init.list") != null) {
+                    return true;
+                }
+            } catch (IOException ignored) {
+            }
+        }
+        return false;
+    }
 
     @Override
     public ILSPApplicationService requestApplicationService(int uid, int pid, String processName, IBinder heartBeat) {
@@ -108,7 +127,7 @@ public class LSPosedService extends ILSPosedService.Stub {
             }
         }
 
-        boolean isXposedModule = applicationInfo != null && applicationInfo.metaData != null && applicationInfo.metaData.containsKey("xposedminversion");
+        boolean isXposedModule = applicationInfo != null && ((applicationInfo.metaData != null && applicationInfo.metaData.containsKey("xposedminversion")) || isModernModules(applicationInfo));
 
         switch (intentAction) {
             case Intent.ACTION_PACKAGE_FULLY_REMOVED: {

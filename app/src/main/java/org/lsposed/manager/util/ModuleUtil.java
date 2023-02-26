@@ -25,6 +25,7 @@ import android.content.pm.PackageInfo;
 import android.content.pm.PackageManager;
 import android.content.pm.PackageManager.NameNotFoundException;
 import android.os.Build;
+import android.util.Log;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
@@ -36,14 +37,20 @@ import org.lsposed.manager.ConfigManager;
 import org.lsposed.manager.repo.RepoLoader;
 import org.lsposed.manager.repo.model.OnlineModule;
 
+import java.io.EOFException;
+import java.io.IOException;
+import java.nio.charset.StandardCharsets;
 import java.util.ArrayList;
 import java.util.Arrays;
+import java.util.Collections;
 import java.util.HashMap;
 import java.util.HashSet;
 import java.util.List;
 import java.util.Map;
 import java.util.Set;
 import java.util.concurrent.ConcurrentHashMap;
+import java.util.zip.ZipEntry;
+import java.util.zip.ZipFile;
 
 public final class ModuleUtil {
     // xposedminversion below this
@@ -88,6 +95,31 @@ public final class ModuleUtil {
         return result;
     }
 
+    public static ZipFile getModernModuleApk(ApplicationInfo info) {
+        String[] apks;
+        if (info.splitSourceDirs != null) {
+            apks = Arrays.copyOf(info.splitSourceDirs, info.splitSourceDirs.length + 1);
+            apks[info.splitSourceDirs.length] = info.sourceDir;
+        } else apks = new String[]{info.sourceDir};
+        ZipFile zip = null;
+        for (var apk : apks) {
+            try {
+                zip = new ZipFile(apk);
+                if (zip.getEntry("META-INF/xposed/java_init.list") != null) {
+                    return zip;
+                }
+                zip.close();
+                zip = null;
+            } catch (IOException ignored) {
+            }
+        }
+        return zip;
+    }
+
+    public static boolean isLegacyModule(ApplicationInfo info) {
+        return info.metaData != null && info.metaData.containsKey("xposedminversion");
+    }
+
     synchronized public void reloadInstalledModules() {
         modulesLoaded = false;
         if (!ConfigManager.isBinderAlive()) {
@@ -100,8 +132,9 @@ public final class ModuleUtil {
         for (PackageInfo pkg : ConfigManager.getInstalledPackagesFromAllUsers(PackageManager.GET_META_DATA | MATCH_ALL_FLAGS, false)) {
             ApplicationInfo app = pkg.applicationInfo;
 
-            if (app.metaData != null && app.metaData.containsKey("xposedminversion")) {
-                modules.computeIfAbsent(Pair.create(pkg.packageName, app.uid / 100000), k -> new InstalledModule(pkg));
+            var modernApk = getModernModuleApk(app);
+            if (modernApk != null || isLegacyModule(app)) {
+                modules.computeIfAbsent(Pair.create(pkg.packageName, app.uid / App.PER_USER_RANGE), k -> new InstalledModule(pkg, modernApk));
             }
         }
 
@@ -139,8 +172,9 @@ public final class ModuleUtil {
         }
 
         ApplicationInfo app = pkg.applicationInfo;
-        if (app.metaData != null && app.metaData.containsKey("xposedminversion")) {
-            InstalledModule module = new InstalledModule(pkg);
+        var modernApk = getModernModuleApk(app);
+        if (modernApk != null || isLegacyModule(app)) {
+            InstalledModule module = new InstalledModule(pkg, modernApk);
             installedModules.put(Pair.create(packageName, userId), module);
             listeners.forEach(i -> i.onSingleModuleReloaded(module));
             return module;
@@ -182,6 +216,21 @@ public final class ModuleUtil {
         return enabledModules.contains(packageName);
     }
 
+    private static String readZipEntryToString(ZipFile file, ZipEntry entry) throws IOException {
+        try (var is = file.getInputStream(entry)) {
+            var bytes = new byte[(int) entry.getSize()];
+            int offset = 0;
+            while (offset < bytes.length) {
+                int read = is.read(bytes, offset, bytes.length - offset);
+                if (read < 0) {
+                    throw new EOFException();
+                }
+                offset += read;
+            }
+            return new String(bytes, StandardCharsets.UTF_8);
+        }
+    }
+
     public int getEnabledModulesCount() {
         return modulesLoaded ? enabledModules.size() : -1;
     }
@@ -214,6 +263,7 @@ public final class ModuleUtil {
         public final String packageName;
         public final String versionName;
         public final long versionCode;
+        public final boolean legacy;
         public final int minVersion;
         public final int targetVersion;
         public final long installTime;
@@ -224,35 +274,54 @@ public final class ModuleUtil {
         private String description; // loaded lazyily
         private List<String> scopeList; // loaded lazyily
 
-        private InstalledModule(PackageInfo pkg) {
-            this.app = pkg.applicationInfo;
+        private InstalledModule(PackageInfo pkg, ZipFile modernModuleApk) {
+            app = pkg.applicationInfo;
             this.pkg = pkg;
-            this.userId = pkg.applicationInfo.uid / 100000;
-            this.packageName = pkg.packageName;
-            this.versionName = pkg.versionName;
+            userId = pkg.applicationInfo.uid / App.PER_USER_RANGE;
+            packageName = pkg.packageName;
+            versionName = pkg.versionName;
             if (Build.VERSION.SDK_INT < Build.VERSION_CODES.P) {
-                this.versionCode = pkg.versionCode;
+                versionCode = pkg.versionCode;
             } else {
-                this.versionCode = pkg.getLongVersionCode();
+                versionCode = pkg.getLongVersionCode();
             }
-            this.installTime = pkg.firstInstallTime;
-            this.updateTime = pkg.lastUpdateTime;
+            installTime = pkg.firstInstallTime;
+            updateTime = pkg.lastUpdateTime;
+            legacy = modernModuleApk == null;
 
-            Object minVersionRaw = app.metaData.get("xposedminversion");
-            if (minVersionRaw instanceof Integer) {
-                this.minVersion = (Integer) minVersionRaw;
-            } else if (minVersionRaw instanceof String) {
-                this.minVersion = extractIntPart((String) minVersionRaw);
+            if (legacy) {
+                Object minVersionRaw = app.metaData.get("xposedminversion");
+                if (minVersionRaw instanceof Integer) {
+                    minVersion = (Integer) minVersionRaw;
+                } else if (minVersionRaw instanceof String) {
+                    minVersion = extractIntPart((String) minVersionRaw);
+                } else {
+                    minVersion = 0;
+                }
+                targetVersion = minVersion; // legacy modules don't have a target version
             } else {
-                this.minVersion = 0;
-            }
-            Object targetVersionRaw = app.metaData.get("xposedtargetversion");
-            if (targetVersionRaw instanceof Integer) {
-                this.targetVersion = (Integer) targetVersionRaw;
-            } else if (targetVersionRaw instanceof String) {
-                this.targetVersion = extractIntPart((String) targetVersionRaw);
-            } else {
-                this.targetVersion = this.minVersion;
+                int minVersion = 100;
+                int targetVersion = 100;
+                try (modernModuleApk) {
+                    var minVersionEntry = modernModuleApk.getEntry("META-INF/xposed/minversion");
+                    if (minVersionEntry != null) {
+                        minVersion = extractIntPart(readZipEntryToString(modernModuleApk, minVersionEntry));
+                    }
+                    var targetVersionEntry = modernModuleApk.getEntry("META-INF/xposed/targetversion");
+                    if (targetVersionEntry != null) {
+                        targetVersion = extractIntPart(readZipEntryToString(modernModuleApk, targetVersionEntry));
+                    }
+                    var scopeEntry = modernModuleApk.getEntry("META-INF/xposed/scope");
+                    if (scopeEntry != null) {
+                        scopeList = Arrays.asList(readZipEntryToString(modernModuleApk, scopeEntry).split("\\n|\\r\\n"));
+                    } else {
+                        scopeList = Collections.emptyList();
+                    }
+                } catch (IOException e) {
+                    Log.e(App.TAG, "Error while closing modern module APK", e);
+                }
+                this.minVersion = minVersion;
+                this.targetVersion = targetVersion;
             }
         }
 
@@ -268,17 +337,21 @@ public final class ModuleUtil {
 
         public String getDescription() {
             if (this.description == null) {
-                Object descriptionRaw = app.metaData.get("xposeddescription");
                 String descriptionTmp = null;
-                if (descriptionRaw instanceof String) {
-                    descriptionTmp = ((String) descriptionRaw).trim();
-                } else if (descriptionRaw instanceof Integer) {
-                    try {
-                        int resId = (Integer) descriptionRaw;
-                        if (resId != 0)
-                            descriptionTmp = pm.getResourcesForApplication(app).getString(resId).trim();
-                    } catch (Exception ignored) {
+                if (legacy) {
+                    Object descriptionRaw = app.metaData.get("xposeddescription");
+                    if (descriptionRaw instanceof String) {
+                        descriptionTmp = ((String) descriptionRaw).trim();
+                    } else if (descriptionRaw instanceof Integer) {
+                        try {
+                            int resId = (Integer) descriptionRaw;
+                            if (resId != 0)
+                                descriptionTmp = pm.getResourcesForApplication(app).getString(resId).trim();
+                        } catch (Exception ignored) {
+                        }
                     }
+                } else {
+                    descriptionTmp = app.loadDescription(pm).toString();
                 }
                 this.description = (descriptionTmp != null) ? descriptionTmp : "";
             }

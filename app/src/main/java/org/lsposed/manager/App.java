@@ -70,6 +70,7 @@ import rikka.material.app.DayNightDelegate;
 import rikka.material.app.LocaleDelegate;
 
 public class App extends Application {
+    public static final int PER_USER_RANGE = 100000;
     public static final FutureTask<String> HTML_TEMPLATE = new FutureTask<>(() -> readWebviewHTML("template.html"));
     public static final FutureTask<String> HTML_TEMPLATE_DARK = new FutureTask<>(() -> readWebviewHTML("template_dark.html"));
 
