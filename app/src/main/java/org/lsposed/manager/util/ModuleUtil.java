@@ -25,6 +25,7 @@ import android.content.pm.PackageInfo;
 import android.content.pm.PackageManager;
 import android.content.pm.PackageManager.NameNotFoundException;
 import android.os.Build;
+import android.text.TextUtils;
 import android.util.Log;
 
 import androidx.annotation.NonNull;
@@ -47,6 +48,7 @@ import java.util.HashMap;
 import java.util.HashSet;
 import java.util.List;
 import java.util.Map;
+import java.util.Properties;
 import java.util.Set;
 import java.util.concurrent.ConcurrentHashMap;
 import java.util.zip.ZipEntry;
@@ -266,6 +268,7 @@ public final class ModuleUtil {
         public final boolean legacy;
         public final int minVersion;
         public final int targetVersion;
+        public final boolean staticScope;
         public final long installTime;
         public final long updateTime;
         public ApplicationInfo app;
@@ -299,19 +302,21 @@ public final class ModuleUtil {
                     minVersion = 0;
                 }
                 targetVersion = minVersion; // legacy modules don't have a target version
+                staticScope = false;
             } else {
                 int minVersion = 100;
                 int targetVersion = 100;
+                boolean staticScope = false;
                 try (modernModuleApk) {
-                    var minVersionEntry = modernModuleApk.getEntry("META-INF/xposed/minversion");
-                    if (minVersionEntry != null) {
-                        minVersion = extractIntPart(readZipEntryToString(modernModuleApk, minVersionEntry));
+                    var propEntry = modernModuleApk.getEntry("META-INF/xposed/module.prop");
+                    if (propEntry != null) {
+                        var prop = new Properties();
+                        prop.load(modernModuleApk.getInputStream(propEntry));
+                        minVersion = extractIntPart(prop.getProperty("minApiVersion"));
+                        targetVersion = extractIntPart(prop.getProperty("targetApiVersion"));
+                        staticScope = TextUtils.equals(prop.getProperty("staticScope"), "true");
                     }
-                    var targetVersionEntry = modernModuleApk.getEntry("META-INF/xposed/targetversion");
-                    if (targetVersionEntry != null) {
-                        targetVersion = extractIntPart(readZipEntryToString(modernModuleApk, targetVersionEntry));
-                    }
-                    var scopeEntry = modernModuleApk.getEntry("META-INF/xposed/scope");
+                    var scopeEntry = modernModuleApk.getEntry("META-INF/xposed/scope.list");
                     if (scopeEntry != null) {
                         scopeList = Arrays.asList(readZipEntryToString(modernModuleApk, scopeEntry).split("\\n|\\r\\n"));
                     } else {
@@ -322,6 +327,7 @@ public final class ModuleUtil {
                 }
                 this.minVersion = minVersion;
                 this.targetVersion = targetVersion;
+                this.staticScope = staticScope;
             }
         }
 
