@@ -48,6 +48,8 @@ jobs:
 
       - name: Setup Gradle
         uses: gradle/gradle-build-action@v2
+        with:
+          gradle-home-cache-cleanup: true
 
       - name: Checkout libxposed/api
         uses: actions/checkout@v3
@@ -67,6 +69,7 @@ jobs:
           max-size: 2G
           key: ${{ runner.os }}
           restore-keys: ${{ runner.os }}
+          save: ${{ github.event_name == 'push' && github.ref == 'refs/heads/master' }}
 
       - name: Build dependencies
         working-directory: libxposed
