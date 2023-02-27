@@ -30,6 +30,7 @@ import androidx.fragment.app.FragmentManager;
 import org.lsposed.manager.App;
 import org.lsposed.manager.ConfigManager;
 import org.lsposed.manager.R;
+import org.lsposed.manager.ui.fragment.HomeFragment;
 import org.lsposed.manager.util.ShortcutUtil;
 
 public class WelcomeDialog extends DialogFragment {
@@ -43,12 +44,15 @@ public class WelcomeDialog extends DialogFragment {
                         R.string.parasitic_welcome_summary_no_shortcut_support)
                 .setNegativeButton(R.string.never_show, (dialog, which) ->
                         App.getPreferences().edit().putBoolean("never_show_welcome", true).apply())
-                .setPositiveButton(android.R.string.ok, null);
-        if (shortcutSupported)
-            builder.setNeutralButton(R.string.create_shortcut, (dialog, which) ->
-                    ShortcutUtil.requestPinLaunchShortcut(() ->
-                            App.getPreferences().edit().putBoolean("never_show_welcome",
-                                    true).apply()));
+                .setPositiveButton(android.R.string.ok, null)
+                .setNeutralButton(R.string.create_shortcut, (dialog, which) -> {
+                    if (ShortcutUtil.requestPinLaunchShortcut(() -> App.getPreferences().edit().putBoolean("never_show_welcome", true).apply())) {
+                        var fragment = (HomeFragment) getParentFragment();
+                        if (fragment != null) {
+                            fragment.showHint(R.string.settings_unsupported_pin_shortcut_summary, false);
+                        }
+                    }
+                });
         return builder.create();
     }
 

@@ -24,6 +24,7 @@ import android.content.Context;
 import android.os.Build;
 import android.os.Bundle;
 import android.provider.Settings;
+import android.text.SpannableStringBuilder;
 import android.text.TextUtils;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -53,6 +54,7 @@ import org.lsposed.manager.util.LangList;
 import org.lsposed.manager.util.NavUtil;
 import org.lsposed.manager.util.ShortcutUtil;
 import org.lsposed.manager.util.ThemeUtil;
+import org.lsposed.manager.util.StyleUtils;
 
 import java.time.LocalDateTime;
 import java.util.ArrayList;
@@ -161,8 +163,12 @@ public class SettingsFragment extends BaseFragment {
             MaterialSwitchPreference notification = findPreference("enable_status_notification");
             if (notification != null) {
                 if (App.isParasitic() && !ShortcutUtil.isLaunchShortcutPinned()) {
-                    var s = notification.getContext().getString(R.string.disable_status_notification_error);
-                    notification.setSummaryOn(notification.getSummary() + "\n" + s);
+                    var sb = new SpannableStringBuilder();
+                    var summary = notification.getSummary() + "\n";
+                    sb.append(summary);
+                    sb.append(notification.getContext().getString(R.string.disable_status_notification_error));
+                    StyleUtils.setHintSpanColor(requireContext(), sb, sb.length() - summary.length(), sb.length(), com.google.android.material.R.attr.colorError);
+                    notification.setSummaryOn(sb);
                     notification.setEnabled(false);
                 } else {
                     notification.setEnabled(installed);
@@ -175,18 +181,24 @@ public class SettingsFragment extends BaseFragment {
 
             Preference shortcut = findPreference("add_shortcut");
             if (shortcut != null) {
-                shortcut.setVisible(App.isParasitic() && ShortcutUtil.isRequestPinShortcutSupported(requireContext()));
-                if (ShortcutUtil.isLaunchShortcutPinned()) {
-                    shortcut.setEnabled(false);
-                    shortcut.setSummary(R.string.settings_created_shortcut_summary);
+                var summary = new SpannableStringBuilder();
+                shortcut.setVisible(App.isParasitic());
+                if (ShortcutUtil.isRequestPinShortcutSupported(requireContext())) {
+                    summary.append(getString(R.string.settings_unsupported_pin_shortcut_summary));
+                    StyleUtils.setHintSpanColor(requireContext(), summary, 0, summary.length(), com.google.android.material.R.attr.colorError);
+                } else if (ShortcutUtil.isLaunchShortcutPinned()) {
+                    summary.append(getString(R.string.settings_created_shortcut_summary));
+                    StyleUtils.setHintSpanColor(requireContext(), summary, 0, summary.length(), com.google.android.material.R.attr.colorPrimary);
                 } else {
                     shortcut.setEnabled(true);
-                    shortcut.setSummary(R.string.settings_create_shortcut_summary);
+                    summary.append(getString(R.string.settings_create_shortcut_summary));
+                    StyleUtils.setHintSpanColor(requireContext(), summary, 0, summary.length(), com.google.android.material.R.attr.colorPrimary);
                 }
                 shortcut.setOnPreferenceClickListener(preference -> {
                     ShortcutUtil.requestPinLaunchShortcut(() -> {
                         shortcut.setEnabled(false);
-                        shortcut.setSummary(R.string.settings_created_shortcut_summary);
+                        summary.append(getString(R.string.settings_created_shortcut_summary));
+                        StyleUtils.setHintSpanColor(requireContext(), summary, 0, summary.length(), com.google.android.material.R.attr.colorPrimary);
                         if (notification != null) {
                             notification.setEnabled(true);
                             notification.setSummaryOn(R.string.settings_enable_status_notification_summary);
@@ -195,6 +207,7 @@ public class SettingsFragment extends BaseFragment {
                     });
                     return true;
                 });
+                if (summary.length() != 0) shortcut.setSummary(summary);
             }
 
             Preference backup = findPreference("backup");

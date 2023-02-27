@@ -200,6 +200,7 @@
     <string name="settings_translation_summary">Help us translate %s into your language</string>
     <string name="settings_create_shortcut_summary">Create a shortcut that can open parasitic manager</string>
     <string name="settings_created_shortcut_summary">A shortcut has been created to open parasitic manager</string>
+    <string name="settings_unsupported_pin_shortcut_summary">The current default desktop does not support creating shortcuts</string>
     <string name="settings_enable_status_notification">Status Notification</string>
     <string name="settings_enable_status_notification_summary">Show a notification that can open parasitic manager</string>
     <string name="disable_status_notification_error">No shortcut, cannot disable notification</string>
