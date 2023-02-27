@@ -2,6 +2,11 @@ name: Core
 
 on:
   workflow_dispatch:
+    inputs:
+      post_telegram:
+        description: 'Post to Telegram'
+        required: true
+        type: boolean
   push:
     branches: [ master ]
     tags: [ v* ]
@@ -14,137 +19,149 @@ jobs:
     env:
       CCACHE_COMPILERCHECK: "%compiler% -dumpmachine; %compiler% -dumpversion"
       CCACHE_NOHASHDIR: "true"
-      CCACHE_MAXSIZE: "1G"
       CCACHE_HARDLINK: "true"
       CCACHE_BASEDIR: "${{ github.workspace }}"
+
     steps:
-    - name: Checkout
-      uses: actions/checkout@v3
-      with:
-        submodules: 'recursive'
-        fetch-depth: 0
-    - name: Write key
-      if: ${{ ( github.event_name != 'pull_request' && github.ref == 'refs/heads/master' ) || github.ref_type == 'tag' }}
-      run: |
-        if [ ! -z "${{ secrets.KEY_STORE }}" ]; then
-          echo androidStorePassword='${{ secrets.KEY_STORE_PASSWORD }}' >> gradle.properties
-          echo androidKeyAlias='${{ secrets.ALIAS }}' >> gradle.properties
-          echo androidKeyPassword='${{ secrets.KEY_PASSWORD }}' >> gradle.properties
-          echo androidStoreFile='key.jks' >> gradle.properties
-          echo ${{ secrets.KEY_STORE }} | base64 --decode > key.jks
-        fi
-    - name: Setup Java
-      uses: actions/setup-java@v3
-      with:
-        distribution: 'temurin'
-        java-version: '17'
-        cache: 'gradle'
-    - name: Cache Gradle Build
-      uses: actions/cache@v3
-      with:
-        path: |
-          ~/.gradle/caches/build-cache-*
-          ~/.gradle/buildOutputCleanup/cache.properties
-        key: gradle-builds-core-${{ github.sha }}
-        restore-keys: |
-          gradle-builds
-    - name: Set up ccache
-      uses: hendrikmuhs/ccache-action@v1.2
-      with:
-        key: ${{ runner.os }}
-        restore-keys: ${{ runner.os }}
-    - name: Build dependencies
-      run: |
-        mkdir -p libxposed
-        cd libxposed
-        git clone https://github.com/libxposed/api.git
-        cd api
-        echo 'org.gradle.jvmargs=-Xmx2048m' >> gradle.properties
-        ./gradlew :api:publishApiPublicationToMavenLocal
-        cd ..
-        git clone https://github.com/libxposed/service.git
-        cd service
-        echo 'org.gradle.jvmargs=-Xmx2048m' >> gradle.properties
-        ./gradlew :interface:publishInterfacePublicationToMavenLocal
-        cd ../..
-      env:
-        ORG_GRADLE_PROJECT_signingKey: ${{ secrets.maven_pgp_signingKey }}
-        ORG_GRADLE_PROJECT_signingPassword: ${{ secrets.maven_pgp_signingPassword }}
-    - name: Build with Gradle
-      run: |
-        [ $(du -s ~/.gradle/wrapper | awk '{ print $1 }') -gt 250000 ] && rm -rf ~/.gradle/wrapper/* || true
-        find ~/.gradle/caches -exec touch -d "2 days ago" {} + || true
-        echo 'org.gradle.caching=true' >> gradle.properties
-        echo 'org.gradle.parallel=true' >> gradle.properties
-        echo 'org.gradle.vfs.watch=true' >> gradle.properties
-        echo 'org.gradle.jvmargs=-Xmx2048m' >> gradle.properties
-        echo 'android.native.buildOutput=verbose' >> gradle.properties
-        echo 'buildCache { local { removeUnusedEntriesAfterDays = 1 } }' >> settings.gradle.kts
-        ./gradlew zipAll
-    - name: Prepare artifact
-      if: success()
-      id: prepareArtifact
-      run: |
-        riruReleaseName=`ls magisk-loader/release/LSPosed-v*-riru-release.zip | awk -F '(/|.zip)' '{print $3}'` && echo "riruReleaseName=$riruReleaseName" >> $GITHUB_OUTPUT
-        riruDebugName=`ls magisk-loader/release/LSPosed-v*-riru-debug.zip | awk -F '(/|.zip)' '{print $3}'` && echo "riruDebugName=$riruDebugName" >> $GITHUB_OUTPUT
-        zygiskReleaseName=`ls magisk-loader/release/LSPosed-v*-zygisk-release.zip | awk -F '(/|.zip)' '{print $3}'` && echo "zygiskReleaseName=$zygiskReleaseName" >> $GITHUB_OUTPUT
-        zygiskDebugName=`ls magisk-loader/release/LSPosed-v*-zygisk-debug.zip | awk -F '(/|.zip)' '{print $3}'` && echo "zygiskDebugName=$zygiskDebugName" >> $GITHUB_OUTPUT
-        unzip magisk-loader/release/LSPosed-v*-riru-release.zip -d LSPosed-riru-release
-        unzip magisk-loader/release/LSPosed-v*-riru-debug.zip -d LSPosed-riru-debug
-        unzip magisk-loader/release/LSPosed-v*-zygisk-release.zip -d LSPosed-zygisk-release
-        unzip magisk-loader/release/LSPosed-v*-zygisk-debug.zip -d LSPosed-zygisk-debug
-    - name: Upload riru release
-      uses: actions/upload-artifact@v3
-      with:
-        name: ${{ steps.prepareArtifact.outputs.riruReleaseName }}
-        path: './LSPosed-riru-release/*'
-    - name: Upload riru debug
-      uses: actions/upload-artifact@v3
-      with:
-        name: ${{ steps.prepareArtifact.outputs.riruDebugName }}
-        path: './LSPosed-riru-debug/*'
-    - name: Upload zygisk release
-      uses: actions/upload-artifact@v3
-      with:
-        name: ${{ steps.prepareArtifact.outputs.zygiskReleaseName }}
-        path: './LSPosed-zygisk-release/*'
-    - name: Upload zygisk debug
-      uses: actions/upload-artifact@v3
-      with:
-        name: ${{ steps.prepareArtifact.outputs.zygiskDebugName }}
-        path: './LSPosed-zygisk-debug/*'
-    - name: Upload mappings
-      uses: actions/upload-artifact@v3
-      with:
-        name: mappings
-        path: |
-          magisk-loader/build/outputs/mapping
-          app/build/outputs/mapping
-    - name: Upload symbols
-      uses: actions/upload-artifact@v3
-      with:
-        name: symbols
-        path: |
-          magisk-loader/build/symbols
-          daemon/build/symbols
-          dex2oat/build/symbols
-    - name: Post to channel
-      if: ${{ success() && github.event_name != 'pull_request' && github.ref == 'refs/heads/master' && github.ref_type != 'tag' }}
-      env:
-        CHANNEL_ID: ${{ secrets.CHANNEL_ID }}
-        DISCUSSION_ID: ${{ secrets.DISCUSSION_ID }}
-        TOPIC_ID: ${{ secrets.TOPIC_ID }}
-        BOT_TOKEN: ${{ secrets.BOT_TOKEN }}
-        COMMIT_MESSAGE: ${{ github.event.head_commit.message }}
-        COMMIT_URL: ${{ github.event.head_commit.url }}
-      run: |
-        if [ ! -z "${{ secrets.BOT_TOKEN }}" ]; then
-          OUTPUT="magisk-loader/release/"
-          export riruRelease=$(find $OUTPUT -name "LSPosed-v*-riru-release.zip")
-          export riruDebug=$(find $OUTPUT -name "LSPosed-v*-riru-debug.zip")
-          export zygiskRelease=$(find $OUTPUT -name "LSPosed-v*-zygisk-release.zip")
-          export zygiskDebug=$(find $OUTPUT -name "LSPosed-v*-zygisk-debug.zip")
-          ESCAPED=`python3 -c 'import json,os,urllib.parse; msg = json.dumps(os.environ["COMMIT_MESSAGE"]); print(urllib.parse.quote(msg if len(msg) <= 1024 else json.dumps(os.environ["COMMIT_URL"])))'`
-          curl -v "https://api.telegram.org/bot${BOT_TOKEN}/sendMediaGroup?chat_id=${CHANNEL_ID}&media=%5B%7B%22type%22%3A%22document%22%2C%20%22media%22%3A%22attach%3A%2F%2FriruRelease%22%7D%2C%7B%22type%22%3A%22document%22%2C%20%22media%22%3A%22attach%3A%2F%2FzygiskRelease%22%7D%2C%7B%22type%22%3A%22document%22%2C%20%22media%22%3A%22attach%3A%2F%2FriruDebug%22%7D%2C%7B%22type%22%3A%22document%22%2C%20%22media%22%3A%22attach%3A%2F%2FzygiskDebug%22%2C%22caption%22:${ESCAPED}%7D%5D" -F riruRelease="@$riruRelease" -F riruDebug="@$riruDebug" -F zygiskRelease="@$zygiskRelease" -F zygiskDebug="@$zygiskDebug"
-          curl -v "https://api.telegram.org/bot${BOT_TOKEN}/sendMediaGroup?chat_id=${DISCUSSION_ID}&message_thread_id=${TOPIC_ID}&media=%5B%7B%22type%22%3A%22document%22%2C%20%22media%22%3A%22attach%3A%2F%2FriruRelease%22%7D%2C%7B%22type%22%3A%22document%22%2C%20%22media%22%3A%22attach%3A%2F%2FzygiskRelease%22%7D%2C%7B%22type%22%3A%22document%22%2C%20%22media%22%3A%22attach%3A%2F%2FriruDebug%22%7D%2C%7B%22type%22%3A%22document%22%2C%20%22media%22%3A%22attach%3A%2F%2FzygiskDebug%22%2C%22caption%22:${ESCAPED}%7D%5D" -F riruRelease="@$riruRelease" -F riruDebug="@$riruDebug" -F zygiskRelease="@$zygiskRelease" -F zygiskDebug="@$zygiskDebug"
-        fi
+      - name: Checkout
+        uses: actions/checkout@v3
+        with:
+          submodules: "recursive"
+          fetch-depth: 0
+
+      - name: Write key
+        if: ${{ ( github.event_name != 'pull_request' && github.ref == 'refs/heads/master' ) || github.ref_type == 'tag' }}
+        run: |
+          if [ ! -z "${{ secrets.KEY_STORE }}" ]; then
+            echo androidStorePassword='${{ secrets.KEY_STORE_PASSWORD }}' >> gradle.properties
+            echo androidKeyAlias='${{ secrets.ALIAS }}' >> gradle.properties
+            echo androidKeyPassword='${{ secrets.KEY_PASSWORD }}' >> gradle.properties
+            echo androidStoreFile='key.jks' >> gradle.properties
+            echo ${{ secrets.KEY_STORE }} | base64 --decode > key.jks
+          fi
+
+      - name: Setup Java
+        uses: actions/setup-java@v3
+        with:
+          distribution: "temurin"
+          java-version: "17"
+
+      - name: Setup Gradle
+        uses: gradle/gradle-build-action@v2
+        with:
+          gradle-home-cache-cleanup: true
+
+      - name: Checkout libxposed/api
+        uses: actions/checkout@v3
+        with:
+          repository: libxposed/api
+          path: libxposed/api
+
+      - name: Checkout libxposed/api
+        uses: actions/checkout@v3
+        with:
+          repository: libxposed/service
+          path: libxposed/service
+
+      - name: Set up ccache
+        uses: hendrikmuhs/ccache-action@v1.2
+        with:
+          max-size: 2G
+          key: ${{ runner.os }}
+          restore-keys: ${{ runner.os }}
+          save: ${{ github.event_name == 'push' && github.ref == 'refs/heads/master' }}
+
+      - name: Build dependencies
+        working-directory: libxposed
+        run: |
+          cd api
+          echo 'org.gradle.jvmargs=-Xmx2048m' >> gradle.properties
+          ./gradlew :api:publishApiPublicationToMavenLocal
+          cd ..
+          cd service
+          echo 'org.gradle.jvmargs=-Xmx2048m' >> gradle.properties
+          ./gradlew :interface:publishInterfacePublicationToMavenLocal
+        env:
+          ORG_GRADLE_PROJECT_signingKey: ${{ secrets.maven_pgp_signingKey }}
+          ORG_GRADLE_PROJECT_signingPassword: ${{ secrets.maven_pgp_signingPassword }}
+
+      - name: Build with Gradle
+        run: |
+          echo 'org.gradle.parallel=true' >> gradle.properties
+          echo 'org.gradle.vfs.watch=true' >> gradle.properties
+          echo 'org.gradle.jvmargs=-Xmx2048m' >> gradle.properties
+          echo 'android.native.buildOutput=verbose' >> gradle.properties
+          sed -i 's/org.gradle.unsafe.configuration-cache=true//g' gradle.properties
+          ./gradlew zipAll
+
+      - name: Prepare artifact
+        if: success()
+        id: prepareArtifact
+        run: |
+          riruReleaseName=`ls magisk-loader/release/LSPosed-v*-riru-release.zip | awk -F '(/|.zip)' '{print $3}'` && echo "riruReleaseName=$riruReleaseName" >> $GITHUB_OUTPUT
+          riruDebugName=`ls magisk-loader/release/LSPosed-v*-riru-debug.zip | awk -F '(/|.zip)' '{print $3}'` && echo "riruDebugName=$riruDebugName" >> $GITHUB_OUTPUT
+          zygiskReleaseName=`ls magisk-loader/release/LSPosed-v*-zygisk-release.zip | awk -F '(/|.zip)' '{print $3}'` && echo "zygiskReleaseName=$zygiskReleaseName" >> $GITHUB_OUTPUT
+          zygiskDebugName=`ls magisk-loader/release/LSPosed-v*-zygisk-debug.zip | awk -F '(/|.zip)' '{print $3}'` && echo "zygiskDebugName=$zygiskDebugName" >> $GITHUB_OUTPUT
+          unzip magisk-loader/release/LSPosed-v*-riru-release.zip -d LSPosed-riru-release
+          unzip magisk-loader/release/LSPosed-v*-riru-debug.zip -d LSPosed-riru-debug
+          unzip magisk-loader/release/LSPosed-v*-zygisk-release.zip -d LSPosed-zygisk-release
+          unzip magisk-loader/release/LSPosed-v*-zygisk-debug.zip -d LSPosed-zygisk-debug
+
+      - name: Upload riru release
+        uses: actions/upload-artifact@v3
+        with:
+          name: ${{ steps.prepareArtifact.outputs.riruReleaseName }}
+          path: "./LSPosed-riru-release/*"
+
+      - name: Upload riru debug
+        uses: actions/upload-artifact@v3
+        with:
+          name: ${{ steps.prepareArtifact.outputs.riruDebugName }}
+          path: "./LSPosed-riru-debug/*"
+
+      - name: Upload zygisk release
+        uses: actions/upload-artifact@v3
+        with:
+          name: ${{ steps.prepareArtifact.outputs.zygiskReleaseName }}
+          path: "./LSPosed-zygisk-release/*"
+
+      - name: Upload zygisk debug
+        uses: actions/upload-artifact@v3
+        with:
+          name: ${{ steps.prepareArtifact.outputs.zygiskDebugName }}
+          path: "./LSPosed-zygisk-debug/*"
+
+      - name: Upload mappings
+        uses: actions/upload-artifact@v3
+        with:
+          name: mappings
+          path: |
+            magisk-loader/build/outputs/mapping
+            app/build/outputs/mapping
+
+      - name: Upload symbols
+        uses: actions/upload-artifact@v3
+        with:
+          name: symbols
+          path: build/symbols
+
+      - name: Post to channel
+        if: ${{ success() && github.event_name != 'pull_request' && github.ref == 'refs/heads/master' && github.ref_type != 'tag' && inputs.post_telegram != 'false' }}
+        env:
+          CHANNEL_ID: ${{ secrets.CHANNEL_ID }}
+          DISCUSSION_ID: ${{ secrets.DISCUSSION_ID }}
+          TOPIC_ID: ${{ secrets.TOPIC_ID }}
+          BOT_TOKEN: ${{ secrets.BOT_TOKEN }}
+          COMMIT_MESSAGE: ${{ github.event.head_commit.message }}
+          COMMIT_URL: ${{ github.event.head_commit.url }}
+        run: |
+          if [ ! -z "${{ secrets.BOT_TOKEN }}" ]; then
+            OUTPUT="magisk-loader/release/"
+            export riruRelease=$(find $OUTPUT -name "LSPosed-v*-riru-release.zip")
+            export riruDebug=$(find $OUTPUT -name "LSPosed-v*-riru-debug.zip")
+            export zygiskRelease=$(find $OUTPUT -name "LSPosed-v*-zygisk-release.zip")
+            export zygiskDebug=$(find $OUTPUT -name "LSPosed-v*-zygisk-debug.zip")
+            ESCAPED=`python3 -c 'import json,os,urllib.parse; msg = json.dumps(os.environ["COMMIT_MESSAGE"]); print(urllib.parse.quote(msg if len(msg) <= 1024 else json.dumps(os.environ["COMMIT_URL"])))'`
+            curl -v "https://api.telegram.org/bot${BOT_TOKEN}/sendMediaGroup?chat_id=${CHANNEL_ID}&media=%5B%7B%22type%22%3A%22document%22%2C%20%22media%22%3A%22attach%3A%2F%2FriruRelease%22%7D%2C%7B%22type%22%3A%22document%22%2C%20%22media%22%3A%22attach%3A%2F%2FzygiskRelease%22%7D%2C%7B%22type%22%3A%22document%22%2C%20%22media%22%3A%22attach%3A%2F%2FriruDebug%22%7D%2C%7B%22type%22%3A%22document%22%2C%20%22media%22%3A%22attach%3A%2F%2FzygiskDebug%22%2C%22caption%22:${ESCAPED}%7D%5D" -F riruRelease="@$riruRelease" -F riruDebug="@$riruDebug" -F zygiskRelease="@$zygiskRelease" -F zygiskDebug="@$zygiskDebug"
+            curl -v "https://api.telegram.org/bot${BOT_TOKEN}/sendMediaGroup?chat_id=${DISCUSSION_ID}&message_thread_id=${TOPIC_ID}&media=%5B%7B%22type%22%3A%22document%22%2C%20%22media%22%3A%22attach%3A%2F%2FriruRelease%22%7D%2C%7B%22type%22%3A%22document%22%2C%20%22media%22%3A%22attach%3A%2F%2FzygiskRelease%22%7D%2C%7B%22type%22%3A%22document%22%2C%20%22media%22%3A%22attach%3A%2F%2FriruDebug%22%7D%2C%7B%22type%22%3A%22document%22%2C%20%22media%22%3A%22attach%3A%2F%2FzygiskDebug%22%2C%22caption%22:${ESCAPED}%7D%5D" -F riruRelease="@$riruRelease" -F riruDebug="@$riruDebug" -F zygiskRelease="@$zygiskRelease" -F zygiskDebug="@$zygiskDebug"
+          fi
