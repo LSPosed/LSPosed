@@ -61,8 +61,7 @@ public class Startup {
                 ActivityThread.class, ApplicationInfo.class, CompatibilityInfo.class,
                 ClassLoader.class, boolean.class, boolean.class, boolean.class,
                 new LoadedApkCtorHooker());
-        XposedHelpers.findAndHookMethod(ActivityThread.class, "attach", boolean.class,
-                long.class, new AttachHooker());
+        XposedBridge.hookAllMethods(ActivityThread.class, "attach", new AttachHooker());
     }
 
     public static void bootstrapXposed() {
