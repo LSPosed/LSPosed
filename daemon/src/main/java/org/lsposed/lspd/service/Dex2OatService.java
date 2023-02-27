@@ -162,6 +162,7 @@ public class Dex2OatService implements Runnable {
         thread.setName("dex2oat");
         thread.start();
         selinuxObserver.startWatching();
+        selinuxObserver.onEvent(0, null);
     }
 
     @Override
