@@ -88,16 +88,16 @@
             android:icon="@drawable/ic_outline_assignment_24"
             android:key="disable_verbose_log"
             android:persistent="false"
-            android:title="@string/settings_disable_verbose_log"
-            android:summary="@string/settings_disable_verbose_log_summary"/>
+            android:summary="@string/settings_disable_verbose_log_summary"
+            android:title="@string/settings_disable_verbose_log" />
 
         <rikka.material.preference.MaterialSwitchPreference
             android:defaultValue="true"
             android:icon="@drawable/ic_outline_shield_24"
             android:key="enable_dex_obfuscate"
             android:persistent="false"
-            android:title="@string/settings_xposed_api_call_protection"
-            android:summary="@string/settings_xposed_api_call_protection_summary"/>
+            android:summary="@string/settings_xposed_api_call_protection_summary"
+            android:title="@string/settings_xposed_api_call_protection" />
 
         <Preference
             android:icon="@drawable/ic_outline_app_shortcut_24"
@@ -110,6 +110,7 @@
             android:icon="@drawable/ic_outline_speaker_notes_24"
             android:key="enable_status_notification"
             android:persistent="false"
+            android:shouldDisableView="false"
             android:summary="@string/settings_enable_status_notification_summary"
             android:title="@string/settings_enable_status_notification" />
     </PreferenceCategory>

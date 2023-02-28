@@ -149,12 +149,12 @@ public class ShortcutUtil {
         return sm.isRequestPinShortcutSupported();
     }
 
-    public static void requestPinLaunchShortcut(Runnable afterPinned) {
+    public static boolean requestPinLaunchShortcut(Runnable afterPinned) {
         if (!App.isParasitic()) throw new RuntimeException();
         var context = App.getInstance();
         var sm = context.getSystemService(ShortcutManager.class);
-        if (!isRequestPinShortcutSupported(context)) return;
-        sm.requestPinShortcut(getShortcutBuilder(context).build(),
+        if (!sm.isRequestPinShortcutSupported()) return false;
+        return sm.requestPinShortcut(getShortcutBuilder(context).build(),
                 registerReceiver(context, afterPinned));
     }
 
