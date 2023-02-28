@@ -59,7 +59,7 @@ dependencyResolutionManagement {
             library("rikkax-widget-mainswitchbar", "dev.rikka.rikkax.widget:mainswitchbar:1.0.2")
 
             library("androidx-activity", "androidx.activity:activity:1.6.1")
-            library("androidx-annotation", "androidx.annotation:annotation:1.5.0")
+            library("androidx-annotation", "androidx.annotation:annotation:1.6.0")
             library("androidx-browser", "androidx.browser:browser:1.5.0")
             library("androidx-constraintlayout", "androidx.constraintlayout:constraintlayout:2.1.4")
             library("androidx-core", "androidx.core:core:1.9.0")
