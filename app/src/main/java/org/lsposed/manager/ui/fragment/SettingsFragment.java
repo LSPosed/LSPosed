@@ -169,7 +169,8 @@ public class SettingsFragment extends BaseFragment {
                     return res;
                 });
                 if (App.isParasitic() && !ShortcutUtil.isLaunchShortcutPinned()) {
-                    notification.setSummaryOn(notification.getSummary() + "\n" + notification.getContext().getString(R.string.disable_status_notification_error));
+                    var s = notification.getContext().getString(R.string.disable_status_notification_error);
+                    notification.setSummaryOn(notification.getSummary() + "\n" + s);
                     if (ConfigManager.enableStatusNotification())
                         notification.setEnabled(false);
                 }
