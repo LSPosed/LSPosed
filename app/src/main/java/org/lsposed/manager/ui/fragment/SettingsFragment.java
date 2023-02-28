@@ -193,9 +193,8 @@ public class SettingsFragment extends BaseFragment {
                     shortcut.setSummary(R.string.settings_create_shortcut_summary);
                 }
                 var supported = ShortcutUtil.isRequestPinShortcutSupported(requireContext());
-                var onCreateShortcutPreferenceClickListener = new Preference.OnPreferenceClickListener() {
-                    @Override
-                    public boolean onPreferenceClick(@NonNull Preference preference) {
+                shortcut.setOnPreferenceClickListener(preference -> {
+                    if (supported) {
                         ShortcutUtil.requestPinLaunchShortcut(() -> {
                             shortcut.setEnabled(false);
                             shortcut.setSummary(R.string.settings_created_shortcut_summary);
@@ -206,16 +205,11 @@ public class SettingsFragment extends BaseFragment {
                             App.getPreferences().edit().putBoolean("never_show_welcome", true).apply();
                         });
                         return true;
-                    }
-                };
-                var onNotSupportShortcutsPreferenceClickListener = new Preference.OnPreferenceClickListener() {
-                    @Override
-                    public boolean onPreferenceClick(@NonNull Preference preference) {
+                    } else {
                         parentFragment.showHint(R.string.settings_unsupported_pin_shortcut_summary, true);
-                        return true;
+                        return false;
                     }
-                };
-                shortcut.setOnPreferenceClickListener(supported ? onCreateShortcutPreferenceClickListener : onNotSupportShortcutsPreferenceClickListener);
+                });
             }
 
             Preference backup = findPreference("backup");
