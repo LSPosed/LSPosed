@@ -110,6 +110,7 @@
             android:icon="@drawable/ic_outline_speaker_notes_24"
             android:key="enable_status_notification"
             android:persistent="false"
+            android:shouldDisableView="false"
             android:summary="@string/settings_enable_status_notification_summary"
             android:title="@string/settings_enable_status_notification" />
     </PreferenceCategory>

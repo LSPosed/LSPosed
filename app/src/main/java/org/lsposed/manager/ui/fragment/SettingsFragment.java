@@ -158,20 +158,18 @@ public class SettingsFragment extends BaseFragment {
                     return ConfigManager.setDexObfuscateEnabled((boolean) newValue);
                 });
             }
-            var onEnableStatusNotificationPreferenceChangeListener = new Preference.OnPreferenceChangeListener() {
-                @Override
-                public boolean onPreferenceChange(@NonNull Preference preference, Object newValue) {
-                    var res = ConfigManager.setEnableStatusNotification((boolean) newValue);
-                    if ((boolean) newValue && !ShortcutUtil.isLaunchShortcutPinned())
-                        preference.setOnPreferenceChangeListener((p, v) -> false);
-                    return res;
-                }
-            };
+
             MaterialSwitchPreference notification = findPreference("enable_status_notification");
             if (notification != null) {
                 notification.setChecked(installed && ConfigManager.enableStatusNotification());
-                if (installed && !ConfigManager.enableStatusNotification())
-                    notification.setOnPreferenceChangeListener(onEnableStatusNotificationPreferenceChangeListener);
+                notification.setVisible(installed);
+                if (installed)
+                    notification.setOnPreferenceChangeListener((p, v) -> {
+                        var res = ConfigManager.setEnableStatusNotification((boolean) v);
+                        if ((boolean) v && !ShortcutUtil.isLaunchShortcutPinned())
+                            p.setEnabled(false);
+                        return res;
+                    });
                 if (App.isParasitic() && !ShortcutUtil.isLaunchShortcutPinned()) {
                     var sb = new SpannableStringBuilder();
                     var summary = notification.getSummary();
@@ -180,9 +178,7 @@ public class SettingsFragment extends BaseFragment {
                     sb.append(notification.getContext().getString(R.string.disable_status_notification_error));
                     notification.setSummaryOn(sb);
                     if (ConfigManager.enableStatusNotification())
-                        notification.setOnPreferenceChangeListener((p, v) -> false);
-                } else {
-                    notification.setVisible(installed);
+                        notification.setEnabled(false);
                 }
             }
 
@@ -204,7 +200,7 @@ public class SettingsFragment extends BaseFragment {
                             shortcut.setEnabled(false);
                             shortcut.setSummary(R.string.settings_created_shortcut_summary);
                             if (notification != null) {
-                                notification.setOnPreferenceChangeListener(onEnableStatusNotificationPreferenceChangeListener);
+                                notification.setEnabled(true);
                                 notification.setSummaryOn(R.string.settings_enable_status_notification_summary);
                             }
                             App.getPreferences().edit().putBoolean("never_show_welcome", true).apply();
