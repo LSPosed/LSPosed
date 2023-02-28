@@ -20,7 +20,7 @@ dependencyResolutionManagement {
     }
     versionCatalogs {
         create("libs") {
-            val agpVersion = version("agp", "7.4.1")
+            val agpVersion = version("agp", "7.4.2")
             val kotlinVersion = version("kotlin", "1.8.10")
             val navVersion = version("nav", "2.5.3")
             val appCenterVersion = version("appcenter", "5.0.0")
