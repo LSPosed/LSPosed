@@ -81,9 +81,6 @@ jobs:
           cd service
           echo 'org.gradle.jvmargs=-Xmx2048m' >> gradle.properties
           ./gradlew :interface:publishInterfacePublicationToMavenLocal
-        env:
-          ORG_GRADLE_PROJECT_signingKey: ${{ secrets.maven_pgp_signingKey }}
-          ORG_GRADLE_PROJECT_signingPassword: ${{ secrets.maven_pgp_signingPassword }}
 
       - name: Build with Gradle
         run: |
