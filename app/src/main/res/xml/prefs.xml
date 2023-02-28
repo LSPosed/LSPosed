@@ -102,7 +102,6 @@
         <Preference
             android:icon="@drawable/ic_outline_app_shortcut_24"
             android:key="add_shortcut"
-            android:enabled="false"
             android:summary="@string/settings_create_shortcut_summary"
             android:title="@string/create_shortcut" />
 

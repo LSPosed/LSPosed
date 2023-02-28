@@ -54,7 +54,6 @@ import org.lsposed.manager.util.LangList;
 import org.lsposed.manager.util.NavUtil;
 import org.lsposed.manager.util.ShortcutUtil;
 import org.lsposed.manager.util.ThemeUtil;
-import org.lsposed.manager.util.StyleUtils;
 
 import java.time.LocalDateTime;
 import java.util.ArrayList;
@@ -159,55 +158,68 @@ public class SettingsFragment extends BaseFragment {
                     return ConfigManager.setDexObfuscateEnabled((boolean) newValue);
                 });
             }
-
+            var onEnableStatusNotificationPreferenceChangeListener = new Preference.OnPreferenceChangeListener() {
+                @Override
+                public boolean onPreferenceChange(@NonNull Preference preference, Object newValue) {
+                    var res = ConfigManager.setEnableStatusNotification((boolean) newValue);
+                    if ((boolean) newValue && !ShortcutUtil.isLaunchShortcutPinned())
+                        preference.setOnPreferenceChangeListener((p, v) -> false);
+                    return res;
+                }
+            };
             MaterialSwitchPreference notification = findPreference("enable_status_notification");
             if (notification != null) {
+                notification.setChecked(installed && ConfigManager.enableStatusNotification());
+                if (installed && !ConfigManager.enableStatusNotification())
+                    notification.setOnPreferenceChangeListener(onEnableStatusNotificationPreferenceChangeListener);
                 if (App.isParasitic() && !ShortcutUtil.isLaunchShortcutPinned()) {
                     var sb = new SpannableStringBuilder();
-                    var summary = notification.getSummary() + "\n";
+                    var summary = notification.getSummary();
                     sb.append(summary);
+                    sb.append("\n");
                     sb.append(notification.getContext().getString(R.string.disable_status_notification_error));
-                    StyleUtils.setHintSpanColor(requireContext(), sb, sb.length() - summary.length(), sb.length(), com.google.android.material.R.attr.colorError);
                     notification.setSummaryOn(sb);
-                    notification.setEnabled(false);
+                    if (ConfigManager.enableStatusNotification())
+                        notification.setOnPreferenceChangeListener((p, v) -> false);
                 } else {
-                    notification.setEnabled(installed);
+                    notification.setVisible(installed);
                 }
-                notification.setChecked(installed && ConfigManager.enableStatusNotification());
-                notification.setOnPreferenceChangeListener((p, v) ->
-                        ConfigManager.setEnableStatusNotification((boolean) v)
-                );
             }
 
             Preference shortcut = findPreference("add_shortcut");
             if (shortcut != null) {
-                var summary = new SpannableStringBuilder();
                 shortcut.setVisible(App.isParasitic());
-                if (ShortcutUtil.isRequestPinShortcutSupported(requireContext())) {
-                    summary.append(getString(R.string.settings_unsupported_pin_shortcut_summary));
-                    StyleUtils.setHintSpanColor(requireContext(), summary, 0, summary.length(), com.google.android.material.R.attr.colorError);
-                } else if (ShortcutUtil.isLaunchShortcutPinned()) {
-                    summary.append(getString(R.string.settings_created_shortcut_summary));
-                    StyleUtils.setHintSpanColor(requireContext(), summary, 0, summary.length(), com.google.android.material.R.attr.colorPrimary);
+                if (ShortcutUtil.isLaunchShortcutPinned()) {
+                    shortcut.setEnabled(false);
+                    shortcut.setSummary(R.string.settings_created_shortcut_summary);
                 } else {
                     shortcut.setEnabled(true);
-                    summary.append(getString(R.string.settings_create_shortcut_summary));
-                    StyleUtils.setHintSpanColor(requireContext(), summary, 0, summary.length(), com.google.android.material.R.attr.colorPrimary);
+                    shortcut.setSummary(R.string.settings_create_shortcut_summary);
                 }
-                shortcut.setOnPreferenceClickListener(preference -> {
-                    ShortcutUtil.requestPinLaunchShortcut(() -> {
-                        shortcut.setEnabled(false);
-                        summary.append(getString(R.string.settings_created_shortcut_summary));
-                        StyleUtils.setHintSpanColor(requireContext(), summary, 0, summary.length(), com.google.android.material.R.attr.colorPrimary);
-                        if (notification != null) {
-                            notification.setEnabled(true);
-                            notification.setSummaryOn(R.string.settings_enable_status_notification_summary);
-                        }
-                        App.getPreferences().edit().putBoolean("never_show_welcome", true).apply();
-                    });
-                    return true;
-                });
-                if (summary.length() != 0) shortcut.setSummary(summary);
+                var supported = ShortcutUtil.isRequestPinShortcutSupported(requireContext());
+                var onCreateShortcutPreferenceClickListener = new Preference.OnPreferenceClickListener() {
+                    @Override
+                    public boolean onPreferenceClick(@NonNull Preference preference) {
+                        ShortcutUtil.requestPinLaunchShortcut(() -> {
+                            shortcut.setEnabled(false);
+                            shortcut.setSummary(R.string.settings_created_shortcut_summary);
+                            if (notification != null) {
+                                notification.setOnPreferenceChangeListener(onEnableStatusNotificationPreferenceChangeListener);
+                                notification.setSummaryOn(R.string.settings_enable_status_notification_summary);
+                            }
+                            App.getPreferences().edit().putBoolean("never_show_welcome", true).apply();
+                        });
+                        return true;
+                    }
+                };
+                var onNotSupportShortcutsPreferenceClickListener = new Preference.OnPreferenceClickListener() {
+                    @Override
+                    public boolean onPreferenceClick(@NonNull Preference preference) {
+                        parentFragment.showHint(R.string.settings_unsupported_pin_shortcut_summary, true);
+                        return true;
+                    }
+                };
+                shortcut.setOnPreferenceClickListener(supported ? onCreateShortcutPreferenceClickListener : onNotSupportShortcutsPreferenceClickListener);
             }
 
             Preference backup = findPreference("backup");
