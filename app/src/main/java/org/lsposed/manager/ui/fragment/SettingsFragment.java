@@ -24,7 +24,6 @@ import android.content.Context;
 import android.os.Build;
 import android.os.Bundle;
 import android.provider.Settings;
-import android.text.SpannableStringBuilder;
 import android.text.TextUtils;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -170,12 +169,7 @@ public class SettingsFragment extends BaseFragment {
                     return res;
                 });
                 if (App.isParasitic() && !ShortcutUtil.isLaunchShortcutPinned()) {
-                    var sb = new SpannableStringBuilder();
-                    var summary = notification.getSummary();
-                    sb.append(summary);
-                    sb.append("\n");
-                    sb.append(notification.getContext().getString(R.string.disable_status_notification_error));
-                    notification.setSummaryOn(sb);
+                    notification.setSummaryOn(notification.getSummary() + "\n" + notification.getContext().getString(R.string.disable_status_notification_error));
                     if (ConfigManager.enableStatusNotification())
                         notification.setEnabled(false);
                 }
