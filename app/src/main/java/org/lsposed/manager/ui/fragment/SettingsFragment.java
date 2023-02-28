@@ -160,20 +160,19 @@ public class SettingsFragment extends BaseFragment {
 
             MaterialSwitchPreference notification = findPreference("enable_status_notification");
             if (notification != null) {
-                notification.setChecked(installed && ConfigManager.enableStatusNotification());
-                notification.setVisible(installed);
-                notification.setOnPreferenceChangeListener((p, v) -> {
-                    var res = ConfigManager.setEnableStatusNotification((boolean) v);
-                    if ((boolean) v && !ShortcutUtil.isLaunchShortcutPinned() && App.isParasitic())
-                        p.setEnabled(false);
-                    return res;
-                });
                 if (App.isParasitic() && !ShortcutUtil.isLaunchShortcutPinned()) {
                     var s = notification.getContext().getString(R.string.disable_status_notification_error);
                     notification.setSummaryOn(notification.getSummary() + "\n" + s);
-                    if (ConfigManager.enableStatusNotification())
-                        notification.setEnabled(false);
+                    if (ConfigManager.enableStatusNotification()) notification.setEnabled(false);
                 }
+                notification.setVisible(installed);
+                notification.setChecked(installed && ConfigManager.enableStatusNotification());
+                notification.setOnPreferenceChangeListener((p, v) -> {
+                    if ((boolean) v && App.isParasitic() && !ShortcutUtil.isLaunchShortcutPinned()) {
+                        p.setEnabled(false);
+                    }
+                    return ConfigManager.setEnableStatusNotification((boolean) v);
+                });
             }
 
             Preference shortcut = findPreference("add_shortcut");
@@ -187,21 +186,18 @@ public class SettingsFragment extends BaseFragment {
                     shortcut.setSummary(R.string.settings_create_shortcut_summary);
                 }
                 shortcut.setOnPreferenceClickListener(preference -> {
-                    if (ShortcutUtil.isRequestPinShortcutSupported(requireContext())) {
-                        ShortcutUtil.requestPinLaunchShortcut(() -> {
-                            shortcut.setEnabled(false);
-                            shortcut.setSummary(R.string.settings_created_shortcut_summary);
-                            if (notification != null) {
-                                notification.setEnabled(true);
-                                notification.setSummaryOn(R.string.settings_enable_status_notification_summary);
-                            }
-                            App.getPreferences().edit().putBoolean("never_show_welcome", true).apply();
-                        });
-                        return true;
-                    } else {
+                    if (!ShortcutUtil.requestPinLaunchShortcut(() -> {
+                        shortcut.setEnabled(false);
+                        shortcut.setSummary(R.string.settings_created_shortcut_summary);
+                        if (notification != null) {
+                            notification.setEnabled(true);
+                            notification.setSummaryOn(R.string.settings_enable_status_notification_summary);
+                        }
+                        App.getPreferences().edit().putBoolean("never_show_welcome", true).apply();
+                    })) {
                         parentFragment.showHint(R.string.settings_unsupported_pin_shortcut_summary, true);
-                        return false;
                     }
+                    return true;
                 });
             }
 

@@ -46,10 +46,11 @@ public class WelcomeDialog extends DialogFragment {
                         App.getPreferences().edit().putBoolean("never_show_welcome", true).apply())
                 .setPositiveButton(android.R.string.ok, null)
                 .setNeutralButton(R.string.create_shortcut, (dialog, which) -> {
-                    if (!ShortcutUtil.requestPinLaunchShortcut(() -> App.getPreferences().edit().putBoolean("never_show_welcome", true).apply())) {
-                        var fragment = (HomeFragment) getParentFragment();
-                        if (fragment != null) {
-                            fragment.showHint(R.string.settings_unsupported_pin_shortcut_summary, false);
+                    if (!ShortcutUtil.requestPinLaunchShortcut(() -> App.getPreferences().edit()
+                            .putBoolean("never_show_welcome", true).apply())) {
+                        var home = (HomeFragment) getParentFragment();
+                        if (home != null) {
+                            home.showHint(R.string.settings_unsupported_pin_shortcut_summary, false);
                         }
                     }
                 });
