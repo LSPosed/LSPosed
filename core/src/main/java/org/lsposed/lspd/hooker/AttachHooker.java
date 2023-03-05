@@ -6,16 +6,14 @@ import android.app.ActivityThread;
 
 import org.lsposed.lspd.impl.LSPosedContext;
 
+import java.util.Optional;
+
 import de.robv.android.xposed.XC_MethodHook;
 import de.robv.android.xposed.XposedInit;
 
 public class AttachHooker extends XC_MethodHook {
     @Override
-    protected void afterHookedMethod(MethodHookParam param) throws Throwable {
-        serviceClient.getModulesList().forEach(module -> {
-            if (LSPosedContext.loadModule((ActivityThread) param.thisObject, module)) {
-                XposedInit.getLoadedModules().add(module.packageName);
-            }
-        });
+    protected void afterHookedMethod(MethodHookParam<?> param) throws Throwable {
+        XposedInit.loadModules((ActivityThread) param.thisObject);
     }
 }

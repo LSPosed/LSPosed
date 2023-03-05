@@ -7,7 +7,7 @@ import de.robv.android.xposed.XposedBridge;
 
 public class CrashDumpHooker extends XC_MethodHook {
     @Override
-    protected void beforeHookedMethod(MethodHookParam param) throws Throwable {
+    protected void beforeHookedMethod(MethodHookParam<?> param) {
         try {
             var e = (Throwable) param.args[0];
             XposedBridge.log("Crash unexpectedly: " + Log.getStackTraceString(e));

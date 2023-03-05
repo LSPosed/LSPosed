@@ -20,11 +20,14 @@
 
 package org.lsposed.lspd.hooker;
 
+import android.app.ActivityThread;
 import android.app.LoadedApk;
 import android.content.res.XResources;
 import android.util.Log;
 
 import org.lsposed.lspd.util.Hookers;
+
+import java.util.Optional;
 
 import de.robv.android.xposed.XC_MethodHook;
 import de.robv.android.xposed.XposedHelpers;
@@ -34,13 +37,14 @@ import de.robv.android.xposed.XposedInit;
 public class LoadedApkCtorHooker extends XC_MethodHook {
 
     @Override
-    protected void afterHookedMethod(MethodHookParam param) {
+    protected void afterHookedMethod(MethodHookParam<?> param) {
         Hookers.logD("LoadedApk#<init> starts");
 
         try {
             LoadedApk loadedApk = (LoadedApk) param.thisObject;
             String packageName = loadedApk.getPackageName();
-            if (XposedInit.getLoadedModules().contains(packageName)) {
+            boolean isFirstPackage = packageName != null && ActivityThread.currentProcessName() != null && packageName.equals(ActivityThread.currentPackageName());
+            if (!isFirstPackage && !XposedInit.getLoadedModules().getOrDefault(packageName, Optional.of("")).isPresent()) {
                 return;
             }
             Object mAppDir = XposedHelpers.getObjectField(loadedApk, "mAppDir");
@@ -77,7 +81,7 @@ public class LoadedApkCtorHooker extends XC_MethodHook {
                 return;
             }
 
-            new LoadedApkGetCLHooker(loadedApk);
+            new LoadedApkGetCLHooker(loadedApk, isFirstPackage);
         } catch (Throwable t) {
             Hookers.logE("error when hooking LoadedApk.<init>", t);
         }

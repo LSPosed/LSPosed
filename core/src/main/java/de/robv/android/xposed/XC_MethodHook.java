@@ -75,10 +75,10 @@ public abstract class XC_MethodHook extends XCallback {
      * @param param Information about the method call.
      * @throws Throwable Everything the callback throws is caught and logged.
      */
-    protected void beforeHookedMethod(MethodHookParam param) throws Throwable {
+    protected void beforeHookedMethod(MethodHookParam<?> param) throws Throwable {
     }
 
-    public void callBeforeHookedMethod(MethodHookParam param) throws Throwable {
+    public void callBeforeHookedMethod(MethodHookParam<?> param) throws Throwable {
         beforeHookedMethod(param);
     }
 
@@ -93,10 +93,10 @@ public abstract class XC_MethodHook extends XCallback {
      * @param param Information about the method call.
      * @throws Throwable Everything the callback throws is caught and logged.
      */
-    protected void afterHookedMethod(MethodHookParam param) throws Throwable {
+    protected void afterHookedMethod(MethodHookParam<?> param) throws Throwable {
     }
 
-    public void callAfterHookedMethod(MethodHookParam param) throws Throwable {
+    public void callAfterHookedMethod(MethodHookParam<?> param) throws Throwable {
         afterHookedMethod(param);
     }
 

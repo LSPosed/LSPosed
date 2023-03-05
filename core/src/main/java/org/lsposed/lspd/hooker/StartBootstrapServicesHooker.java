@@ -36,7 +36,7 @@ import io.github.libxposed.api.XposedModuleInterface;
 public class StartBootstrapServicesHooker extends XC_MethodHook {
 
     @Override
-    protected void beforeHookedMethod(MethodHookParam param) {
+    protected void beforeHookedMethod(MethodHookParam<?> param) {
         logD("SystemServer#startBootstrapServices() starts");
 
         try {
