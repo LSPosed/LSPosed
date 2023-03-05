@@ -89,9 +89,15 @@ LSP_DEF_NATIVE_METHOD(jboolean, HookBridge, hookMethod, jobject hookMethod,
         hook_item->backup = lsplant::Hook(env, hookMethod, hooker_object, callback_method);
         env->DeleteLocalRef(hooker_object);
     }
-    JNIMonitor monitor(env, hook_item->backup);
+    jobject backup = nullptr;
+    {
+        std::unique_lock lk(backup_lock);
+        backup = hook_item->backup;
+    }
+    if (!backup) return JNI_FALSE;
+    JNIMonitor monitor(env, backup);
     hook_item->callbacks.emplace(std::make_pair(priority, env->NewGlobalRef(callback)));
-    return hook_item->backup ? JNI_TRUE : JNI_FALSE;
+    return JNI_TRUE;
 }
 
 LSP_DEF_NATIVE_METHOD(jboolean, HookBridge, unhookMethod, jobject hookMethod, jobject callback) {
