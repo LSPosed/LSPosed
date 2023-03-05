@@ -98,7 +98,7 @@ public class ConfigManager {
     private boolean verboseLog = true;
     private boolean dexObfuscate = false;
     private boolean enableStatusNotification = true;
-    private String miscPath = null;
+    private Path miscPath = null;
 
     private int managerUid = -1;
 
@@ -280,16 +280,15 @@ public class ConfigManager {
         // Don't migrate to ConfigFileManager, as XSharedPreferences will be restored soon
         String string = (String) config.get("misc_path");
         if (string == null) {
-            miscPath = "/data/misc/" + UUID.randomUUID().toString();
-            updateModulePrefs("lspd", 0, "config", "misc_path", miscPath);
+            miscPath = Paths.get("/data", "misc", UUID.randomUUID().toString());
+            updateModulePrefs("lspd", 0, "config", "misc_path", miscPath.toString());
         } else {
-            miscPath = string;
+            miscPath = Paths.get(string);
         }
         try {
-            Path prefs = Paths.get(miscPath);
             var perms = PosixFilePermissions.fromString("rwx--x--x");
-            Files.createDirectories(prefs, PosixFilePermissions.asFileAttribute(perms));
-            walkFileTree(prefs, f -> SELinux.setFileContext(f.toString(), "u:object_r:magisk_file:s0"));
+            Files.createDirectories(miscPath, PosixFilePermissions.asFileAttribute(perms));
+            walkFileTree(miscPath, f -> SELinux.setFileContext(f.toString(), "u:object_r:magisk_file:s0"));
         } catch (IOException e) {
             Log.e(TAG, Log.getStackTraceString(e));
         }
@@ -1083,9 +1082,26 @@ public class ConfigManager {
         return managerUid != -1;
     }
 
-    public String getPrefsPath(String fileName, int uid) {
+    public String getPrefsPath(String packageName, int uid) {
         int userId = uid / PER_USER_RANGE;
-        return miscPath + "/prefs" + (userId == 0 ? "" : String.valueOf(userId)) + "/" + fileName;
+        var path = miscPath.resolve("prefs" + (userId == 0 ? "" : String.valueOf(userId))).resolve(packageName);
+        var module = cachedModule.getOrDefault(packageName, null);
+        if (module != null && module.appId == uid % PER_USER_RANGE) {
+            try {
+                var perms = PosixFilePermissions.fromString("rwx--x--x");
+                Files.createDirectories(path, PosixFilePermissions.asFileAttribute(perms));
+                walkFileTree(path, p -> {
+                    try {
+                        Os.chown(p.toString(), uid, uid);
+                    } catch (ErrnoException e) {
+                        Log.e(TAG, Log.getStackTraceString(e));
+                    }
+                });
+            } catch (IOException e) {
+                Log.e(TAG, Log.getStackTraceString(e));
+            }
+        }
+        return path.toString();
     }
 
     // this is slow, avoid using it

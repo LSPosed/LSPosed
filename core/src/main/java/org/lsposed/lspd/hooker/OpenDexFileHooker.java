@@ -9,7 +9,7 @@ import de.robv.android.xposed.XposedHelpers;
 
 public class OpenDexFileHooker extends XC_MethodHook {
     @Override
-    protected void afterHookedMethod(MethodHookParam param) throws Throwable {
+    protected void afterHookedMethod(MethodHookParam<?> param) throws Throwable {
         ClassLoader classLoader = null;
         for (var arg : param.args) {
             if (arg instanceof ClassLoader) {

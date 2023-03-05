@@ -68,7 +68,7 @@ public class Startup {
         // Initialize the Xposed framework
         try {
             startBootstrapHook(XposedInit.startsSystemServer);
-            XposedInit.loadModules();
+            XposedInit.loadLegacyModules();
         } catch (Throwable t) {
             Utils.logE("error during Xposed initialization", t);
         }

@@ -33,7 +33,7 @@ public class HandleSystemServerProcessHooker extends XC_MethodHook {
     public static volatile ClassLoader systemServerCL;
 
     @Override
-    protected void afterHookedMethod(MethodHookParam param) {
+    protected void afterHookedMethod(MethodHookParam<?> param) {
         Hookers.logD("ZygoteInit#handleSystemServerProcess() starts");
         try {
             // get system_server classLoader
