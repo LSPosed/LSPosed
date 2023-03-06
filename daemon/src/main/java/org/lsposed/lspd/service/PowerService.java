@@ -19,6 +19,7 @@
 
 package org.lsposed.lspd.service;
 
+import static android.content.Context.POWER_SERVICE;
 import static org.lsposed.lspd.service.ServiceManager.TAG;
 
 import android.os.IBinder;
@@ -42,7 +43,7 @@ public class PowerService {
 
     private static IPowerManager getPowerManager() {
         if (binder == null && pm == null) {
-            binder = ServiceManager.getService("power");
+            binder = ServiceManager.getService(POWER_SERVICE);
             if (binder == null) return null;
             try {
                 binder.linkToDeath(recipient, 0);
