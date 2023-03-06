@@ -96,7 +96,7 @@ public class ConfigManager {
                     sqLiteDatabase -> Log.w(TAG, "database corrupted"));
 
     private boolean verboseLog = true;
-    private boolean dexObfuscate = false;
+    private boolean dexObfuscate = true;
     private boolean enableStatusNotification = true;
     private Path miscPath = null;
 
@@ -263,7 +263,7 @@ public class ConfigManager {
         verboseLog = bool == null || (boolean) bool;
 
         bool = config.get("enable_dex_obfuscate");
-        dexObfuscate = bool != null && (boolean) bool;
+        dexObfuscate = bool == null || (boolean) bool;
 
         bool = config.get("enable_auto_add_shortcut");
         if (bool != null) {
@@ -1023,9 +1023,8 @@ public class ConfigManager {
 
     // this is for manager and should not use the cache result
     boolean dexObfuscate() {
-        Map<String, Object> config = getModulePrefs("lspd", 0, "config");
-        Object bool = config.get("enable_dex_obfuscate");
-        return bool != null && (boolean) bool;
+        var bool = getModulePrefs("lspd", 0, "config").get("enable_dex_obfuscate");
+        return bool == null || (boolean) bool;
     }
 
     public boolean enableStatusNotification() {
