@@ -73,7 +73,7 @@ public class WelcomeDialog extends DialogFragment {
     public Dialog onCreateDialog(@Nullable Bundle savedInstanceState) {
         var builder = new BlurBehindDialogBuilder(requireContext(),
                 R.style.ThemeOverlay_MaterialAlertDialog_Centered_FullWidthButtons);
-        if (App.isParasitic()) {
+        if (App.isParasitic) {
             return parasiticDialog(builder);
         } else {
             return appDialog(builder);

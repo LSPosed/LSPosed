@@ -154,7 +154,7 @@ public class MainActivity extends BaseActivity implements RepoLoader.RepoListene
     }
 
     public void restart() {
-        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.S || App.isParasitic()) {
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.S || App.isParasitic) {
             recreate();
         } else {
             try {
@@ -263,7 +263,7 @@ public class MainActivity extends BaseActivity implements RepoLoader.RepoListene
                 }
             }
         }
-        if(App.isParasitic()){
+        if(App.isParasitic){
             ShortcutUtil.updateShortcut();
         }
     }
