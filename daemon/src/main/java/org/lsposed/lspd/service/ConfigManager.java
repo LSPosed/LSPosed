@@ -96,7 +96,7 @@ public class ConfigManager {
                     sqLiteDatabase -> Log.w(TAG, "database corrupted"));
 
     private boolean verboseLog = true;
-    private boolean dexObfuscate = false;
+    private boolean dexObfuscate = true;
     private boolean enableStatusNotification = true;
     private Path miscPath = null;
 
@@ -263,7 +263,7 @@ public class ConfigManager {
         verboseLog = bool == null || (boolean) bool;
 
         bool = config.get("enable_dex_obfuscate");
-        dexObfuscate = bool != null && (boolean) bool;
+        dexObfuscate = bool == null || (boolean) bool;
 
         bool = config.get("enable_auto_add_shortcut");
         if (bool != null) {
@@ -1001,6 +1001,7 @@ public class ConfigManager {
 
     public void setDexObfuscate(boolean on) {
         updateModulePrefs("lspd", 0, "config", "enable_dex_obfuscate", on);
+        dexObfuscate = on;
     }
 
     public boolean scopeRequestBlocked(String packageName) {
@@ -1021,12 +1022,11 @@ public class ConfigManager {
         scopeRequestBlocked = set;
     }
 
-    // this is for manager and should not use the cache result
     boolean dexObfuscate() {
-        Map<String, Object> config = getModulePrefs("lspd", 0, "config");
-        Object bool = config.get("enable_dex_obfuscate");
-        return bool != null && (boolean) bool;
+        return dexObfuscate;
     }
+
+    // this is for manager and should not use the cache result
 
     public boolean enableStatusNotification() {
         Log.d(TAG, "show status notification = " + enableStatusNotification);
