@@ -326,7 +326,7 @@ public class ScopeAdapter extends EmptyStateRecyclerView.EmptyStateAdapter<Scope
             ConfigManager.startActivityAsUserWithFeature(new Intent(ACTION_APPLICATION_DETAILS_SETTINGS, Uri.fromParts("package", info.packageName, null)), module.userId);
         } else if (itemId == R.id.menu_force_stop) {
             if (info.packageName.equals("android")) {
-                ConfigManager.reboot();
+                ConfigManager.reboot(false);
             } else {
                 new BlurBehindDialogBuilder(activity, R.style.ThemeOverlay_MaterialAlertDialog_Centered_FullWidthButtons)
                         .setTitle(R.string.force_stop_dlg_title)
@@ -588,7 +588,7 @@ public class ScopeAdapter extends EmptyStateRecyclerView.EmptyStateAdapter<Scope
             }
             buttonView.setChecked(!isChecked);
         } else if (appInfo.packageName.equals("android")) {
-            fragment.showHint(R.string.reboot_required, true, R.string.reboot, v -> ConfigManager.reboot());
+            fragment.showHint(R.string.reboot_required, true, R.string.reboot, v -> ConfigManager.reboot(false));
         } else if (denyList.contains(appInfo.packageName)) {
             fragment.showHint(activity.getString(R.string.deny_list, appInfo.label), true);
         }

@@ -153,7 +153,7 @@ public class SettingsFragment extends BaseFragment {
                 prefDexObfuscate.setEnabled(installed);
                 prefDexObfuscate.setChecked(!installed || ConfigManager.isDexObfuscateEnabled());
                 prefDexObfuscate.setOnPreferenceChangeListener((preference, newValue) -> {
-                    parentFragment.showHint(R.string.reboot_required, true, R.string.reboot, v -> ConfigManager.reboot());
+                    parentFragment.showHint(R.string.reboot_required, true, R.string.reboot, v -> ConfigManager.reboot(false));
                     return ConfigManager.setDexObfuscateEnabled((boolean) newValue);
                 });
             }

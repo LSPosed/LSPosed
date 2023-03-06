@@ -446,12 +446,9 @@ public class LSPManagerService extends ILSPManagerService.Stub {
     }
 
     @Override
-    public void reboot() {
-        try {
-            Runtime.getRuntime().exec("/system/bin/svc power reboot || /system/bin/reboot");
-        } catch (IOException e) {
-            Log.e(TAG, e.getMessage(), e);
-        }
+    public void reboot(boolean shutdown) {
+        var value = shutdown ? "shutdown" : "reboot";
+        SystemProperties.set("sys.powerctl", value);
     }
 
     @Override
@@ -588,7 +585,7 @@ public class LSPManagerService extends ILSPManagerService.Stub {
                 if (exit == 0) {
                     fdw.write("- Reboot after 5s\n".getBytes());
                     Thread.sleep(5000);
-                    reboot();
+                    reboot(false);
                 } else {
                     var s = "! Flash failed, exit with " + exit + "\n";
                     fdw.write(s.getBytes());
