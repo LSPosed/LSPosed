@@ -88,7 +88,7 @@ public class LoadedApkGetCLHooker extends XC_MethodHook {
         try {
             Hookers.logD("LoadedApk#getClassLoader starts");
 
-            final String processName = AndroidAppHelper.currentProcessName();
+            final String processName = ActivityThread.currentProcessName();
             final String packageName = isFirstPackage && "android".equals(ActivityThread.currentPackageName()) ? "system" : loadedApk.getPackageName();
 
             Object mAppDir = XposedHelpers.getObjectField(loadedApk, "mAppDir");
