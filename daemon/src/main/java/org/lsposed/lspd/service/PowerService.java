@@ -42,7 +42,7 @@ public class PowerService {
     };
 
     private static IPowerManager getPowerManager() {
-        if (binder == null && pm == null) {
+        if (binder == null || pm == null) {
             binder = ServiceManager.getService(POWER_SERVICE);
             if (binder == null) return null;
             try {
