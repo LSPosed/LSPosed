@@ -150,7 +150,7 @@ public class ShortcutUtil {
     }
 
     public static boolean requestPinLaunchShortcut(Runnable afterPinned) {
-        if (!App.isParasitic()) throw new RuntimeException();
+        if (!App.isParasitic) throw new RuntimeException();
         var context = App.getInstance();
         var sm = context.getSystemService(ShortcutManager.class);
         if (!sm.isRequestPinShortcutSupported()) return false;
