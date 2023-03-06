@@ -446,9 +446,8 @@ public class LSPManagerService extends ILSPManagerService.Stub {
     }
 
     @Override
-    public void reboot(boolean shutdown) {
-        var value = shutdown ? "shutdown" : "reboot";
-        SystemProperties.set("sys.powerctl", value);
+    public void reboot() throws RemoteException {
+        PowerService.reboot(false, null, false);
     }
 
     @Override
@@ -585,7 +584,7 @@ public class LSPManagerService extends ILSPManagerService.Stub {
                 if (exit == 0) {
                     fdw.write("- Reboot after 5s\n".getBytes());
                     Thread.sleep(5000);
-                    reboot(false);
+                    reboot();
                 } else {
                     var s = "! Flash failed, exit with " + exit + "\n";
                     fdw.write(s.getBytes());
@@ -594,7 +593,7 @@ public class LSPManagerService extends ILSPManagerService.Stub {
                 proc.destroy();
                 fdw.write("! Timeout, abort\n".getBytes());
             }
-        } catch (IOException | InterruptedException e) {
+        } catch (IOException | InterruptedException | RemoteException e) {
             Log.e(TAG, "flashZip: ", e);
         }
     }

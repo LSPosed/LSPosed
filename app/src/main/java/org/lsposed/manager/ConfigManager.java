@@ -211,9 +211,9 @@ public class ConfigManager {
         }
     }
 
-    public static boolean reboot(boolean shutdown) {
+    public static boolean reboot() {
         try {
-            LSPManagerServiceHolder.getService().reboot(shutdown);
+            LSPManagerServiceHolder.getService().reboot();
             return true;
         } catch (RemoteException e) {
             Log.e(App.TAG, Log.getStackTraceString(e));
