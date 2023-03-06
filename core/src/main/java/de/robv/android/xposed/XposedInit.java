@@ -38,6 +38,7 @@ import android.content.res.XResources;
 import android.os.Build;
 import android.os.IBinder;
 import android.os.Process;
+import android.util.ArrayMap;
 import android.util.Log;
 
 import org.lsposed.lspd.impl.LSPosedContext;
@@ -241,6 +242,7 @@ public final class XposedInit {
             if (!LSPosedContext.loadModule(at, module)) {
                 loadedModules.remove(module.packageName);
             }
+            ((ArrayMap<?, ?>) XposedHelpers.getObjectField(ActivityThread.currentActivityThread(), "mPackages")).clear();
         });
     }
 

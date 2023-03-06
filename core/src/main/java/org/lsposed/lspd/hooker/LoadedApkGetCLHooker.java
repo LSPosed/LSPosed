@@ -69,11 +69,8 @@ public class LoadedApkGetCLHooker extends XC_MethodHook {
     private final LoadedApk loadedApk;
     private final Unhook unhook;
 
-    private final boolean isFirstPackage;
-
-    public LoadedApkGetCLHooker(LoadedApk loadedApk, boolean isFirstPackage) {
+    public LoadedApkGetCLHooker(LoadedApk loadedApk) {
         this.loadedApk = loadedApk;
-        this.isFirstPackage = isFirstPackage;
         unhook = XposedHelpers.findAndHookMethod(LoadedApk.class, "getClassLoader", this);
     }
 
@@ -88,14 +85,25 @@ public class LoadedApkGetCLHooker extends XC_MethodHook {
         try {
             Hookers.logD("LoadedApk#getClassLoader starts");
 
-            final String processName = ActivityThread.currentProcessName();
-            final String packageName = isFirstPackage && "android".equals(ActivityThread.currentPackageName()) ? "system" : loadedApk.getPackageName();
+            String packageName = ActivityThread.currentPackageName();
+            String processName = ActivityThread.currentProcessName();
+            boolean isFirstPackage = packageName != null && processName != null && packageName.equals(loadedApk.getPackageName());
+            if (!isFirstPackage) {
+                packageName = loadedApk.getPackageName();
+                processName = AndroidAppHelper.currentProcessName();
+            } else if (packageName.equals("android")) {
+                packageName = "system";
+            }
 
             Object mAppDir = XposedHelpers.getObjectField(loadedApk, "mAppDir");
             ClassLoader classLoader = (ClassLoader) param.getResult();
             Hookers.logD("LoadedApk#getClassLoader ends: " + mAppDir + " -> " + classLoader);
 
             if (classLoader == null) {
+                return;
+            }
+
+            if (!isFirstPackage && !XposedInit.getLoadedModules().getOrDefault(packageName, Optional.of("")).isPresent()) {
                 return;
             }
 

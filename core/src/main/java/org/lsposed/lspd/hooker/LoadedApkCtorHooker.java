@@ -43,10 +43,6 @@ public class LoadedApkCtorHooker extends XC_MethodHook {
         try {
             LoadedApk loadedApk = (LoadedApk) param.thisObject;
             String packageName = loadedApk.getPackageName();
-            boolean isFirstPackage = packageName != null && ActivityThread.currentProcessName() != null && packageName.equals(ActivityThread.currentPackageName());
-            if (!isFirstPackage && !XposedInit.getLoadedModules().getOrDefault(packageName, Optional.of("")).isPresent()) {
-                return;
-            }
             Object mAppDir = XposedHelpers.getObjectField(loadedApk, "mAppDir");
             Hookers.logD("LoadedApk#<init> ends: " + mAppDir);
 
@@ -81,7 +77,7 @@ public class LoadedApkCtorHooker extends XC_MethodHook {
                 return;
             }
 
-            new LoadedApkGetCLHooker(loadedApk, isFirstPackage);
+            new LoadedApkGetCLHooker(loadedApk);
         } catch (Throwable t) {
             Hookers.logE("error when hooking LoadedApk.<init>", t);
         }
