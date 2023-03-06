@@ -1001,7 +1001,6 @@ public class ConfigManager {
 
     public void setDexObfuscate(boolean on) {
         updateModulePrefs("lspd", 0, "config", "enable_dex_obfuscate", on);
-        dexObfuscate = on;
     }
 
     public boolean scopeRequestBlocked(String packageName) {
@@ -1022,11 +1021,11 @@ public class ConfigManager {
         scopeRequestBlocked = set;
     }
 
-    boolean dexObfuscate() {
-        return dexObfuscate;
-    }
-
     // this is for manager and should not use the cache result
+    boolean dexObfuscate() {
+        var bool = getModulePrefs("lspd", 0, "config").get("enable_dex_obfuscate");
+        return bool == null || (boolean) bool;
+    }
 
     public boolean enableStatusNotification() {
         Log.d(TAG, "show status notification = " + enableStatusNotification);
