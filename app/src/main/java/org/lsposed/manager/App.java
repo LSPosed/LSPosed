@@ -141,9 +141,7 @@ public class App extends Application {
         return executorService;
     }
 
-    public static boolean isParasitic() {
-        return !Process.isApplicationUid(Process.myUid());
-    }
+    public static final boolean isParasitic = !Process.isApplicationUid(Process.myUid());
 
     public static Handler getMainHandler() {
         return MainHandler;
@@ -154,7 +152,7 @@ public class App extends Application {
         super.attachBaseContext(base);
         Telemetry.start(this);
         var map = new HashMap<String, String>(1);
-        map.put("isParasitic", String.valueOf(isParasitic()));
+        map.put("isParasitic", String.valueOf(isParasitic));
         Telemetry.trackEvent("App start", map);
         var am = getSystemService(ActivityManager.class);
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.R) {
@@ -200,7 +198,7 @@ public class App extends Application {
     @Override
     public void onCreate() {
         super.onCreate();
-        if (!BuildConfig.DEBUG && !isParasitic()) {
+        if (!BuildConfig.DEBUG && !isParasitic) {
             setCrashReport();
         }
 
