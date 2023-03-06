@@ -33,14 +33,14 @@ public class PowerService {
     private static final IBinder.DeathRecipient recipient = new IBinder.DeathRecipient() {
         @Override
         public void binderDied() {
-            Log.w(TAG, "pm is dead");
+            Log.w(TAG, "PowerManager is dead");
             binder.unlinkToDeath(this, 0);
             binder = null;
             pm = null;
         }
     };
 
-    public static IPowerManager getPowerManager() {
+    private static IPowerManager getPowerManager() {
         if (binder == null && pm == null) {
             binder = ServiceManager.getService("power");
             if (binder == null) return null;
