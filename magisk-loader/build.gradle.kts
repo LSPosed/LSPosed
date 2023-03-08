@@ -44,9 +44,9 @@ val moduleBaseId = "lsposed"
 val authors = "LSPosed Developers"
 
 val riruModuleId = "lsposed"
-val moduleMinRiruApiVersion = 25
-val moduleMinRiruVersionName = "25.0.1"
-val moduleMaxRiruApiVersion = 25
+val moduleMinRiruApiVersion = 26
+val moduleMinRiruVersionName = "26.1.7"
+val moduleMaxRiruApiVersion = 26
 
 val injectedPackageName: String by rootProject.extra
 val injectedPackageUid: Int by rootProject.extra
