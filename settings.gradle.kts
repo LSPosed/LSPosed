@@ -67,7 +67,7 @@ dependencyResolutionManagement {
             library("androidx-navigation-fragment", "androidx.navigation", "navigation-fragment").versionRef(navVersion)
             library("androidx-navigation-ui", "androidx.navigation", "navigation-ui").versionRef(navVersion)
             library("androidx-preference", "androidx.preference:preference:1.2.0")
-            library("androidx-recyclerview", "androidx.recyclerview:recyclerview:1.2.1")
+            library("androidx-recyclerview", "androidx.recyclerview:recyclerview:1.3.0")
             library("androidx-swiperefreshlayout", "androidx.swiperefreshlayout:swiperefreshlayout:1.2.0-alpha01")
 
             library("glide", "com.github.bumptech.glide", "glide").versionRef(glideVersion)
