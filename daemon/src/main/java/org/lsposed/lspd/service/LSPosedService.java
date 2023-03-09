@@ -28,6 +28,7 @@ import static org.lsposed.lspd.service.ServiceManager.getExecutorService;
 
 import android.app.IApplicationThread;
 import android.app.IUidObserver;
+import android.content.Context;
 import android.content.IIntentReceiver;
 import android.content.Intent;
 import android.content.IntentFilter;
@@ -328,7 +329,7 @@ public class LSPosedService extends ILSPosedService.Stub {
         };
         try {
             for (var filter : filters) {
-                ActivityManagerService.registerReceiver("android", null, receiver, filter, requiredPermission, userId, 0);
+                ActivityManagerService.registerReceiver("android", null, receiver, filter, requiredPermission, userId, Context.RECEIVER_NOT_EXPORTED);
             }
         } catch (RemoteException e) {
             Log.e(TAG, "register receiver", e);
@@ -401,10 +402,9 @@ public class LSPosedService extends ILSPosedService.Stub {
 
     private void registerModuleScopeReceiver() {
         var intentFilter = new IntentFilter(LSPNotificationManager.moduleScope);
-        var moduleFilter = new IntentFilter(intentFilter);
-        moduleFilter.addDataScheme("module");
+        intentFilter.addDataScheme("module");
 
-        registerReceiver(List.of(intentFilter, moduleFilter), "android.permission.BRICK", 0, this::dispatchModuleScope);
+        registerReceiver(List.of(intentFilter), "android.permission.BRICK", 0, this::dispatchModuleScope);
         Log.d(TAG, "registered module scope receiver");
     }
 

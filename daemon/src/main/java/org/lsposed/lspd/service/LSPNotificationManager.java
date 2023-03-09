@@ -142,6 +142,7 @@ public class LSPNotificationManager {
 
     static void notifyStatusNotification() {
         var intent = new Intent(openManagerAction);
+        intent.setPackage("android");
         var context = new FakeContext();
         int flags = PendingIntent.FLAG_UPDATE_CURRENT | PendingIntent.FLAG_IMMUTABLE;
         var notification = new Notification.Builder(context, STATUS_CHANNEL_ID)
@@ -180,6 +181,7 @@ public class LSPNotificationManager {
 
     private static PendingIntent getModuleIntent(String modulePackageName, int moduleUserId) {
         var intent = new Intent(openManagerAction);
+        intent.setPackage("android");
         intent.setData(new Uri.Builder().scheme("module").encodedAuthority(modulePackageName + ":" + moduleUserId).build());
         int flags = PendingIntent.FLAG_UPDATE_CURRENT | PendingIntent.FLAG_IMMUTABLE;
         return PendingIntent.getBroadcast(new FakeContext(), 3, intent, flags);
@@ -187,6 +189,7 @@ public class LSPNotificationManager {
 
     private static PendingIntent getModuleScopeIntent(String modulePackageName, int moduleUserId, String scopePackageName, String action, IXposedScopeCallback callback) {
         var intent = new Intent(moduleScope);
+        intent.setPackage("android");
         intent.setData(new Uri.Builder().scheme("module").encodedAuthority(modulePackageName + ":" + moduleUserId).encodedPath(scopePackageName).appendQueryParameter("action", action).build());
         var extras = new Bundle();
         extras.putBinder("callback", callback.asBinder());
