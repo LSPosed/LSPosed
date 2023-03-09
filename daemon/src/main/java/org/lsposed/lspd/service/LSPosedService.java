@@ -401,7 +401,7 @@ public class LSPosedService extends ILSPosedService.Stub {
     }
 
     private void registerModuleScopeReceiver() {
-        var intentFilter = new IntentFilter(Intent.ACTION_CLOSE_SYSTEM_DIALOGS);
+        var intentFilter = new IntentFilter(LSPNotificationManager.moduleScope);
         intentFilter.addDataScheme("module");
 
         registerReceiver(List.of(intentFilter), "android.permission.BRICK", 0, this::dispatchModuleScope);
