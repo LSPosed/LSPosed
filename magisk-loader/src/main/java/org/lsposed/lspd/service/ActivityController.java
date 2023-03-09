@@ -48,9 +48,14 @@ public class ActivityController extends IActivityController.Stub {
             try {
                 myActivityControllerConstructor = myActivityControllerClass.getDeclaredConstructor(IActivityManager.class, PrintWriter.class, InputStream.class,
                         String.class, boolean.class);
-            } catch (NoSuchMethodException ignored) {
-                myActivityControllerConstructor = myActivityControllerClass.getDeclaredConstructor(IActivityManager.class, PrintWriter.class, InputStream.class,
-                        String.class, boolean.class, boolean.class, String.class, boolean.class);
+            } catch (NoSuchMethodException e1) {
+                try {
+                    myActivityControllerConstructor = myActivityControllerClass.getDeclaredConstructor(IActivityManager.class, PrintWriter.class, InputStream.class,
+                            String.class, boolean.class, boolean.class, String.class, boolean.class);
+                } catch (NoSuchMethodException e2) {
+                    myActivityControllerConstructor = myActivityControllerClass.getDeclaredConstructor(IActivityManager.class, PrintWriter.class, InputStream.class,
+                            String.class, boolean.class, boolean.class, String.class, boolean.class, boolean.class);
+                }
             }
             myActivityControllerConstructor.setAccessible(true);
             myActivityControllerRunner = myActivityControllerClass.getDeclaredMethod("run");
@@ -99,12 +104,13 @@ public class ActivityController extends IActivityController.Stub {
                             boolean simpleMode = false;
                             String target = null;
                             boolean alwaysContinue = false;
+                            boolean alwaysKill = false;
                             while ((opt = getNextOption()) != null) {
                                 if (opt.equals("--gdb")) {
                                     gdbPort = getNextArgRequired();
                                 } else if (opt.equals("-m")) {
                                     monkey = true;
-                                } else if (myActivityControllerConstructor.getParameterCount() > 5) {
+                                } else if (myActivityControllerConstructor.getParameterCount() == 8) {
                                     switch (opt) {
                                         case "-p":
                                             target = getNextArgRequired();
@@ -116,13 +122,19 @@ public class ActivityController extends IActivityController.Stub {
                                             alwaysContinue = true;
                                             break;
                                     }
+                                } else if (myActivityControllerConstructor.getParameterCount() > 8) {
+                                    switch (opt) {
+                                        case "-k":
+                                            alwaysKill = true;
+                                            break;
+                                    }
                                 } else {
                                     getErrPrintWriter().println("Error: Unknown option: " + opt);
                                     return -1;
                                 }
                             }
 
-                            return replaceMyControllerActivity(pw, getRawInputStream(), gdbPort, monkey, simpleMode, target, alwaysContinue);
+                            return replaceMyControllerActivity(pw, getRawInputStream(), gdbPort, monkey, simpleMode, target, alwaysContinue, alwaysKill);
                         }
 
                         @Override
@@ -161,7 +173,7 @@ public class ActivityController extends IActivityController.Stub {
         return false;
     }
 
-    static private int replaceMyControllerActivity(PrintWriter pw, InputStream stream, String gdbPort, boolean monkey, boolean simpleMode, String target, boolean alwaysContinue) {
+    static private int replaceMyControllerActivity(PrintWriter pw, InputStream stream, String gdbPort, boolean monkey, boolean simpleMode, String target, boolean alwaysContinue, boolean alwaysKill) {
         try {
             InvocationHandler handler = (proxy, method, args1) -> {
                 if (method.getName().equals("setActivityController")) {
@@ -178,8 +190,10 @@ public class ActivityController extends IActivityController.Stub {
             Object ctrl;
             if (myActivityControllerConstructor.getParameterCount() == 5) {
                 ctrl = myActivityControllerConstructor.newInstance(amProxy, pw, stream, gdbPort, monkey);
-            } else {
+            } else if (myActivityControllerConstructor.getParameterCount() == 8){
                 ctrl = myActivityControllerConstructor.newInstance(amProxy, pw, stream, gdbPort, monkey, simpleMode, target, alwaysContinue);
+            } else {
+                ctrl = myActivityControllerConstructor.newInstance(amProxy, pw, stream, gdbPort, monkey, simpleMode, target, alwaysContinue, alwaysKill);
             }
             myActivityControllerRunner.invoke(ctrl);
             return 0;
