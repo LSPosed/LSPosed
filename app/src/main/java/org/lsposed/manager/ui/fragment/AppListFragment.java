@@ -23,6 +23,7 @@ import android.content.Intent;
 import android.os.Bundle;
 import android.view.LayoutInflater;
 import android.view.Menu;
+import android.view.MenuInflater;
 import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
@@ -33,6 +34,7 @@ import androidx.activity.result.contract.ActivityResultContracts;
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.appcompat.widget.SearchView;
+import androidx.core.view.MenuProvider;
 import androidx.recyclerview.widget.ConcatAdapter;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
@@ -49,7 +51,7 @@ import org.lsposed.manager.util.ModuleUtil;
 import rikka.material.app.LocaleDelegate;
 import rikka.recyclerview.RecyclerViewKt;
 
-public class AppListFragment extends BaseFragment {
+public class AppListFragment extends BaseFragment implements MenuProvider {
 
     public SearchView searchView;
     private ScopeAdapter scopeAdapter;
@@ -191,16 +193,12 @@ public class AppListFragment extends BaseFragment {
     }
 
     @Override
-    public boolean onOptionsItemSelected(@NonNull MenuItem item) {
-        if (scopeAdapter.onOptionsItemSelected(item)) {
-            return true;
-        }
-        return super.onOptionsItemSelected(item);
+    public boolean onMenuItemSelected(@NonNull MenuItem item) {
+        return scopeAdapter.onOptionsItemSelected(item);
     }
 
     @Override
-    public void onPrepareOptionsMenu(@NonNull Menu menu) {
-        super.onPrepareOptionsMenu(menu);
+    public void onPrepareMenu(@NonNull Menu menu) {
         searchView = (SearchView) menu.findItem(R.id.menu_search).getActionView();
         searchView.setOnQueryTextListener(searchListener);
         searchView.addOnAttachStateChangeListener(new View.OnAttachStateChangeListener() {
@@ -217,6 +215,11 @@ public class AppListFragment extends BaseFragment {
         });
         searchView.findViewById(androidx.appcompat.R.id.search_edit_frame).setLayoutDirection(View.LAYOUT_DIRECTION_INHERIT);
         scopeAdapter.onPrepareOptionsMenu(menu);
+    }
+
+    @Override
+    public void onCreateMenu(@NonNull Menu menu, @NonNull MenuInflater menuInflater) {
+
     }
 
     @Override

@@ -27,6 +27,7 @@ import android.widget.Toast;
 import androidx.annotation.IdRes;
 import androidx.annotation.StringRes;
 import androidx.appcompat.widget.Toolbar;
+import androidx.core.view.MenuProvider;
 import androidx.fragment.app.Fragment;
 import androidx.navigation.NavController;
 import androidx.navigation.NavDirections;
@@ -43,7 +44,7 @@ import java.util.concurrent.Callable;
 import java.util.concurrent.Future;
 import java.util.concurrent.FutureTask;
 
-public class BaseFragment extends Fragment {
+public abstract class BaseFragment extends Fragment {
     private final Handler uiHandler = new Handler(Looper.getMainLooper());
 
     public void navigateUp() {
@@ -92,8 +93,11 @@ public class BaseFragment extends Fragment {
         if (tipsView != null) tipsView.setTooltipText(title);
         if (menu != -1) {
             toolbar.inflateMenu(menu);
-            toolbar.setOnMenuItemClickListener(this::onOptionsItemSelected);
-            onPrepareOptionsMenu(toolbar.getMenu());
+            if (this instanceof MenuProvider) {
+                var self = (MenuProvider) this;
+                toolbar.setOnMenuItemClickListener(self::onMenuItemSelected);
+                self.onPrepareMenu(toolbar.getMenu());
+            }
         }
     }
 
@@ -149,5 +153,4 @@ public class BaseFragment extends Fragment {
             }
         });
     }
-
 }

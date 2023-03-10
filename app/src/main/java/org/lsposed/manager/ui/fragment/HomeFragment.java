@@ -26,12 +26,15 @@ import android.os.Bundle;
 import android.text.method.LinkMovementMethod;
 import android.view.LayoutInflater;
 import android.view.Menu;
+import android.view.MenuInflater;
+import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.core.text.HtmlCompat;
+import androidx.core.view.MenuProvider;
 import androidx.fragment.app.DialogFragment;
 
 import org.lsposed.lspd.ILSPManagerService;
@@ -54,8 +57,7 @@ import java.util.HashMap;
 import rikka.core.util.ClipboardUtils;
 import rikka.material.app.LocaleDelegate;
 
-public class HomeFragment extends BaseFragment {
-
+public class HomeFragment extends BaseFragment implements MenuProvider {
     private FragmentHomeBinding binding;
 
     @Override
@@ -65,7 +67,7 @@ public class HomeFragment extends BaseFragment {
     }
 
     @Override
-    public void onPrepareOptionsMenu(Menu menu) {
+    public void onPrepareMenu(Menu menu) {
         menu.findItem(R.id.menu_about).setOnMenuItemClickListener(v -> {
             showAbout();
             return true;
@@ -74,6 +76,16 @@ public class HomeFragment extends BaseFragment {
             NavUtil.startURL(requireActivity(), "https://github.com/LSPosed/LSPosed/issues/new/choose");
             return true;
         });
+    }
+
+    @Override
+    public void onCreateMenu(@NonNull Menu menu, @NonNull MenuInflater menuInflater) {
+
+    }
+
+    @Override
+    public boolean onMenuItemSelected(@NonNull MenuItem menuItem) {
+        return false;
     }
 
     @Override
