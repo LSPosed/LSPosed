@@ -27,6 +27,7 @@ import android.os.Looper;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.Menu;
+import android.view.MenuInflater;
 import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
@@ -36,6 +37,7 @@ import androidx.activity.result.ActivityResultLauncher;
 import androidx.activity.result.contract.ActivityResultContracts;
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
+import androidx.core.view.MenuProvider;
 import androidx.fragment.app.Fragment;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
@@ -67,7 +69,7 @@ import java.util.stream.IntStream;
 import rikka.material.app.LocaleDelegate;
 import rikka.recyclerview.RecyclerViewKt;
 
-public class LogsFragment extends BaseFragment {
+public class LogsFragment extends BaseFragment implements MenuProvider {
     private final Handler handler = new Handler(Looper.getMainLooper());
     private FragmentPagerBinding binding;
     private LogPageAdapter adapter;
@@ -129,7 +131,7 @@ public class LogsFragment extends BaseFragment {
 
     @SuppressLint("NotifyDataSetChanged")
     @Override
-    public boolean onOptionsItemSelected(@NonNull MenuItem item) {
+    public boolean onMenuItemSelected(@NonNull MenuItem item) {
         var itemId = item.getItemId();
         if (itemId == R.id.menu_save) {
             save();
@@ -142,18 +144,21 @@ public class LogsFragment extends BaseFragment {
             return true;
         }
         if (optionsItemSelectListener != null) {
-            if (optionsItemSelectListener.onOptionsItemSelected(item))
-                return true;
+            return optionsItemSelectListener.onOptionsItemSelected(item);
         }
-        return super.onOptionsItemSelected(item);
+        return false;
     }
 
     @Override
-    public void onPrepareOptionsMenu(@NonNull Menu menu) {
-        super.onPrepareOptionsMenu(menu);
+    public void onPrepareMenu(@NonNull Menu menu) {
         wordWrap = menu.findItem(R.id.menu_word_wrap);
         wordWrap.setChecked(App.getPreferences().getBoolean("enable_word_wrap", false));
         binding.viewPager.setUserInputEnabled(wordWrap.isChecked());
+    }
+
+    @Override
+    public void onCreateMenu(@NonNull Menu menu, @NonNull MenuInflater menuInflater) {
+
     }
 
     @Override

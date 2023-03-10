@@ -34,6 +34,8 @@ import android.text.style.ForegroundColorSpan;
 import android.text.style.RelativeSizeSpan;
 import android.util.Log;
 import android.view.LayoutInflater;
+import android.view.Menu;
+import android.view.MenuInflater;
 import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
@@ -48,6 +50,7 @@ import android.widget.TextView;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
+import androidx.core.view.MenuProvider;
 import androidx.fragment.app.DialogFragment;
 import androidx.fragment.app.Fragment;
 import androidx.fragment.app.FragmentManager;
@@ -100,7 +103,7 @@ import rikka.material.app.LocaleDelegate;
 import rikka.recyclerview.RecyclerViewKt;
 import rikka.widget.borderview.BorderView;
 
-public class RepoItemFragment extends BaseFragment implements RepoLoader.RepoListener {
+public class RepoItemFragment extends BaseFragment implements RepoLoader.RepoListener, MenuProvider {
     FragmentPagerBinding binding;
     OnlineModule module;
     private ReleaseAdapter releaseAdapter;
@@ -222,12 +225,18 @@ public class RepoItemFragment extends BaseFragment implements RepoLoader.RepoLis
     }
 
     @Override
-    public boolean onOptionsItemSelected(@NonNull MenuItem item) {
+    public void onCreateMenu(@NonNull Menu menu, @NonNull MenuInflater menuInflater) {
+
+    }
+
+    @Override
+    public boolean onMenuItemSelected(@NonNull MenuItem item) {
         int id = item.getItemId();
         if (id == R.id.menu_open_in_browser) {
             NavUtil.startURL(requireActivity(), "https://modules.lsposed.org/module/" + module.getName());
+            return true;
         }
-        return super.onOptionsItemSelected(item);
+        return false;
     }
 
     @Override

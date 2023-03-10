@@ -34,6 +34,7 @@ import android.text.style.StyleSpan;
 import android.text.style.TypefaceSpan;
 import android.view.LayoutInflater;
 import android.view.Menu;
+import android.view.MenuInflater;
 import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
@@ -46,6 +47,7 @@ import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.appcompat.widget.SearchView;
 import androidx.constraintlayout.widget.ConstraintLayout;
+import androidx.core.view.MenuProvider;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
@@ -74,7 +76,7 @@ import rikka.core.util.LabelComparator;
 import rikka.core.util.ResourceUtils;
 import rikka.recyclerview.RecyclerViewKt;
 
-public class RepoFragment extends BaseFragment implements RepoLoader.RepoListener, ModuleUtil.ModuleListener {
+public class RepoFragment extends BaseFragment implements RepoLoader.RepoListener, ModuleUtil.ModuleListener, MenuProvider {
     protected FragmentRepoBinding binding;
     protected SearchView searchView;
     private SearchView.OnQueryTextListener mSearchListener;
@@ -173,7 +175,7 @@ public class RepoFragment extends BaseFragment implements RepoLoader.RepoListene
     }
 
     @Override
-    public void onPrepareOptionsMenu(Menu menu) {
+    public void onPrepareMenu(Menu menu) {
         searchView = (SearchView) menu.findItem(R.id.menu_search).getActionView();
         searchView.setOnQueryTextListener(mSearchListener);
         searchView.addOnAttachStateChangeListener(new View.OnAttachStateChangeListener() {
@@ -196,6 +198,10 @@ public class RepoFragment extends BaseFragment implements RepoLoader.RepoListene
             menu.findItem(R.id.item_sort_by_update_time).setChecked(true);
         }
         menu.findItem(R.id.item_upgradable_first).setChecked(App.getPreferences().getBoolean("upgradable_first", true));
+    }
+
+    @Override
+    public void onCreateMenu(@NonNull Menu menu, @NonNull MenuInflater menuInflater) {
     }
 
     @Override
@@ -239,7 +245,7 @@ public class RepoFragment extends BaseFragment implements RepoLoader.RepoListene
     }
 
     @Override
-    public boolean onOptionsItemSelected(@NonNull MenuItem item) {
+    public boolean onMenuItemSelected(@NonNull MenuItem item) {
         int itemId = item.getItemId();
         if (itemId == R.id.item_sort_by_name) {
             item.setChecked(true);
@@ -253,8 +259,10 @@ public class RepoFragment extends BaseFragment implements RepoLoader.RepoListene
             item.setChecked(!item.isChecked());
             App.getPreferences().edit().putBoolean("upgradable_first", item.isChecked()).apply();
             adapter.refresh();
+        } else {
+            return false;
         }
-        return super.onOptionsItemSelected(item);
+        return true;
     }
 
     private class RepoAdapter extends EmptyStateRecyclerView.EmptyStateAdapter<RepoAdapter.ViewHolder> implements Filterable {
