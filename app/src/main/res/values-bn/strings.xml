@@ -50,7 +50,6 @@
     <string name="activated">সক্রিয়</string>
     <string name="partial_activated">আংশিক সক্রিয়</string>
     <string name="selinux_policy_not_loaded_summary">এসইপলিসি সঠিকভাবে লোড করা হয় না</string>
-    <string name="selinux_policy_not_loaded"><![CDATA[সিস্টেম ফ্রেমওয়ার্ক হুক করে এমন মডিউল কাজ করবে না।<br/>অনুগ্রহ করে এটি <a href="https://github.com/topjohnwu/Magisk/issues"><b>Magisk</b></a> বিকাশকারীকে রিপোর্ট করুন।]]></string>
     <string name="system_inject_fail_summary">সিস্টেম ফ্রেমওয়ার্ক ইনজেকশন ব্যর্থ হয়েছে</string>
     <string name="system_inject_fail"><![CDATA[এটি বিরল এবং <b>Magisk</b> বা কিছু নিম্নমানের Magisk মডিউলের কারণে হতে পারে।<br/>অনুগ্রহ করে Riru এবং LSPosed ব্যতীত Magisk মডিউলগুলি নিষ্ক্রিয় করার চেষ্টা করুন বা বিকাশকারীদের কাছে সম্পূর্ণ লগ জমা দিন।]]></string>
     <string name="system_prop_incorrect_summary">সিস্টেম প্রপ ভুল</string>
@@ -201,7 +200,6 @@
     <string name="update_channel_bate">বেটা</string>
     <string name="update_channel_nightly">রাতারাতি নির্মাণ</string>
     <string name="settings_xposed_api_call_protection">Xposed API কল সুরক্ষা</string>
-    <string name="settings_xposed_api_call_protection_summary">এক্সপোজড এপিআই ব্যবহার করার জন্য গতিশীলভাবে লোড করা মডিউল কোড ব্লক করুন, এটি কিছু মডিউল ভেঙে ফেলতে পারে কিন্তু নিরাপত্তা লাভ করতে পারে (পরীক্ষামূলক বৈশিষ্ট্য)</string>
     <!-- Module Repo -->
     <string name="module_readme">রিডমি</string>
     <string name="module_releases">মুক্তি দেয়</string>
