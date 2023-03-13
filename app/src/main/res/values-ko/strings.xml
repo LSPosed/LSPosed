@@ -200,6 +200,7 @@
     <string name="update_channel_bate">베타</string>
     <string name="update_channel_nightly">야간 빌드</string>
     <string name="settings_xposed_api_call_protection">Xposed API 호출 보호</string>
+    <string name="settings_xposed_api_call_protection_summary">Xposed API를 사용하기 위해 로드된 모듈 코드를 동적으로 차단하면 일부 모듈이 손상될 수 있지만 보안에 도움이 됩니다.</string>
     <!-- Module Repo -->
     <string name="module_readme">읽어보기</string>
     <string name="module_releases">릴리스</string>
