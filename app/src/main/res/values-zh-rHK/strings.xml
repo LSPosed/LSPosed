@@ -47,7 +47,6 @@
     <string name="activated">已啟動</string>
     <string name="partial_activated">部分啟動</string>
     <string name="selinux_policy_not_loaded_summary">SEPolicy 未正常加載</string>
-    <string name="selinux_policy_not_loaded"><![CDATA[注入系統的模組將不會工作。<br/>請回報給 <a href="https://github.com/topjohnwu/Magisk/issues"><b>Magisk</b></a> 開發者。]]></string>
     <string name="system_inject_fail_summary">系統框架注入失敗</string>
     <string name="system_inject_fail"><![CDATA[此問題很罕見，可能是由於<b>Magisk</b>或某些低質量Magisk模組造成的。<br/>請嘗試禁用除Riru和LSPosed之外的Magisk模組，或向開發人員提交完整日誌。]]></string>
     <string name="system_prop_incorrect_summary">系統屬性異常</string>
