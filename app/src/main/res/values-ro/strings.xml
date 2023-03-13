@@ -51,7 +51,6 @@
     <string name="activated">Activat</string>
     <string name="partial_activated">Parțial activat</string>
     <string name="selinux_policy_not_loaded_summary">SEPolicy nu este încărcată corect</string>
-    <string name="selinux_policy_not_loaded"><![CDATA[Modulele care conectează System Framework nu vor funcționa.<br/>Vă rugăm să raportați acest lucru dezvoltatorului <a href="https://github.com/topjohnwu/Magisk/issues"><b>Magisk</b></a>.]]></string>
     <string name="system_inject_fail_summary">Injectarea System Framework a eșuat</string>
     <string name="system_inject_fail"><![CDATA[Acest lucru este rar și poate fi cauzat de <b>Magisk</b> sau de unele module Magisk de calitate scăzută.<br/>Vă rugăm să încercați să dezactivați modulele Magisk altele decât Riru și LSPosed sau să trimiteți jurnalul complet dezvoltatorilor.]]></string>
     <string name="system_prop_incorrect_summary">System prop incorect</string>
@@ -202,7 +201,6 @@
     <string name="update_channel_bate">Beta</string>
     <string name="update_channel_nightly">Construire nocturnă</string>
     <string name="settings_xposed_api_call_protection">Protecția apelurilor API Xposed</string>
-    <string name="settings_xposed_api_call_protection_summary">Blocați codul modulului încărcat dinamic pentru a utiliza API-ul Xposed, acest lucru poate întrerupe unele module, dar aduce beneficii în materie de securitate (caracteristică experimentală)</string>
     <!-- Module Repo -->
     <string name="module_readme">Citește-mă</string>
     <string name="module_releases">Lansări</string>
