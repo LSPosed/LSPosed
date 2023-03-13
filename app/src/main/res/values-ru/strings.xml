@@ -21,7 +21,7 @@
     <!-- MainActivity -->
     <string name="info">Информация</string>
     <string name="overview">LSPosed</string>
-    <string name="Modules">Мои модули</string>
+    <string name="Modules">Модули</string>
     <plurals name="modules_enabled_count">
         <item quantity="one">Включен %d модуль</item>
         <item quantity="few">Включены %d модуля</item>
@@ -53,7 +53,7 @@
     <string name="activated">Активирован</string>
     <string name="partial_activated">Частично активирован</string>
     <string name="selinux_policy_not_loaded_summary">SEPolicy загружен неправильно</string>
-    <string name="selinux_policy_not_loaded"><![CDATA[Модули которым нужен системный фреймворк, не будут работать.<br/>Пожалуйста, сообщите об этом разработчику <a href="https://github.com/topjohnwu/Magisk/issues"><b>Magisk</b></a>]]></string>
+    <string name="selinux_policy_not_loaded"><![CDATA[Некоторые функции не будут работать.<br/>Пожалуйста, сообщите об этом разработчику <a href="https://github.com/topjohnwu/Magisk/issues"><b>Magisk</b></a>]]></string>
     <string name="system_inject_fail_summary">Ошибка внедрения системного фреймворка</string>
     <string name="system_inject_fail"><![CDATA[Это редкость и может быть вызвано <b>Magisk</b> или несовместимыми модулями Magisk.<br/>Пожалуйста, попробуйте отключить модули Magisk кроме Riru и LSPosed или пришлите полные логи разработчику]]></string>
     <string name="system_prop_incorrect_summary">Неправильные системные настройки</string>
@@ -107,6 +107,7 @@
     <!-- ModulesActivity -->
     <string name="module_empty_description">(описание отсутствует)</string>
     <string name="warning_xposed_min_version">Этот модуль требует более новой версии LSPosed (%d) и не может быть включен</string>
+    <string name="warning_target_version_higher">Этот модуль разработан для более новой версии Xposed (%d), поэтому некоторые функции могут не работать</string>
     <string name="no_min_version_specified">Этот модуль не указал версию LSPosed, в которой он нуждается</string>
     <string name="warning_min_version_too_low">Этот модуль был создан для LSPosed версии %1$d, но из-за несовместимых изменений в версии %2$d, он был выключен</string>
     <string name="warning_installed_on_external_storage">Этот модуль не может быть загружен, потому что он установлен на SD-карте, переместите его во внутреннюю память</string>
@@ -140,7 +141,7 @@
     <string name="enable_module">Включить модуль</string>
     <string name="no_scope_selected">Вы не выбрали ни одного приложения. Продолжить?</string>
     <string name="menu_show_games">Игры</string>
-    <string name="menu_show_modules">Мои модули</string>
+    <string name="menu_show_modules">Модули</string>
     <string name="menu_show_denylist">DenyList</string>
     <string name="failed_to_save_scope_list">Не удалось сохранить список выбранных приложений для модуля</string>
     <string name="app_version">Версия: %1$s</string>
@@ -196,6 +197,7 @@
     <string name="settings_translation_summary">Помогите нам перевести %s на ваш язык</string>
     <string name="settings_create_shortcut_summary">Создать ярлык, с помощью которого можно открыть LSPosed</string>
     <string name="settings_created_shortcut_summary">Для открытия LSPosed был создан ярлык</string>
+    <string name="settings_unsupported_pin_shortcut_summary">Текущий лаунчер по умолчанию не поддерживает ярлыки</string>
     <string name="settings_enable_status_notification">Уведомление</string>
     <string name="settings_enable_status_notification_summary">Показывать уведомление, через которое можно открыть LSPosed</string>
     <string name="disable_status_notification_error">Не найден ярлык, выключить уведомление нельзя</string>
@@ -204,7 +206,6 @@
     <string name="update_channel_bate">Бета-версии</string>
     <string name="update_channel_nightly">Ночные версии</string>
     <string name="settings_xposed_api_call_protection">Защита использования Xposed API</string>
-    <string name="settings_xposed_api_call_protection_summary">Блокировать динамически загружаемый код модуля для использования Xposed API, это может нарушить работу некоторых модулей, но повысит безопасность (экспериментальная функция)</string>
     <!-- Module Repo -->
     <string name="module_readme">Описание</string>
     <string name="module_releases">Версии</string>
