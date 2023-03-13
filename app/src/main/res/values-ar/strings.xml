@@ -57,7 +57,6 @@
     <string name="activated">مُفعّل</string>
     <string name="partial_activated">مفعل جزئياً</string>
     <string name="selinux_policy_not_loaded_summary">لم يتم تحميل SEPolicy بشكل صحيح</string>
-    <string name="selinux_policy_not_loaded"><![CDATA[لن تعمل الوحدات النمطية التي تربط إطار عمل النظام.<br/>الرجاء الإبلاغ عن هذا إلى <a href="https://github.com/topjohnwu/Magisk/issues"><b>ماجيسك</b></a> مطور النظام.]]></string>
     <string name="system_inject_fail_summary">فشل حقن إطار عمل النظام</string>
     <string name="system_inject_fail"><![CDATA[هذا نادر وقد يكون بسبب <b>Magisk</b> أو بعض وحدات Magisk منخفضة الجودة.<br/>الرجاء محاولة تعطيل وحدات Magisk خلاف Riru وLSPosed أو إرسال سجل كامل للمطورين.]]></string>
     <string name="system_prop_incorrect_summary">نظام prop غير صحيح</string>
@@ -71,7 +70,7 @@
     <string name="info_system_version">إصدار النظام</string>
     <string name="info_device">الجهاز</string>
     <string name="info_system_abi">نظام ABI</string>
-    <string name="info_dex2oat_wrapper">غلاف محسّن Dex</string>
+    <string name="info_dex2oat_wrapper">غلاف Dex المحسّن</string>
     <string name="enabled">مفعل</string>
     <string name="not_enabled">غير مفعل</string>
     <string name="supported">مدعوم</string>
@@ -208,7 +207,6 @@
     <string name="update_channel_bate">تجريبي</string>
     <string name="update_channel_nightly">البناء الليلي</string>
     <string name="settings_xposed_api_call_protection">حماية استدعاء Xposed API</string>
-    <string name="settings_xposed_api_call_protection_summary">حظر رمز الوحدة النمطية المحمل ديناميكيا لاستخدام Xposed API ، قد يؤدي هذا إلى كسر بعض الوحدات النمطية ولكن يستفيد من الأمان (ميزة تجريبية)</string>
     <!-- Module Repo -->
     <string name="module_readme">اقرأني</string>
     <string name="module_releases">إصدارات</string>
