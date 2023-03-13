@@ -203,6 +203,7 @@ JJ108</string>
     <string name="update_channel_bate">Beta</string>
     <string name="update_channel_nightly">Nightly Build</string>
     <string name="settings_xposed_api_call_protection">Xposed API-Aufrufschutz</string>
+    <string name="settings_xposed_api_call_protection_summary">Dynamisch geladenen Modulcode blockieren, um Xposed API zu verwenden. Einige Module werden nicht mehr funktionieren, aber die Sicherheit profitiert davon</string>
     <!-- Module Repo -->
     <string name="module_readme">Liesmich</string>
     <string name="module_releases">Veröffentlichungen</string>
