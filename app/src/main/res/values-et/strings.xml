@@ -202,6 +202,7 @@
     <string name="update_channel_bate">Beeta</string>
     <string name="update_channel_nightly">Nightly build</string>
     <string name="settings_xposed_api_call_protection">Xposed API call protection</string>
+    <string name="settings_xposed_api_call_protection_summary">Blokeerige dünaamiliselt laaditud mooduli kood, et kasutada Xposed API-t, see võib mõne mooduli rikkuda, kuid toob kasu turvalisusele</string>
     <!-- Module Repo -->
     <string name="module_readme">Readme</string>
     <string name="module_releases">Väljaanded</string>
