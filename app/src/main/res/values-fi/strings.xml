@@ -49,7 +49,6 @@
     <string name="activated">Aktivoitu</string>
     <string name="partial_activated">Osittain aktivoitu</string>
     <string name="selinux_policy_not_loaded_summary">SEPolicy ei ole ladattu oikein</string>
-    <string name="selinux_policy_not_loaded"><![CDATA[Moduulit jotka eivät toimi järjestelmäkehyksessä.<br/>Ole hyvä ja raportoi tästä <a href="https://github.com/topjohnwu/Magisk/issues"><b>Magisk</b></a> kehittäjä.]]></string>
     <string name="system_inject_fail_summary">Järjestelmän kehysinjektointi epäonnistui</string>
     <string name="system_inject_fail"><![CDATA[Tämä on harvinaista ja voi johtua <b>Magisk</b> tai joitakin heikkolaatuisia Magisk moduuleja.<br/>Yritä poistaa käytöstä muut Magisk moduulit kuin Riru ja LSPosed tai lähettää täysi loki kehittäjille.]]></string>
     <string name="system_prop_incorrect_summary">Järjestelmän prop virheellinen</string>
@@ -200,7 +199,6 @@
     <string name="update_channel_bate">Beeta</string>
     <string name="update_channel_nightly">Yöllinen rakentaminen</string>
     <string name="settings_xposed_api_call_protection">Xposedin API-kutsujen suojaus</string>
-    <string name="settings_xposed_api_call_protection_summary">Estää dynaamisesti ladatun moduulin koodin käyttö Xposed API:n avulla, tämä voi rikkoa joitakin moduuleja, mutta hyödyttää turvallisuutta (kokeellinen ominaisuus).</string>
     <!-- Module Repo -->
     <string name="module_readme">Luennot</string>
     <string name="module_releases">Julkaisut</string>
