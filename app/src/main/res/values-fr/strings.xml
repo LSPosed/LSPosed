@@ -203,6 +203,7 @@ https://github.com/tclement0922</string>
     <string name="update_channel_bate">Bêta</string>
     <string name="update_channel_nightly">Alpha</string>
     <string name="settings_xposed_api_call_protection">Protection des appels API Xposed</string>
+    <string name="settings_xposed_api_call_protection_summary">Bloquer dynamiquement le code de module chargé pour utiliser l\'API Xposed, celà peut casser certains modules mais être bénéfique à la sécurité</string>
     <!-- Module Repo -->
     <string name="module_readme">Lisez-moi</string>
     <string name="module_releases">Versions</string>
