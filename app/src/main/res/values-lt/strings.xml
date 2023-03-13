@@ -53,7 +53,6 @@
     <string name="activated">Aktyvuota</string>
     <string name="partial_activated">Iš dalies aktyvuota</string>
     <string name="selinux_policy_not_loaded_summary">\"SEPolicy\" nėra tinkamai įkelta</string>
-    <string name="selinux_policy_not_loaded"><![CDATA[Moduliai, kurie užkabina System Framework, neveiks.<br/>Praneškite apie tai <a href="https://github.com/topjohnwu/Magisk/issues"><b>Magisk</b></a> kūrėjui.]]></string>
     <string name="system_inject_fail_summary">Nepavyko įšvirkšti sistemos pagrindo</string>
     <string name="system_inject_fail"><![CDATA[Tai pasitaiko retai ir gali būti dėl <b>"Magisk"</b> arba kai kurių nekokybiškų "Magisk" modulių.<br/>Pabandykite išjungti kitus "Magisk" modulius, išskyrus "Riru" ir "LSPosed", arba pateikite visą žurnalą kūrėjams.]]></string>
     <string name="system_prop_incorrect_summary">Neteisingas sistemos rekvizitas</string>
@@ -204,7 +203,6 @@
     <string name="update_channel_bate">Beta</string>
     <string name="update_channel_nightly">Naktinis kūrimas</string>
     <string name="settings_xposed_api_call_protection">\"Xposed API\" skambučių apsauga</string>
-    <string name="settings_xposed_api_call_protection_summary">Blokuoti dinamiškai įkeliamo modulio kodą, kad būtų naudojama \"Xposed API\", tai gali sugadinti kai kuriuos modulius, bet naudinga saugumui (eksperimentinė funkcija)</string>
     <!-- Module Repo -->
     <string name="module_readme">Readme</string>
     <string name="module_releases">Leidiniai</string>
