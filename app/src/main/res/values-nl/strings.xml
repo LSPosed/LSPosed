@@ -202,6 +202,7 @@
     <string name="update_channel_bate">Bèta</string>
     <string name="update_channel_nightly">Nachtelijke bouw</string>
     <string name="settings_xposed_api_call_protection">Xposed API-oproepbeveiliging</string>
+    <string name="settings_xposed_api_call_protection_summary">Blokkeer dynamisch geladen modulecode om Xposed API te gebruiken, dit kan sommige modules breken maar komt de veiligheid ten goede</string>
     <!-- Module Repo -->
     <string name="module_readme">Leesmij</string>
     <string name="module_releases">Publicaties</string>
