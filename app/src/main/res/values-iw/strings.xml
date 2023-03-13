@@ -54,7 +54,6 @@
     <string name="activated">הופעל</string>
     <string name="partial_activated">הופעל חלקית</string>
     <string name="selinux_policy_not_loaded_summary">SEPolicy לא נטען כמו שצריך</string>
-    <string name="selinux_policy_not_loaded"><![CDATA[SEPolicy לא טעון כמו שצריך, מודולים שמתחברים ל-System Framework לא יעבדו.]]></string>
     <string name="system_inject_fail_summary">הזרקת System Framework נכשלה</string>
     <string name="system_inject_fail"><![CDATA[זה נדיר ועלול להיגרם על ידי <b>Magisk</b> או מודולי Magisk באיכות נמוכה.<br/>נסה להשבית מודולי Magisk שאינם Riru ו-LSPosed או שלח יומן מלא למפתחים.]]></string>
     <string name="system_prop_incorrect_summary">אבזר המערכת שגוי</string>
@@ -205,7 +204,6 @@
     <string name="update_channel_bate">בטא</string>
     <string name="update_channel_nightly">בניה לילית</string>
     <string name="settings_xposed_api_call_protection">הגנה מפני קריאות Xposed API</string>
-    <string name="settings_xposed_api_call_protection_summary">חסום קוד מודול שנטען באופן דינמי לשימוש ב-Xposed API, זה עשוי לשבור מודולים מסוימים אך יועיל לאבטחה (תכונה נסיונית)</string>
     <!-- Module Repo -->
     <string name="module_readme">קרא אותי</string>
     <string name="module_releases">גרסאות</string>
