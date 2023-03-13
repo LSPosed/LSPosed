@@ -206,6 +206,7 @@
     <string name="update_channel_bate">Beta</string>
     <string name="update_channel_nightly">Wersja nocna</string>
     <string name="settings_xposed_api_call_protection">Ochrona wywołania Xposed API</string>
+    <string name="settings_xposed_api_call_protection_summary">Zablokuj dynamiczne ładowanie kodu modułu do używania Xposed API, wzmocni to ochronę kosztem możliwego uszkodzenia niektórych modułów</string>
     <!-- Module Repo -->
     <string name="module_readme">Readme</string>
     <string name="module_releases">Wersje</string>
