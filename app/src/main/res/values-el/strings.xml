@@ -199,6 +199,7 @@
     <string name="update_channel_bate">Βήτα</string>
     <string name="update_channel_nightly">Νυχτερινή κατασκευή</string>
     <string name="settings_xposed_api_call_protection">Προστασία κλήσεων Xposed API</string>
+    <string name="settings_xposed_api_call_protection_summary">Αποκλείστε τον δυναμικά φορτωμένο κώδικα μονάδας για να χρησιμοποιήσετε το Xposed API, αυτό μπορεί να σπάσει ορισμένες μονάδες αλλά να ωφελήσει την ασφάλεια</string>
     <!-- Module Repo -->
     <string name="module_readme">Έτοιμο</string>
     <string name="module_releases">Εκδόσεις</string>
