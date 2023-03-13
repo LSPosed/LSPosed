@@ -46,7 +46,7 @@ dependencyResolutionManagement {
             library("libxposed-service-interface", "io.github.libxposed", "service-interface").versionRef(libxposedVersion)
 
 
-            library("rikkax-appcompat", "dev.rikka.rikkax.appcompat:appcompat:1.5.0.1")
+            library("rikkax-appcompat", "dev.rikka.rikkax.appcompat:appcompat:1.6.1")
             library("rikkax-core", "dev.rikka.rikkax.core:core:1.4.1")
             library("rikkax-insets", "dev.rikka.rikkax.insets:insets:1.3.0")
             library("rikkax-layoutinflater", "dev.rikka.rikkax.layoutinflater:layoutinflater:1.3.0")
