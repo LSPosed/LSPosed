@@ -49,7 +49,6 @@
     <string name="activated">Aktiverad</string>
     <string name="partial_activated">Delvis aktiverad</string>
     <string name="selinux_policy_not_loaded_summary">SEPolicy är inte korrekt laddat</string>
-    <string name="selinux_policy_not_loaded"><![CDATA[Moduler som hakar i System Framework inte kommer att fungera.<br/>Vänligen rapportera detta till <a href="https://github.com/topjohnwu/Magisk/issues"><b>Magisk</b></a> utvecklare.]]></string>
     <string name="system_inject_fail_summary">Injektion i System Framework misslyckades</string>
     <string name="system_inject_fail"><![CDATA[Detta är sällsynt och kan orsakas av <b>Magisk</b> eller några Magisk-moduler av låg kvalitet.<br/>Försök att inaktivera andra Magisk-moduler än Riru och LSPosed eller skicka fullständig logg till utvecklare.]]></string>
     <string name="system_prop_incorrect_summary">Felaktig System prop</string>
@@ -200,7 +199,6 @@
     <string name="update_channel_bate">Beta</string>
     <string name="update_channel_nightly">Nattligt bygg</string>
     <string name="settings_xposed_api_call_protection">Skydd av Xposed API-anrop</string>
-    <string name="settings_xposed_api_call_protection_summary">Blockera dynamiskt laddad modulkod för att använda Xposed API, vilket kan förstöra vissa moduler men gynnar säkerheten (experimentell funktion).</string>
     <!-- Module Repo -->
     <string name="module_readme">Läsa</string>
     <string name="module_releases">Släpp</string>
