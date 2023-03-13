@@ -200,6 +200,7 @@
     <string name="update_channel_bate">測試版</string>
     <string name="update_channel_nightly">每夜構建</string>
     <string name="settings_xposed_api_call_protection">Xposed API 呼叫保護</string>
+    <string name="settings_xposed_api_call_protection_summary">封鎖動態載入的模組代碼以使用 Xposed API，這可能會損毀某些模組但有益於安全性</string>
     <!-- Module Repo -->
     <string name="module_readme">自述檔案</string>
     <string name="module_releases">版本</string>
