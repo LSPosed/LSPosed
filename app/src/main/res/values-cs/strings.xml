@@ -206,6 +206,7 @@
     <string name="update_channel_bate">Beta</string>
     <string name="update_channel_nightly">Noční sestavení</string>
     <string name="settings_xposed_api_call_protection">Ochrana volání rozhraní Xposed API</string>
+    <string name="settings_xposed_api_call_protection_summary">Blokování dynamicky načítaného kódu modulu pro použití rozhraní Xposed API, což může narušit některé moduly, ale prospěje bezpečnosti</string>
     <!-- Module Repo -->
     <string name="module_readme">Přečti si mě</string>
     <string name="module_releases">Vydání</string>
