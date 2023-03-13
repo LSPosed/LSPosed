@@ -12,4 +12,10 @@
     <string name="status_channel_name">LSPosed-Status</string>
     <string name="lsposed_running_notification_title">LSPosed geladen</string>
     <string name="lsposed_running_notification_content">Tippen Sie auf die Benachrichtigung, um den Manager zu öffnen</string>
+    <string name="xposed_module_request_scope_title">Scope-Anfrage</string>
+    <string name="xposed_module_request_scope_content">%1$s von Benutzer %2$s fordert an, %3$s zu seinem Scope-Bereich hinzuzufügen.</string>
+    <string name="scope_channel_name">Scope-Anfrage</string>
+    <string name="scope_approve">Genehmigen</string>
+    <string name="scope_deny">Verweigern</string>
+    <string name="nerver_ask_again">Niemals fragen</string>
 </resources>
