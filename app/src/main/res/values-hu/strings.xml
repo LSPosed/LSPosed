@@ -49,7 +49,6 @@
     <string name="activated">Aktiválva</string>
     <string name="partial_activated">Részben aktiválva</string>
     <string name="selinux_policy_not_loaded_summary">Az SEPolicy nem töltött be megfelelően</string>
-    <string name="selinux_policy_not_loaded"><![CDATA[A System Framework-t érintő modulok lehetséges, hogy nem fognak működni. <br/>Kérlek jelentsd az esetet a <a href="https://github.com/topjohnwu/Magisk/issues"><b>Magisk</b></a> fejlesztőjének.]]></string>
     <string name="system_inject_fail_summary">A System Framework injektálása sikertelen</string>
     <string name="system_inject_fail"><![CDATA[Ez sajnos gyakori probléma, amit lehet, hogy a
 <b>Magisk</b> vagy néhány Magisk modul okozott.<br/> Kérlek próbálj meg deaktiválni néhány Magisk modult a Riru és LSPosed modulokon kívül vagy küldj el egy teljes napló fájlt a fejlesztőknek.]]></string>
@@ -201,7 +200,6 @@
     <string name="update_channel_bate">Béta</string>
     <string name="update_channel_nightly">Nightly</string>
     <string name="settings_xposed_api_call_protection">Xposed API hívásvédelem</string>
-    <string name="settings_xposed_api_call_protection_summary">A dinamikusan betöltött modul kódjának blokkolása az Xposed API használatához, ez néhány modult megtörhet, de a biztonság javára válik (kísérleti funkció).</string>
     <!-- Module Repo -->
     <string name="module_readme">Olvass el</string>
     <string name="module_releases">Kiadások</string>
