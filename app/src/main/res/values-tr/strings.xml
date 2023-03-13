@@ -202,6 +202,7 @@
     <string name="update_channel_bate">Beta</string>
     <string name="update_channel_nightly">Gecelik</string>
     <string name="settings_xposed_api_call_protection">Xposed API çağrı koruması</string>
+    <string name="settings_xposed_api_call_protection_summary">Xposed API kullanmak için dinamik olarak yüklenen modül kodunu engelleyin, bu bazı modülleri bozabilir ancak güvenliğe faydalı da olabilir</string>
     <!-- Module Repo -->
     <string name="module_readme">Beni oku</string>
     <string name="module_releases">Sürümler</string>
