@@ -51,7 +51,6 @@
     <string name="activated">Aktiviran</string>
     <string name="partial_activated">Djelomično aktiviran</string>
     <string name="selinux_policy_not_loaded_summary">SEPolicy nije pravilno učitan</string>
-    <string name="selinux_policy_not_loaded"><![CDATA[Moduli koji se spajaju na System Framework neće raditi.<br/>Molimo prijavite ovo <a href="https://github.com/topjohnwu/Magisk/issues"><b>Magisk</b></a> programeru.]]></string>
     <string name="system_inject_fail_summary">Injektiranje u System Framework nije uspjelo</string>
     <string name="system_inject_fail"><![CDATA[Ovo je rijetko i može biti uzrokovano aplikacijom <b>Magisk</b> ili nekim Magisk modulima niske kvalitete.<br/>Pokušajte onemogućiti Magisk module koji nisu Riru i LSPosed ili pošaljite cijeli zapis programerima.]]></string>
     <string name="system_prop_incorrect_summary">Svojstva sustava nisu ispravna</string>
@@ -202,7 +201,6 @@
     <string name="update_channel_bate">Beta</string>
     <string name="update_channel_nightly">Noćna izgradnja</string>
     <string name="settings_xposed_api_call_protection">Xposed API zaštita poziva</string>
-    <string name="settings_xposed_api_call_protection_summary">Blokirajte dinamički učitani kod modula za korištenje Xposed API-ja, to može pokvariti neke module, ali ima koristi od sigurnosti (eksperimentalna značajka)</string>
     <!-- Module Repo -->
     <string name="module_readme">Pročitaj me</string>
     <string name="module_releases">Izdanja</string>
