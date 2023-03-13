@@ -49,7 +49,7 @@
     <string name="activated">یہ چالو ہے۔</string>
     <string name="partial_activated">جزوی طور پر فعال</string>
     <string name="selinux_policy_not_loaded_summary">SePolicy ٹھیک سے آن نہیں ہے</string>
-    <string name="selinux_policy_not_loaded"><![CDATA[سسٹم فریم ورک کو جوڑنے والے ماڈیول کام نہیں کریں گے۔<br/>براہ کرم اس کی اطلاع <a href="https://github.com/topjohnwu/Magisk/issues"><b>Magisk</b></a> ڈویلپر کو دیں۔]]></string>
+    <string name="selinux_policy_not_loaded"><![CDATA[<a href="https://github.com/topjohnwu/Magisk/issues"mggnteer.]]></string>
     <string name="system_inject_fail_summary">سسٹم فریم ورک انجکشن ناکام۔</string>
     <string name="system_inject_fail"><![CDATA[یہ نایاب ہے اور یہ <b>Magisk</b> یا کچھ کم معیار کے Magisk ماڈیولز کی وجہ سے ہو سکتا ہے۔<br/>براہ کرم Riru اور LSPosed کے علاوہ Magisk ماڈیولز کو غیر فعال کرنے کی کوشش کریں یا مکمل لاگ ڈویلپرز کو جمع کرائیں۔]]></string>
     <string name="system_prop_incorrect_summary">سسٹم پروپ غلط ہے۔</string>
@@ -200,7 +200,6 @@
     <string name="update_channel_bate">بیٹا</string>
     <string name="update_channel_nightly">رات کی تعمیر</string>
     <string name="settings_xposed_api_call_protection">Xposed API کال تحفظ</string>
-    <string name="settings_xposed_api_call_protection_summary">ایکسپوزڈ API استعمال کرنے کے لیے متحرک طور پر بھرے ہوئے ماڈیول کوڈ کو بلاک کریں، اس سے کچھ ماڈیول ٹوٹ سکتے ہیں لیکن سیکیورٹی کو فائدہ پہنچ سکتا ہے (تجرباتی خصوصیت)</string>
     <!-- Module Repo -->
     <string name="module_readme">ریڈمی</string>
     <string name="module_releases">جاری کرتا ہے۔</string>
