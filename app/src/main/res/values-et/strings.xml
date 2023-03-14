@@ -30,7 +30,7 @@
     <string name="Settings">Seaded</string>
     <string name="feedback_or_suggestion">Tagasiside või ettepanek</string>
     <string name="About">Kohta</string>
-    <string name="report_issue">Aruandeküsimus</string>
+    <string name="report_issue">Teata probleemist</string>
     <string name="module_repo">Repo</string>
     <string name="module_repo_loading">Laadimine…</string>
     <string name="module_repo_up_to_date">Kõik moodulid on ajakohased</string>
@@ -41,7 +41,7 @@
         <item quantity="other">%d moodulit täiendatavad</item>
     </plurals>
     <string name="about_view_source_code"><![CDATA[Vaata lähtekoodi aadressil %1$s<br/>Liitu meie %2$s \'i kanaliga]]></string>
-    <string name="translators" comment="Dear translators, please add your home page here following the format. There can be more than one translator. So feel free to append yourself.">Subaru Ye</string>
+    <string name="translators" comment="Dear translators, please add your home page here following the format. There can be more than one translator. So feel free to append yourself.">Subaru Pan</string>
     <string name="install">Installi</string>
     <string name="install_summary">Puudutage LSPosedi installimiseks</string>
     <string name="not_installed">Puudub</string>
@@ -49,14 +49,14 @@
     <string name="activated">Aktiveeritud</string>
     <string name="partial_activated">Osaliselt aktiveeritud</string>
     <string name="selinux_policy_not_loaded_summary">SEPolicy ei ole korralikult laetud</string>
-    <string name="selinux_policy_not_loaded"><![CDATA[Moodulid, mis haakuvad System Frameworkiga, ei tööta.<br/>Palun teatage sellest <a href="https://github.com/topjohnwu/Magisk/issues"><b>Magiski</b></a> arendajale.]]></string>
+    <string name="selinux_policy_not_loaded"><![CDATA[Mõned funktsioonid ei tööta.<br/>Palun teatage sellest <a href="https://github.com/topjohnwu/Magisk/issues"><b>Magisk</b></a> arendajale.]]></string>
     <string name="system_inject_fail_summary">System Frameworki süstimine ebaõnnestus</string>
     <string name="system_inject_fail"><![CDATA[Seda esineb harva ja selle põhjuseks võib olla <b>Magisk</b> või mõned madala kvaliteediga Magisk-moodulid.<br/>Palun proovige lülitada välja Magisk\'i moodulid peale Riru ja LSPosed või esitage täielik logi arendajatele.]]></string>
     <string name="system_prop_incorrect_summary">Süsteemi tugi vale</string>
     <string name="system_prop_incorrect"><![CDATA[Mõned vajalikud süsteemiomadused kustutatud või muudetud.<br/>Moodulid võivad aeg-ajalt kehtetuks muutuda.]]></string>
     <string name="need_update">Vaja uuendada</string>
     <string name="please_update_summary">Palun installige LSPosedi uusim versioon</string>
-    <string name="lsposed_not_active">LSPosed ei ole praegu paigaldatud ega aktiivne.</string>
+    <string name="lsposed_not_active">LSPosed ei ole praegu installitud ega aktiivne.</string>
     <string name="info_api_version">API\'i versioon</string>
     <string name="info_framework_version">Raamistiku versioon</string>
     <string name="info_manager_version">Halduri versioon</string>
@@ -68,7 +68,7 @@
     <string name="not_enabled">Pole lubatud</string>
     <string name="supported">Toetatud</string>
     <string name="unsupported">Toetamata</string>
-    <string name="android_version_unsatisfied">Android versioon rahulolematu</string>
+    <string name="android_version_unsatisfied">Androidi versioon ei ole toetatud</string>
     <string name="crashed">Kokku jooksnud</string>
     <string name="mount_failed">Kinnitus ebaõnnestus</string>
     <string name="selinux_permissive">SELinux on lubav</string>
@@ -103,6 +103,7 @@
     <!-- ModulesActivity -->
     <string name="module_empty_description">(kirjeldus puudub)</string>
     <string name="warning_xposed_min_version">See moodul nõuab uuemat Xposed versiooni (%d) ja seega ei saa seda aktiveerida.</string>
+    <string name="warning_target_version_higher">See moodul on mõeldud uuemale Xposedi versioonile (%d) ja seetõttu ei pruugi mõned funktsioonid töötada</string>
     <string name="no_min_version_specified">See moodul ei täpsusta Xposedi versiooni, mida ta vajab.</string>
     <string name="warning_min_version_too_low">See moodul loodi Xposedi versiooni %1$d jaoks, kuid versioonis %2$d tehtud ühildumatute muudatuste tõttu on see välja lülitatud</string>
     <string name="warning_installed_on_external_storage">Seda moodulit ei saa laadida, sest see on paigaldatud SD-kaardile, palun viige see sisemällu.</string>
@@ -192,6 +193,7 @@
     <string name="settings_translation_summary">Aita meil tõlkida %s sinu keelde</string>
     <string name="settings_create_shortcut_summary">Loo otsetee, mis võib avada parasiitide halduri</string>
     <string name="settings_created_shortcut_summary">Parasiitide halduri avamiseks on loodud otsetee</string>
+    <string name="settings_unsupported_pin_shortcut_summary">Praegune vaikekäivitusprogramm ei toeta nööpnõelte otseteid</string>
     <string name="settings_enable_status_notification">Staatuse teatamine</string>
     <string name="settings_enable_status_notification_summary">Kuva teatis, mis võib avada parasiitide halduri</string>
     <string name="disable_status_notification_error">Otsetee puudub, teavitust ei saa keelata</string>
@@ -200,7 +202,7 @@
     <string name="update_channel_bate">Beeta</string>
     <string name="update_channel_nightly">Nightly build</string>
     <string name="settings_xposed_api_call_protection">Xposed API call protection</string>
-    <string name="settings_xposed_api_call_protection_summary">Blokeerige dünaamiliselt laaditud mooduli kood, et kasutada Xposed API-t, see võib mõne mooduli rikkuda, kuid toob kasu turvalisusele (eksperimentaalne funktsioon)</string>
+    <string name="settings_xposed_api_call_protection_summary">Blokeerige dünaamiliselt laaditud mooduli kood, et kasutada Xposed API-t, see võib mõne mooduli rikkuda, kuid toob kasu turvalisusele</string>
     <!-- Module Repo -->
     <string name="module_readme">Readme</string>
     <string name="module_releases">Väljaanded</string>

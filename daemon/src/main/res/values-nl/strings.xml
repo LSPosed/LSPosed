@@ -12,4 +12,10 @@
     <string name="status_channel_name">LSPosed status</string>
     <string name="lsposed_running_notification_title">LSPosed geladen</string>
     <string name="lsposed_running_notification_content">Tik op de melding om manager te openen</string>
+    <string name="xposed_module_request_scope_title">Scope verzoek</string>
+    <string name="xposed_module_request_scope_content">%1$s op gebruiker %2$s verzoeken om %3$s toe te voegen aan het toepassingsgebied.</string>
+    <string name="scope_channel_name">Scope verzoek</string>
+    <string name="scope_approve">Goedkeuren</string>
+    <string name="scope_deny">Weiger</string>
+    <string name="nerver_ask_again">Nooit vragen</string>
 </resources>

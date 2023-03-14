@@ -47,7 +47,7 @@
     <string name="activated">활성화됨</string>
     <string name="partial_activated">부분적으로 활성화됨</string>
     <string name="selinux_policy_not_loaded_summary">SEPolicy가 제대로 로드되지 않았습니다.</string>
-    <string name="selinux_policy_not_loaded"><![CDATA[SEPolicy가 제대로 로드되지 않아 시스템 프레임워크를 후크하는 모듈이 작동하지 않습니다.<br><a href="https://github.com/topjohnwu/Magisk/issues"><b>Magisk</b></a> 개발자에게 보고하십시오.]]></string>
+    <string name="selinux_policy_not_loaded"><![CDATA[몇몇 기능은 작동하지 않을 수도 있습니다<br/> 오류를<ahref="https://github.com/topjohnwu/Magisk/issues"><b>Magisk 개발자</b></a> 에 신고해주세요]]></string>
     <string name="system_inject_fail_summary">System Framework 주입 실패</string>
     <string name="system_inject_fail"><![CDATA[System Framework 주입 실패.<br/>이는 드물게 발생하며, Magisk 또는 일부 저품질 <b>Magisk</b> 모듈 때문일 수 있습니다.<br/>Riru 및 LSPosed 이외의 Magisk 모듈을 비활성화하거나 전체 로그를 개발자에게 제출하십시오.]]></string>
     <string name="system_prop_incorrect_summary">잘못된 System prop</string>
@@ -101,6 +101,7 @@
     <!-- ModulesActivity -->
     <string name="module_empty_description">(설명 없음)</string>
     <string name="warning_xposed_min_version">이 모듈에는 최신 LSPosed (%d) 버전이 필요하므로 활성화할 수 없습니다.</string>
+    <string name="warning_target_version_higher">이 모듈은 더 새로운 Xposed 버전 (%d) 에서 만들어졌고 따라서 몇몇 기능들이 작동하지 않을 수도 있습니다</string>
     <string name="no_min_version_specified">이 모듈에서는 필요한 LSPosed 버전을 지정하지 않습니다.</string>
     <string name="warning_min_version_too_low">이 모듈은 LSPosed 버전 %1$d에 대해 생성되었지만 버전 %2$d에서 호환되지 않는 변경으로 인해 비활성화되었습니다.</string>
     <string name="warning_installed_on_external_storage">이 모듈은 SD 카드에 설치되어 있으므로 로드할 수 없습니다. 내부 스토리지로 이동하십시오.</string>
@@ -190,6 +191,7 @@
     <string name="settings_translation_summary">%s를 귀하의 언어로 번역하는 데 도움을 주세요.</string>
     <string name="settings_create_shortcut_summary">내부 관리자를 열 수 있는 바로가기 생성</string>
     <string name="settings_created_shortcut_summary">내부 관리자를 여는 바로 가기가 생성되었습니다.</string>
+    <string name="settings_unsupported_pin_shortcut_summary">현재 기본 런쳐는 핀 바로가기를 지원하지 않습니다</string>
     <string name="settings_enable_status_notification">상태 알림</string>
     <string name="settings_enable_status_notification_summary">기생 관리자를 열 수 있는 알림 표시</string>
     <string name="disable_status_notification_error">바로 가기 없음, 알림을 비활성화할 수 없음</string>
@@ -198,7 +200,7 @@
     <string name="update_channel_bate">베타</string>
     <string name="update_channel_nightly">야간 빌드</string>
     <string name="settings_xposed_api_call_protection">Xposed API 호출 보호</string>
-    <string name="settings_xposed_api_call_protection_summary">Xposed API를 사용하기 위해 로드된 모듈 코드를 동적으로 차단하면 일부 모듈이 손상될 수 있지만 보안에 도움이 됩니다(실험 기능).</string>
+    <string name="settings_xposed_api_call_protection_summary">Xposed API를 사용하기 위해 로드된 모듈 코드를 동적으로 차단하면 일부 모듈이 손상될 수 있지만 보안에 도움이 됩니다.</string>
     <!-- Module Repo -->
     <string name="module_readme">읽어보기</string>
     <string name="module_releases">릴리스</string>

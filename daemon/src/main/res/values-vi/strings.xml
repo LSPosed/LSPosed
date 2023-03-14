@@ -10,6 +10,12 @@
     <string name="xposed_module_updated_notification_content_system">%s đã được cập nhật, vì phạm vi bao gồm Framework Hệ thống, thì khởi động lại là cần thiết để áp dụng các thay đổi</string>
     <string name="module_updated_channel_name">Cập nhật mô-đun hoàn tất</string>
     <string name="status_channel_name">Trạng thái LSPosed</string>
-    <string name="lsposed_running_notification_title">LSPos đã được tải</string>
-    <string name="lsposed_running_notification_content">Nhấn vào thông báo để mở trình quản lý</string>
+    <string name="lsposed_running_notification_title">LSPosed đã được cài đặt</string>
+    <string name="lsposed_running_notification_content">Nhấp vào đây để mở LSposed Manager</string>
+    <string name="xposed_module_request_scope_title">Yêu cầu Phạm vi</string>
+    <string name="xposed_module_request_scope_content">%1$s khi người dùng %2$s yêu cầu thêm %3$s vào phạm vi của nó.</string>
+    <string name="scope_channel_name">Yêu cầu Phạm vi</string>
+    <string name="scope_approve">Chấp thuận</string>
+    <string name="scope_deny">Từ chối</string>
+    <string name="nerver_ask_again">Không bao giờ hỏi lại</string>
 </resources>

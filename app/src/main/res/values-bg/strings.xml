@@ -49,7 +49,6 @@
     <string name="activated">Активиран</string>
     <string name="partial_activated">Частично активиран</string>
     <string name="selinux_policy_not_loaded_summary">SEPolicy не е заредена правилно</string>
-    <string name="selinux_policy_not_loaded"><![CDATA[Модулите, които закачат System Framework, няма да работят.<br/>Моля, докладвайте това на <a href="https://github.com/topjohnwu/Magisk/issues"><b>Magisk</b></a> разработчика.]]></string>
     <string name="system_inject_fail_summary">Неуспешно инжектиране на системната рамка</string>
     <string name="system_inject_fail"><![CDATA[Това се случва рядко и може да е причинено от <b>Magisk</b> или някои нискокачествени модули на Magisk.<br/>Моля, опитайте се да деактивирате модулите на Magisk, различни от Riru и LSPosed, или изпратете пълен журнал на разработчиците.]]></string>
     <string name="system_prop_incorrect_summary">Неправилна стойност на системата</string>
@@ -200,7 +199,6 @@
     <string name="update_channel_bate">Бета</string>
     <string name="update_channel_nightly">Нощно изграждане</string>
     <string name="settings_xposed_api_call_protection">Защита на повикванията на Xposed API</string>
-    <string name="settings_xposed_api_call_protection_summary">Блокиране на динамично зареждан код на модул, за да се използва Xposed API, което може да наруши някои модули, но е от полза за сигурността (експериментална функция)</string>
     <!-- Module Repo -->
     <string name="module_readme">Readme</string>
     <string name="module_releases">Освобождава</string>

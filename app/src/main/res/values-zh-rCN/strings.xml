@@ -47,7 +47,7 @@
     <string name="activated">已激活</string>
     <string name="partial_activated">部分激活</string>
     <string name="selinux_policy_not_loaded_summary">SEPolicy 未被正确加载</string>
-    <string name="selinux_policy_not_loaded"><![CDATA[作用于系统框架的模块将不起作用。<br/>请将此问题报告给 <a href="https://github.com/topjohnwu/Magisk/issues"><b>Magisk</b></a> 开发者。]]></string>
+    <string name="selinux_policy_not_loaded"><![CDATA[某些功能将不起作用。<br/>请将此问题报告给 <a href="https://github.com/topjohnwu/Magisk/issues"><b>Magisk</b></a> 开发者]]></string>
     <string name="system_inject_fail_summary">系统框架注入失败</string>
     <string name="system_inject_fail"><![CDATA[这是极罕见的情况，可能是由 <b>Magisk</b> 或低质 Magisk 模块导致。<br/>请尝试禁用除 Riru 和 LSPosed 外的其他 Magisk 模块，或向开发者提供完整日志。]]></string>
     <string name="system_prop_incorrect_summary">系统属性异常</string>
@@ -101,6 +101,7 @@
     <!-- ModulesActivity -->
     <string name="module_empty_description">（未提供介绍）</string>
     <string name="warning_xposed_min_version">此模块需要更新的 Xposed 版本（%d），因此无法激活</string>
+    <string name="warning_target_version_higher">此模块是为较新的 Xposed 版本（%d）设计的，因此某些功能可能无法使用</string>
     <string name="no_min_version_specified">该模块未指定所需的 Xposed 版本</string>
     <string name="warning_min_version_too_low">由于该模块开发时所基于 Xposed %1$d 版本不再兼容 %2$d 版本中的变更，该模块现已被停用</string>
     <string name="warning_installed_on_external_storage">此模块因被安装在 SD 卡中而导致无法加载，请将其移动到内部存储</string>
@@ -190,6 +191,7 @@
     <string name="settings_translation_summary">帮助我们把 %s 翻译到你的语言</string>
     <string name="settings_create_shortcut_summary">创建一个能打开寄生管理器的快捷方式</string>
     <string name="settings_created_shortcut_summary">已经创建了用于打开寄生管理器的快捷方式</string>
+    <string name="settings_unsupported_pin_shortcut_summary">当前默认桌面不支持固定快捷方式</string>
     <string name="settings_enable_status_notification">状态通知</string>
     <string name="settings_enable_status_notification_summary">显示一个通知以打开寄生管理器</string>
     <string name="disable_status_notification_error">没有快捷方式，无法禁用通知</string>
@@ -198,7 +200,7 @@
     <string name="update_channel_bate">测试版</string>
     <string name="update_channel_nightly">每夜版</string>
     <string name="settings_xposed_api_call_protection">Xposed API 调用保护</string>
-    <string name="settings_xposed_api_call_protection_summary">阻止模块动态加载的代码使用 Xposed API，这会使某些模块失效，但有利于安全性（实验性功能）</string>
+    <string name="settings_xposed_api_call_protection_summary">阻止模块动态加载的代码使用 Xposed API，这会使某些模块失效，但有利于安全性</string>
     <!-- Module Repo -->
     <string name="module_readme">自述文件</string>
     <string name="module_releases">版本</string>

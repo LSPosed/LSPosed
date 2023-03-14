@@ -53,7 +53,7 @@
     <string name="activated">Aktivováno</string>
     <string name="partial_activated">Částečně aktivováno</string>
     <string name="selinux_policy_not_loaded_summary">SEPolicy není správně načten</string>
-    <string name="selinux_policy_not_loaded"><![CDATA[Moduly, které načítají System Framework nebudou fungovat.<br/>Prosím nahlaste to na <a href="https://github.com/topjohnwu/Magisk/issues"><b>Magisk</b></a> vývojáře.]]></string>
+    <string name="selinux_policy_not_loaded"><![CDATA[Některé funkce nebudou fungovat.<br/>Nahlaste to prosím vývojáři <a href="https://github.com/topjohnwu/Magisk/issues"><b>Magisk</b></a>.]]></string>
     <string name="system_inject_fail_summary">Načtení System Framework se nezdařilo</string>
     <string name="system_inject_fail"><![CDATA[Toto je vzácné a může to být způsobeno <b>Magisk</b>em nebo některými málo kvalitními moduly Magisku.<br/>Zkuste vypnout moduly Magisk jiné než Riru a LSPosed nebo odešlete kompletní log vývojářům.]]></string>
     <string name="system_prop_incorrect_summary">Nesprávné systémové prop</string>
@@ -107,6 +107,7 @@
     <!-- ModulesActivity -->
     <string name="module_empty_description">(žádný popis)</string>
     <string name="warning_xposed_min_version">Tento modul vyžaduje novější Xposed verzi (%d) a proto nemůže být aktivován</string>
+    <string name="warning_target_version_higher">Tento modul je určen pro novější verzi Xposed (%d), a proto některé funkce nemusí fungovat</string>
     <string name="no_min_version_specified">Tento modul nespecifikuje potřebnou Xposed verzi.</string>
     <string name="warning_min_version_too_low">Tento modul byl vytvořen pro Xposed verzi %1$d, a tak z důvodu nekompatibilních změn ve verzi %2$dbyl zakázán</string>
     <string name="warning_installed_on_external_storage">Tento modul nelze načíst, protože je nainstalován na SD kartě, přesuňte jej na interní úložiště</string>
@@ -196,6 +197,7 @@
     <string name="settings_translation_summary">Pomozte nám přeložit %s do vašeho jazyka</string>
     <string name="settings_create_shortcut_summary">Vytvoření zástupce, který může otevřít parazitního správce</string>
     <string name="settings_created_shortcut_summary">Byl vytvořen zástupce pro otevření parazitního správce</string>
+    <string name="settings_unsupported_pin_shortcut_summary">Současný výchozí spouštěč nepodporuje připnuté zkratky</string>
     <string name="settings_enable_status_notification">Oznámení o stavu</string>
     <string name="settings_enable_status_notification_summary">Zobrazení oznámení, které může otevřít parazitního správce</string>
     <string name="disable_status_notification_error">Žádný zástupce, nelze zakázat oznámení</string>
@@ -204,7 +206,7 @@
     <string name="update_channel_bate">Beta</string>
     <string name="update_channel_nightly">Noční sestavení</string>
     <string name="settings_xposed_api_call_protection">Ochrana volání rozhraní Xposed API</string>
-    <string name="settings_xposed_api_call_protection_summary">Blokování dynamicky načítaného kódu modulu pro použití rozhraní Xposed API, což může narušit některé moduly, ale prospěje bezpečnosti (experimentální funkce)</string>
+    <string name="settings_xposed_api_call_protection_summary">Blokování dynamicky načítaného kódu modulu pro použití rozhraní Xposed API, což může narušit některé moduly, ale prospěje bezpečnosti</string>
     <!-- Module Repo -->
     <string name="module_readme">Přečti si mě</string>
     <string name="module_releases">Vydání</string>

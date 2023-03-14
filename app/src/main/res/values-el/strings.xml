@@ -49,7 +49,6 @@
     <string name="activated">Ενεργοποιημένο</string>
     <string name="partial_activated">Μερικώς ενεργοποιημένο</string>
     <string name="selinux_policy_not_loaded_summary">Το SEPolicy δεν φορτώθηκε σωστά</string>
-    <string name="selinux_policy_not_loaded"><![CDATA[Πρόσθετα που το πλαίσιο συστήματος άγκιστρου δεν θα λειτουργήσει.<br/>Παρακαλώ αναφέρετε αυτό στο <a href="https://github.com/topjohnwu/Magisk/issues"><b>Magisk</b></a> προγραμματιστή.]]></string>
     <string name="system_inject_fail_summary">Η έγχυση στο πλαίσιο συστήματος απέτυχε</string>
     <string name="system_inject_fail"><![CDATA[Αυτό είναι σπάνιο και μπορεί να προκληθεί από το <b>Magisk</b> ή από κάποια χαμηλής ποιότητας πρόσθετα τουMagisk.<br/>Παρακαλώ προσπαθήστε να απενεργοποιήσετε όλα τα πρόσθετα του Magisk εκτός από το Riru και το LSPosed ή να υποβάλετε το πλήρες αρχείο καταγραφής στους προγραμματιστές.]]></string>
     <string name="system_prop_incorrect_summary">Λανθασμένο στήριγμα συστήματος</string>
@@ -200,7 +199,7 @@
     <string name="update_channel_bate">Βήτα</string>
     <string name="update_channel_nightly">Νυχτερινή κατασκευή</string>
     <string name="settings_xposed_api_call_protection">Προστασία κλήσεων Xposed API</string>
-    <string name="settings_xposed_api_call_protection_summary">Αποκλείστε τον δυναμικά φορτωμένο κώδικα μονάδας για να χρησιμοποιήσετε το Xposed API, αυτό μπορεί να σπάσει ορισμένες μονάδες αλλά να ωφελήσει την ασφάλεια (πειραματική δυνατότητα)</string>
+    <string name="settings_xposed_api_call_protection_summary">Αποκλείστε τον δυναμικά φορτωμένο κώδικα μονάδας για να χρησιμοποιήσετε το Xposed API, αυτό μπορεί να σπάσει ορισμένες μονάδες αλλά να ωφελήσει την ασφάλεια</string>
     <!-- Module Repo -->
     <string name="module_readme">Έτοιμο</string>
     <string name="module_releases">Εκδόσεις</string>

@@ -50,7 +50,7 @@ https://github.com/tclement0922</string>
     <string name="activated">Activé</string>
     <string name="partial_activated">Partiellement activé</string>
     <string name="selinux_policy_not_loaded_summary">SEPolicy n\’est pas chargé correctement</string>
-    <string name="selinux_policy_not_loaded"><![CDATA[Les modules qui modifient le sous-système ne fonctionneront pas.<br/>Merci de le signaler au développeur de <a href="https://github.com/topjohnwu/Magisk/issues"><b>Magisk</b></a>.]]></string>
+    <string name="selinux_policy_not_loaded"><![CDATA[Certaines fonctions ne fonctionneront pas.<br/>Merci de ne pas remonter celà vers le développeur <a href="https://github.com/topjohnwu/Magisk/issues">Magisk</b></a>.]]></string>
     <string name="system_inject_fail_summary">Échec de l\’injection du sous système</string>
     <string name="system_inject_fail"><![CDATA[Ceci est rare et peut être causé par <b>Magisk</b> ou certains modules Magisk de basse qualité.<br/>Essayez de désactiver les modules Magisk autres que Riru et LSPosed ou envoyez le journal complet aux développeurs.]]></string>
     <string name="system_prop_incorrect_summary">Propriétés système incorrectes</string>
@@ -104,6 +104,7 @@ https://github.com/tclement0922</string>
     <!-- ModulesActivity -->
     <string name="module_empty_description">(aucune description fournie)</string>
     <string name="warning_xposed_min_version">Ce module requière une nouvelle version d\'Xposed (%d) et n\'a donc pas pu être activé</string>
+    <string name="warning_target_version_higher">Ce module a été conçu pour une nouvelle version d\’Xposed (%d) et certaines fonctionnalités pourraient ne pas fonctionner</string>
     <string name="no_min_version_specified">Ce module ne spécifie pas la version d\'Xposed nécessaire.</string>
     <string name="warning_min_version_too_low">Ce module à été créé pour la version Xposed %1$d, mais due à des changements incompatibles dans la version %2$d, il à été désactivé</string>
     <string name="warning_installed_on_external_storage">Ce module ne peut pas être chargé car il est installé sur la carte SD, merci de le déplacer sur le stockage interne</string>
@@ -193,15 +194,16 @@ https://github.com/tclement0922</string>
     <string name="settings_translation_summary">Aidez-nous à traduire %s dans votre langue</string>
     <string name="settings_create_shortcut_summary">Créer un raccourcis pouvant ouvrir le gestionnaire parasitaire</string>
     <string name="settings_created_shortcut_summary">Un raccourcis a été créé pour ouvrir le gestionnaire parasitaire</string>
+    <string name="settings_unsupported_pin_shortcut_summary">Le lanceur par défaut actuel ne supporte pas les raccourcis épinglés</string>
     <string name="settings_enable_status_notification">Notification d\'état</string>
-    <string name="settings_enable_status_notification_summary">Afficher une notification pouvant ouvrir le gestionnaire parasite</string>
+    <string name="settings_enable_status_notification_summary">Afficher une notification pouvant ouvrir le gestionnaire parasitaire</string>
     <string name="disable_status_notification_error">Pas de raccourcis, la notification ne peut pas être désactivée</string>
     <string name="settings_update_channel">Canal de mise à jour</string>
     <string name="update_channel_stable">Stable</string>
     <string name="update_channel_bate">Bêta</string>
-    <string name="update_channel_nightly">Version alpha</string>
-    <string name="settings_xposed_api_call_protection">Protection d\'appels de l\'API Xposed</string>
-    <string name="settings_xposed_api_call_protection_summary">Bloquer dynamiquement le code de module chargé pour utiliser l\'API Xposed, celà peut casser certains modules mais être bénéfique à la sécurité (fonction expérimentale)</string>
+    <string name="update_channel_nightly">Alpha</string>
+    <string name="settings_xposed_api_call_protection">Protection des appels API Xposed</string>
+    <string name="settings_xposed_api_call_protection_summary">Bloquer dynamiquement le code de module chargé pour utiliser l\'API Xposed, celà peut casser certains modules mais être bénéfique à la sécurité</string>
     <!-- Module Repo -->
     <string name="module_readme">Lisez-moi</string>
     <string name="module_releases">Versions</string>

@@ -47,7 +47,7 @@
     <string name="activated">Diaktifkan</string>
     <string name="partial_activated">Diaktifkan sebagian</string>
     <string name="selinux_policy_not_loaded_summary">SEPolicy tidak dimuat dengan benar</string>
-    <string name="selinux_policy_not_loaded"><![CDATA[Modul yang mengaitkan Kerangka Sistem tidak berfungsi.<br/>Tolong laporkan ini ke<a href="https://github.com/topjohnwu/Magisk/issues"><b>Pengembang Magisk</b></a>.]]></string>
+    <string name="selinux_policy_not_loaded"><![CDATA[Beberapa fitur tidak berfungsi.<br/>Mohon laporkan hal ini ke <a href="https://github.com/topjohnwu/Magisk/issues"><b>pengembang</b></a> Magisk.]]></string>
     <string name="system_inject_fail_summary">Injeksi Kerangka Sistem gagal</string>
     <string name="system_inject_fail"><![CDATA[Ini jarang terjadi dan mungkin disebabkan oleh <b>Magisk</b> atau beberapa modul Magisk berkualitas rendah.<br/>Coba nonaktifkan modul Magisk selain Riru dan LSPosed atau kirimkan log lengkap ke pengembang.]]></string>
     <string name="system_prop_incorrect_summary">Prop sistem salah</string>
@@ -61,13 +61,13 @@
     <string name="info_system_version">Versi sistem</string>
     <string name="info_device">Perangkat</string>
     <string name="info_system_abi">Sistem ABI</string>
-    <string name="info_dex2oat_wrapper">Pembungkus Pengoptimalan Dex</string>
+    <string name="info_dex2oat_wrapper">Pengoptimal Pengemas Dex</string>
     <string name="enabled">Diaktifkan</string>
     <string name="not_enabled">Tidak diaktifkan</string>
     <string name="supported">Didukung</string>
     <string name="unsupported">Tidak didukung</string>
-    <string name="android_version_unsatisfied">Versi Android tidak terpenuhi</string>
-    <string name="crashed">Gagal</string>
+    <string name="android_version_unsatisfied">Versi Android tidak tersedia</string>
+    <string name="crashed">Rusak</string>
     <string name="mount_failed">Pengaitan gagal</string>
     <string name="selinux_permissive">SELinux permisif</string>
     <string name="sepolicy_incorrect">Kebijakan SELinux salah</string>
@@ -75,8 +75,8 @@
     <string name="update_lsposed_msg">Konfirmasi untuk pembaruan LSPosed? Perangkat ini akan mulai ulang setelah pembaruan selesai</string>
     <!-- WelcomeDialog -->
     <string name="parasitic_welcome">Selamat datang di LSPosed</string>
-    <string name="parasitic_welcome_summary">Anda menggunakan manajer parasit, yang dapat membuat pintasan atau masih terbuka dari notifikasi.</string>
-    <string name="parasitic_welcome_summary_no_shortcut_support">Anda menggunakan manajer parasit, yang dapat dibuka dari pemberitahuan.</string>
+    <string name="parasitic_welcome_summary">Anda menggunakan manajer parasit, yang dapat membuat pintasan atau dapat terbuka dari notifikasi.</string>
+    <string name="parasitic_welcome_summary_no_shortcut_support">Anda menggunakan manajer parasit, yang dapat membuat pintasan atau masih terbuka dari notifikasi.</string>
     <string name="create_shortcut">Buat pintasan</string>
     <string name="never_show">Jangan pernah tampilkan</string>
     <string name="app_welcome">Manajer Parasit Direkomendasikan</string>
@@ -101,7 +101,7 @@
     <!-- ModulesActivity -->
     <string name="module_empty_description">(tidak ada deskripsi yang diberikan)</string>
     <string name="warning_xposed_min_version">Modul ini membutuhkan versi Xposed yang lebih baru (%d) dan oleh karena itu tidak dapat diaktifkan</string>
-    <string name="no_min_version_specified">Modul ini tidak menentukan versi Xposed yang dibutuhkan.</string>
+    <string name="no_min_version_specified">Modul ini tidak menyertakan versi Xposed yang dibutuhkan.</string>
     <string name="warning_min_version_too_low">Modul ini dibuat untuk Xposed versi %1$d, tetapi karena perubahan yang tidak cocok di versi %2$d, modul ini telah dinonaktifkan</string>
     <string name="warning_installed_on_external_storage">Modul ini tidak dapat dimuat karena terpasang di kartu SD, harap pindahkan ke penyimpanan internal</string>
     <string name="module_uninstall">Copot</string>
@@ -145,7 +145,7 @@
     <string name="requested_by_module">Direkomendasikan</string>
     <string name="update_available">Pembaruan tersedia: %1$s</string>
     <string name="module_disabled_no_selection">Modul %s telah dinonaktifkan karena tidak ada aplikasi yang dipilih.</string>
-    <string name="android_framework">System Framework</string>
+    <string name="android_framework">Kerangka kerja sistem</string>
     <string name="menu_backup_and_restore">Cadangan</string>
     <string name="menu_backup">Cadangkan</string>
     <string name="menu_restore">Pulihkan</string>
@@ -162,7 +162,7 @@
     <string name="module_app_info">Informasi aplikasi</string>
     <string name="list_empty">¯\\\\_(ツ)_\/¯\nTidak ada apa-apa di sini</string>
     <!-- SettingsActivity -->
-    <string name="settings_group_framework">Framework</string>
+    <string name="settings_group_framework">Kerangka kerja</string>
     <string name="settings_disable_verbose_log">Nonaktifkan log verbose</string>
     <string name="settings_disable_verbose_log_summary">Permintaan laporan masalah dengan menyertakan log-log verbose</string>
     <string name="pure_black_dark_theme">Tema hitam gelap</string>
@@ -178,7 +178,7 @@
     <string name="settings_restore_failed2">Gagal memulihkan:\n%s</string>
     <string name="group_network">Jaringan</string>
     <string name="dns_over_http">DNS melalui HTTPS</string>
-    <string name="dns_over_http_summary">Mengatasi pencampuran DNS di beberapa negara</string>
+    <string name="dns_over_http_summary">Mengatasi pencemaran DNS di beberapa negara</string>
     <string name="theme_color">Warna tema</string>
     <string name="theme_color_system">Warna aksen sistem</string>
     <string name="settings_show_hidden_icon_apps_enabled">Paksa aplikasi untuk menampilkan ikon peluncur</string>
@@ -198,7 +198,7 @@
     <string name="update_channel_bate">Beta</string>
     <string name="update_channel_nightly">Rilis harian</string>
     <string name="settings_xposed_api_call_protection">Perlindungan panggilan Xposed API</string>
-    <string name="settings_xposed_api_call_protection_summary">Blokir kode modul yang dimuat secara dinamis untuk menggunakan Xposed API, ini mungkin mengganggu beberapa modul namun lebih aman (fitur percobaan)</string>
+    <string name="settings_xposed_api_call_protection_summary">Blokir kode modul yang dimuat secara dinamis untuk menggunakan Xposed API, ini mungkin mengganggu beberapa modul namun lebih aman</string>
     <!-- Module Repo -->
     <string name="module_readme">Baca aku</string>
     <string name="module_releases">Rilis</string>
@@ -214,8 +214,8 @@
     <string name="repo_load_failed">Gagal memuat repo modul: %s</string>
     <string name="sort_upgradable_first">Dapat diupgrade terlebih dahulu</string>
     <!-- CrashReportActivity -->
-    <string name="version_mismatch">Versi dari LSPosed framework (%1$d) tidak cocok dengan pengelola (%2$d). Mohon untuk pasang ulang LSPosed.</string>
-    <string name="manager_crashed">Pengelola gagal</string>
+    <string name="version_mismatch">Versi dari LSPosed framework (%1$d) tidak cocok dengan pengelola (%2$d). Mohon pasang ulang LSPosed.</string>
+    <string name="manager_crashed">Pengelola rusak</string>
     <string name="send_crash_info">Kirim info gagal</string>
     <string name="crash_info_copied">Info kegagalan disalin ke papan klip</string>
     <string name="info_copied">Disalin ke papan klip</string>
@@ -235,11 +235,12 @@
     <string name="color_lime">Hijau limau</string>
     <string name="color_yellow">Kuning</string>
     <string name="color_amber">Kuning madu</string>
-    <string name="color_orange">Oranye</string>
-    <string name="color_deep_orange">Oranye gelap</string>
+    <string name="color_orange">Jingga</string>
+    <string name="color_deep_orange">Jingga gelap</string>
     <string name="color_brown">Coklat</string>
     <string name="color_blue_grey">Abu-abu kebiruan</string>
     <plurals name="module_release_assets_download_count">
-        <item quantity="other">%d unduhan</item>
+        <item quantity="other">%d unduh
+%d unduhan</item>
     </plurals>
 </resources>

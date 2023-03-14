@@ -47,7 +47,7 @@
     <string name="activated">已啟用</string>
     <string name="partial_activated">部分啟用</string>
     <string name="selinux_policy_not_loaded_summary">SEPolicy 未被正確讀取</string>
-    <string name="selinux_policy_not_loaded"><![CDATA[Sepolicy 沒有被正確讀取，掛鉤系統框架的模組將無法運作。<br/>請將此問題回報給<a href="https://github.com/topjohnwu/Magisk/issues"><b>Magisk</b></a>開發者]]></string>
+    <string name="selinux_policy_not_loaded"><![CDATA[部分功能將無法運作。<br/>請將此回報給 <a href="https://github.com/topjohnwu/Magisk/issues"><b>Magisk</b></a> 開發人員。]]></string>
     <string name="system_inject_fail_summary">系統框架注入失敗</string>
     <string name="system_inject_fail"><![CDATA[這是極罕見的情況，可能是由 <b>Magisk</b> 或低品質 Magisk 模組導致，<br/>請嘗試停用除 Riru 和 LSPosed 外的 Magisk 模組，或向開發者提供完整日誌。]]></string>
     <string name="system_prop_incorrect_summary">系統屬性異常</string>
@@ -76,7 +76,7 @@
     <!-- WelcomeDialog -->
     <string name="parasitic_welcome">歡迎使用 LSPosed</string>
     <string name="parasitic_welcome_summary">您正在使用寄生管理員，您可以建立捷徑或從通知開啟。</string>
-    <string name="parasitic_welcome_summary_no_shortcut_support">您正在使用寄生管理器，它可以從通知中打開。</string>
+    <string name="parasitic_welcome_summary_no_shortcut_support">您正在使用寄生管理員，它可以從通知中開啟。</string>
     <string name="create_shortcut">建立捷徑</string>
     <string name="never_show">不再顯示</string>
     <string name="app_welcome">建議使用寄生管理員</string>
@@ -101,6 +101,7 @@
     <!-- ModulesActivity -->
     <string name="module_empty_description">(未提供介紹)</string>
     <string name="warning_xposed_min_version">該模組需要更新版本的 Xposed(%d)，因此無法被啟用</string>
+    <string name="warning_target_version_higher">此模組專為較新的 Xposed 版本 (%d) 而設計，因此某些功能可能無法運作</string>
     <string name="no_min_version_specified">該模組未指定需要的 Xposed 版本</string>
     <string name="warning_min_version_too_low">此模組適用於 %1$d 版本的 Xposed ，由於版本 %2$d 的變更不相容，因此已經停用此模組</string>
     <string name="warning_installed_on_external_storage">由於此模組被安裝在SD卡中而無法載入，請將其移動到內部儲存空間</string>
@@ -190,6 +191,7 @@
     <string name="settings_translation_summary">幫助我們翻譯 %s 到您的語言</string>
     <string name="settings_create_shortcut_summary">建立可以開啟寄生管理員的捷徑</string>
     <string name="settings_created_shortcut_summary">已建立可以開啟寄生管理員的捷徑</string>
+    <string name="settings_unsupported_pin_shortcut_summary">目前的預設啟動器不支援釘選捷徑</string>
     <string name="settings_enable_status_notification">狀態通知</string>
     <string name="settings_enable_status_notification_summary">顯示通知以便開啟寄生管理員</string>
     <string name="disable_status_notification_error">沒有捷徑，無法停用通知</string>
@@ -198,7 +200,7 @@
     <string name="update_channel_bate">測試版</string>
     <string name="update_channel_nightly">每夜構建</string>
     <string name="settings_xposed_api_call_protection">Xposed API 呼叫保護</string>
-    <string name="settings_xposed_api_call_protection_summary">封鎖動態載入的模組代碼以使用 Xposed API，這可能會損毀某些模組但有益於安全性 (實驗性功能)</string>
+    <string name="settings_xposed_api_call_protection_summary">封鎖動態載入的模組代碼以使用 Xposed API，這可能會損毀某些模組但有益於安全性</string>
     <!-- Module Repo -->
     <string name="module_readme">自述檔案</string>
     <string name="module_releases">版本</string>

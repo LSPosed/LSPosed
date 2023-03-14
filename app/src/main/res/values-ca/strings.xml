@@ -49,7 +49,6 @@
     <string name="activated">Activat</string>
     <string name="partial_activated">Parcialment activat</string>
     <string name="selinux_policy_not_loaded_summary">SEPolicy no s\'ha carregat correctament</string>
-    <string name="selinux_policy_not_loaded"><![CDATA[Els mòduls que enganxen el marc del sistema no funcionen<br/>Si us plau, informa a <a href="https://github.com/topjohnwu/Magisk/issues"><b>Magisk</b></a> desarrollador.]]></string>
     <string name="system_inject_fail_summary">La injecció del marc del sistema ha fallat</string>
     <string name="system_inject_fail"><![CDATA[Això és poc comú i podria ser causat per <b>Magisk</b> o algún Mòdul de baixa qualitat<br/>Si us plau, prova a desactivar els demés mòduls de magisk excepte Riru i LSPosed o envia un informe complet als desarrolladors.]]></string>
     <string name="system_prop_incorrect_summary">Prop del sistema incorrecte</string>
@@ -200,7 +199,6 @@
     <string name="update_channel_bate">Beta</string>
     <string name="update_channel_nightly">Construcció nocturna</string>
     <string name="settings_xposed_api_call_protection">Protecció de trucades de l\'API Xposed</string>
-    <string name="settings_xposed_api_call_protection_summary">Bloqueja el codi del mòdul carregat dinàmicament per utilitzar l\'API Xposed, això pot trencar alguns mòduls però beneficiar la seguretat (funció experimental)</string>
     <!-- Module Repo -->
     <string name="module_readme">Llegiu-me</string>
     <string name="module_releases">Alliberaments</string>

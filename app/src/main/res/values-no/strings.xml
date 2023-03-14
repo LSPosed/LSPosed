@@ -49,7 +49,6 @@
     <string name="activated">Aktivert</string>
     <string name="partial_activated">Delvis aktivert</string>
     <string name="selinux_policy_not_loaded_summary">SEPolicy er ikke lastet riktig</string>
-    <string name="selinux_policy_not_loaded"><![CDATA[Moduler som krok systemrammeverket vil ikke fungere.<br/>Vennligst rapporter dette til <a href="https://github.com/topjohnwu/Magisk/issues"><b>utvikleren Magisk</b></a>]]></string>
     <string name="system_inject_fail_summary">Systemets ramme-injeksjon mislyktes</string>
     <string name="system_inject_fail"><![CDATA[Dette er sjeldent og kan forårsakes av <b>Magisk</b> eller noen lavkvalitets magnetiske moduler.<br/>Prøv å deaktivere andre Magiske moduler enn Riru og LSPosed eller sende full logg til utviklere.]]></string>
     <string name="system_prop_incorrect_summary">Feil i systemprop</string>
@@ -200,7 +199,6 @@
     <string name="update_channel_bate">beta</string>
     <string name="update_channel_nightly">Nattlig bygg</string>
     <string name="settings_xposed_api_call_protection">Xposed API-anropsbeskyttelse</string>
-    <string name="settings_xposed_api_call_protection_summary">Blokker dynamisk lastet modulkode for å bruke Xposed API, dette kan ødelegge noen moduler, men gi fordeler for sikkerheten (eksperimentell funksjon)</string>
     <!-- Module Repo -->
     <string name="module_readme">Lesmeg</string>
     <string name="module_releases">Utgivelser</string>

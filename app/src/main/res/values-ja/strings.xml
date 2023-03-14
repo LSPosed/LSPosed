@@ -47,10 +47,9 @@
     <string name="activated">有効化済み</string>
     <string name="partial_activated">部分的に有効化済み</string>
     <string name="selinux_policy_not_loaded_summary">SEPolicyが正しく読み込まれていません</string>
-    <string name="selinux_policy_not_loaded"><![CDATA[システムフレームワークをフックするモジュールは動作しません。<br/>この問題について<a href="https://github.com/topjohnwu/Magisk/issues"><b>Magisk</b></a>開発者に報告して下さい。]]></string>
     <string name="system_inject_fail_summary">システムフレームワークへのパッチに失敗しました</string>
     <string name="system_inject_fail"><![CDATA[本現象はごく稀に発生し、<b>Magisk</b>もしくは低品質な Magiskモジュールが原因で発生します。<br/>RiruとLSPosed以外のMagiskモジュールを一時的に無効化してみるか、開発者へすべてのログを提出して下さい。]]></string>
-    <string name="system_prop_incorrect_summary">System propが正しくありません</string>
+    <string name="system_prop_incorrect_summary">システム設定が正しくありません</string>
     <string name="system_prop_incorrect"><![CDATA[必須のシステム設定が変更もしくは削除されています。<br/>モジュールが無効化される場合があります。]]></string>
     <string name="need_update">更新が必要です</string>
     <string name="please_update_summary">最新バージョンの LSPosedをインストールして下さい</string>
@@ -75,12 +74,12 @@
     <string name="update_lsposed_msg">LSPosedをアップデートしてもよろしいですか？アップデート完了後、このデバイスは再起動します</string>
     <!-- WelcomeDialog -->
     <string name="parasitic_welcome">LSPosedへようこそ</string>
-    <string name="parasitic_welcome_summary">ショートカットを作成したり、通知からまだ開くことができる寄生虫マネージャを使用しています。</string>
-    <string name="parasitic_welcome_summary_no_shortcut_support">通知から開くことができる寄生虫マネージャを使用していますね。</string>
+    <string name="parasitic_welcome_summary">ショートカットを作成したり、通知からまだ開くことができる寄生マネージャを使用しています。</string>
+    <string name="parasitic_welcome_summary_no_shortcut_support">通知から開くことができる寄生マネージャを使用しています。</string>
     <string name="create_shortcut">ショートカットを作成</string>
     <string name="never_show">表示しない</string>
     <string name="app_welcome">寄生マネージャーがおすすめです</string>
-    <string name="app_welcome_summary">LSPosedは検出を回避するためのシステム寄生に対応し、通知から寄生虫マネージャを開くことができるようになりました。現在のアプリケーションをアンインストールすることをお勧めします。</string>
+    <string name="app_welcome_summary">LSPosedは検出を回避するためのシステム寄生に対応し、通知から寄生マネージャを開くことができるようになりました。現在のアプリケーションをアンインストールすることをお勧めします。</string>
     <!-- LogsActivity -->
     <string name="menuSaveToSd">保存</string>
     <string name="nav_item_logs_verbose">詳細ログ</string>
@@ -188,24 +187,24 @@
     <string name="settings_translation_contributors">翻訳貢献者</string>
     <string name="settings_translation">翻訳に参加する</string>
     <string name="settings_translation_summary">%s をあなたの言語に翻訳するのを手伝ってください</string>
-    <string name="settings_create_shortcut_summary">パラサイトマネージャーを開くことができるショートカットを作成する</string>
-    <string name="settings_created_shortcut_summary">パラサイトマネージャーを開くためのショートカットが作成されました。</string>
+    <string name="settings_create_shortcut_summary">寄生マネージャーを開くことができるショートカットを作成する</string>
+    <string name="settings_created_shortcut_summary">寄生マネージャーを開くためのショートカットが作成されました。</string>
     <string name="settings_enable_status_notification">ステータス通知</string>
-    <string name="settings_enable_status_notification_summary">寄生虫マネージャを開くことができる通知を表示する</string>
-    <string name="disable_status_notification_error">ショートカットがない、通知を無効化できない</string>
+    <string name="settings_enable_status_notification_summary">寄生マネージャを開くことができる通知を表示する</string>
+    <string name="disable_status_notification_error">ショートカットがありません、通知を無効化できません</string>
     <string name="settings_update_channel">更新チャンネル</string>
     <string name="update_channel_stable">安定版</string>
     <string name="update_channel_bate">ベータ版</string>
     <string name="update_channel_nightly">ナイトリービルド</string>
-    <string name="settings_xposed_api_call_protection">Xposed APIの呼び出し保護</string>
-    <string name="settings_xposed_api_call_protection_summary">Xposed APIを使用するために、動的にロードされるモジュールコードをブロックします。</string>
+    <string name="settings_xposed_api_call_protection">Xposed API使用保護</string>
+    <string name="settings_xposed_api_call_protection_summary">モジュールの動態コードがXposed APIを利用することを阻止します。一部のモジュールが使用できない可能性はありますが、安全性は上がります</string>
     <!-- Module Repo -->
     <string name="module_readme">Readme</string>
     <string name="module_releases">リリース</string>
     <string name="module_information">情報</string>
     <string name="module_information_homepage">ホームページ</string>
     <string name="module_information_source_url">ソースコード</string>
-    <string name="module_information_collaborators">協力</string>
+    <string name="module_information_collaborators">協力者</string>
     <string name="module_release_view_assets">アセット</string>
     <string name="menu_open_in_browser">ブラウザで表示</string>
     <string name="refresh">更新</string>

@@ -49,7 +49,7 @@
     <string name="activated">Ativado</string>
     <string name="partial_activated">Parcialmente Ativado</string>
     <string name="selinux_policy_not_loaded_summary">SEPolicy não está devidamente carregado</string>
-    <string name="selinux_policy_not_loaded"><![CDATA[Módulos que aplicam hooks ao Framework do Sistema não funcionarão.<br/>Por favor, relate isso para o desenvolvedor do <a href="https://github.com/topjohnwu/Magisk/issues"><b>Magisk</b></a>.]]></string>
+    <string name="selinux_policy_not_loaded"><![CDATA[Alguns recursos não funcionarão.<br/>Por favor, relate isso ao desenvolvedor do <a href="https://github.com/topjohnwu/Magisk/issues"><b>Magisk</b></a>.]]></string>
     <string name="system_inject_fail_summary">Falha na injeção ao Framework do Sistema</string>
     <string name="system_inject_fail"><![CDATA[Isso é raro e pode ter sido causado pelo <b>Magisk</b> ou por algum módulo do Magisk de baixa qualidade.<br/>Por favor, tente desativar os módulos do Magisk, exceto o LSPosed (e o Riru, caso esteja em uso). Ou envie todos os registros para os desenvolvedores.]]></string>
     <string name="system_prop_incorrect_summary">Propriedade do sistema incorreta</string>
@@ -103,6 +103,7 @@
     <!-- ModulesActivity -->
     <string name="module_empty_description">(nenhuma descrição fornecida)</string>
     <string name="warning_xposed_min_version">Este módulo exige uma versão mais recente do Xposed (%d). Por isso, não poderá ser ativado</string>
+    <string name="warning_target_version_higher">Este módulo foi projetado para uma versão mais recente do Xposed (%d) e, portanto, algumas funcionalidades podem não funcionar</string>
     <string name="no_min_version_specified">Este módulo não especifica qual a versão necessária do Xposed.</string>
     <string name="warning_min_version_too_low">Este módulo foi criado para a versão %1$d do Xposed. Mas, devido mudanças incompatíveis na versão %2$d, ele foi desativado</string>
     <string name="warning_installed_on_external_storage">Este módulo não pode ser carregado porque está instalado no cartão de memória. Por favor, mova para o armazenamento interno</string>
@@ -192,6 +193,7 @@
     <string name="settings_translation_summary">Ajude a traduzir o %s para o Português 🇧🇷🇵🇹</string>
     <string name="settings_create_shortcut_summary">Criar um atalho para abrir gerenciador parasita</string>
     <string name="settings_created_shortcut_summary">Um atalho para abrir o gerenciador parasita foi criado</string>
+    <string name="settings_unsupported_pin_shortcut_summary">O lançador padrão atual não suporta atalhos de pinos</string>
     <string name="settings_enable_status_notification">Notificação de estado</string>
     <string name="settings_enable_status_notification_summary">Mostrar uma notificação que possa abrir o gerenciador parasita</string>
     <string name="disable_status_notification_error">Nenhum atalho, não é possível desativar a notificação</string>
@@ -200,7 +202,7 @@
     <string name="update_channel_bate">Beta</string>
     <string name="update_channel_nightly">Nightly</string>
     <string name="settings_xposed_api_call_protection">Proteção da API do Xposed</string>
-    <string name="settings_xposed_api_call_protection_summary">Bloquear módulos carregados dinamicamente de usarem a API do Xposed, isso pode travar alguns módulos, mas melhora a segurança (recurso experimental)</string>
+    <string name="settings_xposed_api_call_protection_summary">Bloquear módulos carregados dinamicamente de usarem a API do Xposed. Isso pode travar alguns módulos, mas melhora a segurança</string>
     <!-- Module Repo -->
     <string name="module_readme">Leia-me</string>
     <string name="module_releases">Versões</string>

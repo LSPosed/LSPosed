@@ -49,7 +49,7 @@
     <string name="activated">सक्रिय</string>
     <string name="partial_activated">आंशिक रूप से सक्रिय</string>
     <string name="selinux_policy_not_loaded_summary">SEPolicy ठीक से लोड नहीं है</string>
-    <string name="selinux_policy_not_loaded"><![CDATA[सिस्टम फ्रेमवर्क को हुक करने वाले मॉड्यूल काम नहीं करेंगे।<br/>कृपया इसकी सूचना <a href="https://github.com/topjohnwu/Magisk/issues"><b>Magisk</b></a> डेवलपर को दें।]]></string>
+    <string name="selinux_policy_not_loaded"><![CDATA[कुछ सुविधाएँ काम नहीं करेंगी।<br/>कृपया इसकी सूचना <a href="https://github.com/topjohnwu/Magisk/issues"><b>मैजिक</b></a> डेवलपर को दें।]]></string>
     <string name="system_inject_fail_summary">सिस्टम फ्रेमवर्क इंजेक्शन विफल</string>
     <string name="system_inject_fail"><![CDATA[यह दुर्लभ है और <b>Magisk</b> या कुछ निम्न-गुणवत्ता वाले Magisk मॉड्यूल के कारण हो सकता है।<br/>कृपया Riru और LSPosed के अलावा अन्य Magisk मॉड्यूल को अक्षम करने का प्रयास करें या डेवलपर्स को पूर्ण लॉग सबमिट करें।]]></string>
     <string name="system_prop_incorrect_summary">सिस्टम प्रोप गलत</string>
@@ -103,6 +103,7 @@
     <!-- ModulesActivity -->
     <string name="module_empty_description">(कोई विवरण नहीं दिया गया)</string>
     <string name="warning_xposed_min_version">इस मॉड्यूल को एक नए Xposed संस्करण (%d) की आवश्यकता है और इस प्रकार इसे सक्रिय नहीं किया जा सकता है</string>
+    <string name="warning_target_version_higher">यह मॉड्यूल एक नए Xposed संस्करण (%d) के लिए डिज़ाइन किया गया है और इस प्रकार कुछ कार्यात्मकताएँ काम नहीं कर सकती हैं</string>
     <string name="no_min_version_specified">यह मॉड्यूल Xposed संस्करण को निर्दिष्ट नहीं करता है जिसकी उसे आवश्यकता है।</string>
     <string name="warning_min_version_too_low">यह मॉड्यूल Xposed संस्करण %1$dके लिए बनाया गया था, लेकिन संस्करण %2$dमें असंगत परिवर्तनों के कारण, इसे अक्षम कर दिया गया है</string>
     <string name="warning_installed_on_external_storage">यह मॉड्यूल लोड नहीं किया जा सकता क्योंकि यह एसडी कार्ड पर स्थापित है, कृपया इसे आंतरिक भंडारण में ले जाएं</string>
@@ -192,6 +193,7 @@
     <string name="settings_translation_summary">%s को अपनी भाषा में अनुवाद करने में हमारी सहायता करें</string>
     <string name="settings_create_shortcut_summary">एक शॉर्टकट बनाएं जो परजीवी प्रबंधक खोल सके</string>
     <string name="settings_created_shortcut_summary">परजीवी प्रबंधक खोलने के लिए एक शॉर्टकट बनाया गया है</string>
+    <string name="settings_unsupported_pin_shortcut_summary">वर्तमान डिफ़ॉल्ट लांचर पिन शॉर्टकट का समर्थन नहीं करता</string>
     <string name="settings_enable_status_notification">स्थिति अधिसूचना</string>
     <string name="settings_enable_status_notification_summary">एक अधिसूचना दिखाएं जो परजीवी प्रबंधक खोल सकती है</string>
     <string name="disable_status_notification_error">कोई शॉर्टकट नहीं, अधिसूचना अक्षम नहीं कर सकता</string>
@@ -200,7 +202,6 @@
     <string name="update_channel_bate">बीटा</string>
     <string name="update_channel_nightly">सॉफ़्टवेयर की स्थिरता</string>
     <string name="settings_xposed_api_call_protection">Xposed API कॉल सुरक्षा</string>
-    <string name="settings_xposed_api_call_protection_summary">एक्सपोज़ेड एपीआई का उपयोग करने के लिए गतिशील रूप से लोड किए गए मॉड्यूल कोड को ब्लॉक करें, यह कुछ मॉड्यूल तोड़ सकता है लेकिन सुरक्षा को लाभ देता है (प्रायोगिक सुविधा)</string>
     <!-- Module Repo -->
     <string name="module_readme">रीडमी</string>
     <string name="module_releases">विज्ञप्ति</string>

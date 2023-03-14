@@ -28,7 +28,7 @@
         <item quantity="many">Włączono %d moduły/ów</item>
         <item quantity="other">Włączono %d moduły/ów</item>
     </plurals>
-    <string name="Logs">Dziennik</string>
+    <string name="Logs">Logi</string>
     <string name="Settings">Ustawienia</string>
     <string name="feedback_or_suggestion">Opinie lub sugestie</string>
     <string name="About">O aplikacji</string>
@@ -37,12 +37,12 @@
     <string name="module_repo_loading">Ładowanie…</string>
     <string name="module_repo_up_to_date">Wszystkie moduły są aktualne</string>
     <string name="module_repo_published_time">Opublikowano na stronie %s</string>
-    <string name="module_repo_updated_time">Aktualizacja na stronie %s</string>
+    <string name="module_repo_updated_time">Zaktualizowany na stronie %s</string>
     <plurals name="module_repo_upgradable">
         <item quantity="one">%d moduł możliwy do aktualizacji</item>
         <item quantity="few">%d moduły z możliwością aktualizacji</item>
         <item quantity="many">%d moduły z możliwością aktualizacji</item>
-        <item quantity="other">możliwa aktualizacja %d modułów</item>
+        <item quantity="other">%d modułów z możliwością aktualizacji</item>
     </plurals>
     <string name="about_view_source_code"><![CDATA[Zobacz kod źródłowy na %1$s<br/>Dołącz do naszego kanału %2$s]]></string>
     <string name="translators" comment="Dear translators, please add your home page here following the format. There can be more than one translator. So feel free to append yourself.">Adiker</string>
@@ -52,10 +52,10 @@
     <string name="not_install_summary">LSPosed nie jest zainstalowany</string>
     <string name="activated">Aktywowano</string>
     <string name="partial_activated">Częściowo aktywowano</string>
-    <string name="selinux_policy_not_loaded_summary">SEPolicy nie jest prawidłowo załadowany</string>
-    <string name="selinux_policy_not_loaded"><![CDATA[Moduły, które podpinają System Framework nie zadziałają.<br/>Zgłoś to do<a href="https://github.com/topjohnwu/Magisk/issues"><b>programisty</b></a> Magisk.]]></string>
+    <string name="selinux_policy_not_loaded_summary">SEPolicy nie jest prawidłowo załadowane</string>
+    <string name="selinux_policy_not_loaded"><![CDATA[Niektóre funkcje nie będą działać.<br/>Proszę to zgłosić do twórcy <a href="https://github.com/topjohnwu/Magisk/issues"><b>Magiska</b></a>.]]></string>
     <string name="system_inject_fail_summary">Wstrzyknięcie Frameworku Systemowego nie powiodło się</string>
-    <string name="system_inject_fail"><![CDATA[Jest to rzadkie i może być spowodowane przez <b>Magisk</b> lub niektóre moduły Magisk niskiej jakości.<br/>Spróbuj wyłączyć moduły Magisk inne niż Riru i LSPosed lub przesłać pełny log programistom.]]></string>
+    <string name="system_inject_fail"><![CDATA[Jest to rzadkie i może być spowodowane przez <b>Magiska</b> lub niektóre moduły Magisk niskiej jakości.<br/>Spróbuj wyłączyć moduły Magisk inne niż Riru i LSPosed lub przesłać pełny log programistom.]]></string>
     <string name="system_prop_incorrect_summary">Nieprawidłowy system prop</string>
     <string name="system_prop_incorrect"><![CDATA[Niektóre niezbędne właściwości systemowe zostały usunięte lub zmienione.<br/>Moduły mogą czasami działać niepoprawnie.]]></string>
     <string name="need_update">Konieczna aktualizacja</string>
@@ -66,7 +66,7 @@
     <string name="info_manager_version">Wersja Menedżera</string>
     <string name="info_system_version">Wersja systemu</string>
     <string name="info_device">Urządzenie</string>
-    <string name="info_system_abi">System ABI</string>
+    <string name="info_system_abi">ABI systemu</string>
     <string name="info_dex2oat_wrapper">Optymalizator Dex Optimizer Wrapper</string>
     <string name="enabled">Włączone</string>
     <string name="not_enabled">Wyłączone</string>
@@ -74,10 +74,10 @@
     <string name="unsupported">Nieobsługiwana strona</string>
     <string name="android_version_unsatisfied">Niezadowolenie z wersji na Androida</string>
     <string name="crashed">Rozbita</string>
-    <string name="mount_failed">Montaż nie powiódł się</string>
+    <string name="mount_failed">Montowanie nie powiodło się</string>
     <string name="selinux_permissive">SELinux jest permisywny</string>
-    <string name="sepolicy_incorrect">Zasady SELinux są nieprawidłowe</string>
-    <string name="update_lsposed">Aktualizuj LSPosed</string>
+    <string name="sepolicy_incorrect">Zasady SELinuxa są nieprawidłowe</string>
+    <string name="update_lsposed">Zaktualizuj LSPosed</string>
     <string name="update_lsposed_msg">Czy chcesz zatwierdzić aktualizację LSPosed? Urządzenie zostanie uruchomione ponownie po zakończeniu aktualizacji</string>
     <!-- WelcomeDialog -->
     <string name="parasitic_welcome">Witamy w LSPosed</string>
@@ -86,12 +86,12 @@
     <string name="create_shortcut">Utwórz skrót</string>
     <string name="never_show">Nigdy nie pokazuj</string>
     <string name="app_welcome">Rekomendowany menadżer Parasitic</string>
-    <string name="app_welcome_summary">LSPosed teraz obsługuje \"pasożytowanie\" systemowe by uniknąć wykrycia, możesz otworzyć menedżera pasożytów z okna powiadomień. Zalecane jest odinstalowanie obecnej aplikacji.</string>
+    <string name="app_welcome_summary">LSPosed teraz obsługuje pasożytowanie systemowe by uniknąć wykrycia, możesz otworzyć menedżera pasożytów z okna powiadomień. Zalecane jest odinstalowanie obecnej aplikacji.</string>
     <!-- LogsActivity -->
     <string name="menuSaveToSd">Zapisz</string>
     <string name="nav_item_logs_verbose">Logi verbose</string>
     <string name="nav_item_logs_module">Logi modułów</string>
-    <string name="logs_saved">Zapisane dzienniki</string>
+    <string name="logs_saved">Zapisane logi</string>
     <string name="logs_save_failed2">Nie udało się zapisać:\n%s</string>
     <string name="menuClearLog">Wyczyść log teraz</string>
     <string name="logs_cleared">Logi zostały pomyślnie wyczyszczone.</string>
@@ -107,6 +107,7 @@
     <!-- ModulesActivity -->
     <string name="module_empty_description">(nie podano opisu)</string>
     <string name="warning_xposed_min_version">Ten moduł wymaga nowszej wersji Xposed (%d) przez co nie może być aktywowany</string>
+    <string name="warning_target_version_higher">Ten moduł został zaprojektowany dla nowej wersji Xposed (%d) i dlatego niektóre funkcje mogą nie działać</string>
     <string name="no_min_version_specified">Ten moduł nie określa wymaganej wersji Xposed.</string>
     <string name="warning_min_version_too_low">Ten moduł został utworzony dla Xposed w wersji %1$d, ale ze względu na niekompatybilne zmiany w wersji %2$d, został wyłączony</string>
     <string name="warning_installed_on_external_storage">Ten moduł nie może być załadowany, ponieważ jest zainstalowany na karcie SD, przenieś go do pamięci wewnętrznej</string>
@@ -196,6 +197,7 @@
     <string name="settings_translation_summary">Pomóż nam przetłumaczyć %s na Twój język</string>
     <string name="settings_create_shortcut_summary">Utwórz skrót, za pomocą którego otworzysz menadżera \"pasożytów\"</string>
     <string name="settings_created_shortcut_summary">Skrót do otwierania menadżera pasożytów został utworzony</string>
+    <string name="settings_unsupported_pin_shortcut_summary">Bieżący domyślny launcher nie wspiera skrótów pinezkowych</string>
     <string name="settings_enable_status_notification">Status powiadomień</string>
     <string name="settings_enable_status_notification_summary">Pokazuj powiadomienie, za pomocą którego otworzysz menadżera pasożytów</string>
     <string name="disable_status_notification_error">Brak skrótu, nie można wyłączyć powiadomienia</string>
@@ -204,7 +206,7 @@
     <string name="update_channel_bate">Beta</string>
     <string name="update_channel_nightly">Wersja nocna</string>
     <string name="settings_xposed_api_call_protection">Ochrona wywołania Xposed API</string>
-    <string name="settings_xposed_api_call_protection_summary">Zablokuj dynamiczne ładowanie kodu modułu do używania Xposed API, wzmocni to ochronę kosztem możliwego uszkodzenia niektórych modułów (funkcja eksperymentalna)</string>
+    <string name="settings_xposed_api_call_protection_summary">Zablokuj dynamiczne ładowanie kodu modułu do używania Xposed API, wzmocni to ochronę kosztem możliwego uszkodzenia niektórych modułów</string>
     <!-- Module Repo -->
     <string name="module_readme">Readme</string>
     <string name="module_releases">Wersje</string>

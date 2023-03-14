@@ -23,7 +23,7 @@
     <string name="overview">Übersicht</string>
     <string name="Modules">Module</string>
     <plurals name="modules_enabled_count">
-        <item quantity="one">%d Module aktiviert</item>
+        <item quantity="one">%d Modul aktiviert</item>
         <item quantity="other">%d Module aktiviert</item>
     </plurals>
     <string name="Logs">Protokolle</string>
@@ -50,7 +50,7 @@ JJ108</string>
     <string name="activated">Aktiviert</string>
     <string name="partial_activated">Teilweise aktiviert</string>
     <string name="selinux_policy_not_loaded_summary">SEPolicy wird nicht korrekt geladen</string>
-    <string name="selinux_policy_not_loaded"><![CDATA[Module, welche sich in das System Framework einklinken, funktionieren nicht.<br/>Bitte melden Sie dies an den <a href="https://github.com/topjohnwu/Magisk/issues"><b>Magisk</b></a> Entwickler.]]></string>
+    <string name="selinux_policy_not_loaded"><![CDATA[Einige Funktionen werden nicht ordnungsgemäß funktionieren.<br/>Bitte melden Sie dies an den <a href="https://github.com/topjohnwu/Magisk/issues"><b>Magisk</b></a> Entwickler.]]></string>
     <string name="system_inject_fail_summary">System-Framework-Injektion fehlgeschlagen</string>
     <string name="system_inject_fail"><![CDATA[Dies ist selten und kann durch <b>Magisk</b> oder einige minderwertige Magisk Module verursacht werden.<br/>Bitte deaktivieren Sie alle Magisk-Module bis auf Riru und LSPosed, oder senden Sie eine vollständige Fehlermeldung an die Entwickler.]]></string>
     <string name="system_prop_incorrect_summary">System-Prop falsch</string>
@@ -104,6 +104,7 @@ JJ108</string>
     <!-- ModulesActivity -->
     <string name="module_empty_description">(keine Beschreibung angegeben)</string>
     <string name="warning_xposed_min_version">Dieses Modul erfordert eine neuere Version von LSPosed (%d) und kann daher nicht aktiviert werden</string>
+    <string name="warning_target_version_higher">Dieses Modul wurde für eine neuere Xposed-Version (%d) entwickelt und daher funktionieren einige Funktionen möglicherweise nicht</string>
     <string name="no_min_version_specified">Dieses Modul gibt nicht die benötigte LSPosed-Version an.</string>
     <string name="warning_min_version_too_low">Dieses Modul wurde für die LSPosed-Version %1$d erstellt, wurde jedoch aufgrund inkompatibler Änderungen in der Version %2$d deaktiviert</string>
     <string name="warning_installed_on_external_storage">Dieses Modul kann nicht geladen werden, da es auf der SD-Karte installiert ist, bitte es in den internen Speicher verschieben</string>
@@ -193,6 +194,7 @@ JJ108</string>
     <string name="settings_translation_summary">Helfen Sie uns, %s in Ihre Sprache zu übersetzen</string>
     <string name="settings_create_shortcut_summary">Eine Verknüpfung zum Öffnen des parasitären Managers erstellen</string>
     <string name="settings_created_shortcut_summary">Eine Verknüpfung zum Öffnen des parasitären Managers wurde erstellt</string>
+    <string name="settings_unsupported_pin_shortcut_summary">Der aktuelle Standard-Launcher unterstützt keine Pin-Verknüpfungen</string>
     <string name="settings_enable_status_notification">Status-Benachrichtigung</string>
     <string name="settings_enable_status_notification_summary">Eine Benachrichtigung anzeigen, die den parasitären Manager öffnen kann</string>
     <string name="disable_status_notification_error">Keine Verknüpfung, Benachrichtigung kann nicht deaktiviert werden</string>
@@ -201,7 +203,7 @@ JJ108</string>
     <string name="update_channel_bate">Beta</string>
     <string name="update_channel_nightly">Nightly Build</string>
     <string name="settings_xposed_api_call_protection">Xposed API-Aufrufschutz</string>
-    <string name="settings_xposed_api_call_protection_summary">Dynamisch geladenen Modulcode blockieren, um Xposed API zu verwenden. Einige Module werden nicht mehr funktionieren, aber die Sicherheit profitiert davon (experimentelle Funktion)</string>
+    <string name="settings_xposed_api_call_protection_summary">Dynamisch geladenen Modulcode blockieren, um Xposed API zu verwenden. Einige Module werden nicht mehr funktionieren, aber die Sicherheit profitiert davon</string>
     <!-- Module Repo -->
     <string name="module_readme">Liesmich</string>
     <string name="module_releases">Veröffentlichungen</string>

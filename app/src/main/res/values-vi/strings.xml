@@ -19,9 +19,9 @@
   -->
 <resources xmlns:tools="http://schemas.android.com/tools" tools:keep="@string/xposed_module_updated_notification_*,@string/module_is_not_activated_*">
     <!-- MainActivity -->
-    <string name="info">Info</string>
-    <string name="overview">Overview</string>
-    <string name="Modules">Modules</string>
+    <string name="info">Thông tin</string>
+    <string name="overview">Tổng quan</string>
+    <string name="Modules">Mô-đun</string>
     <plurals name="modules_enabled_count">
         <item quantity="other">%d Modules đã được kích hoạt</item>
     </plurals>
@@ -47,7 +47,7 @@
     <string name="activated">Đã được kích hoạt</string>
     <string name="partial_activated">Một phần đã được kích hoạt</string>
     <string name="selinux_policy_not_loaded_summary">Chính sách SELinux không được nạp đúng cách</string>
-    <string name="selinux_policy_not_loaded"><![CDATA[Những mô-đun mà can thiệp vào Khung hệ thống sẽ không hoạt động.<br/>Hãy báo cáo lỗi này nhà phát triển của <a href="https://github.com/topjohnwu/Magisk/issues"><b>Magisk</b></a>.]]></string>
+    <string name="selinux_policy_not_loaded"><![CDATA[Một số tính năng sẽ không hoạt động.<br/>Vui lòng báo cáo điều này đến <a href="https://github.com/topjohnwu/Magisk/issues"><b>nhà phát triển</b></a> Magisk.]]></string>
     <string name="system_inject_fail_summary">Không thể nhúng vào khung hệ thống</string>
     <string name="system_inject_fail"><![CDATA[Trường hợp này khá hiếm khi xảy ra và có thể lý do bởi <b>Magisk</b> hoặc 1 số mô-đun Magisk kém chất lượng.<br/>Hãy thử vô hiệu hóa những mô-đun Magisk đó, thử chạy riêng Riru và LSPosed mà thôi hoặc thông báo nhật ký tới những nhà phát triển.]]></string>
     <string name="system_prop_incorrect_summary">Thông tin hệ thống không đúng</string>
@@ -101,6 +101,7 @@
     <!-- ModulesActivity -->
     <string name="module_empty_description">(chưa có mô tả)</string>
     <string name="warning_xposed_min_version">Mô-đun này yêu cầu một phiên bản Xposed mới hơn (%d) và đó là lý do không thể được kích hoạt</string>
+    <string name="warning_target_version_higher">Mô-đun này được thiết kế cho phiên bản Xposed mới hơn (%d) và do đó một số chức năng có thể không hoạt động</string>
     <string name="no_min_version_specified">Mô-đun này không chỉ định phiên bản Xposed cần thiết để khởi chạy.</string>
     <string name="warning_min_version_too_low">Mô-đun này được tạo bởi phiên bản Xposed %1$d, nhưng vì lý do không tương thích với phiên bản %2$d, nên nó đã bị vô hiệu hóa</string>
     <string name="warning_installed_on_external_storage">Mô-đun này không được nạp vì nó được cài đặt trên thẻ nhớ SD, vui lòng chuyển nó vào bộ nhớ trong</string>
@@ -190,6 +191,7 @@
     <string name="settings_translation_summary">Giúp chúng tôi dịch %s sang ngôn ngữ của bạn</string>
     <string name="settings_create_shortcut_summary">Tạo lối tắt để có thể mở trình quản lý ký sinh</string>
     <string name="settings_created_shortcut_summary">Một lối tắt đã được tạo để mở trình quản lý ký sinh</string>
+    <string name="settings_unsupported_pin_shortcut_summary">Trình khởi chạy mặc định hiện tại không hỗ trợ phím tắt ghim</string>
     <string name="settings_enable_status_notification">Thông báo trạng thái</string>
     <string name="settings_enable_status_notification_summary">Hiển thị thông báo để có thể mở trình quản lý ký sinh</string>
     <string name="disable_status_notification_error">Không lối tắt, không thể tắt thông báo</string>
@@ -198,7 +200,7 @@
     <string name="update_channel_bate">Thử nghiệm</string>
     <string name="update_channel_nightly">Bản dựng hàng đêm</string>
     <string name="settings_xposed_api_call_protection">Bảo vệ kết nối tới Xposed API</string>
-    <string name="settings_xposed_api_call_protection_summary">Chặn các mã mô-đun được tải động sử dụng API Xposed, điều này có thể làm hỏng một số mô-đun nhưng có lợi cho bảo mật (tính năng thử nghiệm)</string>
+    <string name="settings_xposed_api_call_protection_summary">Chặn các mã mô-đun được tải động sử dụng API Xposed, điều này có thể làm hỏng một số mô-đun nhưng có lợi cho bảo mật</string>
     <!-- Module Repo -->
     <string name="module_readme">Readme</string>
     <string name="module_releases">Bản phát hành</string>

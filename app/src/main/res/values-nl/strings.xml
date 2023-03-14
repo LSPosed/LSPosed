@@ -49,7 +49,7 @@
     <string name="activated">Geactiveerd</string>
     <string name="partial_activated">Gedeeltelijk geactiveerd</string>
     <string name="selinux_policy_not_loaded_summary">SEPolicy is niet correct geladen</string>
-    <string name="selinux_policy_not_loaded"><![CDATA[&lt;b&gt;WAARSCHUWING:&lt;\/b&gt; SEPolicy is niet correct geladen, modules die System Framework haken zullen niet werken.]]></string>
+    <string name="selinux_policy_not_loaded"><![CDATA[Sommige functies zullen niet werken.<br/>Gelieve dit te melden aan <a href="https://github.com/topjohnwu/Magisk/issues"><b>Magisk</b></a> ontwikkelaar.]]></string>
     <string name="system_inject_fail_summary">Systeem Framework injectie is mislukt</string>
     <string name="system_inject_fail"><![CDATA[Systeem Framework injectie mislukt.<br/>Dit is zeldzaam en kan worden veroorzaakt door <b>Magisk</b> of sommige Magisk-modules van lage kwaliteit.<br/>Probeer andere Magisk-modules dan Riru en LSPosed uit te schakelen of stuur een volledig logboek naar de ontwikkelaars.]]></string>
     <string name="system_prop_incorrect_summary">Systeem prop incorrect</string>
@@ -103,6 +103,7 @@
     <!-- ModulesActivity -->
     <string name="module_empty_description">(geen beschrijving gegeven)</string>
     <string name="warning_xposed_min_version">Deze module vereist een nieuwere versie van Lsposed (%d) en kan dus niet worden geactiveerd</string>
+    <string name="warning_target_version_higher">Deze module is ontworpen voor een nieuwere Xposed-versie (%d) en daarom werken sommige functionaliteiten mogelijk niet</string>
     <string name="no_min_version_specified">Deze module heeft geen vereiste versie voor Xposed opgegeven.</string>
     <string name="warning_min_version_too_low">Deze module is gemaakt voor de Lsposed-versie %1$d, maar vanwege onverenigbare wijzigingen in de versie %2$d, is het uitgeschakeld</string>
     <string name="warning_installed_on_external_storage">Deze module kan niet worden geladen omdat deze op de SD-kaart is geïnstalleerd. Verplaats deze naar de interne opslag</string>
@@ -192,6 +193,7 @@
     <string name="settings_translation_summary">Help ons %s te vertalen in uw taal</string>
     <string name="settings_create_shortcut_summary">Maak een snelkoppeling die parasitaire manager kan openen</string>
     <string name="settings_created_shortcut_summary">Er is een snelkoppeling gemaakt om parasitaire manager te openen</string>
+    <string name="settings_unsupported_pin_shortcut_summary">De huidige standaard launcher ondersteunt geen pin-snelkoppelingen</string>
     <string name="settings_enable_status_notification">Statusmelding</string>
     <string name="settings_enable_status_notification_summary">Toon een melding die parasitaire manager kan openen</string>
     <string name="disable_status_notification_error">Geen snelkoppeling, kan melding niet uitschakelen</string>
@@ -200,7 +202,7 @@
     <string name="update_channel_bate">Bèta</string>
     <string name="update_channel_nightly">Nachtelijke bouw</string>
     <string name="settings_xposed_api_call_protection">Xposed API-oproepbeveiliging</string>
-    <string name="settings_xposed_api_call_protection_summary">Blokkeer dynamisch geladen modulecode om Xposed API te gebruiken, dit kan sommige modules breken maar komt de veiligheid ten goede (experimentele functie)</string>
+    <string name="settings_xposed_api_call_protection_summary">Blokkeer dynamisch geladen modulecode om Xposed API te gebruiken, dit kan sommige modules breken maar komt de veiligheid ten goede</string>
     <!-- Module Repo -->
     <string name="module_readme">Leesmij</string>
     <string name="module_releases">Publicaties</string>

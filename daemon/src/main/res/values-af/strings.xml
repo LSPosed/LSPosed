@@ -12,4 +12,5 @@
     <string name="status_channel_name">LSPosed status</string>
     <string name="lsposed_running_notification_title">LSPosed gelaai</string>
     <string name="lsposed_running_notification_content">Tik die kennisgewing om bestuurder oop te maak</string>
+    <string name="xposed_module_request_scope_title">Omvang Versoek</string>
 </resources>

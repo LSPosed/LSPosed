@@ -12,4 +12,10 @@
     <string name="status_channel_name">LSPosed 狀態</string>
     <string name="lsposed_running_notification_title">LSPosed 已載入</string>
     <string name="lsposed_running_notification_content">輕觸通知以開啟管理員</string>
+    <string name="xposed_module_request_scope_title">作用範圍要求</string>
+    <string name="xposed_module_request_scope_content">使用者 %2$s 上的 %1$s 要求將 %3$s 新增至其作用範圍。</string>
+    <string name="scope_channel_name">作用範圍要求</string>
+    <string name="scope_approve">核准</string>
+    <string name="scope_deny">拒絕</string>
+    <string name="nerver_ask_again">永不詢問</string>
 </resources>

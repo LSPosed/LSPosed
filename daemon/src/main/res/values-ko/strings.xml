@@ -12,4 +12,10 @@
     <string name="status_channel_name">LS포즈 상태</string>
     <string name="lsposed_running_notification_title">LSPosed 로드됨</string>
     <string name="lsposed_running_notification_content">알림을 탭하여 관리자 열기</string>
+    <string name="xposed_module_request_scope_title">범위 요청</string>
+    <string name="xposed_module_request_scope_content">사용자 %2$s 의 %1$s 은 해당 범위에 %3$s 을 추가하도록 요청합니다.</string>
+    <string name="scope_channel_name">범위 요청</string>
+    <string name="scope_approve">승인</string>
+    <string name="scope_deny">거부</string>
+    <string name="nerver_ask_again">다시 묻지 않음</string>
 </resources>

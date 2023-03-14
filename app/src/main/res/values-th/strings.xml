@@ -38,16 +38,17 @@
     <plurals name="module_repo_upgradable">
         <item quantity="other">%d โมดูลที่สามารถอัพเกรดได้</item>
     </plurals>
-    <string name="about_view_source_code"><![CDATA[ดูซอร์สโค้ดได้ที่ %1$s<br/>เข้าร่วม %2$s ช่องของเรา]]></string>
-    <string name="translators" comment="Dear translators, please add your home page here following the format. There can be more than one translator. So feel free to append yourself.">와타나, Eifsy Popay</string>
+    <string name="about_view_source_code"><![CDATA[ดูซอร์สโค้ดได้ที่ %1$s<br/> หรือเข้าร่วม %2$s 
+ ของเรา]]></string>
+    <string name="translators" comment="Dear translators, please add your home page here following the format. There can be more than one translator. So feel free to append yourself.">null</string>
     <string name="install">ติดตั้ง</string>
-    <string name="install_summary">แตะเพื่อติดตั้งLSPosed</string>
+    <string name="install_summary">แตะเพื่อติดตั้ง LSPosed</string>
     <string name="not_installed">ไม่ได้ติดตั้ง</string>
     <string name="not_install_summary">ไม่ได้ติดตั้ง LSPosed</string>
     <string name="activated">เปิดใช้งานแล้ว</string>
     <string name="partial_activated">เปิดใช้งานบางส่วน</string>
-    <string name="selinux_policy_not_loaded_summary">โหลด SEPolicy ไม่ถูกต้อง</string>
-    <string name="selinux_policy_not_loaded"><![CDATA[โมดูลที่เชื่อมต่อ System Framework จะไม่ทำงาน<br/>โปรดรายงานสิ่งนี้ต่อผู้พัฒนา <a href="https://github.com/topjohnwu/Magisk/issues"><b>Magisk</b></a>]]></string>
+    <string name="selinux_policy_not_loaded_summary">การโหลด SEPolicy ไม่ถูกต้อง</string>
+    <string name="selinux_policy_not_loaded"><![CDATA[หากฟีเจอร์บางอย่างไม่ทำงาน<br/>โปรดรายงานที่<a href="https://github.com/topjohnwu/Magisk/issues"><b>Magisk</b></a> developer.]]></string>
     <string name="system_inject_fail_summary">การฉีดกรอบระบบล้มเหลว</string>
     <string name="system_inject_fail"><![CDATA[สิ่งนี้เกิดขึ้นได้ยากและอาจเกิดจาก <b>Magisk</b> หรือโมดูล Magisk ที่มีคุณภาพต่ำบางตัว<br/>โปรดลองปิดการใช้งานโมดูล Magisk อื่นที่ไม่ใช่ Riru และ LSPosed หรือส่งบันทึกแบบเต็มไปยังนักพัฒนา]]></string>
     <string name="system_prop_incorrect_summary">เสาระบบไม่ถูกต้อง</string>
@@ -101,6 +102,7 @@
     <!-- ModulesActivity -->
     <string name="module_empty_description">(ไม่มีคำอธิบายให้)</string>
     <string name="warning_xposed_min_version">โมดูลนี้ต้องการเวอร์ชัน Xposed ที่ใหม่กว่า (%d) ดังนั้นจึงไม่สามารถเปิดใช้งานได้</string>
+    <string name="warning_target_version_higher">โมดูลนี้ออกแบบมาสำหรับ Xposed เวอร์ชั่น (%d) ดังนั้นฟังก์ชั่นบางอย่างอาจไม่ทำงาน</string>
     <string name="no_min_version_specified">โมดูลนี้ไม่ได้ระบุเวอร์ชัน Xposed ที่ต้องการ</string>
     <string name="warning_min_version_too_low">โมดูลนี้ถูกสร้างขึ้นสำหรับ Xposed เวอร์ชัน %1$dแต่เนื่องจากการเปลี่ยนแปลงที่เข้ากันไม่ได้ในเวอร์ชัน %2$dจึงถูกปิดใช้งาน</string>
     <string name="warning_installed_on_external_storage">ไม่สามารถโหลดโมดูลนี้ได้เนื่องจากติดตั้งอยู่ในการ์ด SD โปรดย้ายไปยังที่จัดเก็บข้อมูลภายใน</string>
@@ -198,7 +200,6 @@
     <string name="update_channel_bate">เบต้า</string>
     <string name="update_channel_nightly">สร้างทุกคืน</string>
     <string name="settings_xposed_api_call_protection">การป้องกันการโทร Xposed API</string>
-    <string name="settings_xposed_api_call_protection_summary">บล็อกรหัสโมดูลที่โหลดแบบไดนามิกเพื่อใช้ Xposed API ซึ่งอาจทำให้บางโมดูลเสียหาย แต่ได้ประโยชน์ด้านความปลอดภัย (ฟีเจอร์ทดลอง)</string>
     <!-- Module Repo -->
     <string name="module_readme">ต้องอ่าน</string>
     <string name="module_releases">เผยแพร่</string>

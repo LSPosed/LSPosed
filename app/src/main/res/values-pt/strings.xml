@@ -49,7 +49,6 @@
     <string name="activated">Ativado</string>
     <string name="partial_activated">Parcialmente Ativado</string>
     <string name="selinux_policy_not_loaded_summary">SEPolicy não está devidamente carregado</string>
-    <string name="selinux_policy_not_loaded"><![CDATA[Módulos que aplicam hooks ao Framework do Sistema não funcionarão.<br/>Por favor, relate isso para o desenvolvedor do <a href="https://github.com/topjohnwu/Magisk/issues"><b>Magisk</b></a>.]]></string>
     <string name="system_inject_fail_summary">Falha na injeção ao Framework do Sistema</string>
     <string name="system_inject_fail"><![CDATA[Isso é raro e pode ter sido causado pelo <b>Magisk</b> ou por algum módulo do Magisk de baixa qualidade.<br/>Por favor, tente desativar os módulos do Magisk, exceto o LSPosed (e o Riru, caso esteja em uso). Ou envie todos os registros para os desenvolvedores.]]></string>
     <string name="system_prop_incorrect_summary">Propriedade do sistema incorreta</string>
@@ -200,7 +199,7 @@
     <string name="update_channel_bate">Beta</string>
     <string name="update_channel_nightly">Nightly</string>
     <string name="settings_xposed_api_call_protection">Proteção da API do Xposed</string>
-    <string name="settings_xposed_api_call_protection_summary">Bloquear módulos carregados dinamicamente de usarem a API do Xposed, isso pode travar alguns módulos, mas melhora a segurança (recurso experimental)</string>
+    <string name="settings_xposed_api_call_protection_summary">Bloquear módulos carregados dinamicamente de usarem a API do Xposed, isso pode travar alguns módulos, mas melhora a segurança</string>
     <!-- Module Repo -->
     <string name="module_readme">Leia-me</string>
     <string name="module_releases">Versões</string>

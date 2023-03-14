@@ -12,4 +12,10 @@
     <string name="status_channel_name">LSPosed статус</string>
     <string name="lsposed_running_notification_title">LSPosed загружен</string>
     <string name="lsposed_running_notification_content">Нажмите на уведомление, чтобы открыть LSPosed</string>
+    <string name="xposed_module_request_scope_title">Запрос действий</string>
+    <string name="xposed_module_request_scope_content">%1$s для пользователя %2$s запрашивет выбрать %3$s в списке приложений</string>
+    <string name="scope_channel_name">Запрос действий</string>
+    <string name="scope_approve">Принять</string>
+    <string name="scope_deny">Отклонить</string>
+    <string name="nerver_ask_again">Больше не спрашивать</string>
 </resources>

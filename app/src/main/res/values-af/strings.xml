@@ -49,7 +49,6 @@
     <string name="activated">Activated</string>
     <string name="partial_activated">Partially activated</string>
     <string name="selinux_policy_not_loaded_summary">SEPolicy is nie behoorlik gelaai nie</string>
-    <string name="selinux_policy_not_loaded"><![CDATA[Modules wat System Framework aanhaak, sal nie werk nie.<br/>Rapporteer dit asseblief aan <a href="https://github.com/topjohnwu/Magisk/issues"><b>Magisk</b></a> ontwikkelaar.]]></string>
     <string name="system_inject_fail_summary">Stelselraamwerk-inspuiting het misluk</string>
     <string name="system_inject_fail"><![CDATA[Dit is skaars en kan veroorsaak word deur <b>Magisk</b> of sommige Magisk-modules van lae gehalte.<br/>Probeer asseblief om Magisk-modules anders as Riru en LSPosed te deaktiveer of dien volledige log aan ontwikkelaars in.]]></string>
     <string name="system_prop_incorrect_summary">Stelselstut is verkeerd</string>
@@ -200,7 +199,6 @@
     <string name="update_channel_bate">Beta</string>
     <string name="update_channel_nightly">Nag bou</string>
     <string name="settings_xposed_api_call_protection">Xposed API-oproepbeskerming</string>
-    <string name="settings_xposed_api_call_protection_summary">Blokkeer dinamies gelaaide modulekode om Xposed API te gebruik, dit kan sommige modules breek, maar bevoordeel sekuriteit (eksperimentele kenmerk)</string>
     <!-- Module Repo -->
     <string name="module_readme">Lees my</string>
     <string name="module_releases">Vrystellings</string>

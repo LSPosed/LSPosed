@@ -19,9 +19,9 @@
   -->
 <resources xmlns:tools="http://schemas.android.com/tools" tools:keep="@string/xposed_module_updated_notification_*,@string/module_is_not_activated_*">
     <!-- MainActivity -->
-    <string name="info">Info</string>
-    <string name="overview">Têgihiştinî</string>
-    <string name="Modules">Modules</string>
+    <string name="info">زانیاری</string>
+    <string name="overview">کورتەی گشتی</string>
+    <string name="Modules">مۆدیوولەکان</string>
     <plurals name="modules_enabled_count">
         <item quantity="one">%d modul çalak kirin</item>
         <item quantity="other">%d modul çalak kirin</item>
@@ -49,7 +49,6 @@
     <string name="activated">Çalak kirin</string>
     <string name="partial_activated">Qismî aktîf kirin</string>
     <string name="selinux_policy_not_loaded_summary">SEPolicy bi rêkûpêk nayê barkirin</string>
-    <string name="selinux_policy_not_loaded"><![CDATA[Modulên ku Çarçoveya Pergalê girêdidin dê nexebitin.<br/>Ji kerema xwe vê yekê ji <a href="https://github.com/topjohnwu/Magisk/issues"><b>Magisk</b></a> pêşdebir re ragihînin.]]></string>
     <string name="system_inject_fail_summary">Derzkirina Çarçoveya Pergalê têk çû</string>
     <string name="system_inject_fail"><![CDATA[Ev kêm e û dibe ku ji hêla <b>Magisk</b> an hin modulên Magisk-a kêm-kalîteyê ve çêbibe.<br/>Ji kerema xwe hewl bidin ku modulên Magisk ji bilî Riru û LSPosed neçalak bikin an jî têketinek tevahî ji pêşdebiran re bişînin.]]></string>
     <string name="system_prop_incorrect_summary">Pêşniyara pergalê xelet e</string>
@@ -200,7 +199,6 @@
     <string name="update_channel_bate">Beta</string>
     <string name="update_channel_nightly">Avakirina şevê</string>
     <string name="settings_xposed_api_call_protection">Parastina banga Xposed API</string>
-    <string name="settings_xposed_api_call_protection_summary">Koda modulê ya bi dînamîk barkirî asteng bike ku Xposed API bikar bîne, dibe ku ev hin modulan bişkîne lê ji ewlehiyê sûd werdigire (taybetmendiya ceribandinê)</string>
     <!-- Module Repo -->
     <string name="module_readme">Readme</string>
     <string name="module_releases">Releases</string>
