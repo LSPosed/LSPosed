@@ -1,3 +1,5 @@
+import java.net.URI
+
 enableFeaturePreview("TYPESAFE_PROJECT_ACCESSORS")
 
 pluginManagement {
@@ -42,8 +44,12 @@ dependencyResolutionManagement {
             library("appcenter-crashes", "com.microsoft.appcenter", "appcenter-crashes").versionRef(appCenterVersion)
             library("appcenter-analytics", "com.microsoft.appcenter", "appcenter-analytics").versionRef(appCenterVersion)
 
-            library("libxposed-api", "io.github.libxposed", "api").versionRef(libxposedVersion)
-            library("libxposed-service-interface", "io.github.libxposed", "service-interface").versionRef(libxposedVersion)
+            library("libxposed-api", "io.github.libxposed", "api").version {
+                branch = "master"
+            }
+            library("libxposed-interface", "io.github.libxposed", "interface").version {
+                branch = "master"
+            }
 
 
             library("rikkax-appcompat", "dev.rikka.rikkax.appcompat:appcompat:1.6.1")
@@ -88,6 +94,15 @@ dependencyResolutionManagement {
             library("kotlin-stdlib", "org.jetbrains.kotlin", "kotlin-stdlib").versionRef(kotlinVersion)
             library("kotlinx-coroutines-core", "org.jetbrains.kotlinx:kotlinx-coroutines-core:1.6.4")
         }
+    }
+}
+
+sourceControl {
+    gitRepository(URI.create("https://github.com/libxposed/api.git")) {
+        producesModule("io.github.libxposed:api")
+    }
+    gitRepository(URI.create("https://github.com/libxposed/service.git")) {
+        producesModule("io.github.libxposed:interface")
     }
 }
 
