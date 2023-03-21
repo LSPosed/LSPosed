@@ -51,18 +51,6 @@ jobs:
         with:
           gradle-home-cache-cleanup: true
 
-      - name: Checkout libxposed/api
-        uses: actions/checkout@v3
-        with:
-          repository: libxposed/api
-          path: libxposed/api
-
-      - name: Checkout libxposed/api
-        uses: actions/checkout@v3
-        with:
-          repository: libxposed/service
-          path: libxposed/service
-
       - name: Set up ccache
         uses: hendrikmuhs/ccache-action@v1.2
         with:
@@ -70,17 +58,6 @@ jobs:
           key: ${{ runner.os }}
           restore-keys: ${{ runner.os }}
           save: ${{ github.event_name == 'push' && github.ref == 'refs/heads/master' }}
-
-      - name: Build dependencies
-        working-directory: libxposed
-        run: |
-          cd api
-          echo 'org.gradle.jvmargs=-Xmx2048m' >> gradle.properties
-          ./gradlew :api:publishApiPublicationToMavenLocal
-          cd ..
-          cd service
-          echo 'org.gradle.jvmargs=-Xmx2048m' >> gradle.properties
-          ./gradlew :interface:publishInterfacePublicationToMavenLocal
 
       - name: Build with Gradle
         run: |
