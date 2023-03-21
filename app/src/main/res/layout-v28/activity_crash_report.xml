@@ -31,6 +31,8 @@
         android:layout_gravity="center"
         android:layout_margin="16dp"
         android:minHeight="148dp"
+        android:outlineAmbientShadowColor="@color/home_secondary_outline_ambient_shadow_color"
+        android:outlineSpotShadowColor="@color/home_secondary_outline_spot_shadow_color"
         app:cardElevation="@dimen/home_secondary_elevation">
 
         <LinearLayout

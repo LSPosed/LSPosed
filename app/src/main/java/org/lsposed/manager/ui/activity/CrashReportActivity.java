@@ -34,8 +34,10 @@ import androidx.annotation.Nullable;
 import com.google.android.material.color.DynamicColors;
 
 import org.lsposed.manager.BuildConfig;
+import org.lsposed.manager.ConfigManager;
 import org.lsposed.manager.R;
 import org.lsposed.manager.databinding.ActivityCrashReportBinding;
+import org.lsposed.manager.ui.dialog.BlurBehindDialogBuilder;
 import org.lsposed.manager.util.NavUtil;
 
 import java.time.LocalDateTime;
@@ -69,7 +71,18 @@ public class CrashReportActivity extends MaterialActivity {
             }
             NavUtil.startURL(this, "https://github.com/LSPosed/LSPosed/issues");
         });
-
+        if(ConfigManager.isBinderAlive()){
+            var version = ConfigManager.getXposedVersionCode();
+            if(version > BuildConfig.VERSION_CODE){
+                new BlurBehindDialogBuilder(this)
+                        .setMessage(getString(R.string.version_mismatch, version, BuildConfig.VERSION_CODE))
+                        .setPositiveButton(android.R.string.ok, (dialog, id) -> {
+                            NavUtil.startURL(this, getString(R.string.install_url));
+                            finish();
+                        })
+                        .show();
+            }
+        }
     }
 
     @Override
