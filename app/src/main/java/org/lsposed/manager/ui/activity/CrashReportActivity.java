@@ -71,9 +71,9 @@ public class CrashReportActivity extends MaterialActivity {
             }
             NavUtil.startURL(this, "https://github.com/LSPosed/LSPosed/issues");
         });
-        if(ConfigManager.isBinderAlive()){
+        if (ConfigManager.isBinderAlive()) {
             var version = ConfigManager.getXposedVersionCode();
-            if(version > BuildConfig.VERSION_CODE){
+            if (version > BuildConfig.VERSION_CODE) {
                 new BlurBehindDialogBuilder(this)
                         .setMessage(getString(R.string.version_mismatch, version, BuildConfig.VERSION_CODE))
                         .setPositiveButton(android.R.string.ok, (dialog, id) -> {
