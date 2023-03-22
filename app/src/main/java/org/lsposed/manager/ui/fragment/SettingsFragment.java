@@ -33,6 +33,7 @@ import androidx.activity.result.ActivityResultLauncher;
 import androidx.activity.result.contract.ActivityResultContracts;
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
+import androidx.appcompat.app.AppCompatDelegate;
 import androidx.core.text.HtmlCompat;
 import androidx.preference.Preference;
 import androidx.preference.PreferenceFragmentCompat;
@@ -59,7 +60,6 @@ import java.util.ArrayList;
 import java.util.Locale;
 
 import rikka.core.util.ResourceUtils;
-import rikka.material.app.DayNightDelegate;
 import rikka.material.app.LocaleDelegate;
 import rikka.material.preference.MaterialSwitchPreference;
 import rikka.preference.SimpleMenuPreference;
@@ -234,7 +234,7 @@ public class SettingsFragment extends BaseFragment {
             if (theme != null) {
                 theme.setOnPreferenceChangeListener((preference, newValue) -> {
                     if (!App.getPreferences().getString("dark_theme", ThemeUtil.MODE_NIGHT_FOLLOW_SYSTEM).equals(newValue)) {
-                        DayNightDelegate.setDefaultNightMode(ThemeUtil.getDarkTheme((String) newValue));
+                        AppCompatDelegate.setDefaultNightMode(ThemeUtil.getDarkTheme((String) newValue));
                         MainActivity activity = (MainActivity) getActivity();
                         if (activity != null) {
                             activity.restart();

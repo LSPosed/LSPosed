@@ -38,6 +38,7 @@ import android.text.TextUtils;
 import android.util.Log;
 
 import androidx.annotation.NonNull;
+import androidx.appcompat.app.AppCompatDelegate;
 import androidx.preference.PreferenceManager;
 
 import org.lsposed.hiddenapibypass.HiddenApiBypass;
@@ -66,7 +67,6 @@ import okhttp3.Cache;
 import okhttp3.OkHttpClient;
 import okhttp3.logging.HttpLoggingInterceptor;
 import rikka.core.os.FileUtils;
-import rikka.material.app.DayNightDelegate;
 import rikka.material.app.LocaleDelegate;
 
 public class App extends Application {
@@ -213,8 +213,7 @@ public class App extends Application {
                 pref.edit().putBoolean("doh", true).apply();
             }
         }
-        DayNightDelegate.setApplicationContext(this);
-        DayNightDelegate.setDefaultNightMode(ThemeUtil.getDarkTheme());
+        AppCompatDelegate.setDefaultNightMode(ThemeUtil.getDarkTheme());
         LocaleDelegate.setDefaultLocale(getLocale());
         var res = getResources();
         var config = res.getConfiguration();
