@@ -71,7 +71,7 @@
     <string name="enabled">Włączone</string>
     <string name="not_enabled">Wyłączone</string>
     <string name="supported">Obsługiwana strona</string>
-    <string name="unsupported">Nieobsługiwana strona</string>
+    <string name="unsupported">Nieobsługiwane</string>
     <string name="android_version_unsatisfied">Niezadowolenie z wersji na Androida</string>
     <string name="crashed">Rozbita</string>
     <string name="mount_failed">Montowanie nie powiodło się</string>
@@ -85,7 +85,7 @@
     <string name="parasitic_welcome_summary_no_shortcut_support">Używasz menedżera pasożytów, który może być otwierany z powiadomienia.</string>
     <string name="create_shortcut">Utwórz skrót</string>
     <string name="never_show">Nigdy nie pokazuj</string>
-    <string name="app_welcome">Rekomendowany menadżer Parasitic</string>
+    <string name="app_welcome">Zalecany Menedżer Pasożytowy</string>
     <string name="app_welcome_summary">LSPosed teraz obsługuje pasożytowanie systemowe by uniknąć wykrycia, możesz otworzyć menedżera pasożytów z okna powiadomień. Zalecane jest odinstalowanie obecnej aplikacji.</string>
     <!-- LogsActivity -->
     <string name="menuSaveToSd">Zapisz</string>
@@ -142,14 +142,14 @@
     <string name="no_scope_selected">Nie wybrałeś żadnej aplikacji. Kontynuować?</string>
     <string name="menu_show_games">Gry</string>
     <string name="menu_show_modules">Moduły</string>
-    <string name="menu_show_denylist">Lista zabronionych</string>
+    <string name="menu_show_denylist">Lista Odmów</string>
     <string name="failed_to_save_scope_list">Nie udało się zapisać listy zakresu</string>
     <string name="app_version">Wersja: %1$s</string>
-    <string name="use_recommended">Rekomendowane</string>
+    <string name="use_recommended">Zalecane</string>
     <string name="no_scope_selected_has_recommended">Nie wybrałeś żadnej aplikacji. Wybrać rekomendowane aplikacje?</string>
-    <string name="use_recommended_message">Wybrać rekomendowane aplikacje?</string>
+    <string name="use_recommended_message">Wybrać zalecane aplikacje?</string>
     <string name="module_is_not_activated_yet">Moduł Xposed nie jest jeszcze aktywowany</string>
-    <string name="requested_by_module">Rekomendowane</string>
+    <string name="requested_by_module">Zalecane</string>
     <string name="update_available">Dostępna aktualizacja: %1$s</string>
     <string name="module_disabled_no_selection">Moduł %s został wyłączony, ponieważ nie wybrano żadnej aplikacji.</string>
     <string name="android_framework">System Framework</string>
@@ -206,7 +206,7 @@
     <string name="update_channel_bate">Beta</string>
     <string name="update_channel_nightly">Wersja nocna</string>
     <string name="settings_xposed_api_call_protection">Ochrona wywołania Xposed API</string>
-    <string name="settings_xposed_api_call_protection_summary">Zablokuj dynamiczne ładowanie kodu modułu do używania Xposed API, wzmocni to ochronę kosztem możliwego uszkodzenia niektórych modułów</string>
+    <string name="settings_xposed_api_call_protection_summary">Blokuj dynamicznie ładowany kod modułu do używania API Xposed, wzmocni to ochronę kosztem możliwego uszkodzenia niektórych modułów</string>
     <!-- Module Repo -->
     <string name="module_readme">Readme</string>
     <string name="module_releases">Wersje</string>

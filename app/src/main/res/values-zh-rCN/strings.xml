@@ -154,7 +154,7 @@
     <string name="force_stop_dlg_title">要强行停止吗？</string>
     <string name="force_stop_dlg_text">强行停止某个应用可能会使其异常。</string>
     <string name="reboot_required">重启以应用此更改</string>
-    <string name="reboot">重启</string>
+    <string name="reboot">重启系统</string>
     <string name="menu_hide">隐藏</string>
     <string name="deny_list">%s 在排除列表内。模块可能会不生效</string>
     <string name="deny_list_info">在排除列表内</string>

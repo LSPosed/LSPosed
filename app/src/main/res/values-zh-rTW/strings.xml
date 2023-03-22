@@ -154,7 +154,7 @@
     <string name="force_stop_dlg_title">確定要強制停止？</string>
     <string name="force_stop_dlg_text">如果您強制停止應用程式，可能導致行為異常。</string>
     <string name="reboot_required">需要重新啟動以套用此變更</string>
-    <string name="reboot">重新啟動</string>
+    <string name="reboot">重啟系統</string>
     <string name="menu_hide">隱藏</string>
     <string name="deny_list">%s 在排除列表中，模組可能無法生效。</string>
     <string name="deny_list_info">在排除列表內</string>

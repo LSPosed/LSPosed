@@ -1,0 +1,65 @@
+[versions]
+agp = "7.4.2"
+kotlin = "1.8.10"
+nav = "2.5.3"
+appcenter = "5.0.0"
+libxposed = "100"
+glide = "4.15.1"
+okhttp = "4.10.0"
+
+[plugins]
+agp-lib = { id = "com.android.library", version.ref = "agp" }
+agp-app = { id = "com.android.application", version.ref = "agp" }
+kotlin = { id = "org.jetbrains.kotlin.android", version.ref = "kotlin" }
+nav-safeargs = { id = "androidx.navigation.safeargs", version.ref = "nav" }
+autoresconfig = { id = "dev.rikka.tools.autoresconfig", version = "1.2.2" }
+materialthemebuilder = { id = "dev.rikka.tools.materialthemebuilder", version = "1.3.3" }
+lsplugin-resopt = { id = "org.lsposed.lsplugin.resopt", version = "1.3" }
+lsplugin-apksign = { id = "org.lsposed.lsplugin.apksign", version = "1.1" }
+lsplugin-cmaker = { id = "org.lsposed.lsplugin.cmaker", version = "1.0" }
+lsplugin-jgit = { id = "org.lsposed.lsplugin.jgit", version = "1.0" }
+
+[libraries]
+appcenter-crashes = { group = "com.microsoft.appcenter", name = "appcenter-crashes", version.ref = "appcenter" }
+appcenter-analytics = { group = "com.microsoft.appcenter", name = "appcenter-analytics", version.ref = "appcenter" }
+
+rikkax-appcompat = { module = "dev.rikka.rikkax.appcompat:appcompat", version = "1.6.1" }
+rikkax-core = { module = "dev.rikka.rikkax.core:core", version = "1.4.1" }
+rikkax-insets = { module = "dev.rikka.rikkax.insets:insets", version = "1.3.0" }
+rikkax-layoutinflater = { module = "dev.rikka.rikkax.layoutinflater:layoutinflater", version = "1.3.0" }
+rikkax-material = { module = "dev.rikka.rikkax.material:material", version = "2.7.0" }
+rikkax-material-preference = { module = "dev.rikka.rikkax.material:material-preference", version = "2.0.0" }
+rikkax-parcelablelist = { module = "dev.rikka.rikkax.parcelablelist:parcelablelist", version = "2.0.1" }
+rikkax-preference = { module = "dev.rikka.rikkax.material:material-preference", version = "2.0.0" }
+rikkax-recyclerview = { module = "dev.rikka.rikkax.recyclerview:recyclerview-ktx", version = "1.3.1" }
+rikkax-widget-borderview = { module = "dev.rikka.rikkax.widget:borderview", version = "1.1.0" }
+rikkax-widget-mainswitchbar = { module = "dev.rikka.rikkax.widget:mainswitchbar", version = "1.0.2" }
+
+androidx-activity = { module = "androidx.activity:activity", version = "1.6.1" }
+androidx-annotation = { module = "androidx.annotation:annotation", version = "1.6.0" }
+androidx-browser = { module = "androidx.browser:browser", version = "1.5.0" }
+androidx-constraintlayout = { module = "androidx.constraintlayout:constraintlayout", version = "2.1.4" }
+androidx-core = { module = "androidx.core:core", version = "1.9.0" }
+androidx-fragment = { module = "androidx.fragment:fragment", version = "1.5.5" }
+androidx-navigation-fragment = { group = "androidx.navigation", name = "navigation-fragment", version.ref = "nav" }
+androidx-navigation-ui = { group = "androidx.navigation", name = "navigation-ui", version.ref = "nav" }
+androidx-preference = { module = "androidx.preference:preference", version = "1.2.0" }
+androidx-recyclerview = { module = "androidx.recyclerview:recyclerview", version = "1.3.0" }
+androidx-swiperefreshlayout = { module = "androidx.swiperefreshlayout:swiperefreshlayout", version = "1.2.0-alpha01" }
+
+glide = { group = "com.github.bumptech.glide", name = "glide", version.ref = "glide" }
+glide-compiler = { group = "com.github.bumptech.glide", name = "compiler", version.ref = "glide" }
+
+okhttp = { group = "com.squareup.okhttp3", name = "okhttp", version.ref = "okhttp" }
+okhttp-dnsoverhttps = { group = "com.squareup.okhttp3", name = "okhttp-dnsoverhttps", version.ref = "okhttp" }
+okhttp-logging-interceptor = { group = "com.squareup.okhttp3", name = "logging-interceptor", version.ref = "okhttp" }
+
+agp-apksig = { group = "com.android.tools.build", name = "apksig", version.ref = "agp" }
+appiconloader = { module = "me.zhanghai.android.appiconloader:appiconloader", version = "1.5.0" }
+axml = { module = "de.upb.cs.swt:axml", version = "2.1.3" }
+commons-lang3 = { module = "org.apache.commons:commons-lang3", version = "3.12.0" }
+material = { module = "com.google.android.material:material", version = "1.8.0" }
+gson = { module = "com.google.code.gson:gson", version = "2.10.1" }
+hiddenapibypass = { module = "org.lsposed.hiddenapibypass:hiddenapibypass", version = "4.3" }
+kotlin-stdlib = { module = "org.jetbrains.kotlin:kotlin-stdlib", version.ref = "kotlin" }
+kotlinx-coroutines-core = { module = "org.jetbrains.kotlinx:kotlinx-coroutines-core", version = "1.6.4" }
