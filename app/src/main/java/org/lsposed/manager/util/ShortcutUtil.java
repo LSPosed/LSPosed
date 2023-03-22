@@ -174,8 +174,7 @@ public class ShortcutUtil {
         boolean pinned = false;
         for (var info : sm.getPinnedShortcuts()) {
             if (SHORTCUT_ID.equals(info.getId())) {
-                if (info.isEnabled())
-                    pinned = true;
+                pinned = true;
                 break;
             }
         }
