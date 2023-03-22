@@ -329,7 +329,7 @@ public class LSPosedService extends ILSPosedService.Stub {
         };
         try {
             for (var filter : filters) {
-                ActivityManagerService.registerReceiver("android", null, receiver, filter, requiredPermission, userId, Context.RECEIVER_NOT_EXPORTED);
+                ActivityManagerService.registerReceiver("android", null, receiver, filter, requiredPermission, userId, Context.RECEIVER_EXPORTED);
             }
         } catch (RemoteException e) {
             Log.e(TAG, "register receiver", e);
