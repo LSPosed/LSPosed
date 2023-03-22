@@ -8,5 +8,5 @@
     <string name="xposed_module_updated_notification_content">%s 已更新</string>
     <string name="xposed_module_updated_notification_title_system">Xposed模組已更新，需要重啟系統。</string>
     <string name="xposed_module_updated_notification_content_system">%s 已更新，由於作用域中包含系統框架，需要重啟系統。</string>
-    <string name="module_updated_channel_name">Module update complete</string>
+    <string name="module_updated_channel_name">模块更新完成</string>
 </resources>

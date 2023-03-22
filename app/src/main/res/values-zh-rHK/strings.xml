@@ -146,7 +146,7 @@
     <string name="force_stop_dlg_title">確認強制停止？</string>
     <string name="force_stop_dlg_text">如果你強制停止應用，可能會導致異常。</string>
     <string name="reboot_required">重啟以套用變更</string>
-    <string name="reboot">重啟</string>
+    <string name="reboot">重啟系統</string>
     <string name="menu_hide">隱藏</string>
     <string name="deny_list">%s 在拒絕名單上。可能會不會生效</string>
     <string name="deny_list_info">在拒絕名單內</string>
