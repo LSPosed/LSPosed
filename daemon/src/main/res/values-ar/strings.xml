@@ -12,4 +12,10 @@
     <string name="status_channel_name">حالة LSPosed</string>
     <string name="lsposed_running_notification_title">تم تحميل LSPosed</string>
     <string name="lsposed_running_notification_content">اضغط على الإشعار لفتح المدير</string>
+    <string name="xposed_module_request_scope_title">طلب النطاق</string>
+    <string name="xposed_module_request_scope_content">%1$s على %2$s طلبات المستخدم لإضافة %3$s إلى نطاقه.</string>
+    <string name="scope_channel_name">طلب النطاق</string>
+    <string name="scope_approve">اوافق</string>
+    <string name="scope_deny">رفض</string>
+    <string name="nerver_ask_again">لا تسأل أبدا</string>
 </resources>
