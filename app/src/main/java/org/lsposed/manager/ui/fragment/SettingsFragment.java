@@ -235,10 +235,6 @@ public class SettingsFragment extends BaseFragment {
                 theme.setOnPreferenceChangeListener((preference, newValue) -> {
                     if (!App.getPreferences().getString("dark_theme", ThemeUtil.MODE_NIGHT_FOLLOW_SYSTEM).equals(newValue)) {
                         AppCompatDelegate.setDefaultNightMode(ThemeUtil.getDarkTheme((String) newValue));
-                        MainActivity activity = (MainActivity) getActivity();
-                        if (activity != null) {
-                            activity.restart();
-                        }
                     }
                     return true;
                 });
