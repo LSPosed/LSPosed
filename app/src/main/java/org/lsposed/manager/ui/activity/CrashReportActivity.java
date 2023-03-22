@@ -49,6 +49,7 @@ public class CrashReportActivity extends MaterialActivity {
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+        setTheme(R.style.AppTheme);
         binding = ActivityCrashReportBinding.inflate(getLayoutInflater());
         setContentView(binding.getRoot());
         binding.sendLogs.setOnClickListener(view -> {
