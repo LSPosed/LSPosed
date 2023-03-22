@@ -308,7 +308,7 @@ public class LSPosedService extends ILSPosedService.Stub {
         LSPNotificationManager.cancelNotification(SCOPE_CHANNEL_ID, packageName, userId);
     }
 
-    private void registerReceiver(List<IntentFilter> filters, String requiredPermission, int userId, Consumer<Intent> task) {
+    private void registerReceiver(List<IntentFilter> filters, String requiredPermission, int userId, Consumer<Intent> task, int flag) {
         var receiver = new IIntentReceiver.Stub() {
             @Override
             public void performReceive(Intent intent, int resultCode, String data, Bundle extras, boolean ordered, boolean sticky, int sendingUser) {
@@ -329,15 +329,23 @@ public class LSPosedService extends ILSPosedService.Stub {
         };
         try {
             for (var filter : filters) {
-                ActivityManagerService.registerReceiver("android", null, receiver, filter, requiredPermission, userId, Context.RECEIVER_NOT_EXPORTED);
+                ActivityManagerService.registerReceiver("android", null, receiver, filter, requiredPermission, userId, flag);
             }
         } catch (RemoteException e) {
             Log.e(TAG, "register receiver", e);
         }
     }
 
+    private void registerReceiver(List<IntentFilter> filters, String requiredPermission, int userId, Consumer<Intent> task) {
+        registerReceiver(filters, requiredPermission, userId, task, Context.RECEIVER_NOT_EXPORTED);
+    }
+
     private void registerReceiver(List<IntentFilter> filters, int userId, Consumer<Intent> task) {
-        registerReceiver(filters, null, userId, task);
+        registerReceiver(filters, null, userId, task, Context.RECEIVER_NOT_EXPORTED);
+    }
+
+    private void registerReceiver(List<IntentFilter> filters, int userId, Consumer<Intent> task, int flag) {
+        registerReceiver(filters, null, userId, task, flag);
     }
 
     private void registerPackageReceiver() {
@@ -371,7 +379,7 @@ public class LSPosedService extends ILSPosedService.Stub {
         intentFilter.addDataAuthority("5776733", null);
         intentFilter.addDataScheme("android_secret_code");
 
-        registerReceiver(List.of(intentFilter), 0, this::dispatchSecretCodeReceive);
+        registerReceiver(List.of(intentFilter), 0, this::dispatchSecretCodeReceive, Context.RECEIVER_EXPORTED);
         Log.d(TAG, "registered secret code receiver");
     }
 
