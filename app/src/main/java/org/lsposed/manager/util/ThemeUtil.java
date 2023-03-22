@@ -23,6 +23,7 @@ import android.content.Context;
 import android.content.SharedPreferences;
 
 import androidx.annotation.StyleRes;
+import androidx.appcompat.app.AppCompatDelegate;
 
 import com.google.android.material.color.DynamicColors;
 
@@ -33,7 +34,6 @@ import java.util.HashMap;
 import java.util.Map;
 
 import rikka.core.util.ResourceUtils;
-import rikka.material.app.DayNightDelegate;
 
 public class ThemeUtil {
     private static final Map<String, Integer> colorThemeMap = new HashMap<>();
@@ -116,11 +116,11 @@ public class ThemeUtil {
         switch (mode) {
             case MODE_NIGHT_FOLLOW_SYSTEM:
             default:
-                return DayNightDelegate.MODE_NIGHT_FOLLOW_SYSTEM;
+                return AppCompatDelegate.MODE_NIGHT_FOLLOW_SYSTEM;
             case MODE_NIGHT_YES:
-                return DayNightDelegate.MODE_NIGHT_YES;
+                return AppCompatDelegate.MODE_NIGHT_YES;
             case MODE_NIGHT_NO:
-                return DayNightDelegate.MODE_NIGHT_NO;
+                return AppCompatDelegate.MODE_NIGHT_NO;
         }
     }
 

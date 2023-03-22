@@ -23,11 +23,11 @@ lsplugin-jgit = { id = "org.lsposed.lsplugin.jgit", version = "1.0" }
 appcenter-crashes = { group = "com.microsoft.appcenter", name = "appcenter-crashes", version.ref = "appcenter" }
 appcenter-analytics = { group = "com.microsoft.appcenter", name = "appcenter-analytics", version.ref = "appcenter" }
 
-rikkax-appcompat = { module = "dev.rikka.rikkax.appcompat:appcompat", version = "1.5.0.1" }
+rikkax-appcompat = { module = "dev.rikka.rikkax.appcompat:appcompat", version = "1.6.1" }
 rikkax-core = { module = "dev.rikka.rikkax.core:core", version = "1.4.1" }
 rikkax-insets = { module = "dev.rikka.rikkax.insets:insets", version = "1.3.0" }
 rikkax-layoutinflater = { module = "dev.rikka.rikkax.layoutinflater:layoutinflater", version = "1.3.0" }
-rikkax-material = { module = "dev.rikka.rikkax.material:material", version = "2.5.1" }
+rikkax-material = { module = "dev.rikka.rikkax.material:material", version = "2.7.0" }
 rikkax-material-preference = { module = "dev.rikka.rikkax.material:material-preference", version = "2.0.0" }
 rikkax-parcelablelist = { module = "dev.rikka.rikkax.parcelablelist:parcelablelist", version = "2.0.1" }
 rikkax-preference = { module = "dev.rikka.rikkax.material:material-preference", version = "2.0.0" }
