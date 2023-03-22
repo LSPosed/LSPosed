@@ -53,6 +53,7 @@ public class BaseActivity extends MaterialActivity {
     @Override
     public void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+        setTheme(R.style.AppTheme);
         // make sure the versions are consistent
         if (BuildConfig.DEBUG) return;
         if (!ConfigManager.isBinderAlive()) return;
