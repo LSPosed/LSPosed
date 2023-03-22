@@ -200,7 +200,7 @@
     <string name="update_channel_bate">Thử nghiệm</string>
     <string name="update_channel_nightly">Bản dựng hàng đêm</string>
     <string name="settings_xposed_api_call_protection">Bảo vệ kết nối tới Xposed API</string>
-    <string name="settings_xposed_api_call_protection_summary">Chặn các mã mô-đun được tải động sử dụng API Xposed, điều này có thể làm hỏng một số mô-đun nhưng có lợi cho bảo mật</string>
+    <string name="settings_xposed_api_call_protection_summary">Chặn các mã mô-đun động được nạp sử dụng API Xposed, điều này có thể làm hỏng một số mô-đun nhưng có lợi cho bảo mật</string>
     <!-- Module Repo -->
     <string name="module_readme">Readme</string>
     <string name="module_releases">Bản phát hành</string>
