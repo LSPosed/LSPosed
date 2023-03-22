@@ -308,7 +308,7 @@ public class LSPosedService extends ILSPosedService.Stub {
         LSPNotificationManager.cancelNotification(SCOPE_CHANNEL_ID, packageName, userId);
     }
 
-    private void registerReceiver(List<IntentFilter> filters, String requiredPermission, int userId, Consumer<Intent> task, int Flag) {
+    private void registerReceiver(List<IntentFilter> filters, String requiredPermission, int userId, Consumer<Intent> task, int flag) {
         var receiver = new IIntentReceiver.Stub() {
             @Override
             public void performReceive(Intent intent, int resultCode, String data, Bundle extras, boolean ordered, boolean sticky, int sendingUser) {
@@ -329,7 +329,7 @@ public class LSPosedService extends ILSPosedService.Stub {
         };
         try {
             for (var filter : filters) {
-                ActivityManagerService.registerReceiver("android", null, receiver, filter, requiredPermission, userId, Flag);
+                ActivityManagerService.registerReceiver("android", null, receiver, filter, requiredPermission, userId, flag);
             }
         } catch (RemoteException e) {
             Log.e(TAG, "register receiver", e);
@@ -344,8 +344,8 @@ public class LSPosedService extends ILSPosedService.Stub {
         registerReceiver(filters, null, userId, task, Context.RECEIVER_NOT_EXPORTED);
     }
 
-    private void registerReceiver(List<IntentFilter> filters, int userId, Consumer<Intent> task, int Flag) {
-        registerReceiver(filters, null, userId, task, Flag);
+    private void registerReceiver(List<IntentFilter> filters, int userId, Consumer<Intent> task, int flag) {
+        registerReceiver(filters, null, userId, task, flag);
     }
 
     private void registerPackageReceiver() {
