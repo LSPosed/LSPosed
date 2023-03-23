@@ -192,6 +192,7 @@ public class SettingsFragment extends BaseFragment {
                     })) {
                         parentFragment.showHint(R.string.settings_unsupported_pin_shortcut_summary, true);
                     }
+                    parentFragment.showHint(R.string.settings_request_pin_shortcut_hint, false);
                     return true;
                 });
             }
