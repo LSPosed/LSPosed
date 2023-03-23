@@ -189,10 +189,10 @@ public class SettingsFragment extends BaseFragment {
                             notification.setSummaryOn(R.string.settings_enable_status_notification_summary);
                         }
                         App.getPreferences().edit().putBoolean("never_show_welcome", true).apply();
+                        parentFragment.showHint(R.string.settings_request_pin_shortcut_hint, false);
                     })) {
                         parentFragment.showHint(R.string.settings_unsupported_pin_shortcut_summary, true);
                     }
-                    parentFragment.showHint(R.string.settings_request_pin_shortcut_hint, false);
                     return true;
                 });
             }
