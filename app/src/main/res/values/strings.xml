@@ -199,7 +199,7 @@
     <string name="settings_translation">Participate in translation</string>
     <string name="settings_translation_summary">Help us translate %s into your language</string>
     <string name="settings_create_shortcut_summary">Create a shortcut that can open parasitic manager</string>
-    <string name="settings_shortcut_pinned_hint">Shortcuts pinned</string>
+    <string name="settings_shortcut_pinned_hint">Shortcut pinned</string>
     <string name="settings_created_shortcut_summary">A shortcut has been created to open parasitic manager</string>
     <string name="settings_unsupported_pin_shortcut_summary">The current default launcher does not support pin shortcuts</string>
     <string name="settings_enable_status_notification">Status Notification</string>
