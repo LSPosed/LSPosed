@@ -26,6 +26,7 @@ import android.net.Uri;
 import android.os.Build;
 import android.os.Bundle;
 import android.text.TextUtils;
+import android.util.Log;
 import android.view.KeyEvent;
 import android.view.MotionEvent;
 
@@ -263,8 +264,9 @@ public class MainActivity extends BaseActivity implements RepoLoader.RepoListene
                 }
             }
         }
-        if(App.isParasitic){
-            ShortcutUtil.updateShortcut();
+        if (App.isParasitic) {
+            var updateShortcut = ShortcutUtil.updateShortcut();
+            Log.d(App.TAG, "update shortcut success = " + updateShortcut);
         }
     }
 

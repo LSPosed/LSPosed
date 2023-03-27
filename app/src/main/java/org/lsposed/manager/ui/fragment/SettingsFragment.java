@@ -68,6 +68,7 @@ import rikka.widget.borderview.BorderRecyclerView;
 
 public class SettingsFragment extends BaseFragment {
     FragmentSettingsBinding binding;
+    static boolean allowCreateShortcut = true;
 
     @Nullable
     @Override
@@ -177,6 +178,7 @@ public class SettingsFragment extends BaseFragment {
 
             Preference shortcut = findPreference("add_shortcut");
             if (shortcut != null) {
+                shortcut.setEnabled(allowCreateShortcut);
                 shortcut.setVisible(App.isParasitic);
                 if (!ShortcutUtil.isRequestPinShortcutSupported(requireContext())) {
                     shortcut.setEnabled(false);
@@ -184,6 +186,9 @@ public class SettingsFragment extends BaseFragment {
                 }
                 shortcut.setOnPreferenceClickListener(preference -> {
                     if (!ShortcutUtil.requestPinLaunchShortcut(() -> {
+                        shortcut.setEnabled(false);
+                        shortcut.setSummary(R.string.settings_created_shortcut_summary);
+                        allowCreateShortcut = false;
                         if (notification != null) {
                             notification.setEnabled(true);
                             notification.setSummaryOn(R.string.settings_enable_status_notification_summary);

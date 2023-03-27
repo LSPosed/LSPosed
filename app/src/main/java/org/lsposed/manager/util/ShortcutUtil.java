@@ -38,7 +38,6 @@ import android.graphics.drawable.Drawable;
 import android.graphics.drawable.Icon;
 import android.graphics.drawable.LayerDrawable;
 import android.os.Build;
-import android.util.Log;
 
 import org.lsposed.manager.App;
 import org.lsposed.manager.R;
@@ -138,7 +137,7 @@ public class ShortcutUtil {
         return builder;
     }
 
-    public static boolean isRequestPinShortcutSupported(Context context) {
+    public static boolean isRequestPinShortcutSupported(Context context) throws RuntimeException {
         var sm = context.getSystemService(ShortcutManager.class);
         return sm.isRequestPinShortcutSupported();
     }
@@ -154,7 +153,6 @@ public class ShortcutUtil {
 
     public static boolean updateShortcut() {
         if (!isLaunchShortcutPinned()) return false;
-        Log.d(App.TAG, "update shortcut");
         var context = App.getInstance();
         var sm = context.getSystemService(ShortcutManager.class);
         List<ShortcutInfo> shortcutInfoList = new ArrayList<>();
