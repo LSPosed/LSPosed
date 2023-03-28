@@ -48,7 +48,7 @@ import java.util.UUID;
 
 public class ShortcutUtil {
     private static final String SHORTCUT_ID = "org.lsposed.manager.shortcut";
-    public static boolean shortcutPinned = false;
+    private static boolean shortcutPinned = false;
 
     private static Bitmap getBitmap(Context context, int id) {
         var r = context.getResources();
@@ -173,5 +173,9 @@ public class ShortcutUtil {
             }
         }
         return pinned;
+    }
+
+    public static boolean shouldAllowPinShortcut(){
+        return isLaunchShortcutPinned() && !shortcutPinned;
     }
 }

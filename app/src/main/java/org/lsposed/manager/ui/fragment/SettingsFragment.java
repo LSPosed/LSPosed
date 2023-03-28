@@ -177,12 +177,12 @@ public class SettingsFragment extends BaseFragment {
 
             Preference shortcut = findPreference("add_shortcut");
             if (shortcut != null) {
-                shortcut.setEnabled(!ShortcutUtil.shortcutPinned);
+                shortcut.setEnabled(ShortcutUtil.shouldAllowPinShortcut());
                 shortcut.setVisible(App.isParasitic);
                 if (!ShortcutUtil.isRequestPinShortcutSupported(requireContext())) {
                     shortcut.setEnabled(false);
                     shortcut.setSummary(R.string.settings_unsupported_pin_shortcut_summary);
-                } else if (ShortcutUtil.shortcutPinned)
+                } else if (!ShortcutUtil.shouldAllowPinShortcut())
                     shortcut.setSummary(R.string.settings_created_shortcut_summary);
                 shortcut.setOnPreferenceClickListener(preference -> {
                     if (!ShortcutUtil.requestPinLaunchShortcut(() -> {
