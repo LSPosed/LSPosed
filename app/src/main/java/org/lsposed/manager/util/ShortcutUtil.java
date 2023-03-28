@@ -176,6 +176,6 @@ public class ShortcutUtil {
     }
 
     public static boolean shouldAllowPinShortcut(){
-        return isLaunchShortcutPinned() && !shortcutPinned;
+        return !isLaunchShortcutPinned() && !shortcutPinned;
     }
 }
