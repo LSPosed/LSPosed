@@ -180,8 +180,10 @@ public class ShortcutUtil {
     }
 
     public static boolean shouldAllowPinShortcut(Context context) {
-        shortcutPinned = defaultLauncherPackageName == null
-                || !defaultLauncherPackageName.equals(getDefaultLauncherPackageName(context));
+        if (shortcutPinned)
+            shortcutPinned = !(defaultLauncherPackageName == null
+                    || !defaultLauncherPackageName.equals(getDefaultLauncherPackageName(context)));
+        defaultLauncherPackageName = getDefaultLauncherPackageName(context);
         if (!isLaunchShortcutPinned()) return true;
         return !shortcutPinned;
     }
