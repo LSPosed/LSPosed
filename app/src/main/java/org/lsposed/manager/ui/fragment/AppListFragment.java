@@ -39,6 +39,9 @@ import androidx.recyclerview.widget.ConcatAdapter;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
+import com.google.android.material.appbar.AppBarLayout.LayoutParams;
+import com.google.android.material.appbar.SubtitleCollapsingToolbarLayout;
+
 import org.lsposed.manager.App;
 import org.lsposed.manager.ConfigManager;
 import org.lsposed.manager.R;
@@ -56,9 +59,9 @@ public class AppListFragment extends BaseFragment implements MenuProvider {
     public SearchView searchView;
     private ScopeAdapter scopeAdapter;
     private ModuleUtil.InstalledModule module;
-
     private SearchView.OnQueryTextListener searchListener;
-    public FragmentAppListBinding binding;
+    private FragmentAppListBinding binding;
+    private SubtitleCollapsingToolbarLayout subtitleCollapsingToolbarLayout;
     public ActivityResultLauncher<String> backupLauncher;
     public ActivityResultLauncher<String[]> restoreLauncher;
 
@@ -75,6 +78,7 @@ public class AppListFragment extends BaseFragment implements MenuProvider {
     @Override
     public View onCreateView(@NonNull LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
         binding = FragmentAppListBinding.inflate(getLayoutInflater(), container, false);
+        subtitleCollapsingToolbarLayout = binding.toolbarLayout;
         if (module == null) {
             return binding.getRoot();
         }
@@ -113,7 +117,9 @@ public class AppListFragment extends BaseFragment implements MenuProvider {
         View.OnClickListener l = v -> {
             if (searchView.isIconified()) {
                 binding.recyclerView.smoothScrollToPosition(0);
-                binding.appBar.setExpanded(true, true);
+                var layoutParams = (LayoutParams) subtitleCollapsingToolbarLayout.getLayoutParams();
+                layoutParams.setScrollFlags(LayoutParams.SCROLL_FLAG_SCROLL | LayoutParams.SCROLL_FLAG_EXIT_UNTIL_COLLAPSED);
+                subtitleCollapsingToolbarLayout.setLayoutParams(layoutParams);
             }
         };
         binding.toolbar.setOnClickListener(l);
@@ -135,7 +141,9 @@ public class AppListFragment extends BaseFragment implements MenuProvider {
     @Override
     public void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        AppListFragmentArgs args = AppListFragmentArgs.fromBundle(getArguments());
+        var arguments = getArguments();
+        if (arguments == null) return;
+        AppListFragmentArgs args = AppListFragmentArgs.fromBundle(arguments);
         String modulePackageName = args.getModulePackageName();
         int moduleUserId = args.getModuleUserId();
 
@@ -204,13 +212,17 @@ public class AppListFragment extends BaseFragment implements MenuProvider {
         searchView.addOnAttachStateChangeListener(new View.OnAttachStateChangeListener() {
             @Override
             public void onViewAttachedToWindow(View arg0) {
+                var layoutParams = (LayoutParams) subtitleCollapsingToolbarLayout.getLayoutParams();
+                layoutParams.setScrollFlags(LayoutParams.SCROLL_FLAG_NO_SCROLL);
+                subtitleCollapsingToolbarLayout.setLayoutParams(layoutParams);
                 binding.appBar.setExpanded(false, true);
-                binding.recyclerView.setNestedScrollingEnabled(false);
             }
 
             @Override
             public void onViewDetachedFromWindow(View v) {
-                binding.recyclerView.setNestedScrollingEnabled(true);
+                var layoutParams = (LayoutParams) subtitleCollapsingToolbarLayout.getLayoutParams();
+                layoutParams.setScrollFlags(LayoutParams.SCROLL_FLAG_SCROLL | LayoutParams.SCROLL_FLAG_EXIT_UNTIL_COLLAPSED);
+                subtitleCollapsingToolbarLayout.setLayoutParams(layoutParams);
             }
         });
         searchView.findViewById(androidx.appcompat.R.id.search_edit_frame).setLayoutDirection(View.LAYOUT_DIRECTION_INHERIT);

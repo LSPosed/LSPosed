@@ -86,7 +86,7 @@ public class LogsFragment extends BaseFragment implements MenuProvider {
             uri -> {
                 if (uri == null) return;
                 runAsync(() -> {
-                    var context = requireContext();
+                    var context = App.getInstance();
                     var contentResolver = context.getContentResolver();
                     try (var zipFd = contentResolver.openFileDescriptor(uri, "wt")) {
                         LSPManagerServiceHolder.getService().getLogs(zipFd);
@@ -367,7 +367,6 @@ public class LogsFragment extends BaseFragment implements MenuProvider {
             binding.swipeRefreshLayout.removeView(binding.recyclerView);
             HorizontalScrollView horizontalScrollView = new HorizontalScrollView(getContext());
             horizontalScrollView.setFillViewport(true);
-            horizontalScrollView.setHorizontalScrollBarEnabled(false);
             horizontalScrollView.setLayoutDirection(View.LAYOUT_DIRECTION_LTR);
             binding.swipeRefreshLayout.addView(horizontalScrollView);
             horizontalScrollView.addView(binding.recyclerView);

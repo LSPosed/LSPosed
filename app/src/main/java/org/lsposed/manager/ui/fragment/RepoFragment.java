@@ -220,7 +220,7 @@ public class RepoFragment extends BaseFragment implements RepoLoader.RepoListene
         super.onResume();
         adapter.refresh();
         if (preLoadWebview) {
-            mHandler.postDelayed(() -> new WebView(requireContext()), 500);
+            mHandler.postDelayed(() -> new WebView(App.getInstance()), 500);
             preLoadWebview = false;
         }
     }

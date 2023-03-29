@@ -37,7 +37,7 @@ public class WelcomeDialog extends DialogFragment {
     private static boolean shown = false;
 
     private Dialog parasiticDialog(BlurBehindDialogBuilder builder) {
-        var shortcutSupported = ShortcutUtil.isRequestPinShortcutSupported(requireContext());
+        var shortcutSupported = ShortcutUtil.isRequestPinShortcutSupported(App.getInstance());
         builder
                 .setTitle(R.string.parasitic_welcome)
                 .setMessage(shortcutSupported ? R.string.parasitic_welcome_summary :

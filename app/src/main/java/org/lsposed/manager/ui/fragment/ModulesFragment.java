@@ -63,6 +63,8 @@ import androidx.viewpager2.widget.ViewPager2;
 
 import com.bumptech.glide.request.target.CustomTarget;
 import com.bumptech.glide.request.transition.Transition;
+import com.google.android.material.appbar.AppBarLayout.LayoutParams;
+import com.google.android.material.appbar.SubtitleCollapsingToolbarLayout;
 import com.google.android.material.behavior.HideBottomViewOnScrollBehavior;
 import com.google.android.material.checkbox.MaterialCheckBox;
 import com.google.android.material.floatingactionbutton.FloatingActionButton;
@@ -98,13 +100,12 @@ public class ModulesFragment extends BaseFragment implements ModuleUtil.ModuleLi
     private static final PackageManager pm = App.getInstance().getPackageManager();
     private static final ModuleUtil moduleUtil = ModuleUtil.getInstance();
     private static final RepoLoader repoLoader = RepoLoader.getInstance();
-    protected FragmentPagerBinding binding;
-    protected SearchView searchView;
+    private FragmentPagerBinding binding;
+    private SubtitleCollapsingToolbarLayout subtitleCollapsingToolbarLayout;
+    private SearchView searchView;
     private SearchView.OnQueryTextListener searchListener;
-
     SparseArray<ModuleAdapter> adapters = new SparseArray<>();
     PagerAdapter pagerAdapter = null;
-
     private ModuleUtil.InstalledModule selectedModule;
 
     @Override
@@ -148,6 +149,7 @@ public class ModulesFragment extends BaseFragment implements ModuleUtil.ModuleLi
     @Override
     public View onCreateView(@NonNull LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
         binding = FragmentPagerBinding.inflate(inflater, container, false);
+        subtitleCollapsingToolbarLayout = binding.toolbarLayout;
         binding.appBar.setLiftable(true);
         setupToolbar(binding.toolbar, binding.clickView, R.string.Modules, R.menu.menu_modules);
         binding.toolbar.setNavigationIcon(null);
@@ -198,11 +200,17 @@ public class ModulesFragment extends BaseFragment implements ModuleUtil.ModuleLi
         searchView.addOnAttachStateChangeListener(new View.OnAttachStateChangeListener() {
             @Override
             public void onViewAttachedToWindow(View arg0) {
+                var layoutParams = (LayoutParams) subtitleCollapsingToolbarLayout.getLayoutParams();
+                layoutParams.setScrollFlags(LayoutParams.SCROLL_FLAG_NO_SCROLL);
+                subtitleCollapsingToolbarLayout.setLayoutParams(layoutParams);
                 binding.appBar.setExpanded(false, true);
             }
 
             @Override
             public void onViewDetachedFromWindow(View v) {
+                var layoutParams = (LayoutParams) subtitleCollapsingToolbarLayout.getLayoutParams();
+                layoutParams.setScrollFlags(LayoutParams.SCROLL_FLAG_SCROLL | LayoutParams.SCROLL_FLAG_EXIT_UNTIL_COLLAPSED);
+                subtitleCollapsingToolbarLayout.setLayoutParams(layoutParams);
             }
         });
         searchView.findViewById(androidx.appcompat.R.id.search_edit_frame).setLayoutDirection(View.LAYOUT_DIRECTION_INHERIT);
@@ -356,7 +364,8 @@ public class ModulesFragment extends BaseFragment implements ModuleUtil.ModuleLi
     }
 
     public static class ModuleListFragment extends Fragment {
-        public SwiperefreshRecyclerviewBinding binding;
+        private SwiperefreshRecyclerviewBinding binding;
+        private ModulesFragment modulesFragment;
         private ModuleAdapter adapter;
         private final RecyclerView.AdapterDataObserver observer = new RecyclerView.AdapterDataObserver() {
             @Override
@@ -368,26 +377,31 @@ public class ModulesFragment extends BaseFragment implements ModuleUtil.ModuleLi
         private final View.OnAttachStateChangeListener searchViewLocker = new View.OnAttachStateChangeListener() {
             @Override
             public void onViewAttachedToWindow(View v) {
-                binding.recyclerView.setNestedScrollingEnabled(false);
+                var layoutParams = (LayoutParams) modulesFragment.subtitleCollapsingToolbarLayout.getLayoutParams();
+                layoutParams.setScrollFlags(LayoutParams.SCROLL_FLAG_NO_SCROLL);
+                modulesFragment.subtitleCollapsingToolbarLayout.setLayoutParams(layoutParams);
+                modulesFragment.binding.appBar.setExpanded(false, true);
             }
 
             @Override
             public void onViewDetachedFromWindow(View v) {
-                binding.recyclerView.setNestedScrollingEnabled(true);
+                var layoutParams = (LayoutParams) modulesFragment.subtitleCollapsingToolbarLayout.getLayoutParams();
+                layoutParams.setScrollFlags(LayoutParams.SCROLL_FLAG_SCROLL | LayoutParams.SCROLL_FLAG_EXIT_UNTIL_COLLAPSED);
+                modulesFragment.subtitleCollapsingToolbarLayout.setLayoutParams(layoutParams);
             }
         };
 
         @Nullable
         @Override
         public View onCreateView(@NonNull LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
-            ModulesFragment fragment = (ModulesFragment) getParentFragment();
+            modulesFragment = (ModulesFragment) getParentFragment();
             Bundle arguments = getArguments();
-            if (fragment == null || arguments == null) {
+            if (modulesFragment == null || arguments == null) {
                 return null;
             }
             int userId = arguments.getInt("user_id");
             binding = SwiperefreshRecyclerviewBinding.inflate(getLayoutInflater(), container, false);
-            adapter = fragment.adapters.get(userId);
+            adapter = modulesFragment.adapters.get(userId);
             binding.recyclerView.setAdapter(adapter);
             binding.recyclerView.setLayoutManager(new LinearLayoutManager(requireActivity()));
             binding.swipeRefreshLayout.setOnRefreshListener(adapter::fullRefresh);
@@ -398,17 +412,17 @@ public class ModulesFragment extends BaseFragment implements ModuleUtil.ModuleLi
         }
 
         void attachListeners() {
-            var parent = getParentFragment();
-            if (parent instanceof ModulesFragment) {
-                var moduleFragment = (ModulesFragment) parent;
+            if (modulesFragment != null) {
+                var moduleFragment = (ModulesFragment) modulesFragment;
                 binding.recyclerView.getBorderViewDelegate().setBorderVisibilityChangedListener((top, oldTop, bottom, oldBottom) -> moduleFragment.binding.appBar.setLifted(!top));
                 moduleFragment.binding.appBar.setLifted(!binding.recyclerView.getBorderViewDelegate().isShowingTopBorder());
                 moduleFragment.searchView.addOnAttachStateChangeListener(searchViewLocker);
-                binding.recyclerView.setNestedScrollingEnabled(moduleFragment.searchView.isIconified());
                 View.OnClickListener l = v -> {
                     if (moduleFragment.searchView.isIconified()) {
                         binding.recyclerView.smoothScrollToPosition(0);
-                        moduleFragment.binding.appBar.setExpanded(true, true);
+                        var layoutParams = (LayoutParams) moduleFragment.subtitleCollapsingToolbarLayout.getLayoutParams();
+                        layoutParams.setScrollFlags(LayoutParams.SCROLL_FLAG_SCROLL | LayoutParams.SCROLL_FLAG_EXIT_UNTIL_COLLAPSED);
+                        moduleFragment.subtitleCollapsingToolbarLayout.setLayoutParams(layoutParams);
                     }
                 };
                 moduleFragment.binding.clickView.setOnClickListener(l);
@@ -422,7 +436,6 @@ public class ModulesFragment extends BaseFragment implements ModuleUtil.ModuleLi
             if (parent instanceof ModulesFragment) {
                 var moduleFragment = (ModulesFragment) parent;
                 moduleFragment.searchView.removeOnAttachStateChangeListener(searchViewLocker);
-                binding.recyclerView.setNestedScrollingEnabled(true);
             }
         }
 
