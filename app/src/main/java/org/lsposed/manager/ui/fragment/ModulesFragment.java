@@ -419,10 +419,11 @@ public class ModulesFragment extends BaseFragment implements ModuleUtil.ModuleLi
                 moduleFragment.searchView.addOnAttachStateChangeListener(searchViewLocker);
                 View.OnClickListener l = v -> {
                     if (moduleFragment.searchView.isIconified()) {
-                        binding.recyclerView.smoothScrollToPosition(0);
                         var layoutParams = (LayoutParams) moduleFragment.subtitleCollapsingToolbarLayout.getLayoutParams();
                         layoutParams.setScrollFlags(LayoutParams.SCROLL_FLAG_SCROLL | LayoutParams.SCROLL_FLAG_EXIT_UNTIL_COLLAPSED);
                         moduleFragment.subtitleCollapsingToolbarLayout.setLayoutParams(layoutParams);
+                        binding.recyclerView.smoothScrollToPosition(0);
+                        moduleFragment.binding.appBar.setExpanded(true, true);
                     }
                 };
                 moduleFragment.binding.clickView.setOnClickListener(l);

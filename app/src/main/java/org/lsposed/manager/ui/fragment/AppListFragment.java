@@ -116,10 +116,11 @@ public class AppListFragment extends BaseFragment implements MenuProvider {
         setupToolbar(binding.toolbar, binding.clickView, title, R.menu.menu_app_list, view -> requireActivity().getOnBackPressedDispatcher().onBackPressed());
         View.OnClickListener l = v -> {
             if (searchView.isIconified()) {
-                binding.recyclerView.smoothScrollToPosition(0);
                 var layoutParams = (LayoutParams) subtitleCollapsingToolbarLayout.getLayoutParams();
                 layoutParams.setScrollFlags(LayoutParams.SCROLL_FLAG_SCROLL | LayoutParams.SCROLL_FLAG_EXIT_UNTIL_COLLAPSED);
                 subtitleCollapsingToolbarLayout.setLayoutParams(layoutParams);
+                binding.recyclerView.smoothScrollToPosition(0);
+                binding.appBar.setExpanded(true, true);
             }
         };
         binding.toolbar.setOnClickListener(l);
