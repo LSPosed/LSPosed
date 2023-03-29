@@ -32,13 +32,18 @@ import android.content.pm.ShortcutInfo;
 import android.content.pm.ShortcutManager;
 import android.graphics.Bitmap;
 import android.graphics.Canvas;
+import android.graphics.Rect;
 import android.graphics.drawable.AdaptiveIconDrawable;
 import android.graphics.drawable.BitmapDrawable;
 import android.graphics.drawable.Drawable;
 import android.graphics.drawable.Icon;
 import android.graphics.drawable.LayerDrawable;
 import android.os.Build;
+import android.util.DisplayMetrics;
 import android.util.Log;
+import android.util.TypedValue;
+
+import androidx.annotation.NonNull;
 
 import org.lsposed.manager.App;
 import org.lsposed.manager.R;
@@ -49,23 +54,106 @@ import java.util.UUID;
 
 public class ShortcutUtil {
     private static final String SHORTCUT_ID = "org.lsposed.manager.shortcut";
+    static int iconBitmapSize = pxFromDp(48, App.getInstance().getResources().getDisplayMetrics());
+
+    public static int pxFromDp(float size, DisplayMetrics metrics) {
+        return pxFromDp(size, metrics, 1f);
+    }
+
+    public static int roundPxValueFromFloat(float value) {
+        float fraction = (float) (value - Math.floor(value));
+        if (Math.abs(0.5f - fraction) < 0.0001f) {
+            // Note: we add for negative values as well, as Math.round brings -.5 to the next
+            // "highest" value, e.g. Math.round(-2.5) == -2 [i.e. (int)Math.floor(a + 0.5d)]
+            value += 0.0001f;
+        }
+        return Math.round(value);
+    }
+
+    public static int pxFromDp(float size, DisplayMetrics metrics, float scale) {
+        float value = scale * TypedValue.applyDimension(TypedValue.COMPLEX_UNIT_DIP, size, metrics);
+        return size < 0 ? -1 : roundPxValueFromFloat(value);
+    }
+
+    private static void drawIconBitmap(@NonNull Canvas canvas, @NonNull final Drawable icon,
+                                       final float scale) {
+        final int size = iconBitmapSize;
+        var mOldBounds = new Rect();
+        mOldBounds.set(icon.getBounds());
+
+        if (icon instanceof AdaptiveIconDrawable) {
+            int offset = Math.max((int) Math.ceil(1.68f / 48 * size),
+                    Math.round(size * (1 - scale) / 2));
+            // b/211896569: AdaptiveIconDrawable do not work properly for non top-left bounds
+            icon.setBounds(0, 0, size - offset - offset, size - offset - offset);
+            int count = canvas.save();
+            canvas.translate(offset, offset);
+
+            icon.draw(canvas);
+
+            canvas.restoreToCount(count);
+        } else {
+            if (icon instanceof BitmapDrawable) {
+                BitmapDrawable bitmapDrawable = (BitmapDrawable) icon;
+                Bitmap b = bitmapDrawable.getBitmap();
+                if (b != null && b.getDensity() == Bitmap.DENSITY_NONE) {
+                    bitmapDrawable.setTargetDensity(App.getInstance().getResources().getDisplayMetrics());
+                }
+            }
+            int width = size;
+            int height = size;
+
+            int intrinsicWidth = icon.getIntrinsicWidth();
+            int intrinsicHeight = icon.getIntrinsicHeight();
+            if (intrinsicWidth > 0 && intrinsicHeight > 0) {
+                // Scale the icon proportionally to the icon dimensions
+                final float ratio = (float) intrinsicWidth / intrinsicHeight;
+                if (intrinsicWidth > intrinsicHeight) {
+                    height = (int) (width / ratio);
+                } else if (intrinsicHeight > intrinsicWidth) {
+                    width = (int) (height * ratio);
+                }
+            }
+            final int left = (size - width) / 2;
+            final int top = (size - height) / 2;
+            icon.setBounds(left, top, left + width, top + height);
+
+            canvas.save();
+            canvas.scale(scale, scale, size / 2, size / 2);
+            icon.draw(canvas);
+            canvas.restore();
+        }
+        icon.setBounds(mOldBounds);
+    }
 
     private static Bitmap getBitmap(Context context, int id) {
         var r = context.getResources();
         var res = r.getDrawable(id, context.getTheme());
-        if (res instanceof BitmapDrawable) {
+        if (Build.VERSION.SDK_INT < Build.VERSION_CODES.TIRAMISU && res instanceof BitmapDrawable) {
             return ((BitmapDrawable) res).getBitmap();
         } else {
+            var themed = App.getPreferences().getBoolean("use_themed_icon", false);
             if (res instanceof AdaptiveIconDrawable) {
-                var layers = new Drawable[]{((AdaptiveIconDrawable) res).getBackground(),
-                        ((AdaptiveIconDrawable) res).getForeground()};
-                res = new LayerDrawable(layers);
+                Drawable[] layers;
+                if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.TIRAMISU && themed) {
+                    var monochromeIconFactory = new MonochromeIconFactory(iconBitmapSize);
+                    res = monochromeIconFactory.wrap(res);
+                } else {
+                    layers = new Drawable[]{((AdaptiveIconDrawable) res).getBackground(),
+                            ((AdaptiveIconDrawable) res).getForeground()};
+                    res = new LayerDrawable(layers);
+                }
             }
-            var bitmap = Bitmap.createBitmap(res.getIntrinsicWidth(),
-                    res.getIntrinsicHeight(), Bitmap.Config.ARGB_8888);
+            Bitmap bitmap;
+            if (themed)
+                bitmap = Bitmap.createBitmap(iconBitmapSize, iconBitmapSize, Bitmap.Config.ALPHA_8);
+            else
+                bitmap = Bitmap.createBitmap(res.getIntrinsicWidth(), res.getIntrinsicHeight(), Bitmap.Config.ARGB_8888);
             var canvas = new Canvas(bitmap);
             res.setBounds(0, 0, canvas.getWidth(), canvas.getHeight());
             res.draw(canvas);
+//            drawIconBitmap(canvas, res, 1f);
+            canvas.setBitmap(null);
             return bitmap;
         }
     }

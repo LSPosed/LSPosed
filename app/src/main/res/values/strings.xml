@@ -191,6 +191,7 @@
     <string name="dns_over_http_summary">Workaround DNS poisoning in some nations</string>
     <string name="theme_color">Theme color</string>
     <string name="theme_color_system">System theme color</string>
+    <string name="icon_color_themed">Themed icon</string>
     <string name="settings_show_hidden_icon_apps_enabled">Force apps to show launcher icons</string>
     <string name="settings_show_hidden_icon_apps_enabled_summary">After Android 10, apps are not allowed to hide their launcher icons. Turn off the toggle to disable this system feature.</string>
     <string name="settings_group_system">System</string>
