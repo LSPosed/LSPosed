@@ -116,10 +116,14 @@ public class AppListFragment extends BaseFragment implements MenuProvider {
         setupToolbar(binding.toolbar, binding.clickView, title, R.menu.menu_app_list, view -> requireActivity().getOnBackPressedDispatcher().onBackPressed());
         View.OnClickListener l = v -> {
             if (searchView.isIconified()) {
+                // Click to scroll to top
+                // Unlock the toolbar scroll
                 var layoutParams = (LayoutParams) subtitleCollapsingToolbarLayout.getLayoutParams();
                 layoutParams.setScrollFlags(LayoutParams.SCROLL_FLAG_SCROLL | LayoutParams.SCROLL_FLAG_EXIT_UNTIL_COLLAPSED);
                 subtitleCollapsingToolbarLayout.setLayoutParams(layoutParams);
+                // Scroll to top
                 binding.recyclerView.smoothScrollToPosition(0);
+                // Expand the toolbar
                 binding.appBar.setExpanded(true, true);
             }
         };
@@ -213,14 +217,17 @@ public class AppListFragment extends BaseFragment implements MenuProvider {
         searchView.addOnAttachStateChangeListener(new View.OnAttachStateChangeListener() {
             @Override
             public void onViewAttachedToWindow(View arg0) {
+                // Lock the toolbar scroll when search view attached
                 var layoutParams = (LayoutParams) subtitleCollapsingToolbarLayout.getLayoutParams();
                 layoutParams.setScrollFlags(LayoutParams.SCROLL_FLAG_NO_SCROLL);
                 subtitleCollapsingToolbarLayout.setLayoutParams(layoutParams);
-                binding.appBar.setExpanded(false, true);
+                // Collapse the toolbar
+                binding.appBar.setExpanded(false, false);
             }
 
             @Override
             public void onViewDetachedFromWindow(View v) {
+                // Unlock the toolbar scroll when search view detached
                 var layoutParams = (LayoutParams) subtitleCollapsingToolbarLayout.getLayoutParams();
                 layoutParams.setScrollFlags(LayoutParams.SCROLL_FLAG_SCROLL | LayoutParams.SCROLL_FLAG_EXIT_UNTIL_COLLAPSED);
                 subtitleCollapsingToolbarLayout.setLayoutParams(layoutParams);

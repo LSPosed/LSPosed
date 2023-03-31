@@ -200,14 +200,17 @@ public class ModulesFragment extends BaseFragment implements ModuleUtil.ModuleLi
         searchView.addOnAttachStateChangeListener(new View.OnAttachStateChangeListener() {
             @Override
             public void onViewAttachedToWindow(View arg0) {
+                // Lock the toolbar scroll when search view attached
                 var layoutParams = (LayoutParams) subtitleCollapsingToolbarLayout.getLayoutParams();
                 layoutParams.setScrollFlags(LayoutParams.SCROLL_FLAG_NO_SCROLL);
                 subtitleCollapsingToolbarLayout.setLayoutParams(layoutParams);
-                binding.appBar.setExpanded(false, true);
+                // Collapse the toolbar
+                binding.appBar.setExpanded(false, false);
             }
 
             @Override
             public void onViewDetachedFromWindow(View v) {
+                // Unlock the toolbar scroll when search view detached
                 var layoutParams = (LayoutParams) subtitleCollapsingToolbarLayout.getLayoutParams();
                 layoutParams.setScrollFlags(LayoutParams.SCROLL_FLAG_SCROLL | LayoutParams.SCROLL_FLAG_EXIT_UNTIL_COLLAPSED);
                 subtitleCollapsingToolbarLayout.setLayoutParams(layoutParams);
@@ -377,14 +380,17 @@ public class ModulesFragment extends BaseFragment implements ModuleUtil.ModuleLi
         private final View.OnAttachStateChangeListener searchViewLocker = new View.OnAttachStateChangeListener() {
             @Override
             public void onViewAttachedToWindow(View v) {
+                // Lock the toolbar scroll when search view attached
                 var layoutParams = (LayoutParams) modulesFragment.subtitleCollapsingToolbarLayout.getLayoutParams();
                 layoutParams.setScrollFlags(LayoutParams.SCROLL_FLAG_NO_SCROLL);
                 modulesFragment.subtitleCollapsingToolbarLayout.setLayoutParams(layoutParams);
-                modulesFragment.binding.appBar.setExpanded(false, true);
+                // Collapse the toolbar
+                modulesFragment.binding.appBar.setExpanded(false, false);
             }
 
             @Override
             public void onViewDetachedFromWindow(View v) {
+                // Unlock the toolbar scroll when search view detached
                 var layoutParams = (LayoutParams) modulesFragment.subtitleCollapsingToolbarLayout.getLayoutParams();
                 layoutParams.setScrollFlags(LayoutParams.SCROLL_FLAG_SCROLL | LayoutParams.SCROLL_FLAG_EXIT_UNTIL_COLLAPSED);
                 modulesFragment.subtitleCollapsingToolbarLayout.setLayoutParams(layoutParams);
@@ -413,21 +419,24 @@ public class ModulesFragment extends BaseFragment implements ModuleUtil.ModuleLi
 
         void attachListeners() {
             if (modulesFragment != null) {
-                var moduleFragment = (ModulesFragment) modulesFragment;
-                binding.recyclerView.getBorderViewDelegate().setBorderVisibilityChangedListener((top, oldTop, bottom, oldBottom) -> moduleFragment.binding.appBar.setLifted(!top));
-                moduleFragment.binding.appBar.setLifted(!binding.recyclerView.getBorderViewDelegate().isShowingTopBorder());
-                moduleFragment.searchView.addOnAttachStateChangeListener(searchViewLocker);
+                binding.recyclerView.getBorderViewDelegate().setBorderVisibilityChangedListener((top, oldTop, bottom, oldBottom) -> modulesFragment.binding.appBar.setLifted(!top));
+                modulesFragment.binding.appBar.setLifted(!binding.recyclerView.getBorderViewDelegate().isShowingTopBorder());
+                modulesFragment.searchView.addOnAttachStateChangeListener(searchViewLocker);
                 View.OnClickListener l = v -> {
-                    if (moduleFragment.searchView.isIconified()) {
-                        var layoutParams = (LayoutParams) moduleFragment.subtitleCollapsingToolbarLayout.getLayoutParams();
+                    if (modulesFragment.searchView.isIconified()) {
+                        // Click to scroll to top
+                        // Unlock the toolbar scroll
+                        var layoutParams = (LayoutParams) modulesFragment.subtitleCollapsingToolbarLayout.getLayoutParams();
                         layoutParams.setScrollFlags(LayoutParams.SCROLL_FLAG_SCROLL | LayoutParams.SCROLL_FLAG_EXIT_UNTIL_COLLAPSED);
-                        moduleFragment.subtitleCollapsingToolbarLayout.setLayoutParams(layoutParams);
+                        modulesFragment.subtitleCollapsingToolbarLayout.setLayoutParams(layoutParams);
+                        // Scroll to top
                         binding.recyclerView.smoothScrollToPosition(0);
-                        moduleFragment.binding.appBar.setExpanded(true, true);
+                        // Expand the toolbar
+                        modulesFragment.binding.appBar.setExpanded(true, true);
                     }
                 };
-                moduleFragment.binding.clickView.setOnClickListener(l);
-                moduleFragment.binding.toolbar.setOnClickListener(l);
+                modulesFragment.binding.clickView.setOnClickListener(l);
+                modulesFragment.binding.toolbar.setOnClickListener(l);
             }
         }
 
