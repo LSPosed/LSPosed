@@ -1,6 +1,7 @@
 package com.google.android.material.internal;
 
 import android.animation.TimeInterpolator;
+import android.annotation.SuppressLint;
 import android.content.res.ColorStateList;
 import android.graphics.Bitmap;
 import android.graphics.Canvas;
@@ -9,7 +10,6 @@ import android.graphics.Paint;
 import android.graphics.Rect;
 import android.graphics.RectF;
 import android.graphics.Typeface;
-import android.os.Build;
 import android.text.TextPaint;
 import android.text.TextUtils;
 import android.view.Gravity;
@@ -32,11 +32,12 @@ import com.google.android.material.resources.TextAppearance;
  *
  * @see CollapsingTextHelper
  */
+@SuppressLint("RestrictedApi")
 public final class SubtitleCollapsingTextHelper {
 
     // Pre-JB-MR2 doesn't support HW accelerated canvas scaled title so we will workaround it
     // by using our own texture
-    private static final boolean USE_SCALING_TEXTURE = Build.VERSION.SDK_INT < 18;
+    private static final boolean USE_SCALING_TEXTURE = false;
 
     private static final boolean DEBUG_DRAW = false;
     @NonNull
@@ -91,8 +92,8 @@ public final class SubtitleCollapsingTextHelper {
     @Nullable
     private Bitmap expandedTitleTexture, expandedSubtitleTexture;
     private Paint titleTexturePaint, subtitleTexturePaint;
-    private float titleTextureAscent, subtitleTextureAscent;
-    private float titleTextureDescent, subtitleTextureDescent;
+    private float titleTextureAscent;
+    private float titleTextureDescent;
 
     private float titleScale, subtitleScale;
     private float currentTitleTextSize, currentSubtitleTextSize;
@@ -224,7 +225,7 @@ public final class SubtitleCollapsingTextHelper {
     }
 
     public void getCollapsedTitleTextActualBounds(@NonNull RectF bounds) {
-        boolean isRtl = calculateIsRtl(title);
+        boolean isRtl = calculateIsRtl(title != null ? title : "");
 
         bounds.left = !isRtl ? collapsedBounds.left : collapsedBounds.right - calculateCollapsedTitleTextWidth();
         bounds.top = collapsedBounds.top;
@@ -241,7 +242,7 @@ public final class SubtitleCollapsingTextHelper {
     }
 
     public void getCollapsedSubtitleTextActualBounds(@NonNull RectF bounds) {
-        boolean isRtl = calculateIsRtl(subtitle);
+        boolean isRtl = calculateIsRtl(subtitle != null ? subtitle : "");
 
         bounds.left = !isRtl ? collapsedBounds.left : collapsedBounds.right - calculateCollapsedSubtitleTextWidth();
         bounds.top = collapsedBounds.top;
@@ -350,12 +351,7 @@ public final class SubtitleCollapsingTextHelper {
         if (collapsedTitleFontCallback != null) {
             collapsedTitleFontCallback.cancel();
         }
-        collapsedTitleFontCallback = new CancelableFontCallback(new CancelableFontCallback.ApplyFont() {
-            @Override
-            public void apply(Typeface font) {
-                setCollapsedTitleTypeface(font);
-            }
-        }, textAppearance.getFallbackFont());
+        collapsedTitleFontCallback = new CancelableFontCallback(this::setCollapsedTitleTypeface, textAppearance.getFallbackFont());
         textAppearance.getFontAsync(view.getContext(), collapsedTitleFontCallback);
 
         recalculate();
@@ -380,12 +376,7 @@ public final class SubtitleCollapsingTextHelper {
         if (expandedTitleFontCallback != null) {
             expandedTitleFontCallback.cancel();
         }
-        expandedTitleFontCallback = new CancelableFontCallback(new CancelableFontCallback.ApplyFont() {
-            @Override
-            public void apply(Typeface font) {
-                setExpandedTitleTypeface(font);
-            }
-        }, textAppearance.getFallbackFont());
+        expandedTitleFontCallback = new CancelableFontCallback(this::setExpandedTitleTypeface, textAppearance.getFallbackFont());
         textAppearance.getFontAsync(view.getContext(), expandedTitleFontCallback);
 
         recalculate();
@@ -411,12 +402,7 @@ public final class SubtitleCollapsingTextHelper {
         if (collapsedSubtitleFontCallback != null) {
             collapsedSubtitleFontCallback.cancel();
         }
-        collapsedSubtitleFontCallback = new CancelableFontCallback(new CancelableFontCallback.ApplyFont() {
-            @Override
-            public void apply(Typeface font) {
-                setCollapsedSubtitleTypeface(font);
-            }
-        }, textAppearance.getFallbackFont());
+        collapsedSubtitleFontCallback = new CancelableFontCallback(this::setCollapsedSubtitleTypeface, textAppearance.getFallbackFont());
         textAppearance.getFontAsync(view.getContext(), collapsedSubtitleFontCallback);
 
         recalculate();
@@ -441,11 +427,8 @@ public final class SubtitleCollapsingTextHelper {
         if (expandedSubtitleFontCallback != null) {
             expandedSubtitleFontCallback.cancel();
         }
-        expandedSubtitleFontCallback = new CancelableFontCallback(new CancelableFontCallback.ApplyFont() {
-            @Override
-            public void apply(Typeface font) {
-                if (font != null) setExpandedSubtitleTypeface(font);
-            }
+        expandedSubtitleFontCallback = new CancelableFontCallback(font -> {
+            if (font != null) setExpandedSubtitleTypeface(font);
         }, null);
         textAppearance.getFontAsync(view.getContext(), expandedSubtitleFontCallback);
 
@@ -580,7 +563,7 @@ public final class SubtitleCollapsingTextHelper {
         }
     }
 
-    public final boolean setState(final int[] state) {
+    public boolean setState(final int[] state) {
         this.state = state;
 
         if (isStateful()) {
@@ -591,7 +574,7 @@ public final class SubtitleCollapsingTextHelper {
         return false;
     }
 
-    public final boolean isStateful() {
+    public boolean isStateful() {
         return (collapsedTitleTextColor != null && collapsedTitleTextColor.isStateful())
                 || (expandedTitleTextColor != null && expandedTitleTextColor.isStateful());
     }
@@ -1123,8 +1106,8 @@ public final class SubtitleCollapsingTextHelper {
         }
 
         calculateOffsets(0f);
-        subtitleTextureAscent = subtitleTextPaint.ascent();
-        subtitleTextureDescent = subtitleTextPaint.descent();
+        float subtitleTextureAscent = subtitleTextPaint.ascent();
+        float subtitleTextureDescent = subtitleTextPaint.descent();
 
         final int w = Math.round(subtitleTextPaint.measureText(subtitleToDraw, 0, subtitleToDraw.length()));
         final int h = Math.round(subtitleTextureDescent - subtitleTextureAscent);
@@ -1156,7 +1139,6 @@ public final class SubtitleCollapsingTextHelper {
     /**
      * Set the title to display
      *
-     * @param title
      */
     public void setTitle(@Nullable CharSequence title) {
         if (title == null || !title.equals(this.title)) {
@@ -1175,7 +1157,6 @@ public final class SubtitleCollapsingTextHelper {
     /**
      * Set the subtitle to display
      *
-     * @param subtitle
      */
     public void setSubtitle(@Nullable CharSequence subtitle) {
         if (subtitle == null || !subtitle.equals(this.subtitle)) {

@@ -15,14 +15,12 @@
   ~ along with LSPosed.  If not, see <https://www.gnu.org/licenses/>.
   ~
   ~ Copyright (C) 2020 EdXposed Contributors
-  ~ Copyright (C) 2021 LSPosed Contributors
+  ~ Copyright (C) 2023 LSPosed Contributors
   -->
 
 <resources>
     <attr name="colorNormal" format="color" />
     <attr name="colorInstall" format="color" />
-
-
     <declare-styleable name="SubtitleCollapsingToolbarLayout">
         <!-- Specifies extra space on the start, top, end and bottom sides of the the expanded title text.
              Margin values should be positive,
@@ -81,5 +79,4 @@
         <!-- The subtitle to show when titleEnabled is set to true. -->
         <attr name="subtitle" />
     </declare-styleable>
-
 </resources>
