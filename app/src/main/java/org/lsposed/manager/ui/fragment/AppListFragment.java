@@ -213,27 +213,29 @@ public class AppListFragment extends BaseFragment implements MenuProvider {
     @Override
     public void onPrepareMenu(@NonNull Menu menu) {
         searchView = (SearchView) menu.findItem(R.id.menu_search).getActionView();
-        searchView.setOnQueryTextListener(searchListener);
-        searchView.addOnAttachStateChangeListener(new View.OnAttachStateChangeListener() {
-            @Override
-            public void onViewAttachedToWindow(View arg0) {
-                // Lock the toolbar scroll when search view attached
-                var layoutParams = (LayoutParams) subtitleCollapsingToolbarLayout.getLayoutParams();
-                layoutParams.setScrollFlags(LayoutParams.SCROLL_FLAG_NO_SCROLL);
-                subtitleCollapsingToolbarLayout.setLayoutParams(layoutParams);
-                // Collapse the toolbar
-                binding.appBar.setExpanded(false, false);
-            }
+        if (searchView != null) {
+            searchView.setOnQueryTextListener(searchListener);
+            searchView.addOnAttachStateChangeListener(new View.OnAttachStateChangeListener() {
+                @Override
+                public void onViewAttachedToWindow(@NonNull View arg0) {
+                    // Lock the toolbar scroll when search view attached
+                    var layoutParams = (LayoutParams) subtitleCollapsingToolbarLayout.getLayoutParams();
+                    layoutParams.setScrollFlags(LayoutParams.SCROLL_FLAG_NO_SCROLL);
+                    subtitleCollapsingToolbarLayout.setLayoutParams(layoutParams);
+                    // Collapse the toolbar
+                    binding.appBar.setExpanded(false, false);
+                }
 
-            @Override
-            public void onViewDetachedFromWindow(View v) {
-                // Unlock the toolbar scroll when search view detached
-                var layoutParams = (LayoutParams) subtitleCollapsingToolbarLayout.getLayoutParams();
-                layoutParams.setScrollFlags(LayoutParams.SCROLL_FLAG_SCROLL | LayoutParams.SCROLL_FLAG_EXIT_UNTIL_COLLAPSED);
-                subtitleCollapsingToolbarLayout.setLayoutParams(layoutParams);
-            }
-        });
-        searchView.findViewById(androidx.appcompat.R.id.search_edit_frame).setLayoutDirection(View.LAYOUT_DIRECTION_INHERIT);
+                @Override
+                public void onViewDetachedFromWindow(@NonNull View v) {
+                    // Unlock the toolbar scroll when search view detached
+                    var layoutParams = (LayoutParams) subtitleCollapsingToolbarLayout.getLayoutParams();
+                    layoutParams.setScrollFlags(LayoutParams.SCROLL_FLAG_SCROLL | LayoutParams.SCROLL_FLAG_EXIT_UNTIL_COLLAPSED);
+                    subtitleCollapsingToolbarLayout.setLayoutParams(layoutParams);
+                }
+            });
+            searchView.findViewById(androidx.appcompat.R.id.search_edit_frame).setLayoutDirection(View.LAYOUT_DIRECTION_INHERIT);
+        }
         scopeAdapter.onPrepareOptionsMenu(menu);
     }
 

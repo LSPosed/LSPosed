@@ -196,10 +196,11 @@ public class ModulesFragment extends BaseFragment implements ModuleUtil.ModuleLi
     @Override
     public void onPrepareMenu(Menu menu) {
         searchView = (SearchView) menu.findItem(R.id.menu_search).getActionView();
+        if (searchView == null) return;
         searchView.setOnQueryTextListener(searchListener);
         searchView.addOnAttachStateChangeListener(new View.OnAttachStateChangeListener() {
             @Override
-            public void onViewAttachedToWindow(View arg0) {
+            public void onViewAttachedToWindow(@NonNull View arg0) {
                 // Lock the toolbar scroll when search view attached
                 var layoutParams = (LayoutParams) subtitleCollapsingToolbarLayout.getLayoutParams();
                 layoutParams.setScrollFlags(LayoutParams.SCROLL_FLAG_NO_SCROLL);
@@ -209,7 +210,7 @@ public class ModulesFragment extends BaseFragment implements ModuleUtil.ModuleLi
             }
 
             @Override
-            public void onViewDetachedFromWindow(View v) {
+            public void onViewDetachedFromWindow(@NonNull View v) {
                 // Unlock the toolbar scroll when search view detached
                 var layoutParams = (LayoutParams) subtitleCollapsingToolbarLayout.getLayoutParams();
                 layoutParams.setScrollFlags(LayoutParams.SCROLL_FLAG_SCROLL | LayoutParams.SCROLL_FLAG_EXIT_UNTIL_COLLAPSED);
@@ -379,7 +380,7 @@ public class ModulesFragment extends BaseFragment implements ModuleUtil.ModuleLi
 
         private final View.OnAttachStateChangeListener searchViewLocker = new View.OnAttachStateChangeListener() {
             @Override
-            public void onViewAttachedToWindow(View v) {
+            public void onViewAttachedToWindow(@NonNull View v) {
                 // Lock the toolbar scroll when search view attached
                 var layoutParams = (LayoutParams) modulesFragment.subtitleCollapsingToolbarLayout.getLayoutParams();
                 layoutParams.setScrollFlags(LayoutParams.SCROLL_FLAG_NO_SCROLL);
@@ -389,7 +390,7 @@ public class ModulesFragment extends BaseFragment implements ModuleUtil.ModuleLi
             }
 
             @Override
-            public void onViewDetachedFromWindow(View v) {
+            public void onViewDetachedFromWindow(@NonNull View v) {
                 // Unlock the toolbar scroll when search view detached
                 var layoutParams = (LayoutParams) modulesFragment.subtitleCollapsingToolbarLayout.getLayoutParams();
                 layoutParams.setScrollFlags(LayoutParams.SCROLL_FLAG_SCROLL | LayoutParams.SCROLL_FLAG_EXIT_UNTIL_COLLAPSED);
