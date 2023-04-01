@@ -273,17 +273,13 @@ void zygisk_companion_entry(int client) { func(client); }
 
         template <class T>
         void entry_impl(api_table *table, JNIEnv *env) {
-            static T module{};
+            static Api api;
+            api.impl = table;
+            static T module;
             ModuleBase *m = &module;
             static module_abi abi(m);
-            static bool loaded = table->registerModule(table, &abi);
-            if (!loaded) return;
-            [[maybe_unused]] static Api api = [&] {
-                Api api;
-                api.impl = table;
-                m->onLoad(&api, env);
-                return api;
-            }();
+            if (!table->registerModule(table, &abi)) return;
+            m->onLoad(&api, env);
         }
 
     } // namespace internal
