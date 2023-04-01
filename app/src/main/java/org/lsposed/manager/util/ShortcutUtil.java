@@ -38,7 +38,8 @@ import android.graphics.drawable.Drawable;
 import android.graphics.drawable.Icon;
 import android.graphics.drawable.LayerDrawable;
 import android.os.Build;
-import android.util.Log;
+
+import androidx.annotation.Nullable;
 
 import org.lsposed.manager.App;
 import org.lsposed.manager.R;
@@ -49,6 +50,8 @@ import java.util.UUID;
 
 public class ShortcutUtil {
     private static final String SHORTCUT_ID = "org.lsposed.manager.shortcut";
+    private static boolean shortcutPinned = false;
+    private static String defaultLauncherPackageName = null;
 
     private static Bitmap getBitmap(Context context, int id) {
         var r = context.getResources();
@@ -114,16 +117,12 @@ public class ShortcutUtil {
                 if (!uuid.equals(intent.getAction())) return;
                 context.unregisterReceiver(this);
                 task.run();
+                defaultLauncherPackageName = getDefaultLauncherPackageName(context);
+                shortcutPinned = true;
             }
         };
         context.registerReceiver(receiver, filter, permission,
                 null/* main thread */, Context.RECEIVER_NOT_EXPORTED);
-
-        App.getMainHandler().postDelayed(() -> {
-            if (isLaunchShortcutPinned()) {
-                task.run();
-            }
-        }, 1000);
 
         var intent = new Intent(uuid);
         int flags = PendingIntent.FLAG_UPDATE_CURRENT | PendingIntent.FLAG_IMMUTABLE;
@@ -144,7 +143,7 @@ public class ShortcutUtil {
         return builder;
     }
 
-    public static boolean isRequestPinShortcutSupported(Context context) {
+    public static boolean isRequestPinShortcutSupported(Context context) throws RuntimeException {
         var sm = context.getSystemService(ShortcutManager.class);
         return sm.isRequestPinShortcutSupported();
     }
@@ -160,7 +159,6 @@ public class ShortcutUtil {
 
     public static boolean updateShortcut() {
         if (!isLaunchShortcutPinned()) return false;
-        Log.d(App.TAG, "update shortcut");
         var context = App.getInstance();
         var sm = context.getSystemService(ShortcutManager.class);
         List<ShortcutInfo> shortcutInfoList = new ArrayList<>();
@@ -179,5 +177,23 @@ public class ShortcutUtil {
             }
         }
         return pinned;
+    }
+
+    public static boolean shouldAllowPinShortcut(Context context) {
+        if (shortcutPinned)
+            if (defaultLauncherPackageName == null
+                    || !defaultLauncherPackageName.equals(getDefaultLauncherPackageName(context)))
+                shortcutPinned = false;
+        defaultLauncherPackageName = getDefaultLauncherPackageName(context);
+        if (!isLaunchShortcutPinned()) return true;
+        return !shortcutPinned;
+    }
+
+    @Nullable
+    private static String getDefaultLauncherPackageName(Context context) {
+        Intent intent = new Intent(Intent.ACTION_MAIN);
+        intent.addCategory(Intent.CATEGORY_HOME);
+        var resolveInfo = context.getPackageManager().resolveActivity(intent, PackageManager.MATCH_DEFAULT_ONLY);
+        return resolveInfo.activityInfo.packageName;
     }
 }

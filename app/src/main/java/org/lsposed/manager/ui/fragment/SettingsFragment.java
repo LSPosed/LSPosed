@@ -177,14 +177,13 @@ public class SettingsFragment extends BaseFragment {
 
             Preference shortcut = findPreference("add_shortcut");
             if (shortcut != null) {
+                shortcut.setEnabled(ShortcutUtil.shouldAllowPinShortcut(requireContext()));
                 shortcut.setVisible(App.isParasitic);
-                if (ShortcutUtil.isLaunchShortcutPinned()) {
+                if (!ShortcutUtil.isRequestPinShortcutSupported(requireContext())) {
                     shortcut.setEnabled(false);
+                    shortcut.setSummary(R.string.settings_unsupported_pin_shortcut_summary);
+                } else if (!ShortcutUtil.shouldAllowPinShortcut(requireContext()))
                     shortcut.setSummary(R.string.settings_created_shortcut_summary);
-                } else {
-                    shortcut.setEnabled(true);
-                    shortcut.setSummary(R.string.settings_create_shortcut_summary);
-                }
                 shortcut.setOnPreferenceClickListener(preference -> {
                     if (!ShortcutUtil.requestPinLaunchShortcut(() -> {
                         shortcut.setEnabled(false);
@@ -194,6 +193,7 @@ public class SettingsFragment extends BaseFragment {
                             notification.setSummaryOn(R.string.settings_enable_status_notification_summary);
                         }
                         App.getPreferences().edit().putBoolean("never_show_welcome", true).apply();
+                        parentFragment.showHint(R.string.settings_shortcut_pinned_hint, false);
                     })) {
                         parentFragment.showHint(R.string.settings_unsupported_pin_shortcut_summary, true);
                     }
