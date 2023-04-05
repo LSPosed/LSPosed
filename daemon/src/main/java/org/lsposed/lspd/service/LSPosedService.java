@@ -118,8 +118,13 @@ public class LSPosedService extends ILSPosedService.Stub {
         var allUsers = intent.getBooleanExtra(EXTRA_REMOVED_FOR_ALL_USERS, false);
         if (userId == USER_NULL) userId = uid % PER_USER_RANGE;
         Uri uri = intent.getData();
-        String moduleName = (uri != null) ? uri.getSchemeSpecificPart() : ConfigManager.getInstance().getModule(uid).packageName;
-
+        String moduleName = null;
+        if (uri != null) {
+            moduleName = uri.getSchemeSpecificPart();
+        } else {
+            var module = ConfigManager.getInstance().getModule(uid);
+            if (module != null) moduleName = module.packageName;
+        }
         ApplicationInfo applicationInfo = null;
         if (moduleName != null) {
             try {
