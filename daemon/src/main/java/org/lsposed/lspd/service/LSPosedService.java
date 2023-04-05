@@ -125,6 +125,7 @@ public class LSPosedService extends ILSPosedService.Stub {
             var module = ConfigManager.getInstance().getModule(uid);
             if (module != null) moduleName = module.packageName;
         }
+
         ApplicationInfo applicationInfo = null;
         if (moduleName != null) {
             try {
