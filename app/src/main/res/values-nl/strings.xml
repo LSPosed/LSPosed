@@ -192,6 +192,7 @@
     <string name="settings_translation">Deelnemen aan vertaling</string>
     <string name="settings_translation_summary">Help ons %s te vertalen in uw taal</string>
     <string name="settings_create_shortcut_summary">Maak een snelkoppeling die parasitaire manager kan openen</string>
+    <string name="settings_shortcut_pinned_hint">Snelkoppeling vastgezet</string>
     <string name="settings_created_shortcut_summary">Er is een snelkoppeling gemaakt om parasitaire manager te openen</string>
     <string name="settings_unsupported_pin_shortcut_summary">De huidige standaard launcher ondersteunt geen pin-snelkoppelingen</string>
     <string name="settings_enable_status_notification">Statusmelding</string>
