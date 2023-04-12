@@ -196,6 +196,7 @@
     <string name="settings_translation">Weź udział w tłumaczeniu</string>
     <string name="settings_translation_summary">Pomóż nam przetłumaczyć %s na Twój język</string>
     <string name="settings_create_shortcut_summary">Utwórz skrót, za pomocą którego otworzysz menadżera \"pasożytów\"</string>
+    <string name="settings_shortcut_pinned_hint">Skrót przypięty</string>
     <string name="settings_created_shortcut_summary">Skrót do otwierania menadżera pasożytów został utworzony</string>
     <string name="settings_unsupported_pin_shortcut_summary">Bieżący domyślny launcher nie wspiera skrótów pinezkowych</string>
     <string name="settings_enable_status_notification">Status powiadomień</string>
