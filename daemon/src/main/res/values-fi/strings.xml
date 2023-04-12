@@ -12,4 +12,10 @@
     <string name="status_channel_name">LSPosed status</string>
     <string name="lsposed_running_notification_title">LSPosed ladattu</string>
     <string name="lsposed_running_notification_content">Avaa manager napauttamalla ilmoitusta</string>
+    <string name="xposed_module_request_scope_title">Soveltamisalaa koskeva pyyntö</string>
+    <string name="xposed_module_request_scope_content">%1$s käyttäjän %2$s pyynnöistä lisätä %3$s sen toimialueeseen.</string>
+    <string name="scope_channel_name">Laajuuspyyntö</string>
+    <string name="scope_approve">Hyväksy</string>
+    <string name="scope_deny">Kiellä</string>
+    <string name="nerver_ask_again">Älä koskaan kysy</string>
 </resources>
