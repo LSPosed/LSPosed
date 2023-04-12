@@ -192,6 +192,7 @@
     <string name="settings_translation">Partecipa alla traduzione</string>
     <string name="settings_translation_summary">Aiutaci a tradurre %s nella tua lingua</string>
     <string name="settings_create_shortcut_summary">Crea una scorciatoia che può aprire il manager parassitario</string>
+    <string name="settings_shortcut_pinned_hint">Scorciatoia fissata</string>
     <string name="settings_created_shortcut_summary">È stata creata una scorciatoia per aprire il manager parassitario</string>
     <string name="settings_unsupported_pin_shortcut_summary">L\'attuale launcher predefinito non supporta le scorciatoie con i pin</string>
     <string name="settings_enable_status_notification">Notifica di stato</string>
