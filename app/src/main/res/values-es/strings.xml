@@ -49,6 +49,7 @@
     <string name="activated">Activado</string>
     <string name="partial_activated">Parcialmente activado</string>
     <string name="selinux_policy_not_loaded_summary">Selinux policy no está cargado correctamente</string>
+    <string name="selinux_policy_not_loaded"><![CDATA[Algunas funciones no funcionarán.<br/>Informa de ello al desarrollador de <a href="https://github.com/topjohnwu/Magisk/issues"><b>Magisk</b></a> .]]></string>
     <string name="system_inject_fail_summary">System Framework injection failed</string>
     <string name="system_inject_fail"><![CDATA[This is rare and may be caused by <b>Magisk</b> or some low-quality Magisk modules.<br/>Please try to disable Magisk modules other than Riru and LSPosed or submit full log to developers.]]></string>
     <string name="system_prop_incorrect_summary">System prop incorrect</string>
@@ -102,6 +103,7 @@
     <!-- ModulesActivity -->
     <string name="module_empty_description">(sin descripción)</string>
     <string name="warning_xposed_min_version">Este módulo requiere una versión más nueva de Xposed (%d), por lo que no puede ser activado</string>
+    <string name="warning_target_version_higher">Este módulo está diseñado para una versión más reciente Xposed (%d) y por lo tanto algunas funcionalidades pueden no funcionar</string>
     <string name="no_min_version_specified">Este módulo no especifica la versión de Xposed que necesita.</string>
     <string name="warning_min_version_too_low">Este módulo fue creado para la versión de Xposed %1$d, pero, debido a cambios incompatibles en la versión %2$d, ha sido desactivado</string>
     <string name="warning_installed_on_external_storage">Este módulo no puede ser cargado porque está instalado en la tarjeta SD. Por favor, muévelo al almacenamiento interno</string>
@@ -190,7 +192,9 @@
     <string name="settings_translation">Participar en la traducción</string>
     <string name="settings_translation_summary">Ayúdanos a traducir %s a tu idioma</string>
     <string name="settings_create_shortcut_summary">Crear un acceso directo que pueda abrir el gestor de parásitos</string>
+    <string name="settings_shortcut_pinned_hint">Acceso directo anclado</string>
     <string name="settings_created_shortcut_summary">Se ha creado un acceso directo para abrir el gestor de parásitos</string>
+    <string name="settings_unsupported_pin_shortcut_summary">El actual lanzador por defecto no admite accesos directos a pines</string>
     <string name="settings_enable_status_notification">Notificación de estado</string>
     <string name="settings_enable_status_notification_summary">Mostrar una notificación que puede abrir el gestor de parásitos</string>
     <string name="disable_status_notification_error">No hay acceso directo, no se puede desactivar la notificación</string>
@@ -199,6 +203,7 @@
     <string name="update_channel_bate">Beta</string>
     <string name="update_channel_nightly">Construcción nocturna</string>
     <string name="settings_xposed_api_call_protection">Protección de llamadas a la API Xposed</string>
+    <string name="settings_xposed_api_call_protection_summary">Bloquear el código del módulo cargado dinámicamente para utilizar Xposed API, esto puede romper algunos módulos, pero beneficiar a la seguridad</string>
     <!-- Module Repo -->
     <string name="module_readme">Léeme</string>
     <string name="module_releases">Versiones</string>
