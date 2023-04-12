@@ -12,4 +12,10 @@
     <string name="status_channel_name">Estat LSPosed</string>
     <string name="lsposed_running_notification_title">LSPosed carregat</string>
     <string name="lsposed_running_notification_content">Toqueu la notificació per obrir el gestor</string>
+    <string name="xposed_module_request_scope_title">Sol·licitud d\'abast</string>
+    <string name="xposed_module_request_scope_content">%1$s a l\'usuari %2$s demana afegir %3$s al seu abast.</string>
+    <string name="scope_channel_name">Sol·licitud d\'abast</string>
+    <string name="scope_approve">Aprovar</string>
+    <string name="scope_deny">Negar</string>
+    <string name="nerver_ask_again">Mai pregunteu</string>
 </resources>

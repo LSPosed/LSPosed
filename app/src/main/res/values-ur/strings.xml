@@ -103,6 +103,7 @@
     <!-- ModulesActivity -->
     <string name="module_empty_description">(کوئی تفصیل فراہم نہیں کی گئی)</string>
     <string name="warning_xposed_min_version">اس ماڈیول کے لیے ایک نئے Xposed ورژن (%d) کی ضرورت ہے اور اس طرح اسے چالو نہیں کیا جا سکتا</string>
+    <string name="warning_target_version_higher">یہ ماڈیول ایک نئے Xposed ورژن (%d) کے لیے ڈیزائن کیا گیا ہے اور اس طرح کچھ افعال کام نہیں کر سکتے</string>
     <string name="no_min_version_specified">یہ ماڈیول اس Xposed ورژن کی وضاحت نہیں کرتا جس کی اسے ضرورت ہے۔</string>
     <string name="warning_min_version_too_low">یہ ماڈیول Xposed ورژن %1$dکے لیے بنایا گیا تھا، لیکن ورژن %2$dمیں غیر موافق تبدیلیوں کی وجہ سے، اسے غیر فعال کر دیا گیا ہے۔</string>
     <string name="warning_installed_on_external_storage">اس ماڈیول کو لوڈ نہیں کیا جا سکتا کیونکہ یہ SD کارڈ پر انسٹال ہے، براہ کرم اسے اندرونی اسٹوریج میں منتقل کریں۔</string>
@@ -191,7 +192,9 @@
     <string name="settings_translation">ترجمہ میں حصہ لیں۔</string>
     <string name="settings_translation_summary">%s کا اپنی زبان میں ترجمہ کرنے میں ہماری مدد کریں۔</string>
     <string name="settings_create_shortcut_summary">ایک شارٹ کٹ بنائیں جو پرجیوی مینیجر کو کھول سکے۔</string>
+    <string name="settings_shortcut_pinned_hint">شارٹ کٹ پن کر دیا گیا۔</string>
     <string name="settings_created_shortcut_summary">پرجیوی مینیجر کو کھولنے کے لیے ایک شارٹ کٹ بنایا گیا ہے۔</string>
+    <string name="settings_unsupported_pin_shortcut_summary">موجودہ ڈیفالٹ لانچر پن شارٹ کٹس کو سپورٹ نہیں کرتا ہے۔</string>
     <string name="settings_enable_status_notification">اسٹیٹس کی اطلاع</string>
     <string name="settings_enable_status_notification_summary">ایک اطلاع دکھائیں جو پرجیوی مینیجر کو کھول سکے۔</string>
     <string name="disable_status_notification_error">کوئی شارٹ کٹ نہیں، اطلاع کو غیر فعال نہیں کر سکتا</string>
@@ -200,6 +203,7 @@
     <string name="update_channel_bate">بیٹا</string>
     <string name="update_channel_nightly">رات کی تعمیر</string>
     <string name="settings_xposed_api_call_protection">Xposed API کال تحفظ</string>
+    <string name="settings_xposed_api_call_protection_summary">ایکسپوزڈ API استعمال کرنے کے لیے متحرک طور پر بھرے ہوئے ماڈیول کوڈ کو بلاک کریں، اس سے کچھ ماڈیول ٹوٹ سکتے ہیں لیکن سیکیورٹی کو فائدہ پہنچ سکتا ہے</string>
     <!-- Module Repo -->
     <string name="module_readme">ریڈمی</string>
     <string name="module_releases">جاری کرتا ہے۔</string>

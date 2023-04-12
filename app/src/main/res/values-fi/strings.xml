@@ -49,6 +49,7 @@
     <string name="activated">Aktivoitu</string>
     <string name="partial_activated">Osittain aktivoitu</string>
     <string name="selinux_policy_not_loaded_summary">SEPolicy ei ole ladattu oikein</string>
+    <string name="selinux_policy_not_loaded"><![CDATA[Jotkin ominaisuudet eivät toimi.<br/>Ilmoita tästä <a href="https://github.com/topjohnwu/Magisk/issues"><b>Magisk</b></a> kehittäjälle.]]></string>
     <string name="system_inject_fail_summary">Järjestelmän kehysinjektointi epäonnistui</string>
     <string name="system_inject_fail"><![CDATA[Tämä on harvinaista ja voi johtua <b>Magisk</b> tai joitakin heikkolaatuisia Magisk moduuleja.<br/>Yritä poistaa käytöstä muut Magisk moduulit kuin Riru ja LSPosed tai lähettää täysi loki kehittäjille.]]></string>
     <string name="system_prop_incorrect_summary">Järjestelmän prop virheellinen</string>
@@ -102,6 +103,7 @@
     <!-- ModulesActivity -->
     <string name="module_empty_description">(ei kuvausta annettu)</string>
     <string name="warning_xposed_min_version">Tämä moduuli vaatii uudemman Xposed version (%d) eikä sitä näin ollen voi aktivoida</string>
+    <string name="warning_target_version_higher">Tämä moduuli on suunniteltu uudemmalle Xposed-versiolle (%d), joten jotkin toiminnot eivät välttämättä toimi.</string>
     <string name="no_min_version_specified">Tämä moduuli ei määrittele tarvitsemaansa Xposed versiota.</string>
     <string name="warning_min_version_too_low">Tämä moduuli on luotu Xposed versiolle %1$d, mutta koska versiossa %2$don tehty yhteensopimattomia muutoksia, se on poistettu käytöstä</string>
     <string name="warning_installed_on_external_storage">Tätä moduulia ei voi ladata, koska se on asennettu SD-kortille, siirrä se sisäiseen tallennustilaan</string>
@@ -190,7 +192,9 @@
     <string name="settings_translation">Osallistu käännökseen</string>
     <string name="settings_translation_summary">Auta meitä kääntämään %s kielellesi</string>
     <string name="settings_create_shortcut_summary">Luo pikakuvake, joka voi avata loishallintaohjelman.</string>
+    <string name="settings_shortcut_pinned_hint">Pikakuvake kiinnitetty</string>
     <string name="settings_created_shortcut_summary">On luotu pikakuvake, jolla voit avata loishallinnan</string>
+    <string name="settings_unsupported_pin_shortcut_summary">Nykyinen oletuskäynnistin ei tue pin-pikakuvakkeita.</string>
     <string name="settings_enable_status_notification">Tilailmoitus</string>
     <string name="settings_enable_status_notification_summary">Näytä ilmoitus, joka voi avata loishallintaohjelman</string>
     <string name="disable_status_notification_error">Ei pikakuvaketta, ilmoitusta ei voi poistaa käytöstä</string>
@@ -199,6 +203,7 @@
     <string name="update_channel_bate">Beeta</string>
     <string name="update_channel_nightly">Yöllinen rakentaminen</string>
     <string name="settings_xposed_api_call_protection">Xposedin API-kutsujen suojaus</string>
+    <string name="settings_xposed_api_call_protection_summary">Estetään dynaamisesti ladatun moduulin koodin käyttö Xposed API:n avulla, mikä saattaa rikkoa joitakin moduuleja mutta hyödyttää turvallisuutta.</string>
     <!-- Module Repo -->
     <string name="module_readme">Luennot</string>
     <string name="module_releases">Julkaisut</string>

@@ -12,4 +12,10 @@
     <string name="status_channel_name">LSPosed status</string>
     <string name="lsposed_running_notification_title">LSPosed laddad</string>
     <string name="lsposed_running_notification_content">Tryck på meddelandet för att öppna administratören</string>
+    <string name="xposed_module_request_scope_title">Begäran om tillämpningsområde</string>
+    <string name="xposed_module_request_scope_content">%1$s om användaren %2$s begär att %3$s ska läggas till i dess räckvidd.</string>
+    <string name="scope_channel_name">Begäran om tillämpningsområde</string>
+    <string name="scope_approve">Godkänna</string>
+    <string name="scope_deny">Förneka</string>
+    <string name="nerver_ask_again">Fråga aldrig</string>
 </resources>

@@ -13,4 +13,9 @@
     <string name="lsposed_running_notification_title">LSPosed gelaai</string>
     <string name="lsposed_running_notification_content">Tik die kennisgewing om bestuurder oop te maak</string>
     <string name="xposed_module_request_scope_title">Omvang Versoek</string>
+    <string name="xposed_module_request_scope_content">%1$s op gebruiker %2$s versoek om %3$s by sy omvang te voeg.</string>
+    <string name="scope_channel_name">Omvang versoek</string>
+    <string name="scope_approve">Keur goed</string>
+    <string name="scope_deny">Ontken</string>
+    <string name="nerver_ask_again">Moet nooit vra nie</string>
 </resources>

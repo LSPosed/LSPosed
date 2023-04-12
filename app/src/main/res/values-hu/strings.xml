@@ -49,6 +49,7 @@
     <string name="activated">Aktiválva</string>
     <string name="partial_activated">Részben aktiválva</string>
     <string name="selinux_policy_not_loaded_summary">Az SEPolicy nem töltött be megfelelően</string>
+    <string name="selinux_policy_not_loaded"><![CDATA[Néhány funkció nem fog működni.<br/>Kérjük, jelezze ezt a <a href="https://github.com/topjohnwu/Magisk/issues"><b>Magisk</b></a> fejlesztőnek.]]></string>
     <string name="system_inject_fail_summary">A System Framework injektálása sikertelen</string>
     <string name="system_inject_fail"><![CDATA[Ez sajnos gyakori probléma, amit lehet, hogy a
 <b>Magisk</b> vagy néhány Magisk modul okozott.<br/> Kérlek próbálj meg deaktiválni néhány Magisk modult a Riru és LSPosed modulokon kívül vagy küldj el egy teljes napló fájlt a fejlesztőknek.]]></string>
@@ -102,7 +103,8 @@
     <string name="disabled_verbose_log">Szöveges napló letiltva</string>
     <!-- ModulesActivity -->
     <string name="module_empty_description">(nincs leírás megadva)</string>
-    <string name="warning_xposed_min_version">Ez a modul egy újabb Xposed verziót igényel (%d), ezért nem aktiválható.</string>
+    <string name="warning_xposed_min_version">Ez a modul egy újabb Xposed verziót igényel (%d), ezért nem aktiválható</string>
+    <string name="warning_target_version_higher">Ez a modul egy újabb Xposed verzióhoz készült (%d), ezért előfordulhat, hogy egyes funkciók nem működnek</string>
     <string name="no_min_version_specified">Ez a modul nem határoz meg szükséges Xposed verziót.</string>
     <string name="warning_min_version_too_low">Ez a modul az Xposed %1$dverziójához készült, de a %2$dverzióban bekövetkezett inkompatibilis változások miatt letiltásra került.</string>
     <string name="warning_installed_on_external_storage">Ez a modul nem tölthető be, mert az SD-kártyára van telepítve, kérjük, helyezze át a belső tárhelyre.</string>
@@ -191,7 +193,9 @@
     <string name="settings_translation">Részvétel a fordításban</string>
     <string name="settings_translation_summary">Segítsen nekünk lefordítani az %s -t az Ön nyelvére</string>
     <string name="settings_create_shortcut_summary">Hozzon létre egy parancsikont, amely képes megnyitni a parazita menedzser</string>
+    <string name="settings_shortcut_pinned_hint">Parancsikon kitüzve</string>
     <string name="settings_created_shortcut_summary">A parazita-kezelő megnyitásához parancsikon jött létre</string>
+    <string name="settings_unsupported_pin_shortcut_summary">A jelenlegi alapértelmezett indítóprogram nem támogatja a pin parancsikonokat</string>
     <string name="settings_enable_status_notification">Állapot értesítés</string>
     <string name="settings_enable_status_notification_summary">Értesítés megjelenítése, amely megnyithatja a parazita-kezelőt</string>
     <string name="disable_status_notification_error">Nincs parancsikon, nem lehet letiltani az értesítést</string>
@@ -200,6 +204,7 @@
     <string name="update_channel_bate">Béta</string>
     <string name="update_channel_nightly">Nightly</string>
     <string name="settings_xposed_api_call_protection">Xposed API hívásvédelem</string>
+    <string name="settings_xposed_api_call_protection_summary">A dinamikusan betöltött modul kódjának blokkolása az Xposed API használatához, ez néhány modult tönkretehet, de a biztonság javára válik</string>
     <!-- Module Repo -->
     <string name="module_readme">Olvass el</string>
     <string name="module_releases">Kiadások</string>

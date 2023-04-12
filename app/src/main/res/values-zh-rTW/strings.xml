@@ -190,6 +190,7 @@
     <string name="settings_translation">參與翻譯</string>
     <string name="settings_translation_summary">幫助我們翻譯 %s 到您的語言</string>
     <string name="settings_create_shortcut_summary">建立可以開啟寄生管理員的捷徑</string>
+    <string name="settings_shortcut_pinned_hint">捷徑已釘選</string>
     <string name="settings_created_shortcut_summary">已建立可以開啟寄生管理員的捷徑</string>
     <string name="settings_unsupported_pin_shortcut_summary">目前的預設啟動器不支援釘選捷徑</string>
     <string name="settings_enable_status_notification">狀態通知</string>

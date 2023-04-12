@@ -12,4 +12,10 @@
     <string name="status_channel_name">LSPatvirtintas statusas</string>
     <string name="lsposed_running_notification_title">LSPpateiktas pakrautas</string>
     <string name="lsposed_running_notification_content">Bakstelėkite pranešimą, kad atidarytumėte tvarkytuvę</string>
+    <string name="xposed_module_request_scope_title">Apimties prašymas</string>
+    <string name="xposed_module_request_scope_content">%1$s pagal naudotojo %2$s užklausas įtraukti %3$s į jo taikymo sritį.</string>
+    <string name="scope_channel_name">Apimties prašymas</string>
+    <string name="scope_approve">Patvirtinti</string>
+    <string name="scope_deny">Atsisakyti</string>
+    <string name="nerver_ask_again">Niekada neklauskite</string>
 </resources>
