@@ -51,6 +51,7 @@
     <string name="activated">Aktiviran</string>
     <string name="partial_activated">Djelomično aktiviran</string>
     <string name="selinux_policy_not_loaded_summary">SEPolicy nije pravilno učitan</string>
+    <string name="selinux_policy_not_loaded"><![CDATA[Neke značajke neće raditi.<br/>Prijavite ovo <a href="https://github.com/topjohnwu/Magisk/issues"><b>Magisk</b></a> programeru.]]></string>
     <string name="system_inject_fail_summary">Injektiranje u System Framework nije uspjelo</string>
     <string name="system_inject_fail"><![CDATA[Ovo je rijetko i može biti uzrokovano aplikacijom <b>Magisk</b> ili nekim Magisk modulima niske kvalitete.<br/>Pokušajte onemogućiti Magisk module koji nisu Riru i LSPosed ili pošaljite cijeli zapis programerima.]]></string>
     <string name="system_prop_incorrect_summary">Svojstva sustava nisu ispravna</string>
@@ -104,6 +105,7 @@
     <!-- ModulesActivity -->
     <string name="module_empty_description">(nema opisa)</string>
     <string name="warning_xposed_min_version">Ovaj modul zahtijeva noviju verziju Xposed (%d) i stoga se ne može aktivirati</string>
+    <string name="warning_target_version_higher">Ovaj modul je dizajniran za noviju verziju Xposed (%d) i stoga neke funkcije možda neće raditi</string>
     <string name="no_min_version_specified">Ovaj modul ne navodi verziju Xposed koja mu je potrebna.</string>
     <string name="warning_min_version_too_low">Ovaj modul je stvoren za Xposed verziju %1$d, zbog nekompatibilnih promjena u verziji %2$d, modul je onemogućen</string>
     <string name="warning_installed_on_external_storage">Ovaj modul nije moguće učitati jer je instaliran na SD kartici, molimo premjestite ga u internu memoriju</string>
@@ -192,7 +194,9 @@
     <string name="settings_translation">Sudjelujte u prevođenju</string>
     <string name="settings_translation_summary">Pomozite nam prevesti %s na vaš jezik</string>
     <string name="settings_create_shortcut_summary">Napravite prečac koji može otvoriti parazitski upravitelj</string>
+    <string name="settings_shortcut_pinned_hint">Prečac prikvačen</string>
     <string name="settings_created_shortcut_summary">Stvoren je prečac za otvaranje parazitskog upravitelja</string>
+    <string name="settings_unsupported_pin_shortcut_summary">Trenutačni zadani pokretač ne podržava prečace pribadače</string>
     <string name="settings_enable_status_notification">Obavijest o statusu</string>
     <string name="settings_enable_status_notification_summary">Prikaži obavijest koja može otvoriti parazitski upravitelj</string>
     <string name="disable_status_notification_error">Nema prečaca, nije moguće onemogućiti obavijest</string>
@@ -201,6 +205,7 @@
     <string name="update_channel_bate">Beta</string>
     <string name="update_channel_nightly">Noćna izgradnja</string>
     <string name="settings_xposed_api_call_protection">Xposed API zaštita poziva</string>
+    <string name="settings_xposed_api_call_protection_summary">Blokirajte dinamički učitani kod modula za korištenje Xposed API-ja, to može pokvariti neke module, ali doprinosi sigurnosti</string>
     <!-- Module Repo -->
     <string name="module_readme">Pročitaj me</string>
     <string name="module_releases">Izdanja</string>
