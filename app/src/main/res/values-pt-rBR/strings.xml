@@ -192,6 +192,7 @@
     <string name="settings_translation">Participe das Traduções</string>
     <string name="settings_translation_summary">Ajude a traduzir o %s para o Português 🇧🇷🇵🇹</string>
     <string name="settings_create_shortcut_summary">Criar um atalho para abrir gerenciador parasita</string>
+    <string name="settings_shortcut_pinned_hint">Atalho fixado</string>
     <string name="settings_created_shortcut_summary">Um atalho para abrir o gerenciador parasita foi criado</string>
     <string name="settings_unsupported_pin_shortcut_summary">O lançador padrão atual não suporta atalhos de pinos</string>
     <string name="settings_enable_status_notification">Notificação de estado</string>
