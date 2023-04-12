@@ -47,6 +47,7 @@
     <string name="activated">有効化済み</string>
     <string name="partial_activated">部分的に有効化済み</string>
     <string name="selinux_policy_not_loaded_summary">SEPolicyが正しく読み込まれていません</string>
+    <string name="selinux_policy_not_loaded"><![CDATA[一部の機能が動作しない。<br/> <a href="https://github.com/topjohnwu/Magisk/issues"><b>Magisk</b></a> 開発者にご報告ください。]]></string>
     <string name="system_inject_fail_summary">システムフレームワークへのパッチに失敗しました</string>
     <string name="system_inject_fail"><![CDATA[本現象はごく稀に発生し、<b>Magisk</b>もしくは低品質な Magiskモジュールが原因で発生します。<br/>RiruとLSPosed以外のMagiskモジュールを一時的に無効化してみるか、開発者へすべてのログを提出して下さい。]]></string>
     <string name="system_prop_incorrect_summary">システム設定が正しくありません</string>
@@ -100,6 +101,7 @@
     <!-- ModulesActivity -->
     <string name="module_empty_description">(詳細説明なし)</string>
     <string name="warning_xposed_min_version">このモジュールは新しいバージョンのXposed(%d)が必要なので有効化できません</string>
+    <string name="warning_target_version_higher">このモジュールは、新しいXposedバージョン（%d）用に設計されているため、一部の機能が動作しない場合があります。</string>
     <string name="no_min_version_specified">このモジュールは必要なXposedのバージョンを指定していません。</string>
     <string name="warning_min_version_too_low">この モジュールはXposedバージョン%1$d向けに開発されましたが、%2$dでの互換性のない変更により無効化されています</string>
     <string name="warning_installed_on_external_storage">このモジュールは SD カード上にインストールされているため読込できません。内部ストレージに移動して下さい</string>
@@ -188,7 +190,9 @@
     <string name="settings_translation">翻訳に参加する</string>
     <string name="settings_translation_summary">%s をあなたの言語に翻訳するのを手伝ってください</string>
     <string name="settings_create_shortcut_summary">寄生マネージャーを開くことができるショートカットを作成する</string>
+    <string name="settings_shortcut_pinned_hint">ショートカットのピン留め</string>
     <string name="settings_created_shortcut_summary">寄生マネージャーを開くためのショートカットが作成されました。</string>
+    <string name="settings_unsupported_pin_shortcut_summary">現在のデフォルトのランチャーは、ピンショートカットに対応していません</string>
     <string name="settings_enable_status_notification">ステータス通知</string>
     <string name="settings_enable_status_notification_summary">寄生マネージャを開くことができる通知を表示する</string>
     <string name="disable_status_notification_error">ショートカットがありません、通知を無効化できません</string>
