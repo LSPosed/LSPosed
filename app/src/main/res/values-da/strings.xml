@@ -49,6 +49,7 @@
     <string name="activated">Aktiveret</string>
     <string name="partial_activated">Delvist aktiveret</string>
     <string name="selinux_policy_not_loaded_summary">SEPolicy er ikke indlæst korrekt</string>
+    <string name="selinux_policy_not_loaded"><![CDATA[Nogle funktioner vil ikke fungere.<br/>Du bedes rapportere dette til <a href="https://github.com/topjohnwu/Magisk/issues"><b>Magisk</b></a> udvikleren.]]></string>
     <string name="system_inject_fail_summary">System Framework injektion mislykkedes</string>
     <string name="system_inject_fail"><![CDATA[Dette er sjældent og kan være forårsaget af <b>Magisk</b> eller nogle lavkvalitets Magisk moduler.<br/>Prøv at deaktivere andre Magisk moduler end Riru og LSPosed eller indsende fuld log til udviklere.]]></string>
     <string name="system_prop_incorrect_summary">System prop forkert</string>
@@ -102,6 +103,7 @@
     <!-- ModulesActivity -->
     <string name="module_empty_description">(ingen beskrivelse angivet)</string>
     <string name="warning_xposed_min_version">Dette modul kræver en nyere Xposed version (%d) og kan derfor ikke aktiveres</string>
+    <string name="warning_target_version_higher">Dette modul er designet til en nyere Xposed-version (%d), og derfor fungerer nogle funktioner muligvis ikke</string>
     <string name="no_min_version_specified">Dette modul angiver ikke den Xposed version det behøver.</string>
     <string name="warning_min_version_too_low">Dette modul blev oprettet til Xposed version %1$d, men på grund af inkompatible ændringer i version %2$d, er det blevet deaktiveret</string>
     <string name="warning_installed_on_external_storage">Dette modul kan ikke indlæses, da det er installeret på SD-kortet, flyt det til intern lagerplads</string>
@@ -190,7 +192,9 @@
     <string name="settings_translation">Deltag i oversættelse</string>
     <string name="settings_translation_summary">Hjælp os med at oversætte %s til dit sprog</string>
     <string name="settings_create_shortcut_summary">Opret en genvej, der kan åbne parasitic manager</string>
+    <string name="settings_shortcut_pinned_hint">Genvej fastgjort</string>
     <string name="settings_created_shortcut_summary">Der er oprettet en genvej til at åbne parasitic manager</string>
+    <string name="settings_unsupported_pin_shortcut_summary">Den nuværende standardstarter understøtter ikke pin-genveje</string>
     <string name="settings_enable_status_notification">Meddelelse om status</string>
     <string name="settings_enable_status_notification_summary">Vis en meddelelse, der kan åbne parasitic manager</string>
     <string name="disable_status_notification_error">Ingen genvej, kan ikke deaktivere meddelelse</string>
@@ -199,6 +203,7 @@
     <string name="update_channel_bate">Beta</string>
     <string name="update_channel_nightly">Nightly build</string>
     <string name="settings_xposed_api_call_protection">Beskyttelse af Xposed API-opkald</string>
+    <string name="settings_xposed_api_call_protection_summary">Bloker dynamisk indlæst modulkode for at bruge Xposed API, hvilket kan ødelægge nogle moduler, men gavner sikkerheden</string>
     <!-- Module Repo -->
     <string name="module_readme">Læs</string>
     <string name="module_releases">Udgivelser</string>
