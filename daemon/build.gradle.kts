@@ -22,7 +22,6 @@ import com.android.ide.common.signing.KeystoreHelper
 import java.io.PrintStream
 import java.util.*
 
-@Suppress("DSL_SCOPE_VIOLATION")
 plugins {
     alias(libs.plugins.agp.app)
     alias(libs.plugins.lsplugin.resopt)
@@ -86,8 +85,8 @@ android {
 }
 
 android.applicationVariants.all {
-    val variantCapped = name.capitalize(Locale.ROOT)
-    val variantLowered = name.toLowerCase(Locale.ROOT)
+    val variantCapped = name.replaceFirstChar { it.uppercase() }
+    val variantLowered = name.lowercase()
 
     val outSrcDir = file("$buildDir/generated/source/signInfo/${variantLowered}")
     val signInfoTask = tasks.register("generate${variantCapped}SignInfo") {

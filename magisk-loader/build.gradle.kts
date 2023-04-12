@@ -33,7 +33,6 @@ import org.objectweb.asm.ClassVisitor
 import org.objectweb.asm.MethodVisitor
 import org.objectweb.asm.Opcodes
 
-@Suppress("DSL_SCOPE_VIOLATION")
 plugins {
     alias(libs.plugins.agp.app)
     alias(libs.plugins.lsplugin.resopt)
@@ -92,8 +91,8 @@ android {
         all {
             externalNativeBuild {
                 cmake {
-                    arguments += "-DMODULE_NAME=${name.toLowerCase()}_$moduleBaseId"
-                    arguments += "-DAPI=${name.toLowerCase()}"
+                    arguments += "-DMODULE_NAME=${name.lowercase()}_$moduleBaseId"
+                    arguments += "-DAPI=${name.lowercase()}"
                 }
             }
         }
@@ -137,12 +136,12 @@ val zipAll = task("zipAll") {
 }
 
 fun afterEval() = android.applicationVariants.forEach { variant ->
-    val variantCapped = variant.name.capitalize(Locale.ROOT)
-    val variantLowered = variant.name.toLowerCase(Locale.ROOT)
-    val buildTypeCapped = variant.buildType.name.capitalize(Locale.ROOT)
-    val buildTypeLowered = variant.buildType.name.toLowerCase(Locale.ROOT)
-    val flavorCapped = variant.flavorName!!.capitalize(Locale.ROOT)
-    val flavorLowered = variant.flavorName!!.toLowerCase(Locale.ROOT)
+    val variantCapped = variant.name.replaceFirstChar { it.uppercase() }
+    val variantLowered = variant.name.lowercase()
+    val buildTypeCapped = variant.buildType.name.replaceFirstChar { it.uppercase() }
+    val buildTypeLowered = variant.buildType.name.lowercase()
+    val flavorCapped = variant.flavorName!!.replaceFirstChar { it.uppercase() }
+    val flavorLowered = variant.flavorName!!.lowercase()
 
     val magiskDir = "$buildDir/magisk/$variantLowered"
 

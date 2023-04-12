@@ -20,7 +20,6 @@
 val verName: String by rootProject.extra
 val verCode: Int by rootProject.extra
 
-@Suppress("DSL_SCOPE_VIOLATION")
 plugins {
     alias(libs.plugins.agp.lib)
 }
