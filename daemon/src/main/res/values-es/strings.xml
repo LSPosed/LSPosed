@@ -12,4 +12,10 @@
     <string name="status_channel_name">LSPosición de estado</string>
     <string name="lsposed_running_notification_title">LSPosed loaded</string>
     <string name="lsposed_running_notification_content">Toca la notificación para abrir el gestor</string>
+    <string name="xposed_module_request_scope_title">Solicitud de alcance</string>
+    <string name="xposed_module_request_scope_content">%1$s cuando el usuario %2$s solicita añadir %3$s a su ámbito.</string>
+    <string name="scope_channel_name">Solicitud de alcance</string>
+    <string name="scope_approve">Aprobar</string>
+    <string name="scope_deny">Denegar</string>
+    <string name="nerver_ask_again">Nunca preguntes</string>
 </resources>
