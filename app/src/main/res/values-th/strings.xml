@@ -191,7 +191,9 @@
     <string name="settings_translation">มีส่วนร่วมในการแปล</string>
     <string name="settings_translation_summary">ช่วยเราแปล %s เป็นภาษาของคุณ</string>
     <string name="settings_create_shortcut_summary">สร้างทางลัดที่สามารถเปิดตัวจัดการปรสิต</string>
+    <string name="settings_shortcut_pinned_hint">ตรึงทางลัดแล้ว</string>
     <string name="settings_created_shortcut_summary">มีการสร้างทางลัดเพื่อเปิดตัวจัดการปรสิต</string>
+    <string name="settings_unsupported_pin_shortcut_summary">Launcher เริ่มต้นปัจจุบันไม่รองรับทางลัด PIN</string>
     <string name="settings_enable_status_notification">การแจ้งเตือนสถานะ</string>
     <string name="settings_enable_status_notification_summary">แสดงการแจ้งเตือนที่สามารถเปิดตัวจัดการปรสิต</string>
     <string name="disable_status_notification_error">ไม่มีทางลัด ไม่สามารถปิดการแจ้งเตือนได้</string>
@@ -200,6 +202,7 @@
     <string name="update_channel_bate">เบต้า</string>
     <string name="update_channel_nightly">สร้างทุกคืน</string>
     <string name="settings_xposed_api_call_protection">การป้องกันการโทร Xposed API</string>
+    <string name="settings_xposed_api_call_protection_summary">บล็อกโค้ดโมดูลที่โหลดแบบไดนามิกเพื่อใช้ Xposed API ซึ่งอาจทำให้บางโมดูลเสียหายแต่ได้ประโยชน์ด้านความปลอดภัย</string>
     <!-- Module Repo -->
     <string name="module_readme">ต้องอ่าน</string>
     <string name="module_releases">เผยแพร่</string>

@@ -192,6 +192,7 @@
     <string name="settings_translation">Osalege tõlkimises</string>
     <string name="settings_translation_summary">Aita meil tõlkida %s sinu keelde</string>
     <string name="settings_create_shortcut_summary">Loo otsetee, mis võib avada parasiitide halduri</string>
+    <string name="settings_shortcut_pinned_hint">Otsetee kinnitatud</string>
     <string name="settings_created_shortcut_summary">Parasiitide halduri avamiseks on loodud otsetee</string>
     <string name="settings_unsupported_pin_shortcut_summary">Praegune vaikekäivitusprogramm ei toeta nööpnõelte otseteid</string>
     <string name="settings_enable_status_notification">Staatuse teatamine</string>

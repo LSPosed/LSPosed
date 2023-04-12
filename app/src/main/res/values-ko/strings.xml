@@ -190,6 +190,7 @@
     <string name="settings_translation">번역 참여</string>
     <string name="settings_translation_summary">%s를 귀하의 언어로 번역하는 데 도움을 주세요.</string>
     <string name="settings_create_shortcut_summary">내부 관리자를 열 수 있는 바로가기 생성</string>
+    <string name="settings_shortcut_pinned_hint">바로 가기 고정</string>
     <string name="settings_created_shortcut_summary">내부 관리자를 여는 바로 가기가 생성되었습니다.</string>
     <string name="settings_unsupported_pin_shortcut_summary">현재 기본 런쳐는 핀 바로가기를 지원하지 않습니다</string>
     <string name="settings_enable_status_notification">상태 알림</string>

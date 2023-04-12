@@ -42,13 +42,14 @@
     </plurals>
     <string name="about_view_source_code"><![CDATA[Bekyk bronkode by %1$s<br/>Sluit aan by ons %2$s -kanaal]]></string>
     <string name="translators" comment="Dear translators, please add your home page here following the format. There can be more than one translator. So feel free to append yourself.">null</string>
-    <string name="install">Install</string>
+    <string name="install">Installeer2</string>
     <string name="install_summary">Tik om LSPosed te installeer</string>
-    <string name="not_installed">Not installed</string>
+    <string name="not_installed">Not installed1</string>
     <string name="not_install_summary">LSPosed is nie geïnstalleer nie</string>
     <string name="activated">Activated</string>
     <string name="partial_activated">Partially activated</string>
     <string name="selinux_policy_not_loaded_summary">SEPolicy is nie behoorlik gelaai nie</string>
+    <string name="selinux_policy_not_loaded"><![CDATA[Sommige kenmerke sal nie werk nie.<br/>Rapporteer dit asseblief aan <a href="https://github.com/topjohnwu/Magisk/issues"><b>Magisk</b></a> ontwikkelaar.]]></string>
     <string name="system_inject_fail_summary">Stelselraamwerk-inspuiting het misluk</string>
     <string name="system_inject_fail"><![CDATA[Dit is skaars en kan veroorsaak word deur <b>Magisk</b> of sommige Magisk-modules van lae gehalte.<br/>Probeer asseblief om Magisk-modules anders as Riru en LSPosed te deaktiveer of dien volledige log aan ontwikkelaars in.]]></string>
     <string name="system_prop_incorrect_summary">Stelselstut is verkeerd</string>
@@ -102,6 +103,7 @@
     <!-- ModulesActivity -->
     <string name="module_empty_description">(geen beskrywing verskaf nie)</string>
     <string name="warning_xposed_min_version">Hierdie module vereis \'n nuwer Xposed weergawe (%d) en kan dus nie geaktiveer word nie</string>
+    <string name="warning_target_version_higher">This module is designed for a newer Xposed version (%d) and thus some functionalities may not work</string>
     <string name="no_min_version_specified">Hierdie module spesifiseer nie die Xposed-weergawe wat dit benodig nie.</string>
     <string name="warning_min_version_too_low">Hierdie module is geskep vir Xposed weergawe %1$d, maar as gevolg van onversoenbare veranderinge in weergawe %2$d, is dit gedeaktiveer</string>
     <string name="warning_installed_on_external_storage">Hierdie module kan nie gelaai word nie omdat dit op die SD-kaart geïnstalleer is, skuif dit asseblief na interne berging</string>
@@ -190,7 +192,9 @@
     <string name="settings_translation">Neem deel aan vertaling</string>
     <string name="settings_translation_summary">Help ons om %s in jou taal te vertaal</string>
     <string name="settings_create_shortcut_summary">Skep \'n kortpad wat parasitiese bestuurder kan oopmaak</string>
+    <string name="settings_shortcut_pinned_hint">Shortcut pinned</string>
     <string name="settings_created_shortcut_summary">\'n Kortpad is geskep om parasitiese bestuurder oop te maak</string>
+    <string name="settings_unsupported_pin_shortcut_summary">Die huidige versteklanseerder ondersteun nie penkortpaaie nie</string>
     <string name="settings_enable_status_notification">Statuskennisgewing</string>
     <string name="settings_enable_status_notification_summary">Wys \'n kennisgewing wat parasitiese bestuurder kan oopmaak</string>
     <string name="disable_status_notification_error">Geen kortpad nie, kan nie kennisgewing deaktiveer nie</string>
@@ -199,6 +203,7 @@
     <string name="update_channel_bate">Beta</string>
     <string name="update_channel_nightly">Nag bou</string>
     <string name="settings_xposed_api_call_protection">Xposed API-oproepbeskerming</string>
+    <string name="settings_xposed_api_call_protection_summary">Blokkeer dinamies gelaaide modulekode om Xposed API te gebruik, dit kan sommige modules breek, maar bevoordeel sekuriteit</string>
     <!-- Module Repo -->
     <string name="module_readme">Lees my</string>
     <string name="module_releases">Vrystellings</string>

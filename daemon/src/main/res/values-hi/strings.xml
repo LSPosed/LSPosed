@@ -12,4 +12,10 @@
     <string name="status_channel_name">एलएसपोस्ड स्थिति</string>
     <string name="lsposed_running_notification_title">LSPosed लोड किया गया</string>
     <string name="lsposed_running_notification_content">मैनेजर खोलने के लिए नोटिफिकेशन पर टैप करें</string>
+    <string name="xposed_module_request_scope_title">गुंजाइश अनुरोध</string>
+    <string name="xposed_module_request_scope_content">उपयोगकर्ता %2$s पर %1$s इसके दायरे में %3$s जोड़ने का अनुरोध करता है।</string>
+    <string name="scope_channel_name">दायरा अनुरोध</string>
+    <string name="scope_approve">मंज़ूरी देना</string>
+    <string name="scope_deny">अस्वीकार करना</string>
+    <string name="nerver_ask_again">कभी मत पूछो</string>
 </resources>

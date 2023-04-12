@@ -51,6 +51,7 @@
     <string name="activated">Activat</string>
     <string name="partial_activated">Parțial activat</string>
     <string name="selinux_policy_not_loaded_summary">SEPolicy nu este încărcată corect</string>
+    <string name="selinux_policy_not_loaded"><![CDATA[Unele funcții nu vor funcționa.<br/>Vă rugăm să raportați acest lucru la <a href="https://github.com/topjohnwu/Magisk/issues"><b>Magisk</b></a> dezvoltator.]]></string>
     <string name="system_inject_fail_summary">Injectarea System Framework a eșuat</string>
     <string name="system_inject_fail"><![CDATA[Acest lucru este rar și poate fi cauzat de <b>Magisk</b> sau de unele module Magisk de calitate scăzută.<br/>Vă rugăm să încercați să dezactivați modulele Magisk altele decât Riru și LSPosed sau să trimiteți jurnalul complet dezvoltatorilor.]]></string>
     <string name="system_prop_incorrect_summary">System prop incorect</string>
@@ -104,6 +105,7 @@
     <!-- ModulesActivity -->
     <string name="module_empty_description">(nici o descriere furnizată)</string>
     <string name="warning_xposed_min_version">Acest modul necesită o versiune Xposed mai nouă (%d) și astfel nu poate fi activată</string>
+    <string name="warning_target_version_higher">Acest modul este proiectat pentru o versiune mai nouă a Xposed (%d) și, prin urmare, este posibil ca unele funcționalități să nu funcționeze.</string>
     <string name="no_min_version_specified">Acest modul nu specifica versiunea Xposed de care are nevoie.</string>
     <string name="warning_min_version_too_low">Acest modul a fost creat pentru versiunea Xposed %1$d, dar datorită modificărilor incompatibile din versiunea %2$d, a fost dezactivat</string>
     <string name="warning_installed_on_external_storage">Acest modul nu poate fi încărcat deoarece este instalat pe cardul SD, te rugăm mută-l în memoria internă</string>
@@ -192,7 +194,9 @@
     <string name="settings_translation">Participă în traducere</string>
     <string name="settings_translation_summary">Ajută-ne să traducem %s în limba ta</string>
     <string name="settings_create_shortcut_summary">Creați o comandă rapidă care poate deschide managerul de paraziți</string>
+    <string name="settings_shortcut_pinned_hint">Comenzi rapide fixate</string>
     <string name="settings_created_shortcut_summary">A fost creată o comandă rapidă pentru a deschide Parasitic Manager</string>
+    <string name="settings_unsupported_pin_shortcut_summary">Lansatorul implicit actual nu acceptă comenzi rapide de tip pin</string>
     <string name="settings_enable_status_notification">Notificare de stare</string>
     <string name="settings_enable_status_notification_summary">Afișați o notificare care poate deschide managerul de paraziți</string>
     <string name="disable_status_notification_error">Nu există scurtătură, nu se poate dezactiva notificarea</string>
@@ -201,6 +205,7 @@
     <string name="update_channel_bate">Beta</string>
     <string name="update_channel_nightly">Construire nocturnă</string>
     <string name="settings_xposed_api_call_protection">Protecția apelurilor API Xposed</string>
+    <string name="settings_xposed_api_call_protection_summary">Blocați codul modulului încărcat dinamic pentru a utiliza API-ul Xposed, acest lucru poate întrerupe unele module, dar aduce beneficii în materie de securitate</string>
     <!-- Module Repo -->
     <string name="module_readme">Citește-mă</string>
     <string name="module_releases">Lansări</string>

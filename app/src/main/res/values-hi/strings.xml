@@ -192,6 +192,7 @@
     <string name="settings_translation">अनुवाद में भाग लें</string>
     <string name="settings_translation_summary">%s को अपनी भाषा में अनुवाद करने में हमारी सहायता करें</string>
     <string name="settings_create_shortcut_summary">एक शॉर्टकट बनाएं जो परजीवी प्रबंधक खोल सके</string>
+    <string name="settings_shortcut_pinned_hint">शॉर्टकट पिन किया गया</string>
     <string name="settings_created_shortcut_summary">परजीवी प्रबंधक खोलने के लिए एक शॉर्टकट बनाया गया है</string>
     <string name="settings_unsupported_pin_shortcut_summary">वर्तमान डिफ़ॉल्ट लांचर पिन शॉर्टकट का समर्थन नहीं करता</string>
     <string name="settings_enable_status_notification">स्थिति अधिसूचना</string>
@@ -202,6 +203,7 @@
     <string name="update_channel_bate">बीटा</string>
     <string name="update_channel_nightly">सॉफ़्टवेयर की स्थिरता</string>
     <string name="settings_xposed_api_call_protection">Xposed API कॉल सुरक्षा</string>
+    <string name="settings_xposed_api_call_protection_summary">Xposed API का उपयोग करने के लिए गतिशील रूप से लोड किए गए मॉड्यूल कोड को ब्लॉक करें, इससे कुछ मॉड्यूल टूट सकते हैं लेकिन सुरक्षा को लाभ होगा</string>
     <!-- Module Repo -->
     <string name="module_readme">रीडमी</string>
     <string name="module_releases">विज्ञप्ति</string>

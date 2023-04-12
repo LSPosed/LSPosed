@@ -53,6 +53,7 @@
     <string name="activated">Активовано</string>
     <string name="partial_activated">Частково активовано</string>
     <string name="selinux_policy_not_loaded_summary">SEPolicy завантажено неправильно</string>
+    <string name="selinux_policy_not_loaded"><![CDATA[Деякі функції не працюватимуть.<br/>Будь ласка, повідомте про це на <a href="https://github.com/topjohnwu/Magisk/issues"><b>Magisk</b></a> розробнику.]]></string>
     <string name="system_inject_fail_summary">Помилка ін\'єкції System Framework</string>
     <string name="system_inject_fail"><![CDATA[Це рідкісна проблема, яка може бути спричинена <b>Magisk</b> або деякими неякісними модулями Magisk.<br/>Спробуйте вимкнути всі модулі Magisk, крім Riru та LSPosed, або надішліть повний звіт розробникам.]]></string>
     <string name="system_prop_incorrect_summary">Неправильний параметр системи</string>
@@ -106,6 +107,7 @@
     <!-- ModulesActivity -->
     <string name="module_empty_description">(опису не надано)</string>
     <string name="warning_xposed_min_version">Для цього модуля потрібна новіша версія Xposed (%d), тому його неможливо активувати</string>
+    <string name="warning_target_version_higher">Цей модуль розроблено для новішої версії Xposed (%d), тому деякі функції можуть не працювати.</string>
     <string name="no_min_version_specified">У цьому модулі не вказано необхідну для нього версію Xposed.</string>
     <string name="warning_min_version_too_low">Цей модуль був створений для Xposed версії %1$d, але через несумісні зміни у версії %2$d його було вимкнено</string>
     <string name="warning_installed_on_external_storage">Цей модуль не може бути завантажений, оскільки він встановлений на SD-карті. Будь ласка, перенесіть його у внутрішню пам’ять</string>
@@ -194,7 +196,9 @@
     <string name="settings_translation">Допомогти з перекладом</string>
     <string name="settings_translation_summary">Доповнити український переклад %s</string>
     <string name="settings_create_shortcut_summary">Створіть ярлик, який зможе відкрити паразитний менеджер</string>
+    <string name="settings_shortcut_pinned_hint">Ярлик закріплено</string>
     <string name="settings_created_shortcut_summary">Створено ярлик для відкриття паразитного менеджера</string>
+    <string name="settings_unsupported_pin_shortcut_summary">Поточна панель запуску за замовчуванням не підтримує шорткати пін-кодів</string>
     <string name="settings_enable_status_notification">Повідомлення про статус</string>
     <string name="settings_enable_status_notification_summary">Показати повідомлення, яке може відкрити паразитний менеджер</string>
     <string name="disable_status_notification_error">Немає ярлика, не можна відключити сповіщення</string>
@@ -203,6 +207,7 @@
     <string name="update_channel_bate">Бета-версія</string>
     <string name="update_channel_nightly">Нічна збірка</string>
     <string name="settings_xposed_api_call_protection">Захист викликів Xposed API</string>
+    <string name="settings_xposed_api_call_protection_summary">Блокування динамічно завантаженого коду модуля для використання Xposed API, це може призвести до поломки деяких модулів, але покращить безпеку</string>
     <!-- Module Repo -->
     <string name="module_readme">Опис</string>
     <string name="module_releases">Релізи</string>

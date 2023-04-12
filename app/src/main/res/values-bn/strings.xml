@@ -50,6 +50,7 @@
     <string name="activated">সক্রিয়</string>
     <string name="partial_activated">আংশিক সক্রিয়</string>
     <string name="selinux_policy_not_loaded_summary">এসইপলিসি সঠিকভাবে লোড করা হয় না</string>
+    <string name="selinux_policy_not_loaded"><![CDATA[কিছু বৈশিষ্ট্য কাজ করবে না।<br/>অনুগ্রহ করে এটি <a href="https://github.com/topjohnwu/Magisk/issues"><b>Magisk</b></a> বিকাশকারীকে রিপোর্ট করুন।]]></string>
     <string name="system_inject_fail_summary">সিস্টেম ফ্রেমওয়ার্ক ইনজেকশন ব্যর্থ হয়েছে</string>
     <string name="system_inject_fail"><![CDATA[এটি বিরল এবং <b>Magisk</b> বা কিছু নিম্নমানের Magisk মডিউলের কারণে হতে পারে।<br/>অনুগ্রহ করে Riru এবং LSPosed ব্যতীত Magisk মডিউলগুলি নিষ্ক্রিয় করার চেষ্টা করুন বা বিকাশকারীদের কাছে সম্পূর্ণ লগ জমা দিন।]]></string>
     <string name="system_prop_incorrect_summary">সিস্টেম প্রপ ভুল</string>
@@ -103,6 +104,7 @@
     <!-- ModulesActivity -->
     <string name="module_empty_description">(কোন বর্ণনা দেওয়া হয়নি)</string>
     <string name="warning_xposed_min_version">এই মডিউলটির একটি নতুন Xposed সংস্করণ প্রয়োজন (%d) এবং এইভাবে সক্রিয় করা যাবে না</string>
+    <string name="warning_target_version_higher">এই মডিউলটি একটি নতুন Xposed সংস্করণ (%d) এর জন্য ডিজাইন করা হয়েছে এবং এইভাবে কিছু কার্যকারিতা কাজ নাও করতে পারে</string>
     <string name="no_min_version_specified">এই মডিউলটি তার প্রয়োজনীয় Xposed সংস্করণটি নির্দিষ্ট করে না।</string>
     <string name="warning_min_version_too_low">এই মডিউলটি Xposed সংস্করণ %1$d-এর জন্য তৈরি করা হয়েছিল, কিন্তু সংস্করণ %2$d-এ অসামঞ্জস্যপূর্ণ পরিবর্তনের কারণে, এটি নিষ্ক্রিয় করা হয়েছে।</string>
     <string name="warning_installed_on_external_storage">এই মডিউলটি লোড করা যাবে না কারণ এটি SD কার্ডে ইনস্টল করা আছে, দয়া করে এটিকে অভ্যন্তরীণ সঞ্চয়স্থানে নিয়ে যান৷</string>
@@ -191,7 +193,9 @@
     <string name="settings_translation">অনুবাদে অংশগ্রহণ করুন</string>
     <string name="settings_translation_summary">আপনার ভাষায় %s অনুবাদ করতে আমাদের সাহায্য করুন</string>
     <string name="settings_create_shortcut_summary">একটি শর্টকাট তৈরি করুন যা পরজীবী ম্যানেজার খুলতে পারে</string>
+    <string name="settings_shortcut_pinned_hint">শর্টকাট পিন করা হয়েছে</string>
     <string name="settings_created_shortcut_summary">পরজীবী ম্যানেজার খোলার জন্য একটি শর্টকাট তৈরি করা হয়েছে</string>
+    <string name="settings_unsupported_pin_shortcut_summary">বর্তমান ডিফল্ট লঞ্চার পিন শর্টকাট সমর্থন করে না</string>
     <string name="settings_enable_status_notification">স্থিতি বিজ্ঞপ্তি</string>
     <string name="settings_enable_status_notification_summary">পরজীবী ম্যানেজার খুলতে পারে এমন একটি বিজ্ঞপ্তি দেখান</string>
     <string name="disable_status_notification_error">কোন শর্টকাট, বিজ্ঞপ্তি নিষ্ক্রিয় করতে পারবেন না</string>
@@ -200,6 +204,7 @@
     <string name="update_channel_bate">বেটা</string>
     <string name="update_channel_nightly">রাতারাতি নির্মাণ</string>
     <string name="settings_xposed_api_call_protection">Xposed API কল সুরক্ষা</string>
+    <string name="settings_xposed_api_call_protection_summary">এক্সপোজড এপিআই ব্যবহার করতে গতিশীলভাবে লোড করা মডিউল কোড ব্লক করুন, এটি কিছু মডিউল ভেঙে ফেলতে পারে তবে নিরাপত্তার সুবিধা পাবে</string>
     <!-- Module Repo -->
     <string name="module_readme">রিডমি</string>
     <string name="module_releases">মুক্তি দেয়</string>
