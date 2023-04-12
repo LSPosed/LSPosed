@@ -12,4 +12,10 @@
     <string name="status_channel_name">סטטוס LSPost</string>
     <string name="lsposed_running_notification_title">LSPosed נטען</string>
     <string name="lsposed_running_notification_content">הקש על ההודעה כדי לפתוח את המנהל</string>
+    <string name="xposed_module_request_scope_title">Xposed_מודול_מבקש_כותרת_תחום</string>
+    <string name="xposed_module_request_scope_content">xposed_מודול_מבקש_תוכן_תחום.</string>
+    <string name="scope_channel_name">תחום_שם_ערוץ</string>
+    <string name="scope_approve">אישור_תחום</string>
+    <string name="scope_deny">לְהַכּחִישׁ</string>
+    <string name="nerver_ask_again">לעולם אל תשאל</string>
 </resources>
