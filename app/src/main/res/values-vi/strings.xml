@@ -190,6 +190,7 @@
     <string name="settings_translation">Tham gia phiên dịch</string>
     <string name="settings_translation_summary">Giúp chúng tôi dịch %s sang ngôn ngữ của bạn</string>
     <string name="settings_create_shortcut_summary">Tạo lối tắt để có thể mở trình quản lý ký sinh</string>
+    <string name="settings_shortcut_pinned_hint">Đã ghim phím tắt</string>
     <string name="settings_created_shortcut_summary">Một lối tắt đã được tạo để mở trình quản lý ký sinh</string>
     <string name="settings_unsupported_pin_shortcut_summary">Trình khởi chạy mặc định hiện tại không hỗ trợ phím tắt ghim</string>
     <string name="settings_enable_status_notification">Thông báo trạng thái</string>
