@@ -49,6 +49,7 @@
     <string name="activated">Ενεργοποιημένο</string>
     <string name="partial_activated">Μερικώς ενεργοποιημένο</string>
     <string name="selinux_policy_not_loaded_summary">Το SEPolicy δεν φορτώθηκε σωστά</string>
+    <string name="selinux_policy_not_loaded"><![CDATA[Ορισμένες λειτουργίες δεν θα λειτουργούν.<br/>Παρακαλούμε αναφέρετε το γεγονός αυτό στον προγραμματιστή <a href="https://github.com/topjohnwu/Magisk/issues"><b>Magisk</b></a> .]]></string>
     <string name="system_inject_fail_summary">Η έγχυση στο πλαίσιο συστήματος απέτυχε</string>
     <string name="system_inject_fail"><![CDATA[Αυτό είναι σπάνιο και μπορεί να προκληθεί από το <b>Magisk</b> ή από κάποια χαμηλής ποιότητας πρόσθετα τουMagisk.<br/>Παρακαλώ προσπαθήστε να απενεργοποιήσετε όλα τα πρόσθετα του Magisk εκτός από το Riru και το LSPosed ή να υποβάλετε το πλήρες αρχείο καταγραφής στους προγραμματιστές.]]></string>
     <string name="system_prop_incorrect_summary">Λανθασμένο στήριγμα συστήματος</string>
@@ -102,6 +103,7 @@
     <!-- ModulesActivity -->
     <string name="module_empty_description">(δεν παρέχεται περιγραφή)</string>
     <string name="warning_xposed_min_version">Αυτό το ένθεμα απαιτεί μια νεότερη έκδοση του Xposed (%d) και επομένως δεν μπορεί να ενεργοποιηθεί</string>
+    <string name="warning_target_version_higher">Αυτή η ενότητα έχει σχεδιαστεί για μια νεότερη έκδοση Xposed (%d) και ως εκ τούτου ορισμένες λειτουργίες ενδέχεται να μην λειτουργούν.</string>
     <string name="no_min_version_specified">Αυτό το ένθεμα δεν καθορίζει την έκδοση Xposed που χρειάζεται.</string>
     <string name="warning_min_version_too_low">Αυτό το ένθεμα δημιουργήθηκε για την έκδοση Xposed %1$d, αλλά λόγω μη συμβατών αλλαγών στην έκδοση %2$d, έχει απενεργοποιηθεί</string>
     <string name="warning_installed_on_external_storage">Αυτό το πρόσθετο δεν μπορεί να φορτωθεί επειδή είναι εγκατεστημένο στην κάρτα SD, παρακαλώ μετακινήστε το στον εσωτερικό αποθηκευτικό χώρο</string>
@@ -190,7 +192,9 @@
     <string name="settings_translation">Συμμετοχή στη μετάφραση</string>
     <string name="settings_translation_summary">Βοηθήστε μας να μεταφράσουμε το %s στη γλώσσα σας</string>
     <string name="settings_create_shortcut_summary">Δημιουργήστε μια συντόμευση που μπορεί να ανοίξει τον παρασιτικό διαχειριστή</string>
+    <string name="settings_shortcut_pinned_hint">Συντόμευση καρφιτσωμένη</string>
     <string name="settings_created_shortcut_summary">Έχει δημιουργηθεί μια συντόμευση για το άνοιγμα του παρασιτικού διαχειριστή</string>
+    <string name="settings_unsupported_pin_shortcut_summary">Ο τρέχων προεπιλεγμένος εκτοξευτής δεν υποστηρίζει συντομεύσεις καρφίτσας</string>
     <string name="settings_enable_status_notification">Ειδοποίηση καταστάσεως</string>
     <string name="settings_enable_status_notification_summary">Εμφάνιση μιας ειδοποίησης που μπορεί να ανοίξει τον διαχειριστή παρασιτικής</string>
     <string name="disable_status_notification_error">Δεν υπάρχει συντόμευση, δεν είναι δυνατή η απενεργοποίηση της ειδοποίησης</string>
