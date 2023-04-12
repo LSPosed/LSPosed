@@ -196,6 +196,7 @@
     <string name="settings_translation">Účast na překladu</string>
     <string name="settings_translation_summary">Pomozte nám přeložit %s do vašeho jazyka</string>
     <string name="settings_create_shortcut_summary">Vytvoření zástupce, který může otevřít parazitního správce</string>
+    <string name="settings_shortcut_pinned_hint">Připnutí zástupci</string>
     <string name="settings_created_shortcut_summary">Byl vytvořen zástupce pro otevření parazitního správce</string>
     <string name="settings_unsupported_pin_shortcut_summary">Současný výchozí spouštěč nepodporuje připnuté zkratky</string>
     <string name="settings_enable_status_notification">Oznámení o stavu</string>
