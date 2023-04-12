@@ -12,4 +12,10 @@
     <string name="status_channel_name">Κατάσταση LSPosed</string>
     <string name="lsposed_running_notification_title">LSPosed φορτώθηκε</string>
     <string name="lsposed_running_notification_content">Πατήστε την ειδοποίηση για άνοιγμα διαχειριστή</string>
+    <string name="xposed_module_request_scope_title">Αίτηση για το πεδίο εφαρμογής</string>
+    <string name="xposed_module_request_scope_content">%1$s στις αιτήσεις του χρήστη %2$s για την προσθήκη του %3$s στο πεδίο εφαρμογής του.</string>
+    <string name="scope_channel_name">Αίτημα πεδίου εφαρμογής</string>
+    <string name="scope_approve">Έγκριση</string>
+    <string name="scope_deny">Άρνηση</string>
+    <string name="nerver_ask_again">Ποτέ μην ρωτάς</string>
 </resources>
