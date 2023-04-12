@@ -193,6 +193,7 @@ https://github.com/tclement0922</string>
     <string name="settings_translation">Participer à la traduction</string>
     <string name="settings_translation_summary">Aidez-nous à traduire %s dans votre langue</string>
     <string name="settings_create_shortcut_summary">Créer un raccourcis pouvant ouvrir le gestionnaire parasitaire</string>
+    <string name="settings_shortcut_pinned_hint">Raccourci épinglé</string>
     <string name="settings_created_shortcut_summary">Un raccourcis a été créé pour ouvrir le gestionnaire parasitaire</string>
     <string name="settings_unsupported_pin_shortcut_summary">Le lanceur par défaut actuel ne supporte pas les raccourcis épinglés</string>
     <string name="settings_enable_status_notification">Notification d\'état</string>
