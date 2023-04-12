@@ -193,6 +193,7 @@ https://github.com/topjohnwu/Magisk/issues]]></string>
     <string name="settings_translation">در ترجمه شرکت کنید</string>
     <string name="settings_translation_summary">به ما کمک کنید تا %s را به زبان شما ترجمه کنیم</string>
     <string name="settings_create_shortcut_summary">یک میانبر بسازید تا بتوانید مدیر lsposed را باز کنید</string>
+    <string name="settings_shortcut_pinned_hint">میانبر پین شد</string>
     <string name="settings_created_shortcut_summary">یک میانبر برای باز کردن مدیر lsposed ساخته شده است</string>
     <string name="settings_unsupported_pin_shortcut_summary">اجرا کننده پیش فرض فعلی از میانبر های پین پشتیبانی نمی کند</string>
     <string name="settings_enable_status_notification">اطلاع رسانی وضعیت</string>
