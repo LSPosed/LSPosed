@@ -12,4 +12,10 @@
     <string name="status_channel_name">LSPosed status</string>
     <string name="lsposed_running_notification_title">LSPosed je učitan</string>
     <string name="lsposed_running_notification_content">Dodirnite obavijest da otvorite upravitelja</string>
+    <string name="xposed_module_request_scope_title">Zahtjev za opseg</string>
+    <string name="xposed_module_request_scope_content">%1$s na korisniku %2$s zahtijeva dodavanje %3$s svom opsegu.</string>
+    <string name="scope_channel_name">Zahtjev za opseg</string>
+    <string name="scope_approve">Odobriti</string>
+    <string name="scope_deny">Poreći</string>
+    <string name="nerver_ask_again">Nikad ne pitaj</string>
 </resources>
