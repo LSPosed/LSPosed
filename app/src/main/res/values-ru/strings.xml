@@ -196,6 +196,7 @@
     <string name="settings_translation">Принять участие в переводе</string>
     <string name="settings_translation_summary">Помогите нам перевести %s на ваш язык</string>
     <string name="settings_create_shortcut_summary">Создать ярлык, с помощью которого можно открыть LSPosed</string>
+    <string name="settings_shortcut_pinned_hint">Ярлык закреплен</string>
     <string name="settings_created_shortcut_summary">Для открытия LSPosed был создан ярлык</string>
     <string name="settings_unsupported_pin_shortcut_summary">Текущий лаунчер по умолчанию не поддерживает ярлыки</string>
     <string name="settings_enable_status_notification">Уведомление</string>
