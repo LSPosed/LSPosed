@@ -49,6 +49,7 @@
     <string name="activated">Activat</string>
     <string name="partial_activated">Parcialment activat</string>
     <string name="selinux_policy_not_loaded_summary">SEPolicy no s\'ha carregat correctament</string>
+    <string name="selinux_policy_not_loaded"><![CDATA[Algunes funcions no funcionaran.<br/>Informeu-ho al desenvolupador <a href="https://github.com/topjohnwu/Magisk/issues"><b>Magisk</b></a>.]]></string>
     <string name="system_inject_fail_summary">La injecció del marc del sistema ha fallat</string>
     <string name="system_inject_fail"><![CDATA[Això és poc comú i podria ser causat per <b>Magisk</b> o algún Mòdul de baixa qualitat<br/>Si us plau, prova a desactivar els demés mòduls de magisk excepte Riru i LSPosed o envia un informe complet als desarrolladors.]]></string>
     <string name="system_prop_incorrect_summary">Prop del sistema incorrecte</string>
@@ -102,6 +103,7 @@
     <!-- ModulesActivity -->
     <string name="module_empty_description">(no s\'ofereix cap descripció)</string>
     <string name="warning_xposed_min_version">Aquest mòdul requereix una versió més nova de Xposed (%d) i per tant no es pot activar</string>
+    <string name="warning_target_version_higher">Aquest mòdul està dissenyat per a una versió més nova de Xposed (%d) i per tant algunes funcionalitats poden no funcionar</string>
     <string name="no_min_version_specified">Aquest mòdul no especifica la versió de Xposed que necessita.</string>
     <string name="warning_min_version_too_low">Aquest mòdul es va crear per a Xposed versió %1$d, però a causa de canvis incompatibles a la versió %2$d, s\'ha desactivat</string>
     <string name="warning_installed_on_external_storage">Aquest mòdul no es pot carregar perquè està instal·lat a la targeta SD, moveu-lo a l\'emmagatzematge intern</string>
@@ -190,7 +192,9 @@
     <string name="settings_translation">Participar en la traducció</string>
     <string name="settings_translation_summary">Ajuda\'ns a traduir %s al teu idioma</string>
     <string name="settings_create_shortcut_summary">Creeu una drecera que pugui obrir el gestor de paràsits</string>
+    <string name="settings_shortcut_pinned_hint">Drecera fixada</string>
     <string name="settings_created_shortcut_summary">S\'ha creat una drecera per obrir el gestor de paràsits</string>
+    <string name="settings_unsupported_pin_shortcut_summary">El llançador predeterminat actual no admet dreceres de pin</string>
     <string name="settings_enable_status_notification">Notificació d\'estat</string>
     <string name="settings_enable_status_notification_summary">Mostra una notificació que pugui obrir el gestor de paràsits</string>
     <string name="disable_status_notification_error">Sense drecera, no es pot desactivar la notificació</string>
@@ -199,6 +203,7 @@
     <string name="update_channel_bate">Beta</string>
     <string name="update_channel_nightly">Construcció nocturna</string>
     <string name="settings_xposed_api_call_protection">Protecció de trucades de l\'API Xposed</string>
+    <string name="settings_xposed_api_call_protection_summary">Bloqueja el codi del mòdul carregat dinàmicament per utilitzar l\'API Xposed, això pot trencar alguns mòduls però beneficiar la seguretat</string>
     <!-- Module Repo -->
     <string name="module_readme">Llegiu-me</string>
     <string name="module_releases">Alliberaments</string>
