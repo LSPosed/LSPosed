@@ -19,7 +19,6 @@
 
 import java.time.Instant
 
-@Suppress("DSL_SCOPE_VIOLATION")
 plugins {
     alias(libs.plugins.agp.app)
     alias(libs.plugins.nav.safeargs)

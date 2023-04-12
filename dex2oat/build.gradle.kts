@@ -17,7 +17,6 @@
  * Copyright (C) 2022 LSPosed Contributors
  */
 
-@Suppress("DSL_SCOPE_VIOLATION")
 plugins {
     alias(libs.plugins.agp.lib)
 }
