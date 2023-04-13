@@ -48,7 +48,7 @@ android {
         buildConfigField("long", "BUILD_TIME", Instant.now().epochSecond.toString())
     }
 
-    packagingOptions {
+    packaging {
         resources {
             excludes += "META-INF/**"
             excludes += "okhttp3/**"

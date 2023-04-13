@@ -65,7 +65,7 @@ jobs:
           echo 'org.gradle.vfs.watch=true' >> gradle.properties
           echo 'org.gradle.jvmargs=-Xmx2048m' >> gradle.properties
           echo 'android.native.buildOutput=verbose' >> gradle.properties
-          sed -i 's/org.gradle.unsafe.configuration-cache=true//g' gradle.properties
+          sed -i 's/org.gradle.configuration-cache=true//g' gradle.properties
           ./gradlew zipAll
 
       - name: Prepare artifact

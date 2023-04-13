@@ -29,6 +29,7 @@ android {
 
     buildFeatures {
         androidResources = false
+        buildConfig = true
     }
 
     defaultConfig {

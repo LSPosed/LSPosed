@@ -126,7 +126,7 @@ public class AppListFragment extends BaseFragment implements MenuProvider {
     public void onViewCreated(@NonNull View view, @Nullable Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
         if (module == null) {
-            if (!safeNavigate(AppListFragmentDirections.actionAppListFragmentToModulesFragment())) {
+            if (!safeNavigate(R.id.action_app_list_fragment_to_modules_fragment)) {
                 safeNavigate(R.id.modules_nav);
             }
         }

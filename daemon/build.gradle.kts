@@ -39,6 +39,7 @@ val defaultManagerPackageName: String by rootProject.extra
 android {
     buildFeatures {
         prefab = true
+        buildConfig = true
     }
 
     defaultConfig {

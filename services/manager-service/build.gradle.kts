@@ -22,6 +22,10 @@ plugins {
 }
 
 android {
+    buildFeatures {
+        aidl = true
+    }
+
     defaultConfig {
         consumerProguardFiles("proguard-rules.pro")
     }
