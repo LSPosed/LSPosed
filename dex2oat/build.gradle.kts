@@ -28,6 +28,7 @@ android {
         androidResources = false
         buildConfig = false
         prefab = true
+        prefabPublishing = true
     }
 
     defaultConfig {
@@ -38,5 +39,9 @@ android {
         cmake {
             path("src/main/cpp/CMakeLists.txt")
         }
+    }
+
+    prefab {
+        register("dex2oat")
     }
 }
