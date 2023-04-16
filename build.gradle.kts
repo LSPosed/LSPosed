@@ -47,11 +47,6 @@ cmaker {
         cppFlags.addAll(flags)
         abiFilters("arm64-v8a", "armeabi-v7a", "x86", "x86_64")
     }
-    buildTypes {
-        if (it.name == "release") {
-            arguments += "-DDEBUG_SYMBOLS_PATH=${buildDir.absolutePath}/symbols"
-        }
-    }
 }
 
 val repo = jgit.repo()

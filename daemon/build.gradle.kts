@@ -52,6 +52,9 @@ android {
         )
         buildConfigField("String", "MANAGER_INJECTED_PKG_NAME", """"$injectedPackageName"""")
         buildConfigField("int", "MANAGER_INJECTED_UID", """$injectedPackageUid""")
+        ndk {
+            debugSymbolLevel = "FULL"
+        }
     }
 
     buildTypes {
