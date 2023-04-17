@@ -63,9 +63,6 @@ android {
         )
         buildConfigField("String", "MANAGER_INJECTED_PKG_NAME", """"$injectedPackageName"""")
         buildConfigField("int", "MANAGER_INJECTED_UID", """$injectedPackageUid""")
-        ndk {
-            debugSymbolLevel = "FULL"
-        }
     }
 
     buildTypes {
@@ -148,7 +145,6 @@ fun afterEval() = android.applicationVariants.forEach { variant ->
             "assemble$variantCapped",
             ":app:package$buildTypeCapped",
             ":daemon:package$buildTypeCapped",
-            ":daemon:merge${buildTypeCapped}NativeDebugMetadata",
             ":dex2oat:externalNativeBuild${buildTypeCapped}"
         )
         into(magiskDir)

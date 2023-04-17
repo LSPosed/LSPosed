@@ -112,9 +112,12 @@ jobs:
           path: |
             magisk-loader/build/outputs/mapping
             app/build/outputs/mapping
-            daemon/build/outputs/mapping
-            magisk-loader/build/outputs/native-debug-symbols
-            daemon/build/outputs/native-debug-symbols
+
+      - name: Upload symbols
+        uses: actions/upload-artifact@v3
+        with:
+          name: symbols
+          path: build/symbols
 
       - name: Post to channel
         if: ${{ success() && github.event_name != 'pull_request' && github.ref == 'refs/heads/master' && github.ref_type != 'tag' && inputs.post_telegram != 'false' }}
