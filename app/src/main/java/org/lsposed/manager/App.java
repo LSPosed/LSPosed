@@ -221,39 +221,39 @@ public class App extends Application {
         //noinspection deprecation
         res.updateConfiguration(config, res.getDisplayMetrics());
 
-        IntentFilter intentFilter = new IntentFilter();
-        intentFilter.addAction("org.lsposed.manager.NOTIFICATION");
-        registerReceiver(new BroadcastReceiver() {
-            @Override
-            public void onReceive(Context context, Intent inIntent) {
-                var intent = (Intent) inIntent.getParcelableExtra(Intent.EXTRA_INTENT);
-                Log.d(TAG, "onReceive: " + intent);
-                switch (intent.getAction()) {
-                    case Intent.ACTION_PACKAGE_ADDED:
-                    case Intent.ACTION_PACKAGE_CHANGED:
-                    case Intent.ACTION_PACKAGE_FULLY_REMOVED:
-                    case Intent.ACTION_UID_REMOVED: {
-                        var userId = intent.getIntExtra(Intent.EXTRA_USER, 0);
-                        var packageName = intent.getStringExtra("android.intent.extra.PACKAGES");
-                        var packageRemovedForAllUsers = intent.getBooleanExtra(EXTRA_REMOVED_FOR_ALL_USERS, false);
-                        var isXposedModule = intent.getBooleanExtra("isXposedModule", false);
-                        if (packageName != null) {
-                            if (isXposedModule)
-                                ModuleUtil.getInstance().reloadSingleModule(packageName, userId, packageRemovedForAllUsers);
-                            else
-                                App.getExecutorService().submit(() -> AppHelper.getAppList(true));
-                        }
-                        break;
-                    }
-                    case ACTION_USER_ADDED:
-                    case ACTION_USER_REMOVED:
-                    case ACTION_USER_INFO_CHANGED: {
-                        App.getExecutorService().submit(() -> ModuleUtil.getInstance().reloadInstalledModules());
-                        break;
-                    }
-                }
-            }
-        }, intentFilter, Context.RECEIVER_NOT_EXPORTED);
+//        IntentFilter intentFilter = new IntentFilter();
+//        intentFilter.addAction("org.lsposed.manager.NOTIFICATION");
+//        registerReceiver(new BroadcastReceiver() {
+//            @Override
+//            public void onReceive(Context context, Intent inIntent) {
+//                var intent = (Intent) inIntent.getParcelableExtra(Intent.EXTRA_INTENT);
+//                Log.d(TAG, "onReceive: " + intent);
+//                switch (intent.getAction()) {
+//                    case Intent.ACTION_PACKAGE_ADDED:
+//                    case Intent.ACTION_PACKAGE_CHANGED:
+//                    case Intent.ACTION_PACKAGE_FULLY_REMOVED:
+//                    case Intent.ACTION_UID_REMOVED: {
+//                        var userId = intent.getIntExtra(Intent.EXTRA_USER, 0);
+//                        var packageName = intent.getStringExtra("android.intent.extra.PACKAGES");
+//                        var packageRemovedForAllUsers = intent.getBooleanExtra(EXTRA_REMOVED_FOR_ALL_USERS, false);
+//                        var isXposedModule = intent.getBooleanExtra("isXposedModule", false);
+//                        if (packageName != null) {
+//                            if (isXposedModule)
+//                                ModuleUtil.getInstance().reloadSingleModule(packageName, userId, packageRemovedForAllUsers);
+//                            else
+//                                App.getExecutorService().submit(() -> AppHelper.getAppList(true));
+//                        }
+//                        break;
+//                    }
+//                    case ACTION_USER_ADDED:
+//                    case ACTION_USER_REMOVED:
+//                    case ACTION_USER_INFO_CHANGED: {
+//                        App.getExecutorService().submit(() -> ModuleUtil.getInstance().reloadInstalledModules());
+//                        break;
+//                    }
+//                }
+//            }
+//        }, intentFilter, Context.RECEIVER_NOT_EXPORTED);
 
         UpdateUtil.loadRemoteVersion();
 

@@ -17,27 +17,12 @@
  * Copyright (C) 2023 LSPosed Contributors
  */
 
-plugins {
-    alias(libs.plugins.agp.lib)
-}
+package org.lsposed.lspd;
 
-android {
-    buildFeatures {
-        aidl = true
-    }
+// Declare any non-default types here with import statements
 
-    defaultConfig {
-        consumerProguardFiles("proguard-rules.pro")
-    }
-
-    buildTypes {
-        release {
-            isMinifyEnabled = false
-        }
-    }
-    namespace = "org.lsposed.lspd.managerservice"
-}
-
-dependencies {
-    api(libs.rikkax.parcelablelist)
+interface ILSPManagerClientService {
+    boolean reloadSingleModule(String packageName, int userId, boolean packageRemovedForAllUsers) = 1;
+    boolean reloadInstalledModules() = 2;
+    boolean refreshAppList(boolean force) = 3;
 }

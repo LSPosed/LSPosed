@@ -22,12 +22,10 @@ plugins {
 }
 
 android {
-    buildFeatures {
-        aidl = true
-    }
+    namespace = "org.lsposed.lspd.managerclient"
 
     defaultConfig {
-        consumerProguardFiles("proguard-rules.pro")
+        consumerProguardFiles("consumer-rules.pro")
     }
 
     buildTypes {
@@ -35,7 +33,10 @@ android {
             isMinifyEnabled = false
         }
     }
-    namespace = "org.lsposed.lspd.managerservice"
+
+    buildFeatures {
+        aidl = true
+    }
 }
 
 dependencies {

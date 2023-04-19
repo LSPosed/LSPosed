@@ -20,6 +20,10 @@
 package org.lsposed.lspd.service;
 
 import static android.content.Context.BIND_AUTO_CREATE;
+import static org.lsposed.lspd.service.LSPosedService.ACTION_USER_ADDED;
+import static org.lsposed.lspd.service.LSPosedService.ACTION_USER_INFO_CHANGED;
+import static org.lsposed.lspd.service.LSPosedService.ACTION_USER_REMOVED;
+import static org.lsposed.lspd.service.LSPosedService.EXTRA_REMOVED_FOR_ALL_USERS;
 import static org.lsposed.lspd.service.ServiceManager.TAG;
 import static org.lsposed.lspd.service.ServiceManager.getExecutorService;
 
@@ -50,6 +54,7 @@ import androidx.annotation.NonNull;
 
 import org.lsposed.daemon.BuildConfig;
 import org.lsposed.lspd.ILSPManagerService;
+import org.lsposed.lspd.ILSPManagerClientService;
 import org.lsposed.lspd.models.Application;
 import org.lsposed.lspd.models.UserInfo;
 import org.lsposed.lspd.util.Utils;
@@ -71,6 +76,7 @@ public class LSPManagerService extends ILSPManagerService.Stub {
     private static String RANDOM_UUID = null;
 
     private static Intent managerIntent = null;
+    private static ILSPManagerClientService service = null;
 
     public class ManagerGuard implements IBinder.DeathRecipient {
         private final @NonNull
@@ -110,6 +116,7 @@ public class LSPManagerService extends ILSPManagerService.Stub {
                 Log.e(TAG, "manager guard", e);
             }
             guard = null;
+            service = null;
         }
 
         boolean isAlive() {
@@ -175,21 +182,45 @@ public class LSPManagerService extends ILSPManagerService.Stub {
 
     @SuppressLint("WrongConstant")
     public static void broadcastIntent(Intent inIntent) {
-        var intent = new Intent("org.lsposed.manager.NOTIFICATION");
-        intent.putExtra(Intent.EXTRA_INTENT, inIntent);
-        intent.addFlags(0x01000000); //Intent.FLAG_RECEIVER_INCLUDE_BACKGROUND
-        intent.addFlags(0x00400000); //Intent.FLAG_RECEIVER_FROM_SHELL
-        intent.setPackage(BuildConfig.MANAGER_INJECTED_PKG_NAME);
+//        var intent = new Intent("org.lsposed.manager.NOTIFICATION");
+//        intent.putExtra(Intent.EXTRA_INTENT, inIntent);
+//        intent.addFlags(0x01000000); //Intent.FLAG_RECEIVER_INCLUDE_BACKGROUND
+//        intent.addFlags(0x00400000); //Intent.FLAG_RECEIVER_FROM_SHELL
+//        intent.setPackage(BuildConfig.MANAGER_INJECTED_PKG_NAME);
         try {
-            ActivityManagerService.broadcastIntentWithFeature(null, intent,
-                    null, null, 0, null, null,
-                    null, -1, null, true, false,
-                    0);
-            intent.setPackage(BuildConfig.DEFAULT_MANAGER_PACKAGE_NAME);
-            ActivityManagerService.broadcastIntentWithFeature(null, intent,
-                    null, null, 0, null, null,
-                    null, -1, null, true, false,
-                    0);
+            switch (inIntent.getAction()) {
+                case Intent.ACTION_PACKAGE_ADDED:
+                case Intent.ACTION_PACKAGE_CHANGED:
+                case Intent.ACTION_PACKAGE_FULLY_REMOVED:
+                case Intent.ACTION_UID_REMOVED: {
+                    var userId = inIntent.getIntExtra(Intent.EXTRA_USER, 0);
+                    var packageName = inIntent.getStringExtra("android.intent.extra.PACKAGES");
+                    var packageRemovedForAllUsers = inIntent.getBooleanExtra(EXTRA_REMOVED_FOR_ALL_USERS, false);
+                    var isXposedModule = inIntent.getBooleanExtra("isXposedModule", false);
+                    if (packageName != null) {
+                        if (isXposedModule)
+                            service.reloadSingleModule(packageName, userId, packageRemovedForAllUsers);
+                        else
+                            service.refreshAppList(true);
+                    }
+                    break;
+                }
+                case ACTION_USER_ADDED:
+                case ACTION_USER_REMOVED:
+                case ACTION_USER_INFO_CHANGED: {
+                    service.reloadInstalledModules();
+                    break;
+                }
+            }
+//            ActivityManagerService.broadcastIntentWithFeature(null, intent,
+//                    null, null, 0, null, null,
+//                    null, -1, null, true, false,
+//                    0);
+//            intent.setPackage(BuildConfig.DEFAULT_MANAGER_PACKAGE_NAME);
+//            ActivityManagerService.broadcastIntentWithFeature(null, intent,
+//                    null, null, 0, null, null,
+//                    null, -1, null, true, false,
+//                    0);
         } catch (RemoteException t) {
             Log.e(TAG, "Broadcast to manager failed: ", t);
         }

@@ -44,7 +44,7 @@ public class LSPApplicationService extends ILSPApplicationService.Stub {
     // key: <uid, pid>
     private final static Map<Pair<Integer, Integer>, ProcessInfo> processes = new ConcurrentHashMap<>();
 
-    static class ProcessInfo implements DeathRecipient {
+    static class ProcessInfo implements IBinder.DeathRecipient {
         final int uid;
         final int pid;
         final String processName;
