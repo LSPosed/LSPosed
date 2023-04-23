@@ -21,19 +21,20 @@
 package org.lsposed.manager.ui.activity.base;
 
 import android.app.ActivityManager;
+import android.content.pm.PackageManager;
 import android.content.res.Resources;
 import android.graphics.Bitmap;
 import android.graphics.Canvas;
 import android.graphics.Color;
 import android.graphics.drawable.BitmapDrawable;
+import android.os.Build;
 import android.os.Bundle;
 import android.view.Window;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 
-import com.google.android.material.color.DynamicColors;
-
+import org.lsposed.manager.App;
 import org.lsposed.manager.BuildConfig;
 import org.lsposed.manager.ConfigManager;
 import org.lsposed.manager.R;
@@ -57,10 +58,19 @@ public class BaseActivity extends MaterialActivity {
         // make sure the versions are consistent
         if (BuildConfig.DEBUG) return;
         if (!ConfigManager.isBinderAlive()) return;
-        var version = ConfigManager.getXposedVersionCode();
-        if (BuildConfig.VERSION_CODE == version) return;
+        var xposedVersionCode = ConfigManager.getXposedVersionCode();
+        long managerVersionCode = BuildConfig.VERSION_CODE;
+        if (!App.isParasitic)
+            try {
+                if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.P) {
+                    managerVersionCode = ConfigManager.getPackageInfo(BuildConfig.APPLICATION_ID, PackageManager.GET_META_DATA, 0).getLongVersionCode();
+                } else
+                    managerVersionCode = ConfigManager.getPackageInfo(BuildConfig.APPLICATION_ID, PackageManager.GET_META_DATA, 0).versionCode;
+            } catch (PackageManager.NameNotFoundException ignored) {
+            }
+        if (managerVersionCode == xposedVersionCode) return;
         new BlurBehindDialogBuilder(this)
-                .setMessage(getString(R.string.version_mismatch, version, BuildConfig.VERSION_CODE))
+                .setMessage(getString(R.string.version_mismatch, xposedVersionCode, managerVersionCode))
                 .setPositiveButton(android.R.string.ok, (dialog, id) -> {
                     if (UpdateUtil.canInstall()) {
                         new FlashDialogBuilder(this, (d, i) -> finish()).show();
