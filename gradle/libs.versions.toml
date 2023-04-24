@@ -5,7 +5,7 @@ nav = "2.5.3"
 appcenter = "5.0.1"
 libxposed = "100"
 glide = "4.15.1"
-okhttp = "4.10.0"
+okhttp = "4.11.0"
 
 [plugins]
 agp-lib = { id = "com.android.library", version.ref = "agp" }
