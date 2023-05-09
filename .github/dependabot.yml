@@ -7,6 +7,9 @@ updates:
       time: "21:00"
     open-pull-requests-limit: 10
     target-branch: master
+    registries:
+      - maven-google
+      - gralde-plugin
 
 registries:
   maven-google:
