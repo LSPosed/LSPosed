@@ -9,12 +9,12 @@ updates:
     target-branch: master
     registries:
       - maven-google
-      - gralde-plugin
+      - gradle-plugin
 
 registries:
   maven-google:
     type: maven-repository
     url: "https://dl.google.com/dl/android/maven2/"
-  gralde-plugin:
+  gradle-plugin:
     type: maven-repository
     url: "https://plugins.gradle.org/m2/"
