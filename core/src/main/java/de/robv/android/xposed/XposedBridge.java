@@ -492,7 +492,7 @@ public final class XposedBridge {
                 try {
                     if (HookBridge.instanceOf(cb, XC_MethodHook.class)) {
                         ((XC_MethodHook) cb).afterHookedMethod(param);
-                    } else if (HookBridge.instanceOf(cb, XposedInterface.AfterHookCallback.class)) {
+                    } else if (HookBridge.instanceOf(cb, XposedInterface.AfterHooker.class)) {
                         ((XposedInterface.AfterHooker<T>) cb).after(param);
                     }
                 } catch (Throwable t) {
