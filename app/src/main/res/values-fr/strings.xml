@@ -21,7 +21,7 @@
     <!-- MainActivity -->
     <string name="info">Info</string>
     <string name="overview">Aperçu</string>
-    <string name="Modules">Modules</string>
+    <string name="Modules">Module</string>
     <plurals name="modules_enabled_count">
         <item quantity="one">%d module actif</item>
         <item quantity="other">%d modules actifs</item>
