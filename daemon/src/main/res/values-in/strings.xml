@@ -16,6 +16,6 @@
     <string name="xposed_module_request_scope_content">%1$s pada pengguna %2$s meminta untuk menambahkan %3$s ke dalam cakupannya.</string>
     <string name="scope_channel_name">Permintaan cakupan</string>
     <string name="scope_approve">Menyetujui</string>
-    <string name="scope_deny">Menyangkal</string>
+    <string name="scope_deny">Menolak</string>
     <string name="nerver_ask_again">Jangan Pernah Bertanya</string>
 </resources>
