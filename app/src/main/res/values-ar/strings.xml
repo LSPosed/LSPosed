@@ -200,7 +200,7 @@
     <string name="settings_translation">المشاركة في الترجمة</string>
     <string name="settings_translation_summary">ساعدنا في ترجمة %s إلى لغتك</string>
     <string name="settings_create_shortcut_summary">إنشاء اختصار يمكنه فتح مدير الطفيليات</string>
-    <string name="settings_shortcut_pinned_hint">Shortcut pinned</string>
+    <string name="settings_shortcut_pinned_hint">تم تثبيت الاختصار</string>
     <string name="settings_created_shortcut_summary">تم إنشاء اختصار لفتح مدير الطفيليات</string>
     <string name="settings_unsupported_pin_shortcut_summary">المشغل الافتراضي الحالي لا يدعم اختصارات الدبوس</string>
     <string name="settings_enable_status_notification">إشعارات الحالة</string>
