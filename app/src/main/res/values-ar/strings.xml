@@ -57,7 +57,7 @@
     <string name="activated">مُفعّل</string>
     <string name="partial_activated">مفعل جزئياً</string>
     <string name="selinux_policy_not_loaded_summary">لم يتم تحميل SEPolicy بشكل صحيح</string>
-    <string name="selinux_policy_not_loaded"><![CDATA[<a href="https://github.com/topjohnwu/Magisk/issues">.]]></string>
+    <string name="selinux_policy_not_loaded"><![CDATA[لن تعمل الوحدات النمطية التي تربط إطار عمل النظام.<br/>الرجاء الإبلاغ عن هذا إلى <a href="https://github.com/topjohnwu/Magisk/issues"><b>ماجيسك</b></a> مطور النظام.]]></string>
     <string name="system_inject_fail_summary">فشل حقن إطار عمل النظام</string>
     <string name="system_inject_fail"><![CDATA[هذا نادر وقد يكون بسبب <b>Magisk</b> أو بعض وحدات Magisk منخفضة الجودة.<br/>الرجاء محاولة تعطيل وحدات Magisk خلاف Riru وLSPosed أو إرسال سجل كامل للمطورين.]]></string>
     <string name="system_prop_incorrect_summary">نظام prop غير صحيح</string>
@@ -111,7 +111,7 @@
     <!-- ModulesActivity -->
     <string name="module_empty_description">(لم يتم تقديم وصف)</string>
     <string name="warning_xposed_min_version">هذه الوحدة تتطلب إصدار Xposed الأحدث (%d) لذا لا يمكن تفعيلها</string>
-    <string name="warning_target_version_higher">تم تصميم هذه الوحدة لإصدار Xposed أحدث (%d) وبالتالي قد لا تعمل بعض الوظائف</string>
+    <string name="warning_target_version_higher">Этот модуль разработан для более новой версии Xposed (%d), поэтому некоторые функции могут не работать</string>
     <string name="no_min_version_specified">لا تحدد هذه الوحدة إصدار Xposed الذي تحتاجه.</string>
     <string name="warning_min_version_too_low">تم إنشاء هذه الوحدة لإصدار Xposed %1$d ، ولكن بسبب التغييرات غير المتوافقة في الإصدار %2$d، فقد تم تعطيلها</string>
     <string name="warning_installed_on_external_storage">لا يمكن تحميل هذه الوحدة لأنها مثبتة على بطاقة الذاكرة، يرجى نقلها إلى مساحة التخزين الداخلية</string>
@@ -200,9 +200,9 @@
     <string name="settings_translation">المشاركة في الترجمة</string>
     <string name="settings_translation_summary">ساعدنا في ترجمة %s إلى لغتك</string>
     <string name="settings_create_shortcut_summary">إنشاء اختصار يمكنه فتح مدير الطفيليات</string>
-    <string name="settings_shortcut_pinned_hint">تم تثبيت الاختصار</string>
+    <string name="settings_shortcut_pinned_hint">ثبت الاختصار</string>
     <string name="settings_created_shortcut_summary">تم إنشاء اختصار لفتح مدير الطفيليات</string>
-    <string name="settings_unsupported_pin_shortcut_summary">المشغل الافتراضي الحالي لا يدعم اختصارات الدبوس</string>
+    <string name="settings_unsupported_pin_shortcut_summary">Текущий лаунчер по умолчанию не поддерживает ярлыки</string>
     <string name="settings_enable_status_notification">إشعارات الحالة</string>
     <string name="settings_enable_status_notification_summary">إظهار إشعار يمكنه فتح مدير الطفيليات</string>
     <string name="disable_status_notification_error">لا يوجد اختصار، لا يمكن تعطيل الإشعار</string>
@@ -211,7 +211,7 @@
     <string name="update_channel_bate">تجريبي</string>
     <string name="update_channel_nightly">البناء الليلي</string>
     <string name="settings_xposed_api_call_protection">حماية استدعاء Xposed API</string>
-    <string name="settings_xposed_api_call_protection_summary">حظر رمز الوحدة الذي يتم تحميله ديناميكيًا لاستخدام Xposed API ، قد يؤدي ذلك إلى كسر بعض الوحدات ولكنه يفيد الأمان</string>
+    <string name="settings_xposed_api_call_protection_summary">Блокировать динамически загружаемый код модуля для использования Xposed API, это может нарушить работу некоторых модулей, но повысит безопасность</string>
     <!-- Module Repo -->
     <string name="module_readme">اقرأني</string>
     <string name="module_releases">إصدارات</string>
