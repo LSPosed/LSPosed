@@ -24,7 +24,7 @@
     <string name="Modules">Modüller</string>
     <plurals name="modules_enabled_count">
         <item quantity="one">%d modül etkin</item>
-        <item quantity="other">%d modülleri etkin</item>
+        <item quantity="other">%d modüller etkin </item>
     </plurals>
     <string name="Logs">Günlükler</string>
     <string name="Settings">Ayarlar</string>
