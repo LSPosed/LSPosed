@@ -26,7 +26,7 @@
         android:actionViewClass="androidx.appcompat.widget.SearchView"
         android:icon="@drawable/ic_baseline_search_24"
         android:showAsAction="ifRoom|collapseActionView"
-        android:title="@string/menu_search" />
+        android:title="@android:string/search_go" />
 
     <item
         android:id="@+id/item_list_sort"
