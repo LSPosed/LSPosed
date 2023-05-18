@@ -170,7 +170,6 @@
     <string name="modules_other_app">View in other app</string>
     <string name="module_app_info">App info</string>
     <string name="list_empty">¯\\\\_(ツ)_\/¯\nNothing here</string>
-    <string name="menu_search">Search</string>
 
     <!-- SettingsActivity -->
     <string name="settings_group_framework">Framework</string>
