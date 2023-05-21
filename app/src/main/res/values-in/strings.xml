@@ -67,17 +67,17 @@
     <string name="supported">Didukung</string>
     <string name="unsupported">Tidak didukung</string>
     <string name="android_version_unsatisfied">Versi Android tidak tersedia</string>
-    <string name="crashed">Rusak</string>
-    <string name="mount_failed">Pengaitan gagal</string>
+    <string name="crashed">Crash</string>
+    <string name="mount_failed">Mount gagal</string>
     <string name="selinux_permissive">SELinux permisif</string>
-    <string name="sepolicy_incorrect">Kebijakan SELinux salah</string>
+    <string name="sepolicy_incorrect">SELinux policy salah</string>
     <string name="update_lsposed">Perbarui LSPosed</string>
     <string name="update_lsposed_msg">Konfirmasi untuk pembaruan LSPosed? Perangkat ini akan mulai ulang setelah pembaruan selesai</string>
     <!-- WelcomeDialog -->
     <string name="parasitic_welcome">Selamat datang di LSPosed</string>
     <string name="parasitic_welcome_summary">Anda menggunakan manajer parasit, yang dapat membuat pintasan atau dapat terbuka dari notifikasi.</string>
-    <string name="parasitic_welcome_summary_no_shortcut_support">Anda menggunakan pengelola parasit, yang dapat dibuka dari notifikasi.</string>
-    <string name="create_shortcut">Buat pintasan</string>
+    <string name="parasitic_welcome_summary_no_shortcut_support">Anda menggunakan manajer parasit, yang dapat dibuka dari notifikasi.</string>
+    <string name="create_shortcut">Buat shortcut</string>
     <string name="never_show">Jangan pernah tampilkan</string>
     <string name="app_welcome">Manajer Parasit Direkomendasikan</string>
     <string name="app_welcome_summary">LSPosed sekarang mendukung parasitisasi sistem untuk menghindari deteksi, Anda dapat membuka manajer parasit dari pemberitahuan. Disarankan untuk menghapus aplikasi saat ini.</string>
@@ -121,22 +121,22 @@
     <!-- AppListActivity -->
     <string name="compile_speed">Mengoptimalkan ulang</string>
     <string name="compile_speed_msg">Mengoptimalkan…</string>
-    <string name="compile_done">Optimisasi selesai</string>
+    <string name="compile_done">Optimalisasi selesai</string>
     <string name="app_launch">Luncurkan</string>
-    <string name="compile_failed">Optimasi gagal: hasil yang dikembalikan kosong</string>
-    <string name="compile_failed_with_info">Optimasi gagal: </string>
+    <string name="compile_failed">Optimalisasi gagal: nilai yang dihasilkan kosong</string>
+    <string name="compile_failed_with_info">Optimalisasi gagal: </string>
     <string name="sort_by_name">Nama aplikasi</string>
     <string name="sort_by_package_name">Nama paket</string>
     <string name="sort_by_install_time">Waktu pemasangan</string>
     <string name="sort_by_update_time">Waktu pembaruan</string>
-    <string name="sort_reverse">Membalikkan</string>
+    <string name="sort_reverse">Terbalik</string>
     <string name="menu_show_system_apps">Aplikasi sistem</string>
     <string name="menu_sort">Penyortiran</string>
     <string name="enable_module">Aktifkan modul</string>
     <string name="no_scope_selected">Anda tidak memilih aplikasi apa pun. Lanjutkan?</string>
     <string name="menu_show_games">Permainan</string>
     <string name="menu_show_modules">Modul</string>
-    <string name="menu_show_denylist">Daftar tolak</string>
+    <string name="menu_show_denylist">Denylist</string>
     <string name="failed_to_save_scope_list">Gagal menyimpan ke daftar cakupan</string>
     <string name="app_version">Versi: %1$s</string>
     <string name="use_recommended">Direkomendasikan</string>
@@ -152,12 +152,12 @@
     <string name="menu_restore">Pulihkan</string>
     <string name="force_stop">Paksa berhenti</string>
     <string name="force_stop_dlg_title">Paksa berhenti?</string>
-    <string name="force_stop_dlg_text">Jika anda memaksa menghentikan aplikasi, mungkin akan bekerja tidak semestinya.</string>
+    <string name="force_stop_dlg_text">Jika Anda menghentikan paksa aplikasi, mungkin dapat bekerja tidak semestinya.</string>
     <string name="reboot_required">Mulai ulang diperlukan agar perubahan ini dapat diterapkan</string>
     <string name="reboot">Mulai ulang</string>
     <string name="menu_hide">Sembunyikan</string>
-    <string name="deny_list">%s berada di daftar tolak. Kemungkinan tidak akan merubah apapun.</string>
-    <string name="deny_list_info">Berada di daftar tolak</string>
+    <string name="deny_list">%s berada di denylist. Ini mungkin tidak akan berpengaruh.</string>
+    <string name="deny_list_info">Berada di denylist</string>
     <!-- ModulesActivity and AppListActivity -->
     <string name="modules_other_app">Lihat di aplikasi lain</string>
     <string name="module_app_info">Informasi aplikasi</string>
@@ -179,16 +179,16 @@
     <string name="settings_restore_failed2">Gagal memulihkan:\n%s</string>
     <string name="group_network">Jaringan</string>
     <string name="dns_over_http">DNS melalui HTTPS</string>
-    <string name="dns_over_http_summary">Mengatasi pencemaran DNS di beberapa negara</string>
+    <string name="dns_over_http_summary">Solusi mengatasi masalah DNS di beberapa negara</string>
     <string name="theme_color">Warna tema</string>
-    <string name="theme_color_system">Warna aksen sistem</string>
+    <string name="theme_color_system">Warna tema sistem</string>
     <string name="settings_show_hidden_icon_apps_enabled">Paksa aplikasi untuk menampilkan ikon peluncur</string>
     <string name="settings_show_hidden_icon_apps_enabled_summary">Setelah Android 10, aplikasi tidak diizinkan menyembunyikan ikon peluncurnya. Matikan untuk menonaktifkan fitur sistem ini.</string>
     <string name="settings_group_system">Sistem</string>
     <string name="settings_language">Bahasa</string>
     <string name="settings_translation_contributors">Kontributor terjemahan</string>
     <string name="settings_translation">Berpartisipasi dalam terjemahan</string>
-    <string name="settings_translation_summary">Bantu kami menerjemahkan %s kedalam bahasamu</string>
+    <string name="settings_translation_summary">Bantu kami menerjemahkan %s ke dalam bahasamu</string>
     <string name="settings_create_shortcut_summary">Buat pintasan yang dapat membuka manajer parasit</string>
     <string name="settings_shortcut_pinned_hint">Pintasan disematkan</string>
     <string name="settings_created_shortcut_summary">Pintasan telah dibuat untuk membuka manajer parasit</string>
@@ -200,17 +200,17 @@
     <string name="update_channel_stable">Stabil</string>
     <string name="update_channel_bate">Beta</string>
     <string name="update_channel_nightly">Rilis harian</string>
-    <string name="settings_xposed_api_call_protection">Perlindungan panggilan Xposed API</string>
+    <string name="settings_xposed_api_call_protection">Proteksi panggilan API Xposed</string>
     <string name="settings_xposed_api_call_protection_summary">Blokir kode modul yang dimuat secara dinamis untuk menggunakan Xposed API, ini mungkin mengganggu beberapa modul namun lebih aman</string>
     <!-- Module Repo -->
-    <string name="module_readme">Baca aku</string>
+    <string name="module_readme">Readme</string>
     <string name="module_releases">Rilis</string>
     <string name="module_information">Informasi</string>
     <string name="module_information_homepage">Beranda</string>
     <string name="module_information_source_url">Kode sumber</string>
     <string name="module_information_collaborators">Kolaborator</string>
     <string name="module_release_view_assets">Aset</string>
-    <string name="menu_open_in_browser">Buka di peramban</string>
+    <string name="menu_open_in_browser">Buka di browser</string>
     <string name="refresh">Segarkan</string>
     <string name="module_release_load_more">Tampilkan versi lama</string>
     <string name="module_release_no_more">Tidak ada rilis</string>
@@ -218,9 +218,9 @@
     <string name="sort_upgradable_first">Dapat diupgrade terlebih dahulu</string>
     <!-- CrashReportActivity -->
     <string name="version_mismatch">Versi dari LSPosed framework (%1$d) tidak cocok dengan pengelola (%2$d). Mohon pasang ulang LSPosed.</string>
-    <string name="manager_crashed">Pengelola rusak</string>
-    <string name="send_crash_info">Kirim info gagal</string>
-    <string name="crash_info_copied">Info kegagalan disalin ke papan klip</string>
+    <string name="manager_crashed">Manajer crash</string>
+    <string name="send_crash_info">Kirim info crash</string>
+    <string name="crash_info_copied">Info crash dicopy ke clipboard</string>
     <string name="info_copied">Disalin ke papan klip</string>
     <!-- Colors -->
     <string name="color_sakura">Sakura</string>

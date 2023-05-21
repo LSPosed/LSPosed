@@ -1,0 +1,21 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <!-- Notification -->
+    <string name="module_is_not_activated_yet">Xposed මොඩියුලය තවම සක්‍රිය කර නැත</string>
+    <string name="module_is_not_activated_yet_main_user_detailed">%1$s ස්ථාපනය කර ඇත, නමුත් තවමත් සක්රිය කර නැත</string>
+    <string name="module_is_not_activated_yet_multi_user_detailed">පරිශීලක %2$sවෙත %1$s ස්ථාපනය කර ඇත, නමුත් තවමත් සක්‍රිය කර නොමැත</string>
+    <string name="xposed_module_updated_notification_title">Xposed මොඩියුලය යාවත්කාලීන කරන ලදී</string>
+    <string name="xposed_module_updated_notification_content">%s යාවත්කාලීන කර ඇත, කරුණාකර එහි විෂය පථය තුළ යෙදුම් බලහත්කාරයෙන් නතර කර නැවත ආරම්භ කරන්න</string>
+    <string name="xposed_module_updated_notification_title_system">Xposed මොඩියුලය යාවත්කාලීන කරන ලදි, පද්ධතිය නැවත ආරම්භ කිරීම අවශ්‍යයි</string>
+    <string name="xposed_module_updated_notification_content_system">%s යාවත්කාලීන කර ඇත, විෂය පථයේ පද්ධති රාමුව අඩංගු බැවින්, වෙනස්කම් යෙදීමට නැවත පණගැන්වීම අවශ්‍ය වේ</string>
+    <string name="module_updated_channel_name">මොඩියුල යාවත්කාලීන කිරීම සම්පූර්ණයි</string>
+    <string name="status_channel_name">එල්එස්පී තත්ත්වය</string>
+    <string name="lsposed_running_notification_title">LSPposed පටවා ඇත</string>
+    <string name="lsposed_running_notification_content">කළමනාකරු විවෘත කිරීමට දැනුම්දීම තට්ටු කරන්න</string>
+    <string name="xposed_module_request_scope_title">විෂය පථය ඉල්ලීම</string>
+    <string name="xposed_module_request_scope_content">පරිශීලක %2$s හි %1$s එහි විෂය පථයට %3$s එකතු කරන ලෙස ඉල්ලා සිටී.</string>
+    <string name="scope_channel_name">විෂය පථය ඉල්ලීම</string>
+    <string name="scope_approve">අනුමත කරන්න</string>
+    <string name="scope_deny">ප්රතික්ෂේප කරන්න</string>
+    <string name="nerver_ask_again">කවදාවත් අහන්න එපා</string>
+</resources>

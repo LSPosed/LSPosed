@@ -47,7 +47,7 @@
     <string name="activated">有効化済み</string>
     <string name="partial_activated">部分的に有効化済み</string>
     <string name="selinux_policy_not_loaded_summary">SEPolicyが正しく読み込まれていません</string>
-    <string name="selinux_policy_not_loaded"><![CDATA[一部の機能が動作しない。<br/> <a href="https://github.com/topjohnwu/Magisk/issues"><b>Magisk</b></a> 開発者にご報告ください。]]></string>
+    <string name="selinux_policy_not_loaded"><![CDATA[一部の機能が動作しない。<br/><a href="https://github.com/topjohnwu/Magisk/issues"><b>Magisk</b></a>開発者にご報告ください。]]></string>
     <string name="system_inject_fail_summary">システムフレームワークへのパッチに失敗しました</string>
     <string name="system_inject_fail"><![CDATA[本現象はごく稀に発生し、<b>Magisk</b>もしくは低品質な Magiskモジュールが原因で発生します。<br/>RiruとLSPosed以外のMagiskモジュールを一時的に無効化してみるか、開発者へすべてのログを提出して下さい。]]></string>
     <string name="system_prop_incorrect_summary">システム設定が正しくありません</string>
@@ -75,23 +75,23 @@
     <string name="update_lsposed_msg">LSPosedをアップデートしてもよろしいですか？アップデート完了後、このデバイスは再起動します</string>
     <!-- WelcomeDialog -->
     <string name="parasitic_welcome">LSPosedへようこそ</string>
-    <string name="parasitic_welcome_summary">ショートカットを作成したり、通知からまだ開くことができる寄生マネージャを使用しています。</string>
-    <string name="parasitic_welcome_summary_no_shortcut_support">通知から開くことができる寄生マネージャを使用しています。</string>
+    <string name="parasitic_welcome_summary">パラサイトマネージャーを使用しています。これにより、ショートカットを作成したり、通知から開いたりできます。</string>
+    <string name="parasitic_welcome_summary_no_shortcut_support">通知から開くことができるパラサイトマネージャーを使用しています。</string>
     <string name="create_shortcut">ショートカットを作成</string>
     <string name="never_show">表示しない</string>
-    <string name="app_welcome">寄生マネージャーがおすすめです</string>
-    <string name="app_welcome_summary">LSPosedは検出を回避するためのシステム寄生に対応し、通知から寄生マネージャを開くことができるようになりました。現在のアプリケーションをアンインストールすることをお勧めします。</string>
+    <string name="app_welcome">パラサイトマネージャー推奨</string>
+    <string name="app_welcome_summary">LSPosedは検出を回避するためのシステムパラサイトに対応し、通知からパラサイトマネージャーを開くことができるようになりました。現在のアプリケーションをアンインストールすることをお勧めします。</string>
     <!-- LogsActivity -->
     <string name="menuSaveToSd">保存</string>
     <string name="nav_item_logs_verbose">詳細ログ</string>
     <string name="nav_item_logs_module">モジュールログ</string>
-    <string name="logs_saved">ログを保存</string>
+    <string name="logs_saved">ログを保存しました</string>
     <string name="logs_save_failed2">保存に失敗しました:\n%s</string>
-    <string name="menuClearLog">すぐにログを消去</string>
+    <string name="menuClearLog">ログを消去</string>
     <string name="logs_cleared">ログの消去に成功しました。</string>
     <string name="scroll_top">ログの先頭行にスクロール</string>
     <string name="loading">読み込み中…</string>
-    <string name="scroll_bottom">ログの最下行にスクロール</string>
+    <string name="scroll_bottom">最下行にスクロール</string>
     <string name="logs_cannot_read">ログの読み込みに失敗: \n</string>
     <string name="menuReload">再読込</string>
     <string name="logs_clear_failed_2">ログの消去に失敗</string>
@@ -101,7 +101,7 @@
     <!-- ModulesActivity -->
     <string name="module_empty_description">(詳細説明なし)</string>
     <string name="warning_xposed_min_version">このモジュールは新しいバージョンのXposed(%d)が必要なので有効化できません</string>
-    <string name="warning_target_version_higher">このモジュールは、新しいXposedバージョン（%d）用に設計されているため、一部の機能が動作しない場合があります。</string>
+    <string name="warning_target_version_higher">このモジュールは新しいXposedバージョン(%d)用に設計されているため、一部の機能が動作しない場合があります</string>
     <string name="no_min_version_specified">このモジュールは必要なXposedのバージョンを指定していません。</string>
     <string name="warning_min_version_too_low">この モジュールはXposedバージョン%1$d向けに開発されましたが、%2$dでの互換性のない変更により無効化されています</string>
     <string name="warning_installed_on_external_storage">このモジュールは SD カード上にインストールされているため読込できません。内部ストレージに移動して下さい</string>
@@ -138,7 +138,7 @@
     <string name="menu_show_modules">モジュール</string>
     <string name="menu_show_denylist">拒否リスト</string>
     <string name="failed_to_save_scope_list">スコープリストの保存に失敗</string>
-    <string name="app_version">バージョン %1$s</string>
+    <string name="app_version">バージョン: %1$s</string>
     <string name="use_recommended">おすすめ</string>
     <string name="no_scope_selected_has_recommended">アプリが選択されていません。おすすめのアプリを選択しますか？</string>
     <string name="use_recommended_message">おすすめのアプリを選択しますか？</string>
@@ -165,7 +165,7 @@
     <!-- SettingsActivity -->
     <string name="settings_group_framework">フレームワーク</string>
     <string name="settings_disable_verbose_log">詳細ログの無効化</string>
-    <string name="settings_disable_verbose_log_summary">冗長なログを含むように要望する問題を報告する</string>
+    <string name="settings_disable_verbose_log_summary">レポートに冗長ログを含めるように要求する</string>
     <string name="pure_black_dark_theme">ブラックダークテーマ</string>
     <string name="pure_black_dark_theme_summary">ダークテーマ有効時にピュアブラックのテーマを使用</string>
     <string name="settings_group_theme">テーマ</string>
@@ -189,26 +189,26 @@
     <string name="settings_translation_contributors">翻訳貢献者</string>
     <string name="settings_translation">翻訳に参加する</string>
     <string name="settings_translation_summary">%s をあなたの言語に翻訳するのを手伝ってください</string>
-    <string name="settings_create_shortcut_summary">寄生マネージャーを開くことができるショートカットを作成する</string>
+    <string name="settings_create_shortcut_summary">パラサイトマネージャーを開くことができるショートカットを作成する</string>
     <string name="settings_shortcut_pinned_hint">ショートカットのピン留め</string>
-    <string name="settings_created_shortcut_summary">寄生マネージャーを開くためのショートカットが作成されました。</string>
+    <string name="settings_created_shortcut_summary">パラサイトマネージャーを開くためのショートカットが作成されました</string>
     <string name="settings_unsupported_pin_shortcut_summary">現在のデフォルトのランチャーは、ピンショートカットに対応していません</string>
     <string name="settings_enable_status_notification">ステータス通知</string>
-    <string name="settings_enable_status_notification_summary">寄生マネージャを開くことができる通知を表示する</string>
+    <string name="settings_enable_status_notification_summary">パラサイトマネージャーを開くことができる通知を表示する</string>
     <string name="disable_status_notification_error">ショートカットがありません、通知を無効化できません</string>
     <string name="settings_update_channel">更新チャンネル</string>
     <string name="update_channel_stable">安定版</string>
     <string name="update_channel_bate">ベータ版</string>
     <string name="update_channel_nightly">ナイトリービルド</string>
-    <string name="settings_xposed_api_call_protection">Xposed API使用保護</string>
-    <string name="settings_xposed_api_call_protection_summary">モジュールの動態コードがXposed APIを利用することを阻止します。一部のモジュールが使用できない可能性はありますが、安全性は上がります</string>
+    <string name="settings_xposed_api_call_protection">Xposed APIの呼び出し保護</string>
+    <string name="settings_xposed_api_call_protection_summary">Xposed APIを使用するために動的にロードされたモジュールコードをブロックします。これにより、一部のモジュールが壊れる可能性がありますが、セキュリティにメリットがあります</string>
     <!-- Module Repo -->
     <string name="module_readme">Readme</string>
     <string name="module_releases">リリース</string>
     <string name="module_information">情報</string>
     <string name="module_information_homepage">ホームページ</string>
     <string name="module_information_source_url">ソースコード</string>
-    <string name="module_information_collaborators">協力者</string>
+    <string name="module_information_collaborators">協力</string>
     <string name="module_release_view_assets">アセット</string>
     <string name="menu_open_in_browser">ブラウザで表示</string>
     <string name="refresh">更新</string>
@@ -239,7 +239,7 @@
     <string name="color_yellow">黄色</string>
     <string name="color_amber">琥珀色</string>
     <string name="color_orange">オレンジ色</string>
-    <string name="color_deep_orange">深いオレンジ</string>
+    <string name="color_deep_orange">ディープオレンジ</string>
     <string name="color_brown">茶色</string>
     <string name="color_blue_grey">ブルーグレー</string>
     <plurals name="module_release_assets_download_count">

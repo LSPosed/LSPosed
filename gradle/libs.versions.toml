@@ -1,11 +1,11 @@
 [versions]
-agp = "8.0.0"
-kotlin = "1.8.20"
+agp = "8.0.1"
+kotlin = "1.8.21"
 nav = "2.5.3"
 appcenter = "5.0.1"
 libxposed = "100"
 glide = "4.15.1"
-okhttp = "4.10.0"
+okhttp = "4.11.0"
 
 [plugins]
 agp-lib = { id = "com.android.library", version.ref = "agp" }
@@ -35,12 +35,12 @@ rikkax-recyclerview = { module = "dev.rikka.rikkax.recyclerview:recyclerview-ktx
 rikkax-widget-borderview = { module = "dev.rikka.rikkax.widget:borderview", version = "1.1.0" }
 rikkax-widget-mainswitchbar = { module = "dev.rikka.rikkax.widget:mainswitchbar", version = "1.0.2" }
 
-androidx-activity = { module = "androidx.activity:activity", version = "1.7.0" }
+androidx-activity = { module = "androidx.activity:activity", version = "1.7.1" }
 androidx-annotation = { module = "androidx.annotation:annotation", version = "1.6.0" }
 androidx-browser = { module = "androidx.browser:browser", version = "1.5.0" }
 androidx-constraintlayout = { module = "androidx.constraintlayout:constraintlayout", version = "2.1.4" }
-androidx-core = { module = "androidx.core:core", version = "1.10.0" }
-androidx-fragment = { module = "androidx.fragment:fragment", version = "1.5.6" }
+androidx-core = { module = "androidx.core:core", version = "1.10.1" }
+androidx-fragment = { module = "androidx.fragment:fragment", version = "1.5.7" }
 androidx-navigation-fragment = { group = "androidx.navigation", name = "navigation-fragment", version.ref = "nav" }
 androidx-navigation-ui = { group = "androidx.navigation", name = "navigation-ui", version.ref = "nav" }
 androidx-preference = { module = "androidx.preference:preference", version = "1.2.0" }
@@ -58,8 +58,8 @@ agp-apksig = { group = "com.android.tools.build", name = "apksig", version.ref =
 appiconloader = { module = "me.zhanghai.android.appiconloader:appiconloader", version = "1.5.0" }
 axml = { module = "de.upb.cs.swt:axml", version = "2.1.3" }
 commons-lang3 = { module = "org.apache.commons:commons-lang3", version = "3.12.0" }
-material = { module = "com.google.android.material:material", version = "1.8.0" }
+material = { module = "com.google.android.material:material", version = "1.9.0" }
 gson = { module = "com.google.code.gson:gson", version = "2.10.1" }
 hiddenapibypass = { module = "org.lsposed.hiddenapibypass:hiddenapibypass", version = "4.3" }
 kotlin-stdlib = { module = "org.jetbrains.kotlin:kotlin-stdlib", version.ref = "kotlin" }
-kotlinx-coroutines-core = { module = "org.jetbrains.kotlinx:kotlinx-coroutines-core", version = "1.6.4" }
+kotlinx-coroutines-core = { module = "org.jetbrains.kotlinx:kotlinx-coroutines-core", version = "1.7.1" }
