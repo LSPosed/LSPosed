@@ -54,7 +54,7 @@ public class LSPNotificationManager {
     private static final IBinder.DeathRecipient recipient = new IBinder.DeathRecipient() {
         @Override
         public void binderDied() {
-            Log.w(TAG, "nm is dead");
+            Log.w(TAG, "notificationManager is dead");
             binder.unlinkToDeath(this, 0);
             binder = null;
             notificationManager = null;
@@ -96,11 +96,16 @@ public class LSPNotificationManager {
 
     private static boolean hasNotificationChannelForSystem(
             INotificationManager nm, String channelId) throws RemoteException {
+        NotificationChannel channel;
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.R) {
-            return nm.getNotificationChannelForPackage("android", 1000, channelId, null, false) != null;
+            channel = nm.getNotificationChannelForPackage("android", 1000, channelId, null, false);
         } else {
-            return nm.getNotificationChannelForPackage("android", 1000, channelId, false) != null;
+            channel = nm.getNotificationChannelForPackage("android", 1000, channelId, false);
         }
+        if(channel != null) {
+            Log.d(TAG, "hasNotificationChannelForSystem: " + channel);
+        }
+        return channel != null;
     }
 
     private static void createNotificationChannel(INotificationManager nm) throws RemoteException {
@@ -112,6 +117,7 @@ public class LSPNotificationManager {
                 NotificationManager.IMPORTANCE_HIGH);
         updated.setShowBadge(false);
         if (hasNotificationChannelForSystem(nm, UPDATED_CHANNEL_ID)) {
+            Log.d(TAG, "update notification channel: " + UPDATED_CHANNEL_ID);
             nm.updateNotificationChannelForPackage("android", 1000, updated);
         } else {
             list.add(updated);
@@ -122,6 +128,7 @@ public class LSPNotificationManager {
                 NotificationManager.IMPORTANCE_MIN);
         status.setShowBadge(false);
         if (hasNotificationChannelForSystem(nm, STATUS_CHANNEL_ID)) {
+            Log.d(TAG, "update notification channel: " + STATUS_CHANNEL_ID);
             nm.updateNotificationChannelForPackage("android", 1000, status);
         } else {
             list.add(status);
@@ -132,11 +139,13 @@ public class LSPNotificationManager {
                 NotificationManager.IMPORTANCE_HIGH);
         scope.setShowBadge(false);
         if (hasNotificationChannelForSystem(nm, SCOPE_CHANNEL_ID)) {
+            Log.d(TAG, "update notification channel: " + SCOPE_CHANNEL_ID);
             nm.updateNotificationChannelForPackage("android", 1000, scope);
         } else {
             list.add(scope);
         }
 
+        Log.d(TAG, "create notification channels for android: " + list);
         nm.createNotificationChannelsForPackage("android", 1000, new ParceledListSlice<>(list));
     }
 
