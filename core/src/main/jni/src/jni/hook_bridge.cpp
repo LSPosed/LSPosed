@@ -36,7 +36,7 @@ struct HookItem {
 };
 
 std::shared_mutex hooked_lock;
-std::recursive_mutex backup_lock;
+std::shared_mutex backup_lock;
 absl::flat_hash_map<jmethodID, std::unique_ptr<HookItem>> hooked_methods;
 
 jmethodID invoke = nullptr;
@@ -74,24 +74,25 @@ LSP_DEF_NATIVE_METHOD(jboolean, HookBridge, hookMethod, jobject hookMethod,
         if (auto &ptr = hooked_methods[target]; !ptr) {
             ptr = std::make_unique<HookItem>();
             hook_item = ptr.get();
+            std::unique_lock bk(backup_lock);
+            lk.swap(bk);
             newHook = true;
         } else {
             hook_item = ptr.get();
         }
+        if (newHook) {
+            auto init = env->GetMethodID(hooker, "<init>", "(Ljava/lang/reflect/Executable;)V");
+            auto callback_method = env->ToReflectedMethod(hooker, env->GetMethodID(hooker, "callback",
+                                                                                   "([Ljava/lang/Object;)Ljava/lang/Object;"),
+                                                          false);
+            auto hooker_object = env->NewObject(hooker, init, hookMethod);
+            hook_item->backup = lsplant::Hook(env, hookMethod, hooker_object, callback_method);
+            env->DeleteLocalRef(hooker_object);
+        }
     }
-    if (newHook) {
-        auto init = env->GetMethodID(hooker, "<init>", "(Ljava/lang/reflect/Executable;)V");
-        auto callback_method = env->ToReflectedMethod(hooker, env->GetMethodID(hooker, "callback",
-                                                                               "([Ljava/lang/Object;)Ljava/lang/Object;"),
-                                                      false);
-        auto hooker_object = env->NewObject(hooker, init, hookMethod);
-        std::unique_lock lk(backup_lock);
-        hook_item->backup = lsplant::Hook(env, hookMethod, hooker_object, callback_method);
-        env->DeleteLocalRef(hooker_object);
-    }
-    jobject backup = nullptr;
+    jobject backup;
     {
-        std::unique_lock lk(backup_lock);
+        std::shared_lock lk(backup_lock);
         backup = hook_item->backup;
     }
     if (!backup) return JNI_FALSE;
@@ -110,9 +111,9 @@ LSP_DEF_NATIVE_METHOD(jboolean, HookBridge, unhookMethod, jobject hookMethod, jo
         }
     }
     if (!hook_item) return JNI_FALSE;
-    jobject backup = nullptr;
+    jobject backup;
     {
-        std::unique_lock lk(backup_lock);
+        std::shared_lock lk(backup_lock);
         backup = hook_item->backup;
     }
     if (!backup) return JNI_FALSE;
@@ -143,7 +144,7 @@ LSP_DEF_NATIVE_METHOD(jobject, HookBridge, invokeOriginalMethod, jobject hookMet
     }
     jobject to_call = hookMethod;
     if (hook_item) {
-        std::unique_lock lk(backup_lock);
+        std::shared_lock lk(backup_lock);
         if (hook_item->backup) to_call = hook_item->backup;
     }
     return env->CallObjectMethod(to_call, invoke, thiz, args);
@@ -185,7 +186,7 @@ LSP_DEF_NATIVE_METHOD(jobject, HookBridge, invokeSpecialMethod, jobject method, 
     std::vector<jvalue> a(param_len);
     auto *const shorty_char = env->GetCharArrayElements(shorty, nullptr);
     for (jint i = 0; i != param_len; ++i) {
-        jobject element = nullptr;
+        jobject element;
         switch(shorty_char[i + 1]) {
             case 'I':
                 a[i].i = env->CallIntMethod(element = env->GetObjectArrayElement(args, i), get_int);
@@ -276,9 +277,9 @@ LSP_DEF_NATIVE_METHOD(jobjectArray, HookBridge, callbackSnapshot, jobject method
         }
     }
     if (!hook_item) return nullptr;
-    jobject backup = nullptr;
+    jobject backup;
     {
-        std::unique_lock lk(backup_lock);
+        std::shared_lock lk(backup_lock);
         backup = hook_item->backup;
     }
     if (!backup) return nullptr;
