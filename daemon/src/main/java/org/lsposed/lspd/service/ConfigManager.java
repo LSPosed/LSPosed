@@ -91,9 +91,12 @@ import java.util.zip.ZipOutputStream;
 public class ConfigManager {
     private static ConfigManager instance = null;
 
-    private final SQLiteDatabase db =
-            SQLiteDatabase.openOrCreateDatabase(ConfigFileManager.dbPath.getAbsolutePath(), null,
-                    sqLiteDatabase -> Log.w(TAG, "database corrupted"));
+    private final SQLiteDatabase db = SQLiteDatabase.openDatabase(
+            ConfigFileManager.dbPath.getAbsolutePath(),
+            null,
+            SQLiteDatabase.CREATE_IF_NECESSARY | SQLiteDatabase.ENABLE_WRITE_AHEAD_LOGGING,
+            sqLiteDatabase -> Log.w(TAG, "database corrupted")
+    );
 
     private boolean verboseLog = true;
     private boolean dexObfuscate = true;
