@@ -671,6 +671,10 @@ public class ConfigManager {
                 // system server always loads database
                 if (app.packageName.equals("android")) continue;
 
+                if (app.packageName.equals("system")) {
+                    app.packageName = "android";
+                }
+
                 try {
                     List<ProcessScope> processesScope = cachedProcessScope.computeIfAbsent(new Pair<>(app.packageName, app.userId), (k) -> {
                         try {

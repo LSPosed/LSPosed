@@ -180,6 +180,9 @@ public class PackageService {
     private static Set<String> fetchProcesses(PackageInfo pkgInfo) {
         HashSet<String> processNames = new HashSet<>();
         if (pkgInfo == null) return processNames;
+        if ("android".equals(pkgInfo.packageName)) {
+            processNames.add("system:ui"); // this is hardcoded in aosp
+        }
         for (ComponentInfo[] componentInfos : new ComponentInfo[][]{pkgInfo.activities, pkgInfo.receivers, pkgInfo.providers}) {
             if (componentInfos == null) continue;
             for (ComponentInfo componentInfo : componentInfos) {

@@ -165,7 +165,7 @@ public class ScopeAdapter extends EmptyStateRecyclerView.EmptyStateAdapter<Scope
     }
 
     private boolean shouldHideApp(PackageInfo info, ApplicationWithEquals app, HashSet<ApplicationWithEquals> tmpChkList) {
-        if (info.packageName.equals("android")) {
+        if (info.packageName.equals("android") || info.packageName.equals("system")) {
             return false;
         }
         if (tmpChkList.contains(app)) {
