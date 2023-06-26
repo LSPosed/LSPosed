@@ -190,9 +190,6 @@ public class ScopeAdapter extends EmptyStateRecyclerView.EmptyStateAdapter<Scope
                 return true;
             }
         }
-        if ((info.applicationInfo.flags & ApplicationInfo.FLAG_HAS_CODE) == 0) {
-            return true;
-        }
         return preferences.getBoolean("filter_system_apps", true) && (info.applicationInfo.flags & ApplicationInfo.FLAG_SYSTEM) != 0;
     }
 
