@@ -17,7 +17,7 @@ materialthemebuilder = { id = "dev.rikka.tools.materialthemebuilder", version = 
 lsplugin-resopt = { id = "org.lsposed.lsplugin.resopt", version = "1.5" }
 lsplugin-apksign = { id = "org.lsposed.lsplugin.apksign", version = "1.1" }
 lsplugin-cmaker = { id = "org.lsposed.lsplugin.cmaker", version = "1.1" }
-lsplugin-jgit = { id = "org.lsposed.lsplugin.jgit", version = "1.0" }
+lsplugin-jgit = { id = "org.lsposed.lsplugin.jgit", version = "1.1" }
 
 [libraries]
 appcenter-crashes = { group = "com.microsoft.appcenter", name = "appcenter-crashes", version.ref = "appcenter" }
