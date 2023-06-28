@@ -38,7 +38,6 @@ import android.graphics.drawable.Drawable;
 import android.graphics.drawable.Icon;
 import android.graphics.drawable.LayerDrawable;
 import android.os.Build;
-import android.util.Log;
 
 import androidx.annotation.Nullable;
 
@@ -107,33 +106,25 @@ public class ShortcutUtil {
 
     @SuppressLint("InlinedApi")
     private static IntentSender registerReceiver(Context context, Runnable task) {
-        Log.d(App.TAG, "registerReceiver called");
         if (task == null) return null;
-        Log.d(App.TAG, "registerReceiver: task=" + task);
         var uuid = UUID.randomUUID().toString();
         var filter = new IntentFilter(uuid);
         var permission = "android.permission.CREATE_USERS";
         var receiver = new BroadcastReceiver() {
             @Override
             public void onReceive(Context c, Intent intent) {
-                Log.d(App.TAG, "registerReceiver: onReceive: " + intent.getAction());
                 if (!uuid.equals(intent.getAction())) return;
-                Log.d(App.TAG, "registerReceiver: onReceive: unregisterReceiver");
                 context.unregisterReceiver(this);
-                Log.d(App.TAG, "registerReceiver: onReceive: task.run()");
                 task.run();
                 defaultLauncherPackageName = getDefaultLauncherPackageName(context);
                 shortcutPinned = true;
-                Log.d(App.TAG, "registerReceiver: onReceive: shortcutPinned=" + shortcutPinned + " defaultLauncherPackageName=" + defaultLauncherPackageName);
             }
         };
-        Log.d(App.TAG, "registerReceiver: filterAction=" + filter.getAction(0) + " permission=" + permission + " receiver=" + receiver);
         context.registerReceiver(receiver, filter, permission,
                 null/* main thread */, Context.RECEIVER_NOT_EXPORTED);
 
         var intent = new Intent(uuid);
         int flags = PendingIntent.FLAG_UPDATE_CURRENT | PendingIntent.FLAG_IMMUTABLE;
-        Log.d(App.TAG, "registerReceiver: intent=" + intent + " flags=" + flags);
         return PendingIntent.getBroadcast(context, 0, intent, flags).getIntentSender();
     }
 
