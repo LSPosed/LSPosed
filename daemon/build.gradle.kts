@@ -20,7 +20,6 @@
 import com.android.build.api.dsl.ApplicationExtension
 import com.android.ide.common.signing.KeystoreHelper
 import java.io.PrintStream
-import java.util.*
 
 plugins {
     alias(libs.plugins.agp.app)

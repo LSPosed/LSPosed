@@ -31,12 +31,29 @@ using namespace lsplant;
 namespace {
 
 struct HookItem {
-    jobject backup {nullptr};
     std::multimap<jint, jobject, std::greater<>> callbacks {};
+private:
+    std::atomic<jobject> backup {nullptr};
+    static_assert(decltype(backup)::is_always_lock_free);
+    inline static jobject FAILED = reinterpret_cast<jobject>(std::numeric_limits<uintptr_t>::max());
+public:
+    jobject GetBackup() {
+        backup.wait(nullptr, std::memory_order::acquire);
+        if (auto bk = backup.load(std::memory_order_relaxed); bk != FAILED) {
+            return bk;
+        } else {
+            return nullptr;
+        }
+    }
+    void SetBackup(jobject newBackup) {
+        jobject null = nullptr;
+        backup.compare_exchange_strong(null, newBackup ? newBackup : FAILED,
+                                       std::memory_order_acq_rel, std::memory_order_relaxed);
+        backup.notify_all();
+    }
 };
 
 std::shared_mutex hooked_lock;
-std::recursive_mutex backup_lock;
 absl::flat_hash_map<jmethodID, std::unique_ptr<HookItem>> hooked_methods;
 
 jmethodID invoke = nullptr;
@@ -85,15 +102,10 @@ LSP_DEF_NATIVE_METHOD(jboolean, HookBridge, hookMethod, jobject hookMethod,
                                                                                "([Ljava/lang/Object;)Ljava/lang/Object;"),
                                                       false);
         auto hooker_object = env->NewObject(hooker, init, hookMethod);
-        std::unique_lock lk(backup_lock);
-        hook_item->backup = lsplant::Hook(env, hookMethod, hooker_object, callback_method);
+        hook_item->SetBackup(lsplant::Hook(env, hookMethod, hooker_object, callback_method));
         env->DeleteLocalRef(hooker_object);
     }
-    jobject backup = nullptr;
-    {
-        std::unique_lock lk(backup_lock);
-        backup = hook_item->backup;
-    }
+    jobject backup = hook_item->GetBackup();
     if (!backup) return JNI_FALSE;
     JNIMonitor monitor(env, backup);
     hook_item->callbacks.emplace(std::make_pair(priority, env->NewGlobalRef(callback)));
@@ -110,11 +122,7 @@ LSP_DEF_NATIVE_METHOD(jboolean, HookBridge, unhookMethod, jobject hookMethod, jo
         }
     }
     if (!hook_item) return JNI_FALSE;
-    jobject backup = nullptr;
-    {
-        std::unique_lock lk(backup_lock);
-        backup = hook_item->backup;
-    }
+    jobject backup = hook_item->GetBackup();
     if (!backup) return JNI_FALSE;
     JNIMonitor monitor(env, backup);
     for (auto i = hook_item->callbacks.begin(); i != hook_item->callbacks.end(); ++i) {
@@ -141,12 +149,7 @@ LSP_DEF_NATIVE_METHOD(jobject, HookBridge, invokeOriginalMethod, jobject hookMet
             hook_item = found->second.get();
         }
     }
-    jobject to_call = hookMethod;
-    if (hook_item) {
-        std::unique_lock lk(backup_lock);
-        if (hook_item->backup) to_call = hook_item->backup;
-    }
-    return env->CallObjectMethod(to_call, invoke, thiz, args);
+    return env->CallObjectMethod(hook_item ? hook_item->GetBackup() : hookMethod, invoke, thiz, args);
 }
 
 LSP_DEF_NATIVE_METHOD(jobject, HookBridge, allocateObject, jclass cls) {
@@ -185,7 +188,7 @@ LSP_DEF_NATIVE_METHOD(jobject, HookBridge, invokeSpecialMethod, jobject method, 
     std::vector<jvalue> a(param_len);
     auto *const shorty_char = env->GetCharArrayElements(shorty, nullptr);
     for (jint i = 0; i != param_len; ++i) {
-        jobject element = nullptr;
+        jobject element;
         switch(shorty_char[i + 1]) {
             case 'I':
                 a[i].i = env->CallIntMethod(element = env->GetObjectArrayElement(args, i), get_int);
@@ -276,11 +279,7 @@ LSP_DEF_NATIVE_METHOD(jobjectArray, HookBridge, callbackSnapshot, jobject method
         }
     }
     if (!hook_item) return nullptr;
-    jobject backup = nullptr;
-    {
-        std::unique_lock lk(backup_lock);
-        backup = hook_item->backup;
-    }
+    jobject backup = hook_item->GetBackup();
     if (!backup) return nullptr;
     JNIMonitor monitor(env, backup);
     auto res = env->NewObjectArray((jsize) hook_item->callbacks.size(), env->FindClass("java/lang/Object"), nullptr);
