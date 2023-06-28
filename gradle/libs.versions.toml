@@ -65,4 +65,4 @@ kotlin-stdlib = { module = "org.jetbrains.kotlin:kotlin-stdlib", version.ref = "
 kotlinx-coroutines-core = { module = "org.jetbrains.kotlinx:kotlinx-coroutines-core", version = "1.7.1" }
 
 libxposed-api = { group = "io.github.libxposed", name = "api", version.ref = "libxposed" }
-libxposed-service-interface = { group = "io.github.libxposed", name = "interface", version.ref = "libxposed" }
+libxposed-interface = { group = "io.github.libxposed", name = "interface", version.ref = "libxposed" }
