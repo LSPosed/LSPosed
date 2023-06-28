@@ -13,7 +13,7 @@ dependencyResolutionManagement {
     repositories {
         google()
         mavenCentral()
-        mavenLocal() {
+        mavenLocal {
             content {
                 includeGroup("io.github.libxposed")
             }
