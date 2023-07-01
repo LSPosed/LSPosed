@@ -40,6 +40,7 @@ import org.lsposed.lspd.core.BuildConfig;
 import org.lsposed.lspd.impl.utils.LSPosedDexParser;
 import org.lsposed.lspd.models.Module;
 import org.lsposed.lspd.nativebridge.HookBridge;
+import org.lsposed.lspd.nativebridge.NativeAPI;
 import org.lsposed.lspd.service.ILSPInjectedModuleService;
 import org.lsposed.lspd.util.LspModuleClassLoader;
 
@@ -191,6 +192,7 @@ public class LSPosedContext extends XposedContext {
         } catch (Throwable e) {
             Log.d(TAG, "Loading module " + module.packageName, e);
         }
+        module.file.moduleLibraryNames.forEach(NativeAPI::recordNativeEntrypoint);
         return false;
     }
 
