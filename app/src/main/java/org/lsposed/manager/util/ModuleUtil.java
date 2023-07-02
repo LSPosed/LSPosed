@@ -43,6 +43,7 @@ import java.io.IOException;
 import java.io.InputStreamReader;
 import java.util.ArrayList;
 import java.util.Arrays;
+import java.util.Collections;
 import java.util.HashMap;
 import java.util.HashSet;
 import java.util.List;
@@ -257,9 +258,9 @@ public final class ModuleUtil {
         public final long updateTime;
         public final ApplicationInfo app;
         public final PackageInfo pkg;
-        private String appName; // loaded lazyily
-        private String description; // loaded lazyily
-        private List<String> scopeList; // loaded lazyily
+        private String appName; // loaded lazily
+        private String description; // loaded lazily
+        private List<String> scopeList; // loaded lazily
 
         private InstalledModule(PackageInfo pkg, ZipFile modernModuleApk) {
             app = pkg.applicationInfo;
@@ -305,6 +306,8 @@ public final class ModuleUtil {
                         try (var reader = new BufferedReader(new InputStreamReader(modernModuleApk.getInputStream(scopeEntry)))) {
                             scopeList = reader.lines().collect(Collectors.toList());
                         }
+                    } else {
+                        scopeList = Collections.emptyList();
                     }
                 } catch (IOException | OutOfMemoryError e) {
                     Log.e(App.TAG, "Error while closing modern module APK", e);
@@ -350,24 +353,36 @@ public final class ModuleUtil {
 
         public List<String> getScopeList() {
             if (scopeList != null) return scopeList;
-            if (legacy) {
-                try {
-                    int scopeListResourceId = app.metaData.getInt("xposedscope");
-                    if (scopeListResourceId != 0) {
-                        scopeList = Arrays.asList(pm.getResourcesForApplication(app).getStringArray(scopeListResourceId));
-                    } else {
-                        String scopeListString = app.metaData.getString("xposedscope");
-                        if (scopeListString != null)
-                            scopeList = Arrays.asList(scopeListString.split(";"));
-                    }
-                } catch (Exception ignored) {
+            List<String> list = null;
+            try {
+                int scopeListResourceId = app.metaData.getInt("xposedscope");
+                if (scopeListResourceId != 0) {
+                    scopeList = Arrays.asList(pm.getResourcesForApplication(app).getStringArray(scopeListResourceId));
+                } else {
+                    String scopeListString = app.metaData.getString("xposedscope");
+                    if (scopeListString != null)
+                        list = Arrays.asList(scopeListString.split(";"));
                 }
+            } catch (Exception ignored) {
             }
-            if (scopeList == null) {
+            if (list == null) {
                 OnlineModule module = RepoLoader.getInstance().getOnlineModule(packageName);
                 if (module != null && module.getScope() != null) {
-                    scopeList = module.getScope();
+                    list = module.getScope();
                 }
+            }
+            if (list != null) {
+                list.replaceAll(s ->
+                    switch (s) {
+                        case "android":
+                            yield "system";
+                        case "system":
+                            yield "android";
+                        default:
+                            yield s;
+                    }
+                );
+                scopeList = list;
             }
             return scopeList;
         }

@@ -149,6 +149,7 @@ public class AppHelper {
                     p.setDataPosition(0);
                     system = PackageInfo.CREATOR.createFromParcel(p);
                     system.packageName = "system";
+                    break;
                 }
             }
             if (system != null) {
