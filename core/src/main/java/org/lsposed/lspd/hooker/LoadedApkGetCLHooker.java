@@ -102,6 +102,11 @@ public class LoadedApkGetCLHooker extends XC_MethodHook {
                 return;
             }
 
+            if (!isFirstPackage && !XposedHelpers.getBooleanField(loadedApk, "mIncludeCode")) {
+                Hookers.logD("LoadedApk#<init> mIncludeCode == false: " + mAppDir);
+                return;
+            }
+
             if (!isFirstPackage && !XposedInit.getLoadedModules().getOrDefault(packageName, Optional.of("")).isPresent()) {
                 return;
             }
