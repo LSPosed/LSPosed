@@ -20,14 +20,11 @@
 
 package org.lsposed.lspd.hooker;
 
-import android.app.ActivityThread;
 import android.app.LoadedApk;
 import android.content.res.XResources;
 import android.util.Log;
 
 import org.lsposed.lspd.util.Hookers;
-
-import java.util.Optional;
 
 import de.robv.android.xposed.XC_MethodHook;
 import de.robv.android.xposed.XposedHelpers;
@@ -57,12 +54,6 @@ public class LoadedApkCtorHooker extends XC_MethodHook {
                 } else {
                     packageName = "system";
                 }
-            }
-
-            // mIncludeCode checking should go ahead of loadedPackagesInProcess added checking
-            if (!XposedHelpers.getBooleanField(loadedApk, "mIncludeCode")) {
-                Hookers.logD("LoadedApk#<init> mIncludeCode == false: " + mAppDir);
-                return;
             }
 
             if (!XposedInit.loadedPackagesInProcess.add(packageName)) {
