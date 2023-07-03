@@ -34,6 +34,7 @@ import android.content.pm.PackageParser;
 import android.database.Cursor;
 import android.database.sqlite.SQLiteDatabase;
 import android.database.sqlite.SQLiteStatement;
+import android.os.Build;
 import android.os.Bundle;
 import android.os.Handler;
 import android.os.HandlerThread;
@@ -91,12 +92,7 @@ import java.util.zip.ZipOutputStream;
 public class ConfigManager {
     private static ConfigManager instance = null;
 
-    private final SQLiteDatabase db = SQLiteDatabase.openDatabase(
-            ConfigFileManager.dbPath.getAbsolutePath(),
-            null,
-            SQLiteDatabase.CREATE_IF_NECESSARY | SQLiteDatabase.ENABLE_WRITE_AHEAD_LOGGING,
-            sqLiteDatabase -> Log.w(TAG, "database corrupted")
-    );
+    private final SQLiteDatabase db = openDb();
 
     private boolean verboseLog = true;
     private boolean dexObfuscate = true;
@@ -178,6 +174,16 @@ public class ConfigManager {
     private final Map<Pair<String, Integer>, Map<String, HashMap<String, Object>>> cachedConfig = new ConcurrentHashMap<>();
 
     private Set<String> scopeRequestBlocked = new HashSet<>();
+
+    private static SQLiteDatabase openDb() {
+        var params = new SQLiteDatabase.OpenParams.Builder()
+                .addOpenFlags(SQLiteDatabase.CREATE_IF_NECESSARY | SQLiteDatabase.ENABLE_WRITE_AHEAD_LOGGING)
+                .setErrorHandler(sqLiteDatabase -> Log.w(TAG, "database corrupted"));
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.P) {
+            params.setSynchronousMode("NORMAL");
+        }
+        return SQLiteDatabase.openDatabase(ConfigFileManager.dbPath.getAbsoluteFile(), params.build());
+    }
 
     private void updateCaches(boolean sync) {
         synchronized (cacheHandler) {
