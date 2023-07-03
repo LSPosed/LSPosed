@@ -357,7 +357,7 @@ public final class ModuleUtil {
             try {
                 int scopeListResourceId = app.metaData.getInt("xposedscope");
                 if (scopeListResourceId != 0) {
-                    scopeList = Arrays.asList(pm.getResourcesForApplication(app).getStringArray(scopeListResourceId));
+                    list = Arrays.asList(pm.getResourcesForApplication(app).getStringArray(scopeListResourceId));
                 } else {
                     String scopeListString = app.metaData.getString("xposedscope");
                     if (scopeListString != null)
