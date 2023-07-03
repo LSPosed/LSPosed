@@ -210,16 +210,6 @@ public class ConfigManager {
 
     @SuppressLint("BlockedPrivateApi")
     public List<Module> getModulesForSystemServer() {
-        var at = ActivityThread.currentActivityThread();
-        Field permissionManager = null;
-        try {
-            // PackageParser need to access PermissionManager, but it's not initialized yet
-            permissionManager = ActivityThread.class.getDeclaredField("sPermissionManager");
-            permissionManager.setAccessible(true);
-            permissionManager.set(at, (IPermissionManager) ArrayList::new);
-        } catch (NoSuchFieldException | IllegalAccessException ignored) {
-        }
-
         List<Module> modules = new LinkedList<>();
         try (Cursor cursor = db.query("scope INNER JOIN modules ON scope.mid = modules.mid", new String[]{"module_pkg_name", "apk_path"}, "app_pkg_name=? AND enabled=1", new String[]{"system"}, null, null, null)) {
             int apkPathIdx = cursor.getColumnIndex("apk_path");
@@ -244,13 +234,6 @@ public class ConfigManager {
                 }
                 module.service = new LSPInjectedModuleService(module);
                 modules.add(module);
-            }
-        }
-
-        if (permissionManager != null) {
-            try {
-                permissionManager.set(at, null);
-            } catch (IllegalAccessException ignored) {
             }
         }
 
