@@ -235,6 +235,7 @@ public class LSPosedContext extends XposedContext {
 
     @Override
     public void setTheme(int resid) {
+        getResources();
         mBase.setTheme(resid);
     }
 
