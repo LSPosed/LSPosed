@@ -240,6 +240,7 @@ public class LSPosedContext extends XposedContext {
 
     @Override
     public Resources.Theme getTheme() {
+        getResources();
         return mBase.getTheme();
     }
 
