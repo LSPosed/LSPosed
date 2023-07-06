@@ -1,5 +1,6 @@
 package org.lsposed.lspd.impl;
 
+import android.annotation.SuppressLint;
 import android.app.ActivityThread;
 import android.app.LoadedApk;
 import android.content.BroadcastReceiver;
@@ -7,6 +8,7 @@ import android.content.ComponentName;
 import android.content.ContentResolver;
 import android.content.Context;
 import android.content.ContextParams;
+import android.content.ContextWrapper;
 import android.content.Intent;
 import android.content.IntentFilter;
 import android.content.IntentSender;
@@ -69,6 +71,8 @@ import io.github.libxposed.api.XposedModuleInterface;
 import io.github.libxposed.api.errors.HookFailedError;
 import io.github.libxposed.api.utils.DexParser;
 
+
+@SuppressLint("NewApi")
 public class LSPosedContext extends XposedContext {
 
     private static final String TAG = "LSPosedContext";
@@ -115,6 +119,7 @@ public class LSPosedContext extends XposedContext {
         }
     }
 
+    @SuppressLint("DiscouragedPrivateApi")
     public static boolean loadModule(ActivityThread at, Module module) {
         try {
             Log.d(TAG, "Loading module " + module.packageName);
@@ -160,7 +165,26 @@ public class LSPosedContext extends XposedContext {
                 }
                 args[i] = null;
             }
-            var ctx = new LSPosedContext((Context) ctor.newInstance(args), module.packageName, module.apkPath, module.service);
+            var ci = (Context) ctor.newInstance(args);
+            var ctx = new LSPosedContext(ci, module.packageName, module.apkPath, module.service);
+            var setOuterContext = c.getDeclaredMethod("setOuterContext", Context.class);
+            setOuterContext.setAccessible(true);
+            setOuterContext.invoke(ci, new ContextWrapper(ci) {
+                @Override
+                public Resources getResources() {
+                    return ctx.getResources();
+                }
+
+                @Override
+                public Resources.Theme getTheme() {
+                    return ctx.getTheme();
+                }
+
+                @Override
+                public void setTheme(int resid) {
+                    ctx.setTheme(resid);
+                }
+            });
             for (var entry : module.file.moduleClassNames) {
                 var moduleClass = ctx.getClassLoader().loadClass(entry);
                 Log.d(TAG, "  Loading class " + moduleClass);
