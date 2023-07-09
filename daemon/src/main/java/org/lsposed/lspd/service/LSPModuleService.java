@@ -203,9 +203,9 @@ public class LSPModuleService extends IXposedService.Stub {
         var userId = ensureModule();
         Map<String, Object> values = new ArrayMap<>();
         if (diff.containsKey("delete")) {
-            var deletes = diff.getStringArrayList("delete");
+            var deletes = (Set<?>) diff.getSerializable("delete");
             for (var key : deletes) {
-                values.put(key, null);
+                values.put((String) key, null);
             }
         }
         if (diff.containsKey("put")) {
