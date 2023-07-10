@@ -161,6 +161,7 @@ public class App extends Application {
     }
 
     private void setCrashReport() {
+        var handler = Thread.getDefaultUncaughtExceptionHandler();
         Thread.setDefaultUncaughtExceptionHandler((thread, throwable) -> {
             var time = OffsetDateTime.now();
             var dir = new File(getCacheDir(), "crash");
@@ -187,6 +188,9 @@ public class App extends Application {
                 } catch (Exception ignored) {
                     cr.delete(uri, null, null);
                 }
+            }
+            if (handler != null) {
+                handler.uncaughtException(thread, throwable);
             }
         });
     }
@@ -255,8 +259,8 @@ public class App extends Application {
     public static OkHttpClient getOkHttpClient() {
         if (okHttpClient != null) return okHttpClient;
         var builder = new OkHttpClient.Builder()
-                .cache(getOkHttpCache())
-                .dns(new CloudflareDNS());
+            .cache(getOkHttpCache())
+            .dns(new CloudflareDNS());
         if (BuildConfig.DEBUG) {
             var log = new HttpLoggingInterceptor();
             log.setLevel(HttpLoggingInterceptor.Level.HEADERS);
