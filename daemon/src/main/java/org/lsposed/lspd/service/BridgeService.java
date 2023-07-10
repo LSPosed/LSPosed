@@ -11,6 +11,8 @@ import android.system.ErrnoException;
 import android.system.Os;
 import android.util.Log;
 
+import org.lsposed.daemon.BuildConfig;
+
 import java.lang.reflect.Field;
 import java.util.Map;
 
@@ -147,7 +149,9 @@ public class BridgeService {
             }
         } finally {
             try {
-                Os.seteuid(1000);
+                if (!BuildConfig.DEBUG) {
+                    Os.seteuid(1000);
+                }
             } catch (ErrnoException e) {
                 Log.e(TAG, "seteuid 1000", e);
             }
