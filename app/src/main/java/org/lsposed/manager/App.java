@@ -20,18 +20,20 @@
 
 package org.lsposed.manager;
 
-import android.annotation.SuppressLint;
 import android.app.ActivityManager;
 import android.app.Application;
 import android.content.BroadcastReceiver;
+import android.content.ContentValues;
 import android.content.Context;
 import android.content.Intent;
 import android.content.IntentFilter;
 import android.content.SharedPreferences;
 import android.os.Build;
+import android.os.Environment;
 import android.os.Handler;
 import android.os.Looper;
 import android.os.Process;
+import android.provider.MediaStore;
 import android.provider.Settings;
 import android.system.Os;
 import android.text.TextUtils;
@@ -43,8 +45,8 @@ import androidx.preference.PreferenceManager;
 
 import org.lsposed.hiddenapibypass.HiddenApiBypass;
 import org.lsposed.manager.adapters.AppHelper;
+import org.lsposed.manager.receivers.LSPManagerServiceHolder;
 import org.lsposed.manager.repo.RepoLoader;
-import org.lsposed.manager.ui.activity.CrashReportActivity;
 import org.lsposed.manager.util.CloudflareDNS;
 import org.lsposed.manager.util.ModuleUtil;
 import org.lsposed.manager.util.Telemetry;
@@ -55,8 +57,8 @@ import java.io.ByteArrayOutputStream;
 import java.io.File;
 import java.io.IOException;
 import java.io.PrintWriter;
-import java.io.StringWriter;
 import java.nio.charset.StandardCharsets;
+import java.time.OffsetDateTime;
 import java.util.HashMap;
 import java.util.Locale;
 import java.util.concurrent.ExecutorService;
@@ -96,23 +98,12 @@ public class App extends Application {
                 var list = AppHelper.getAppList(false);
                 var pm = App.getInstance().getPackageManager();
                 list.parallelStream().forEach(i -> AppHelper.getAppLabel(i, pm));
+                AppHelper.getDenyList(false);
+                ModuleUtil.getInstance();
+                RepoLoader.getInstance();
             });
-            return false;
-        });
-
-        Looper.myQueue().addIdleHandler(() -> {
-            if (App.getInstance() == null || App.getExecutorService() == null) return true;
-            App.getExecutorService().submit(() -> AppHelper.getDenyList(false));
-            return false;
-        });
-        Looper.myQueue().addIdleHandler(() -> {
-            if (App.getInstance() == null || App.getExecutorService() == null) return true;
-            App.getExecutorService().submit(ModuleUtil::getInstance);
-            return false;
-        });
-        Looper.myQueue().addIdleHandler(() -> {
-            if (App.getInstance() == null || App.getExecutorService() == null) return true;
-            App.getExecutorService().submit(RepoLoader::getInstance);
+            App.getExecutorService().submit(HTML_TEMPLATE);
+            App.getExecutorService().submit(HTML_TEMPLATE_DARK);
             return false;
         });
     }
@@ -169,41 +160,47 @@ public class App extends Application {
         }
     }
 
-    @SuppressLint("WrongConstant")
     private void setCrashReport() {
+        var handler = Thread.getDefaultUncaughtExceptionHandler();
         Thread.setDefaultUncaughtExceptionHandler((thread, throwable) -> {
-
-            StringWriter sw = new StringWriter();
-            PrintWriter pw = new PrintWriter(sw);
-            throwable.printStackTrace(pw);
-            String stackTraceString = sw.toString();
-
-            //Reduce data to 128KB so we don't get a TransactionTooLargeException when sending the intent.
-            //The limit is 1MB on Android but some devices seem to have it lower.
-            //See: http://developer.android.com/reference/android/os/TransactionTooLargeException.html
-            //And: http://stackoverflow.com/questions/11451393/what-to-do-on-transactiontoolargeexception#comment46697371_12809171
-            if (stackTraceString.length() > 131071) {
-                String disclaimer = " [stack trace too large]";
-                stackTraceString = stackTraceString.substring(0, 131071 - disclaimer.length()) + disclaimer;
+            var time = OffsetDateTime.now();
+            var dir = new File(getCacheDir(), "crash");
+            //noinspection ResultOfMethodCallIgnored
+            dir.mkdir();
+            var file = new File(dir, time.toEpochSecond() + ".log");
+            try (var pw = new PrintWriter(file)) {
+                pw.println(BuildConfig.VERSION_NAME + " (" + BuildConfig.VERSION_CODE + ")");
+                pw.println(time);
+                pw.println("pid: " + Os.getpid() + " uid: " + Os.getuid());
+                throwable.printStackTrace(pw);
+            } catch (IOException ignored) {
             }
-            Intent intent = new Intent(App.this, CrashReportActivity.class);
-            intent.putExtra(BuildConfig.APPLICATION_ID + ".EXTRA_STACK_TRACE", stackTraceString);
-            intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_CLEAR_TASK);
-            App.this.startActivity(intent);
-            System.exit(10);
-            Process.killProcess(Os.getpid());
+            if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.Q) {
+                var table = MediaStore.Downloads.getContentUri(MediaStore.VOLUME_EXTERNAL_PRIMARY);
+                var values = new ContentValues();
+                values.put(MediaStore.Downloads.DISPLAY_NAME, "LSPosed_crash_report" + time.toEpochSecond() + ".zip");
+                values.put(MediaStore.Downloads.RELATIVE_PATH, Environment.DIRECTORY_DOCUMENTS);
+                var cr = getContentResolver();
+                var uri = cr.insert(table, values);
+                if (uri == null) return;
+                try (var zipFd = cr.openFileDescriptor(uri, "wt")) {
+                    LSPManagerServiceHolder.getService().getLogs(zipFd);
+                } catch (Exception ignored) {
+                    cr.delete(uri, null, null);
+                }
+            }
+            if (handler != null) {
+                handler.uncaughtException(thread, throwable);
+            }
         });
     }
 
     @Override
     public void onCreate() {
         super.onCreate();
-        if (!BuildConfig.DEBUG && !isParasitic) {
-            setCrashReport();
-        }
-
         instance = this;
 
+        setCrashReport();
         pref = PreferenceManager.getDefaultSharedPreferences(this);
         if (!pref.contains("doh")) {
             var name = "private_dns_mode";
@@ -256,17 +253,14 @@ public class App extends Application {
         }, intentFilter, Context.RECEIVER_NOT_EXPORTED);
 
         UpdateUtil.loadRemoteVersion();
-
-        executorService.submit(HTML_TEMPLATE);
-        executorService.submit(HTML_TEMPLATE_DARK);
     }
 
     @NonNull
     public static OkHttpClient getOkHttpClient() {
         if (okHttpClient != null) return okHttpClient;
         var builder = new OkHttpClient.Builder()
-                .cache(getOkHttpCache())
-                .dns(new CloudflareDNS());
+            .cache(getOkHttpCache())
+            .dns(new CloudflareDNS());
         if (BuildConfig.DEBUG) {
             var log = new HttpLoggingInterceptor();
             log.setLevel(HttpLoggingInterceptor.Level.HEADERS);

@@ -56,9 +56,6 @@
                 android:name="android.app.shortcuts"
                 android:resource="@xml/shortcuts" />
         </activity>
-        <activity
-            android:name=".ui.activity.CrashReportActivity"
-            android:process=":error" />
 
         <provider
             android:name="androidx.startup.InitializationProvider"
