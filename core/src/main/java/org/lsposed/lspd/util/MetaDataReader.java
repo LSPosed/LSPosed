@@ -40,22 +40,16 @@ public class MetaDataReader {
     }
 
     private MetaDataReader(File apk) throws IOException {
-        try (JarFile zip = new JarFile(apk)) {
-            InputStream is = zip.getInputStream(zip.getEntry("AndroidManifest.xml"));
-            byte[] bytes = getBytesFromInputStream(is);
-            AxmlReader reader = null;
-            if (bytes != null) {
-                reader = new AxmlReader(bytes);
-            }
-            if (reader != null) {
-                reader.accept(new AxmlVisitor() {
-                    @Override
-                    public NodeVisitor child(String ns, String name) {
-                        NodeVisitor child = super.child(ns, name);
-                        return new ManifestTagVisitor(child);
-                    }
-                });
-            }
+        try (JarFile zip = new JarFile(apk);
+             var is = zip.getInputStream(zip.getEntry("AndroidManifest.xml"))) {
+            var reader = new AxmlReader(getBytesFromInputStream(is));
+            reader.accept(new AxmlVisitor() {
+                @Override
+                public NodeVisitor child(String ns, String name) {
+                    NodeVisitor child = super.child(ns, name);
+                    return new ManifestTagVisitor(child);
+                }
+            });
         }
     }
 
@@ -67,10 +61,7 @@ public class MetaDataReader {
                 bos.write(b, 0, n);
             }
             return bos.toByteArray();
-        } catch (Exception e) {
-            e.printStackTrace();
         }
-        return null;
     }
 
     private class ManifestTagVisitor extends NodeVisitor {
