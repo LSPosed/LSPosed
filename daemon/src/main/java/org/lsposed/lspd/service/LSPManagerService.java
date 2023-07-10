@@ -163,14 +163,7 @@ public class LSPManagerService extends ILSPManagerService.Stub {
         if (intent == null) return;
         intent = new Intent(intent);
         intent.setData(withData);
-        try {
-            var userInfo = ActivityManagerService.getCurrentUser();
-            if (userInfo == null || userInfo.id != 0) return;
-            ActivityManagerService.startActivityAsUserWithFeature("android", null,
-                    intent, intent.getType(), null, null, 0, 0, null, null, 0);
-        } catch (RemoteException e) {
-            Log.e(TAG, "open manager", e);
-        }
+        ServiceManager.getManagerService().preStartManager(BuildConfig.MANAGER_INJECTED_PKG_NAME, intent, true);
     }
 
     @SuppressLint("WrongConstant")
@@ -243,7 +236,7 @@ public class LSPManagerService extends ILSPManagerService.Stub {
     // where starting the target app while the manager is
     // still running.
     // We instead let the manager to restart the activity.
-    synchronized boolean preStartManager(String pkgName, Intent intent) {
+    synchronized boolean preStartManager(String pkgName, Intent intent, boolean doResume) {
         // first, check if it's our target app, if not continue the start
         if (BuildConfig.MANAGER_INJECTED_PKG_NAME.equals(pkgName)) {
             Log.d(TAG, "starting target app of parasitic manager");
@@ -260,6 +253,14 @@ public class LSPManagerService extends ILSPManagerService.Stub {
                     Log.d(TAG, "manager is still running or is on its way");
                     // there's one running parasitic manager
                     // or it's run by ourself after killing, resume it
+                    if (doResume) {
+                        // if doResume is true, we help do the resumption
+                        try {
+                            ActivityManagerService.startActivityAsUserWithFeature("android", null, intent, intent.getType(), null, null, 0, 0, null, null, 0);
+                        } catch (Throwable e) {
+                            Log.w(TAG, "resume manager", e);
+                        }
+                    }
                     return true;
                 } else if (pendingManager) {
                     // Check the flag in case new launch comes before finishing
