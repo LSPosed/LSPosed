@@ -164,6 +164,8 @@ public class App extends Application {
         Thread.setDefaultUncaughtExceptionHandler((thread, throwable) -> {
             var time = OffsetDateTime.now();
             var dir = new File(getCacheDir(), "crash");
+            //noinspection ResultOfMethodCallIgnored
+            dir.mkdir();
             var file = new File(dir, time.toEpochSecond() + ".log");
             try (var pw = new PrintWriter(file)) {
                 pw.println(BuildConfig.VERSION_NAME + " (" + BuildConfig.VERSION_CODE + ")");
@@ -175,7 +177,7 @@ public class App extends Application {
             if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.Q) {
                 var table = MediaStore.Downloads.getContentUri(MediaStore.VOLUME_EXTERNAL_PRIMARY);
                 var values = new ContentValues();
-                values.put(MediaStore.Downloads.DISPLAY_NAME, "LSPosed_" + time.toEpochSecond() + ".zip");
+                values.put(MediaStore.Downloads.DISPLAY_NAME, "LSPosed_crash_report" + time.toEpochSecond() + ".zip");
                 values.put(MediaStore.Downloads.RELATIVE_PATH, Environment.DIRECTORY_DOCUMENTS);
                 var cr = getContentResolver();
                 var uri = cr.insert(table, values);
@@ -183,7 +185,7 @@ public class App extends Application {
                 try (var zipFd = cr.openFileDescriptor(uri, "wt")) {
                     LSPManagerServiceHolder.getService().getLogs(zipFd);
                 } catch (Exception ignored) {
-                    cr.delete(uri, null);
+                    cr.delete(uri, null, null);
                 }
             }
         });
