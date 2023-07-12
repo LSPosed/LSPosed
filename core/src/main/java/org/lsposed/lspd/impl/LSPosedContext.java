@@ -230,7 +230,7 @@ public class LSPosedContext extends XposedContext {
         synchronized (mSync) {
             var res = mBase.getResources();
             if (res == null) {
-                res = XModuleResources.createInstance(mBase.getPackageCodePath(), null);
+                res = XModuleResources.createInstance(mApkPath, null);
                 XposedHelpers.setObjectField(mBase, "mResources", res);
             }
             return res;
