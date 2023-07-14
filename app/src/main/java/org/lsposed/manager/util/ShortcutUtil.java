@@ -168,14 +168,12 @@ public class ShortcutUtil {
     public static boolean isLaunchShortcutPinned() {
         var context = App.getInstance();
         var sm = context.getSystemService(ShortcutManager.class);
-        boolean pinned = false;
         for (var info : sm.getPinnedShortcuts()) {
             if (SHORTCUT_ID.equals(info.getId())) {
-                pinned = true;
-                break;
+                return true;
             }
         }
-        return pinned;
+        return false;
     }
 
     public static boolean shouldAllowPinShortcut(Context context) {
