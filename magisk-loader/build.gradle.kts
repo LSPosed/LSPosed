@@ -233,8 +233,8 @@ fun afterEval() = android.applicationVariants.forEach { variant ->
     val zipTask = task<Zip>("zip${variantCapped}") {
         group = "LSPosed"
         dependsOn(prepareMagiskFilesTask)
-        archiveFileName.set(zipFileName)
-        destinationDirectory.set(file("$projectDir/release"))
+        archiveFileName = zipFileName
+        destinationDirectory = file("$projectDir/release")
         from(magiskDir)
     }
 

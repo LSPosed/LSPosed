@@ -27,6 +27,7 @@ import android.content.pm.ApplicationInfo;
 import android.content.pm.PackageInfo;
 import android.content.pm.PackageManager;
 import android.content.pm.ResolveInfo;
+import android.os.Parcel;
 import android.view.MenuItem;
 
 import org.lsposed.manager.ConfigManager;
@@ -140,6 +141,20 @@ public class AppHelper {
     synchronized public static List<PackageInfo> getAppList(boolean force) {
         if (appList == null || force) {
             appList = ConfigManager.getInstalledPackagesFromAllUsers(PackageManager.GET_META_DATA | PackageManager.MATCH_UNINSTALLED_PACKAGES, true);
+            PackageInfo system = null;
+            for (var app : appList) {
+                if ("android".equals(app.packageName)) {
+                    var p = Parcel.obtain();
+                    app.writeToParcel(p, 0);
+                    p.setDataPosition(0);
+                    system = PackageInfo.CREATOR.createFromParcel(p);
+                    system.packageName = "system";
+                    break;
+                }
+            }
+            if (system != null) {
+                appList.add(system);
+            }
         }
         return appList;
     }

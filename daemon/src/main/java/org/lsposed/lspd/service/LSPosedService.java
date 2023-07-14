@@ -207,7 +207,7 @@ public class LSPosedService extends ILSPosedService.Stub {
         if (isXposedModule) {
             var enabledModules = ConfigManager.getInstance().enabledModules();
             var scope = ConfigManager.getInstance().getModuleScope(packageName);
-            boolean systemModule = scope != null && scope.parallelStream().anyMatch(app -> app.packageName.equals("android"));
+            boolean systemModule = scope != null && scope.parallelStream().anyMatch(app -> app.packageName.equals("system"));
             boolean enabled = Arrays.asList(enabledModules).contains(packageName);
             if (!(Intent.ACTION_UID_REMOVED.equals(action) || Intent.ACTION_PACKAGE_FULLY_REMOVED.equals(action) || allUsers))
                 LSPNotificationManager.notifyModuleUpdated(packageName, userId, enabled, systemModule);
@@ -469,6 +469,6 @@ public class LSPosedService extends ILSPosedService.Stub {
     @Override
     public boolean preStartManager(String pkgName, Intent intent) {
         Log.d(TAG, "checking manager intent");
-        return ServiceManager.getManagerService().preStartManager(pkgName, intent);
+        return ServiceManager.getManagerService().preStartManager(pkgName, intent, false);
     }
 }

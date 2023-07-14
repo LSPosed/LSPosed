@@ -80,10 +80,10 @@ android {
 }
 
 autoResConfig {
-    generateClass.set(true)
-    generateRes.set(false)
-    generatedClassFullName.set("org.lsposed.manager.util.LangList")
-    generatedArrayFirstItem.set("SYSTEM")
+    generateClass = true
+    generateRes = false
+    generatedClassFullName = "org.lsposed.manager.util.LangList"
+    generatedArrayFirstItem = "SYSTEM"
 }
 
 materialThemeBuilder {

@@ -24,7 +24,6 @@ import static org.lsposed.lspd.core.ApplicationServiceClient.serviceClient;
 
 import android.annotation.SuppressLint;
 import android.app.ActivityThread;
-import android.app.AndroidAppHelper;
 import android.app.LoadedApk;
 import android.content.pm.ApplicationInfo;
 import android.os.Build;
@@ -90,7 +89,7 @@ public class LoadedApkGetCLHooker extends XC_MethodHook {
             boolean isFirstPackage = packageName != null && processName != null && packageName.equals(loadedApk.getPackageName());
             if (!isFirstPackage) {
                 packageName = loadedApk.getPackageName();
-                processName = AndroidAppHelper.currentProcessName();
+                processName = ActivityThread.currentPackageName();
             } else if (packageName.equals("android")) {
                 packageName = "system";
             }
@@ -100,6 +99,11 @@ public class LoadedApkGetCLHooker extends XC_MethodHook {
             Hookers.logD("LoadedApk#getClassLoader ends: " + mAppDir + " -> " + classLoader);
 
             if (classLoader == null) {
+                return;
+            }
+
+            if (!isFirstPackage && !XposedHelpers.getBooleanField(loadedApk, "mIncludeCode")) {
+                Hookers.logD("LoadedApk#<init> mIncludeCode == false: " + mAppDir);
                 return;
             }
 

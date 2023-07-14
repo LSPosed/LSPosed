@@ -34,10 +34,12 @@ import android.content.pm.PackageParser;
 import android.database.Cursor;
 import android.database.sqlite.SQLiteDatabase;
 import android.database.sqlite.SQLiteStatement;
+import android.os.Build;
 import android.os.Bundle;
 import android.os.Handler;
 import android.os.HandlerThread;
 import android.os.ParcelFileDescriptor;
+import android.os.Process;
 import android.os.RemoteException;
 import android.os.SELinux;
 import android.os.SharedMemory;
@@ -91,12 +93,7 @@ import java.util.zip.ZipOutputStream;
 public class ConfigManager {
     private static ConfigManager instance = null;
 
-    private final SQLiteDatabase db = SQLiteDatabase.openDatabase(
-            ConfigFileManager.dbPath.getAbsolutePath(),
-            null,
-            SQLiteDatabase.CREATE_IF_NECESSARY | SQLiteDatabase.ENABLE_WRITE_AHEAD_LOGGING,
-            sqLiteDatabase -> Log.w(TAG, "database corrupted")
-    );
+    private final SQLiteDatabase db = openDb();
 
     private boolean verboseLog = true;
     private boolean dexObfuscate = true;
@@ -179,6 +176,16 @@ public class ConfigManager {
 
     private Set<String> scopeRequestBlocked = new HashSet<>();
 
+    private static SQLiteDatabase openDb() {
+        var params = new SQLiteDatabase.OpenParams.Builder()
+                .addOpenFlags(SQLiteDatabase.CREATE_IF_NECESSARY | SQLiteDatabase.ENABLE_WRITE_AHEAD_LOGGING)
+                .setErrorHandler(sqLiteDatabase -> Log.w(TAG, "database corrupted"));
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.P) {
+            params.setSynchronousMode("NORMAL");
+        }
+        return SQLiteDatabase.openDatabase(ConfigFileManager.dbPath.getAbsoluteFile(), params.build());
+    }
+
     private void updateCaches(boolean sync) {
         synchronized (cacheHandler) {
             requestScopeCacheTime = requestModuleCacheTime = SystemClock.elapsedRealtime();
@@ -196,25 +203,15 @@ public class ConfigManager {
             Log.e(TAG, "skip injecting into android because sepolicy was not loaded properly");
             return true; // skip
         }
-        try (Cursor cursor = db.query("scope INNER JOIN modules ON scope.mid = modules.mid", new String[]{"modules.mid"}, "app_pkg_name=? AND enabled=1", new String[]{"android"}, null, null, null)) {
+        try (Cursor cursor = db.query("scope INNER JOIN modules ON scope.mid = modules.mid", new String[]{"modules.mid"}, "app_pkg_name=? AND enabled=1", new String[]{"system"}, null, null, null)) {
             return cursor == null || !cursor.moveToNext();
         }
     }
 
     @SuppressLint("BlockedPrivateApi")
     public List<Module> getModulesForSystemServer() {
-        var at = ActivityThread.currentActivityThread();
-        Field permissionManager = null;
-        try {
-            // PackageParser need to access PermissionManager, but it's not initialized yet
-            permissionManager = ActivityThread.class.getDeclaredField("sPermissionManager");
-            permissionManager.setAccessible(true);
-            permissionManager.set(at, (IPermissionManager) ArrayList::new);
-        } catch (NoSuchFieldException | IllegalAccessException ignored) {
-        }
-
         List<Module> modules = new LinkedList<>();
-        try (Cursor cursor = db.query("scope INNER JOIN modules ON scope.mid = modules.mid", new String[]{"module_pkg_name", "apk_path"}, "app_pkg_name=? AND enabled=1", new String[]{"android"}, null, null, null)) {
+        try (Cursor cursor = db.query("scope INNER JOIN modules ON scope.mid = modules.mid", new String[]{"module_pkg_name", "apk_path"}, "app_pkg_name=? AND enabled=1", new String[]{"system"}, null, null, null)) {
             int apkPathIdx = cursor.getColumnIndex("apk_path");
             int pkgNameIdx = cursor.getColumnIndex("module_pkg_name");
             while (cursor.moveToNext()) {
@@ -237,13 +234,6 @@ public class ConfigManager {
                 }
                 module.service = new LSPInjectedModuleService(module);
                 modules.add(module);
-            }
-        }
-
-        if (permissionManager != null) {
-            try {
-                permissionManager.set(at, null);
-            } catch (IllegalAccessException ignored) {
             }
         }
 
@@ -410,11 +400,15 @@ public class ConfigManager {
                         db.compileStatement("DROP TABLE old_configs;").execute();
                         db.setVersion(2);
                     });
+                case 2:
+                    executeInTransaction(() -> {
+                        db.compileStatement("UPDATE scope SET app_pkg_name = 'system' WHERE app_pkg_name = 'android';").execute();
+                        db.setVersion(3);
+                    });
                 default:
                     break;
             }
-        } catch (
-                Throwable e) {
+        } catch (Throwable e) {
             Log.e(TAG, "init db", e);
         }
 
@@ -423,8 +417,17 @@ public class ConfigManager {
     private List<ProcessScope> getAssociatedProcesses(Application app) throws RemoteException {
         Pair<Set<String>, Integer> result = PackageService.fetchProcessesWithUid(app);
         List<ProcessScope> processes = new ArrayList<>();
+        if (app.packageName.equals("android")) {
+            // this is hardcoded for ResolverActivity
+            processes.add(new ProcessScope("system:ui", Process.SYSTEM_UID));
+        }
         for (String processName : result.first) {
-            processes.add(new ProcessScope(processName, result.second));
+            var uid = result.second;
+            if (uid == Process.SYSTEM_UID && processName.equals("system")) {
+                // code run in system_server
+                continue;
+            }
+            processes.add(new ProcessScope(processName, uid));
         }
         return processes;
     }
@@ -663,7 +666,7 @@ public class ConfigManager {
                 })) continue;
 
                 // system server always loads database
-                if (app.packageName.equals("android")) continue;
+                if (app.packageName.equals("system")) continue;
 
                 try {
                     List<ProcessScope> processesScope = cachedProcessScope.computeIfAbsent(new Pair<>(app.packageName, app.userId), (k) -> {
@@ -835,7 +838,7 @@ public class ConfigManager {
         executeInTransaction(() -> {
             db.delete("scope", "mid = ?", new String[]{String.valueOf(mid)});
             for (Application app : scopes) {
-                if (app.packageName.equals("android") && app.userId != 0) continue;
+                if (app.packageName.equals("system") && app.userId != 0) continue;
                 ContentValues values = new ContentValues();
                 values.put("mid", mid);
                 values.put("app_pkg_name", app.packageName);
@@ -852,7 +855,7 @@ public class ConfigManager {
         if (scopePackageName == null) return false;
         int mid = getModuleId(packageName);
         if (mid == -1) return false;
-        if (scopePackageName.equals("android") && userId != 0) return false;
+        if (scopePackageName.equals("system") && userId != 0) return false;
         executeInTransaction(() -> {
             ContentValues values = new ContentValues();
             values.put("mid", mid);
@@ -869,7 +872,7 @@ public class ConfigManager {
         if (scopePackageName == null) return false;
         int mid = getModuleId(packageName);
         if (mid == -1) return false;
-        if (scopePackageName.equals("android") && userId != 0) return false;
+        if (scopePackageName.equals("system") && userId != 0) return false;
         executeInTransaction(() -> {
             db.delete("scope", "mid = ? AND app_pkg_name = ? AND user_id = ?", new String[]{String.valueOf(mid), scopePackageName, String.valueOf(userId)});
         });

@@ -86,8 +86,12 @@ public class WelcomeDialog extends DialogFragment {
 
     public static void showIfNeed(FragmentManager fm) {
         if (shown) return;
-        if (!ConfigManager.isBinderAlive()) return;
-        if (App.getPreferences().getBoolean("never_show_welcome", false)) return;
+        if (!ConfigManager.isBinderAlive() ||
+                App.getPreferences().getBoolean("never_show_welcome", false) ||
+                (App.isParasitic && ShortcutUtil.isLaunchShortcutPinned())) {
+            shown = true;
+            return;
+        }
         new WelcomeDialog().show(fm, "welcome");
         shown = true;
     }

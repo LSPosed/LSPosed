@@ -80,7 +80,7 @@ public class LSPSystemServerService extends ILSPSystemServerService.Stub impleme
     public ILSPApplicationService requestApplicationService(int uid, int pid, String processName, IBinder heartBeat) {
         Log.d(TAG, "ILSPApplicationService.requestApplicationService: " + uid + " " + pid + " " + processName + " " + heartBeat);
         requested = 1;
-        if (ConfigManager.getInstance().shouldSkipSystemServer() || uid != 1000 || heartBeat == null || !"android".equals(processName))
+        if (ConfigManager.getInstance().shouldSkipSystemServer() || uid != 1000 || heartBeat == null || !"system".equals(processName))
             return null;
         else
             return ServiceManager.requestApplicationService(uid, pid, processName, heartBeat);

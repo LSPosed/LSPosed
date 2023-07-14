@@ -153,7 +153,7 @@ public class RepoItemFragment extends BaseFragment implements RepoLoader.RepoLis
         }
     }
 
-    private void renderGithubMarkdown(WebView view, String text) {
+    private void renderGithubMarkdown(WebView view, @Nullable String text) {
         try {
             view.setBackgroundColor(Color.TRANSPARENT);
             var setting = view.getSettings();
@@ -172,6 +172,9 @@ public class RepoItemFragment extends BaseFragment implements RepoLoader.RepoLis
                 direction = "rtl";
             } else {
                 direction = "ltr";
+            }
+            if (text == null) {
+                text = "<center>" + App.getInstance().getString(R.string.list_empty) + "</center>";
             }
             if (ResourceUtils.isNightMode(getResources().getConfiguration())) {
                 body = App.HTML_TEMPLATE_DARK.get().replace("@dir@", direction).replace("@body@", text);

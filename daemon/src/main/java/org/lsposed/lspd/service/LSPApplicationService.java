@@ -24,6 +24,7 @@ import static org.lsposed.lspd.service.ServiceManager.TAG;
 import android.os.IBinder;
 import android.os.Parcel;
 import android.os.ParcelFileDescriptor;
+import android.os.Process;
 import android.os.RemoteException;
 import android.util.Log;
 import android.util.Pair;
@@ -117,7 +118,7 @@ public class LSPApplicationService extends ILSPApplicationService.Stub {
 
     private List<Module> getAllModulesList() throws RemoteException {
         var processInfo = ensureRegistered();
-        if (processInfo.uid == 1000 && processInfo.processName.equals("android")) {
+        if (processInfo.uid == Process.SYSTEM_UID && processInfo.processName.equals("system")) {
             return ConfigManager.getInstance().getModulesForSystemServer();
         }
         if (ServiceManager.getManagerService().isRunningManager(processInfo.pid, processInfo.uid))
