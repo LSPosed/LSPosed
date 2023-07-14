@@ -328,6 +328,13 @@ public class RepoFragment extends BaseFragment implements RepoLoader.RepoListene
                     sb.setSpan(styleSpan, sb.length() - hint.length(), sb.length(), Spannable.SPAN_INCLUSIVE_INCLUSIVE);
                 }
                 sb.setSpan(foregroundColorSpan, sb.length() - hint.length(), sb.length(), Spannable.SPAN_INCLUSIVE_INCLUSIVE);
+            } else if (moduleUtil.getModule(module.getName()) != null) {
+                String installed = getString(R.string.installed);
+                sb.append(installed);
+                final StyleSpan styleSpan = new StyleSpan(Typeface.ITALIC);
+                sb.setSpan(styleSpan, sb.length() - installed.length(), sb.length(), Spannable.SPAN_INCLUSIVE_INCLUSIVE);
+                final ForegroundColorSpan foregroundColorSpan = new ForegroundColorSpan(ResourceUtils.resolveColor(requireActivity().getTheme(), com.google.android.material.R.attr.colorSecondary));
+                sb.setSpan(foregroundColorSpan, sb.length() - installed.length(), sb.length(), Spannable.SPAN_INCLUSIVE_INCLUSIVE);
             }
             if (sb.length() > 0) {
                 holder.hint.setVisibility(View.VISIBLE);
