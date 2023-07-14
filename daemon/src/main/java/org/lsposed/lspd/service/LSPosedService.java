@@ -468,6 +468,6 @@ public class LSPosedService extends ILSPosedService.Stub {
     @Override
     public boolean preStartManager(String pkgName, Intent intent) {
         Log.d(TAG, "checking manager intent");
-        return ServiceManager.getManagerService().preStartManager(pkgName, intent);
+        return ServiceManager.getManagerService().preStartManager(pkgName, intent, false);
     }
 }
