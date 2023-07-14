@@ -254,6 +254,7 @@
     <string name="color_deep_orange">Deep orange</string>
     <string name="color_brown">Brown</string>
     <string name="color_blue_grey">Blue grey</string>
+    <string name="installed">Installed</string>
     <plurals name="module_release_assets_download_count">
         <item quantity="one">%d download</item>
         <item quantity="other">%d downloads</item>
