@@ -242,6 +242,7 @@
     <string name="color_deep_orange">Jingga gelap</string>
     <string name="color_brown">Coklat</string>
     <string name="color_blue_grey">Abu-abu kebiruan</string>
+    <string name="installed">Terpasang</string>
     <plurals name="module_release_assets_download_count">
         <item quantity="other">%d unduh
 %d unduhan</item>
