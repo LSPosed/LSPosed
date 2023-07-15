@@ -244,6 +244,7 @@
     <string name="color_deep_orange">Taronja profund</string>
     <string name="color_brown">marró</string>
     <string name="color_blue_grey">Gris blau</string>
+    <string name="installed">Instal·lat</string>
     <plurals name="module_release_assets_download_count">
         <item quantity="one">%d descàrrega</item>
         <item quantity="other">%d descàrregues</item>
