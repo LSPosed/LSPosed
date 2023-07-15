@@ -102,7 +102,7 @@ public class LSPNotificationManager {
         } else {
             channel = nm.getNotificationChannelForPackage("android", 1000, channelId, false);
         }
-        if(channel != null) {
+        if (channel != null) {
             Log.d(TAG, "hasNotificationChannelForSystem: " + channel);
         }
         return channel != null;
@@ -224,89 +224,87 @@ public class LSPNotificationManager {
                                     int moduleUserId,
                                     boolean enabled,
                                     boolean systemModule) {
+        var context = new FakeContext();
+        var userName = UserService.getUserName(moduleUserId);
+        String title = context.getString(enabled ? systemModule ?
+                R.string.xposed_module_updated_notification_title_system :
+                R.string.xposed_module_updated_notification_title :
+                R.string.module_is_not_activated_yet);
+        String content = context.getString(enabled ? systemModule ?
+                R.string.xposed_module_updated_notification_content_system :
+                R.string.xposed_module_updated_notification_content :
+                (moduleUserId == 0 ?
+                        R.string.module_is_not_activated_yet_main_user_detailed :
+                        R.string.module_is_not_activated_yet_multi_user_detailed), modulePackageName, userName);
+
+        var style = new Notification.BigTextStyle();
+        style.bigText(content);
+
+        var notification = new Notification.Builder(context, UPDATED_CHANNEL_ID)
+                .setContentTitle(title)
+                .setContentText(content)
+                .setSmallIcon(getNotificationIcon())
+                .setContentIntent(getModuleIntent(modulePackageName, moduleUserId))
+                .setVisibility(Notification.VISIBILITY_SECRET)
+                .setColor(0xFFF48FB1)
+                .setAutoCancel(true)
+                .setStyle(style)
+                .build();
+        notification.extras.putString("android.substName", "LSPosed");
         try {
-            var context = new FakeContext();
-            var userInfo = UserService.getUserInfo(moduleUserId);
-            String userName = userInfo != null ? userInfo.name : String.valueOf(moduleUserId);
-            String title = context.getString(enabled ? systemModule ?
-                    R.string.xposed_module_updated_notification_title_system :
-                    R.string.xposed_module_updated_notification_title :
-                    R.string.module_is_not_activated_yet);
-            String content = context.getString(enabled ? systemModule ?
-                    R.string.xposed_module_updated_notification_content_system :
-                    R.string.xposed_module_updated_notification_content :
-                    (moduleUserId == 0 ?
-                            R.string.module_is_not_activated_yet_main_user_detailed :
-                            R.string.module_is_not_activated_yet_multi_user_detailed), modulePackageName, userName);
-
-            var style = new Notification.BigTextStyle();
-            style.bigText(content);
-
-            var notification = new Notification.Builder(context, UPDATED_CHANNEL_ID)
-                    .setContentTitle(title)
-                    .setContentText(content)
-                    .setSmallIcon(getNotificationIcon())
-                    .setContentIntent(getModuleIntent(modulePackageName, moduleUserId))
-                    .setVisibility(Notification.VISIBILITY_SECRET)
-                    .setColor(0xFFF48FB1)
-                    .setAutoCancel(true)
-                    .setStyle(style)
-                    .build();
-            notification.extras.putString("android.substName", "LSPosed");
             var nm = getNotificationManager();
             createNotificationChannel(nm);
             nm.enqueueNotificationWithTag("android", opPkg, modulePackageName,
                     pushAndGetNotificationId(UPDATED_CHANNEL_ID, modulePackageName, moduleUserId),
                     notification, 0);
-        } catch (Throwable e) {
+        } catch (RemoteException e) {
             Log.e(TAG, "notify module updated", e);
         }
     }
 
     static void requestModuleScope(String modulePackageName, int moduleUserId, String scopePackageName, IXposedScopeCallback callback) {
+        var context = new FakeContext();
+        var userName = UserService.getUserName(moduleUserId);
+        String title = context.getString(R.string.xposed_module_request_scope_title);
+        String content = context.getString(R.string.xposed_module_request_scope_content, modulePackageName, userName, scopePackageName);
+
+        var style = new Notification.BigTextStyle();
+        style.bigText(content);
+
+        var notification = new Notification.Builder(context, SCOPE_CHANNEL_ID)
+                .setContentTitle(title)
+                .setContentText(content)
+                .setSmallIcon(getNotificationIcon())
+                .setVisibility(Notification.VISIBILITY_SECRET)
+                .setColor(0xFFF48FB1)
+                .setAutoCancel(true)
+                .setTimeoutAfter(1000 * 60 * 60)
+                .setStyle(style)
+                .setDeleteIntent(getModuleScopeIntent(modulePackageName, moduleUserId, scopePackageName, "delete", callback))
+                .setActions(new Notification.Action.Builder(
+                                Icon.createWithResource(context, R.drawable.ic_baseline_check_24),
+                                context.getString(R.string.scope_approve),
+                                getModuleScopeIntent(modulePackageName, moduleUserId, scopePackageName, "approve", callback))
+                                .build(),
+                        new Notification.Action.Builder(
+                                Icon.createWithResource(context, R.drawable.ic_baseline_close_24),
+                                context.getString(R.string.scope_deny),
+                                getModuleScopeIntent(modulePackageName, moduleUserId, scopePackageName, "deny", callback))
+                                .build(),
+                        new Notification.Action.Builder(
+                                Icon.createWithResource(context, R.drawable.ic_baseline_block_24),
+                                context.getString(R.string.nerver_ask_again),
+                                getModuleScopeIntent(modulePackageName, moduleUserId, scopePackageName, "block", callback))
+                                .build()
+                ).build();
+        notification.extras.putString("android.substName", "LSPosed");
         try {
-            var context = new FakeContext();
-            var userInfo = UserService.getUserInfo(moduleUserId);
-            String userName = userInfo != null ? userInfo.name : String.valueOf(moduleUserId);
-            String title = context.getString(R.string.xposed_module_request_scope_title);
-            String content = context.getString(R.string.xposed_module_request_scope_content, modulePackageName, userName, scopePackageName);
-
-            var style = new Notification.BigTextStyle();
-            style.bigText(content);
-
-            var notification = new Notification.Builder(context, SCOPE_CHANNEL_ID)
-                    .setContentTitle(title)
-                    .setContentText(content)
-                    .setSmallIcon(getNotificationIcon())
-                    .setVisibility(Notification.VISIBILITY_SECRET)
-                    .setColor(0xFFF48FB1)
-                    .setAutoCancel(true)
-                    .setTimeoutAfter(1000 * 60 * 60)
-                    .setStyle(style)
-                    .setDeleteIntent(getModuleScopeIntent(modulePackageName, moduleUserId, scopePackageName, "delete", callback))
-                    .setActions(new Notification.Action.Builder(
-                                    Icon.createWithResource(context, R.drawable.ic_baseline_check_24),
-                                    context.getString(R.string.scope_approve),
-                                    getModuleScopeIntent(modulePackageName, moduleUserId, scopePackageName, "approve", callback))
-                                    .build(),
-                            new Notification.Action.Builder(
-                                    Icon.createWithResource(context, R.drawable.ic_baseline_close_24),
-                                    context.getString(R.string.scope_deny),
-                                    getModuleScopeIntent(modulePackageName, moduleUserId, scopePackageName, "deny", callback))
-                                    .build(),
-                            new Notification.Action.Builder(
-                                    Icon.createWithResource(context, R.drawable.ic_baseline_block_24),
-                                    context.getString(R.string.nerver_ask_again),
-                                    getModuleScopeIntent(modulePackageName, moduleUserId, scopePackageName, "block", callback))
-                                    .build()
-                    ).build();
-            notification.extras.putString("android.substName", "LSPosed");
             var nm = getNotificationManager();
             createNotificationChannel(nm);
             nm.enqueueNotificationWithTag("android", opPkg, modulePackageName,
                     pushAndGetNotificationId(SCOPE_CHANNEL_ID, modulePackageName, moduleUserId),
                     notification, 0);
-        } catch (Throwable e) {
+        } catch (RemoteException e) {
             try {
                 callback.onScopeRequestFailed(scopePackageName, e.getMessage());
             } catch (RemoteException ignored) {
