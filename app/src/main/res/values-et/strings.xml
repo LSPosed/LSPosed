@@ -244,6 +244,7 @@
     <string name="color_deep_orange">Sügavoranž</string>
     <string name="color_brown">Pruun</string>
     <string name="color_blue_grey">Sinine hall</string>
+    <string name="installed">Paigaldatud</string>
     <plurals name="module_release_assets_download_count">
         <item quantity="one">allalaaditud on %d kord</item>
         <item quantity="other">allalaaditud on %d korda</item>
