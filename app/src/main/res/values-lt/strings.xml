@@ -248,6 +248,7 @@
     <string name="color_deep_orange">Tamsiai oranžinė</string>
     <string name="color_brown">Ruda</string>
     <string name="color_blue_grey">Mėlyna pilka</string>
+    <string name="installed">Įdiegta</string>
     <plurals name="module_release_assets_download_count">
         <item quantity="one">%d atsisiųsti</item>
         <item quantity="few">%d Parsisiųsti</item>
