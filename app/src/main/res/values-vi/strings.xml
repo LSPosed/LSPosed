@@ -21,7 +21,7 @@
     <!-- MainActivity -->
     <string name="info">Thông tin</string>
     <string name="overview">Tổng quan</string>
-    <string name="Modules">Mô-đun</string>
+    <string name="Modules">Tiện ích bổ sung</string>
     <plurals name="modules_enabled_count">
         <item quantity="other">%d Modules đã được kích hoạt</item>
     </plurals>
@@ -47,7 +47,7 @@
     <string name="activated">Đã được kích hoạt</string>
     <string name="partial_activated">Một phần đã được kích hoạt</string>
     <string name="selinux_policy_not_loaded_summary">Chính sách SELinux không được nạp đúng cách</string>
-    <string name="selinux_policy_not_loaded"><![CDATA[Một số tính năng sẽ không hoạt động.<br/>Vui lòng báo cáo điều này đến <a href="https://github.com/topjohnwu/Magisk/issues"><b>nhà phát triển</b></a> Magisk.]]></string>
+    <string name="selinux_policy_not_loaded"><![CDATA[Vài tính năng không hoạt động.<br/>Vui lòng báo cáo đến <a href="https://github.com/topjohnwu/Magisk/issues"><b>nhà phát triển</b></a>.]]></string>
     <string name="system_inject_fail_summary">Không thể nhúng vào khung hệ thống</string>
     <string name="system_inject_fail"><![CDATA[Trường hợp này khá hiếm khi xảy ra và có thể lý do bởi <b>Magisk</b> hoặc 1 số mô-đun Magisk kém chất lượng.<br/>Hãy thử vô hiệu hóa những mô-đun Magisk đó, thử chạy riêng Riru và LSPosed mà thôi hoặc thông báo nhật ký tới những nhà phát triển.]]></string>
     <string name="system_prop_incorrect_summary">Thông tin hệ thống không đúng</string>
@@ -62,8 +62,8 @@
     <string name="info_device">Thiết bị</string>
     <string name="info_system_abi">Hệ thống ABI</string>
     <string name="info_dex2oat_wrapper">Trình tối ưu Dex Wrapper</string>
-    <string name="enabled">Đã kích hoạt</string>
-    <string name="not_enabled">Không được kích hoạt</string>
+    <string name="enabled">Đã bật</string>
+    <string name="not_enabled">Đã tắt</string>
     <string name="supported">Được hỗ trợ</string>
     <string name="unsupported">Không được hỗ trợ</string>
     <string name="android_version_unsatisfied">Phiên bản Android không hỗ trợ</string>
@@ -74,13 +74,14 @@
     <string name="update_lsposed">Cập nhật LSPosed</string>
     <string name="update_lsposed_msg">Xác nhận để cập nhật LSPosed? Thiết bị sẽ khởi động lại sau khi cập nhật hoàn tất</string>
     <!-- WelcomeDialog -->
-    <string name="parasitic_welcome">Chào mừng đến với LSPosed</string>
-    <string name="parasitic_welcome_summary">Bạn đang sử dụng trình quản lý ký sinh, có thể tạo lối tắt hoặc mở từ thông báo.</string>
-    <string name="parasitic_welcome_summary_no_shortcut_support">Bạn đang sử dụng trình quản lý ký sinh, có thể tạo lối tắt hoặc mở từ thông báo.</string>
+    <string name="parasitic_welcome">Chào mừng</string>
+    <string name="parasitic_welcome_summary">Đang sử dụng trình quản lý phụ thuộc có thể tạo lối tắt hoặc mở từ thông báo.</string>
+    <string name="parasitic_welcome_summary_no_shortcut_support">Đang sử dụng trình quản lý phụ thuộc có thể mở từ thông báo.</string>
     <string name="create_shortcut">Tạo lối tắt</string>
     <string name="never_show">Không hiện nữa</string>
-    <string name="app_welcome">Quản lý ký sinh khuyến nghị</string>
-    <string name="app_welcome_summary">LSPosed giờ đã hỗ trợ ký sinh hệ thống để tránh bị phát hiện, bạn có thể mở trình quản lý ký sinh từ thông báo. Bạn nên gỡ cài đặt ứng dụng hiện tại.</string>
+    <string name="app_welcome">Quản lý phụ thuộc khuyến nghị</string>
+    <string name="app_welcome_summary">Ứng dụng hiện hỗ trợ phụ thuộc hệ thống để tránh bị phát hiện có thể mở trình quản lý từ thông báo.
+Nên gỡ cài đặt ứng dụng hiện tại.</string>
     <!-- LogsActivity -->
     <string name="menuSaveToSd">Lưu lại</string>
     <string name="nav_item_logs_verbose">Nhật ký Chi tiết</string>
@@ -101,7 +102,7 @@
     <!-- ModulesActivity -->
     <string name="module_empty_description">(chưa có mô tả)</string>
     <string name="warning_xposed_min_version">Mô-đun này yêu cầu một phiên bản Xposed mới hơn (%d) và đó là lý do không thể được kích hoạt</string>
-    <string name="warning_target_version_higher">Mô-đun này được thiết kế cho phiên bản Xposed mới hơn (%d) và do đó một số chức năng có thể không hoạt động</string>
+    <string name="warning_target_version_higher">Tiện ích bổ sung này được làm cho phiên bản ứng dụng mới hơn (%d) nên một số chức năng có thể không hoạt động</string>
     <string name="no_min_version_specified">Mô-đun này không chỉ định phiên bản Xposed cần thiết để khởi chạy.</string>
     <string name="warning_min_version_too_low">Mô-đun này được tạo bởi phiên bản Xposed %1$d, nhưng vì lý do không tương thích với phiên bản %2$d, nên nó đã bị vô hiệu hóa</string>
     <string name="warning_installed_on_external_storage">Mô-đun này không được nạp vì nó được cài đặt trên thẻ nhớ SD, vui lòng chuyển nó vào bộ nhớ trong</string>
@@ -163,9 +164,9 @@
     <string name="module_app_info">Thông tin ứng dụng</string>
     <string name="list_empty">¯\\\\_(ツ)_\/¯\nKhông có gì ở đây cả</string>
     <!-- SettingsActivity -->
-    <string name="settings_group_framework">Framework</string>
+    <string name="settings_group_framework">Khung hệ thống</string>
     <string name="settings_disable_verbose_log">Vô hiệu hoá nhật ký chi tiết</string>
-    <string name="settings_disable_verbose_log_summary">Báo cáo sự cố có yêu cầu bao gồm thêm nhật ký chi tiết</string>
+    <string name="settings_disable_verbose_log_summary">Báo cáo sự cố yêu cầu bao gồm nhật ký chi tiết</string>
     <string name="pure_black_dark_theme">Chủ đề Đen - Tối</string>
     <string name="pure_black_dark_theme_summary">Sử dụng chủ đề đen nếu chủ đề tối được bật</string>
     <string name="settings_group_theme">Chủ đề</string>
@@ -189,21 +190,22 @@
     <string name="settings_translation_contributors">Cộng tác viên phiên dịch</string>
     <string name="settings_translation">Tham gia phiên dịch</string>
     <string name="settings_translation_summary">Giúp chúng tôi dịch %s sang ngôn ngữ của bạn</string>
-    <string name="settings_create_shortcut_summary">Tạo lối tắt để có thể mở trình quản lý ký sinh</string>
+    <string name="settings_create_shortcut_summary">Tạo lối tắt để mở trình quản lý phụ thuộc</string>
     <string name="settings_shortcut_pinned_hint">Đã ghim phím tắt</string>
-    <string name="settings_created_shortcut_summary">Một lối tắt đã được tạo để mở trình quản lý ký sinh</string>
-    <string name="settings_unsupported_pin_shortcut_summary">Trình khởi chạy mặc định hiện tại không hỗ trợ phím tắt ghim</string>
+    <string name="settings_created_shortcut_summary">Một lối tắt đã được tạo để mở trình quản lý phụ thuộc</string>
+    <string name="settings_unsupported_pin_shortcut_summary">Trình khởi chạy hiện tại không hỗ trợ tạo lối tắt</string>
     <string name="settings_enable_status_notification">Thông báo trạng thái</string>
-    <string name="settings_enable_status_notification_summary">Hiển thị thông báo để có thể mở trình quản lý ký sinh</string>
-    <string name="disable_status_notification_error">Không lối tắt, không thể tắt thông báo</string>
+    <string name="settings_enable_status_notification_summary">Hiện thông báo để mở trình quản lý phụ thuộc</string>
+    <string name="disable_status_notification_error">Không có lối tắt nên không thể tắt thông báo</string>
     <string name="settings_update_channel">Kênh cập nhật</string>
     <string name="update_channel_stable">Ổn định</string>
     <string name="update_channel_bate">Thử nghiệm</string>
     <string name="update_channel_nightly">Bản dựng hàng đêm</string>
-    <string name="settings_xposed_api_call_protection">Bảo vệ kết nối tới Xposed API</string>
-    <string name="settings_xposed_api_call_protection_summary">Chặn các mã mô-đun động được nạp sử dụng API Xposed, điều này có thể làm hỏng một số mô-đun nhưng có lợi cho bảo mật</string>
+    <string name="settings_xposed_api_call_protection">Bảo vệ kết nối</string>
+    <string name="settings_xposed_api_call_protection_summary">Chặn mã tiện ích hoạt động được sử dụng.
+Có thể làm hỏng một số tiện ích bổ sung nhưng có lợi cho bảo mật</string>
     <!-- Module Repo -->
-    <string name="module_readme">Readme</string>
+    <string name="module_readme">Đọc</string>
     <string name="module_releases">Bản phát hành</string>
     <string name="module_information">Thông tin</string>
     <string name="module_information_homepage">Trang chủ</string>
@@ -242,6 +244,7 @@
     <string name="color_deep_orange">Cam đậm</string>
     <string name="color_brown">Nâu</string>
     <string name="color_blue_grey">Xanh xám</string>
+    <string name="installed">Cài đặt</string>
     <plurals name="module_release_assets_download_count">
         <item quantity="other">%d lượt tải xuống</item>
     </plurals>
