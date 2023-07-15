@@ -248,6 +248,7 @@
     <string name="color_deep_orange">Tmavě oranžová</string>
     <string name="color_brown">Hnědá</string>
     <string name="color_blue_grey">Modro-šedivá</string>
+    <string name="installed">Instalováno</string>
     <plurals name="module_release_assets_download_count">
         <item quantity="one">%d stažení</item>
         <item quantity="few">%d ke stažení</item>
