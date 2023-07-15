@@ -19,19 +19,18 @@
   -->
 <resources xmlns:tools="http://schemas.android.com/tools" tools:keep="@string/xposed_module_updated_notification_*,@string/module_is_not_activated_*">
     <!-- MainActivity -->
-    <string name="info">তথ্য
-প্রধানকার্যকলাপ</string>
-    <string name="overview">ওভারভিউ</string>
+    <string name="info">তথ্য</string>
+    <string name="overview">সার সংক্ষেপ </string>
     <string name="Modules">মডিউল</string>
     <plurals name="modules_enabled_count">
         <item quantity="one">%d মডিউল সক্ষম</item>
         <item quantity="other">%d মডিউল সক্রিয়</item>
     </plurals>
-    <string name="Logs">লগ</string>
-    <string name="Settings">সেটিংস</string>
+    <string name="Logs">তথ্য সার-সংক্ষেপ </string>
+    <string name="Settings">বিন্যাস</string>
     <string name="feedback_or_suggestion">প্রতিক্রিয়া বা পরামর্শ</string>
     <string name="About">সম্পর্কিত</string>
-    <string name="report_issue">রিপোর্ট সমস্যা</string>
+    <string name="report_issue">সমস্যা প্রতিবেদন </string>
     <string name="module_repo">ভান্ডার</string>
     <string name="module_repo_loading">লোড হচ্ছে…</string>
     <string name="module_repo_up_to_date">সব মডিউল আপ টু ডেট</string>
@@ -245,6 +244,7 @@
     <string name="color_deep_orange">গভীর কমলা</string>
     <string name="color_brown">বাদামী</string>
     <string name="color_blue_grey">নীল ধূসর</string>
+    <string name="installed">ইনস্টল করা হয়েছে</string>
     <plurals name="module_release_assets_download_count">
         <item quantity="one">%d ডাউনলোড</item>
         <item quantity="other">%d ডাউনলোড</item>

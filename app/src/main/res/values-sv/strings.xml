@@ -244,6 +244,7 @@
     <string name="color_deep_orange">Djup orange</string>
     <string name="color_brown">Brun</string>
     <string name="color_blue_grey">Blå grå</string>
+    <string name="installed">Installerad</string>
     <plurals name="module_release_assets_download_count">
         <item quantity="one">%d ladda ner</item>
         <item quantity="other">%d nedladdningar</item>

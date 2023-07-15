@@ -36,8 +36,8 @@
     <string name="module_repo">Репозиторий</string>
     <string name="module_repo_loading">Загрузка…</string>
     <string name="module_repo_up_to_date">Все модули в актуальном состоянии</string>
-    <string name="module_repo_published_time">Опубликовано в %s</string>
-    <string name="module_repo_updated_time">Обновлено в %s</string>
+    <string name="module_repo_published_time">Опубликовано %s</string>
+    <string name="module_repo_updated_time">Обновлено %s</string>
     <plurals name="module_repo_upgradable">
         <item quantity="one">Найдено обновление %d модуля</item>
         <item quantity="few">Найдены обновления %d модулей</item>
@@ -248,6 +248,7 @@
     <string name="color_deep_orange">Насыщенный оранжевый</string>
     <string name="color_brown">Коричневый</string>
     <string name="color_blue_grey">Серо-голубой</string>
+    <string name="installed">Установлен</string>
     <plurals name="module_release_assets_download_count">
         <item quantity="one">%d раз скачали</item>
         <item quantity="few">%d раза скачали</item>

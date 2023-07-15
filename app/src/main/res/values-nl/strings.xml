@@ -244,6 +244,7 @@
     <string name="color_deep_orange">Diep oranje</string>
     <string name="color_brown">Bruin</string>
     <string name="color_blue_grey">Blauw grijs</string>
+    <string name="installed">Geïnstalleerd</string>
     <plurals name="module_release_assets_download_count">
         <item quantity="one">%d download</item>
         <item quantity="other">%d downloads</item>

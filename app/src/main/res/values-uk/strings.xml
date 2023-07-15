@@ -248,6 +248,7 @@
     <string name="color_deep_orange">Жовтогарячий</string>
     <string name="color_brown">Коричневий</string>
     <string name="color_blue_grey">Блакитно-сірий</string>
+    <string name="installed">встановлено</string>
     <plurals name="module_release_assets_download_count">
         <item quantity="one">%d завантажити</item>
         <item quantity="few">%d завантажень</item>

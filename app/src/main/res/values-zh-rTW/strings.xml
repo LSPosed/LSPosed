@@ -242,6 +242,7 @@
     <string name="color_deep_orange">深橙</string>
     <string name="color_brown">棕色</string>
     <string name="color_blue_grey">藍灰</string>
+    <string name="installed">已安裝</string>
     <plurals name="module_release_assets_download_count">
         <item quantity="other">%d 次下載</item>
     </plurals>

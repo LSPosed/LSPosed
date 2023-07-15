@@ -244,6 +244,7 @@
     <string name="color_deep_orange">Syvä oranssi</string>
     <string name="color_brown">Ruskea</string>
     <string name="color_blue_grey">Sininen harmaa</string>
+    <string name="installed">Asennettu</string>
     <plurals name="module_release_assets_download_count">
         <item quantity="one">%d lataa</item>
         <item quantity="other">%d lataukset</item>

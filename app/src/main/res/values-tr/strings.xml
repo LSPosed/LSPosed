@@ -244,6 +244,7 @@
     <string name="color_deep_orange">Koyu turuncu</string>
     <string name="color_brown">Kahverengi</string>
     <string name="color_blue_grey">Mavi gri</string>
+    <string name="installed">Kurulmuş</string>
     <plurals name="module_release_assets_download_count">
         <item quantity="one">%d İndir</item>
         <item quantity="other">%d indirmeler</item>
