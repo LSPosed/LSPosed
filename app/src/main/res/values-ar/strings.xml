@@ -57,7 +57,7 @@
     <string name="activated">مُفعّل</string>
     <string name="partial_activated">مفعل جزئياً</string>
     <string name="selinux_policy_not_loaded_summary">لم يتم تحميل SEPolicy بشكل صحيح</string>
-    <string name="selinux_policy_not_loaded"><![CDATA[لن تعمل الوحدات النمطية التي تربط إطار عمل النظام.<br/>الرجاء الإبلاغ عن هذا إلى <a href="https://github.com/topjohnwu/Magisk/issues"><b>ماجيسك</b></a> مطور النظام.]]></string>
+    <string name="selinux_policy_not_loaded"><![CDATA[Some features will not work.<br/>Please report this to <a href="https://github.com/topjohnwu/Magisk/issues"><b>Magisk</b></a> developer.]]></string>
     <string name="system_inject_fail_summary">فشل حقن إطار عمل النظام</string>
     <string name="system_inject_fail"><![CDATA[هذا نادر وقد يكون بسبب <b>Magisk</b> أو بعض وحدات Magisk منخفضة الجودة.<br/>الرجاء محاولة تعطيل وحدات Magisk خلاف Riru وLSPosed أو إرسال سجل كامل للمطورين.]]></string>
     <string name="system_prop_incorrect_summary">نظام prop غير صحيح</string>
@@ -252,6 +252,7 @@
     <string name="color_deep_orange">برتقالي عميق</string>
     <string name="color_brown">بني</string>
     <string name="color_blue_grey">أزرق رمادي</string>
+    <string name="installed">المثبتة</string>
     <plurals name="module_release_assets_download_count">
         <item quantity="zero">%d التنزيلات</item>
         <item quantity="one">%d تنزيل</item>
