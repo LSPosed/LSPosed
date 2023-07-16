@@ -162,7 +162,6 @@ public class LSPNotificationManager {
                 .setVisibility(Notification.VISIBILITY_SECRET)
                 .setColor(0xFFF48FB1)
                 .setOngoing(true)
-                .setAutoCancel(false)
                 .build();
         notification.extras.putString("android.substName", "LSPosed");
         try {
@@ -240,7 +239,7 @@ public class LSPNotificationManager {
         var style = new Notification.BigTextStyle();
         style.bigText(content);
 
-        var notification = new Notification.Builder(context, UPDATED_CHANNEL_ID)
+        var builder = new Notification.Builder(context, UPDATED_CHANNEL_ID)
                 .setContentTitle(title)
                 .setContentText(content)
                 .setSmallIcon(getNotificationIcon())
@@ -248,8 +247,12 @@ public class LSPNotificationManager {
                 .setVisibility(Notification.VISIBILITY_SECRET)
                 .setColor(0xFFF48FB1)
                 .setAutoCancel(true)
-                .setStyle(style)
-                .build();
+                .setStyle(style);
+        if (systemModule) {
+            builder.setAutoCancel(false);
+            builder.setOngoing(true);
+        }
+        var notification = builder.build();
         notification.extras.putString("android.substName", "LSPosed");
         try {
             var nm = getNotificationManager();
