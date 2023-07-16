@@ -177,6 +177,7 @@ public class LSPNotificationManager {
     static void cancelStatusNotification() {
         try {
             var nm = getNotificationManager();
+            createNotificationChannel(nm);
             if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.R) {
                 nm.cancelNotificationWithTag("android", "android", null, STATUS_NOTIFICATION_ID, 0);
             } else {
