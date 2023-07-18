@@ -212,11 +212,11 @@ public class LSPosedContext extends XposedContext {
                 }
             }
             Log.d(TAG, "Loaded module " + module.packageName + ": " + ctx);
+            module.file.moduleLibraryNames.forEach(NativeAPI::recordNativeEntrypoint);
             return true;
         } catch (Throwable e) {
             Log.d(TAG, "Loading module " + module.packageName, e);
         }
-        module.file.moduleLibraryNames.forEach(NativeAPI::recordNativeEntrypoint);
         return false;
     }
 
