@@ -10,7 +10,7 @@
     <string name="xposed_module_updated_notification_content_system">%s було оновлено, оскільки область містить System Framework, необхідне перезавантаження для застосування змін</string>
     <string name="module_updated_channel_name">Оновлення модуля завершено</string>
     <string name="status_channel_name">Статус LSPosed</string>
-    <string name="lsposed_running_notification_title">LSP закритий навантажений</string>
+    <string name="lsposed_running_notification_title">LSPosed завантажено</string>
     <string name="lsposed_running_notification_content">Натисніть на повідомлення, щоб відкрити менеджер</string>
     <string name="xposed_module_request_scope_title">Запит на визначення обсягу робіт</string>
     <string name="xposed_module_request_scope_content">%1$s на запит користувача %2$s з проханням додати %3$s до своєї області видимості.</string>

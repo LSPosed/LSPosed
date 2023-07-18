@@ -244,6 +244,7 @@
     <string name="color_deep_orange">තද තැඹිලි</string>
     <string name="color_brown">දුඹුරු</string>
     <string name="color_blue_grey">නිල් අළු</string>
+    <string name="installed">ස්ථාපනය කර ඇත</string>
     <plurals name="module_release_assets_download_count">
         <item quantity="one">%d බාගැනීම</item>
         <item quantity="other">බාගැනීම් %d</item>

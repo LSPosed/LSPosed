@@ -24,7 +24,7 @@
     <string name="Modules">Módulos</string>
     <plurals name="modules_enabled_count">
         <item quantity="one">%d módulo activado</item>
-        <item quantity="other">%d modules enabled</item>
+        <item quantity="other">%d Módulos activados</item>
     </plurals>
     <string name="Logs">Trozas</string>
     <string name="Settings">Configuración</string>
@@ -244,6 +244,7 @@
     <string name="color_deep_orange">Naranja oscuro</string>
     <string name="color_brown">Marrón</string>
     <string name="color_blue_grey">Gris azul</string>
+    <string name="installed">Instalado</string>
     <plurals name="module_release_assets_download_count">
         <item quantity="one">%d descargar</item>
         <item quantity="other">%d descargas</item>

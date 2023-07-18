@@ -30,9 +30,9 @@
     <string name="feedback_or_suggestion">ข้อเสนอแนะ หรือ คำแนะนำ</string>
     <string name="About">เกี่ยวกับ</string>
     <string name="report_issue">รายงานปัญหา</string>
-    <string name="module_repo">ที่เก็บ</string>
+    <string name="module_repo">คลังโมดูล</string>
     <string name="module_repo_loading">กำลังโหลด…</string>
-    <string name="module_repo_up_to_date">โมดูลทั้งหมดเป็นปัจจุบัน</string>
+    <string name="module_repo_up_to_date">โมดูลทั้งหมดเป็นเวอร์ชั่นล่าสุด</string>
     <string name="module_repo_published_time">เผยแพร่เมื่อ %s</string>
     <string name="module_repo_updated_time">อัปเดตเมื่อ %s</string>
     <plurals name="module_repo_upgradable">
@@ -49,15 +49,15 @@
     <string name="partial_activated">เปิดใช้งานบางส่วน</string>
     <string name="selinux_policy_not_loaded_summary">การโหลด SEPolicy ไม่ถูกต้อง</string>
     <string name="selinux_policy_not_loaded"><![CDATA[หากฟีเจอร์บางอย่างไม่ทำงาน<br/>โปรดรายงานที่<a href="https://github.com/topjohnwu/Magisk/issues"><b>Magisk</b></a> developer.]]></string>
-    <string name="system_inject_fail_summary">การฉีดกรอบระบบล้มเหลว</string>
+    <string name="system_inject_fail_summary">Injection ระบบ Framework ล้มเหลว</string>
     <string name="system_inject_fail"><![CDATA[สิ่งนี้เกิดขึ้นได้ยากและอาจเกิดจาก <b>Magisk</b> หรือโมดูล Magisk ที่มีคุณภาพต่ำบางตัว<br/>โปรดลองปิดการใช้งานโมดูล Magisk อื่นที่ไม่ใช่ Riru และ LSPosed หรือส่งบันทึกแบบเต็มไปยังนักพัฒนา]]></string>
-    <string name="system_prop_incorrect_summary">เสาระบบไม่ถูกต้อง</string>
+    <string name="system_prop_incorrect_summary">System prop ไม่ถูกต้อง</string>
     <string name="system_prop_incorrect"><![CDATA[คุณสมบัติระบบที่จำเป็นบางอย่างถูกลบหรือแก้ไข<br/>โมดูลอาจใช้ไม่ได้ในบางครั้ง]]></string>
-    <string name="need_update">จำเป็นต้องปรับปรุง</string>
+    <string name="need_update">จำเป็นต้องอัพเดท</string>
     <string name="please_update_summary">โปรดติดตั้ง LSPosed . เวอร์ชันล่าสุด</string>
     <string name="lsposed_not_active">LSPosed ยังไม่ได้ติดตั้งหรือใช้งานอยู่</string>
     <string name="info_api_version">เวอร์ชัน API</string>
-    <string name="info_framework_version">เวอร์ชันกรอบงาน</string>
+    <string name="info_framework_version">เวอร์ชัน Framework</string>
     <string name="info_manager_version">การจัดการเวอร์ชัน</string>
     <string name="info_system_version">เวอร์ชันของระบบ</string>
     <string name="info_device">อุปกรณ์</string>
@@ -76,8 +76,8 @@
     <string name="update_lsposed_msg">ยืนยันการอัปเดต LSPosed? อุปกรณ์นี้จะรีบูตหลังจากอัปเดตเสร็จสิ้น</string>
     <!-- WelcomeDialog -->
     <string name="parasitic_welcome">ยินดีต้อนรับสู่ LSPosed</string>
-    <string name="parasitic_welcome_summary">คุณกำลังใช้ตัวจัดการปรสิตซึ่งสามารถสร้างทางลัดหรือยังคงเปิดจากการแจ้งเตือน</string>
-    <string name="parasitic_welcome_summary_no_shortcut_support">คุณกำลังใช้ตัวจัดการกาฝากซึ่งสามารถเปิดได้จากการแจ้งเตือน</string>
+    <string name="parasitic_welcome_summary">คุณกำลังใช้ Lsposed ซึ่งสามารถสร้างทางลัดหรือยังคงเปิดจากการแจ้งเตือน</string>
+    <string name="parasitic_welcome_summary_no_shortcut_support">คุณกำลังใช้ตัวจัดการ Lsposed ซึ่งสามารถเปิดได้จากการแจ้งเตือน</string>
     <string name="create_shortcut">สร้างทางลัด</string>
     <string name="never_show">ไม่ต้องแสดง</string>
     <string name="app_welcome">แนะนำ กำจัดไวรัส</string>
@@ -86,7 +86,7 @@
     <string name="menuSaveToSd">บันทึก</string>
     <string name="nav_item_logs_verbose">บันทึกอย่างละเอียด</string>
     <string name="nav_item_logs_module">บันทึกโมดูล</string>
-    <string name="logs_saved">บันทึกบันทึกแล้ว</string>
+    <string name="logs_saved">บันทึก Log แล้ว</string>
     <string name="logs_save_failed2">ไม่สามารถบันทึก:\n%s</string>
     <string name="menuClearLog">ล้างบันทึกตอนนี้</string>
     <string name="logs_cleared">ล้างบันทึกเรียบร้อยแล้ว</string>
@@ -243,6 +243,7 @@
     <string name="color_deep_orange">ส้มเข้ม</string>
     <string name="color_brown">สีน้ำตาล</string>
     <string name="color_blue_grey">น้ำเงินเทา</string>
+    <string name="installed">ติดตั้งแล้ว</string>
     <plurals name="module_release_assets_download_count">
         <item quantity="other">%d ดาวน์โหลด</item>
     </plurals>

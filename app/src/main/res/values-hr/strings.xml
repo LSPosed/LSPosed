@@ -246,6 +246,7 @@
     <string name="color_deep_orange">Tamno narančasta</string>
     <string name="color_brown">Smeđa</string>
     <string name="color_blue_grey">Plavo siva</string>
+    <string name="installed">instalirano</string>
     <plurals name="module_release_assets_download_count">
         <item quantity="one">%d preuzimanje</item>
         <item quantity="few">%d preuzimanja</item>

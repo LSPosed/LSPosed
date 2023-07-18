@@ -252,6 +252,7 @@
     <string name="color_deep_orange">برتقالي عميق</string>
     <string name="color_brown">بني</string>
     <string name="color_blue_grey">أزرق رمادي</string>
+    <string name="installed">المثبتة</string>
     <plurals name="module_release_assets_download_count">
         <item quantity="zero">%d التنزيلات</item>
         <item quantity="one">%d تنزيل</item>

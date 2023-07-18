@@ -244,6 +244,7 @@
     <string name="color_deep_orange">Laranja Escuro</string>
     <string name="color_brown">Marrom</string>
     <string name="color_blue_grey">Azul-acinzentado</string>
+    <string name="installed">Instalado</string>
     <plurals name="module_release_assets_download_count">
         <item quantity="one">%d baixado</item>
         <item quantity="other">%d baixados</item>
