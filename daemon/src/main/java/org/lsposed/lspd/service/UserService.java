@@ -102,6 +102,15 @@ public class UserService {
         return um.getUserInfo(userId);
     }
 
+    public static String getUserName(int userId) {
+        try {
+            var userInfo = getUserInfo(userId);
+            if (userInfo != null) return userInfo.name;
+        } catch (RemoteException ignored) {
+        }
+        return String.valueOf(userId);
+    }
+
     public static int getProfileParent(int userId) throws RemoteException {
         IUserManager um = getUserManager();
         if (um == null) return -1;
