@@ -88,9 +88,9 @@ public class LogsFragment extends BaseFragment implements MenuProvider {
                     var context = requireContext();
                     var contentResolver = context.getContentResolver();
                     var values = new ContentValues();
+                    values.put(MediaStore.MediaColumns.IS_PENDING, 1);
+                    contentResolver.update(uri, values, null, null);
                     try (var zipFd = contentResolver.openFileDescriptor(uri, "wt")) {
-                        values.put(MediaStore.MediaColumns.IS_PENDING, 1);
-                        contentResolver.update(uri, values, null, null);
                         LSPManagerServiceHolder.getService().getLogs(zipFd);
                         values.put(MediaStore.MediaColumns.IS_PENDING, 0);
                         contentResolver.update(uri, values, null, null);
