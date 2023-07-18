@@ -178,6 +178,7 @@ public class LSPNotificationManager {
     static void cancelStatusNotification() {
         try {
             var nm = getNotificationManager();
+            createNotificationChannel(nm);
             if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.R) {
                 nm.cancelNotificationWithTag("android", "android", null, STATUS_NOTIFICATION_ID, 0);
             } else {
@@ -253,7 +254,6 @@ public class LSPNotificationManager {
         notification.extras.putString("android.substName", "LSPosed");
         try {
             var nm = getNotificationManager();
-            createNotificationChannel(nm);
             nm.enqueueNotificationWithTag("android", opPkg, modulePackageName,
                     pushAndGetNotificationId(UPDATED_CHANNEL_ID, modulePackageName, moduleUserId),
                     notification, 0);
@@ -300,7 +300,6 @@ public class LSPNotificationManager {
         notification.extras.putString("android.substName", "LSPosed");
         try {
             var nm = getNotificationManager();
-            createNotificationChannel(nm);
             nm.enqueueNotificationWithTag("android", opPkg, modulePackageName,
                     pushAndGetNotificationId(SCOPE_CHANNEL_ID, modulePackageName, moduleUserId),
                     notification, 0);

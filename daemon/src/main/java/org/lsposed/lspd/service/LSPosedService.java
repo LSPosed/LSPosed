@@ -226,6 +226,8 @@ public class LSPosedService extends ILSPosedService.Stub {
         var configManager = ConfigManager.getInstance();
         if (configManager.enableStatusNotification()) {
             LSPNotificationManager.notifyStatusNotification();
+        } else {
+            LSPNotificationManager.cancelStatusNotification();
         }
     }
 
@@ -234,6 +236,8 @@ public class LSPosedService extends ILSPosedService.Stub {
         var configManager = ConfigManager.getInstance();
         if (configManager.enableStatusNotification()) {
             LSPNotificationManager.notifyStatusNotification();
+        } else {
+            LSPNotificationManager.cancelStatusNotification();
         }
     }
 
