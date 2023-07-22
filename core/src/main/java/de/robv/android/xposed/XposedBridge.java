@@ -35,8 +35,10 @@ import java.lang.reflect.Member;
 import java.lang.reflect.Method;
 import java.lang.reflect.Modifier;
 import java.lang.reflect.Proxy;
+import java.util.ArrayDeque;
 import java.util.Arrays;
 import java.util.HashSet;
+import java.util.Queue;
 import java.util.Set;
 import java.util.concurrent.CopyOnWriteArraySet;
 
@@ -219,7 +221,7 @@ public final class XposedBridge {
             throw new IllegalArgumentException("callback should not be null!");
         }
 
-        if (!HookBridge.hookMethod((Executable) hookMethod, AdditionalHookInfo.class, callback.priority, callback)) {
+        if (!HookBridge.hookMethod(false, (Executable) hookMethod, AdditionalHookInfo.class, callback.priority, callback)) {
             log("Failed to hook " + hookMethod);
             return null;
         }
@@ -238,7 +240,7 @@ public final class XposedBridge {
     @Deprecated
     public static void unhookMethod(Member hookMethod, XC_MethodHook callback) {
         if (hookMethod instanceof Executable) {
-            HookBridge.unhookMethod((Executable) hookMethod, callback);
+            HookBridge.unhookMethod(false, (Executable) hookMethod, callback);
         }
     }
 
@@ -438,7 +440,7 @@ public final class XposedBridge {
                 }
             }
 
-            Object[] callbacksSnapshot = HookBridge.callbackSnapshot(method);
+            Object[] callbacksSnapshot = HookBridge.callbackSnapshot(HookerCallback.class, method);
             if (callbacksSnapshot == null || callbacksSnapshot.length == 0) {
                 try {
                     return HookBridge.invokeOriginalMethod(method, param.thisObject, param.args);
@@ -446,6 +448,7 @@ public final class XposedBridge {
                     throw (Throwable) HookBridge.invokeOriginalMethod(getCause, ite);
                 }
             }
+            Queue<Object> extras = new ArrayDeque<>(callbacksSnapshot.length);
 
             // call "before method" callbacks
             int beforeIdx = 0;
@@ -454,8 +457,9 @@ public final class XposedBridge {
                     var cb = callbacksSnapshot[beforeIdx];
                     if (HookBridge.instanceOf(cb, XC_MethodHook.class)) {
                         ((XC_MethodHook) cb).beforeHookedMethod(param);
-                    } else if (HookBridge.instanceOf(cb, XposedInterface.BeforeHooker.class)) {
-                        ((XposedInterface.BeforeHooker<T>) cb).before(param);
+                    } else if (HookBridge.instanceOf(cb, HookerCallback.class)) {
+                        var hooker = (HookerCallback) cb;
+                        extras.add(hooker.beforeInvocation.invoke(null, method, param.thisObject, param.args));
                     }
                 } catch (Throwable t) {
                     XposedBridge.log(t);
@@ -492,8 +496,9 @@ public final class XposedBridge {
                 try {
                     if (HookBridge.instanceOf(cb, XC_MethodHook.class)) {
                         ((XC_MethodHook) cb).afterHookedMethod(param);
-                    } else if (HookBridge.instanceOf(cb, XposedInterface.AfterHooker.class)) {
-                        ((XposedInterface.AfterHooker<T>) cb).after(param);
+                    } else if (HookBridge.instanceOf(cb, HookerCallback.class)) {
+                        var hooker = (HookerCallback) cb;
+                        hooker.afterInvocation.invoke(null, extras.poll(), lastResult);
                     }
                 } catch (Throwable t) {
                     XposedBridge.log(t);
@@ -516,6 +521,16 @@ public final class XposedBridge {
                 }
                 return result;
             }
+        }
+    }
+
+    public static class HookerCallback {
+        Method beforeInvocation;
+        Method afterInvocation;
+
+        public HookerCallback(Method beforeInvocation, Method afterInvocation) {
+            this.beforeInvocation = beforeInvocation;
+            this.afterInvocation = afterInvocation;
         }
     }
 }
