@@ -42,9 +42,6 @@
     getFrameworkVersion(...);
     getFrameworkVersionCode(...);
     getFrameworkPrivilege(...);
-    featuredMethod(...);
-    hookBefore(...);
-    hookAfter(...);
     hook(...);
     deoptimize(...);
     invokeOrigin(...);

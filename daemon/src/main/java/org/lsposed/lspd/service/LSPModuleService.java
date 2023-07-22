@@ -150,11 +150,6 @@ public class LSPModuleService extends IXposedService.Stub {
     }
 
     @Override
-    public Bundle featuredMethod(String name, Bundle args) {
-        throw new UnsupportedOperationException();
-    }
-
-    @Override
     public List<String> getScope() throws RemoteException {
         ensureModule();
         ArrayList<String> res = new ArrayList<>();
