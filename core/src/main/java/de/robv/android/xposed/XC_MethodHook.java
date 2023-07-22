@@ -20,20 +20,12 @@
 
 package de.robv.android.xposed;
 
-import androidx.annotation.NonNull;
-import androidx.annotation.Nullable;
-
-import org.lsposed.lspd.nativebridge.HookBridge;
-
 import java.lang.reflect.Executable;
-import java.lang.reflect.InvocationTargetException;
 import java.lang.reflect.Member;
-import java.util.ConcurrentModificationException;
 import java.util.HashMap;
 
 import de.robv.android.xposed.callbacks.IXUnhook;
 import de.robv.android.xposed.callbacks.XCallback;
-import io.github.libxposed.api.XposedInterface;
 
 /**
  * Callback class for method hooks.
@@ -103,7 +95,7 @@ public abstract class XC_MethodHook extends XCallback {
     /**
      * Wraps information about the method call and allows to influence it.
      */
-    public static final class MethodHookParam <T extends Executable> extends XCallback.Param implements XposedInterface.BeforeHookCallback<T>, XposedInterface.AfterHookCallback<T> {
+    public static final class MethodHookParam<T extends Executable> extends XCallback.Param {
         /**
          * @hide
          */
@@ -158,11 +150,6 @@ public abstract class XC_MethodHook extends XCallback {
             return throwable;
         }
 
-        @Override
-        public boolean isSkipped() {
-            return returnEarly;
-        }
-
         /**
          * Returns true if an exception was thrown by the method.
          */
@@ -188,62 +175,6 @@ public abstract class XC_MethodHook extends XCallback {
             if (throwable != null)
                 throw throwable;
             return result;
-        }
-
-        @NonNull
-        @Override
-        public T getOrigin() {
-            return (T) method;
-        }
-
-        @Nullable
-        @Override
-        public Object getThis() {
-            return thisObject;
-        }
-
-        @NonNull
-        @Override
-        public Object[] getArgs() {
-            return args;
-        }
-
-        @Nullable
-        @Override
-        public <U> U getArg(int index) {
-            return (U) args[index];
-        }
-
-        @Override
-        public <U> void setArg(int index, U value) {
-            args[index] = value;
-        }
-
-        @Override
-        public void returnAndSkip(@Nullable Object returnValue) {
-            setResult(returnValue);
-        }
-
-        @Override
-        public void throwAndSkip(@Nullable Throwable throwable) {
-            setThrowable(throwable);
-        }
-
-        @Nullable
-        @Override
-        public Object invokeOrigin() throws InvocationTargetException, IllegalAccessException {
-            return HookBridge.invokeOriginalMethod((Executable) method, thisObject, args);
-        }
-
-        @Nullable
-        @Override
-        public <U> U getExtra(@NonNull String key) {
-            return (U) extras.get(key);
-        }
-
-        @Override
-        public <U> void setExtra(@NonNull String key, @Nullable U value) throws ConcurrentModificationException {
-            extras.put(key, value);
         }
     }
 
