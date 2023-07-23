@@ -94,7 +94,7 @@ public class LSPSystemServerService extends ILSPSystemServerService.Stub impleme
         }
 
         switch (code) {
-            case BridgeService.TRANSACTION_CODE:
+            case BridgeService.TRANSACTION_CODE -> {
                 int uid = data.readInt();
                 int pid = data.readInt();
                 String processName = data.readString();
@@ -109,12 +109,14 @@ public class LSPSystemServerService extends ILSPSystemServerService.Stub impleme
                     Log.d(TAG, "LSPSystemServerService.onTransact requestApplicationService rejected");
                     return false;
                 }
-            case LSPApplicationService.OBFUSCATION_MAP_TRANSACTION_CODE:
-            case LSPApplicationService.DEX_TRANSACTION_CODE:
+            }
+            case LSPApplicationService.OBFUSCATION_MAP_TRANSACTION_CODE, LSPApplicationService.DEX_TRANSACTION_CODE -> {
                 // Proxy LSP dex transaction to Application Binder
                 return ServiceManager.getApplicationService().onTransact(code, data, reply, flags);
-            default:
+            }
+            default -> {
                 return super.onTransact(code, data, reply, flags);
+            }
         }
     }
 

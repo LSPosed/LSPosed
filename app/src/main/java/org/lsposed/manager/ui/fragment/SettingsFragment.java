@@ -390,8 +390,7 @@ public class SettingsFragment extends BaseFragment {
             RecyclerViewKt.fixEdgeEffect(recyclerView, false, true);
             recyclerView.getBorderViewDelegate().setBorderVisibilityChangedListener((top, oldTop, bottom, oldBottom) -> parentFragment.binding.appBar.setLifted(!top));
             var fragment = getParentFragment();
-            if (fragment instanceof SettingsFragment) {
-                var settingsFragment = (SettingsFragment) fragment;
+            if (fragment instanceof SettingsFragment settingsFragment) {
                 View.OnClickListener l = v -> {
                     settingsFragment.binding.appBar.setExpanded(true, true);
                     recyclerView.smoothScrollToPosition(0);

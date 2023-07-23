@@ -19,14 +19,14 @@
 
 package org.lsposed.manager.services;
 
-import android.os.RemoteException;
+import android.os.IBinder;
 
-import org.lsposed.lspd.ILSPManagerClientService;
+import org.lsposed.lspd.ILSPManagerDispatchService;
 import org.lsposed.manager.App;
 import org.lsposed.manager.adapters.AppHelper;
 import org.lsposed.manager.util.ModuleUtil;
 
-public class LSPManagerClientService extends ILSPManagerClientService.Stub {
+public class LSPManagerDispatchService extends ILSPManagerDispatchService.Stub {
 
     @Override
     public boolean reloadSingleModule(String packageName, int userId, boolean packageRemovedForAllUsers) {
@@ -44,5 +44,10 @@ public class LSPManagerClientService extends ILSPManagerClientService.Stub {
     public boolean refreshAppList(boolean force) {
         App.getExecutorService().submit(() -> AppHelper.getAppList(force));
         return true;
+    }
+
+    @Override
+    public IBinder asBinder() {
+        return this;
     }
 }

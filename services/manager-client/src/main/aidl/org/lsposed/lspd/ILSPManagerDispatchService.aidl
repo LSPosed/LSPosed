@@ -21,7 +21,7 @@ package org.lsposed.lspd;
 
 // Declare any non-default types here with import statements
 
-interface ILSPManagerClientService {
+interface ILSPManagerDispatchService {
     boolean reloadSingleModule(String packageName, int userId, boolean packageRemovedForAllUsers) = 1;
     boolean reloadInstalledModules() = 2;
     boolean refreshAppList(boolean force) = 3;
