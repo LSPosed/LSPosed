@@ -21,9 +21,9 @@ package org.lsposed.manager.ui.fragment;
 
 import android.annotation.SuppressLint;
 import android.content.ActivityNotFoundException;
+import android.content.ContentValues;
 import android.os.Bundle;
-import android.os.Handler;
-import android.os.Looper;
+import android.provider.MediaStore;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.Menu;
@@ -70,7 +70,6 @@ import rikka.material.app.LocaleDelegate;
 import rikka.recyclerview.RecyclerViewKt;
 
 public class LogsFragment extends BaseFragment implements MenuProvider {
-    private final Handler handler = new Handler(Looper.getMainLooper());
     private FragmentPagerBinding binding;
     private LogPageAdapter adapter;
     private MenuItem wordWrap;
@@ -88,8 +87,13 @@ public class LogsFragment extends BaseFragment implements MenuProvider {
                 runAsync(() -> {
                     var context = requireContext();
                     var contentResolver = context.getContentResolver();
+                    var values = new ContentValues();
+                    values.put(MediaStore.MediaColumns.IS_PENDING, 1);
+                    contentResolver.update(uri, values, null, null);
                     try (var zipFd = contentResolver.openFileDescriptor(uri, "wt")) {
                         LSPManagerServiceHolder.getService().getLogs(zipFd);
+                        values.put(MediaStore.MediaColumns.IS_PENDING, 0);
+                        contentResolver.update(uri, values, null, null);
                         showHint(context.getString(R.string.logs_saved), true);
                     } catch (Throwable e) {
                         var cause = e.getCause();
@@ -176,12 +180,6 @@ public class LogsFragment extends BaseFragment implements MenuProvider {
         } catch (ActivityNotFoundException e) {
             showHint(R.string.enable_documentui, true);
         }
-    }
-
-    @Override
-    public void onDestroy() {
-        handler.removeCallbacksAndMessages(null);
-        super.onDestroy();
     }
 
     public static class LogFragment extends BaseFragment {
@@ -300,8 +298,7 @@ public class LogsFragment extends BaseFragment implements MenuProvider {
 
         void attachListeners() {
             var parent = getParentFragment();
-            if (parent instanceof LogsFragment) {
-                var logsFragment = (LogsFragment) parent;
+            if (parent instanceof LogsFragment logsFragment) {
                 logsFragment.binding.appBar.setLifted(!binding.recyclerView.getBorderViewDelegate().isShowingTopBorder());
                 binding.recyclerView.getBorderViewDelegate().setBorderVisibilityChangedListener((top, oldTop, bottom, oldBottom) -> logsFragment.binding.appBar.setLifted(!top));
                 logsFragment.setOptionsItemSelectListener(item -> {
