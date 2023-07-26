@@ -240,11 +240,10 @@ public final class XposedInit {
         var packages = (ArrayMap<?, ?>) XposedHelpers.getObjectField(at, "mPackages");
         serviceClient.getModulesList().forEach(module -> {
             loadedModules.put(module.packageName, Optional.empty());
-            var loadedApk = LSPosedContext.loadModule(at, module);
-            if (loadedApk == null) {
+            if (!LSPosedContext.loadModule(at, module)) {
                 loadedModules.remove(module.packageName);
             } else {
-                packages.remove(module.packageName, loadedApk);
+                packages.remove(module.packageName);
             }
         });
     }
