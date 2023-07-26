@@ -126,7 +126,7 @@ public class LSPosedContext extends XposedContext {
     }
 
     @SuppressLint("DiscouragedPrivateApi")
-    public static boolean loadModule(ActivityThread at, Module module) {
+    public static LoadedApk loadModule(ActivityThread at, Module module) {
         try {
             Log.d(TAG, "Loading module " + module.packageName);
             var sb = new StringBuilder();
@@ -141,8 +141,9 @@ public class LSPosedContext extends XposedContext {
                 Log.e(TAG, "  Cannot load module: " + module.packageName);
                 Log.e(TAG, "  The Xposed API classes are compiled into the module's APK.");
                 Log.e(TAG, "  This may cause strange issues and must be fixed by the module developer.");
-                return false;
+                return null;
             }
+            module.applicationInfo.packageName = module.packageName; // Just in case
             var loadedApk = at.getPackageInfoNoCheck(module.applicationInfo, null);
             XposedHelpers.setObjectField(loadedApk, "mClassLoader", mcl);
             XposedHelpers.setObjectField(loadedApk, "mDataDir", appDir);
@@ -219,11 +220,11 @@ public class LSPosedContext extends XposedContext {
             }
             Log.d(TAG, "Loaded module " + module.packageName + ": " + ctx);
             module.file.moduleLibraryNames.forEach(NativeAPI::recordNativeEntrypoint);
-            return true;
+            return loadedApk;
         } catch (Throwable e) {
             Log.d(TAG, "Loading module " + module.packageName, e);
         }
-        return false;
+        return null;
     }
 
     @Override
