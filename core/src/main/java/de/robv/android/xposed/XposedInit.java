@@ -237,7 +237,7 @@ public final class XposedInit {
     }
 
     public static void loadModules(ActivityThread at) {
-        var packages = (ArrayMap<?, ?>) XposedHelpers.getObjectField(ActivityThread.currentActivityThread(), "mPackages");
+        var packages = (ArrayMap<?, ?>) XposedHelpers.getObjectField(at, "mPackages");
         serviceClient.getModulesList().forEach(module -> {
             loadedModules.put(module.packageName, Optional.empty());
             var loadedApk = LSPosedContext.loadModule(at, module);
