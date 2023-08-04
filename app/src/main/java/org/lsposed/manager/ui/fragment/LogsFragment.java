@@ -21,9 +21,7 @@ package org.lsposed.manager.ui.fragment;
 
 import android.annotation.SuppressLint;
 import android.content.ActivityNotFoundException;
-import android.content.ContentValues;
 import android.os.Bundle;
-import android.provider.MediaStore;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.Menu;
@@ -86,14 +84,10 @@ public class LogsFragment extends BaseFragment implements MenuProvider {
                 if (uri == null) return;
                 runAsync(() -> {
                     var context = requireContext();
-                    var contentResolver = context.getContentResolver();
-                    var values = new ContentValues();
-                    values.put(MediaStore.MediaColumns.IS_PENDING, 1);
-                    contentResolver.update(uri, values, null, null);
-                    try (var zipFd = contentResolver.openFileDescriptor(uri, "wt")) {
+                    var cr = context.getContentResolver();
+                    try (var zipFd = cr.openFileDescriptor(uri, "wt")) {
+                        showHint(context.getString(R.string.logs_saving), false);
                         LSPManagerServiceHolder.getService().getLogs(zipFd);
-                        values.put(MediaStore.MediaColumns.IS_PENDING, 0);
-                        contentResolver.update(uri, values, null, null);
                         showHint(context.getString(R.string.logs_saved), true);
                     } catch (Throwable e) {
                         var cause = e.getCause();

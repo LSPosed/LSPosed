@@ -90,6 +90,7 @@
     <string name="menuSaveToSd">Save</string>
     <string name="nav_item_logs_verbose">Verbose Logs</string>
     <string name="nav_item_logs_module">Modules Logs</string>
+    <string name="logs_saving">Saving log, please wait</string>
     <string name="logs_saved">Logs saved</string>
     <string name="logs_save_failed2">Failed to save:\n%s</string>
     <string name="menuClearLog">Clear log now</string>
