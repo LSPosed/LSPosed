@@ -32,17 +32,9 @@ import android.view.Window;
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 
-import com.google.android.material.color.DynamicColors;
-
-import org.lsposed.manager.BuildConfig;
-import org.lsposed.manager.ConfigManager;
 import org.lsposed.manager.R;
-import org.lsposed.manager.ui.dialog.BlurBehindDialogBuilder;
-import org.lsposed.manager.ui.dialog.FlashDialogBuilder;
-import org.lsposed.manager.util.NavUtil;
 import org.lsposed.manager.util.Telemetry;
 import org.lsposed.manager.util.ThemeUtil;
-import org.lsposed.manager.util.UpdateUtil;
 
 import rikka.material.app.MaterialActivity;
 
@@ -54,23 +46,6 @@ public class BaseActivity extends MaterialActivity {
     public void onCreate(@Nullable Bundle savedInstanceState) {
         setTheme(R.style.AppTheme);
         super.onCreate(savedInstanceState);
-        // make sure the versions are consistent
-        if (BuildConfig.DEBUG) return;
-        if (!ConfigManager.isBinderAlive()) return;
-        var version = ConfigManager.getXposedVersionCode();
-        if (BuildConfig.VERSION_CODE == version) return;
-        new BlurBehindDialogBuilder(this)
-                .setMessage(getString(R.string.version_mismatch, version, BuildConfig.VERSION_CODE))
-                .setPositiveButton(android.R.string.ok, (dialog, id) -> {
-                    if (UpdateUtil.canInstall()) {
-                        new FlashDialogBuilder(this, (d, i) -> finish()).show();
-                    } else {
-                        NavUtil.startURL(this, getString(R.string.install_url));
-                        finish();
-                    }
-                })
-                .setCancelable(false)
-                .show();
     }
 
     @Override
