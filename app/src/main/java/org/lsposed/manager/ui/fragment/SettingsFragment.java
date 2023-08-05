@@ -141,13 +141,6 @@ public class SettingsFragment extends BaseFragment {
             if (App.isParasitic && notificationPreference != null && notificationPreference.isVisible()) {
                 setNotificationPreferenceEnabled(notificationPreference, ShortcutUtil.isLaunchShortcutPinned());
             }
-            var shortcut = findPreference("add_shortcut");
-            if (shortcut != null) {
-                var supported = ShortcutUtil.isRequestPinShortcutSupported(requireContext());
-                shortcut.setEnabled(supported);
-                shortcut.setSummary(supported ? R.string.settings_enable_status_notification_summary :
-                        R.string.settings_unsupported_pin_shortcut_summary);
-            }
         }
 
         private void setNotificationPreferenceEnabled(MaterialSwitchPreference notificationPreference, boolean enabled) {
@@ -202,6 +195,10 @@ public class SettingsFragment extends BaseFragment {
             Preference shortcut = findPreference("add_shortcut");
             if (shortcut != null) {
                 shortcut.setVisible(App.isParasitic);
+                if (!ShortcutUtil.isRequestPinShortcutSupported(requireContext())) {
+                    shortcut.setEnabled(false);
+                    shortcut.setSummary(R.string.settings_unsupported_pin_shortcut_summary);
+                }
                 shortcut.setOnPreferenceClickListener(preference -> {
                     if (!ShortcutUtil.requestPinLaunchShortcut(() -> {
                         setNotificationPreferenceEnabled(notificationPreference, true);
