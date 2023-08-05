@@ -127,7 +127,6 @@ public class LogsFragment extends BaseFragment implements MenuProvider {
         this.optionsItemSelectListener = optionsItemSelectListener;
     }
 
-    @SuppressLint("NotifyDataSetChanged")
     @Override
     public boolean onMenuItemSelected(@NonNull MenuItem item) {
         var itemId = item.getItemId();

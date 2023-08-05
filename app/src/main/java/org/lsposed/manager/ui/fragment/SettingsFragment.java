@@ -138,7 +138,7 @@ public class SettingsFragment extends BaseFragment {
         public void onResume() {
             super.onResume();
             MaterialSwitchPreference notificationPreference = findPreference("enable_status_notification");
-            if (notificationPreference != null && notificationPreference.isVisible()) {
+            if (App.isParasitic && notificationPreference != null && notificationPreference.isVisible()) {
                 setNotificationPreferenceEnabled(notificationPreference, ShortcutUtil.isLaunchShortcutPinned());
             }
         }
