@@ -194,17 +194,13 @@ public class SettingsFragment extends BaseFragment {
 
             Preference shortcut = findPreference("add_shortcut");
             if (shortcut != null) {
-                shortcut.setEnabled(ShortcutUtil.shouldAllowPinShortcut(requireContext()));
                 shortcut.setVisible(App.isParasitic);
                 if (!ShortcutUtil.isRequestPinShortcutSupported(requireContext())) {
                     shortcut.setEnabled(false);
                     shortcut.setSummary(R.string.settings_unsupported_pin_shortcut_summary);
-                } else if (!ShortcutUtil.shouldAllowPinShortcut(requireContext()))
-                    shortcut.setSummary(R.string.settings_created_shortcut_summary);
+                }
                 shortcut.setOnPreferenceClickListener(preference -> {
                     if (!ShortcutUtil.requestPinLaunchShortcut(() -> {
-                        shortcut.setEnabled(false);
-                        shortcut.setSummary(R.string.settings_created_shortcut_summary);
                         setNotificationPreferenceEnabled(notificationPreference, true);
                         App.getPreferences().edit().putBoolean("never_show_welcome", true).apply();
                         parentFragment.showHint(R.string.settings_shortcut_pinned_hint, false);
@@ -390,8 +386,7 @@ public class SettingsFragment extends BaseFragment {
             RecyclerViewKt.fixEdgeEffect(recyclerView, false, true);
             recyclerView.getBorderViewDelegate().setBorderVisibilityChangedListener((top, oldTop, bottom, oldBottom) -> parentFragment.binding.appBar.setLifted(!top));
             var fragment = getParentFragment();
-            if (fragment instanceof SettingsFragment) {
-                var settingsFragment = (SettingsFragment) fragment;
+            if (fragment instanceof SettingsFragment settingsFragment) {
                 View.OnClickListener l = v -> {
                     settingsFragment.binding.appBar.setExpanded(true, true);
                     recyclerView.smoothScrollToPosition(0);
