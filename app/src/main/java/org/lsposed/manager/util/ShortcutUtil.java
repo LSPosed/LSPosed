@@ -39,8 +39,6 @@ import android.graphics.drawable.Icon;
 import android.graphics.drawable.LayerDrawable;
 import android.os.Build;
 
-import androidx.annotation.Nullable;
-
 import org.lsposed.manager.App;
 import org.lsposed.manager.R;
 
@@ -50,8 +48,6 @@ import java.util.UUID;
 
 public class ShortcutUtil {
     private static final String SHORTCUT_ID = "org.lsposed.manager.shortcut";
-    private static boolean shortcutPinned = false;
-    private static String defaultLauncherPackageName = null;
 
     private static Bitmap getBitmap(Context context, int id) {
         var r = context.getResources();
@@ -116,8 +112,6 @@ public class ShortcutUtil {
                 if (!uuid.equals(intent.getAction())) return;
                 context.unregisterReceiver(this);
                 task.run();
-                defaultLauncherPackageName = getDefaultLauncherPackageName(context);
-                shortcutPinned = true;
             }
         };
         context.registerReceiver(receiver, filter, permission,
@@ -176,25 +170,4 @@ public class ShortcutUtil {
         return false;
     }
 
-    public static boolean shouldAllowPinShortcut(Context context) {
-        if (shortcutPinned)
-            if (defaultLauncherPackageName == null
-                    || !defaultLauncherPackageName.equals(getDefaultLauncherPackageName(context)))
-                shortcutPinned = false;
-        defaultLauncherPackageName = getDefaultLauncherPackageName(context);
-        if (!isLaunchShortcutPinned()) return true;
-        return !shortcutPinned;
-    }
-
-    @Nullable
-    private static String getDefaultLauncherPackageName(Context context) {
-        Intent intent = new Intent(Intent.ACTION_MAIN);
-        intent.addCategory(Intent.CATEGORY_HOME);
-        var resolveInfo = context.getPackageManager().resolveActivity(intent, PackageManager.MATCH_DEFAULT_ONLY);
-        if (resolveInfo != null) {
-            return resolveInfo.activityInfo.packageName;
-        } else {
-            return null;
-        }
-    }
 }
