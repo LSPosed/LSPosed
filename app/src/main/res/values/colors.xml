@@ -15,7 +15,7 @@
   ~ along with LSPosed.  If not, see <https://www.gnu.org/licenses/>.
   ~
   ~ Copyright (C) 2020 EdXposed Contributors
-  ~ Copyright (C) 2021 LSPosed Contributors
+  ~ Copyright (C) 2023 LSPosed Contributors
   -->
 
 <resources>
@@ -27,4 +27,7 @@
 
     <color name="primary_text_material">@color/abc_primary_text_material_light</color>
     <color name="secondary_text_material">@color/abc_secondary_text_material_light</color>
+
+    <color name="ic_launcher_foreground">#FFFFFF</color>
+    <color name="ic_launcher_background">#F48FB1</color>
 </resources>
