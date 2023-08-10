@@ -15,10 +15,10 @@
   ~ You should have received a copy of the GNU General Public License
   ~ along with LSPosed.  If not, see <https://www.gnu.org/licenses/>.
   ~
-  ~ Copyright (C) 2022 LSPosed Contributors
+  ~ Copyright (C) 2023 LSPosed Contributors
   -->
 
 <resources>
-    <color name="ic_launcher_foreground">@android:color/system_accent1_0</color>
-    <color name="ic_launcher_background">@android:color/system_accent1_600</color>
+    <color name="ic_launcher_foreground">@android:color/system_accent1_800</color>
+    <color name="ic_launcher_background">@android:color/system_accent1_200</color>
 </resources>
