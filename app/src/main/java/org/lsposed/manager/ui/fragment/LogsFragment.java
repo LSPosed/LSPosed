@@ -78,27 +78,6 @@ public class LogsFragment extends BaseFragment implements MenuProvider {
 
     private OptionsItemSelectListener optionsItemSelectListener;
 
-    private final ActivityResultLauncher<String> saveLogsLauncher = registerForActivityResult(
-            new ActivityResultContracts.CreateDocument("application/zip"),
-            uri -> {
-                if (uri == null) return;
-                runAsync(() -> {
-                    var context = requireContext();
-                    var cr = context.getContentResolver();
-                    try (var zipFd = cr.openFileDescriptor(uri, "wt")) {
-                        showHint(context.getString(R.string.logs_saving), false);
-                        LSPManagerServiceHolder.getService().getLogs(zipFd);
-                        showHint(context.getString(R.string.logs_saved), true);
-                    } catch (Throwable e) {
-                        var cause = e.getCause();
-                        var message = cause == null ? e.getMessage() : cause.getMessage();
-                        var text = context.getString(R.string.logs_save_failed2, message);
-                        showHint(text, false);
-                        Log.w(App.TAG, "save log", e);
-                    }
-                });
-            });
-
     @Nullable
     @Override
     public View onCreateView(@NonNull LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
@@ -130,10 +109,7 @@ public class LogsFragment extends BaseFragment implements MenuProvider {
     @Override
     public boolean onMenuItemSelected(@NonNull MenuItem item) {
         var itemId = item.getItemId();
-        if (itemId == R.id.menu_save) {
-            save();
-            return true;
-        } else if (itemId == R.id.menu_word_wrap) {
+        if (itemId == R.id.menu_word_wrap) {
             item.setChecked(!item.isChecked());
             App.getPreferences().edit().putBoolean("enable_word_wrap", item.isChecked()).apply();
             binding.viewPager.setUserInputEnabled(item.isChecked());
@@ -163,16 +139,6 @@ public class LogsFragment extends BaseFragment implements MenuProvider {
         super.onDestroyView();
 
         binding = null;
-    }
-
-    private void save() {
-        LocalDateTime now = LocalDateTime.now();
-        String filename = String.format(LocaleDelegate.getDefaultLocale(), "LSPosed_%s.zip", now.toString());
-        try {
-            saveLogsLauncher.launch(filename);
-        } catch (ActivityNotFoundException e) {
-            showHint(R.string.enable_documentui, true);
-        }
     }
 
     public static class LogFragment extends BaseFragment {

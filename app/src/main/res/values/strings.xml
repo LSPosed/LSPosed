@@ -175,6 +175,8 @@
 
     <!-- SettingsActivity -->
     <string name="settings_group_framework">Framework</string>
+    <string name="settings_save_logs">Export logs</string>
+    <string name="settings_save_logs_summary">Useful when reporting bugs</string>
     <string name="settings_disable_verbose_log">Disable verbose logs</string>
     <string name="settings_disable_verbose_log_summary">Report issues request to include verbose logs</string>
     <string name="pure_black_dark_theme">Black dark theme</string>

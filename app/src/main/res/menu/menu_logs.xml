@@ -19,11 +19,6 @@
   -->
 
 <menu xmlns:android="http://schemas.android.com/apk/res/android">
-    <item
-        android:id="@+id/menu_save"
-        android:icon="@drawable/ic_save"
-        android:showAsAction="ifRoom"
-        android:title="@string/menuSaveToSd" />
 
     <item
         android:id="@+id/menu_scroll_top"

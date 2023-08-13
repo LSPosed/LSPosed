@@ -25,6 +25,7 @@ import android.os.Build;
 import android.os.Bundle;
 import android.provider.Settings;
 import android.text.TextUtils;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -46,6 +47,7 @@ import org.lsposed.manager.BuildConfig;
 import org.lsposed.manager.ConfigManager;
 import org.lsposed.manager.R;
 import org.lsposed.manager.databinding.FragmentSettingsBinding;
+import org.lsposed.manager.receivers.LSPManagerServiceHolder;
 import org.lsposed.manager.repo.RepoLoader;
 import org.lsposed.manager.ui.activity.MainActivity;
 import org.lsposed.manager.util.BackupUtils;
@@ -119,6 +121,26 @@ public class SettingsFragment extends BaseFragment {
                 }
             });
         });
+        ActivityResultLauncher<String> saveLogsLauncher = registerForActivityResult(
+                new ActivityResultContracts.CreateDocument("application/zip"),
+                uri -> {
+                    if (uri == null) return;
+                    parentFragment.runAsync(() -> {
+                        var context = requireContext();
+                        var cr = context.getContentResolver();
+                        try (var zipFd = cr.openFileDescriptor(uri, "wt")) {
+                            parentFragment.showHint(context.getString(R.string.logs_saving), false);
+                            LSPManagerServiceHolder.getService().getLogs(zipFd);
+                            parentFragment.showHint(context.getString(R.string.logs_saved), true);
+                        } catch (Throwable e) {
+                            var cause = e.getCause();
+                            var message = cause == null ? e.getMessage() : cause.getMessage();
+                            var text = context.getString(R.string.logs_save_failed2, message);
+                            parentFragment.showHint(text, false);
+                            Log.w(App.TAG, "save log", e);
+                        }
+                    });
+                });
 
         @Override
         public void onAttach(@NonNull Context context) {
@@ -153,6 +175,16 @@ public class SettingsFragment extends BaseFragment {
             }
         }
 
+        private void saveLogs() {
+            LocalDateTime now = LocalDateTime.now();
+            String filename = String.format(LocaleDelegate.getDefaultLocale(), "LSPosed_%s.zip", now.toString());
+            try {
+                saveLogsLauncher.launch(filename);
+            } catch (ActivityNotFoundException e) {
+                parentFragment.showHint(R.string.enable_documentui, true);
+            }
+        }
+
         @Override
         public void onCreatePreferences(Bundle savedInstanceState, String rootKey) {
             final String SYSTEM = "SYSTEM";
@@ -165,6 +197,15 @@ public class SettingsFragment extends BaseFragment {
                 prefVerboseLogs.setEnabled(!BuildConfig.DEBUG && installed);
                 prefVerboseLogs.setChecked(!installed || !ConfigManager.isVerboseLogEnabled());
                 prefVerboseLogs.setOnPreferenceChangeListener((preference, newValue) -> ConfigManager.setVerboseLogEnabled(!(boolean) newValue));
+            }
+
+            Preference saveLogs = findPreference("save_logs");
+            if (saveLogs != null) {
+                saveLogs.setEnabled(!BuildConfig.DEBUG && installed);
+                saveLogs.setOnPreferenceClickListener(preference -> {
+                    saveLogs();
+                    return true;
+                });
             }
 
             MaterialSwitchPreference prefDexObfuscate = findPreference("enable_dex_obfuscate");

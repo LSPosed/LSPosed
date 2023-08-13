@@ -83,6 +83,14 @@
     </PreferenceCategory>
 
     <PreferenceCategory android:title="@string/settings_group_framework">
+        <Preference
+            android:defaultValue="false"
+            android:icon="@drawable/ic_save"
+            android:key="save_logs"
+            android:persistent="false"
+            android:summary="@string/settings_save_logs_summary"
+            android:title="@string/settings_save_logs" />
+
         <rikka.material.preference.MaterialSwitchPreference
             android:defaultValue="false"
             android:icon="@drawable/ic_outline_assignment_24"
