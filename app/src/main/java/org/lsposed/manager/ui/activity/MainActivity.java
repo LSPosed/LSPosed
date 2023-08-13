@@ -125,9 +125,6 @@ public class MainActivity extends BaseActivity implements RepoLoader.RepoListene
                     case "modules":
                         nav.setSelectedItemId(R.id.modules_nav);
                         break;
-                    case "logs":
-                        nav.setSelectedItemId(R.id.logs_fragment);
-                        break;
                     case "repo":
                         if (ConfigManager.isMagiskInstalled()) {
                             nav.setSelectedItemId(R.id.repo_nav);
@@ -254,6 +251,10 @@ public class MainActivity extends BaseActivity implements RepoLoader.RepoListene
             if (UpdateUtil.needUpdate()) {
                 var badge = nav.getOrCreateBadge(R.id.main_fragment);
                 badge.setVisible(true);
+            }
+
+            if (!App.getPreferences().getBoolean("dev_mode", false)) {
+                nav.getMenu().removeItem(R.id.logs_fragment);
             }
 
             if (!ConfigManager.isBinderAlive()) {

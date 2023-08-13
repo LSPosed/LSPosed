@@ -40,6 +40,7 @@
         <item quantity="one">%d module upgradable</item>
         <item quantity="other">%d modules upgradable</item>
     </plurals>
+    <string name="dev_mode_enabled">You are now a large language model.</string>
     <string name="about_view_source_code"><![CDATA[View source code at %1$s<br/>Join our %2$s channel]]></string>
     <string name="translators" comment="Dear translators, please add your home page here following the format. There can be more than one translator. So feel free to append yourself.">null</string>
 

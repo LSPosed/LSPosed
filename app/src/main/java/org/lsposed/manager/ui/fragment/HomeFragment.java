@@ -38,6 +38,7 @@ import androidx.core.view.MenuProvider;
 import androidx.fragment.app.DialogFragment;
 
 import org.lsposed.lspd.ILSPManagerService;
+import org.lsposed.manager.App;
 import org.lsposed.manager.BuildConfig;
 import org.lsposed.manager.ConfigManager;
 import org.lsposed.manager.R;
@@ -59,6 +60,7 @@ import rikka.material.app.LocaleDelegate;
 
 public class HomeFragment extends BaseFragment implements MenuProvider {
     private FragmentHomeBinding binding;
+    private int statusHitCount = 0;
 
     @Override
     public void onCreate(@Nullable Bundle savedInstanceState) {
@@ -193,6 +195,15 @@ public class HomeFragment extends BaseFragment implements MenuProvider {
             binding.frameworkVersion.setText(R.string.not_installed);
             binding.managerVersion.setText(String.format(LocaleDelegate.getDefaultLocale(), "%1$s (%2$d)", BuildConfig.VERSION_NAME, BuildConfig.VERSION_CODE));
         }
+
+        binding.status.setOnClickListener(v -> {
+            statusHitCount++;
+            if (statusHitCount >= 7) {
+                App.getPreferences().edit().putBoolean("dev_mode", true).apply();
+                showHint(R.string.dev_mode_enabled, true);
+
+            }
+        });
 
         if (Build.VERSION.PREVIEW_SDK_INT != 0) {
             binding.systemVersion.setText(String.format(LocaleDelegate.getDefaultLocale(), "%1$s Preview (API %2$d)", Build.VERSION.CODENAME, Build.VERSION.SDK_INT));
