@@ -34,34 +34,29 @@ import org.lsposed.lspd.hooker.HandleSystemServerProcessHooker;
 import org.lsposed.lspd.hooker.LoadedApkCtorHooker;
 import org.lsposed.lspd.hooker.OpenDexFileHooker;
 import org.lsposed.lspd.impl.LSPosedContext;
+import org.lsposed.lspd.impl.LSPosedHelper;
 import org.lsposed.lspd.service.ILSPApplicationService;
 import org.lsposed.lspd.util.Utils;
 
 import dalvik.system.DexFile;
 import de.robv.android.xposed.XposedBridge;
-import de.robv.android.xposed.XposedHelpers;
 import de.robv.android.xposed.XposedInit;
 
 public class Startup {
-    @SuppressWarnings("deprecation")
     private static void startBootstrapHook(boolean isSystem) {
         Utils.logD("startBootstrapHook starts: isSystem = " + isSystem);
-        XposedHelpers.findAndHookMethod(Thread.class, "dispatchUncaughtException",
-                Throwable.class, new CrashDumpHooker());
+        LSPosedHelper.hookMethod(CrashDumpHooker.class, Thread.class, "dispatchUncaughtException", Throwable.class);
         if (isSystem) {
-            XposedBridge.hookAllMethods(ZygoteInit.class,
-                    "handleSystemServerProcess", new HandleSystemServerProcessHooker());
+            LSPosedHelper.hookAllMethods(HandleSystemServerProcessHooker.class, ZygoteInit.class, "handleSystemServerProcess");
         } else {
-            var hooker = new OpenDexFileHooker();
-            XposedBridge.hookAllMethods(DexFile.class, "openDexFile", hooker);
-            XposedBridge.hookAllMethods(DexFile.class, "openInMemoryDexFile", hooker);
-            XposedBridge.hookAllMethods(DexFile.class, "openInMemoryDexFiles", hooker);
+            LSPosedHelper.hookAllMethods(OpenDexFileHooker.class, DexFile.class, "openDexFile");
+            LSPosedHelper.hookAllMethods(OpenDexFileHooker.class, DexFile.class, "openInMemoryDexFile");
+            LSPosedHelper.hookAllMethods(OpenDexFileHooker.class, DexFile.class, "openInMemoryDexFiles");
         }
-        XposedHelpers.findAndHookConstructor(LoadedApk.class,
+        LSPosedHelper.hookConstructor(LoadedApkCtorHooker.class, LoadedApk.class,
                 ActivityThread.class, ApplicationInfo.class, CompatibilityInfo.class,
-                ClassLoader.class, boolean.class, boolean.class, boolean.class,
-                new LoadedApkCtorHooker());
-        XposedBridge.hookAllMethods(ActivityThread.class, "attach", new AttachHooker());
+                ClassLoader.class, boolean.class, boolean.class, boolean.class);
+        LSPosedHelper.hookAllMethods(AttachHooker.class, ActivityThread.class, "attach");
     }
 
     public static void bootstrapXposed() {
