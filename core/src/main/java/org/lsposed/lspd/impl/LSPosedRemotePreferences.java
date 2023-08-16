@@ -29,7 +29,7 @@ public class LSPosedRemotePreferences implements SharedPreferences {
         synchronized public void onUpdate(Bundle bundle) {
             Set<String> changes = new ArraySet<>();
             if (bundle.containsKey("delete")) {
-                var deletes = bundle.getStringArrayList("delete");
+                var deletes = (Set<String>) bundle.getSerializable("delete");
                 changes.addAll(deletes);
                 for (var key : deletes) {
                     mMap.remove(key);
