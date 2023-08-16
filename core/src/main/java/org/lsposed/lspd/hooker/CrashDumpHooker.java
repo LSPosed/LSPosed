@@ -2,15 +2,20 @@ package org.lsposed.lspd.hooker;
 
 import android.util.Log;
 
-import de.robv.android.xposed.XC_MethodHook;
-import de.robv.android.xposed.XposedBridge;
+import org.lsposed.lspd.impl.LSPosedBridge;
 
-public class CrashDumpHooker extends XC_MethodHook {
-    @Override
-    protected void beforeHookedMethod(MethodHookParam<?> param) {
+import io.github.libxposed.api.XposedInterface;
+import io.github.libxposed.api.annotations.BeforeInvocation;
+import io.github.libxposed.api.annotations.XposedHooker;
+
+@XposedHooker
+public class CrashDumpHooker implements XposedInterface.Hooker {
+
+    @BeforeInvocation
+    public static void beforeHookedMethod(XposedInterface.BeforeHookCallback callback) {
         try {
-            var e = (Throwable) param.args[0];
-            XposedBridge.log("Crash unexpectedly: " + Log.getStackTraceString(e));
+            var e = (Throwable) callback.getArgs()[0];
+            LSPosedBridge.log("Crash unexpectedly: " + Log.getStackTraceString(e));
         } catch (Throwable ignored) {
         }
     }

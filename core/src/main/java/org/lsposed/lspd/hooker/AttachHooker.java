@@ -1,19 +1,17 @@
 package org.lsposed.lspd.hooker;
 
-import static org.lsposed.lspd.core.ApplicationServiceClient.serviceClient;
-
 import android.app.ActivityThread;
 
-import org.lsposed.lspd.impl.LSPosedContext;
-
-import java.util.Optional;
-
-import de.robv.android.xposed.XC_MethodHook;
 import de.robv.android.xposed.XposedInit;
+import io.github.libxposed.api.XposedInterface;
+import io.github.libxposed.api.annotations.AfterInvocation;
+import io.github.libxposed.api.annotations.XposedHooker;
 
-public class AttachHooker extends XC_MethodHook {
-    @Override
-    protected void afterHookedMethod(MethodHookParam<?> param) throws Throwable {
-        XposedInit.loadModules((ActivityThread) param.thisObject);
+@XposedHooker
+public class AttachHooker implements XposedInterface.Hooker {
+
+    @AfterInvocation
+    public static void afterHookedMethod(XposedInterface.AfterHookCallback callback) {
+        XposedInit.loadModules((ActivityThread) callback.getThisObject());
     }
 }

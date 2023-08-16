@@ -2,6 +2,8 @@ package org.lsposed.lspd.impl;
 
 import android.util.Log;
 
+import androidx.annotation.NonNull;
+
 import org.lsposed.lspd.nativebridge.HookBridge;
 
 import java.lang.reflect.Executable;
@@ -10,6 +12,11 @@ import java.lang.reflect.Method;
 import java.lang.reflect.Modifier;
 
 import de.robv.android.xposed.XposedBridge;
+import io.github.libxposed.api.XposedInterface;
+import io.github.libxposed.api.annotations.AfterInvocation;
+import io.github.libxposed.api.annotations.BeforeInvocation;
+import io.github.libxposed.api.annotations.XposedHooker;
+import io.github.libxposed.api.errors.HookFailedError;
 
 public class LSPosedBridge {
 
@@ -30,12 +37,19 @@ public class LSPosedBridge {
     }
 
     public static class HookerCallback {
-        Method beforeInvocation;
-        Method afterInvocation;
+        @NonNull
+        final Method beforeInvocation;
+        @NonNull
+        final Method afterInvocation;
 
-        public HookerCallback(Method beforeInvocation, Method afterInvocation) {
+        final int beforeParams;
+        final int afterParams;
+
+        public HookerCallback(@NonNull Method beforeInvocation, @NonNull Method afterInvocation) {
             this.beforeInvocation = beforeInvocation;
             this.afterInvocation = afterInvocation;
+            this.beforeParams = beforeInvocation.getParameterCount();
+            this.afterParams = afterInvocation.getParameterCount();
         }
     }
 
@@ -111,7 +125,11 @@ public class LSPosedBridge {
             for (beforeIdx = 0; beforeIdx < modernSnapshot.length; beforeIdx++) {
                 try {
                     var hooker = (HookerCallback) modernSnapshot[beforeIdx];
-                    ctxArray[beforeIdx] = hooker.beforeInvocation.invoke(null, callback);
+                    if (hooker.beforeParams == 0) {
+                        ctxArray[beforeIdx] = hooker.beforeInvocation.invoke(null);
+                    } else {
+                        ctxArray[beforeIdx] = hooker.beforeInvocation.invoke(null, callback);
+                    }
                 } catch (Throwable t) {
                     LSPosedBridge.log(t);
 
@@ -150,12 +168,13 @@ public class LSPosedBridge {
                 Object lastResult = callback.getResult();
                 Throwable lastThrowable = callback.getThrowable();
                 var hooker = (HookerCallback) modernSnapshot[afterIdx];
-                var context = ctxArray[afterIdx];
                 try {
-                    if (context == null) {
+                    if (hooker.afterParams == 0) {
+                        hooker.afterInvocation.invoke(null);
+                    } else if (hooker.afterParams == 1) {
                         hooker.afterInvocation.invoke(null, callback);
                     } else {
-                        hooker.afterInvocation.invoke(null, callback, context);
+                        hooker.afterInvocation.invoke(null, callback, ctxArray[afterIdx]);
                     }
                 } catch (Throwable t) {
                     LSPosedBridge.log(t);
@@ -185,5 +204,96 @@ public class LSPosedBridge {
                 return result;
             }
         }
+    }
+
+    public static void dummyCallback() {
+    }
+
+    public static <T extends Executable> XposedInterface.MethodUnhooker<T>
+    doHook(T hookMethod, int priority, Class<? extends XposedInterface.Hooker> hooker) {
+        if (Modifier.isAbstract(hookMethod.getModifiers())) {
+            throw new IllegalArgumentException("Cannot hook abstract methods: " + hookMethod);
+        } else if (hookMethod.getDeclaringClass().getClassLoader() == LSPosedContext.class.getClassLoader()) {
+            throw new IllegalArgumentException("Do not allow hooking inner methods");
+        } else if (hookMethod.getDeclaringClass() == Method.class && hookMethod.getName().equals("invoke")) {
+            throw new IllegalArgumentException("Cannot hook Method.invoke");
+        } else if (hooker == null) {
+            throw new IllegalArgumentException("hooker should not be null!");
+        } else if (hooker.getAnnotation(XposedHooker.class) == null) {
+            throw new IllegalArgumentException("Hooker should be annotated with @XposedHooker");
+        }
+
+        Method beforeInvocation = null, afterInvocation = null;
+        var modifiers = Modifier.PUBLIC | Modifier.STATIC;
+        for (var method : hooker.getDeclaredMethods()) {
+            if (method.getAnnotation(BeforeInvocation.class) != null) {
+                if (beforeInvocation != null) {
+                    throw new IllegalArgumentException("More than one method annotated with @BeforeInvocation");
+                }
+                boolean valid = (method.getModifiers() & modifiers) == modifiers;
+                var params = method.getParameterTypes();
+                if (params.length == 1) {
+                    valid &= params[0].equals(XposedInterface.BeforeHookCallback.class);
+                } else if (params.length != 0) {
+                    valid = false;
+                }
+                if (!valid) {
+                    throw new IllegalArgumentException("BeforeInvocation method format is invalid");
+                }
+                beforeInvocation = method;
+            }
+            if (method.getAnnotation(AfterInvocation.class) != null) {
+                if (afterInvocation != null) {
+                    throw new IllegalArgumentException("More than one method annotated with @AfterInvocation");
+                }
+                boolean valid = (method.getModifiers() & modifiers) == modifiers;
+                valid &= method.getReturnType().equals(void.class);
+                var params = method.getParameterTypes();
+                if (params.length == 1 || params.length == 2) {
+                    valid &= params[0].equals(XposedInterface.AfterHookCallback.class);
+                } else if (params.length != 0) {
+                    valid = false;
+                }
+                if (!valid) {
+                    throw new IllegalArgumentException("AfterInvocation method format is invalid");
+                }
+                afterInvocation = method;
+            }
+        }
+        if (beforeInvocation == null && afterInvocation == null) {
+            throw new IllegalArgumentException("No method annotated with @BeforeInvocation or @AfterInvocation");
+        }
+        try {
+            if (beforeInvocation == null) {
+                beforeInvocation = LSPosedBridge.class.getMethod("dummyCallback");
+            } else if (afterInvocation == null) {
+                afterInvocation = LSPosedBridge.class.getMethod("dummyCallback");
+            } else {
+                var ret = beforeInvocation.getReturnType();
+                var params = afterInvocation.getParameterTypes();
+                if (ret != void.class && params.length == 2 && !ret.equals(params[1])) {
+                    throw new IllegalArgumentException("BeforeInvocation and AfterInvocation method format is invalid");
+                }
+            }
+        } catch (NoSuchMethodException e) {
+            throw new HookFailedError(e);
+        }
+
+        var callback = new LSPosedBridge.HookerCallback(beforeInvocation, afterInvocation);
+        if (HookBridge.hookMethod(true, hookMethod, LSPosedBridge.NativeHooker.class, priority, callback)) {
+            return new XposedInterface.MethodUnhooker<>() {
+                @NonNull
+                @Override
+                public T getOrigin() {
+                    return hookMethod;
+                }
+
+                @Override
+                public void unhook() {
+                    HookBridge.unhookMethod(true, hookMethod, callback);
+                }
+            };
+        }
+        throw new HookFailedError("Cannot hook " + hookMethod);
     }
 }
