@@ -72,7 +72,7 @@ public class LoadedApkCtorHooker implements XposedInterface.Hooker {
                 return;
             }
 
-            new LoadedApkGetCLHooker(loadedApk);
+            LoadedApkGetCLHooker.addLoadedApk(loadedApk);
         } catch (Throwable t) {
             Hookers.logE("error when hooking LoadedApk.<init>", t);
         }

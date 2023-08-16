@@ -32,6 +32,7 @@ import org.lsposed.lspd.hooker.AttachHooker;
 import org.lsposed.lspd.hooker.CrashDumpHooker;
 import org.lsposed.lspd.hooker.HandleSystemServerProcessHooker;
 import org.lsposed.lspd.hooker.LoadedApkCtorHooker;
+import org.lsposed.lspd.hooker.LoadedApkGetCLHooker;
 import org.lsposed.lspd.hooker.OpenDexFileHooker;
 import org.lsposed.lspd.impl.LSPosedContext;
 import org.lsposed.lspd.impl.LSPosedHelper;
@@ -56,6 +57,7 @@ public class Startup {
         LSPosedHelper.hookConstructor(LoadedApkCtorHooker.class, LoadedApk.class,
                 ActivityThread.class, ApplicationInfo.class, CompatibilityInfo.class,
                 ClassLoader.class, boolean.class, boolean.class, boolean.class);
+        LSPosedHelper.hookMethod(LoadedApkGetCLHooker.class, LoadedApk.class, "getClassLoader");
         LSPosedHelper.hookAllMethods(AttachHooker.class, ActivityThread.class, "attach");
     }
 
