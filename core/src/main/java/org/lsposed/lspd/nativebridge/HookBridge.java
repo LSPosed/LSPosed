@@ -24,5 +24,5 @@ public class HookBridge {
     @FastNative
     public static native boolean setTrusted(Object cookie);
 
-    public static native Object[] callbackSnapshot(Class<?> hooker_callback, Executable method);
+    public static native Object[][] callbackSnapshot(Class<?> hooker_callback, Executable method);
 }

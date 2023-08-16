@@ -135,7 +135,7 @@ public class LoadedApkGetCLHooker extends XC_MethodHook {
 
                 @NonNull
                 @Override
-                public ApplicationInfo getAppInfo() {
+                public ApplicationInfo getApplicationInfo() {
                     return loadedApk.getApplicationInfo();
                 }
 

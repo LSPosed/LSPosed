@@ -119,8 +119,8 @@ public abstract class XC_MethodHook extends XCallback {
          */
         public Object[] args;
 
-        private Object result = null;
-        private Throwable throwable = null;
+        public Object result = null;
+        public Throwable throwable = null;
         public boolean returnEarly = false;
 
         private final HashMap<String, Object> extras = new HashMap<>();
