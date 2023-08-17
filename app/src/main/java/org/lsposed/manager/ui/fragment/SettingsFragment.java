@@ -134,15 +134,6 @@ public class SettingsFragment extends BaseFragment {
             parentFragment = null;
         }
 
-        @Override
-        public void onResume() {
-            super.onResume();
-            MaterialSwitchPreference notificationPreference = findPreference("enable_status_notification");
-            if (App.isParasitic && notificationPreference != null && notificationPreference.isVisible()) {
-                setNotificationPreferenceEnabled(notificationPreference, ShortcutUtil.isLaunchShortcutPinned());
-            }
-        }
-
         private void setNotificationPreferenceEnabled(MaterialSwitchPreference notificationPreference, boolean enabled) {
             if (notificationPreference != null) {
                 notificationPreference.setEnabled(!ConfigManager.enableStatusNotification() || enabled);
@@ -179,10 +170,10 @@ public class SettingsFragment extends BaseFragment {
 
             MaterialSwitchPreference notificationPreference = findPreference("enable_status_notification");
             if (notificationPreference != null) {
-                if (App.isParasitic && !ShortcutUtil.isLaunchShortcutPinned()) {
-                    setNotificationPreferenceEnabled(notificationPreference, false);
-                }
                 notificationPreference.setVisible(installed);
+                if (installed && App.isParasitic) {
+                    setNotificationPreferenceEnabled(notificationPreference, ShortcutUtil.isLaunchShortcutPinned());
+                }
                 notificationPreference.setChecked(installed && ConfigManager.enableStatusNotification());
                 notificationPreference.setOnPreferenceChangeListener((p, v) -> {
                     if ((boolean) v && App.isParasitic && !ShortcutUtil.isLaunchShortcutPinned()) {
