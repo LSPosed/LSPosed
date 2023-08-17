@@ -105,7 +105,7 @@ public class BridgeService {
         Log.d(TAG, "onTransact: action=" + action + ", callingUid=" + Binder.getCallingUid() + ", callingPid=" + Binder.getCallingPid());
 
         switch (action) {
-            case ACTION_SEND_BINDER: {
+            case ACTION_SEND_BINDER -> {
                 if (Binder.getCallingUid() == 0) {
                     receiveFromBridge(data.readStrongBinder());
                     if (reply != null) {
@@ -113,9 +113,8 @@ public class BridgeService {
                     }
                     return true;
                 }
-                break;
             }
-            case ACTION_GET_BINDER: {
+            case ACTION_GET_BINDER -> {
                 IBinder binder = null;
                 try {
                     String processName = data.readString();

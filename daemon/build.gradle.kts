@@ -14,7 +14,7 @@
  * You should have received a copy of the GNU General Public License
  * along with LSPosed.  If not, see <https://www.gnu.org/licenses/>.
  *
- * Copyright (C) 2021 LSPosed Contributors
+ * Copyright (C) 2023 LSPosed Contributors
  */
 
 import com.android.build.api.dsl.ApplicationExtension
@@ -117,6 +117,7 @@ dependencies {
     implementation(projects.hiddenapi.bridge)
     implementation(projects.services.daemonService)
     implementation(projects.services.managerService)
+    implementation(projects.services.managerClient)
     compileOnly(libs.androidx.annotation)
     compileOnly(projects.hiddenapi.stubs)
 }

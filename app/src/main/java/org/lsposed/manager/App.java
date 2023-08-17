@@ -22,15 +22,13 @@ package org.lsposed.manager;
 
 import android.app.ActivityManager;
 import android.app.Application;
-import android.content.BroadcastReceiver;
 import android.content.ContentValues;
 import android.content.Context;
-import android.content.Intent;
-import android.content.IntentFilter;
 import android.content.SharedPreferences;
 import android.os.Build;
 import android.os.Environment;
 import android.os.Handler;
+import android.os.IBinder;
 import android.os.Looper;
 import android.os.Process;
 import android.provider.MediaStore;
@@ -47,6 +45,7 @@ import org.lsposed.hiddenapibypass.HiddenApiBypass;
 import org.lsposed.manager.adapters.AppHelper;
 import org.lsposed.manager.receivers.LSPManagerServiceHolder;
 import org.lsposed.manager.repo.RepoLoader;
+import org.lsposed.manager.services.LSPManagerDispatchService;
 import org.lsposed.manager.util.CloudflareDNS;
 import org.lsposed.manager.util.ModuleUtil;
 import org.lsposed.manager.util.Telemetry;
@@ -114,6 +113,8 @@ public class App extends Application {
     private static final String ACTION_USER_INFO_CHANGED = "android.intent.action.USER_INFO_CHANGED";
     private static final String EXTRA_REMOVED_FOR_ALL_USERS = "android.intent.extra.REMOVED_FOR_ALL_USERS";
     private static App instance = null;
+
+    private static IBinder clientService = null;
     private static OkHttpClient okHttpClient;
     private static Cache okHttpCache;
     private SharedPreferences pref;
@@ -218,39 +219,41 @@ public class App extends Application {
         //noinspection deprecation
         res.updateConfiguration(config, res.getDisplayMetrics());
 
-        IntentFilter intentFilter = new IntentFilter();
-        intentFilter.addAction("org.lsposed.manager.NOTIFICATION");
-        registerReceiver(new BroadcastReceiver() {
-            @Override
-            public void onReceive(Context context, Intent inIntent) {
-                var intent = (Intent) inIntent.getParcelableExtra(Intent.EXTRA_INTENT);
-                Log.d(TAG, "onReceive: " + intent);
-                switch (intent.getAction()) {
-                    case Intent.ACTION_PACKAGE_ADDED:
-                    case Intent.ACTION_PACKAGE_CHANGED:
-                    case Intent.ACTION_PACKAGE_FULLY_REMOVED:
-                    case Intent.ACTION_UID_REMOVED: {
-                        var userId = intent.getIntExtra(Intent.EXTRA_USER, 0);
-                        var packageName = intent.getStringExtra("android.intent.extra.PACKAGES");
-                        var packageRemovedForAllUsers = intent.getBooleanExtra(EXTRA_REMOVED_FOR_ALL_USERS, false);
-                        var isXposedModule = intent.getBooleanExtra("isXposedModule", false);
-                        if (packageName != null) {
-                            if (isXposedModule)
-                                ModuleUtil.getInstance().reloadSingleModule(packageName, userId, packageRemovedForAllUsers);
-                            else
-                                App.getExecutorService().submit(() -> AppHelper.getAppList(true));
-                        }
-                        break;
-                    }
-                    case ACTION_USER_ADDED:
-                    case ACTION_USER_REMOVED:
-                    case ACTION_USER_INFO_CHANGED: {
-                        App.getExecutorService().submit(() -> ModuleUtil.getInstance().reloadInstalledModules());
-                        break;
-                    }
-                }
-            }
-        }, intentFilter, Context.RECEIVER_NOT_EXPORTED);
+        clientService = new LSPManagerDispatchService().asBinder();
+
+//        IntentFilter intentFilter = new IntentFilter();
+//        intentFilter.addAction("org.lsposed.manager.NOTIFICATION");
+//        registerReceiver(new BroadcastReceiver() {
+//            @Override
+//            public void onReceive(Context context, Intent inIntent) {
+//                var intent = (Intent) inIntent.getParcelableExtra(Intent.EXTRA_INTENT);
+//                Log.d(TAG, "onReceive: " + intent);
+//                switch (intent.getAction()) {
+//                    case Intent.ACTION_PACKAGE_ADDED:
+//                    case Intent.ACTION_PACKAGE_CHANGED:
+//                    case Intent.ACTION_PACKAGE_FULLY_REMOVED:
+//                    case Intent.ACTION_UID_REMOVED: {
+//                        var userId = intent.getIntExtra(Intent.EXTRA_USER, 0);
+//                        var packageName = intent.getStringExtra("android.intent.extra.PACKAGES");
+//                        var packageRemovedForAllUsers = intent.getBooleanExtra(EXTRA_REMOVED_FOR_ALL_USERS, false);
+//                        var isXposedModule = intent.getBooleanExtra("isXposedModule", false);
+//                        if (packageName != null) {
+//                            if (isXposedModule)
+//                                ModuleUtil.getInstance().reloadSingleModule(packageName, userId, packageRemovedForAllUsers);
+//                            else
+//                                App.getExecutorService().submit(() -> AppHelper.getAppList(true));
+//                        }
+//                        break;
+//                    }
+//                    case ACTION_USER_ADDED:
+//                    case ACTION_USER_REMOVED:
+//                    case ACTION_USER_INFO_CHANGED: {
+//                        App.getExecutorService().submit(() -> ModuleUtil.getInstance().reloadInstalledModules());
+//                        break;
+//                    }
+//                }
+//            }
+//        }, intentFilter, Context.RECEIVER_NOT_EXPORTED);
 
         UpdateUtil.loadRemoteVersion();
     }

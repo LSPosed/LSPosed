@@ -14,7 +14,7 @@
  * You should have received a copy of the GNU General Public License
  * along with LSPosed.  If not, see <https://www.gnu.org/licenses/>.
  *
- * Copyright (C) 2021 LSPosed Contributors
+ * Copyright (C) 2023 LSPosed Contributors
  */
 
 import java.time.Instant
@@ -154,6 +154,7 @@ dependencies {
     implementation(libs.kotlin.stdlib)
     implementation(libs.kotlinx.coroutines.core)
     implementation(projects.services.managerService)
+    implementation(projects.services.managerClient)
 
     debugImplementation(libs.appcenter.analytics)
     debugImplementation(libs.appcenter.crashes)

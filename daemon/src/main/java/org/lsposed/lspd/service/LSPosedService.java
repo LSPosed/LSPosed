@@ -58,10 +58,11 @@ import io.github.libxposed.service.IXposedScopeCallback;
 public class LSPosedService extends ILSPosedService.Stub {
     private static final int AID_NOBODY = 9999;
     private static final int USER_NULL = -10000;
-    private static final String ACTION_USER_ADDED = "android.intent.action.USER_ADDED";
+    static final String ACTION_USER_ADDED = "android.intent.action.USER_ADDED";
     public static final String ACTION_USER_REMOVED = "android.intent.action.USER_REMOVED";
     private static final String EXTRA_USER_HANDLE = "android.intent.extra.user_handle";
-    private static final String EXTRA_REMOVED_FOR_ALL_USERS = "android.intent.extra.REMOVED_FOR_ALL_USERS";
+    static final String EXTRA_REMOVED_FOR_ALL_USERS = "android.intent.extra.REMOVED_FOR_ALL_USERS";
+    static final String ACTION_USER_INFO_CHANGED = "android.intent.action.USER_INFO_CHANGED";
 
     private static boolean isModernModules(ApplicationInfo info) {
         String[] apks;
