@@ -258,7 +258,7 @@ fun afterEval() = android.applicationVariants.forEach { variant ->
     task<Exec>("flashAndReboot${variantCapped}") {
         group = "LSPosed"
         dependsOn(flashTask)
-        commandLine(adb, "shell", "reboot")
+        commandLine(adb, "shell", "/system/bin/svc", "power", "reboot")
     }
 }
 
