@@ -134,14 +134,16 @@ public class SettingsFragment extends BaseFragment {
             parentFragment = null;
         }
 
-        private void setNotificationPreferenceEnabled(MaterialSwitchPreference notificationPreference, boolean enabled) {
+        private boolean setNotificationPreferenceEnabled(MaterialSwitchPreference notificationPreference, boolean preferenceEnabled) {
+            var notificationEnabled = ConfigManager.enableStatusNotification();
             if (notificationPreference != null) {
-                notificationPreference.setEnabled(!ConfigManager.enableStatusNotification() || enabled);
-                notificationPreference.setSummaryOn(enabled ?
+                notificationPreference.setEnabled(!notificationEnabled || preferenceEnabled);
+                notificationPreference.setSummaryOn(preferenceEnabled ?
                         notificationPreference.getContext().getString(R.string.settings_enable_status_notification_summary) :
                         notificationPreference.getContext().getString(R.string.settings_enable_status_notification_summary) + "\n" +
                                 notificationPreference.getContext().getString(R.string.disable_status_notification_error));
             }
+            return notificationEnabled;
         }
 
         @Override
@@ -172,14 +174,14 @@ public class SettingsFragment extends BaseFragment {
             if (notificationPreference != null) {
                 notificationPreference.setVisible(installed);
                 if (installed && App.isParasitic) {
-                    setNotificationPreferenceEnabled(notificationPreference, ShortcutUtil.isLaunchShortcutPinned());
+                    notificationPreference.setChecked(setNotificationPreferenceEnabled(notificationPreference, ShortcutUtil.isLaunchShortcutPinned()));
                 }
-                notificationPreference.setChecked(installed && ConfigManager.enableStatusNotification());
                 notificationPreference.setOnPreferenceChangeListener((p, v) -> {
+                    var succeeded = ConfigManager.setEnableStatusNotification((boolean) v);
                     if ((boolean) v && App.isParasitic && !ShortcutUtil.isLaunchShortcutPinned()) {
                         setNotificationPreferenceEnabled(notificationPreference, false);
                     }
-                    return ConfigManager.setEnableStatusNotification((boolean) v);
+                    return succeeded;
                 });
             }
 
