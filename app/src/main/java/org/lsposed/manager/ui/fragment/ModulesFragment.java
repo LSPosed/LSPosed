@@ -261,7 +261,7 @@ public class ModulesFragment extends BaseFragment implements ModuleUtil.ModuleLi
     }
 
     @Override
-    public void onRepoLoaded() {
+    public void onRepoLoaded(boolean force) {
         forEachAdaptor(ModuleAdapter::refresh);
     }
 

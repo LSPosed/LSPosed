@@ -155,7 +155,7 @@ public class RepoLoader {
         } finally {
             repoLoaded = true;
             for (RepoListener listener : listeners) {
-                listener.onRepoLoaded();
+                listener.onRepoLoaded(updateRemoteRepo);
             }
             if (updateRemoteRepo) loadRemoteData();
         }
@@ -191,7 +191,7 @@ public class RepoLoader {
         latestVersion = versions;
         repoLoaded = true;
         for (RepoListener listener : listeners) {
-            listener.onRepoLoaded();
+            listener.onRepoLoaded(false);
         }
     }
 
@@ -309,7 +309,7 @@ public class RepoLoader {
     }
 
     public interface RepoListener {
-        default void onRepoLoaded() {
+        default void onRepoLoaded(boolean force) {
         }
 
         default void onModuleReleasesLoaded(OnlineModule module) {

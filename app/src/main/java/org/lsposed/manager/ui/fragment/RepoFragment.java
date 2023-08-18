@@ -138,7 +138,7 @@ public class RepoFragment extends BaseFragment implements RepoLoader.RepoListene
         binding.clickView.setOnClickListener(l);
         repoLoader.addListener(this);
         moduleUtil.addListener(this);
-        onRepoLoaded();
+        onRepoLoaded(false);
         return binding.getRoot();
     }
 
@@ -226,7 +226,7 @@ public class RepoFragment extends BaseFragment implements RepoLoader.RepoListene
     }
 
     @Override
-    public void onRepoLoaded() {
+    public void onRepoLoaded(boolean force) {
         if (adapter != null) {
             adapter.refresh();
         }

@@ -86,8 +86,7 @@ public class MainActivity extends BaseActivity implements RepoLoader.RepoListene
 
         repoLoader.addListener(this);
         moduleUtil.addListener(this);
-
-        onModulesReloaded();
+        App.getExecutorService().submit(this::onModulesReloaded);
 
         NavHostFragment navHostFragment = (NavHostFragment) getSupportFragmentManager().findFragmentById(R.id.nav_host_fragment);
         if (navHostFragment == null) {
@@ -197,13 +196,16 @@ public class MainActivity extends BaseActivity implements RepoLoader.RepoListene
         return restarting || super.dispatchGenericMotionEvent(event);
     }
 
+    private boolean repoLoading = false;
 
     @Override
-    public void onRepoLoaded() {
+    public void onRepoLoaded(boolean force) {
+        if (repoLoading && !force) return;
+        repoLoading = true;
         final int[] count = new int[]{0};
         HashSet<String> processedModules = new HashSet<>();
         var modules = moduleUtil.getModules();
-        if (modules == null) return;
+        if (modules == null || modules.isEmpty()) return;
         modules.forEach((k, v) -> {
                     if (!processedModules.contains(k.first)) {
                         var ver = repoLoader.getModuleLatestVersion(k.first);
@@ -214,41 +216,27 @@ public class MainActivity extends BaseActivity implements RepoLoader.RepoListene
                     }
                 }
         );
-        runOnUiThread(() -> {
-            if (count[0] > 0 && binding != null) {
-                var nav = (NavigationBarView) binding.nav;
-                var badge = nav.getOrCreateBadge(R.id.repo_nav);
-                badge.setVisible(true);
-                badge.setNumber(count[0]);
-            } else {
-                onThrowable(null);
-            }
-        });
+        setSummaryCount(R.id.repo_nav, count[0]);
+        repoLoading = false;
     }
 
     @Override
     public void onThrowable(Throwable t) {
-        runOnUiThread(() -> {
-            if (binding != null) {
-                var nav = (NavigationBarView) binding.nav;
-                var badge = nav.getOrCreateBadge(R.id.repo_nav);
-                badge.setVisible(false);
-            }
-        });
+        setSummaryCount(R.id.repo_nav, 0);
     }
 
     @Override
     public void onModulesReloaded() {
-        onRepoLoaded();
-        setModulesSummary(moduleUtil.getEnabledModulesCount());
+        onRepoLoaded(false);
+        setSummaryCount(R.id.modules_nav, moduleUtil.getEnabledModulesCount());
     }
 
     @Override
     public void onResume() {
         super.onResume();
         if (ConfigManager.isBinderAlive()) {
-            setModulesSummary(moduleUtil.getEnabledModulesCount());
-        } else setModulesSummary(0);
+            setSummaryCount(R.id.modules_nav, moduleUtil.getEnabledModulesCount());
+        } else setSummaryCount(R.id.modules_nav, 0);
         if (binding != null) {
             var nav = (NavigationBarView) binding.nav;
             if (UpdateUtil.needUpdate()) {
@@ -270,11 +258,11 @@ public class MainActivity extends BaseActivity implements RepoLoader.RepoListene
         }
     }
 
-    private void setModulesSummary(int moduleCount) {
+    private void setSummaryCount(int menuItemId, int moduleCount) {
         runOnUiThread(() -> {
             if (binding != null) {
                 var nav = (NavigationBarView) binding.nav;
-                var badge = nav.getOrCreateBadge(R.id.modules_nav);
+                var badge = nav.getOrCreateBadge(menuItemId);
                 badge.setBackgroundColor(ResourceUtils.resolveColor(getTheme(), com.google.android.material.R.attr.colorPrimary));
                 badge.setBadgeTextColor(ResourceUtils.resolveColor(getTheme(), com.google.android.material.R.attr.colorOnPrimary));
                 if (moduleCount > 0) {
