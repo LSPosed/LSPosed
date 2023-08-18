@@ -134,7 +134,7 @@ fun afterEval() = android.applicationVariants.forEach { variant ->
     val flavorCapped = variant.flavorName!!.replaceFirstChar { it.uppercase() }
     val flavorLowered = variant.flavorName!!.lowercase()
 
-    val magiskDir = layout.buildDirectory.file("/magisk/$variantLowered")
+    val magiskDir = layout.buildDirectory.file("magisk/$variantLowered")
 
     val moduleId = "${flavorLowered}_$moduleBaseId"
     val zipFileName = "$moduleName-v$verName-$verCode-${flavorLowered}-$buildTypeLowered.zip"
