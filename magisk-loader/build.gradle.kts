@@ -134,7 +134,7 @@ fun afterEval() = android.applicationVariants.forEach { variant ->
     val flavorCapped = variant.flavorName!!.replaceFirstChar { it.uppercase() }
     val flavorLowered = variant.flavorName!!.lowercase()
 
-    val magiskDir = "$buildDir/magisk/$variantLowered"
+    val magiskDir = layout.buildDirectory.file("/magisk/$variantLowered")
 
     val moduleId = "${flavorLowered}_$moduleBaseId"
     val zipFileName = "$moduleName-v$verName-$verCode-${flavorLowered}-$buildTypeLowered.zip"
@@ -200,24 +200,25 @@ fun afterEval() = android.applicationVariants.forEach { variant ->
             rename(".*\\.apk", "daemon.apk")
         }
         into("lib") {
-            from("${buildDir}/intermediates/stripped_native_libs/$variantCapped/out/lib") {
+            from(layout.buildDirectory.file("intermediates/stripped_native_libs/$variantCapped/out/lib")) {
                 include("**/liblspd.so")
             }
         }
         into("bin") {
-            from("${project(":dex2oat").buildDir}/intermediates/cmake/$buildTypeLowered/obj") {
+            from(project(":dex2oat").layout.buildDirectory.file("intermediates/cmake/$buildTypeLowered/obj")) {
                 include("**/dex2oat")
             }
         }
         val dexOutPath = if (buildTypeLowered == "release")
-            "$buildDir/intermediates/dex/$variantCapped/minify${variantCapped}WithR8" else
-            "$buildDir/intermediates/dex/$variantCapped/mergeDex$variantCapped"
+            layout.buildDirectory.file("intermediates/dex/$variantCapped/minify${variantCapped}WithR8")
+        else
+            layout.buildDirectory.file("intermediates/dex/$variantCapped/mergeDex$variantCapped")
         into("framework") {
             from(dexOutPath)
             rename("classes.dex", "lspd.dex")
         }
 
-        val injected = objects.newInstance<Injected>(magiskDir)
+        val injected = objects.newInstance<Injected>(magiskDir.get().asFile.name)
         doLast {
             injected.factory.fileTree().from(injected.magiskDir).visit {
                 if (isDirectory) return@visit
@@ -275,7 +276,7 @@ val killLspd = task<Exec>("killLspd") {
 val pushDaemon = task<Exec>("pushDaemon") {
     group = "LSPosed"
     dependsOn(":daemon:assembleDebug")
-    workingDir("${project(":daemon").buildDir}/outputs/apk/debug")
+    workingDir(project(":daemon").layout.buildDirectory.file("outputs/apk/debug"))
     commandLine(adb, "push", "daemon-debug.apk", "/data/local/tmp/daemon.apk")
 }
 val pushDaemonNative = task<Exec>("pushDaemonNative") {
@@ -289,7 +290,7 @@ val pushDaemonNative = task<Exec>("pushDaemonNative") {
             }
             outputStream.toString().trim()
         }
-        workingDir("${project(":daemon").buildDir}/intermediates/stripped_native_libs/debug/out/lib/$abi")
+        workingDir(project(":daemon").layout.buildDirectory.file("intermediates/stripped_native_libs/debug/out/lib/$abi"))
     }
     commandLine(adb, "push", "libdaemon.so", "/data/local/tmp/libdaemon.so")
 }
@@ -307,7 +308,7 @@ val tmpApk = "/data/local/tmp/lsp.apk"
 val pushApk = task<Exec>("pushApk") {
     group = "LSPosed"
     dependsOn(":app:assembleDebug")
-    workingDir("${project(":app").buildDir}/outputs/apk/debug")
+    workingDir(project(":app").layout.buildDirectory.file("outputs/apk/debug"))
     commandLine(adb, "push", "app-debug.apk", tmpApk)
 }
 val openApp = task<Exec>("openApp") {
