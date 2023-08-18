@@ -7,6 +7,7 @@ import android.os.Binder;
 import android.os.Bundle;
 import android.os.ParcelFileDescriptor;
 import android.os.RemoteException;
+import android.util.Log;
 
 import org.lsposed.lspd.models.Module;
 
@@ -17,6 +18,9 @@ import java.util.concurrent.ConcurrentHashMap;
 import io.github.libxposed.service.IXposedService;
 
 public class LSPInjectedModuleService extends ILSPInjectedModuleService.Stub {
+
+    private static final String TAG = "LSPosedInjectedModuleService";
+
     private final Module loadedModule;
 
     Map<String, Set<IRemotePreferenceCallback>> callbacks = new ConcurrentHashMap<>();
@@ -38,7 +42,11 @@ public class LSPInjectedModuleService extends ILSPInjectedModuleService.Stub {
         if (callback != null) {
             var groupCallbacks = callbacks.computeIfAbsent(group, k -> ConcurrentHashMap.newKeySet());
             groupCallbacks.add(callback);
-            callback.asBinder().unlinkToDeath(() -> groupCallbacks.remove(callback), 0);
+            try {
+                callback.asBinder().linkToDeath(() -> groupCallbacks.remove(callback), 0);
+            } catch (RemoteException e) {
+                Log.w(TAG, "requestRemotePreferences: ", e);
+            }
         }
         return bundle;
     }

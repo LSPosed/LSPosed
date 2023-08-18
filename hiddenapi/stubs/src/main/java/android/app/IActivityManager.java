@@ -89,8 +89,8 @@ public interface IActivityManager extends IInterface {
                             IIntentReceiver receiver, IntentFilter filter,
                             String requiredPermission, int userId, int flags) throws RemoteException;
 
-    void finishReceiver(IBinder who, int resultCode, String resultData, Bundle map,
-                        boolean abortBroadcast, int flags) throws RemoteException;
+    void finishReceiver(IBinder caller, int resultCode, String resultData,
+                        Bundle resultExtras, boolean resultAbort, int flags) throws RemoteException;
 
     @RequiresApi(30)
     Intent registerReceiverWithFeature(IApplicationThread caller, String callerPackage,

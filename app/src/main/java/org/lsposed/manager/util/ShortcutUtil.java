@@ -115,7 +115,7 @@ public class ShortcutUtil {
             }
         };
         context.registerReceiver(receiver, filter, permission,
-                null/* main thread */, Context.RECEIVER_NOT_EXPORTED);
+                null/* main thread */, Context.RECEIVER_EXPORTED);
 
         var intent = new Intent(uuid);
         int flags = PendingIntent.FLAG_UPDATE_CURRENT | PendingIntent.FLAG_IMMUTABLE;

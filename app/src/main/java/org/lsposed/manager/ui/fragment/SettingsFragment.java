@@ -156,23 +156,16 @@ public class SettingsFragment extends BaseFragment {
             parentFragment = null;
         }
 
-        @Override
-        public void onResume() {
-            super.onResume();
-            MaterialSwitchPreference notificationPreference = findPreference("enable_status_notification");
-            if (App.isParasitic && notificationPreference != null && notificationPreference.isVisible()) {
-                setNotificationPreferenceEnabled(notificationPreference, ShortcutUtil.isLaunchShortcutPinned());
-            }
-        }
-
-        private void setNotificationPreferenceEnabled(MaterialSwitchPreference notificationPreference, boolean enabled) {
+        private boolean setNotificationPreferenceEnabled(MaterialSwitchPreference notificationPreference, boolean preferenceEnabled) {
+            var notificationEnabled = ConfigManager.enableStatusNotification();
             if (notificationPreference != null) {
-                notificationPreference.setEnabled(!ConfigManager.enableStatusNotification() || enabled);
-                notificationPreference.setSummaryOn(enabled ?
+                notificationPreference.setEnabled(!notificationEnabled || preferenceEnabled);
+                notificationPreference.setSummaryOn(preferenceEnabled ?
                         notificationPreference.getContext().getString(R.string.settings_enable_status_notification_summary) :
                         notificationPreference.getContext().getString(R.string.settings_enable_status_notification_summary) + "\n" +
                                 notificationPreference.getContext().getString(R.string.disable_status_notification_error));
             }
+            return notificationEnabled;
         }
 
         private void saveLogs() {
@@ -220,16 +213,16 @@ public class SettingsFragment extends BaseFragment {
 
             MaterialSwitchPreference notificationPreference = findPreference("enable_status_notification");
             if (notificationPreference != null) {
-                if (App.isParasitic && !ShortcutUtil.isLaunchShortcutPinned()) {
-                    setNotificationPreferenceEnabled(notificationPreference, false);
-                }
                 notificationPreference.setVisible(installed);
-                notificationPreference.setChecked(installed && ConfigManager.enableStatusNotification());
+                if (installed && App.isParasitic) {
+                    notificationPreference.setChecked(setNotificationPreferenceEnabled(notificationPreference, ShortcutUtil.isLaunchShortcutPinned()));
+                }
                 notificationPreference.setOnPreferenceChangeListener((p, v) -> {
+                    var succeeded = ConfigManager.setEnableStatusNotification((boolean) v);
                     if ((boolean) v && App.isParasitic && !ShortcutUtil.isLaunchShortcutPinned()) {
                         setNotificationPreferenceEnabled(notificationPreference, false);
                     }
-                    return ConfigManager.setEnableStatusNotification((boolean) v);
+                    return succeeded;
                 });
             }
 
