@@ -82,7 +82,7 @@ android.applicationVariants.all {
     val variantLowered = name.lowercase()
 
     val outSrcDir =
-        layout.buildDirectory.file("/generated/source/signInfo/${variantLowered}").get().asFile
+        layout.buildDirectory.file("generated/source/signInfo/${variantLowered}").get().asFile
     val signInfoTask = tasks.register("generate${variantCapped}SignInfo") {
         dependsOn(":app:validateSigning${variantCapped}")
         val sign = rootProject.project(":app").extensions
