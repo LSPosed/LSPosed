@@ -218,7 +218,7 @@ fun afterEval() = android.applicationVariants.forEach { variant ->
             rename("classes.dex", "lspd.dex")
         }
 
-        val injected = objects.newInstance<Injected>(magiskDir.get().asFile.name)
+        val injected = objects.newInstance<Injected>(magiskDir.get().asFile.path)
         doLast {
             injected.factory.fileTree().from(injected.magiskDir).visit {
                 if (isDirectory) return@visit
