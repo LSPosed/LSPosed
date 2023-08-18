@@ -194,7 +194,7 @@ public class SettingsFragment extends BaseFragment {
 
             Preference saveLogs = findPreference("save_logs");
             if (saveLogs != null) {
-                saveLogs.setEnabled(!BuildConfig.DEBUG && installed);
+                saveLogs.setEnabled(installed);
                 saveLogs.setOnPreferenceClickListener(preference -> {
                     saveLogs();
                     return true;
