@@ -50,7 +50,7 @@ cmaker {
     buildTypes {
         if (it.name == "release") {
             arguments += "-DDEBUG_SYMBOLS_PATH=${
-                layout.buildDirectory.file("symbols").get().asFile.absolutePath
+                layout.buildDirectory.dir("symbols").get().asFile.absolutePath
             }"
         }
     }
