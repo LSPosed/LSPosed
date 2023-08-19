@@ -52,23 +52,22 @@ public class BaseActivity extends MaterialActivity {
     @Override
     protected void onStart() {
         super.onStart();
-        if (App.isParasitic) {
-            for (var task : getSystemService(ActivityManager.class).getAppTasks()) {
-                task.setExcludeFromRecents(false);
-            }
-            if (icon == null) {
-                var drawable = getApplicationInfo().loadIcon(getPackageManager());
-                if (drawable instanceof BitmapDrawable) {
-                    icon = ((BitmapDrawable) drawable).getBitmap();
-                } else if (drawable instanceof AdaptiveIconDrawable) {
-                    icon = Bitmap.createBitmap(drawable.getIntrinsicWidth(), drawable.getIntrinsicHeight(), Bitmap.Config.ARGB_8888);
-                    final Canvas canvas = new Canvas(icon);
-                    drawable.setBounds(0, 0, canvas.getWidth(), canvas.getHeight());
-                    drawable.draw(canvas);
-                }
-            }
-            setTaskDescription(new ActivityManager.TaskDescription(getTitle().toString(), icon, getColor(R.color.ic_launcher_background)));
+        if (App.isParasitic) return;
+        for (var task : getSystemService(ActivityManager.class).getAppTasks()) {
+            task.setExcludeFromRecents(false);
         }
+        if (icon == null) {
+            var drawable = getApplicationInfo().loadIcon(getPackageManager());
+            if (drawable instanceof BitmapDrawable) {
+                icon = ((BitmapDrawable) drawable).getBitmap();
+            } else if (drawable instanceof AdaptiveIconDrawable) {
+                icon = Bitmap.createBitmap(drawable.getIntrinsicWidth(), drawable.getIntrinsicHeight(), Bitmap.Config.ARGB_8888);
+                final Canvas canvas = new Canvas(icon);
+                drawable.setBounds(0, 0, canvas.getWidth(), canvas.getHeight());
+                drawable.draw(canvas);
+            }
+        }
+        setTaskDescription(new ActivityManager.TaskDescription(getTitle().toString(), icon, getColor(R.color.ic_launcher_background)));
     }
 
     @Override
