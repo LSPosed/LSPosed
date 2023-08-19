@@ -143,7 +143,10 @@ public class ActivityManagerService {
 
         IActivityManager am = getActivityManager();
         if (am == null || appThread == null) return -1;
-        return am.bindService(appThread, token, service, resolvedType, connection, flags, callingPackage, userId);
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.UPSIDE_DOWN_CAKE)
+            return am.bindService(appThread, token, service, resolvedType, connection, (long) flags, callingPackage, userId);
+        else
+            return am.bindService(appThread, token, service, resolvedType, connection, flags, callingPackage, userId);
     }
 
     public static boolean unbindService(IServiceConnection connection) throws RemoteException {

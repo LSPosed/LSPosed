@@ -106,6 +106,11 @@ public interface IActivityManager extends IInterface {
                     String resolvedType, IServiceConnection connection, int flags,
                     String callingPackage, int userId) throws RemoteException;
 
+    @RequiresApi(34)
+    int bindService(IApplicationThread caller, IBinder token, Intent service,
+                    String resolvedType, IServiceConnection connection, long flags,
+                    String callingPackage, int userId) throws RemoteException;
+
     boolean unbindService(IServiceConnection connection) throws RemoteException;
 
     boolean switchUser(int userid) throws RemoteException;
