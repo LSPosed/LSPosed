@@ -52,7 +52,7 @@ public class BaseActivity extends MaterialActivity {
     @Override
     protected void onStart() {
         super.onStart();
-        if (App.isParasitic) return;
+        if (!App.isParasitic) return;
         for (var task : getSystemService(ActivityManager.class).getAppTasks()) {
             task.setExcludeFromRecents(false);
         }
