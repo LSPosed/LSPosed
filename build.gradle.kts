@@ -49,7 +49,9 @@ cmaker {
     }
     buildTypes {
         if (it.name == "release") {
-            arguments += "-DDEBUG_SYMBOLS_PATH=${buildDir.absolutePath}/symbols"
+            arguments += "-DDEBUG_SYMBOLS_PATH=${
+                layout.buildDirectory.dir("symbols").get().asFile.absolutePath
+            }"
         }
     }
 }
@@ -73,7 +75,7 @@ val androidSourceCompatibility by extra(JavaVersion.VERSION_17)
 val androidTargetCompatibility by extra(JavaVersion.VERSION_17)
 
 tasks.register("Delete", Delete::class) {
-    delete(rootProject.buildDir)
+    delete(rootProject.layout.buildDirectory)
 }
 
 subprojects {
