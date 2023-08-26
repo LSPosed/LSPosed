@@ -230,7 +230,7 @@ public class ConfigManager {
                     var pkg = new PackageParser().parsePackage(apkFile, 0, false);
                     module.applicationInfo = pkg.applicationInfo;
                 } catch (PackageParser.PackageParserException e) {
-                    Log.w(TAG, "failed to parse parse " + module.apkPath, e);
+                    Log.w(TAG, "failed to parse " + module.apkPath, e);
                 }
                 module.service = new LSPInjectedModuleService(module);
                 modules.add(module);

@@ -226,10 +226,7 @@ public class App extends Application {
                 var intent = (Intent) inIntent.getParcelableExtra(Intent.EXTRA_INTENT);
                 Log.d(TAG, "onReceive: " + intent);
                 switch (intent.getAction()) {
-                    case Intent.ACTION_PACKAGE_ADDED:
-                    case Intent.ACTION_PACKAGE_CHANGED:
-                    case Intent.ACTION_PACKAGE_FULLY_REMOVED:
-                    case Intent.ACTION_UID_REMOVED: {
+                    case Intent.ACTION_PACKAGE_ADDED, Intent.ACTION_PACKAGE_CHANGED, Intent.ACTION_PACKAGE_FULLY_REMOVED, Intent.ACTION_UID_REMOVED -> {
                         var userId = intent.getIntExtra(Intent.EXTRA_USER, 0);
                         var packageName = intent.getStringExtra("android.intent.extra.PACKAGES");
                         var packageRemovedForAllUsers = intent.getBooleanExtra(EXTRA_REMOVED_FOR_ALL_USERS, false);
@@ -240,14 +237,8 @@ public class App extends Application {
                             else
                                 App.getExecutorService().submit(() -> AppHelper.getAppList(true));
                         }
-                        break;
                     }
-                    case ACTION_USER_ADDED:
-                    case ACTION_USER_REMOVED:
-                    case ACTION_USER_INFO_CHANGED: {
-                        App.getExecutorService().submit(() -> ModuleUtil.getInstance().reloadInstalledModules());
-                        break;
-                    }
+                    case ACTION_USER_ADDED, ACTION_USER_REMOVED, ACTION_USER_INFO_CHANGED -> App.getExecutorService().submit(() -> ModuleUtil.getInstance().reloadInstalledModules());
                 }
             }
         }, intentFilter, Context.RECEIVER_NOT_EXPORTED);

@@ -19,8 +19,6 @@
 
 package org.lsposed.manager.ui.fragment;
 
-import android.os.Handler;
-import android.os.Looper;
 import android.view.View;
 import android.widget.Toast;
 
@@ -33,7 +31,6 @@ import androidx.navigation.NavController;
 import androidx.navigation.NavDirections;
 import androidx.navigation.fragment.NavHostFragment;
 
-import com.google.android.material.bottomnavigation.BottomNavigationView;
 import com.google.android.material.floatingactionbutton.FloatingActionButton;
 import com.google.android.material.snackbar.Snackbar;
 
@@ -45,7 +42,6 @@ import java.util.concurrent.Future;
 import java.util.concurrent.FutureTask;
 
 public abstract class BaseFragment extends Fragment {
-    private final Handler uiHandler = new Handler(Looper.getMainLooper());
 
     public void navigateUp() {
         getNavController().navigateUp();
@@ -93,8 +89,7 @@ public abstract class BaseFragment extends Fragment {
         if (tipsView != null) tipsView.setTooltipText(title);
         if (menu != -1) {
             toolbar.inflateMenu(menu);
-            if (this instanceof MenuProvider) {
-                var self = (MenuProvider) this;
+            if (this instanceof MenuProvider self) {
                 toolbar.setOnMenuItemClickListener(self::onMenuItemSelected);
                 self.onPrepareMenu(toolbar.getMenu());
             }
@@ -110,7 +105,7 @@ public abstract class BaseFragment extends Fragment {
     }
 
     public void runOnUiThread(Runnable runnable) {
-        uiHandler.post(runnable);
+        App.getMainHandler().post(runnable);
     }
 
     public <T> Future<T> runOnUiThread(Callable<T> callable) {
@@ -132,19 +127,15 @@ public abstract class BaseFragment extends Fragment {
     }
 
     public void showHint(CharSequence str, boolean lengthShort, CharSequence actionStr, View.OnClickListener action) {
-        if (isResumed()) {
-            var container = requireActivity().findViewById(R.id.container);
-            if (container != null) {
-                var snackbar = Snackbar.make(container, str, lengthShort ? Snackbar.LENGTH_SHORT : Snackbar.LENGTH_LONG);
-                if (container.findViewById(R.id.nav) instanceof BottomNavigationView)
-                    snackbar.setAnchorView(R.id.nav);
-                var fab = container.findViewById(R.id.fab);
-                if (fab instanceof FloatingActionButton && ((FloatingActionButton) fab).isOrWillBeShown())
-                    snackbar.setAnchorView(fab);
-                if (actionStr != null && action != null) snackbar.setAction(actionStr, action);
-                snackbar.show();
-                return;
-            }
+        var container = getView();
+        if (isResumed() && container != null) {
+            var snackbar = Snackbar.make(container, str, lengthShort ? Snackbar.LENGTH_SHORT : Snackbar.LENGTH_LONG);
+            var fab = container.findViewById(R.id.fab);
+            if (fab instanceof FloatingActionButton && ((FloatingActionButton) fab).isOrWillBeShown())
+                snackbar.setAnchorView(fab);
+            if (actionStr != null && action != null) snackbar.setAction(actionStr, action);
+            snackbar.show();
+            return;
         }
         runOnUiThread(() -> {
             try {
