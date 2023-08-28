@@ -248,7 +248,7 @@ fun afterEval() = android.applicationVariants.forEach { variant ->
         workingDir("${projectDir}/release")
         commandLine(adb, "push", zipFileName, "/data/local/tmp/")
     }
-    val flashTask = task<Exec>("flash${variantCapped}") {
+    val flashMagiskTask = task<Exec>("flashMagisk${variantCapped}") {
         group = "LSPosed"
         dependsOn(pushTask)
         commandLine(
@@ -256,9 +256,22 @@ fun afterEval() = android.applicationVariants.forEach { variant ->
             "magisk --install-module /data/local/tmp/${zipFileName}"
         )
     }
-    task<Exec>("flashAndReboot${variantCapped}") {
+    task<Exec>("flashMagiskAndReboot${variantCapped}") {
         group = "LSPosed"
-        dependsOn(flashTask)
+        dependsOn(flashMagiskTask)
+        commandLine(adb, "shell", "/system/bin/svc", "power", "reboot")
+    }
+    val flashKsuTask = task<Exec>("flashKsu${variantCapped}") {
+        group = "LSPosed"
+        dependsOn(pushTask)
+        commandLine(
+            adb, "shell", "su", "-c",
+            "ksud module install /data/local/tmp/${zipFileName}"
+        )
+    }
+    task<Exec>("flashKsuAndReboot${variantCapped}") {
+        group = "LSPosed"
+        dependsOn(flashKsuTask)
         commandLine(adb, "shell", "/system/bin/svc", "power", "reboot")
     }
 }
