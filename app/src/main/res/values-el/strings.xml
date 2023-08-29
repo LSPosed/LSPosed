@@ -56,7 +56,7 @@
     <string name="please_update_summary">Παρακαλώ εγκαταστήστε την τελευταία έκδοση του LSPosed</string>
     <string name="info_api_version">Έκδοση API</string>
     <string name="info_framework_version">Έκδοση πλαισίου</string>
-    <string name="info_manager_version">Έκδοση διαχειριστή</string>
+    <string name="info_manager_package_name">Όνομα πακέτου διαχειριστή</string>
     <string name="info_system_version">Έκδοση συστήματος</string>
     <string name="info_device">Συσκευή</string>
     <string name="info_system_abi">Σύστημα ABI</string>
@@ -85,6 +85,7 @@
     <string name="menuSaveToSd">Αποθήκευση</string>
     <string name="nav_item_logs_verbose">Λεπτομερείς Καταγραφές</string>
     <string name="nav_item_logs_module">Αρχείο Καταγραφής Πρόσθετων</string>
+    <string name="logs_saving">Αποθήκευση αρχείου καταγραφής, παρακαλώ περιμένετε</string>
     <string name="logs_saved">Αποθηκευμένα αρχεία καταγραφής</string>
     <string name="logs_save_failed2">Αποτυχία αποθήκευσης:\n%s</string>
     <string name="menuClearLog">Καθαρισμός αρχείου καταγραφής τώρα</string>
