@@ -58,7 +58,7 @@
     <string name="please_update_summary">Te rugăm să instalezi cea mai recentă versiune de LSPosed</string>
     <string name="info_api_version">Versiune API</string>
     <string name="info_framework_version">Versiune Framework</string>
-    <string name="info_manager_version">Versiune manager</string>
+    <string name="info_manager_package_name">Numele pachetului managerului</string>
     <string name="info_system_version">Versiune sistem</string>
     <string name="info_device">Dispozitiv</string>
     <string name="info_system_abi">Sistem ABI</string>
@@ -87,6 +87,7 @@
     <string name="menuSaveToSd">Salvează</string>
     <string name="nav_item_logs_verbose">Jurnalele Verbose</string>
     <string name="nav_item_logs_module">Jurnale module</string>
+    <string name="logs_saving">Salvarea jurnalului, vă rugăm să așteptați</string>
     <string name="logs_saved">Jurnale salvate</string>
     <string name="logs_save_failed2">Salvarea a eșuat:\n%s</string>
     <string name="menuClearLog">Curăță jurnalul acum</string>
