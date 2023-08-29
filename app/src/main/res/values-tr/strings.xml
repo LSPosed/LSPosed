@@ -56,7 +56,7 @@
     <string name="please_update_summary">Lütfen LSPosed\'in en son sürümünü yükleyin</string>
     <string name="info_api_version">API sürümü</string>
     <string name="info_framework_version">Çerçeve sürümü</string>
-    <string name="info_manager_version">Yönetici sürümü</string>
+    <string name="info_manager_package_name">Yönetici paket adı</string>
     <string name="info_system_version">Sistem sürümü</string>
     <string name="info_device">Cihaz</string>
     <string name="info_system_abi">Sistem ABI\'si</string>
@@ -85,6 +85,7 @@
     <string name="menuSaveToSd">Kaydet</string>
     <string name="nav_item_logs_verbose">Ayrıntılı Günlükler</string>
     <string name="nav_item_logs_module">Modül Günlükleri</string>
+    <string name="logs_saving">Günlük kaydediliyor, lütfen bekleyin</string>
     <string name="logs_saved">Günlükler kaydedildi</string>
     <string name="logs_save_failed2">Kaydedilemedi:\n%s</string>
     <string name="menuClearLog">Günlüğü şimdi temizle</string>
