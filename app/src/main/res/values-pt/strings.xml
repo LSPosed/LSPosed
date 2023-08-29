@@ -56,7 +56,7 @@
     <string name="please_update_summary">Por favor, instale a versão mais recente do LSPosed</string>
     <string name="info_api_version">Versão da API</string>
     <string name="info_framework_version">Versão do Framework</string>
-    <string name="info_manager_version">Versão do Gerenciador</string>
+    <string name="info_manager_package_name">Nome do pacote do gestor</string>
     <string name="info_system_version">Versão do Sistema</string>
     <string name="info_device">Aparelho</string>
     <string name="info_system_abi">Interfaces Binárias do Sistema</string>
@@ -85,6 +85,7 @@
     <string name="menuSaveToSd">Salvar</string>
     <string name="nav_item_logs_verbose">Registros Detalhados</string>
     <string name="nav_item_logs_module">Registros dos Módulos</string>
+    <string name="logs_saving">A guardar o registo, aguarde</string>
     <string name="logs_saved">Registros salvos</string>
     <string name="logs_save_failed2">Falha ao salvar:\n%s</string>
     <string name="menuClearLog">Limpar Registros</string>
