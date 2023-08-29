@@ -19,7 +19,6 @@
   -->
 <resources xmlns:tools="http://schemas.android.com/tools" tools:keep="@string/xposed_module_updated_notification_*,@string/module_is_not_activated_*">
     <!-- MainActivity -->
-    <string name="info">Info</string>
     <string name="overview">Übersicht</string>
     <string name="Modules">Module</string>
     <plurals name="modules_enabled_count">
@@ -32,7 +31,6 @@
     <string name="About">Über</string>
     <string name="report_issue">Fehler melden</string>
     <string name="module_repo">Modularchiv</string>
-    <string name="module_repo_loading">Wird geladen …</string>
     <string name="module_repo_up_to_date">Alle Module sind auf dem neusten Stand</string>
     <string name="module_repo_published_time">Veröffentlicht am %s</string>
     <string name="module_repo_updated_time">Aktualisiert am %s</string>
@@ -57,7 +55,6 @@ JJ108</string>
     <string name="system_prop_incorrect"><![CDATA[Einige notwendige Systemeigenschaften wurden gelöscht oder geändert.<br/>Module können gelegentlich außer Kraft gesetzt werden.]]></string>
     <string name="need_update">Aktualisierung erforderlich</string>
     <string name="please_update_summary">Bitte installieren Sie die neueste Version von LSPosed</string>
-    <string name="lsposed_not_active">LSPosed ist derzeit nicht installiert oder aktiv.</string>
     <string name="info_api_version">API Version</string>
     <string name="info_framework_version">Framework Version</string>
     <string name="info_manager_version">Manager Version</string>
@@ -76,6 +73,7 @@ JJ108</string>
     <string name="sepolicy_incorrect">SELinux-Richtlinie ist falsch</string>
     <string name="update_lsposed">Bitte LSPosed aktualisieren</string>
     <string name="update_lsposed_msg">Soll LSPosed aktualisiert werden? Dieses Gerät wird nach dem Update neu gestartet</string>
+    <string name="info_copied">In die Zwischenablage kopiert</string>
     <!-- WelcomeDialog -->
     <string name="parasitic_welcome">Willkommen bei LSPosed</string>
     <string name="parasitic_welcome_summary">Du verwendest den parasitären Manager, der eine Verknüpfung erstellen oder über eine Benachrichtigung noch geöffnet werden kann.</string>
@@ -95,7 +93,6 @@ JJ108</string>
     <string name="scroll_top">Hochscrollen</string>
     <string name="loading">Laden…</string>
     <string name="scroll_bottom">Runterscrollen</string>
-    <string name="logs_cannot_read">Protokoll kann nicht gelesen werden: \n</string>
     <string name="menuReload">Erneut laden</string>
     <string name="logs_clear_failed_2">Protokoll löschen fehlgeschlagen</string>
     <string name="menu_enable_word_wrap">Wortumbruch</string>
@@ -194,7 +191,6 @@ JJ108</string>
     <string name="settings_translation_summary">Helfe uns, %s in deine Sprache zu übersetzen</string>
     <string name="settings_create_shortcut_summary">Eine Verknüpfung zum Öffnen des parasitären Managers erstellen</string>
     <string name="settings_shortcut_pinned_hint">Verknüpfung angeheftet</string>
-    <string name="settings_created_shortcut_summary">Eine Verknüpfung zum Öffnen des parasitären Managers wurde erstellt</string>
     <string name="settings_unsupported_pin_shortcut_summary">Der aktuelle Standard-Launcher unterstützt keine Pin-Verknüpfungen</string>
     <string name="settings_enable_status_notification">Status-Benachrichtigung</string>
     <string name="settings_enable_status_notification_summary">Eine Benachrichtigung anzeigen, die den parasitären Manager öffnen kann</string>
@@ -214,17 +210,15 @@ JJ108</string>
     <string name="module_information_collaborators">Mitarbeiter</string>
     <string name="module_release_view_assets">Ressourcen</string>
     <string name="menu_open_in_browser">Im Browser öffnen</string>
-    <string name="refresh">Aktualisieren</string>
     <string name="module_release_load_more">Ältere Versionen anzeigen</string>
     <string name="module_release_no_more">Keine Veröffentlichung mehr</string>
     <string name="repo_load_failed">Modularchiv laden fehlgeschlagen: %s</string>
     <string name="sort_upgradable_first">Aktualisierbare zuerst</string>
-    <!-- CrashReportActivity -->
-    <string name="version_mismatch">Die LSPosed Framework-Version (%1$d) stimmt nicht mit dem Manager (%2$d) überein. Bitte installiere LSPosed erneut.</string>
-    <string name="manager_crashed">Manager abgestürzt</string>
-    <string name="send_crash_info">Absturzinfo senden</string>
-    <string name="crash_info_copied">Absturzinfo in die Zwischenablage kopiert</string>
-    <string name="info_copied">In die Zwischenablage kopiert</string>
+    <string name="installed">Eingerichtet</string>
+    <plurals name="module_release_assets_download_count">
+        <item quantity="one">%d Download</item>
+        <item quantity="other">%d Downloads</item>
+    </plurals>
     <!-- Colors -->
     <string name="color_sakura">Sakura</string>
     <string name="color_red">Rot</string>
@@ -245,9 +239,4 @@ JJ108</string>
     <string name="color_deep_orange">Dunkelorange</string>
     <string name="color_brown">Braun</string>
     <string name="color_blue_grey">Blaugrau</string>
-    <string name="installed">Eingerichtet</string>
-    <plurals name="module_release_assets_download_count">
-        <item quantity="one">%d Download</item>
-        <item quantity="other">%d Downloads</item>
-    </plurals>
 </resources>
