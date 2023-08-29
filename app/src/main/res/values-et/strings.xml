@@ -56,7 +56,7 @@
     <string name="please_update_summary">Palun installige LSPosedi uusim versioon</string>
     <string name="info_api_version">API\'i versioon</string>
     <string name="info_framework_version">Raamistiku versioon</string>
-    <string name="info_manager_version">Halduri versioon</string>
+    <string name="info_manager_package_name">Manager paketi nimi</string>
     <string name="info_system_version">Süsteemi versioon</string>
     <string name="info_device">Seade</string>
     <string name="info_system_abi">Süsteemi ABI</string>
@@ -85,6 +85,7 @@
     <string name="menuSaveToSd">Salvesta</string>
     <string name="nav_item_logs_verbose">Põhjalikud logid</string>
     <string name="nav_item_logs_module">Moodulite logid</string>
+    <string name="logs_saving">Logi salvestamine, palun oodake</string>
     <string name="logs_saved">Logi salvestatud</string>
     <string name="logs_save_failed2">Salvestamine ebaõnnestus:\n%s</string>
     <string name="menuClearLog">Kustuta logi kohe</string>
