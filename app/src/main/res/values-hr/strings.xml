@@ -19,7 +19,6 @@
   -->
 <resources xmlns:tools="http://schemas.android.com/tools" tools:keep="@string/xposed_module_updated_notification_*,@string/module_is_not_activated_*">
     <!-- MainActivity -->
-    <string name="info">Informacije</string>
     <string name="overview">Pregled</string>
     <string name="Modules">Moduli</string>
     <plurals name="modules_enabled_count">
@@ -33,7 +32,6 @@
     <string name="About">Informacije</string>
     <string name="report_issue">Prijavi problem</string>
     <string name="module_repo">Spremište modula</string>
-    <string name="module_repo_loading">Učitavanje…</string>
     <string name="module_repo_up_to_date">Svi moduli ažurirani</string>
     <string name="module_repo_published_time">Objavljeno u %s</string>
     <string name="module_repo_updated_time">Ažurirano u %s</string>
@@ -58,7 +56,6 @@
     <string name="system_prop_incorrect"><![CDATA[Neka od potrebnih svojstva sustava su izbrisana ili izmijenjena.<br/>Moduli povremeno mogu biti nedostupni.]]></string>
     <string name="need_update">Treba ažurirati</string>
     <string name="please_update_summary">Molimo instalirajte najnoviju verziju LSPosed</string>
-    <string name="lsposed_not_active">LSPosed trenutno nije instaliran niti aktivan.</string>
     <string name="info_api_version">API verzija</string>
     <string name="info_framework_version">Framework verzija</string>
     <string name="info_manager_version">Manager verzija</string>
@@ -77,6 +74,7 @@
     <string name="sepolicy_incorrect">Pravila SELinuxa je netočna</string>
     <string name="update_lsposed">Ažurirajte LSPosed</string>
     <string name="update_lsposed_msg">Potvrditi ažuriranje LSPosed? Ovaj će se uređaj ponovno pokrenuti nakon završetka ažuriranja</string>
+    <string name="info_copied">Kopirano u međuspremnik</string>
     <!-- WelcomeDialog -->
     <string name="parasitic_welcome">Dobrodošli u LSPosed</string>
     <string name="parasitic_welcome_summary">Koristite parazitski upravitelj, koji može stvoriti prečac ili još uvijek otvoriti iz obavijesti.</string>
@@ -96,7 +94,6 @@
     <string name="scroll_top">Pomaknite se na vrh</string>
     <string name="loading">Učitavanje…</string>
     <string name="scroll_bottom">Pomaknite se do dna</string>
-    <string name="logs_cannot_read">Ne mogu pročitati zapis: \n</string>
     <string name="menuReload">Ponovno učitaj</string>
     <string name="logs_clear_failed_2">Brisanje zapisa nije uspjelo</string>
     <string name="menu_enable_word_wrap">Prijelom riječi</string>
@@ -195,7 +192,6 @@
     <string name="settings_translation_summary">Pomozite nam prevesti %s na vaš jezik</string>
     <string name="settings_create_shortcut_summary">Napravite prečac koji može otvoriti parazitski upravitelj</string>
     <string name="settings_shortcut_pinned_hint">Prečac prikvačen</string>
-    <string name="settings_created_shortcut_summary">Stvoren je prečac za otvaranje parazitskog upravitelja</string>
     <string name="settings_unsupported_pin_shortcut_summary">Trenutačni zadani pokretač ne podržava prečace pribadače</string>
     <string name="settings_enable_status_notification">Obavijest o statusu</string>
     <string name="settings_enable_status_notification_summary">Prikaži obavijest koja može otvoriti parazitski upravitelj</string>
@@ -215,17 +211,16 @@
     <string name="module_information_collaborators">Suradnici</string>
     <string name="module_release_view_assets">Imovina</string>
     <string name="menu_open_in_browser">Otvori u pretraživaču</string>
-    <string name="refresh">Osvježiti</string>
     <string name="module_release_load_more">Prikaži starije verzije</string>
     <string name="module_release_no_more">Nema više puštanja</string>
     <string name="repo_load_failed">Neuspješno učitavanje spremišta modula: %s</string>
     <string name="sort_upgradable_first">Prvo nadogradivo</string>
-    <!-- CrashReportActivity -->
-    <string name="version_mismatch">Verzija okvira LSPosed (%1$d) ne odgovara upravitelju (%2$d). Molimo ponovno instalirajte LSPosed.</string>
-    <string name="manager_crashed">Upravitelj se srušio</string>
-    <string name="send_crash_info">Pošalji informacije o padu</string>
-    <string name="crash_info_copied">Informacije o padu kopirane su u međuspremnik</string>
-    <string name="info_copied">Kopirano u međuspremnik</string>
+    <string name="installed">instalirano</string>
+    <plurals name="module_release_assets_download_count">
+        <item quantity="one">%d preuzimanje</item>
+        <item quantity="few">%d preuzimanja</item>
+        <item quantity="other">%d preuzimanja</item>
+    </plurals>
     <!-- Colors -->
     <string name="color_sakura">Sakura</string>
     <string name="color_red">Crvena</string>
@@ -246,10 +241,4 @@
     <string name="color_deep_orange">Tamno narančasta</string>
     <string name="color_brown">Smeđa</string>
     <string name="color_blue_grey">Plavo siva</string>
-    <string name="installed">instalirano</string>
-    <plurals name="module_release_assets_download_count">
-        <item quantity="one">%d preuzimanje</item>
-        <item quantity="few">%d preuzimanja</item>
-        <item quantity="other">%d preuzimanja</item>
-    </plurals>
 </resources>
