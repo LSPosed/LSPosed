@@ -55,6 +55,7 @@
     <string name="please_update_summary">โปรดติดตั้ง LSPosed . เวอร์ชันล่าสุด</string>
     <string name="info_api_version">เวอร์ชัน API</string>
     <string name="info_framework_version">เวอร์ชัน Framework</string>
+    <string name="info_manager_package_name">ชื่อแพ็คเกจผู้จัดการ</string>
     <string name="info_system_version">เวอร์ชันของระบบ</string>
     <string name="info_device">อุปกรณ์</string>
     <string name="info_system_abi">ระบบ ABI</string>
@@ -83,6 +84,7 @@
     <string name="menuSaveToSd">บันทึก</string>
     <string name="nav_item_logs_verbose">บันทึกอย่างละเอียด</string>
     <string name="nav_item_logs_module">บันทึกโมดูล</string>
+    <string name="logs_saving">กำลังบันทึกบันทึก โปรดรอสักครู่</string>
     <string name="logs_saved">บันทึก Log แล้ว</string>
     <string name="logs_save_failed2">ไม่สามารถบันทึก:\n%s</string>
     <string name="menuClearLog">ล้างบันทึกตอนนี้</string>
