@@ -19,7 +19,6 @@
   -->
 <resources xmlns:tools="http://schemas.android.com/tools" tools:keep="@string/xposed_module_updated_notification_*,@string/module_is_not_activated_*">
     <!-- MainActivity -->
-    <string name="info">정보</string>
     <string name="overview">개요</string>
     <string name="Modules">모듈</string>
     <plurals name="modules_enabled_count">
@@ -31,30 +30,28 @@
     <string name="About">정보</string>
     <string name="report_issue">문제 보고</string>
     <string name="module_repo">저장소</string>
-    <string name="module_repo_loading">불러오는 중…</string>
     <string name="module_repo_up_to_date">모든 모듈이 최신 버전입니다</string>
     <string name="module_repo_published_time">%s 에 배포됨</string>
-    <string name="module_repo_updated_time">%s 에 업데이트됨</string>
+    <string name="module_repo_updated_time">%s에 업데이트됨</string>
     <plurals name="module_repo_upgradable">
-        <item quantity="other">%d 개의 모듈이 업데이트 가능합니다</item>
+        <item quantity="other">%d개의 모듈이 업데이트 가능합니다</item>
     </plurals>
-    <string name="about_view_source_code"><![CDATA[%1$s에서 소스 코드 보기<br/>%2$s 채널에 가입하십시오.]]></string>
+    <string name="about_view_source_code"><![CDATA[%1$s에서 소스 코드 보기<br/>%2$s 채널에 가입하세요]]></string>
     <string name="translators" comment="Dear translators, please add your home page here following the format. There can be more than one translator. So feel free to append yourself.">green1052</string>
     <string name="install">설치</string>
-    <string name="install_summary">LSPosed를 설치하려면 누르십시오.</string>
+    <string name="install_summary">LSPosed를 설치하려면 누르세요</string>
     <string name="not_installed">설치되지 않음</string>
-    <string name="not_install_summary">LSPosed가 설치되지 않았습니다.</string>
+    <string name="not_install_summary">LSPosed가 설치되지 않았습니다</string>
     <string name="activated">활성화됨</string>
     <string name="partial_activated">부분적으로 활성화됨</string>
-    <string name="selinux_policy_not_loaded_summary">SEPolicy가 제대로 로드되지 않았습니다.</string>
-    <string name="selinux_policy_not_loaded"><![CDATA[몇몇 기능은 작동하지 않을 수도 있습니다<br/> 오류를<ahref="https://github.com/topjohnwu/Magisk/issues"><b>Magisk 개발자</b></a> 에 신고해주세요]]></string>
-    <string name="system_inject_fail_summary">System Framework 주입 실패</string>
-    <string name="system_inject_fail"><![CDATA[System Framework 주입 실패.<br/>이는 드물게 발생하며, Magisk 또는 일부 저품질 <b>Magisk</b> 모듈 때문일 수 있습니다.<br/>Riru 및 LSPosed 이외의 Magisk 모듈을 비활성화하거나 전체 로그를 개발자에게 제출하십시오.]]></string>
-    <string name="system_prop_incorrect_summary">잘못된 System prop</string>
-    <string name="system_prop_incorrect"><![CDATA[일부 필수 시스템 속성이 삭제 또는 수정되었습니다.<br/>모듈은 때때로 무효화될 수 있습니다.]]></string>
+    <string name="selinux_policy_not_loaded_summary">SEPolicy가 제대로 로드되지 않았습니다</string>
+    <string name="selinux_policy_not_loaded"><![CDATA[몇몇 기능은 작동하지 않을 수도 있습니다.<br/>오류를 <a href="https://github.com/topjohnwu/Magisk/issues"><b>Magisk 개발자</b></a>에게 신고해주세요]]></string>
+    <string name="system_inject_fail_summary">System Framework 삽입 실패</string>
+    <string name="system_inject_fail"><![CDATA[이는 드물게 발생하며, <b>Magisk</b> 또는 일부 Magisk 모듈 때문일 수 있습니다.<br/>Riru 및 LSPosed 이외의 Magisk 모듈을 비활성화 하거나 전체 로그를 개발자에게 제출하세요.]]></string>
+    <string name="system_prop_incorrect_summary">시스템 속성이 잘못됨</string>
+    <string name="system_prop_incorrect"><![CDATA[일부 필수 시스템 속성이 삭제 또는 수정되었습니다.<br/>모듈은 가끔 무효화될 수 있습니다.]]></string>
     <string name="need_update">업데이트가 필요합니다</string>
-    <string name="please_update_summary">최신 버전의 LSPosed를 설치해 주세요</string>
-    <string name="lsposed_not_active">LSPosed가 현재 설치되어 있지 않거나 활성화되어 있지 않습니다.</string>
+    <string name="please_update_summary">최신 버전으로 LSPosed를 설치해 주세요</string>
     <string name="info_api_version">API 버전</string>
     <string name="info_framework_version">Framework 버전</string>
     <string name="info_manager_version">Manager 버전</string>
@@ -62,17 +59,18 @@
     <string name="info_device">장치</string>
     <string name="info_system_abi">시스템 ABI</string>
     <string name="info_dex2oat_wrapper">Dex 옵티마이저 래퍼</string>
-    <string name="enabled">활성화됨</string>
-    <string name="not_enabled">비활성화됨</string>
+    <string name="enabled">사용</string>
+    <string name="not_enabled">사용 안 함</string>
     <string name="supported">지원</string>
     <string name="unsupported">지원되지 않음</string>
-    <string name="android_version_unsatisfied">안드로이드 버전 불만족</string>
+    <string name="android_version_unsatisfied">안드로이드 버전이 지원되지 않습니다</string>
     <string name="crashed">충돌</string>
     <string name="mount_failed">마운트 실패</string>
-    <string name="selinux_permissive">SELinux는 허용적입니다.</string>
-    <string name="sepolicy_incorrect">SELinux 정책이 잘못되었습니다.</string>
+    <string name="selinux_permissive">SELinux가 허용됩니다</string>
+    <string name="sepolicy_incorrect">SELinux 정책이 잘못되었습니다</string>
     <string name="update_lsposed">LSPosed 업데이트</string>
-    <string name="update_lsposed_msg">LSPosed를 업데이트 하시겠습니까? 업데이트 완료 후에 재부팅합니다.</string>
+    <string name="update_lsposed_msg">LSPosed를 업데이트 하시겠습니까? 업데이트 완료 후에 재부팅합니다</string>
+    <string name="info_copied">클립보드에 복사됨</string>
     <!-- WelcomeDialog -->
     <string name="parasitic_welcome">LSPosed에 오신 것을 환영합니다</string>
     <string name="parasitic_welcome_summary">바로 가기를 만들거나 알림에서 계속 열 수 있는 기생 관리자를 사용하고 있습니다.</string>
@@ -85,6 +83,7 @@
     <string name="menuSaveToSd">저장</string>
     <string name="nav_item_logs_verbose">자세한 로그</string>
     <string name="nav_item_logs_module">모듈 로그</string>
+    <string name="logs_saving">로그를 저장중입니다, 기다려주세요</string>
     <string name="logs_saved">로그가 저장되었습니다</string>
     <string name="logs_save_failed2">저장 실패:\n%s</string>
     <string name="menuClearLog">로그 지우기</string>
@@ -92,7 +91,6 @@
     <string name="scroll_top">맨 위로 스크롤</string>
     <string name="loading">로딩 중…</string>
     <string name="scroll_bottom">아래로 스크롤</string>
-    <string name="logs_cannot_read">로그를 읽지 못함: \n</string>
     <string name="menuReload">리로드</string>
     <string name="logs_clear_failed_2">로그를 지우지 못했습니다.</string>
     <string name="menu_enable_word_wrap">줄 바꿈</string>
@@ -191,7 +189,6 @@
     <string name="settings_translation_summary">%s를 귀하의 언어로 번역하는 데 도움을 주세요.</string>
     <string name="settings_create_shortcut_summary">내부 관리자를 열 수 있는 바로가기 생성</string>
     <string name="settings_shortcut_pinned_hint">바로 가기 고정</string>
-    <string name="settings_created_shortcut_summary">내부 관리자를 여는 바로 가기가 생성되었습니다.</string>
     <string name="settings_unsupported_pin_shortcut_summary">현재 기본 런쳐는 핀 바로가기를 지원하지 않습니다</string>
     <string name="settings_enable_status_notification">상태 알림</string>
     <string name="settings_enable_status_notification_summary">기생 관리자를 열 수 있는 알림 표시</string>
@@ -211,17 +208,14 @@
     <string name="module_information_collaborators">기여자</string>
     <string name="module_release_view_assets">자산</string>
     <string name="menu_open_in_browser">브라우저에서 열기</string>
-    <string name="refresh">새로고침</string>
     <string name="module_release_load_more">이전 버전 표시</string>
     <string name="module_release_no_more">더 이상 출시되지 않음</string>
     <string name="repo_load_failed">모듈 저장소를 로드하지 못함: %s</string>
     <string name="sort_upgradable_first">먼저 업그레이드 가능</string>
-    <!-- CrashReportActivity -->
-    <string name="version_mismatch">LSPosed 프레임워크 버전(%1$d)이 관리자(%2$d)와 일치하지 않습니다. LSposed를 다시 설치하십시오.</string>
-    <string name="manager_crashed">관리자 충돌</string>
-    <string name="send_crash_info">충돌 정보 전송</string>
-    <string name="crash_info_copied">충돌 정보가 클립보드에 복사되었습니다.</string>
-    <string name="info_copied">클립보드에 복사됨</string>
+    <string name="installed">설치됨</string>
+    <plurals name="module_release_assets_download_count">
+        <item quantity="other">%d 다운로드</item>
+    </plurals>
     <!-- Colors -->
     <string name="color_sakura">벚꽃</string>
     <string name="color_red">빨강</string>
@@ -242,8 +236,4 @@
     <string name="color_deep_orange">짙은 주황</string>
     <string name="color_brown">갈색</string>
     <string name="color_blue_grey">청회색</string>
-    <string name="installed">설치됨</string>
-    <plurals name="module_release_assets_download_count">
-        <item quantity="other">%d 다운로드</item>
-    </plurals>
 </resources>
