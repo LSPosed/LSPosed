@@ -54,7 +54,7 @@
     <string name="please_update_summary">請安裝最新版本的 LSPosed</string>
     <string name="info_api_version">API 版本</string>
     <string name="info_framework_version">框架版本</string>
-    <string name="info_manager_version">管理器版本</string>
+    <string name="info_manager_package_name">管理器包名</string>
     <string name="info_system_version">系統版本</string>
     <string name="info_device">裝置版本</string>
     <string name="info_system_abi">系統架構</string>
@@ -83,6 +83,7 @@
     <string name="menuSaveToSd">儲存</string>
     <string name="nav_item_logs_verbose">詳細日誌</string>
     <string name="nav_item_logs_module">模組日誌</string>
+    <string name="logs_saving">正在保存日誌，請稍候</string>
     <string name="logs_saved">日誌已儲存</string>
     <string name="logs_save_failed2">儲存失敗：\n%s</string>
     <string name="menuClearLog">立即清理日誌</string>
