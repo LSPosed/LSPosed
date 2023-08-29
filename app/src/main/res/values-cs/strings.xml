@@ -60,7 +60,7 @@
     <string name="please_update_summary">Nainstalujte si prosím nejnovější verzi LSPosed</string>
     <string name="info_api_version">Verze API</string>
     <string name="info_framework_version">Verze frameworku</string>
-    <string name="info_manager_version">Verze LSPosed správce</string>
+    <string name="info_manager_package_name">Název balíčku správce</string>
     <string name="info_system_version">Verze systému</string>
     <string name="info_device">Zařízení</string>
     <string name="info_system_abi">Systémové ABI (architektura)</string>
