@@ -100,7 +100,7 @@ public class ConfigManager {
         }
     }
 
-    public static boolean setModuleScope(String packageName, Set<ScopeAdapter.ApplicationWithEquals> applications) {
+    public static boolean setModuleScope(String packageName, boolean legacy, Set<ScopeAdapter.ApplicationWithEquals> applications) {
         try {
             List<Application> list = new ArrayList<>();
             applications.forEach(application -> {
@@ -109,6 +109,12 @@ public class ConfigManager {
                 app.packageName = application.packageName;
                 list.add(app);
             });
+            if (legacy) {
+                Application app = new Application();
+                app.userId = 0;
+                app.packageName = packageName;
+                list.add(app);
+            }
             return LSPManagerServiceHolder.getService().setModuleScope(packageName, list);
         } catch (RemoteException e) {
             Log.e(App.TAG, Log.getStackTraceString(e));
