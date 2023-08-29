@@ -60,7 +60,7 @@
     <string name="please_update_summary">Установите последнюю версию LSPosed!</string>
     <string name="info_api_version">Версия API</string>
     <string name="info_framework_version">Версия фреймворк</string>
-    <string name="info_manager_version">Версия приложения</string>
+    <string name="info_manager_package_name">Имя пакета менеджера</string>
     <string name="info_system_version">Версия Android</string>
     <string name="info_device">Устройство</string>
     <string name="info_system_abi">Разрядность системы (ABI)</string>
