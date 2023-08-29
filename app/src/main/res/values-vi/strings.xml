@@ -19,7 +19,6 @@
   -->
 <resources xmlns:tools="http://schemas.android.com/tools" tools:keep="@string/xposed_module_updated_notification_*,@string/module_is_not_activated_*">
     <!-- MainActivity -->
-    <string name="info">Thông tin</string>
     <string name="overview">Tổng quan</string>
     <string name="Modules">Tiện ích bổ sung</string>
     <plurals name="modules_enabled_count">
@@ -31,7 +30,6 @@
     <string name="About">Về chúng tôi</string>
     <string name="report_issue">Báo cáo sự cố</string>
     <string name="module_repo">Kho</string>
-    <string name="module_repo_loading">Đang tải…</string>
     <string name="module_repo_up_to_date">Tất cả các modules đã được cập nhật</string>
     <string name="module_repo_published_time">Xuất bản lúc %s</string>
     <string name="module_repo_updated_time">Cập nhật lúc %s</string>
@@ -54,7 +52,6 @@
     <string name="system_prop_incorrect"><![CDATA[Một số thuộc tính hệ thống cần thiết đã bị xóa hoặc sửa đổi.<br/> Đôi khi, các mô-đun có thể sẽ mất hiệu lực.]]></string>
     <string name="need_update">Cần được cập nhật</string>
     <string name="please_update_summary">Vui lòng cài đặt phiên bản mới nhất của LSPosed</string>
-    <string name="lsposed_not_active">LSPosed hiện tại không được cài đặt hoặc chưa được kích hoạt.</string>
     <string name="info_api_version">Phiên bản API</string>
     <string name="info_framework_version">Phiên bản Framework</string>
     <string name="info_manager_version">Phiên bản trình quản lý</string>
@@ -73,6 +70,7 @@
     <string name="sepolicy_incorrect">Chính sách SELinux không chính xác</string>
     <string name="update_lsposed">Cập nhật LSPosed</string>
     <string name="update_lsposed_msg">Xác nhận để cập nhật LSPosed? Thiết bị sẽ khởi động lại sau khi cập nhật hoàn tất</string>
+    <string name="info_copied">Đã sao chép vào bảng nhớ tạm</string>
     <!-- WelcomeDialog -->
     <string name="parasitic_welcome">Chào mừng</string>
     <string name="parasitic_welcome_summary">Đang sử dụng trình quản lý phụ thuộc có thể tạo lối tắt hoặc mở từ thông báo.</string>
@@ -93,7 +91,6 @@ Nên gỡ cài đặt ứng dụng hiện tại.</string>
     <string name="scroll_top">Cuộn lên trên</string>
     <string name="loading">Đang tải…</string>
     <string name="scroll_bottom">Cuộn xuống dưới</string>
-    <string name="logs_cannot_read">Không thể đọc nhật ký: \n</string>
     <string name="menuReload">Tải lại</string>
     <string name="logs_clear_failed_2">Xoá nhật kí thất bại</string>
     <string name="menu_enable_word_wrap">Tự động xuống dòng</string>
@@ -192,7 +189,6 @@ Nên gỡ cài đặt ứng dụng hiện tại.</string>
     <string name="settings_translation_summary">Giúp chúng tôi dịch %s sang ngôn ngữ của bạn</string>
     <string name="settings_create_shortcut_summary">Tạo lối tắt để mở trình quản lý phụ thuộc</string>
     <string name="settings_shortcut_pinned_hint">Đã ghim phím tắt</string>
-    <string name="settings_created_shortcut_summary">Một lối tắt đã được tạo để mở trình quản lý phụ thuộc</string>
     <string name="settings_unsupported_pin_shortcut_summary">Trình khởi chạy hiện tại không hỗ trợ tạo lối tắt</string>
     <string name="settings_enable_status_notification">Thông báo trạng thái</string>
     <string name="settings_enable_status_notification_summary">Hiện thông báo để mở trình quản lý phụ thuộc</string>
@@ -213,17 +209,14 @@ Có thể làm hỏng một số tiện ích bổ sung nhưng có lợi cho bả
     <string name="module_information_collaborators">Cộng tác viên</string>
     <string name="module_release_view_assets">Tài sản</string>
     <string name="menu_open_in_browser">Mở trong trình duyệt</string>
-    <string name="refresh">Làm mới</string>
     <string name="module_release_load_more">Hiển thị các phiên bản cũ hơn</string>
     <string name="module_release_no_more">Không có phiên bản nào</string>
     <string name="repo_load_failed">Tải kho lưu trữ mô-đun thất bại: %s</string>
     <string name="sort_upgradable_first">Có thể nâng cấp trước</string>
-    <!-- CrashReportActivity -->
-    <string name="version_mismatch">Phiên bản của LSPosed framework (%1$d) không trùng khớp với phiên bản quản lý (%2$d). Hãy cài đặt lại LSPosed.</string>
-    <string name="manager_crashed">Trình quản lí gặp sự cố</string>
-    <string name="send_crash_info">Gửi thông tin sự cố</string>
-    <string name="crash_info_copied">Đã sao chép thông tin sự cố vào bộ nhớ tạm</string>
-    <string name="info_copied">Đã sao chép vào bảng nhớ tạm</string>
+    <string name="installed">Đã được cài đặt</string>
+    <plurals name="module_release_assets_download_count">
+        <item quantity="other">%d lượt tải xuống</item>
+    </plurals>
     <!-- Colors -->
     <string name="color_sakura">Hoa anh đào</string>
     <string name="color_red">Đỏ</string>
@@ -244,8 +237,4 @@ Có thể làm hỏng một số tiện ích bổ sung nhưng có lợi cho bả
     <string name="color_deep_orange">Cam đậm</string>
     <string name="color_brown">Nâu</string>
     <string name="color_blue_grey">Xanh xám</string>
-    <string name="installed">Cài đặt</string>
-    <plurals name="module_release_assets_download_count">
-        <item quantity="other">%d lượt tải xuống</item>
-    </plurals>
 </resources>
