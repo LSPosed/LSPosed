@@ -56,7 +56,6 @@
     <string name="please_update_summary">කරුණාකර LSPposed හි නවතම අනුවාදය ස්ථාපනය කරන්න</string>
     <string name="info_api_version">API අනුවාදය</string>
     <string name="info_framework_version">ෆ්‍රෙම්වර්ක් අනුවාදය</string>
-    <string name="info_manager_version">මැනේජර් අනුවාදය</string>
     <string name="info_system_version">පද්ධති අනුවාදය</string>
     <string name="info_device">උපාංගය</string>
     <string name="info_system_abi">පද්ධති ABI</string>
