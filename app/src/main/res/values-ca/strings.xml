@@ -19,7 +19,6 @@
   -->
 <resources xmlns:tools="http://schemas.android.com/tools" tools:keep="@string/xposed_module_updated_notification_*,@string/module_is_not_activated_*">
     <!-- MainActivity -->
-    <string name="info">Info</string>
     <string name="overview">Visió general</string>
     <string name="Modules">Mòduls</string>
     <plurals name="modules_enabled_count">
@@ -32,7 +31,6 @@
     <string name="About">Sobre</string>
     <string name="report_issue">Reportar problema</string>
     <string name="module_repo">Repositori</string>
-    <string name="module_repo_loading">Carregant…</string>
     <string name="module_repo_up_to_date">Tots els mòduls actualitzats</string>
     <string name="module_repo_published_time">Published at %s</string>
     <string name="module_repo_updated_time">Actualitzat a les %s</string>
@@ -56,7 +54,6 @@
     <string name="system_prop_incorrect"><![CDATA[S\'han suprimit o modificat algunes propietats necessàries del sistema.<br/>Els mòduls poden invalidar-se ocasionalment.]]></string>
     <string name="need_update">Cal actualitzar</string>
     <string name="please_update_summary">Instal·leu la darrera versió de LSPosed</string>
-    <string name="lsposed_not_active">LSPosed no està instal·lat ni actiu actualment.</string>
     <string name="info_api_version">Versió de l\'API</string>
     <string name="info_framework_version">Versió del marc</string>
     <string name="info_manager_version">Versió del gestor</string>
@@ -75,6 +72,7 @@
     <string name="sepolicy_incorrect">La política de SELinux és incorrecta</string>
     <string name="update_lsposed">Actualització LSPosed</string>
     <string name="update_lsposed_msg">Confirmeu per actualitzar LSPosed? Aquest dispositiu es reiniciarà un cop finalitzada l\'actualització</string>
+    <string name="info_copied">S\'ha copiat al porta-retalls</string>
     <!-- WelcomeDialog -->
     <string name="parasitic_welcome">Benvingut a LSPosed</string>
     <string name="parasitic_welcome_summary">Esteu utilitzant el gestor de paràsits, que pot crear dreceres o encara obrir-se des de la notificació.</string>
@@ -94,7 +92,6 @@
     <string name="scroll_top">Desplaceu-vos cap a dalt</string>
     <string name="loading">Carregant…</string>
     <string name="scroll_bottom">Desplaceu-vos cap avall</string>
-    <string name="logs_cannot_read">No es pot llegir el registre: \n</string>
     <string name="menuReload">Recarregar</string>
     <string name="logs_clear_failed_2">No s\'ha pogut esborrar el registre</string>
     <string name="menu_enable_word_wrap">L\'ajust de línia</string>
@@ -193,7 +190,6 @@
     <string name="settings_translation_summary">Ajuda\'ns a traduir %s al teu idioma</string>
     <string name="settings_create_shortcut_summary">Creeu una drecera que pugui obrir el gestor de paràsits</string>
     <string name="settings_shortcut_pinned_hint">Drecera fixada</string>
-    <string name="settings_created_shortcut_summary">S\'ha creat una drecera per obrir el gestor de paràsits</string>
     <string name="settings_unsupported_pin_shortcut_summary">El llançador predeterminat actual no admet dreceres de pin</string>
     <string name="settings_enable_status_notification">Notificació d\'estat</string>
     <string name="settings_enable_status_notification_summary">Mostra una notificació que pugui obrir el gestor de paràsits</string>
@@ -213,17 +209,15 @@
     <string name="module_information_collaborators">Col·laboradors</string>
     <string name="module_release_view_assets">Actius</string>
     <string name="menu_open_in_browser">Oberta al navegador</string>
-    <string name="refresh">Actualització</string>
     <string name="module_release_load_more">Mostra les versions anteriors</string>
     <string name="module_release_no_more">No més llançament</string>
     <string name="repo_load_failed">No s\'ha pogut carregar el dipòsit del mòdul: %s</string>
     <string name="sort_upgradable_first">Actualitzable primer</string>
-    <!-- CrashReportActivity -->
-    <string name="version_mismatch">La versió del marc LSPosed (%1$d) no coincideix amb el gestor (%2$d). Torneu a instal·lar LSPosed.</string>
-    <string name="manager_crashed">El gerent s\'ha estavellat</string>
-    <string name="send_crash_info">Envia informació de l\'accident</string>
-    <string name="crash_info_copied">S\'ha copiat la informació de l\'error al porta-retalls</string>
-    <string name="info_copied">S\'ha copiat al porta-retalls</string>
+    <string name="installed">Instal·lat</string>
+    <plurals name="module_release_assets_download_count">
+        <item quantity="one">%d descàrrega</item>
+        <item quantity="other">%d descàrregues</item>
+    </plurals>
     <!-- Colors -->
     <string name="color_sakura">Sakura</string>
     <string name="color_red">Vermell</string>
@@ -244,9 +238,4 @@
     <string name="color_deep_orange">Taronja profund</string>
     <string name="color_brown">marró</string>
     <string name="color_blue_grey">Gris blau</string>
-    <string name="installed">Instal·lat</string>
-    <plurals name="module_release_assets_download_count">
-        <item quantity="one">%d descàrrega</item>
-        <item quantity="other">%d descàrregues</item>
-    </plurals>
 </resources>
