@@ -56,7 +56,7 @@
     <string name="please_update_summary">Por favor, instale a versão mais recente do LSPosed</string>
     <string name="info_api_version">Versão da API</string>
     <string name="info_framework_version">Versão do Framework</string>
-    <string name="info_manager_version">Versão do Gerenciador</string>
+    <string name="info_manager_package_name">Nome do pacote do gestor</string>
     <string name="info_system_version">Versão do Sistema</string>
     <string name="info_device">Aparelho</string>
     <string name="info_system_abi">Interfaces Binárias do Sistema</string>
