@@ -594,7 +594,7 @@ public class ScopeAdapter extends EmptyStateRecyclerView.EmptyStateAdapter<Scope
         return isLoaded;
     }
 
-    static class ViewHolder extends RecyclerView.ViewHolder {
+    public static class ViewHolder extends RecyclerView.ViewHolder {
         ConstraintLayout root;
         ImageView appIcon;
         TextView appName;
@@ -674,11 +674,11 @@ public class ScopeAdapter extends EmptyStateRecyclerView.EmptyStateAdapter<Scope
             builder.setNegativeButton(!recommendedList.isEmpty() ? android.R.string.cancel : android.R.string.ok, (dialog, which) -> {
                 moduleUtil.setModuleEnabled(module.packageName, false);
                 Toast.makeText(activity, activity.getString(R.string.module_disabled_no_selection, module.getAppName()), Toast.LENGTH_LONG).show();
-                fragment.getNavController().navigateUp();
+                fragment.navigateUp();
             });
             builder.show();
         } else {
-            fragment.getNavController().navigateUp();
+            fragment.navigateUp();
         }
     }
 

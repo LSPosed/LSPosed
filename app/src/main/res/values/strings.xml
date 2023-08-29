@@ -19,7 +19,6 @@
 
 <resources xmlns:tools="http://schemas.android.com/tools" tools:keep="@string/xposed_module_updated_notification_*,@string/module_is_not_activated_*">
     <!-- MainActivity -->
-    <string name="info">Info</string>
     <string name="overview">Overview</string>
     <string name="Modules">Modules</string>
     <plurals name="modules_enabled_count">
@@ -32,7 +31,6 @@
     <string name="About">About</string>
     <string name="report_issue">Report issue</string>
     <string name="module_repo">Repository</string>
-    <string name="module_repo_loading">Loading…</string>
     <string name="module_repo_up_to_date">All modules up to date</string>
     <string name="module_repo_published_time">Published at %s</string>
     <string name="module_repo_updated_time">Updated at %s</string>
@@ -57,7 +55,6 @@
     <string name="system_prop_incorrect"><![CDATA[Some necessary system properties deleted or modified.<br/>Modules may invalidate occasionally.]]></string>
     <string name="need_update">Need to update</string>
     <string name="please_update_summary">Please install the latest version of LSPosed</string>
-    <string name="lsposed_not_active">LSPosed is not currently installed or active.</string>
     <string name="info_api_version">API version</string>
     <string name="info_framework_version">Framework version</string>
     <string name="info_manager_version">Manager version</string>
@@ -99,7 +96,6 @@
     <string name="scroll_top">Scroll to top</string>
     <string name="loading">Loading…</string>
     <string name="scroll_bottom">Scroll to bottom</string>
-    <string name="logs_cannot_read">Cannot read log: \n</string>
     <string name="menuReload">Reload</string>
     <string name="logs_clear_failed_2">Failed to clear the log</string>
     <string name="menu_enable_word_wrap">Word Wrap</string>
@@ -222,7 +218,6 @@
     <string name="module_information_collaborators">Collaborators</string>
     <string name="module_release_view_assets">Assets</string>
     <string name="menu_open_in_browser">Open in browser</string>
-    <string name="refresh">Refresh</string>
     <string name="module_release_load_more">Show older versions</string>
     <string name="module_release_no_more">No more release</string>
     <string name="repo_load_failed">Failed to load module repo: %s</string>
