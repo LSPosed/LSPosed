@@ -56,6 +56,7 @@
     <string name="please_update_summary">कृपया LSPosed का नवीनतम संस्करण स्थापित करें</string>
     <string name="info_api_version">एपीआई संस्करण</string>
     <string name="info_framework_version">फ्रेमवर्क संस्करण</string>
+    <string name="info_manager_package_name">प्रबंधक पैकेज का नाम</string>
     <string name="info_system_version">सिस्टम संस्करण</string>
     <string name="info_device">उपकरण</string>
     <string name="info_system_abi">सिस्टम एबीआई</string>
@@ -84,6 +85,7 @@
     <string name="menuSaveToSd">बचाना</string>
     <string name="nav_item_logs_verbose">वर्बोज़ लॉग्स</string>
     <string name="nav_item_logs_module">मॉड्यूल लॉग</string>
+    <string name="logs_saving">लॉग सहेजा जा रहा है, कृपया प्रतीक्षा करें</string>
     <string name="logs_saved">लॉग सेव हो गए</string>
     <string name="logs_save_failed2">सहेजने में विफल:\n%s</string>
     <string name="menuClearLog">अभी लॉग साफ़ करें</string>
