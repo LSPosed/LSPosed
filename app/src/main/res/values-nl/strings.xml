@@ -19,7 +19,6 @@
   -->
 <resources xmlns:tools="http://schemas.android.com/tools" tools:keep="@string/xposed_module_updated_notification_*,@string/module_is_not_activated_*">
     <!-- MainActivity -->
-    <string name="info">info</string>
     <string name="overview">Overzicht</string>
     <string name="Modules">Modules</string>
     <plurals name="modules_enabled_count">
@@ -32,7 +31,6 @@
     <string name="About">Over</string>
     <string name="report_issue">Probleem melden</string>
     <string name="module_repo">Opslagplaats</string>
-    <string name="module_repo_loading">Laden…</string>
     <string name="module_repo_up_to_date">Alle modules zijn up-to-date</string>
     <string name="module_repo_published_time">Gepubliceerd op %s</string>
     <string name="module_repo_updated_time">Bijgewerkt op %s</string>
@@ -56,7 +54,6 @@
     <string name="system_prop_incorrect"><![CDATA[Enkele noodzakelijke systeemeigenschappen verwijderd of gewijzigd.<br/>Modules kunnen af en toe ongeldig worden.]]></string>
     <string name="need_update">Bijwerken is nodig</string>
     <string name="please_update_summary">Installeer de laatste versie van LSPosed</string>
-    <string name="lsposed_not_active">LSPosed is momenteel niet geïnstalleerd of actief.</string>
     <string name="info_api_version">API versie</string>
     <string name="info_framework_version">Framework versie</string>
     <string name="info_manager_version">Manager versie</string>
@@ -75,6 +72,7 @@
     <string name="sepolicy_incorrect">SELinux beleid is onjuist</string>
     <string name="update_lsposed">Update LSPosed</string>
     <string name="update_lsposed_msg">Bevestig bijwerken van LSPosed? Dit apparaat zal opnieuw opstarten nadat de update is voltooid</string>
+    <string name="info_copied">Gekopieerd naar klembord</string>
     <!-- WelcomeDialog -->
     <string name="parasitic_welcome">Welkom bij LSPosed</string>
     <string name="parasitic_welcome_summary">U gebruikt de parasitaire manager, die een snelkoppeling kan maken of nog steeds kan openen vanuit een melding.</string>
@@ -94,7 +92,6 @@
     <string name="scroll_top">Scroll naar boven</string>
     <string name="loading">Laden…</string>
     <string name="scroll_bottom">Scroll naar beneden</string>
-    <string name="logs_cannot_read">Kan logboek niet lezen: \n</string>
     <string name="menuReload">Herlaad</string>
     <string name="logs_clear_failed_2">Het logboek kan niet worden gewist</string>
     <string name="menu_enable_word_wrap">Woord Omslag</string>
@@ -193,7 +190,6 @@
     <string name="settings_translation_summary">Help ons %s te vertalen in uw taal</string>
     <string name="settings_create_shortcut_summary">Maak een snelkoppeling die parasitaire manager kan openen</string>
     <string name="settings_shortcut_pinned_hint">Snelkoppeling vastgezet</string>
-    <string name="settings_created_shortcut_summary">Er is een snelkoppeling gemaakt om parasitaire manager te openen</string>
     <string name="settings_unsupported_pin_shortcut_summary">De huidige standaard launcher ondersteunt geen pin-snelkoppelingen</string>
     <string name="settings_enable_status_notification">Statusmelding</string>
     <string name="settings_enable_status_notification_summary">Toon een melding die parasitaire manager kan openen</string>
@@ -213,17 +209,15 @@
     <string name="module_information_collaborators">Medewerkers</string>
     <string name="module_release_view_assets">Middelen</string>
     <string name="menu_open_in_browser">Open in de browser</string>
-    <string name="refresh">Vernieuwen</string>
     <string name="module_release_load_more">Laat oudere versies zien</string>
     <string name="module_release_no_more">Geen release meer</string>
     <string name="repo_load_failed">Kan moduleopslagplaats niet laden: %1$s</string>
     <string name="sort_upgradable_first">Eerst te upgraden</string>
-    <!-- CrashReportActivity -->
-    <string name="version_mismatch">De versie van het LSPosed framework (%1$d) komt niet overeen met manager (%2$d). Herinstalleer LSPosed.</string>
-    <string name="manager_crashed">Manager gecrasht</string>
-    <string name="send_crash_info">Stuur crash informatie</string>
-    <string name="crash_info_copied">Crash informatie naar klembord gekopieerd</string>
-    <string name="info_copied">Gekopieerd naar klembord</string>
+    <string name="installed">Geïnstalleerd</string>
+    <plurals name="module_release_assets_download_count">
+        <item quantity="one">%d download</item>
+        <item quantity="other">%d downloads</item>
+    </plurals>
     <!-- Colors -->
     <string name="color_sakura">Sakura</string>
     <string name="color_red">Rood</string>
@@ -244,9 +238,4 @@
     <string name="color_deep_orange">Diep oranje</string>
     <string name="color_brown">Bruin</string>
     <string name="color_blue_grey">Blauw grijs</string>
-    <string name="installed">Geïnstalleerd</string>
-    <plurals name="module_release_assets_download_count">
-        <item quantity="one">%d download</item>
-        <item quantity="other">%d downloads</item>
-    </plurals>
 </resources>
