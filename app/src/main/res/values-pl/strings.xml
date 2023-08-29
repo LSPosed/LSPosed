@@ -60,7 +60,7 @@
     <string name="please_update_summary">Proszę zainstalować najnowszą wersję LSPosed</string>
     <string name="info_api_version">Wersja API</string>
     <string name="info_framework_version">Wersja frameworka</string>
-    <string name="info_manager_version">Wersja Menedżera</string>
+    <string name="info_manager_package_name">Nazwa pakietu menedżera</string>
     <string name="info_system_version">Wersja systemu</string>
     <string name="info_device">Urządzenie</string>
     <string name="info_system_abi">ABI systemu</string>
@@ -89,6 +89,7 @@
     <string name="menuSaveToSd">Zapisz</string>
     <string name="nav_item_logs_verbose">Logi verbose</string>
     <string name="nav_item_logs_module">Logi modułów</string>
+    <string name="logs_saving">Zapisywanie dziennika, poczekaj</string>
     <string name="logs_saved">Zapisane logi</string>
     <string name="logs_save_failed2">Nie udało się zapisać:\n%s</string>
     <string name="menuClearLog">Wyczyść log teraz</string>
