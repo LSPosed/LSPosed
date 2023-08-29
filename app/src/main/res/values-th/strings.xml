@@ -55,7 +55,6 @@
     <string name="please_update_summary">โปรดติดตั้ง LSPosed . เวอร์ชันล่าสุด</string>
     <string name="info_api_version">เวอร์ชัน API</string>
     <string name="info_framework_version">เวอร์ชัน Framework</string>
-    <string name="info_manager_version">การจัดการเวอร์ชัน</string>
     <string name="info_system_version">เวอร์ชันของระบบ</string>
     <string name="info_device">อุปกรณ์</string>
     <string name="info_system_abi">ระบบ ABI</string>
