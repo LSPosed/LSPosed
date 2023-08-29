@@ -58,6 +58,7 @@
     <string name="please_update_summary">Molimo instalirajte najnoviju verziju LSPosed</string>
     <string name="info_api_version">API verzija</string>
     <string name="info_framework_version">Framework verzija</string>
+    <string name="info_manager_package_name">Naziv paketa upravitelja</string>
     <string name="info_system_version">System verzija</string>
     <string name="info_device">Uređaj</string>
     <string name="info_system_abi">System ABI</string>
@@ -86,6 +87,7 @@
     <string name="menuSaveToSd">Sačuvaj</string>
     <string name="nav_item_logs_verbose">Opširni zapisi</string>
     <string name="nav_item_logs_module">Zapisi Modula</string>
+    <string name="logs_saving">Spremanje dnevnika, pričekajte</string>
     <string name="logs_saved">Zapisi spremljeni</string>
     <string name="logs_save_failed2">Neuspješno spremanje:\n%s</string>
     <string name="menuClearLog">Očisti zapis sada</string>
