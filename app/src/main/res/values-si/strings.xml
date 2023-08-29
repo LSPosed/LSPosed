@@ -56,6 +56,7 @@
     <string name="please_update_summary">කරුණාකර LSPposed හි නවතම අනුවාදය ස්ථාපනය කරන්න</string>
     <string name="info_api_version">API අනුවාදය</string>
     <string name="info_framework_version">ෆ්‍රෙම්වර්ක් අනුවාදය</string>
+    <string name="info_manager_package_name">කළමනාකරු පැකේජයේ නම</string>
     <string name="info_system_version">පද්ධති අනුවාදය</string>
     <string name="info_device">උපාංගය</string>
     <string name="info_system_abi">පද්ධති ABI</string>
@@ -84,6 +85,7 @@
     <string name="menuSaveToSd">සුරකින්න</string>
     <string name="nav_item_logs_verbose">වාචික ලඝු-සටහන්</string>
     <string name="nav_item_logs_module">මොඩියුල ලොග්</string>
+    <string name="logs_saving">ලොගය සුරකිමින්, කරුණාකර රැඳී සිටින්න</string>
     <string name="logs_saved">ලඝු-සටහන් සුරකින ලදී</string>
     <string name="logs_save_failed2">සුරැකීමට අසමත් විය:\n%s</string>
     <string name="menuClearLog">දැන් ලොගය හිස් කරන්න</string>
