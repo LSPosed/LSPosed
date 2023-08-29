@@ -19,7 +19,6 @@
   -->
 <resources xmlns:tools="http://schemas.android.com/tools" tools:keep="@string/xposed_module_updated_notification_*,@string/module_is_not_activated_*">
     <!-- MainActivity -->
-    <string name="info">Информация</string>
     <string name="overview">LSPosed</string>
     <string name="Modules">Модули</string>
     <plurals name="modules_enabled_count">
@@ -34,7 +33,6 @@
     <string name="About">О приложении</string>
     <string name="report_issue">Сообщить о проблеме</string>
     <string name="module_repo">Репозиторий</string>
-    <string name="module_repo_loading">Загрузка…</string>
     <string name="module_repo_up_to_date">Все модули в актуальном состоянии</string>
     <string name="module_repo_published_time">Опубликовано %s</string>
     <string name="module_repo_updated_time">Обновлено %s</string>
@@ -60,7 +58,6 @@
     <string name="system_prop_incorrect"><![CDATA[Неправильные системные настройки.<br/>Некоторые системные настройки нужные для работы удалены или изменены.<br/>Модули могут не работать должным образом]]></string>
     <string name="need_update">Требуется обновление</string>
     <string name="please_update_summary">Установите последнюю версию LSPosed!</string>
-    <string name="lsposed_not_active">LSPosed не установлен или не активирован!</string>
     <string name="info_api_version">Версия API</string>
     <string name="info_framework_version">Версия фреймворк</string>
     <string name="info_manager_version">Версия приложения</string>
@@ -79,6 +76,7 @@
     <string name="sepolicy_incorrect">Неправильная политика SELinux</string>
     <string name="update_lsposed">Обновление LSPosed</string>
     <string name="update_lsposed_msg">Вы точно хотите обновить LSPosed?\nУстройство перезагрузится после завершения обновления</string>
+    <string name="info_copied">Скопировано в буфер обмена</string>
     <!-- WelcomeDialog -->
     <string name="parasitic_welcome">Добро пожаловать в LSPosed</string>
     <string name="parasitic_welcome_summary">Вы используете скрытый режим. Для открытия LSPosed, можно создать ярлык на рабочем столе или открывать через уведомление</string>
@@ -91,6 +89,7 @@
     <string name="menuSaveToSd">Сохранить</string>
     <string name="nav_item_logs_verbose">Подробные логи</string>
     <string name="nav_item_logs_module">Логи модулей</string>
+    <string name="logs_saving">Сохранение логов, пожалуйста подождите</string>
     <string name="logs_saved">Логи сохранены</string>
     <string name="logs_save_failed2">Ошибка сохранения:\n%s</string>
     <string name="menuClearLog">Очистить логи</string>
@@ -98,7 +97,6 @@
     <string name="scroll_top">Прокрутить вверх</string>
     <string name="loading">Загрузка…</string>
     <string name="scroll_bottom">Прокрутить вниз</string>
-    <string name="logs_cannot_read">Невозможно прочитать логи: \n</string>
     <string name="menuReload">Обновить</string>
     <string name="logs_clear_failed_2">Не удалось очистить логи</string>
     <string name="menu_enable_word_wrap">Переносить текст</string>
@@ -197,7 +195,6 @@
     <string name="settings_translation_summary">Помогите нам перевести %s на ваш язык</string>
     <string name="settings_create_shortcut_summary">Создать ярлык, с помощью которого можно открыть LSPosed</string>
     <string name="settings_shortcut_pinned_hint">Ярлык закреплен</string>
-    <string name="settings_created_shortcut_summary">Для открытия LSPosed был создан ярлык</string>
     <string name="settings_unsupported_pin_shortcut_summary">Текущий лаунчер по умолчанию не поддерживает ярлыки</string>
     <string name="settings_enable_status_notification">Уведомление</string>
     <string name="settings_enable_status_notification_summary">Показывать уведомление, через которое можно открыть LSPosed</string>
@@ -217,17 +214,17 @@
     <string name="module_information_collaborators">Разработчик</string>
     <string name="module_release_view_assets">Установить</string>
     <string name="menu_open_in_browser">Открыть в браузере</string>
-    <string name="refresh">Обновить</string>
     <string name="module_release_load_more">Показать старые версии</string>
     <string name="module_release_no_more">Больше нет других версий</string>
     <string name="repo_load_failed">Не удалось загрузить репозиторий модуля: %s</string>
     <string name="sort_upgradable_first">Сначала обновляемые</string>
-    <!-- CrashReportActivity -->
-    <string name="version_mismatch">Версия LSPosed фреймворк (%1$d) не соответствует версии приложения (%2$d). Пожалуйста, переустановите LSPosed</string>
-    <string name="manager_crashed">Сбой приложения LSPosed</string>
-    <string name="send_crash_info">Отправить информацию о сбое</string>
-    <string name="crash_info_copied">Информация о сбое скопирована в буфер обмена</string>
-    <string name="info_copied">Скопировано в буфер обмена</string>
+    <string name="installed">Установлен</string>
+    <plurals name="module_release_assets_download_count">
+        <item quantity="one">%d раз скачали</item>
+        <item quantity="few">%d раза скачали</item>
+        <item quantity="many">%d раз скачали</item>
+        <item quantity="other">%d раз скачали</item>
+    </plurals>
     <!-- Colors -->
     <string name="color_sakura">Сакура</string>
     <string name="color_red">Красный</string>
@@ -248,11 +245,4 @@
     <string name="color_deep_orange">Насыщенный оранжевый</string>
     <string name="color_brown">Коричневый</string>
     <string name="color_blue_grey">Серо-голубой</string>
-    <string name="installed">Установлен</string>
-    <plurals name="module_release_assets_download_count">
-        <item quantity="one">%d раз скачали</item>
-        <item quantity="few">%d раза скачали</item>
-        <item quantity="many">%d раз скачали</item>
-        <item quantity="other">%d раз скачали</item>
-    </plurals>
 </resources>
