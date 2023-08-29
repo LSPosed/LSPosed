@@ -56,7 +56,6 @@
     <string name="please_update_summary">অনুগ্রহ করে LSPosed এর সর্বশেষ সংস্করণটি ইনস্টল করুন</string>
     <string name="info_api_version">API সংস্করণ</string>
     <string name="info_framework_version">ফ্রেমওয়ার্ক সংস্করণ</string>
-    <string name="info_manager_version">ম্যানেজার সংস্করণ</string>
     <string name="info_system_version">সিস্টেম সংস্করণ</string>
     <string name="info_device">যন্ত্র</string>
     <string name="info_system_abi">সিস্টেম ABI</string>
