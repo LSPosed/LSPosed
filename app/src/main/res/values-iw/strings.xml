@@ -60,7 +60,6 @@
     <string name="please_update_summary">נא להתקין את הגרסה העדכנית ביותר של LSPosed</string>
     <string name="info_api_version">גרסת API</string>
     <string name="info_framework_version">גרסת תשתית</string>
-    <string name="info_manager_version">גרסת אפליקציית ניהול</string>
     <string name="info_system_version">גרסת מערכת</string>
     <string name="info_device">מכשיר</string>
     <string name="info_system_abi">מערכת ABI</string>
