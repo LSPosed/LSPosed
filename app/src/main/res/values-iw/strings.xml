@@ -60,6 +60,7 @@
     <string name="please_update_summary">נא להתקין את הגרסה העדכנית ביותר של LSPosed</string>
     <string name="info_api_version">גרסת API</string>
     <string name="info_framework_version">גרסת תשתית</string>
+    <string name="info_manager_package_name">שם חבילת מנהל</string>
     <string name="info_system_version">גרסת מערכת</string>
     <string name="info_device">מכשיר</string>
     <string name="info_system_abi">מערכת ABI</string>
@@ -88,6 +89,7 @@
     <string name="menuSaveToSd">שמור</string>
     <string name="nav_item_logs_verbose">לוגים מפורטים</string>
     <string name="nav_item_logs_module">לוגים של מודולים</string>
+    <string name="logs_saving">שומר יומן, אנא המתן</string>
     <string name="logs_saved">לוגים נשמרו</string>
     <string name="logs_save_failed2">השמירה נכשלה:\n%s</string>
     <string name="menuClearLog">נקה לוגים עכשיו</string>
