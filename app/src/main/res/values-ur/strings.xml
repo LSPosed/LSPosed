@@ -56,6 +56,7 @@
     <string name="please_update_summary">براہ کرم LSPosed کا تازہ ترین ورژن انسٹال کریں۔</string>
     <string name="info_api_version">API ورژن۔</string>
     <string name="info_framework_version">فریم ورک ورژن۔</string>
+    <string name="info_manager_package_name">مینیجر پیکیج کا نام</string>
     <string name="info_system_version">سسٹم ورژن۔</string>
     <string name="info_device">ڈیوائس۔</string>
     <string name="info_system_abi">ABI سسٹم۔</string>
@@ -84,6 +85,7 @@
     <string name="menuSaveToSd">محفوظ کریں</string>
     <string name="nav_item_logs_verbose">وربوز لاگز</string>
     <string name="nav_item_logs_module">ماڈیولز نوشتہ جات</string>
+    <string name="logs_saving">لاگ محفوظ کر رہا ہے، براہ کرم انتظار کریں۔</string>
     <string name="logs_saved">لاگز محفوظ ہو گئے۔</string>
     <string name="logs_save_failed2">محفوظ کرنے میں ناکام:\n%s</string>
     <string name="menuClearLog">ابھی لاگ صاف کریں۔</string>
