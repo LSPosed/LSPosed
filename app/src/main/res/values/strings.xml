@@ -57,7 +57,7 @@
     <string name="please_update_summary">Please install the latest version of LSPosed</string>
     <string name="info_api_version">API version</string>
     <string name="info_framework_version">Framework version</string>
-    <string name="info_manager_version">Manager version</string>
+    <string name="info_manager_package_name">Manager package name</string>
     <string name="info_system_version">System version</string>
     <string name="info_device">Device</string>
     <string name="info_system_abi">System ABI</string>
