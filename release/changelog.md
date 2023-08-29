@@ -1,18 +1,20 @@
-### New Xposed API proposal
-As Android version iterates, the original Xposed API by rovo89 reaches its limits. Now we are working on the new modern Xposed API with features of application scope management, remote preferences, dex parser interface and so on.
-The new API will be implemented in the next releasing of LSPosed, and it is welcome to post your suggestions on [https://github.com/libxposed](https://github.com/libxposed).
+### [API Changes, click to read more](https://docs.lsposed.org/release/api_changes)
+* Implementation of [Modern Xposed API]
+* Allow hooking processes of the `android` package besides `system_server`
 
-### New way to open parasitic manager
-Some devices cannot create shortcuts due to kernel issues, now LSPosed switches to opening parasitic manager from notification. This notification is always present and can be disable in manager settings.
+### [Changelog](https://github.com/LSPosed/LSPosed/releases/tag/v1.9.0)
+* Magisk version requires 24.0+, and for Riru 26.1.7+
+* Make dex2oat wrapper more compatible
+* Fix some hooks on Android 8.1
+* Fix backup race, fix 'JNI DETECTED ERROR IN APPLICATION: java_object == null'
+* Fix `processName` for `handleLoadedPackage`'s `lpparam`
+* Fix `isFirstPackage` for `afterHookedMethod`
+* Fix NPE due to null `getModule()` return value
+* Fix a race by lock-free backup implementation
+* Skip secondary classloaders that do not include code
+* Only clear module's `LoadedApks`
+* Upgrade Dobby to fix arm32 native hook
+* Adapts to Android 14
+* Fixes known issues and performance optimizations
 
-### Changelog
-- Some manager UI fixes
-- Update DoH
-- Set the dex2oat wrapper owner and group to root:shell
-- Guard backup during hook
-- Add notification to open parasitic manager
-- Fix hook 32bit process
-- Fix dex2oat fallback
-- Fix webview permission
-
-[中文更新日志](https://docs.lsposed.org/release/changelog_zh)
+[中文](https://docs.lsposed.org/release/changelog_zh)
