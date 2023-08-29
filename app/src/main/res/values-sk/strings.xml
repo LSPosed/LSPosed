@@ -19,7 +19,6 @@
   -->
 <resources xmlns:tools="http://schemas.android.com/tools" tools:keep="@string/xposed_module_updated_notification_*,@string/module_is_not_activated_*">
     <!-- MainActivity -->
-    <string name="info">Informácie</string>
     <string name="overview">Prehľad</string>
     <string name="Modules">Moduly</string>
     <plurals name="modules_enabled_count">
@@ -34,7 +33,6 @@
     <string name="About">O stránke</string>
     <string name="report_issue">Nahlásiť problém</string>
     <string name="module_repo">Úložisko</string>
-    <string name="module_repo_loading">Načítanie…</string>
     <string name="module_repo_up_to_date">Aktualizácia všetkých modulov</string>
     <string name="module_repo_published_time">Zverejnené na %s</string>
     <string name="module_repo_updated_time">Aktualizované na %s</string>
@@ -60,7 +58,6 @@
     <string name="system_prop_incorrect"><![CDATA[Niektoré potrebné vlastnosti systému boli odstránené alebo upravené.<br/>Moduly sa môžu občas znefunkčniť.]]></string>
     <string name="need_update">Je potrebné aktualizovať</string>
     <string name="please_update_summary">Nainštalujte si najnovšiu verziu aplikácie LSPosed</string>
-    <string name="lsposed_not_active">LSPosed nie je v súčasnosti nainštalovaný ani aktívny.</string>
     <string name="info_api_version">Verzia API</string>
     <string name="info_framework_version">Verzia rámca</string>
     <string name="info_manager_version">Verzia manažéra</string>
@@ -79,6 +76,7 @@
     <string name="sepolicy_incorrect">Zásady systému SELinux sú nesprávne</string>
     <string name="update_lsposed">Aktualizácia LSPosed</string>
     <string name="update_lsposed_msg">Potvrdiť aktualizáciu LSPosed? Toto zariadenie sa po dokončení aktualizácie reštartuje</string>
+    <string name="info_copied">Skopírované do schránky</string>
     <!-- WelcomeDialog -->
     <string name="parasitic_welcome">Vitajte v LSPosed</string>
     <string name="parasitic_welcome_summary">Používate parazitného správcu, ktorý môže vytvoriť zástupcu alebo ho stále otvárať z oznámenia.</string>
@@ -98,7 +96,6 @@
     <string name="scroll_top">Prejdite na začiatok</string>
     <string name="loading">Načítavanie…</string>
     <string name="scroll_bottom">Prejdite na spodok</string>
-    <string name="logs_cannot_read">Nemožno čítať protokol: \n</string>
     <string name="menuReload">Znovunačítanie</string>
     <string name="logs_clear_failed_2">Nepodarilo sa vymazať protokol</string>
     <string name="menu_enable_word_wrap">Word Wrap</string>
@@ -197,7 +194,6 @@
     <string name="settings_translation_summary">Pomôžte nám preložiť stránku %s do vášho jazyka</string>
     <string name="settings_create_shortcut_summary">Vytvorenie skratky, ktorá dokáže otvoriť parazitného správcu</string>
     <string name="settings_shortcut_pinned_hint">Skratka pripnutá</string>
-    <string name="settings_created_shortcut_summary">Bola vytvorená skratka na otvorenie správcu parazitov</string>
     <string name="settings_unsupported_pin_shortcut_summary">Súčasný predvolený spúšťač nepodporuje pripnuté skratky</string>
     <string name="settings_enable_status_notification">Oznámenie o stave</string>
     <string name="settings_enable_status_notification_summary">Zobrazenie oznámenia, ktoré môže otvoriť parazitický správca</string>
@@ -217,17 +213,17 @@
     <string name="module_information_collaborators">Spolupracovníci</string>
     <string name="module_release_view_assets">Aktíva</string>
     <string name="menu_open_in_browser">Otvoriť v prehliadači</string>
-    <string name="refresh">Obnoviť</string>
     <string name="module_release_load_more">Zobrazenie starších verzií</string>
     <string name="module_release_no_more">Žiadne ďalšie uvoľňovanie</string>
     <string name="repo_load_failed">Nepodarilo sa načítať modul repo: %s</string>
     <string name="sort_upgradable_first">Najskôr aktualizovateľné</string>
-    <!-- CrashReportActivity -->
-    <string name="version_mismatch">Verzia rámca LSPosed (%1$d) sa nezhoduje so správcom (%2$d). Znovu nainštalujte LSPosed.</string>
-    <string name="manager_crashed">Manažér havaroval</string>
-    <string name="send_crash_info">Odoslať informácie o havárii</string>
-    <string name="crash_info_copied">Informácie o havárii skopírované do schránky</string>
-    <string name="info_copied">Skopírované do schránky</string>
+    <string name="installed">Nainštalované</string>
+    <plurals name="module_release_assets_download_count">
+        <item quantity="one">%d stiahnuť</item>
+        <item quantity="few">%d Na stiahnutie</item>
+        <item quantity="many">%d Na stiahnutie</item>
+        <item quantity="other">%d Na stiahnutie</item>
+    </plurals>
     <!-- Colors -->
     <string name="color_sakura">Sakura</string>
     <string name="color_red">Červená</string>
@@ -248,11 +244,4 @@
     <string name="color_deep_orange">Sýto oranžová</string>
     <string name="color_brown">Hnedá</string>
     <string name="color_blue_grey">Modrá šedá</string>
-    <string name="installed">Nainštalované</string>
-    <plurals name="module_release_assets_download_count">
-        <item quantity="one">%d stiahnuť</item>
-        <item quantity="few">%d Na stiahnutie</item>
-        <item quantity="many">%d Na stiahnutie</item>
-        <item quantity="other">%d Na stiahnutie</item>
-    </plurals>
 </resources>
