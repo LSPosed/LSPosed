@@ -56,7 +56,7 @@
     <string name="please_update_summary">Vänligen installera den senaste versionen av LSPosed</string>
     <string name="info_api_version">API version</string>
     <string name="info_framework_version">Ramverk version</string>
-    <string name="info_manager_version">Version av hanterare</string>
+    <string name="info_manager_package_name">Namn på managerpaket</string>
     <string name="info_system_version">Systemversion</string>
     <string name="info_device">Enhet</string>
     <string name="info_system_abi">System ABI</string>
@@ -85,6 +85,7 @@
     <string name="menuSaveToSd">Spara</string>
     <string name="nav_item_logs_verbose">Utförliga Loggar</string>
     <string name="nav_item_logs_module">Modul-loggar</string>
+    <string name="logs_saving">Sparar logg, vänligen vänta</string>
     <string name="logs_saved">Loggar som sparas</string>
     <string name="logs_save_failed2">Det gick inte att spara:\n%s</string>
     <string name="menuClearLog">Rensa loggen nu</string>
