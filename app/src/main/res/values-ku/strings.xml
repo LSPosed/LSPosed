@@ -56,6 +56,7 @@
     <string name="please_update_summary">Ji kerema xwe guhertoya herî dawî ya LSPosed saz bikin</string>
     <string name="info_api_version">Guhertoya API</string>
     <string name="info_framework_version">Guhertoya çarçoveyê</string>
+    <string name="info_manager_package_name">Navê pakêta rêveberê</string>
     <string name="info_system_version">Guhertoya pergalê</string>
     <string name="info_device">Sazî</string>
     <string name="info_system_abi">Pergala ABI</string>
