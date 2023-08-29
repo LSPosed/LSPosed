@@ -19,7 +19,6 @@
   -->
 <resources xmlns:tools="http://schemas.android.com/tools" tools:keep="@string/xposed_module_updated_notification_*,@string/module_is_not_activated_*">
     <!-- MainActivity -->
-    <string name="info">Informace</string>
     <string name="overview">Přehled</string>
     <string name="Modules">Moduly</string>
     <plurals name="modules_enabled_count">
@@ -34,7 +33,6 @@
     <string name="About">O aplikaci</string>
     <string name="report_issue">Nahlásit problém</string>
     <string name="module_repo">Repozitář</string>
-    <string name="module_repo_loading">Načítání…</string>
     <string name="module_repo_up_to_date">Všechny moduly jsou aktuální</string>
     <string name="module_repo_published_time">Publikováno v %s</string>
     <string name="module_repo_updated_time">Aktualizováno v %s</string>
@@ -60,7 +58,6 @@
     <string name="system_prop_incorrect"><![CDATA[Některé potřebné systémové vlastnosti byly odstraněny nebo změněny.<br/>Moduly mohou být někdy neplatné a tedy nefunkční.]]></string>
     <string name="need_update">Je třeba aktualizovat</string>
     <string name="please_update_summary">Nainstalujte si prosím nejnovější verzi LSPosed</string>
-    <string name="lsposed_not_active">LSPosed není aktuálně nainstalován nebo aktivován.</string>
     <string name="info_api_version">Verze API</string>
     <string name="info_framework_version">Verze frameworku</string>
     <string name="info_manager_version">Verze LSPosed správce</string>
@@ -79,6 +76,7 @@
     <string name="sepolicy_incorrect">Zásady SELinuxu jsou nesprávné</string>
     <string name="update_lsposed">Aktualizovat LSPosed</string>
     <string name="update_lsposed_msg">Potvrdit aktualizaci LSPosed? Toto zařízení se restartuje po dokončení aktualizace</string>
+    <string name="info_copied">Zkopírováno do schránky</string>
     <!-- WelcomeDialog -->
     <string name="parasitic_welcome">Vítejte v LSPosed</string>
     <string name="parasitic_welcome_summary">Používáte parazitního správce, který může vytvořit zástupce nebo se stále otevírat z oznámení.</string>
@@ -91,6 +89,7 @@
     <string name="menuSaveToSd">Uložit</string>
     <string name="nav_item_logs_verbose">Podrobné protokoly</string>
     <string name="nav_item_logs_module">Protokoly modulů</string>
+    <string name="logs_saving">Ukládání protokolu, čekejte prosím</string>
     <string name="logs_saved">Protokoly uloženy</string>
     <string name="logs_save_failed2">Nepodařilo se uložit:\n%s</string>
     <string name="menuClearLog">Vymazat log</string>
@@ -98,7 +97,6 @@
     <string name="scroll_top">Přejít na začátek</string>
     <string name="loading">Načítání…</string>
     <string name="scroll_bottom">Přejít na začátek</string>
-    <string name="logs_cannot_read">Nelze přečíst protokol: \n</string>
     <string name="menuReload">Znovu načíst</string>
     <string name="logs_clear_failed_2">Nepodařilo se vymazat protokol</string>
     <string name="menu_enable_word_wrap">Zalamování řádků</string>
@@ -197,7 +195,6 @@
     <string name="settings_translation_summary">Pomozte nám přeložit %s do vašeho jazyka</string>
     <string name="settings_create_shortcut_summary">Vytvoření zástupce, který může otevřít parazitního správce</string>
     <string name="settings_shortcut_pinned_hint">Připnutí zástupci</string>
-    <string name="settings_created_shortcut_summary">Byl vytvořen zástupce pro otevření parazitního správce</string>
     <string name="settings_unsupported_pin_shortcut_summary">Současný výchozí spouštěč nepodporuje připnuté zkratky</string>
     <string name="settings_enable_status_notification">Oznámení o stavu</string>
     <string name="settings_enable_status_notification_summary">Zobrazení oznámení, které může otevřít parazitního správce</string>
@@ -217,17 +214,17 @@
     <string name="module_information_collaborators">Spolupracovníci</string>
     <string name="module_release_view_assets">Assets</string>
     <string name="menu_open_in_browser">Otevřít v prohlížeči</string>
-    <string name="refresh">Obnovit</string>
     <string name="module_release_load_more">Zobrazit starší verze</string>
     <string name="module_release_no_more">Žádné další vydání</string>
     <string name="repo_load_failed">Nepodařilo se načíst repozitář modulu: %s</string>
     <string name="sort_upgradable_first">Nejprve aktualizovatelný</string>
-    <!-- CrashReportActivity -->
-    <string name="version_mismatch">Verze LSPosed (%1$d) neodpovídá správci (%2$d). Prosím přeinstalujte LSPosed.</string>
-    <string name="manager_crashed">Manažer selhal</string>
-    <string name="send_crash_info">Odeslat informace o pádu</string>
-    <string name="crash_info_copied">Informace o pádu zkopírovány do schránky</string>
-    <string name="info_copied">Zkopírováno do schránky</string>
+    <string name="installed">Instalováno</string>
+    <plurals name="module_release_assets_download_count">
+        <item quantity="one">%d stažení</item>
+        <item quantity="few">%d ke stažení</item>
+        <item quantity="many">%d ke stažení</item>
+        <item quantity="other">%d ke stažení</item>
+    </plurals>
     <!-- Colors -->
     <string name="color_sakura">Sakura</string>
     <string name="color_red">Červená</string>
@@ -248,11 +245,4 @@
     <string name="color_deep_orange">Tmavě oranžová</string>
     <string name="color_brown">Hnědá</string>
     <string name="color_blue_grey">Modro-šedivá</string>
-    <string name="installed">Instalováno</string>
-    <plurals name="module_release_assets_download_count">
-        <item quantity="one">%d stažení</item>
-        <item quantity="few">%d ke stažení</item>
-        <item quantity="many">%d ke stažení</item>
-        <item quantity="other">%d ke stažení</item>
-    </plurals>
 </resources>
