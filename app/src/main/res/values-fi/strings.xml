@@ -56,7 +56,7 @@
     <string name="please_update_summary">Asenna LSPosedin uusin versio</string>
     <string name="info_api_version">API versio</string>
     <string name="info_framework_version">Kehyksen versio</string>
-    <string name="info_manager_version">Managerin versio</string>
+    <string name="info_manager_package_name">Manager-paketin nimi</string>
     <string name="info_system_version">Järjestelmän versio</string>
     <string name="info_device">Laite</string>
     <string name="info_system_abi">Järjestelmä ABI</string>
@@ -85,6 +85,7 @@
     <string name="menuSaveToSd">Tallenna</string>
     <string name="nav_item_logs_verbose">Verbose Lokit</string>
     <string name="nav_item_logs_module">Moduulien Lokit</string>
+    <string name="logs_saving">Lokin tallentaminen, odota</string>
     <string name="logs_saved">Tallennetut lokit</string>
     <string name="logs_save_failed2">Tallennus epäonnistui:\n%s</string>
     <string name="menuClearLog">Tyhjennä loki nyt</string>
