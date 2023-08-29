@@ -60,7 +60,7 @@
     <string name="please_update_summary">Будь ласка, встановіть останню версію LSPosed</string>
     <string name="info_api_version">Версія API</string>
     <string name="info_framework_version">Версія Framework</string>
-    <string name="info_manager_version">Версія менеджера</string>
+    <string name="info_manager_package_name">Ім\'я пакета менеджера</string>
     <string name="info_system_version">Версія Android</string>
     <string name="info_device">Пристрій</string>
     <string name="info_system_abi">Розрядність процесора</string>
