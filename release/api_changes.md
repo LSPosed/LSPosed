@@ -8,7 +8,7 @@ Currently, most part of the new API has been roughly stable (except `helper`). W
 * 实现了 [Modern Xposed API](https://github.com/LSPosed/LSPosed/wiki/Develop-Xposed-Modules-Using-Modern-Xposed-API)：
 目前，新 API 的大部分已经相对稳定（除了 `helper`）。我们希望开发者能够测试新 API，并提供反馈以解决可能存在的问题。现代 API 将在 LSPosed 2.0.0 发布时发布到 Maven Central，因此在此之前，您可以提出建议以帮助改进它。
 * 允许钩住 `system_server` 外的 `android` 进程（[查看此提交](https://github.com/LSPosed/LSPosed/commit/6f6c4b67d736e96a61f89b5db22c2e9bbde19461)）：
-由于历史原因，`system_server` 的包名被更改为 `android`，`ChooserActivity`等系统UI的包名被更改为 `system`（请参阅 [rovo89 的此提交](https://github.com/rovo89/XposedBridge/commit/6b49688c929a7768f3113b4c65b429c7a7032afa)）。为纠正此行为，管理器作用域界面中的 `system` 和 `android` 的含义现与它们在实际含义相同。我们保留传统模块代码层面的相反含义，但现代模块已得到更正。
+由于历史原因，`system_server` 的包名被更改为 `android`，`ChooserActivity`等系统UI的包名被更改为 `system`（请参阅 [rovo89 的此提交](https://github.com/rovo89/XposedBridge/commit/6b49688c929a7768f3113b4c65b429c7a7032afa)）。为纠正此行为，管理器作用域界面中的 `system` 和 `android` 的含义现与它们的实际含义相同。我们保留传统模块代码层面的相反含义，但现代模块已得到更正。
 
 ```text
 system_server: uid=1000 pkg=system  proc=system
