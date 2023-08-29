@@ -56,6 +56,7 @@
     <string name="please_update_summary">Please install the latest version of LSPosed</string>
     <string name="info_api_version">API version</string>
     <string name="info_framework_version">Framework version</string>
+    <string name="info_manager_package_name">Bestuurder pakket naam</string>
     <string name="info_system_version">Stelsel weergawe</string>
     <string name="info_device">Toestel</string>
     <string name="info_system_abi">Stelsel ABI</string>
@@ -84,6 +85,7 @@
     <string name="menuSaveToSd">Stoor</string>
     <string name="nav_item_logs_verbose">Uitgebreide logs</string>
     <string name="nav_item_logs_module">Modules</string>
+    <string name="logs_saving">Stoor tans logboek, wag asseblief</string>
     <string name="logs_saved">Logs gestoor</string>
     <string name="logs_save_failed2">Kon nie stoor nie:\n%s</string>
     <string name="menuClearLog">Vee logboek nou uit</string>
