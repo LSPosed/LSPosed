@@ -56,7 +56,6 @@
     <string name="please_update_summary">कृपया LSPosed का नवीनतम संस्करण स्थापित करें</string>
     <string name="info_api_version">एपीआई संस्करण</string>
     <string name="info_framework_version">फ्रेमवर्क संस्करण</string>
-    <string name="info_manager_version">प्रबंधक संस्करण</string>
     <string name="info_system_version">सिस्टम संस्करण</string>
     <string name="info_device">उपकरण</string>
     <string name="info_system_abi">सिस्टम एबीआई</string>
