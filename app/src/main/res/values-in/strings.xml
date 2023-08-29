@@ -54,7 +54,7 @@
     <string name="please_update_summary">Silakan pasang LSPosed versi terbaru</string>
     <string name="info_api_version">Versi API</string>
     <string name="info_framework_version">Versi framework</string>
-    <string name="info_manager_version">Versi manajer</string>
+    <string name="info_manager_package_name">Nama paket manajer</string>
     <string name="info_system_version">Versi sistem</string>
     <string name="info_device">Perangkat</string>
     <string name="info_system_abi">Sistem ABI</string>
