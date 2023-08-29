@@ -19,7 +19,6 @@
   -->
 <resources xmlns:tools="http://schemas.android.com/tools" tools:keep="@string/xposed_module_updated_notification_*,@string/module_is_not_activated_*">
     <!-- MainActivity -->
-    <string name="info">信息</string>
     <string name="overview">概览</string>
     <string name="Modules">模块</string>
     <plurals name="modules_enabled_count">
@@ -31,7 +30,6 @@
     <string name="About">关于</string>
     <string name="report_issue">反馈问题</string>
     <string name="module_repo">仓库</string>
-    <string name="module_repo_loading">加载中…</string>
     <string name="module_repo_up_to_date">所有模块均已最新</string>
     <string name="module_repo_published_time">发布于 %s</string>
     <string name="module_repo_updated_time">更新于 %s</string>
@@ -54,7 +52,6 @@
     <string name="system_prop_incorrect"><![CDATA[一些必须的系统属性被删除或被修改。<br/>模块可能会随机失效。]]></string>
     <string name="need_update">需要更新</string>
     <string name="please_update_summary">请安装新版 LSPosed</string>
-    <string name="lsposed_not_active">LSPosed 未安装或未激活</string>
     <string name="info_api_version">API 版本</string>
     <string name="info_framework_version">框架版本</string>
     <string name="info_manager_version">管理器版本</string>
@@ -73,6 +70,7 @@
     <string name="sepolicy_incorrect">SELinux 规则异常</string>
     <string name="update_lsposed">更新 LSPosed</string>
     <string name="update_lsposed_msg">确认更新 LSPosed? 设备将会在完成更新后自动重启。</string>
+    <string name="info_copied">已复制到剪贴板</string>
     <!-- WelcomeDialog -->
     <string name="parasitic_welcome">欢迎使用 LSPosed</string>
     <string name="parasitic_welcome_summary">你正在使用寄生管理器，可创建快捷方式或继续从通知中打开。</string>
@@ -85,6 +83,7 @@
     <string name="menuSaveToSd">保存</string>
     <string name="nav_item_logs_verbose">详细日志</string>
     <string name="nav_item_logs_module">模块日志</string>
+    <string name="logs_saving">正在保存日志，请稍后</string>
     <string name="logs_saved">日志已保存</string>
     <string name="logs_save_failed2">保存失败：\n%s</string>
     <string name="menuClearLog">立即清空日志</string>
@@ -92,7 +91,6 @@
     <string name="scroll_top">滚动到顶部</string>
     <string name="loading">加载中…</string>
     <string name="scroll_bottom">滚动到底部</string>
-    <string name="logs_cannot_read">无法读取日志：\n</string>
     <string name="menuReload">重新加载</string>
     <string name="logs_clear_failed_2">日志清空失败</string>
     <string name="menu_enable_word_wrap">自动换行</string>
@@ -191,7 +189,6 @@
     <string name="settings_translation_summary">帮助我们把 %s 翻译到你的语言</string>
     <string name="settings_create_shortcut_summary">创建一个能打开寄生管理器的快捷方式</string>
     <string name="settings_shortcut_pinned_hint">已创建快捷方式</string>
-    <string name="settings_created_shortcut_summary">已经创建了用于打开寄生管理器的快捷方式</string>
     <string name="settings_unsupported_pin_shortcut_summary">当前默认桌面不支持固定快捷方式</string>
     <string name="settings_enable_status_notification">状态通知</string>
     <string name="settings_enable_status_notification_summary">显示一个通知以打开寄生管理器</string>
@@ -211,17 +208,14 @@
     <string name="module_information_collaborators">协作者</string>
     <string name="module_release_view_assets">附件</string>
     <string name="menu_open_in_browser">在浏览器中打开</string>
-    <string name="refresh">刷新</string>
     <string name="module_release_load_more">显示较早版本</string>
     <string name="module_release_no_more">无更多版本</string>
     <string name="repo_load_failed">模块仓库加载失败：%s</string>
     <string name="sort_upgradable_first">可更新优先</string>
-    <!-- CrashReportActivity -->
-    <string name="version_mismatch">LSPosed 框架 (%1$d) 的版本与管理器（%2$d）不匹配。请重新安装 LSPosed。</string>
-    <string name="manager_crashed">管理器已崩溃</string>
-    <string name="send_crash_info">发送崩溃信息</string>
-    <string name="crash_info_copied">崩溃信息已复制到剪贴板</string>
-    <string name="info_copied">已复制到剪贴板</string>
+    <string name="installed">已安装</string>
+    <plurals name="module_release_assets_download_count">
+        <item quantity="other">%d 次下载</item>
+    </plurals>
     <!-- Colors -->
     <string name="color_sakura">樱花</string>
     <string name="color_red">红色</string>
@@ -242,8 +236,4 @@
     <string name="color_deep_orange">深橙</string>
     <string name="color_brown">棕色</string>
     <string name="color_blue_grey">灰蓝</string>
-    <string name="installed">已安装</string>
-    <plurals name="module_release_assets_download_count">
-        <item quantity="other">%d 次下载</item>
-    </plurals>
 </resources>
