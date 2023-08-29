@@ -56,7 +56,6 @@
     <string name="please_update_summary">Instal·leu la darrera versió de LSPosed</string>
     <string name="info_api_version">Versió de l\'API</string>
     <string name="info_framework_version">Versió del marc</string>
-    <string name="info_manager_version">Versió del gestor</string>
     <string name="info_system_version">Versió del sistema</string>
     <string name="info_device">Dispositiu</string>
     <string name="info_system_abi">Sistema ABI</string>
