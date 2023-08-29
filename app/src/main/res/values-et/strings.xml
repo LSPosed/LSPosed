@@ -19,7 +19,6 @@
   -->
 <resources xmlns:tools="http://schemas.android.com/tools" tools:keep="@string/xposed_module_updated_notification_*,@string/module_is_not_activated_*">
     <!-- MainActivity -->
-    <string name="info">Teave</string>
     <string name="overview">Kodu</string>
     <string name="Modules">Moodulid</string>
     <plurals name="modules_enabled_count">
@@ -32,7 +31,6 @@
     <string name="About">Kohta</string>
     <string name="report_issue">Teata probleemist</string>
     <string name="module_repo">Repo</string>
-    <string name="module_repo_loading">Laadimine…</string>
     <string name="module_repo_up_to_date">Kõik moodulid on ajakohased</string>
     <string name="module_repo_published_time">Avaldatud %s</string>
     <string name="module_repo_updated_time">Uuendatud %s</string>
@@ -56,7 +54,6 @@
     <string name="system_prop_incorrect"><![CDATA[Mõned vajalikud süsteemiomadused kustutatud või muudetud.<br/>Moodulid võivad aeg-ajalt kehtetuks muutuda.]]></string>
     <string name="need_update">Vaja uuendada</string>
     <string name="please_update_summary">Palun installige LSPosedi uusim versioon</string>
-    <string name="lsposed_not_active">LSPosed ei ole praegu installitud ega aktiivne.</string>
     <string name="info_api_version">API\'i versioon</string>
     <string name="info_framework_version">Raamistiku versioon</string>
     <string name="info_manager_version">Halduri versioon</string>
@@ -75,6 +72,7 @@
     <string name="sepolicy_incorrect">SELinux policy on vale</string>
     <string name="update_lsposed">LSPosedi uuendamine</string>
     <string name="update_lsposed_msg">Kas kinnitada LSPosed uuendamine? See seade taaskäivitub pärast uuendamise lõpetamist</string>
+    <string name="info_copied">Kopeeritud lõikelauale</string>
     <!-- WelcomeDialog -->
     <string name="parasitic_welcome">Tere tulemast LSPosedisse</string>
     <string name="parasitic_welcome_summary">Sa kasutad parasiitide haldurit, mis võib luua otsetee või ikka avada teateid.</string>
@@ -94,7 +92,6 @@
     <string name="scroll_top">Kerige üles</string>
     <string name="loading">Laadimine…</string>
     <string name="scroll_bottom">Kerige alla</string>
-    <string name="logs_cannot_read">Logi ei saa lugeda: \n</string>
     <string name="menuReload">Laadi uuesti</string>
     <string name="logs_clear_failed_2">Logi tühjendamine ebaõnnestus</string>
     <string name="menu_enable_word_wrap">Word Wrap</string>
@@ -193,7 +190,6 @@
     <string name="settings_translation_summary">Aita meil tõlkida %s sinu keelde</string>
     <string name="settings_create_shortcut_summary">Loo otsetee, mis võib avada parasiitide halduri</string>
     <string name="settings_shortcut_pinned_hint">Otsetee kinnitatud</string>
-    <string name="settings_created_shortcut_summary">Parasiitide halduri avamiseks on loodud otsetee</string>
     <string name="settings_unsupported_pin_shortcut_summary">Praegune vaikekäivitusprogramm ei toeta nööpnõelte otseteid</string>
     <string name="settings_enable_status_notification">Staatuse teatamine</string>
     <string name="settings_enable_status_notification_summary">Kuva teatis, mis võib avada parasiitide halduri</string>
@@ -213,17 +209,15 @@
     <string name="module_information_collaborators">Koostööpartnerid</string>
     <string name="module_release_view_assets">Varad</string>
     <string name="menu_open_in_browser">Ava brauseris</string>
-    <string name="refresh">Laadi uuesti</string>
     <string name="module_release_load_more">Kuva vanemad versioonid</string>
     <string name="module_release_no_more">Enam ei ole väljaannet</string>
     <string name="repo_load_failed">Ebaõnnestus mooduli repo laadimine: %s</string>
     <string name="sort_upgradable_first">Esimesena uuendatav</string>
-    <!-- CrashReportActivity -->
-    <string name="version_mismatch">Raamistiku LSPosed versioon (%1$d) ei ole vastavuses haldajaga (%2$d). Palun installige LSPosed uuesti.</string>
-    <string name="manager_crashed">Haldur kokku jooksnud</string>
-    <string name="send_crash_info">Saada info õnnetuse kohta</string>
-    <string name="crash_info_copied">Kokkupõrke info kopeeritakse lõikelauale</string>
-    <string name="info_copied">Kopeeritud lõikelauale</string>
+    <string name="installed">Paigaldatud</string>
+    <plurals name="module_release_assets_download_count">
+        <item quantity="one">allalaaditud on %d kord</item>
+        <item quantity="other">allalaaditud on %d korda</item>
+    </plurals>
     <!-- Colors -->
     <string name="color_sakura">Sakura</string>
     <string name="color_red">Punane</string>
@@ -244,9 +238,4 @@
     <string name="color_deep_orange">Sügavoranž</string>
     <string name="color_brown">Pruun</string>
     <string name="color_blue_grey">Sinine hall</string>
-    <string name="installed">Paigaldatud</string>
-    <plurals name="module_release_assets_download_count">
-        <item quantity="one">allalaaditud on %d kord</item>
-        <item quantity="other">allalaaditud on %d korda</item>
-    </plurals>
 </resources>
