@@ -19,7 +19,6 @@
   -->
 <resources xmlns:tools="http://schemas.android.com/tools" tools:keep="@string/xposed_module_updated_notification_*,@string/module_is_not_activated_*">
     <!-- MainActivity -->
-    <string name="info">מידע</string>
     <string name="overview">סקירה כללית</string>
     <string name="Modules">מודולים</string>
     <plurals name="modules_enabled_count">
@@ -34,7 +33,6 @@
     <string name="About">אודות</string>
     <string name="report_issue">דווח על בעיה</string>
     <string name="module_repo">מאגר מידע</string>
-    <string name="module_repo_loading">טוען…</string>
     <string name="module_repo_up_to_date">כל המודולים מעודכנים</string>
     <string name="module_repo_published_time">פורסם ב-%s</string>
     <string name="module_repo_updated_time">עודכן ב-%s</string>
@@ -60,7 +58,6 @@
     <string name="system_prop_incorrect"><![CDATA[חלק ממאפייני המערכת הדרושים נמחקו או שונו.<br/>המודולים עשויים להתבטל מדי פעם.]]></string>
     <string name="need_update">צריך לעדכן</string>
     <string name="please_update_summary">נא להתקין את הגרסה העדכנית ביותר של LSPosed</string>
-    <string name="lsposed_not_active">LSPosed כרגע לא מותקן או מופעל.</string>
     <string name="info_api_version">גרסת API</string>
     <string name="info_framework_version">גרסת תשתית</string>
     <string name="info_manager_version">גרסת אפליקציית ניהול</string>
@@ -79,6 +76,7 @@
     <string name="sepolicy_incorrect">מדיניות SELinux הינה שגויה</string>
     <string name="update_lsposed">עדכן LSPosed</string>
     <string name="update_lsposed_msg">אשר לעדכן את LSPosed? מכשיר זה יאתחל לאחר השלמת העדכון</string>
+    <string name="info_copied">הועתק ללוח</string>
     <!-- WelcomeDialog -->
     <string name="parasitic_welcome">ברוכים הבאים ל-LSPosed</string>
     <string name="parasitic_welcome_summary">הנך משתמש בגרסת אפליקציית ניהול בתצורת טפיל, שיכולה ליצור קיצור דרך או עדיין להיפתח מהתראה.</string>
@@ -98,7 +96,6 @@
     <string name="scroll_top">גלול למעלה</string>
     <string name="loading">טוען…</string>
     <string name="scroll_bottom">גלול למטה</string>
-    <string name="logs_cannot_read">לא מצליח לקרוא לוגים: \n</string>
     <string name="menuReload">רענן</string>
     <string name="logs_clear_failed_2">נכשל בניקוי הלוגים</string>
     <string name="menu_enable_word_wrap">עטיפת מילה</string>
@@ -197,7 +194,6 @@
     <string name="settings_translation_summary">עזור לנו לתרגם את %s לשפה שלך</string>
     <string name="settings_create_shortcut_summary">צור קיצור דרך שיכול לפתוח מנהל טפילי</string>
     <string name="settings_shortcut_pinned_hint">קיצור דרך הוצמד</string>
-    <string name="settings_created_shortcut_summary">נוצר קיצור דרך לפתיחת מנהל טפילי</string>
     <string name="settings_unsupported_pin_shortcut_summary">מפעיל ברירת המחדל הנוכחי אינו תומך בקיצורי דרך</string>
     <string name="settings_enable_status_notification">הודעת סטטוס</string>
     <string name="settings_enable_status_notification_summary">הצג הודעה שיכולה לפתוח מנהל טפילי</string>
@@ -217,17 +213,17 @@
     <string name="module_information_collaborators">מפתחים</string>
     <string name="module_release_view_assets">קבצים</string>
     <string name="menu_open_in_browser">פתח בדפדפן</string>
-    <string name="refresh">רענן</string>
     <string name="module_release_load_more">הראה גרסאות ישנות</string>
     <string name="module_release_no_more">אין עוד גרסאות</string>
     <string name="repo_load_failed">נשכל לטעון מודול: %s</string>
     <string name="sort_upgradable_first">ניתן לשדרוג תחילה</string>
-    <!-- CrashReportActivity -->
-    <string name="version_mismatch">הגרסה של LSPosed framework (%1$d) אינה תואמת למנהל (%2$d). נא להתקין מחדש את LSPosed.</string>
-    <string name="manager_crashed">המנהל התרסק</string>
-    <string name="send_crash_info">שלח מידע על הקריסה</string>
-    <string name="crash_info_copied">מידע קריסה הועתק ללוח</string>
-    <string name="info_copied">הועתק ללוח</string>
+    <string name="installed">מוּתקָן</string>
+    <plurals name="module_release_assets_download_count">
+        <item quantity="one">%d הורדה</item>
+        <item quantity="two">%d הורדות</item>
+        <item quantity="many">%d הורדות</item>
+        <item quantity="other">%d הורדות</item>
+    </plurals>
     <!-- Colors -->
     <string name="color_sakura">סאקורה</string>
     <string name="color_red">אדום</string>
@@ -248,11 +244,4 @@
     <string name="color_deep_orange">כתום עמוק</string>
     <string name="color_brown">חום</string>
     <string name="color_blue_grey">כחול אפור</string>
-    <string name="installed">מוּתקָן</string>
-    <plurals name="module_release_assets_download_count">
-        <item quantity="one">%d הורדה</item>
-        <item quantity="two">%d הורדות</item>
-        <item quantity="many">%d הורדות</item>
-        <item quantity="other">%d הורדות</item>
-    </plurals>
 </resources>
