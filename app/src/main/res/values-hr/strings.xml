@@ -58,7 +58,6 @@
     <string name="please_update_summary">Molimo instalirajte najnoviju verziju LSPosed</string>
     <string name="info_api_version">API verzija</string>
     <string name="info_framework_version">Framework verzija</string>
-    <string name="info_manager_version">Manager verzija</string>
     <string name="info_system_version">System verzija</string>
     <string name="info_device">Uređaj</string>
     <string name="info_system_abi">System ABI</string>
