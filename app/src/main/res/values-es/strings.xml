@@ -19,7 +19,6 @@
   -->
 <resources xmlns:tools="http://schemas.android.com/tools" tools:keep="@string/xposed_module_updated_notification_*,@string/module_is_not_activated_*">
     <!-- MainActivity -->
-    <string name="info">Información</string>
     <string name="overview">Resumen</string>
     <string name="Modules">Módulos</string>
     <plurals name="modules_enabled_count">
@@ -32,7 +31,6 @@
     <string name="About">Acerca de</string>
     <string name="report_issue">Reportar problema</string>
     <string name="module_repo">Repositorio</string>
-    <string name="module_repo_loading">Cargando modulo repositorio\"...\"…</string>
     <string name="module_repo_up_to_date">Todos los modulos actualizados</string>
     <string name="module_repo_published_time">Publicado el %s</string>
     <string name="module_repo_updated_time">Actualizado el %s</string>
@@ -56,7 +54,6 @@
     <string name="system_prop_incorrect"><![CDATA[Some necessary system properties deleted or modified.<br/>Modules may invalidate occasionally.]]></string>
     <string name="need_update">Need to update</string>
     <string name="please_update_summary">Por favor instale la última versión de LSPosed</string>
-    <string name="lsposed_not_active">LSPosed no está instalado o activado actualmente.</string>
     <string name="info_api_version">Versión de la API</string>
     <string name="info_framework_version">Versión del framework</string>
     <string name="info_manager_version">Versión del manager</string>
@@ -75,6 +72,7 @@
     <string name="sepolicy_incorrect">La política de SELinux es incorrecta</string>
     <string name="update_lsposed">Actualizar LSPosed</string>
     <string name="update_lsposed_msg">¿Confirmar para actualizar LSPose? Este dispositivo se reiniciará después de completar la actualización</string>
+    <string name="info_copied">Información copiada al portapapeles</string>
     <!-- WelcomeDialog -->
     <string name="parasitic_welcome">Bienvenido a LSPosed</string>
     <string name="parasitic_welcome_summary">Usted está utilizando el gestor de parásitos, que puede crear acceso directo o todavía abierta de notificación.</string>
@@ -94,7 +92,6 @@
     <string name="scroll_top">Desplazar hasta el inicio</string>
     <string name="loading">Cargando…</string>
     <string name="scroll_bottom">Desplazar hasta el final</string>
-    <string name="logs_cannot_read">No se pudo leer los registros: \n</string>
     <string name="menuReload">Recargar</string>
     <string name="logs_clear_failed_2">Fallo al limpiar los registros</string>
     <string name="menu_enable_word_wrap">Ajuste de palabras</string>
@@ -193,7 +190,6 @@
     <string name="settings_translation_summary">Ayúdanos a traducir %s a tu idioma</string>
     <string name="settings_create_shortcut_summary">Crear un acceso directo que pueda abrir el gestor de parásitos</string>
     <string name="settings_shortcut_pinned_hint">Acceso directo anclado</string>
-    <string name="settings_created_shortcut_summary">Se ha creado un acceso directo para abrir el gestor de parásitos</string>
     <string name="settings_unsupported_pin_shortcut_summary">El actual lanzador por defecto no admite accesos directos a pines</string>
     <string name="settings_enable_status_notification">Notificación de estado</string>
     <string name="settings_enable_status_notification_summary">Mostrar una notificación que puede abrir el gestor de parásitos</string>
@@ -213,17 +209,15 @@
     <string name="module_information_collaborators">Colaboradores</string>
     <string name="module_release_view_assets">Archivos</string>
     <string name="menu_open_in_browser">Abrir en el navegador</string>
-    <string name="refresh">Refrescar</string>
     <string name="module_release_load_more">Mostrar versiones anteriores</string>
     <string name="module_release_no_more">No hay más versiones</string>
     <string name="repo_load_failed">Fallo al cargar el módulo de repositorio: %s</string>
     <string name="sort_upgradable_first">Upgradable first</string>
-    <!-- CrashReportActivity -->
-    <string name="version_mismatch">La versión del framework LSPosed (%1$d) no coincide con el administrador (%2$d). Por favor, reinstale LSPosed.</string>
-    <string name="manager_crashed">El Manager se ha crasheado</string>
-    <string name="send_crash_info">Enviar información de error</string>
-    <string name="crash_info_copied">Información del error copiada al portapapeles</string>
-    <string name="info_copied">Información copiada al portapapeles</string>
+    <string name="installed">Instalado</string>
+    <plurals name="module_release_assets_download_count">
+        <item quantity="one">%d descargar</item>
+        <item quantity="other">%d descargas</item>
+    </plurals>
     <!-- Colors -->
     <string name="color_sakura">Sakura</string>
     <string name="color_red">Rojo</string>
@@ -244,9 +238,4 @@
     <string name="color_deep_orange">Naranja oscuro</string>
     <string name="color_brown">Marrón</string>
     <string name="color_blue_grey">Gris azul</string>
-    <string name="installed">Instalado</string>
-    <plurals name="module_release_assets_download_count">
-        <item quantity="one">%d descargar</item>
-        <item quantity="other">%d descargas</item>
-    </plurals>
 </resources>
