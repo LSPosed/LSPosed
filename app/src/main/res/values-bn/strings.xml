@@ -19,7 +19,6 @@
   -->
 <resources xmlns:tools="http://schemas.android.com/tools" tools:keep="@string/xposed_module_updated_notification_*,@string/module_is_not_activated_*">
     <!-- MainActivity -->
-    <string name="info">তথ্য</string>
     <string name="overview">সার সংক্ষেপ </string>
     <string name="Modules">মডিউল</string>
     <plurals name="modules_enabled_count">
@@ -32,7 +31,6 @@
     <string name="About">সম্পর্কিত</string>
     <string name="report_issue">সমস্যা প্রতিবেদন </string>
     <string name="module_repo">ভান্ডার</string>
-    <string name="module_repo_loading">লোড হচ্ছে…</string>
     <string name="module_repo_up_to_date">সব মডিউল আপ টু ডেট</string>
     <string name="module_repo_published_time">%sএ প্রকাশিত</string>
     <string name="module_repo_updated_time">%sএ আপডেট করা হয়েছে</string>
@@ -56,7 +54,6 @@
     <string name="system_prop_incorrect"><![CDATA[কিছু প্রয়োজনীয় সিস্টেম বৈশিষ্ট্য মুছে ফেলা বা সংশোধন করা হয়েছে.<br/>মডিউল মাঝে মাঝে অবৈধ হতে পারে।]]></string>
     <string name="need_update">আপডেট করতে হবে</string>
     <string name="please_update_summary">অনুগ্রহ করে LSPosed এর সর্বশেষ সংস্করণটি ইনস্টল করুন</string>
-    <string name="lsposed_not_active">LSPosed বর্তমানে ইনস্টল বা সক্রিয় নেই.</string>
     <string name="info_api_version">API সংস্করণ</string>
     <string name="info_framework_version">ফ্রেমওয়ার্ক সংস্করণ</string>
     <string name="info_manager_version">ম্যানেজার সংস্করণ</string>
@@ -75,6 +72,7 @@
     <string name="sepolicy_incorrect">SELinux নীতি ভুল</string>
     <string name="update_lsposed">আপডেট LSPosed</string>
     <string name="update_lsposed_msg">LSPosed আপডেট করার জন্য নিশ্চিত? আপডেট সম্পূর্ণ হওয়ার পরে এই ডিভাইসটি রিবুট হবে</string>
+    <string name="info_copied">ক্লিপবোর্ডে কপি করা হয়েছে</string>
     <!-- WelcomeDialog -->
     <string name="parasitic_welcome">LSPosed স্বাগতম</string>
     <string name="parasitic_welcome_summary">আপনি পরজীবী ম্যানেজার ব্যবহার করছেন, যা শর্টকাট তৈরি করতে পারে বা এখনও বিজ্ঞপ্তি থেকে খুলতে পারে।</string>
@@ -94,7 +92,6 @@
     <string name="scroll_top">উপরে যান</string>
     <string name="loading">লোড হচ্ছে…</string>
     <string name="scroll_bottom">নীচে স্ক্রোল করুন</string>
-    <string name="logs_cannot_read">লগ পড়া যাবে না: \n</string>
     <string name="menuReload">পুনরায় লোড করুন</string>
     <string name="logs_clear_failed_2">লগ সাফ করতে ব্যর্থ হয়েছে</string>
     <string name="menu_enable_word_wrap">শব্দ মোড়ানো</string>
@@ -193,7 +190,6 @@
     <string name="settings_translation_summary">আপনার ভাষায় %s অনুবাদ করতে আমাদের সাহায্য করুন</string>
     <string name="settings_create_shortcut_summary">একটি শর্টকাট তৈরি করুন যা পরজীবী ম্যানেজার খুলতে পারে</string>
     <string name="settings_shortcut_pinned_hint">শর্টকাট পিন করা হয়েছে</string>
-    <string name="settings_created_shortcut_summary">পরজীবী ম্যানেজার খোলার জন্য একটি শর্টকাট তৈরি করা হয়েছে</string>
     <string name="settings_unsupported_pin_shortcut_summary">বর্তমান ডিফল্ট লঞ্চার পিন শর্টকাট সমর্থন করে না</string>
     <string name="settings_enable_status_notification">স্থিতি বিজ্ঞপ্তি</string>
     <string name="settings_enable_status_notification_summary">পরজীবী ম্যানেজার খুলতে পারে এমন একটি বিজ্ঞপ্তি দেখান</string>
@@ -213,17 +209,15 @@
     <string name="module_information_collaborators">সহযোগীরা</string>
     <string name="module_release_view_assets">সম্পদ</string>
     <string name="menu_open_in_browser">ব্রাউজারে খোলা</string>
-    <string name="refresh">রিফ্রেশ</string>
     <string name="module_release_load_more">পুরোনো সংস্করণ দেখান</string>
     <string name="module_release_no_more">আর মুক্তি নেই</string>
     <string name="repo_load_failed">মডিউল রেপো লোড করতে ব্যর্থ হয়েছে: %s</string>
     <string name="sort_upgradable_first">প্রথমে আপগ্রেডযোগ্য</string>
-    <!-- CrashReportActivity -->
-    <string name="version_mismatch">LSPosed ফ্রেমওয়ার্কের সংস্করণ (%1$d) ম্যানেজার (%2$d) এর সাথে মেলে না। অনুগ্রহ করে LSPosed পুনরায় ইনস্টল করুন।</string>
-    <string name="manager_crashed">ম্যানেজার বিধ্বস্ত</string>
-    <string name="send_crash_info">ক্র্যাশ তথ্য পাঠান</string>
-    <string name="crash_info_copied">ক্র্যাশ তথ্য ক্লিপবোর্ডে অনুলিপি করা হয়েছে৷</string>
-    <string name="info_copied">ক্লিপবোর্ডে কপি করা হয়েছে</string>
+    <string name="installed">ইনস্টল করা হয়েছে</string>
+    <plurals name="module_release_assets_download_count">
+        <item quantity="one">%d ডাউনলোড</item>
+        <item quantity="other">%d ডাউনলোড</item>
+    </plurals>
     <!-- Colors -->
     <string name="color_sakura">সাকুরা</string>
     <string name="color_red">লাল</string>
@@ -244,9 +238,4 @@
     <string name="color_deep_orange">গভীর কমলা</string>
     <string name="color_brown">বাদামী</string>
     <string name="color_blue_grey">নীল ধূসর</string>
-    <string name="installed">ইনস্টল করা হয়েছে</string>
-    <plurals name="module_release_assets_download_count">
-        <item quantity="one">%d ডাউনলোড</item>
-        <item quantity="other">%d ডাউনলোড</item>
-    </plurals>
 </resources>
