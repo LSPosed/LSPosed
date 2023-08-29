@@ -19,7 +19,6 @@
   -->
 <resources xmlns:tools="http://schemas.android.com/tools" tools:keep="@string/xposed_module_updated_notification_*,@string/module_is_not_activated_*">
     <!-- MainActivity -->
-    <string name="info">Informacija</string>
     <string name="overview">Apžvalga</string>
     <string name="Modules">Moduliai</string>
     <plurals name="modules_enabled_count">
@@ -34,7 +33,6 @@
     <string name="About">About-face</string>
     <string name="report_issue">Pranešti apie problemą</string>
     <string name="module_repo">Saugykla</string>
-    <string name="module_repo_loading">Įkrovimas…</string>
     <string name="module_repo_up_to_date">Visi moduliai atnaujinti</string>
     <string name="module_repo_published_time">Paskelbta adresu %s</string>
     <string name="module_repo_updated_time">Atnaujinta %s</string>
@@ -60,7 +58,6 @@
     <string name="system_prop_incorrect"><![CDATA[Ištrintos arba pakeistos kai kurios būtinos sistemos savybės.<br/>Moduliai kartais gali būti pripažinti negaliojančiais.]]></string>
     <string name="need_update">Reikia atnaujinti</string>
     <string name="please_update_summary">Įdiekite naujausią \"LSPosed\" versiją</string>
-    <string name="lsposed_not_active">Šiuo metu \"LSPosed\" nėra įdiegta arba aktyvi.</string>
     <string name="info_api_version">API versija</string>
     <string name="info_framework_version">Pagrindų versija</string>
     <string name="info_manager_version">Valdytojo versija</string>
@@ -79,6 +76,7 @@
     <string name="sepolicy_incorrect">\"SELinux\" politika yra neteisinga</string>
     <string name="update_lsposed">Atnaujinti LSPosed</string>
     <string name="update_lsposed_msg">Patvirtinkite, kad atnaujintumėte LSPosed? Baigus atnaujinimą šis prietaisas bus perkrautas</string>
+    <string name="info_copied">Nukopijuota į iškarpinę</string>
     <!-- WelcomeDialog -->
     <string name="parasitic_welcome">Sveiki atvykę į LSPosed</string>
     <string name="parasitic_welcome_summary">Jūs naudojate parazitinį tvarkytuvą, kuris gali sukurti nuorodą arba vis dar atidaryti iš pranešimo.</string>
@@ -98,7 +96,6 @@
     <string name="scroll_top">Slinkti į viršų</string>
     <string name="loading">Įkrovimas…</string>
     <string name="scroll_bottom">Slinkite į apačią</string>
-    <string name="logs_cannot_read">Negalima skaityti žurnalo: \n</string>
     <string name="menuReload">Perkrauti</string>
     <string name="logs_clear_failed_2">Nepavyko išvalyti žurnalo</string>
     <string name="menu_enable_word_wrap">Žodžių apvyniojimas</string>
@@ -197,7 +194,6 @@
     <string name="settings_translation_summary">Padėkite mums išversti %s į savo kalbą</string>
     <string name="settings_create_shortcut_summary">Sukurti nuorodą, kuri gali atidaryti parazitinį tvarkytuvą</string>
     <string name="settings_shortcut_pinned_hint">Prisegtas trumpinys</string>
-    <string name="settings_created_shortcut_summary">Sukurtas spartusis klavišas parazitų tvarkyklei atidaryti</string>
     <string name="settings_unsupported_pin_shortcut_summary">Dabartinė numatytoji paleidimo programa nepalaiko prisegamų nuorodų</string>
     <string name="settings_enable_status_notification">Pranešimas apie būseną</string>
     <string name="settings_enable_status_notification_summary">Rodyti pranešimą, kad galima atidaryti parazitinį tvarkytuvą</string>
@@ -217,17 +213,17 @@
     <string name="module_information_collaborators">Bendradarbiai</string>
     <string name="module_release_view_assets">Turtas</string>
     <string name="menu_open_in_browser">Atidaryti naršyklėje</string>
-    <string name="refresh">Atnaujinti</string>
     <string name="module_release_load_more">Rodyti senesnes versijas</string>
     <string name="module_release_no_more">Jokio išleidimo</string>
     <string name="repo_load_failed">Nepavyko įkelti modulio atramos: %s</string>
     <string name="sort_upgradable_first">Pirmiausia atnaujinamas</string>
-    <!-- CrashReportActivity -->
-    <string name="version_mismatch">LSPosed sistemos versija (%1$d) neatitinka valdytojo (%2$d). Iš naujo įdiekite \"LSPosed\".</string>
-    <string name="manager_crashed">Vadybininkas patyrė avariją</string>
-    <string name="send_crash_info">Siųsti informaciją apie avariją</string>
-    <string name="crash_info_copied">Į iškarpinę nukopijuota informacija apie avariją</string>
-    <string name="info_copied">Nukopijuota į iškarpinę</string>
+    <string name="installed">Įdiegta</string>
+    <plurals name="module_release_assets_download_count">
+        <item quantity="one">%d atsisiųsti</item>
+        <item quantity="few">%d Parsisiųsti</item>
+        <item quantity="many">%d Parsisiųsti</item>
+        <item quantity="other">%d Parsisiųsti</item>
+    </plurals>
     <!-- Colors -->
     <string name="color_sakura">Sakura</string>
     <string name="color_red">Raudona</string>
@@ -248,11 +244,4 @@
     <string name="color_deep_orange">Tamsiai oranžinė</string>
     <string name="color_brown">Ruda</string>
     <string name="color_blue_grey">Mėlyna pilka</string>
-    <string name="installed">Įdiegta</string>
-    <plurals name="module_release_assets_download_count">
-        <item quantity="one">%d atsisiųsti</item>
-        <item quantity="few">%d Parsisiųsti</item>
-        <item quantity="many">%d Parsisiųsti</item>
-        <item quantity="other">%d Parsisiųsti</item>
-    </plurals>
 </resources>
