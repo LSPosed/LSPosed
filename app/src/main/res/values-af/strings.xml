@@ -19,7 +19,6 @@
   -->
 <resources xmlns:tools="http://schemas.android.com/tools" tools:keep="@string/xposed_module_updated_notification_*,@string/module_is_not_activated_*">
     <!-- MainActivity -->
-    <string name="info">Inligting</string>
     <string name="overview">Oorsig</string>
     <string name="Modules">Modules</string>
     <plurals name="modules_enabled_count">
@@ -32,7 +31,6 @@
     <string name="About">Oor</string>
     <string name="report_issue">Rapporteer probleem</string>
     <string name="module_repo">Bewaarplek</string>
-    <string name="module_repo_loading">Laai…</string>
     <string name="module_repo_up_to_date">Alle modules op datum</string>
     <string name="module_repo_published_time">Published at %s</string>
     <string name="module_repo_updated_time">Opgedateer op %s</string>
@@ -56,10 +54,9 @@
     <string name="system_prop_incorrect"><![CDATA[Sommige nodige stelseleienskappe is uitgevee of gewysig.<br/>Modules kan soms ongeldig word.]]></string>
     <string name="need_update">Need to update</string>
     <string name="please_update_summary">Please install the latest version of LSPosed</string>
-    <string name="lsposed_not_active">LSPosed is not currently installed or active.</string>
     <string name="info_api_version">API version</string>
     <string name="info_framework_version">Framework version</string>
-    <string name="info_manager_version">Bestuurder weergawe</string>
+    <string name="info_manager_package_name">Bestuurder pakket naam</string>
     <string name="info_system_version">Stelsel weergawe</string>
     <string name="info_device">Toestel</string>
     <string name="info_system_abi">Stelsel ABI</string>
@@ -75,6 +72,7 @@
     <string name="sepolicy_incorrect">SELinux-beleid is verkeerd</string>
     <string name="update_lsposed">Dateer LSPosed op</string>
     <string name="update_lsposed_msg">Bevestig om LSPosed op te dateer? Hierdie toestel sal herlaai nadat die opdatering voltooi is</string>
+    <string name="info_copied">Gekopieer na knipbord</string>
     <!-- WelcomeDialog -->
     <string name="parasitic_welcome">Welkom by LSPosed</string>
     <string name="parasitic_welcome_summary">Jy gebruik die parasitiese bestuurder, wat kortpad kan skep of steeds oopmaak vanaf kennisgewing.</string>
@@ -87,6 +85,7 @@
     <string name="menuSaveToSd">Stoor</string>
     <string name="nav_item_logs_verbose">Uitgebreide logs</string>
     <string name="nav_item_logs_module">Modules</string>
+    <string name="logs_saving">Stoor tans logboek, wag asseblief</string>
     <string name="logs_saved">Logs gestoor</string>
     <string name="logs_save_failed2">Kon nie stoor nie:\n%s</string>
     <string name="menuClearLog">Vee logboek nou uit</string>
@@ -94,7 +93,6 @@
     <string name="scroll_top">Blaai na bo</string>
     <string name="loading">Laai…</string>
     <string name="scroll_bottom">Blaai na onder</string>
-    <string name="logs_cannot_read">Kan nie logboek lees nie: \n</string>
     <string name="menuReload">Herlaai</string>
     <string name="logs_clear_failed_2">Kon nie die logboek skoonmaak nie</string>
     <string name="menu_enable_word_wrap">Woordomhulsel</string>
@@ -193,7 +191,6 @@
     <string name="settings_translation_summary">Help ons om %s in jou taal te vertaal</string>
     <string name="settings_create_shortcut_summary">Skep \'n kortpad wat parasitiese bestuurder kan oopmaak</string>
     <string name="settings_shortcut_pinned_hint">Shortcut pinned</string>
-    <string name="settings_created_shortcut_summary">\'n Kortpad is geskep om parasitiese bestuurder oop te maak</string>
     <string name="settings_unsupported_pin_shortcut_summary">Die huidige versteklanseerder ondersteun nie penkortpaaie nie</string>
     <string name="settings_enable_status_notification">Statuskennisgewing</string>
     <string name="settings_enable_status_notification_summary">Wys \'n kennisgewing wat parasitiese bestuurder kan oopmaak</string>
@@ -213,17 +210,15 @@
     <string name="module_information_collaborators">Medewerkers</string>
     <string name="module_release_view_assets">Bates</string>
     <string name="menu_open_in_browser">Maak oop in blaaier</string>
-    <string name="refresh">Verfris</string>
     <string name="module_release_load_more">Wys ouer weergawes</string>
     <string name="module_release_no_more">Geen vrystelling meer nie</string>
     <string name="repo_load_failed">Kon nie module repo laai nie: %s</string>
     <string name="sort_upgradable_first">Eers opgradeerbaar</string>
-    <!-- CrashReportActivity -->
-    <string name="version_mismatch">Die weergawe van die LSPosed-raamwerk (%1$d) stem nie ooreen met bestuurder (%2$d) nie. Herinstalleer asseblief LSPosed.</string>
-    <string name="manager_crashed">Bestuurder het omgeval</string>
-    <string name="send_crash_info">Stuur omvalinligting</string>
-    <string name="crash_info_copied">Omvalinligting is na knipbord gekopieer</string>
-    <string name="info_copied">Gekopieer na knipbord</string>
+    <string name="installed">Geïnstalleer</string>
+    <plurals name="module_release_assets_download_count">
+        <item quantity="one">%d aflaai</item>
+        <item quantity="other">%d aflaaie</item>
+    </plurals>
     <!-- Colors -->
     <string name="color_sakura">Sakura</string>
     <string name="color_red">Rooi</string>
@@ -244,9 +239,4 @@
     <string name="color_deep_orange">Diep oranje</string>
     <string name="color_brown">Bruin</string>
     <string name="color_blue_grey">Blou grys</string>
-    <string name="installed">Geïnstalleer</string>
-    <plurals name="module_release_assets_download_count">
-        <item quantity="one">%d aflaai</item>
-        <item quantity="other">%d aflaaie</item>
-    </plurals>
 </resources>

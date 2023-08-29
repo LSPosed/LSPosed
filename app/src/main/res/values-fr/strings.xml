@@ -19,7 +19,6 @@
   -->
 <resources xmlns:tools="http://schemas.android.com/tools" tools:keep="@string/xposed_module_updated_notification_*,@string/module_is_not_activated_*">
     <!-- MainActivity -->
-    <string name="info">Info</string>
     <string name="overview">Aperçu</string>
     <string name="Modules">Module</string>
     <plurals name="modules_enabled_count">
@@ -32,7 +31,6 @@
     <string name="About">À propos</string>
     <string name="report_issue">Signaler un problème</string>
     <string name="module_repo">Dépôt</string>
-    <string name="module_repo_loading">Chargement…</string>
     <string name="module_repo_up_to_date">Tous les modules sont à jour</string>
     <string name="module_repo_published_time">Publié le %s</string>
     <string name="module_repo_updated_time">Mise à jour le %s</string>
@@ -57,10 +55,9 @@ https://github.com/tclement0922</string>
     <string name="system_prop_incorrect"><![CDATA[Certaines propriétés nécessaires au système ont été supprimées ou modifiées.<br/>Des modules peuvent s\'invalider occasionnellement.]]></string>
     <string name="need_update">Mise à jour nécessaire</string>
     <string name="please_update_summary">Merci d\’installer la dernière version de LSPosed</string>
-    <string name="lsposed_not_active">LSPosed n\’est actuellement pas installé ou activé.</string>
     <string name="info_api_version">Version de l\’API</string>
     <string name="info_framework_version">Version du framework</string>
-    <string name="info_manager_version">Version du gestionnaire</string>
+    <string name="info_manager_package_name">Nom de paquet du gestionnaire</string>
     <string name="info_system_version">Version du système</string>
     <string name="info_device">Périphérique</string>
     <string name="info_system_abi">Architecture du système</string>
@@ -76,6 +73,7 @@ https://github.com/tclement0922</string>
     <string name="sepolicy_incorrect">La politique SELinux est incorrecte</string>
     <string name="update_lsposed">Mettre à jour LSPosed</string>
     <string name="update_lsposed_msg">Vous confirmez la mise à jour LSPosed ? Ce périphérique redémarrera après la mise à jour effectuée</string>
+    <string name="info_copied">Copié dans le presse-papier</string>
     <!-- WelcomeDialog -->
     <string name="parasitic_welcome">Bienvenue dans LSPosed</string>
     <string name="parasitic_welcome_summary">Vous utilisez le gestionnaire parasité, qui ne peut pas créer de raccourcis ou même être ouvert à partir d\'une notification.</string>
@@ -88,6 +86,7 @@ https://github.com/tclement0922</string>
     <string name="menuSaveToSd">Sauvegarder</string>
     <string name="nav_item_logs_verbose">Journaux détaillés</string>
     <string name="nav_item_logs_module">Journaux des modules</string>
+    <string name="logs_saving">Enregistrement du journal, veuillez patienter</string>
     <string name="logs_saved">Journaux enregistrés</string>
     <string name="logs_save_failed2">Échec de la sauvegarde :\n%s</string>
     <string name="menuClearLog">Effacer le journal maintenant</string>
@@ -95,7 +94,6 @@ https://github.com/tclement0922</string>
     <string name="scroll_top">Haut de page</string>
     <string name="loading">Chargement…</string>
     <string name="scroll_bottom">Pied de page</string>
-    <string name="logs_cannot_read">Lecture du journal impossible : \n</string>
     <string name="menuReload">Recharger</string>
     <string name="logs_clear_failed_2">Échec de l\'effacement du journal</string>
     <string name="menu_enable_word_wrap">Retour à la ligne</string>
@@ -194,7 +192,6 @@ https://github.com/tclement0922</string>
     <string name="settings_translation_summary">Aidez-nous à traduire %s dans votre langue</string>
     <string name="settings_create_shortcut_summary">Créer un raccourcis pouvant ouvrir le gestionnaire parasitaire</string>
     <string name="settings_shortcut_pinned_hint">Raccourci épinglé</string>
-    <string name="settings_created_shortcut_summary">Un raccourcis a été créé pour ouvrir le gestionnaire parasitaire</string>
     <string name="settings_unsupported_pin_shortcut_summary">Le lanceur par défaut actuel ne supporte pas les raccourcis épinglés</string>
     <string name="settings_enable_status_notification">Notification d\'état</string>
     <string name="settings_enable_status_notification_summary">Afficher une notification pouvant ouvrir le gestionnaire parasitaire</string>
@@ -214,17 +211,15 @@ https://github.com/tclement0922</string>
     <string name="module_information_collaborators">Collaborateurs</string>
     <string name="module_release_view_assets">Actifs</string>
     <string name="menu_open_in_browser">Ouvrir dans le navigateur</string>
-    <string name="refresh">Rafraîchir</string>
     <string name="module_release_load_more">Afficher les anciennes versions</string>
     <string name="module_release_no_more">Pas d\’autres versions</string>
     <string name="repo_load_failed">Échec de chargement du dépôt des modules : %s</string>
     <string name="sort_upgradable_first">Évolutifs en premier</string>
-    <!-- CrashReportActivity -->
-    <string name="version_mismatch">La version du sous système LSPosed (%1$d) ne correspond pas à celle du gestionnaire (%2$d). Merci de réinstaller LSPosed.</string>
-    <string name="manager_crashed">Le gestionnaire a planté</string>
-    <string name="send_crash_info">Envoyer les infos de plantage</string>
-    <string name="crash_info_copied">Infos de plantage copiées dans le presse-papier</string>
-    <string name="info_copied">Copié dans le presse-papier</string>
+    <string name="installed">installée</string>
+    <plurals name="module_release_assets_download_count">
+        <item quantity="one">%d téléchargé</item>
+        <item quantity="other">%d téléchargés</item>
+    </plurals>
     <!-- Colors -->
     <string name="color_sakura">Sakura</string>
     <string name="color_red">Rouge</string>
@@ -245,9 +240,4 @@ https://github.com/tclement0922</string>
     <string name="color_deep_orange">Orange foncé</string>
     <string name="color_brown">Marron</string>
     <string name="color_blue_grey">Bleu grisâtre</string>
-    <string name="installed">installée</string>
-    <plurals name="module_release_assets_download_count">
-        <item quantity="one">%d téléchargé</item>
-        <item quantity="other">%d téléchargés</item>
-    </plurals>
 </resources>
