@@ -19,7 +19,6 @@
   -->
 <resources xmlns:tools="http://schemas.android.com/tools" tools:keep="@string/xposed_module_updated_notification_*,@string/module_is_not_activated_*">
     <!-- MainActivity -->
-    <string name="info">Informasi</string>
     <string name="overview">Ringkasan</string>
     <string name="Modules">Modul</string>
     <plurals name="modules_enabled_count">
@@ -31,7 +30,6 @@
     <string name="About">Tentang</string>
     <string name="report_issue">Laporkan masalah</string>
     <string name="module_repo">Gudang</string>
-    <string name="module_repo_loading">Memuat…</string>
     <string name="module_repo_up_to_date">Semua modul sudah terbaru</string>
     <string name="module_repo_published_time">Diterbitkan pada %s</string>
     <string name="module_repo_updated_time">Diperbarui pada %s</string>
@@ -54,7 +52,6 @@
     <string name="system_prop_incorrect"><![CDATA[Beberapa properti sistem yang diperlukan dihapus atau diubah.<br/>Modul terkadang tidak valid.]]></string>
     <string name="need_update">Butuh pembaruan</string>
     <string name="please_update_summary">Silakan pasang LSPosed versi terbaru</string>
-    <string name="lsposed_not_active">LSPosed saat ini tidak terpasang atau tidak aktif.</string>
     <string name="info_api_version">Versi API</string>
     <string name="info_framework_version">Versi framework</string>
     <string name="info_manager_version">Versi manajer</string>
@@ -73,6 +70,7 @@
     <string name="sepolicy_incorrect">SELinux policy salah</string>
     <string name="update_lsposed">Perbarui LSPosed</string>
     <string name="update_lsposed_msg">Konfirmasi untuk pembaruan LSPosed? Perangkat ini akan mulai ulang setelah pembaruan selesai</string>
+    <string name="info_copied">Disalin ke papan klip</string>
     <!-- WelcomeDialog -->
     <string name="parasitic_welcome">Selamat datang di LSPosed</string>
     <string name="parasitic_welcome_summary">Anda menggunakan manajer parasit, yang dapat membuat pintasan atau dapat terbuka dari notifikasi.</string>
@@ -85,6 +83,7 @@
     <string name="menuSaveToSd">Simpan</string>
     <string name="nav_item_logs_verbose">Log Verbose</string>
     <string name="nav_item_logs_module">Log Modul</string>
+    <string name="logs_saving">Saving log, please wait</string>
     <string name="logs_saved">Log disimpan</string>
     <string name="logs_save_failed2">Gagal menyimpan:\n%s</string>
     <string name="menuClearLog">Hapus log sekarang</string>
@@ -92,7 +91,6 @@
     <string name="scroll_top">Gulir ke atas</string>
     <string name="loading">Memuat…</string>
     <string name="scroll_bottom">Gulir ke bawah</string>
-    <string name="logs_cannot_read">Tidak dapat membaca log: \n</string>
     <string name="menuReload">Muat ulang</string>
     <string name="logs_clear_failed_2">Gagal menghapus log</string>
     <string name="menu_enable_word_wrap">Bungkus Kata</string>
@@ -191,7 +189,6 @@
     <string name="settings_translation_summary">Bantu kami menerjemahkan %s ke dalam bahasamu</string>
     <string name="settings_create_shortcut_summary">Buat pintasan yang dapat membuka manajer parasit</string>
     <string name="settings_shortcut_pinned_hint">Pintasan disematkan</string>
-    <string name="settings_created_shortcut_summary">Pintasan telah dibuat untuk membuka manajer parasit</string>
     <string name="settings_unsupported_pin_shortcut_summary">Peluncur default saat ini tidak mendukung pintasan pin</string>
     <string name="settings_enable_status_notification">Notifikasi Status</string>
     <string name="settings_enable_status_notification_summary">Tampilkan notifikasi yang dapat membuka manajer parasit</string>
@@ -211,17 +208,15 @@
     <string name="module_information_collaborators">Kolaborator</string>
     <string name="module_release_view_assets">Aset</string>
     <string name="menu_open_in_browser">Buka di browser</string>
-    <string name="refresh">Segarkan</string>
     <string name="module_release_load_more">Tampilkan versi lama</string>
     <string name="module_release_no_more">Tidak ada rilis</string>
     <string name="repo_load_failed">Gagal memuat repo modul: %s</string>
     <string name="sort_upgradable_first">Dapat diupgrade terlebih dahulu</string>
-    <!-- CrashReportActivity -->
-    <string name="version_mismatch">Versi dari LSPosed framework (%1$d) tidak cocok dengan pengelola (%2$d). Mohon pasang ulang LSPosed.</string>
-    <string name="manager_crashed">Manajer crash</string>
-    <string name="send_crash_info">Kirim info crash</string>
-    <string name="crash_info_copied">Info crash dicopy ke clipboard</string>
-    <string name="info_copied">Disalin ke papan klip</string>
+    <string name="installed">Terpasang</string>
+    <plurals name="module_release_assets_download_count">
+        <item quantity="other">%d unduh
+%d unduhan</item>
+    </plurals>
     <!-- Colors -->
     <string name="color_sakura">Sakura</string>
     <string name="color_red">Merah</string>
@@ -242,9 +237,4 @@
     <string name="color_deep_orange">Jingga gelap</string>
     <string name="color_brown">Coklat</string>
     <string name="color_blue_grey">Abu-abu kebiruan</string>
-    <string name="installed">Terpasang</string>
-    <plurals name="module_release_assets_download_count">
-        <item quantity="other">%d unduh
-%d unduhan</item>
-    </plurals>
 </resources>
