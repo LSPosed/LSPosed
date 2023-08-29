@@ -19,7 +19,6 @@
   -->
 <resources xmlns:tools="http://schemas.android.com/tools" tools:keep="@string/xposed_module_updated_notification_*,@string/module_is_not_activated_*">
     <!-- MainActivity -->
-    <string name="info">Informasjon</string>
     <string name="overview">Oversikt</string>
     <string name="Modules">Moduler</string>
     <plurals name="modules_enabled_count">
@@ -32,7 +31,6 @@
     <string name="About">Om</string>
     <string name="report_issue">Rapporter en feil</string>
     <string name="module_repo">Kodelager</string>
-    <string name="module_repo_loading">Laster…</string>
     <string name="module_repo_up_to_date">Alle moduler oppdatert</string>
     <string name="module_repo_published_time">Publisert på %s</string>
     <string name="module_repo_updated_time">Oppdatert kl %s</string>
@@ -56,7 +54,6 @@
     <string name="system_prop_incorrect"><![CDATA[Noen nødvendige systemegenskaper kan slettes eller endres.<br/>Moduler kan godkjennes av og til.]]></string>
     <string name="need_update">Må oppdatere</string>
     <string name="please_update_summary">Vennligst installer den nyeste versjonen av LSPosed</string>
-    <string name="lsposed_not_active">LSPC er ikke installert eller aktivt.</string>
     <string name="info_api_version">API versjon</string>
     <string name="info_framework_version">Rammeverk versjon</string>
     <string name="info_manager_version">Overordnet versjon</string>
@@ -75,6 +72,7 @@
     <string name="sepolicy_incorrect">SELinux policy er feil</string>
     <string name="update_lsposed">Oppdateringen LSPosed</string>
     <string name="update_lsposed_msg">Bekreft oppdatering av LSPosed? Denne enheten vil starte på nytt etter fullført oppdatering</string>
+    <string name="info_copied">Kopiert til utklippstavlen</string>
     <!-- WelcomeDialog -->
     <string name="parasitic_welcome">Velkommen til LSPosed</string>
     <string name="parasitic_welcome_summary">Du bruker den parasittiske manageren, som kan opprette snarvei eller fortsatt åpne fra varsling.</string>
@@ -94,7 +92,6 @@
     <string name="scroll_top">Rull til toppen</string>
     <string name="loading">Laster…</string>
     <string name="scroll_bottom">Rull til bunnen</string>
-    <string name="logs_cannot_read">Kan ikke lese loggen: \n</string>
     <string name="menuReload">Reload</string>
     <string name="logs_clear_failed_2">Kunne ikke tømme loggen</string>
     <string name="menu_enable_word_wrap">Ordfarget farget farget</string>
@@ -193,7 +190,6 @@
     <string name="settings_translation_summary">Hjelp oss med å oversette %s til ditt språk</string>
     <string name="settings_create_shortcut_summary">Lag en snarvei som kan åpne parasitic manager</string>
     <string name="settings_shortcut_pinned_hint">Snarvei festet</string>
-    <string name="settings_created_shortcut_summary">En snarvei er opprettet for å åpne parasitic manager</string>
     <string name="settings_unsupported_pin_shortcut_summary">Den gjeldende standardstarteren støtter ikke pin-snarveier</string>
     <string name="settings_enable_status_notification">Statusvarsel</string>
     <string name="settings_enable_status_notification_summary">Vis et varsel som kan åpne parasitic manager</string>
@@ -213,17 +209,15 @@
     <string name="module_information_collaborators">Samarbeidspartnere</string>
     <string name="module_release_view_assets">Eiendeler</string>
     <string name="menu_open_in_browser">Åpne i nettleser</string>
-    <string name="refresh">Oppdater</string>
     <string name="module_release_load_more">Vis eldre versjoner</string>
     <string name="module_release_no_more">Ingen flere utgivelse</string>
     <string name="repo_load_failed">Kunne ikke laste modulrepo: %s</string>
     <string name="sort_upgradable_first">Oppgraderbar først</string>
-    <!-- CrashReportActivity -->
-    <string name="version_mismatch">Versjonen av det LSPed-rammeverket (%1$d) stemmer ikke overens med behandleren (%2$d). Installer LSPC på nytt.</string>
-    <string name="manager_crashed">Håndterer krasjet</string>
-    <string name="send_crash_info">Send krasjinformasjon</string>
-    <string name="crash_info_copied">Krasj info kopiert til utklippstavlen</string>
-    <string name="info_copied">Kopiert til utklippstavlen</string>
+    <string name="installed">Installert</string>
+    <plurals name="module_release_assets_download_count">
+        <item quantity="one">%d nedlasting</item>
+        <item quantity="other">%d nedlastinger</item>
+    </plurals>
     <!-- Colors -->
     <string name="color_sakura">Sakura</string>
     <string name="color_red">Rød</string>
@@ -244,9 +238,4 @@
     <string name="color_deep_orange">Dyp oransje</string>
     <string name="color_brown">Brun</string>
     <string name="color_blue_grey">Blå grå</string>
-    <string name="installed">Installert</string>
-    <plurals name="module_release_assets_download_count">
-        <item quantity="one">%d nedlasting</item>
-        <item quantity="other">%d nedlastinger</item>
-    </plurals>
 </resources>
