@@ -56,7 +56,7 @@
     <string name="please_update_summary">Installeer de laatste versie van LSPosed</string>
     <string name="info_api_version">API versie</string>
     <string name="info_framework_version">Framework versie</string>
-    <string name="info_manager_version">Manager versie</string>
+    <string name="info_manager_package_name">Naam beheerderspakket</string>
     <string name="info_system_version">Systeem versie</string>
     <string name="info_device">Apparaat</string>
     <string name="info_system_abi">Systeem ABI</string>
@@ -85,6 +85,7 @@
     <string name="menuSaveToSd">Opslaan</string>
     <string name="nav_item_logs_verbose">Uitgebreide logs</string>
     <string name="nav_item_logs_module">Modules Logbestanden</string>
+    <string name="logs_saving">Logboek wordt opgeslagen, even geduld a.u.b.</string>
     <string name="logs_saved">Opgeslagen logboeken</string>
     <string name="logs_save_failed2">Opslaan mislukt:\n%s</string>
     <string name="menuClearLog">Wis het logboek nu</string>
