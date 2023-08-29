@@ -56,7 +56,7 @@
     <string name="please_update_summary">Installér venligst den seneste version af LSPosed</string>
     <string name="info_api_version">API version</string>
     <string name="info_framework_version">Rammer version</string>
-    <string name="info_manager_version">Administrer version</string>
+    <string name="info_manager_package_name">Navn på manager-pakke</string>
     <string name="info_system_version">System version</string>
     <string name="info_device">Enhed</string>
     <string name="info_system_abi">System ABI</string>
@@ -85,6 +85,7 @@
     <string name="menuSaveToSd">Gem</string>
     <string name="nav_item_logs_verbose">Verbose Logs</string>
     <string name="nav_item_logs_module">Moduler Logs</string>
+    <string name="logs_saving">Gemmer log, vent venligst</string>
     <string name="logs_saved">Gemte logfiler</string>
     <string name="logs_save_failed2">Mislykkedes at gemme:\n%s</string>
     <string name="menuClearLog">Ryd log nu</string>
