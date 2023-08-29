@@ -60,7 +60,7 @@
     <string name="please_update_summary">Nainštalujte si najnovšiu verziu aplikácie LSPosed</string>
     <string name="info_api_version">Verzia API</string>
     <string name="info_framework_version">Verzia rámca</string>
-    <string name="info_manager_version">Verzia manažéra</string>
+    <string name="info_manager_package_name">Názov balíka správcu</string>
     <string name="info_system_version">Verzia systému</string>
     <string name="info_device">Zariadenie</string>
     <string name="info_system_abi">Systém ABI</string>
@@ -89,6 +89,7 @@
     <string name="menuSaveToSd">Uložiť</string>
     <string name="nav_item_logs_verbose">Verbálne protokoly</string>
     <string name="nav_item_logs_module">Protokoly modulov</string>
+    <string name="logs_saving">Ukladanie denníka, počkajte, prosím</string>
     <string name="logs_saved">Uložené protokoly</string>
     <string name="logs_save_failed2">Nepodarilo sa uložiť:\n%s</string>
     <string name="menuClearLog">Vymazať protokol</string>
