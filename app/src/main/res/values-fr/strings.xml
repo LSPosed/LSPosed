@@ -57,7 +57,7 @@ https://github.com/tclement0922</string>
     <string name="please_update_summary">Merci d\’installer la dernière version de LSPosed</string>
     <string name="info_api_version">Version de l\’API</string>
     <string name="info_framework_version">Version du framework</string>
-    <string name="info_manager_version">Version du gestionnaire</string>
+    <string name="info_manager_package_name">Nom de paquet du gestionnaire</string>
     <string name="info_system_version">Version du système</string>
     <string name="info_device">Périphérique</string>
     <string name="info_system_abi">Architecture du système</string>
