@@ -56,7 +56,6 @@
     <string name="please_update_summary">Vennligst installer den nyeste versjonen av LSPosed</string>
     <string name="info_api_version">API versjon</string>
     <string name="info_framework_version">Rammeverk versjon</string>
-    <string name="info_manager_version">Overordnet versjon</string>
     <string name="info_system_version">System versjon</string>
     <string name="info_device">Enhet</string>
     <string name="info_system_abi">System ABI</string>
