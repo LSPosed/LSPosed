@@ -57,7 +57,7 @@
     <string name="please_update_summary">Kérjük, telepítse az LSPosed legújabb verzióját</string>
     <string name="info_api_version">API verzió</string>
     <string name="info_framework_version">Keretrendszer verzió</string>
-    <string name="info_manager_version">Manager verzió</string>
+    <string name="info_manager_package_name">Menedzser csomag neve</string>
     <string name="info_system_version">Rendszer verzió</string>
     <string name="info_device">Eszköz</string>
     <string name="info_system_abi">Rendszer ABI</string>
@@ -86,6 +86,7 @@
     <string name="menuSaveToSd">Mentés</string>
     <string name="nav_item_logs_verbose">Szöveges naplók</string>
     <string name="nav_item_logs_module">Modulok Naplói</string>
+    <string name="logs_saving">Napló mentése, kérem várjon</string>
     <string name="logs_saved">Mentett naplók</string>
     <string name="logs_save_failed2">Nem sikerült menteni:\n%s</string>
     <string name="menuClearLog">Törölje a naplót most</string>
