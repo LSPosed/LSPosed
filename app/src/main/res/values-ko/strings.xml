@@ -54,7 +54,7 @@
     <string name="please_update_summary">최신 버전으로 LSPosed를 설치해 주세요</string>
     <string name="info_api_version">API 버전</string>
     <string name="info_framework_version">Framework 버전</string>
-    <string name="info_manager_version">Manager 버전</string>
+    <string name="info_manager_package_name">관리자 패키지 이름</string>
     <string name="info_system_version">System 버전</string>
     <string name="info_device">장치</string>
     <string name="info_system_abi">시스템 ABI</string>
