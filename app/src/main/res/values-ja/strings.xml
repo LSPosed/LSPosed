@@ -54,7 +54,7 @@
     <string name="please_update_summary">最新バージョンの LSPosedをインストールして下さい</string>
     <string name="info_api_version">APIバージョン</string>
     <string name="info_framework_version">フレームワークバージョン</string>
-    <string name="info_manager_version">マネージャーバージョン</string>
+    <string name="info_manager_package_name">マネージャーパッケージ名</string>
     <string name="info_system_version">システムバージョン</string>
     <string name="info_device">デバイス</string>
     <string name="info_system_abi">システムABI</string>
@@ -83,6 +83,7 @@
     <string name="menuSaveToSd">保存</string>
     <string name="nav_item_logs_verbose">詳細ログ</string>
     <string name="nav_item_logs_module">モジュールログ</string>
+    <string name="logs_saving">ログを保存しています。</string>
     <string name="logs_saved">ログを保存しました</string>
     <string name="logs_save_failed2">保存に失敗しました:\n%s</string>
     <string name="menuClearLog">ログを消去</string>
