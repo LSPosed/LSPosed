@@ -57,7 +57,7 @@ JJ108</string>
     <string name="please_update_summary">Bitte installieren Sie die neueste Version von LSPosed</string>
     <string name="info_api_version">API Version</string>
     <string name="info_framework_version">Framework Version</string>
-    <string name="info_manager_version">Manager Version</string>
+    <string name="info_manager_package_name">Name des Managerpakets</string>
     <string name="info_system_version">System Version</string>
     <string name="info_device">Gerät</string>
     <string name="info_system_abi">System ABI</string>
@@ -86,6 +86,7 @@ JJ108</string>
     <string name="menuSaveToSd">Speichern</string>
     <string name="nav_item_logs_verbose">Ausführliche Protokolle</string>
     <string name="nav_item_logs_module">Modul-Protokolle</string>
+    <string name="logs_saving">Protokoll wird gespeichert, bitte warten</string>
     <string name="logs_saved">Gespeicherte Protokolle</string>
     <string name="logs_save_failed2">Speichern fehlgeschlagen:\n%s</string>
     <string name="menuClearLog">Protokoll jetzt löschen</string>
