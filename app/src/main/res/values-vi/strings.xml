@@ -54,6 +54,7 @@
     <string name="please_update_summary">Vui lòng cài đặt phiên bản mới nhất của LSPosed</string>
     <string name="info_api_version">Phiên bản API</string>
     <string name="info_framework_version">Phiên bản Framework</string>
+    <string name="info_manager_package_name">Tên gói quản lý</string>
     <string name="info_system_version">Phiên bản hệ thống</string>
     <string name="info_device">Thiết bị</string>
     <string name="info_system_abi">Hệ thống ABI</string>
@@ -83,6 +84,7 @@ Nên gỡ cài đặt ứng dụng hiện tại.</string>
     <string name="menuSaveToSd">Lưu lại</string>
     <string name="nav_item_logs_verbose">Nhật ký Chi tiết</string>
     <string name="nav_item_logs_module">Nhật ký các Mô-đun</string>
+    <string name="logs_saving">Đang lưu nhật ký, vui lòng đợi</string>
     <string name="logs_saved">Nhật ký đã được lưu</string>
     <string name="logs_save_failed2">Lưu thất bại:\n%s</string>
     <string name="menuClearLog">Xóa nhật ký</string>
