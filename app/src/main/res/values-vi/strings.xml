@@ -54,7 +54,6 @@
     <string name="please_update_summary">Vui lòng cài đặt phiên bản mới nhất của LSPosed</string>
     <string name="info_api_version">Phiên bản API</string>
     <string name="info_framework_version">Phiên bản Framework</string>
-    <string name="info_manager_version">Phiên bản trình quản lý</string>
     <string name="info_system_version">Phiên bản hệ thống</string>
     <string name="info_device">Thiết bị</string>
     <string name="info_system_abi">Hệ thống ABI</string>
