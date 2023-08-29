@@ -56,6 +56,7 @@
     <string name="please_update_summary">অনুগ্রহ করে LSPosed এর সর্বশেষ সংস্করণটি ইনস্টল করুন</string>
     <string name="info_api_version">API সংস্করণ</string>
     <string name="info_framework_version">ফ্রেমওয়ার্ক সংস্করণ</string>
+    <string name="info_manager_package_name">ম্যানেজার প্যাকেজের নাম</string>
     <string name="info_system_version">সিস্টেম সংস্করণ</string>
     <string name="info_device">যন্ত্র</string>
     <string name="info_system_abi">সিস্টেম ABI</string>
@@ -84,6 +85,7 @@
     <string name="menuSaveToSd">সংরক্ষণ</string>
     <string name="nav_item_logs_verbose">ভার্বোস লগ</string>
     <string name="nav_item_logs_module">মডিউল লগ</string>
+    <string name="logs_saving">লগ সংরক্ষণ করা হচ্ছে, অনুগ্রহ করে অপেক্ষা করুন</string>
     <string name="logs_saved">লগ সংরক্ষিত</string>
     <string name="logs_save_failed2">সংরক্ষণ করতে ব্যর্থ হয়েছে:\n%s</string>
     <string name="menuClearLog">এখন লগ সাফ করুন</string>
