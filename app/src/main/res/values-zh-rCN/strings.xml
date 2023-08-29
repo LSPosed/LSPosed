@@ -54,7 +54,7 @@
     <string name="please_update_summary">请安装新版 LSPosed</string>
     <string name="info_api_version">API 版本</string>
     <string name="info_framework_version">框架版本</string>
-    <string name="info_manager_version">管理器版本</string>
+    <string name="info_manager_package_name">管理器包名</string>
     <string name="info_system_version">系统版本</string>
     <string name="info_device">设备</string>
     <string name="info_system_abi">系统架构</string>
