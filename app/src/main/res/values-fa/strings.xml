@@ -57,7 +57,6 @@ https://github.com/topjohnwu/Magisk/issues]]></string>
     <string name="please_update_summary">لطفا آخرین نسخه LSPosed را نصب کنید</string>
     <string name="info_api_version">نسخه API</string>
     <string name="info_framework_version">نسخه فریمورک</string>
-    <string name="info_manager_version">نسخه مدیر lsposed </string>
     <string name="info_system_version">نسخه اندروید</string>
     <string name="info_device">مدل دستگاه</string>
     <string name="info_system_abi">نوع پردازنده</string>
