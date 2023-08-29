@@ -56,7 +56,7 @@
     <string name="please_update_summary">Моля, инсталирайте най-новата версия на LSPosed</string>
     <string name="info_api_version">Версия на API</string>
     <string name="info_framework_version">Версия на рамката</string>
-    <string name="info_manager_version">Версия на мениджъра</string>
+    <string name="info_manager_package_name">Име на пакета на мениджъра</string>
     <string name="info_system_version">Версия на системата</string>
     <string name="info_device">Устройство</string>
     <string name="info_system_abi">ABI на системата</string>
@@ -85,6 +85,7 @@
     <string name="menuSaveToSd">Запазете</string>
     <string name="nav_item_logs_verbose">Условни дневници</string>
     <string name="nav_item_logs_module">Дневници на модулите</string>
+    <string name="logs_saving">Запазване на дневника, моля изчакайте</string>
     <string name="logs_saved">Запазени дневници</string>
     <string name="logs_save_failed2">Не успяхте да запазите:\n%s</string>
     <string name="menuClearLog">Изчистване на дневника сега</string>
