@@ -60,7 +60,7 @@
     <string name="please_update_summary">Įdiekite naujausią \"LSPosed\" versiją</string>
     <string name="info_api_version">API versija</string>
     <string name="info_framework_version">Pagrindų versija</string>
-    <string name="info_manager_version">Valdytojo versija</string>
+    <string name="info_manager_package_name">Valdytojo paketo pavadinimas</string>
     <string name="info_system_version">Sistemos versija</string>
     <string name="info_device">Įrenginys</string>
     <string name="info_system_abi">Sistemos ABI</string>
@@ -89,6 +89,7 @@
     <string name="menuSaveToSd">Išsaugoti</string>
     <string name="nav_item_logs_verbose">Žurnalai su verbaline informacija</string>
     <string name="nav_item_logs_module">Modulių žurnalai</string>
+    <string name="logs_saving">Įrašomas žurnalas, palaukite</string>
     <string name="logs_saved">Išsaugoti žurnalai</string>
     <string name="logs_save_failed2">Nepavyko išsaugoti:\n%s</string>
     <string name="menuClearLog">Išvalyti žurnalą dabar</string>
