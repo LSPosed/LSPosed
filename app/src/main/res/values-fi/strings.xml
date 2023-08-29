@@ -19,7 +19,6 @@
   -->
 <resources xmlns:tools="http://schemas.android.com/tools" tools:keep="@string/xposed_module_updated_notification_*,@string/module_is_not_activated_*">
     <!-- MainActivity -->
-    <string name="info">Tiedot</string>
     <string name="overview">Yleiskatsaus</string>
     <string name="Modules">Moduulit</string>
     <plurals name="modules_enabled_count">
@@ -32,7 +31,6 @@
     <string name="About">Tietoja</string>
     <string name="report_issue">Ilmoita ongelmasta</string>
     <string name="module_repo">Versiovarasto</string>
-    <string name="module_repo_loading">Ladataan…</string>
     <string name="module_repo_up_to_date">Kaikki moduulit ajan tasalla</string>
     <string name="module_repo_published_time">Julkaistu osoitteessa %s</string>
     <string name="module_repo_updated_time">Päivitetty osoitteessa %s</string>
@@ -56,7 +54,6 @@
     <string name="system_prop_incorrect"><![CDATA[Jotkut tarvittavat järjestelmän ominaisuudet poistettu tai muokattu.<br/>Moduulit voivat mitätöidä satunnaisesti.]]></string>
     <string name="need_update">Täytyy päivittää</string>
     <string name="please_update_summary">Asenna LSPosedin uusin versio</string>
-    <string name="lsposed_not_active">LSPosed ei ole tällä hetkellä asennettu tai aktiivinen.</string>
     <string name="info_api_version">API versio</string>
     <string name="info_framework_version">Kehyksen versio</string>
     <string name="info_manager_version">Managerin versio</string>
@@ -75,6 +72,7 @@
     <string name="sepolicy_incorrect">SELinux-käytäntö on virheellinen</string>
     <string name="update_lsposed">Päivitys LSPostettu</string>
     <string name="update_lsposed_msg">Vahvista LSPost-päivitys? Tämä laite käynnistyy uudelleen päivityksen jälkeen</string>
+    <string name="info_copied">Kopioitu leikepöydälle</string>
     <!-- WelcomeDialog -->
     <string name="parasitic_welcome">Tervetuloa LSPosed</string>
     <string name="parasitic_welcome_summary">Käytät loishallintaohjelmaa, joka voi luoda pikakuvakkeen tai silti avata ilmoituksen.</string>
@@ -94,7 +92,6 @@
     <string name="scroll_top">Vieritä ylös</string>
     <string name="loading">Ladataan…</string>
     <string name="scroll_bottom">Siirry alareunaan</string>
-    <string name="logs_cannot_read">Lokia ei voi lukea: \n</string>
     <string name="menuReload">Reload</string>
     <string name="logs_clear_failed_2">Lokin tyhjentäminen epäonnistui</string>
     <string name="menu_enable_word_wrap">Sanan Rivitys</string>
@@ -193,7 +190,6 @@
     <string name="settings_translation_summary">Auta meitä kääntämään %s kielellesi</string>
     <string name="settings_create_shortcut_summary">Luo pikakuvake, joka voi avata loishallintaohjelman.</string>
     <string name="settings_shortcut_pinned_hint">Pikakuvake kiinnitetty</string>
-    <string name="settings_created_shortcut_summary">On luotu pikakuvake, jolla voit avata loishallinnan</string>
     <string name="settings_unsupported_pin_shortcut_summary">Nykyinen oletuskäynnistin ei tue pin-pikakuvakkeita.</string>
     <string name="settings_enable_status_notification">Tilailmoitus</string>
     <string name="settings_enable_status_notification_summary">Näytä ilmoitus, joka voi avata loishallintaohjelman</string>
@@ -213,17 +209,15 @@
     <string name="module_information_collaborators">Yhteistyökumppanit</string>
     <string name="module_release_view_assets">Laitteet</string>
     <string name="menu_open_in_browser">Avaa selaimessa</string>
-    <string name="refresh">Päivitä</string>
     <string name="module_release_load_more">Näytä vanhemmat versiot</string>
     <string name="module_release_no_more">Ei enää versiota</string>
     <string name="repo_load_failed">Ei voitu ladata moduulia repo: %s</string>
     <string name="sort_upgradable_first">Päivitettävissä ensin</string>
-    <!-- CrashReportActivity -->
-    <string name="version_mismatch">LSPosed framework (%1$d) versio ei vastaa manageria (%2$d). Asenna LSPosed uudelleen.</string>
-    <string name="manager_crashed">Hallinta kaatui</string>
-    <string name="send_crash_info">Lähetä kaatumistiedot</string>
-    <string name="crash_info_copied">Kaatumistiedot kopioitu leikepöydälle</string>
-    <string name="info_copied">Kopioitu leikepöydälle</string>
+    <string name="installed">Asennettu</string>
+    <plurals name="module_release_assets_download_count">
+        <item quantity="one">%d lataa</item>
+        <item quantity="other">%d lataukset</item>
+    </plurals>
     <!-- Colors -->
     <string name="color_sakura">Sakura</string>
     <string name="color_red">Punainen</string>
@@ -244,9 +238,4 @@
     <string name="color_deep_orange">Syvä oranssi</string>
     <string name="color_brown">Ruskea</string>
     <string name="color_blue_grey">Sininen harmaa</string>
-    <string name="installed">Asennettu</string>
-    <plurals name="module_release_assets_download_count">
-        <item quantity="one">%d lataa</item>
-        <item quantity="other">%d lataukset</item>
-    </plurals>
 </resources>
