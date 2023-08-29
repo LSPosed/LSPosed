@@ -19,7 +19,6 @@
   -->
 <resources xmlns:tools="http://schemas.android.com/tools" tools:keep="@string/xposed_module_updated_notification_*,@string/module_is_not_activated_*">
     <!-- MainActivity -->
-    <string name="info">जानकारियां</string>
     <string name="overview">ओवरव्यू</string>
     <string name="Modules">मॉड्यूल्स</string>
     <plurals name="modules_enabled_count">
@@ -32,7 +31,6 @@
     <string name="About">इसके बारे में</string>
     <string name="report_issue">इशू को रिपोर्ट करें</string>
     <string name="module_repo">रिपोज़िटरी</string>
-    <string name="module_repo_loading">लोड हो रहा है…</string>
     <string name="module_repo_up_to_date">सभी मॉड्यूल अप टू डेट</string>
     <string name="module_repo_published_time">%s. पर प्रकाशित</string>
     <string name="module_repo_updated_time">%s. पर अपडेट किया गया</string>
@@ -56,7 +54,6 @@
     <string name="system_prop_incorrect"><![CDATA[कुछ आवश्यक सिस्टम गुण हटा दिए गए या संशोधित किए गए।<br/>मॉड्यूल कभी-कभी अमान्य हो सकते हैं।]]></string>
     <string name="need_update">अद्यतन करने की आवश्यकता है</string>
     <string name="please_update_summary">कृपया LSPosed का नवीनतम संस्करण स्थापित करें</string>
-    <string name="lsposed_not_active">LSPosed वर्तमान में स्थापित या सक्रिय नहीं है।</string>
     <string name="info_api_version">एपीआई संस्करण</string>
     <string name="info_framework_version">फ्रेमवर्क संस्करण</string>
     <string name="info_manager_version">प्रबंधक संस्करण</string>
@@ -75,6 +72,7 @@
     <string name="sepolicy_incorrect">SELinux नीति गलत है</string>
     <string name="update_lsposed">अद्यतन LSPosed</string>
     <string name="update_lsposed_msg">LSPosed को अपडेट करने की पुष्टि करें? अपडेट पूरा होने के बाद यह डिवाइस रीबूट हो जाएगा</string>
+    <string name="info_copied">क्लिपबोर्ड पर नकल</string>
     <!-- WelcomeDialog -->
     <string name="parasitic_welcome">LSPosed में आपका स्वागत है</string>
     <string name="parasitic_welcome_summary">आप परजीवी प्रबंधक का उपयोग कर रहे हैं, जो शॉर्टकट बना सकता है या सूचना से अभी भी खुला हो सकता है।</string>
@@ -94,7 +92,6 @@
     <string name="scroll_top">शीर्ष तक स्क्रॉल करें</string>
     <string name="loading">लोड हो रहा है…</string>
     <string name="scroll_bottom">नीचे स्क्रॉल करें</string>
-    <string name="logs_cannot_read">लॉग नहीं पढ़ सकता: \n</string>
     <string name="menuReload">पुनः लोड करें</string>
     <string name="logs_clear_failed_2">लॉग साफ़ करने में विफल</string>
     <string name="menu_enable_word_wrap">वर्ड रैप</string>
@@ -193,7 +190,6 @@
     <string name="settings_translation_summary">%s को अपनी भाषा में अनुवाद करने में हमारी सहायता करें</string>
     <string name="settings_create_shortcut_summary">एक शॉर्टकट बनाएं जो परजीवी प्रबंधक खोल सके</string>
     <string name="settings_shortcut_pinned_hint">शॉर्टकट पिन किया गया</string>
-    <string name="settings_created_shortcut_summary">परजीवी प्रबंधक खोलने के लिए एक शॉर्टकट बनाया गया है</string>
     <string name="settings_unsupported_pin_shortcut_summary">वर्तमान डिफ़ॉल्ट लांचर पिन शॉर्टकट का समर्थन नहीं करता</string>
     <string name="settings_enable_status_notification">स्थिति अधिसूचना</string>
     <string name="settings_enable_status_notification_summary">एक अधिसूचना दिखाएं जो परजीवी प्रबंधक खोल सकती है</string>
@@ -213,17 +209,15 @@
     <string name="module_information_collaborators">सहयोगियों</string>
     <string name="module_release_view_assets">संपत्तियां</string>
     <string name="menu_open_in_browser">ब्राउज़र में खोलें</string>
-    <string name="refresh">ताज़ा करना</string>
     <string name="module_release_load_more">पुराने संस्करण दिखाएं</string>
     <string name="module_release_no_more">कोई और रिलीज नहीं</string>
     <string name="repo_load_failed">मॉड्यूल रेपो लोड करने में विफल: %s</string>
     <string name="sort_upgradable_first">पहले अपग्रेड करने योग्य</string>
-    <!-- CrashReportActivity -->
-    <string name="version_mismatch">LSPosed ढांचे का संस्करण (%1$d) प्रबंधक से मेल नहीं खाता (%2$d)। कृपया LSPosed को पुन: स्थापित करें।</string>
-    <string name="manager_crashed">प्रबंधक दुर्घटनाग्रस्त</string>
-    <string name="send_crash_info">क्रैश की जानकारी भेजें</string>
-    <string name="crash_info_copied">क्रैश जानकारी को क्लिपबोर्ड पर कॉपी किया गया</string>
-    <string name="info_copied">क्लिपबोर्ड पर नकल</string>
+    <string name="installed">स्थापित</string>
+    <plurals name="module_release_assets_download_count">
+        <item quantity="one">%d डाउनलोड</item>
+        <item quantity="other">%d डाउनलोड</item>
+    </plurals>
     <!-- Colors -->
     <string name="color_sakura">सकुरा</string>
     <string name="color_red">लाल</string>
@@ -244,9 +238,4 @@
     <string name="color_deep_orange">गहरा नारंगी</string>
     <string name="color_brown">भूरा</string>
     <string name="color_blue_grey">नीला ग्रे</string>
-    <string name="installed">स्थापित</string>
-    <plurals name="module_release_assets_download_count">
-        <item quantity="one">%d डाउनलोड</item>
-        <item quantity="other">%d डाउनलोड</item>
-    </plurals>
 </resources>
