@@ -173,8 +173,8 @@ public class SettingsFragment extends BaseFragment {
             MaterialSwitchPreference notificationPreference = findPreference("enable_status_notification");
             if (notificationPreference != null) {
                 notificationPreference.setVisible(installed);
-                if (installed && App.isParasitic) {
-                    notificationPreference.setChecked(setNotificationPreferenceEnabled(notificationPreference, ShortcutUtil.isLaunchShortcutPinned()));
+                if (installed) {
+                    notificationPreference.setChecked(setNotificationPreferenceEnabled(notificationPreference, !App.isParasitic || ShortcutUtil.isLaunchShortcutPinned()));
                 }
                 notificationPreference.setOnPreferenceChangeListener((p, v) -> {
                     var succeeded = ConfigManager.setEnableStatusNotification((boolean) v);
