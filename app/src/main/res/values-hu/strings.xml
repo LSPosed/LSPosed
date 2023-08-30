@@ -19,7 +19,6 @@
   -->
 <resources xmlns:tools="http://schemas.android.com/tools" tools:keep="@string/xposed_module_updated_notification_*,@string/module_is_not_activated_*">
     <!-- MainActivity -->
-    <string name="info">Információ</string>
     <string name="overview">Áttekintés</string>
     <string name="Modules">Modulok</string>
     <plurals name="modules_enabled_count">
@@ -32,7 +31,6 @@
     <string name="About">Névjegy</string>
     <string name="report_issue">Hibabejelentés</string>
     <string name="module_repo">Modulok</string>
-    <string name="module_repo_loading">Betöltés…</string>
     <string name="module_repo_up_to_date">Minden modul naprakész</string>
     <string name="module_repo_published_time">Közzétéve: %s</string>
     <string name="module_repo_updated_time">Frissítve: %s</string>
@@ -57,10 +55,9 @@
     <string name="system_prop_incorrect"><![CDATA[Néhány szükséges rendszertulajdonság törlése vagy módosítása.<br/>A modulok időnként érvénytelenné válhatnak.]]></string>
     <string name="need_update">Frissítésre van szükség</string>
     <string name="please_update_summary">Kérjük, telepítse az LSPosed legújabb verzióját</string>
-    <string name="lsposed_not_active">Az LSPosed jelenleg nincs telepítve vagy nem aktív.</string>
     <string name="info_api_version">API verzió</string>
     <string name="info_framework_version">Keretrendszer verzió</string>
-    <string name="info_manager_version">Manager verzió</string>
+    <string name="info_manager_package_name">Menedzser csomag neve</string>
     <string name="info_system_version">Rendszer verzió</string>
     <string name="info_device">Eszköz</string>
     <string name="info_system_abi">Rendszer ABI</string>
@@ -76,6 +73,7 @@
     <string name="sepolicy_incorrect">Az SELinux házirend helytelen</string>
     <string name="update_lsposed">Az LSPosed frissítése</string>
     <string name="update_lsposed_msg">Jóváhagyja az LSPosed frissítését? A készülék a frissítés befejezése után újra fog indulni</string>
+    <string name="info_copied">A vágólapra másolva</string>
     <!-- WelcomeDialog -->
     <string name="parasitic_welcome">Üdvözöljük az LSPosed</string>
     <string name="parasitic_welcome_summary">Ön használja a parazita menedzser, amely képes létrehozni parancsikont vagy még mindig nyitva értesítésből.</string>
@@ -88,6 +86,7 @@
     <string name="menuSaveToSd">Mentés</string>
     <string name="nav_item_logs_verbose">Szöveges naplók</string>
     <string name="nav_item_logs_module">Modulok Naplói</string>
+    <string name="logs_saving">Napló mentése, kérem várjon</string>
     <string name="logs_saved">Mentett naplók</string>
     <string name="logs_save_failed2">Nem sikerült menteni:\n%s</string>
     <string name="menuClearLog">Törölje a naplót most</string>
@@ -95,7 +94,6 @@
     <string name="scroll_top">Görgessen a tetejére</string>
     <string name="loading">Betöltés…</string>
     <string name="scroll_bottom">Görgessen az aljára</string>
-    <string name="logs_cannot_read">Nem olvasható a napló: \n</string>
     <string name="menuReload">Újratöltés</string>
     <string name="logs_clear_failed_2">Nem sikerült törölni a naplót</string>
     <string name="menu_enable_word_wrap">Word Wrap</string>
@@ -194,7 +192,6 @@
     <string name="settings_translation_summary">Segítsen nekünk lefordítani az %s -t az Ön nyelvére</string>
     <string name="settings_create_shortcut_summary">Hozzon létre egy parancsikont, amely képes megnyitni a parazita menedzser</string>
     <string name="settings_shortcut_pinned_hint">Parancsikon kitüzve</string>
-    <string name="settings_created_shortcut_summary">A parazita-kezelő megnyitásához parancsikon jött létre</string>
     <string name="settings_unsupported_pin_shortcut_summary">A jelenlegi alapértelmezett indítóprogram nem támogatja a pin parancsikonokat</string>
     <string name="settings_enable_status_notification">Állapot értesítés</string>
     <string name="settings_enable_status_notification_summary">Értesítés megjelenítése, amely megnyithatja a parazita-kezelőt</string>
@@ -214,17 +211,15 @@
     <string name="module_information_collaborators">Együttműködők</string>
     <string name="module_release_view_assets">Eszközök</string>
     <string name="menu_open_in_browser">Megnyitás a böngészőben</string>
-    <string name="refresh">Frissítés</string>
     <string name="module_release_load_more">Régebbi verziók megjelenítése</string>
     <string name="module_release_no_more">Nincs több kiadás</string>
     <string name="repo_load_failed">Nem sikerült betölteni a modul repo-t: %s</string>
     <string name="sort_upgradable_first">Frissíthetőek először</string>
-    <!-- CrashReportActivity -->
-    <string name="version_mismatch">Az LSPosed keretrendszer verziója (%1$d) nem egyezik a manager (%2$d) verziójával. Kérjük, telepítse újra az LSPosed-et.</string>
-    <string name="manager_crashed">A menedzser összeomlott</string>
-    <string name="send_crash_info">Összeomlási információk küldése</string>
-    <string name="crash_info_copied">Az összeomlási információk a vágólapra másolva</string>
-    <string name="info_copied">A vágólapra másolva</string>
+    <string name="installed">Telepítve</string>
+    <plurals name="module_release_assets_download_count">
+        <item quantity="one">%d letöltés</item>
+        <item quantity="other">%d letöltések</item>
+    </plurals>
     <!-- Colors -->
     <string name="color_sakura">Sakura</string>
     <string name="color_red">Piros</string>
@@ -245,9 +240,4 @@
     <string name="color_deep_orange">Mély narancssárga</string>
     <string name="color_brown">Barna</string>
     <string name="color_blue_grey">Kékes szürke</string>
-    <string name="installed">Telepítve</string>
-    <plurals name="module_release_assets_download_count">
-        <item quantity="one">%d letöltés</item>
-        <item quantity="other">%d letöltések</item>
-    </plurals>
 </resources>

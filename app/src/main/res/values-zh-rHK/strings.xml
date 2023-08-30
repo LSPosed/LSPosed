@@ -19,7 +19,6 @@
   -->
 <resources xmlns:tools="http://schemas.android.com/tools" tools:keep="@string/xposed_module_updated_notification_*,@string/module_is_not_activated_*">
     <!-- MainActivity -->
-    <string name="info">資訊</string>
     <string name="overview">概觀</string>
     <string name="Modules">模組</string>
     <plurals name="modules_enabled_count">
@@ -31,7 +30,6 @@
     <string name="About">關於</string>
     <string name="report_issue">回報問題</string>
     <string name="module_repo">資料庫</string>
-    <string name="module_repo_loading">正在載入…</string>
     <string name="module_repo_up_to_date">所有模組為最新版本</string>
     <string name="module_repo_published_time">發佈於 %s</string>
     <string name="module_repo_updated_time">更新於 %s</string>
@@ -54,10 +52,8 @@
     <string name="system_prop_incorrect"><![CDATA[部分必須的系統屬性被刪除或被修改，<br/>模組可能會隨機失效。]]></string>
     <string name="need_update">需要更新</string>
     <string name="please_update_summary">請安裝最新版本的 LSPosed</string>
-    <string name="lsposed_not_active">LSPosed 未正確安裝或啟用。</string>
     <string name="info_api_version">API版本</string>
     <string name="info_framework_version">架構版本</string>
-    <string name="info_manager_version">管理員版本</string>
     <string name="info_system_version">系統版本</string>
     <string name="info_device">裝置版本</string>
     <string name="info_system_abi">系統架構</string>
@@ -73,6 +69,7 @@
     <string name="sepolicy_incorrect">SELinux 原則異常</string>
     <string name="update_lsposed">更新 LSPosed</string>
     <string name="update_lsposed_msg">確認更新LSPosed? 此裝置會於更新完成後重啟</string>
+    <string name="info_copied">已複製到剪貼簿</string>
     <!-- WelcomeDialog -->
     <string name="parasitic_welcome">歡迎使用 LSPosed</string>
     <string name="parasitic_welcome_summary">您正在使用寄生管理員，您可以建立捷徑或從通知開啟。</string>
@@ -92,7 +89,6 @@
     <string name="scroll_top">移至頂端</string>
     <string name="loading">正在載入…</string>
     <string name="scroll_bottom">移至底端</string>
-    <string name="logs_cannot_read">無法讀取記錄：\n</string>
     <string name="menuReload">重新載入</string>
     <string name="logs_clear_failed_2">記錄清理失敗</string>
     <string name="menu_enable_word_wrap">自動換行</string>
@@ -191,7 +187,6 @@
     <string name="settings_translation_summary">幫助我們翻譯 %s 到您的語言</string>
     <string name="settings_create_shortcut_summary">建立可以開啟寄生管理員的捷徑</string>
     <string name="settings_shortcut_pinned_hint">捷徑已釘選</string>
-    <string name="settings_created_shortcut_summary">已建立可以開啟寄生管理員的捷徑</string>
     <string name="settings_unsupported_pin_shortcut_summary">目前的預設啟動器不支援釘選捷徑</string>
     <string name="settings_enable_status_notification">狀態通知</string>
     <string name="settings_enable_status_notification_summary">顯示通知以便開啟寄生管理員</string>
@@ -211,17 +206,13 @@
     <string name="module_information_collaborators">合作者</string>
     <string name="module_release_view_assets">附件</string>
     <string name="menu_open_in_browser">在瀏覽器中打開</string>
-    <string name="refresh">重新整理</string>
     <string name="module_release_load_more">顯示較舊版本</string>
     <string name="module_release_no_more">沒有更舊版本</string>
     <string name="repo_load_failed">模組存放庫載入失敗：%s</string>
     <string name="sort_upgradable_first">可更新優先</string>
-    <!-- CrashReportActivity -->
-    <string name="version_mismatch">LSPosed 架構版本 (%1$d) 與管理員 (%2$d) 不相符，請重新安裝 LSPosed。</string>
-    <string name="manager_crashed">應用程式已崩潰</string>
-    <string name="send_crash_info">傳送崩潰資訊</string>
-    <string name="crash_info_copied">崩潰資訊已複製到剪貼簿</string>
-    <string name="info_copied">已複製到剪貼簿</string>
+    <plurals name="module_release_assets_download_count">
+        <item quantity="other">%d 次下載</item>
+    </plurals>
     <!-- Colors -->
     <string name="color_sakura">櫻花</string>
     <string name="color_red">紅色</string>
@@ -242,7 +233,4 @@
     <string name="color_deep_orange">深橙</string>
     <string name="color_brown">棕色</string>
     <string name="color_blue_grey">藍灰</string>
-    <plurals name="module_release_assets_download_count">
-        <item quantity="other">%d 次下載</item>
-    </plurals>
 </resources>

@@ -172,7 +172,7 @@ public class HomeFragment extends BaseFragment implements MenuProvider {
             binding.apiVersion.setText(String.valueOf(ConfigManager.getXposedApiVersion()));
             binding.api.setText(ConfigManager.isDexObfuscateEnabled() ? R.string.enabled : R.string.not_enabled);
             binding.frameworkVersion.setText(String.format(LocaleDelegate.getDefaultLocale(), "%1$s (%2$d)", ConfigManager.getXposedVersionName(), ConfigManager.getXposedVersionCode()));
-            binding.managerVersion.setText(activity.getPackageName());
+            binding.managerPackageName.setText(activity.getPackageName());
             if (Build.VERSION.SDK_INT < Build.VERSION_CODES.Q) {
                 binding.dex2oatWrapper.setText(String.format(LocaleDelegate.getDefaultLocale(), "%s (%s)", getString(R.string.unsupported), getString(R.string.android_version_unsatisfied)));
             } else switch (ConfigManager.getDex2OatWrapperCompatibility()) {
@@ -191,7 +191,7 @@ public class HomeFragment extends BaseFragment implements MenuProvider {
             binding.apiVersion.setText(R.string.not_installed);
             binding.api.setText(R.string.not_installed);
             binding.frameworkVersion.setText(R.string.not_installed);
-            binding.managerVersion.setText(String.format(LocaleDelegate.getDefaultLocale(), "%1$s (%2$d)", BuildConfig.VERSION_NAME, BuildConfig.VERSION_CODE));
+            binding.managerPackageName.setText(activity.getPackageName());
         }
 
         if (Build.VERSION.PREVIEW_SDK_INT != 0) {
@@ -218,9 +218,9 @@ public class HomeFragment extends BaseFragment implements MenuProvider {
                 "\n" +
                 binding.frameworkVersion.getText() +
                 "\n\n" +
-                activity.getString(R.string.info_manager_version) +
+                activity.getString(R.string.info_manager_package_name) +
                 "\n" +
-                binding.managerVersion.getText() +
+                binding.managerPackageName.getText() +
                 "\n\n" +
                 activity.getString(R.string.info_system_version) +
                 "\n" +

@@ -19,7 +19,6 @@
   -->
 <resources xmlns:tools="http://schemas.android.com/tools" tools:keep="@string/xposed_module_updated_notification_*,@string/module_is_not_activated_*">
     <!-- MainActivity -->
-    <string name="info">Інформація</string>
     <string name="overview">Огляд</string>
     <string name="Modules">Модулі</string>
     <plurals name="modules_enabled_count">
@@ -31,10 +30,9 @@
     <string name="Logs">Звіти</string>
     <string name="Settings">Налаштування</string>
     <string name="feedback_or_suggestion">Зворотний зв\'язок або пропозиція</string>
-    <string name="About">Про модифікацію</string>
+    <string name="About">Детальніше</string>
     <string name="report_issue">Повідомити про проблему</string>
     <string name="module_repo">Репозиторій</string>
-    <string name="module_repo_loading">Завантаження…</string>
     <string name="module_repo_up_to_date">Модулі не потребують оновлення</string>
     <string name="module_repo_published_time">Опубліковано о %s</string>
     <string name="module_repo_updated_time">Оновлено о %s</string>
@@ -52,33 +50,33 @@
     <string name="not_install_summary">LSPosed не встановлено</string>
     <string name="activated">Активовано</string>
     <string name="partial_activated">Частково активовано</string>
-    <string name="selinux_policy_not_loaded_summary">SEPolicy завантажено неправильно</string>
+    <string name="selinux_policy_not_loaded_summary">SEPolicy не завантажено належним чином</string>
     <string name="selinux_policy_not_loaded"><![CDATA[Деякі функції не працюватимуть.<br/>Будь ласка, повідомте про це на <a href="https://github.com/topjohnwu/Magisk/issues"><b>Magisk</b></a> розробнику.]]></string>
     <string name="system_inject_fail_summary">Помилка ін\'єкції System Framework</string>
     <string name="system_inject_fail"><![CDATA[Це рідкісна проблема, яка може бути спричинена <b>Magisk</b> або деякими неякісними модулями Magisk.<br/>Спробуйте вимкнути всі модулі Magisk, крім Riru та LSPosed, або надішліть повний звіт розробникам.]]></string>
-    <string name="system_prop_incorrect_summary">Неправильний параметр системи</string>
+    <string name="system_prop_incorrect_summary">Неправильні системні налаштування</string>
     <string name="system_prop_incorrect"><![CDATA[Деякі необхідні параметри системи видалені або змінені.<br/>Модулі можуть не працювати належним чином.]]></string>
-    <string name="need_update">Потребує оновлення</string>
+    <string name="need_update">Потрібно оновити</string>
     <string name="please_update_summary">Будь ласка, встановіть останню версію LSPosed</string>
-    <string name="lsposed_not_active">LSPosed наразі не встановлено або не активовано.</string>
     <string name="info_api_version">Версія API</string>
     <string name="info_framework_version">Версія Framework</string>
-    <string name="info_manager_version">Версія менеджера</string>
+    <string name="info_manager_package_name">Ім\'я пакета менеджера</string>
     <string name="info_system_version">Версія Android</string>
     <string name="info_device">Пристрій</string>
     <string name="info_system_abi">Розрядність процесора</string>
     <string name="info_dex2oat_wrapper">Обгортка Dex Optimizer</string>
     <string name="enabled">Увімкнено</string>
-    <string name="not_enabled">Не ввімкнено</string>
+    <string name="not_enabled">Вимкнено</string>
     <string name="supported">Підтримується</string>
     <string name="unsupported">Не підтримується</string>
     <string name="android_version_unsatisfied">Версія Android не підтримується</string>
-    <string name="crashed">Стався збій</string>
+    <string name="crashed">Помилка</string>
     <string name="mount_failed">Не вдалося під\'єднати</string>
     <string name="selinux_permissive">SELinux є дозволеним</string>
     <string name="sepolicy_incorrect">Політика SELinux неправильна</string>
     <string name="update_lsposed">Оновити LSPosed</string>
     <string name="update_lsposed_msg">Підтвердити оновлення LSPosed? Цей пристрій перезавантажиться після завершення оновлення</string>
+    <string name="info_copied">Скопійовано до буфера обміну</string>
     <!-- WelcomeDialog -->
     <string name="parasitic_welcome">Ласкаво просимо до LSPosed</string>
     <string name="parasitic_welcome_summary">Ви використовуєте паразитний менеджер, який може створювати ярлик або все одно відкриватися з повідомлення.</string>
@@ -91,6 +89,7 @@
     <string name="menuSaveToSd">Зберегти</string>
     <string name="nav_item_logs_verbose">Детальні звіти</string>
     <string name="nav_item_logs_module">Звіти модулів</string>
+    <string name="logs_saving">Збереження журналу, зачекайте</string>
     <string name="logs_saved">Журнали збережено</string>
     <string name="logs_save_failed2">Не вдалося зберегти:\n%s</string>
     <string name="menuClearLog">Очистити журнал зараз</string>
@@ -98,23 +97,22 @@
     <string name="scroll_top">Прокрутити догори</string>
     <string name="loading">Завантаження…</string>
     <string name="scroll_bottom">Прокрутити донизу</string>
-    <string name="logs_cannot_read">Не вдається прочитати звіт: \n</string>
     <string name="menuReload">Перезавантажити</string>
     <string name="logs_clear_failed_2">Не вдалося очистити журнал</string>
-    <string name="menu_enable_word_wrap">Перенос слів</string>
+    <string name="menu_enable_word_wrap">Перенесення слів</string>
     <string name="enabled_verbose_log">Детальний журнал увімкнено</string>
     <string name="disabled_verbose_log">Детальний журнал вимкнено</string>
     <!-- ModulesActivity -->
     <string name="module_empty_description">(опису не надано)</string>
-    <string name="warning_xposed_min_version">Для цього модуля потрібна новіша версія Xposed (%d), тому його неможливо активувати</string>
-    <string name="warning_target_version_higher">Цей модуль розроблено для новішої версії Xposed (%d), тому деякі функції можуть не працювати.</string>
+    <string name="warning_xposed_min_version">Цей модуль вимагає новішої версії Xposed (%d), тому його неможливо застосувати</string>
+    <string name="warning_target_version_higher">Цей модуль розроблено для новішої версії Xposed (%d), тому деякі функції можуть не працювати</string>
     <string name="no_min_version_specified">У цьому модулі не вказано необхідну для нього версію Xposed.</string>
     <string name="warning_min_version_too_low">Цей модуль був створений для Xposed версії %1$d, але через несумісні зміни у версії %2$d його було вимкнено</string>
     <string name="warning_installed_on_external_storage">Цей модуль не може бути завантажений, оскільки він встановлений на SD-карті. Будь ласка, перенесіть його у внутрішню пам’ять</string>
     <string name="module_uninstall">Видалити</string>
     <string name="module_settings">Налаштування модуля</string>
     <string name="view_in_repo">Переглянути в репозиторії</string>
-    <string name="module_uninstall_message">Ви бажаєте видалити цей модуль?</string>
+    <string name="module_uninstall_message">Ви впевнені, що хочете видалити цей модуль?</string>
     <string name="module_uninstalled">Видалено %1$s</string>
     <string name="module_uninstall_failed">Видалення не виконано</string>
     <string name="add_module_to_user">Додати модуль до користувача</string>
@@ -154,11 +152,11 @@
     <string name="module_disabled_no_selection">Модуль %s вимкнено, оскільки жодна програма не вибрана.</string>
     <string name="android_framework">System Framework</string>
     <string name="menu_backup_and_restore">Резервне копіювання</string>
-    <string name="menu_backup">Резервне копіювання</string>
+    <string name="menu_backup">Створити резервну копію</string>
     <string name="menu_restore">Відновити з резервної копії</string>
     <string name="force_stop">Примусово зупинити</string>
     <string name="force_stop_dlg_title">Примусово зупинити?</string>
-    <string name="force_stop_dlg_text">Примусове закриття додатку може призвести до збою в його роботі.</string>
+    <string name="force_stop_dlg_text">Примусове зупинення додатку, може мати наслідки.</string>
     <string name="reboot_required">Для застосування цієї зміни потрібне перезавантаження</string>
     <string name="reboot">Перезавантажити</string>
     <string name="menu_hide">Приховати</string>
@@ -197,7 +195,6 @@
     <string name="settings_translation_summary">Доповнити український переклад %s</string>
     <string name="settings_create_shortcut_summary">Створіть ярлик, який зможе відкрити паразитний менеджер</string>
     <string name="settings_shortcut_pinned_hint">Ярлик закріплено</string>
-    <string name="settings_created_shortcut_summary">Створено ярлик для відкриття паразитного менеджера</string>
     <string name="settings_unsupported_pin_shortcut_summary">Поточна панель запуску за замовчуванням не підтримує шорткати пін-кодів</string>
     <string name="settings_enable_status_notification">Повідомлення про статус</string>
     <string name="settings_enable_status_notification_summary">Показати повідомлення, яке може відкрити паразитний менеджер</string>
@@ -217,17 +214,17 @@
     <string name="module_information_collaborators">Співавтори</string>
     <string name="module_release_view_assets">Вкладення</string>
     <string name="menu_open_in_browser">Відкрити в браузері</string>
-    <string name="refresh">Оновити</string>
     <string name="module_release_load_more">Показувати старіші версії</string>
     <string name="module_release_no_more">Більше релізів немає</string>
     <string name="repo_load_failed">Не вдалося завантажити модуль репозиторія: %s</string>
     <string name="sort_upgradable_first">Спершу нові версії</string>
-    <!-- CrashReportActivity -->
-    <string name="version_mismatch">Версія LSPosed framework (%1$d) не відповідає менеджеру (%2$d). Будь-ласка, перевстановіть LSPosed.</string>
-    <string name="manager_crashed">Менеджер зазнав збою</string>
-    <string name="send_crash_info">Надіслати інформацію про помилку</string>
-    <string name="crash_info_copied">Інформація про помилку скопійована до буферу обміну</string>
-    <string name="info_copied">Скопійовано до буфера обміну</string>
+    <string name="installed">встановлено</string>
+    <plurals name="module_release_assets_download_count">
+        <item quantity="one">%d завантажити</item>
+        <item quantity="few">%d завантажень</item>
+        <item quantity="many">%d завантажень</item>
+        <item quantity="other">%d завантажень</item>
+    </plurals>
     <!-- Colors -->
     <string name="color_sakura">Вишневий</string>
     <string name="color_red">Червоний</string>
@@ -248,11 +245,4 @@
     <string name="color_deep_orange">Жовтогарячий</string>
     <string name="color_brown">Коричневий</string>
     <string name="color_blue_grey">Блакитно-сірий</string>
-    <string name="installed">встановлено</string>
-    <plurals name="module_release_assets_download_count">
-        <item quantity="one">%d завантажити</item>
-        <item quantity="few">%d завантажень</item>
-        <item quantity="many">%d завантажень</item>
-        <item quantity="other">%d завантажень</item>
-    </plurals>
 </resources>

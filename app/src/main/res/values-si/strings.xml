@@ -19,7 +19,6 @@
   -->
 <resources xmlns:tools="http://schemas.android.com/tools" tools:keep="@string/xposed_module_updated_notification_*,@string/module_is_not_activated_*">
     <!-- MainActivity -->
-    <string name="info">තොරතුරු</string>
     <string name="overview">දළ විශ්ලේෂණය</string>
     <string name="Modules">මොඩියුල</string>
     <plurals name="modules_enabled_count">
@@ -32,7 +31,6 @@
     <string name="About">මේ ගැන</string>
     <string name="report_issue">ගැටලුවක් රිපෝට් කර්න්න</string>
     <string name="module_repo">ගබඩාව</string>
-    <string name="module_repo_loading">ලෝඩිං…</string>
     <string name="module_repo_up_to_date">සියලු මොඩියුල අප්ඩේට් ය</string>
     <string name="module_repo_published_time">%s හි ප්‍රකාශයට පත් කරන ලදී</string>
     <string name="module_repo_updated_time">%sට අප්ඩේට් කරන ලදී</string>
@@ -56,10 +54,9 @@
     <string name="system_prop_incorrect"><![CDATA[සමහර අවශ්‍ය පද්ධති ගුණාංග මකා හෝ වෙනස් කරන ඇත.<br/>මොඩියුල වරින් වර අවලංගු විය හැක.]]></string>
     <string name="need_update">අප්ඩේට් කිරීම අවශ්‍ය වේ</string>
     <string name="please_update_summary">කරුණාකර LSPposed හි නවතම අනුවාදය ස්ථාපනය කරන්න</string>
-    <string name="lsposed_not_active">LSPosed දැනට ස්ථාපනය කර හෝ සක්‍රිය කර නැත.</string>
     <string name="info_api_version">API අනුවාදය</string>
     <string name="info_framework_version">ෆ්‍රෙම්වර්ක් අනුවාදය</string>
-    <string name="info_manager_version">මැනේජර් අනුවාදය</string>
+    <string name="info_manager_package_name">කළමනාකරු පැකේජයේ නම</string>
     <string name="info_system_version">පද්ධති අනුවාදය</string>
     <string name="info_device">උපාංගය</string>
     <string name="info_system_abi">පද්ධති ABI</string>
@@ -75,6 +72,7 @@
     <string name="sepolicy_incorrect">SELinux ප්‍රතිපත්තිය වැරදියි</string>
     <string name="update_lsposed">LSPposed යාවත්කාලීන කරන්න</string>
     <string name="update_lsposed_msg">LSPposed යාවත්කාලීන කිරීම තහවුරු කරන්නද? යාවත්කාලීන කිරීම අවසන් වූ පසු මෙම උපාංගය නැවත ආරම්භ වේ</string>
+    <string name="info_copied">පසුරු පුවරුවට පිටපත් කර ඇත</string>
     <!-- WelcomeDialog -->
     <string name="parasitic_welcome">LSPposed වෙත සාදරයෙන් පිළිගනිමු</string>
     <string name="parasitic_welcome_summary">ඔබ කෙටිමඟ නිර්මාණය කළ හැකි හෝ තවමත් දැනුම්දීමෙන් විවෘත කළ හැකි පරපෝෂිත කළමනාකරු භාවිත කරයි.</string>
@@ -87,6 +85,7 @@
     <string name="menuSaveToSd">සුරකින්න</string>
     <string name="nav_item_logs_verbose">වාචික ලඝු-සටහන්</string>
     <string name="nav_item_logs_module">මොඩියුල ලොග්</string>
+    <string name="logs_saving">ලොගය සුරකිමින්, කරුණාකර රැඳී සිටින්න</string>
     <string name="logs_saved">ලඝු-සටහන් සුරකින ලදී</string>
     <string name="logs_save_failed2">සුරැකීමට අසමත් විය:\n%s</string>
     <string name="menuClearLog">දැන් ලොගය හිස් කරන්න</string>
@@ -94,7 +93,6 @@
     <string name="scroll_top">ඉහළට අනුචලනය කරන්න</string>
     <string name="loading">…පූරණය වේ</string>
     <string name="scroll_bottom">පහළට අනුචලනය කරන්න</string>
-    <string name="logs_cannot_read">ලොගය කියවිය නොහැක: \n</string>
     <string name="menuReload">නැවත පූරණය කරන්න</string>
     <string name="logs_clear_failed_2">ලොගය හිස් කිරීමට අසමත් විය</string>
     <string name="menu_enable_word_wrap">වචන එතුම</string>
@@ -193,7 +191,6 @@
     <string name="settings_translation_summary">%s ඔබේ භාෂාවට පරිවර්තනය කිරීමට අපට උදවු කරන්න</string>
     <string name="settings_create_shortcut_summary">පරපෝෂිත කළමනාකරු විවෘත කළ හැකි කෙටිමඟක් සාදන්න</string>
     <string name="settings_shortcut_pinned_hint">කෙටිමඟ අමුණා ඇත</string>
-    <string name="settings_created_shortcut_summary">පරපෝෂිත කළමනාකරු විවෘත කිරීමට කෙටිමඟක් නිර්මාණය කර ඇත</string>
     <string name="settings_unsupported_pin_shortcut_summary">වත්මන් පෙරනිමි දියත් කිරීම pin කෙටිමං සඳහා සහය නොදක්වයි</string>
     <string name="settings_enable_status_notification">තත්ත්ව දැනුම්දීම</string>
     <string name="settings_enable_status_notification_summary">පරපෝෂිත කළමනාකරු විවෘත කළ හැකි දැනුම්දීමක් පෙන්වන්න</string>
@@ -213,17 +210,15 @@
     <string name="module_information_collaborators">සහයෝගිතාකරුවන්</string>
     <string name="module_release_view_assets">වත්කම්</string>
     <string name="menu_open_in_browser">බ්‍රවුසරයේ විවෘත කරන්න</string>
-    <string name="refresh">නැවුම් කරන්න</string>
     <string name="module_release_load_more">පැරණි අනුවාද පෙන්වන්න</string>
     <string name="module_release_no_more">තවත් නිදහස් කිරීමක් නැත</string>
     <string name="repo_load_failed">මොඩියුල repo: %sපූරණය කිරීමට අසමත් විය</string>
     <string name="sort_upgradable_first">පළමුව උසස් කළ හැකිය</string>
-    <!-- CrashReportActivity -->
-    <string name="version_mismatch">LSPosed රාමුවේ (%1$d) අනුවාදය කළමනාකරු (%2$d) ට නොගැලපේ. කරුණාකර LSPposed නැවත ස්ථාපනය කරන්න.</string>
-    <string name="manager_crashed">කළමනාකරු කඩා වැටුණි</string>
-    <string name="send_crash_info">බිඳ වැටීම් තොරතුරු යවන්න</string>
-    <string name="crash_info_copied">බිඳ වැටීම් තොරතුරු පසුරු පුවරුවට පිටපත් කරන ලදී</string>
-    <string name="info_copied">පසුරු පුවරුවට පිටපත් කර ඇත</string>
+    <string name="installed">ස්ථාපනය කර ඇත</string>
+    <plurals name="module_release_assets_download_count">
+        <item quantity="one">%d බාගැනීම</item>
+        <item quantity="other">බාගැනීම් %d</item>
+    </plurals>
     <!-- Colors -->
     <string name="color_sakura">සකුරා</string>
     <string name="color_red">රතු</string>
@@ -244,9 +239,4 @@
     <string name="color_deep_orange">තද තැඹිලි</string>
     <string name="color_brown">දුඹුරු</string>
     <string name="color_blue_grey">නිල් අළු</string>
-    <string name="installed">ස්ථාපනය කර ඇත</string>
-    <plurals name="module_release_assets_download_count">
-        <item quantity="one">%d බාගැනීම</item>
-        <item quantity="other">බාගැනීම් %d</item>
-    </plurals>
 </resources>
