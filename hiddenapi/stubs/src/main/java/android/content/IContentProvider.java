@@ -7,6 +7,10 @@ import android.os.RemoteException;
 import androidx.annotation.RequiresApi;
 
 public interface IContentProvider extends IInterface {
+    @RequiresApi(28)
+    Bundle call(String callingPkg, String method,
+                String arg, Bundle extras) throws RemoteException;
+
     @RequiresApi(29)
     Bundle call(String callingPkg, String authority, String method,
                 String arg, Bundle extras) throws RemoteException;
