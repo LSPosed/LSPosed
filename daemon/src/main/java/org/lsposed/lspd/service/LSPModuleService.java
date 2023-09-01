@@ -97,7 +97,7 @@ public class LSPModuleService extends IXposedService.Stub {
                 reply = provider.call("android", null, authority, SEND_BINDER, null, extra);
             } else if (Build.VERSION.SDK_INT == Build.VERSION_CODES.Q) {
                 reply = provider.call("android", authority, SEND_BINDER, null, extra);
-            } else if (Build.VERSION.SDK_INT == Build.VERSION_CODES.P) {
+            } else {
                 reply = provider.call("android", SEND_BINDER, null, extra);
             }
             if (reply != null) {
