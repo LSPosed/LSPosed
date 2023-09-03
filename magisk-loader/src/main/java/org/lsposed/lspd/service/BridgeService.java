@@ -100,39 +100,43 @@ public class BridgeService {
     public static boolean onTransact(@NonNull Parcel data, @Nullable Parcel reply, int flags) {
         if (!ParcelUtils.safeEnforceInterface(data, DESCRIPTOR)) return false;
 
-        ACTION action = ACTION.values()[data.readInt()];
+        try {
+            ACTION action = ACTION.values()[data.readInt()];
 
-        Log.d(TAG, "onTransact: action=" + action + ", callingUid=" + Binder.getCallingUid() + ", callingPid=" + Binder.getCallingPid());
+            Log.d(TAG, "onTransact: action=" + action + ", callingUid=" + Binder.getCallingUid() + ", callingPid=" + Binder.getCallingPid());
 
-        switch (action) {
-            case ACTION_SEND_BINDER: {
-                if (Binder.getCallingUid() == 0) {
-                    receiveFromBridge(data.readStrongBinder());
-                    if (reply != null) {
-                        reply.writeNoException();
+            switch (action) {
+                case ACTION_SEND_BINDER: {
+                    if (Binder.getCallingUid() == 0) {
+                        receiveFromBridge(data.readStrongBinder());
+                        if (reply != null) {
+                            reply.writeNoException();
+                        }
+                        return true;
                     }
-                    return true;
+                    break;
                 }
-                break;
+                case ACTION_GET_BINDER: {
+                    IBinder binder = null;
+                    try {
+                        String processName = data.readString();
+                        IBinder heartBeat = data.readStrongBinder();
+                        var applicationService = service == null ? null : service.requestApplicationService(Binder.getCallingUid(), Binder.getCallingPid(), processName, heartBeat);
+                        if (applicationService != null) binder = applicationService.asBinder();
+                    } catch (RemoteException e) {
+                        Log.e(TAG, Log.getStackTraceString(e));
+                    }
+                    if (binder != null && reply != null) {
+                        reply.writeNoException();
+                        Log.d(TAG, "got binder is " + binder);
+                        reply.writeStrongBinder(binder);
+                        return true;
+                    }
+                    return false;
+                }
             }
-            case ACTION_GET_BINDER: {
-                IBinder binder = null;
-                try {
-                    String processName = data.readString();
-                    IBinder heartBeat = data.readStrongBinder();
-                    var applicationService = service == null ? null : service.requestApplicationService(Binder.getCallingUid(), Binder.getCallingPid(), processName, heartBeat);
-                    if (applicationService != null) binder = applicationService.asBinder();
-                } catch (RemoteException e) {
-                    Log.e(TAG, Log.getStackTraceString(e));
-                }
-                if (binder != null && reply != null) {
-                    reply.writeNoException();
-                    Log.d(TAG, "got binder is " + binder);
-                    reply.writeStrongBinder(binder);
-                    return true;
-                }
-                return false;
-            }
+        } catch (Throwable e) {
+            Log.e(TAG, "onTransact", e);
         }
         return false;
     }
