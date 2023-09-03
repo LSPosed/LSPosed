@@ -129,7 +129,7 @@ public class ConfigManager {
 
         @Override
         public int hashCode() {
-            return processName.hashCode() ^ uid;
+            return Objects.hashCode(processName) ^ uid;
         }
     }
 
