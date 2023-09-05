@@ -1,15 +1,14 @@
 package org.lsposed.lspd.nativebridge;
 
-import java.lang.reflect.Constructor;
 import java.lang.reflect.Executable;
 import java.lang.reflect.InvocationTargetException;
 
 import dalvik.annotation.optimization.FastNative;
 
 public class HookBridge {
-    public static native boolean hookMethod(Executable hookMethod, Class<?> hooker, int priority, Object callback);
+    public static native boolean hookMethod(boolean useModernApi, Executable hookMethod, Class<?> hooker, int priority, Object callback);
 
-    public static native boolean unhookMethod(Executable hookMethod, Object callback);
+    public static native boolean unhookMethod(boolean useModernApi, Executable hookMethod, Object callback);
 
     public static native boolean deoptimizeMethod(Executable method);
 
@@ -25,5 +24,5 @@ public class HookBridge {
     @FastNative
     public static native boolean setTrusted(Object cookie);
 
-    public static native Object[] callbackSnapshot(Executable method);
+    public static native Object[][] callbackSnapshot(Class<?> hooker_callback, Executable method);
 }

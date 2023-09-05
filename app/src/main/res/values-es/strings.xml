@@ -19,12 +19,11 @@
   -->
 <resources xmlns:tools="http://schemas.android.com/tools" tools:keep="@string/xposed_module_updated_notification_*,@string/module_is_not_activated_*">
     <!-- MainActivity -->
-    <string name="info">Información</string>
     <string name="overview">Resumen</string>
     <string name="Modules">Módulos</string>
     <plurals name="modules_enabled_count">
         <item quantity="one">%d módulo activado</item>
-        <item quantity="other">%d modules enabled</item>
+        <item quantity="other">%d Módulos activados</item>
     </plurals>
     <string name="Logs">Trozas</string>
     <string name="Settings">Configuración</string>
@@ -32,7 +31,6 @@
     <string name="About">Acerca de</string>
     <string name="report_issue">Reportar problema</string>
     <string name="module_repo">Repositorio</string>
-    <string name="module_repo_loading">Cargando modulo repositorio\"...\"…</string>
     <string name="module_repo_up_to_date">Todos los modulos actualizados</string>
     <string name="module_repo_published_time">Publicado el %s</string>
     <string name="module_repo_updated_time">Actualizado el %s</string>
@@ -49,16 +47,16 @@
     <string name="activated">Activado</string>
     <string name="partial_activated">Parcialmente activado</string>
     <string name="selinux_policy_not_loaded_summary">Selinux policy no está cargado correctamente</string>
+    <string name="selinux_policy_not_loaded"><![CDATA[Algunas funciones no funcionarán.<br/>Informa de ello al desarrollador de <a href="https://github.com/topjohnwu/Magisk/issues"><b>Magisk</b></a> .]]></string>
     <string name="system_inject_fail_summary">System Framework injection failed</string>
     <string name="system_inject_fail"><![CDATA[This is rare and may be caused by <b>Magisk</b> or some low-quality Magisk modules.<br/>Please try to disable Magisk modules other than Riru and LSPosed or submit full log to developers.]]></string>
     <string name="system_prop_incorrect_summary">System prop incorrect</string>
     <string name="system_prop_incorrect"><![CDATA[Some necessary system properties deleted or modified.<br/>Modules may invalidate occasionally.]]></string>
     <string name="need_update">Need to update</string>
     <string name="please_update_summary">Por favor instale la última versión de LSPosed</string>
-    <string name="lsposed_not_active">LSPosed no está instalado o activado actualmente.</string>
     <string name="info_api_version">Versión de la API</string>
     <string name="info_framework_version">Versión del framework</string>
-    <string name="info_manager_version">Versión del manager</string>
+    <string name="info_manager_package_name">Nombre del paquete de gestión</string>
     <string name="info_system_version">Versión del sistema</string>
     <string name="info_device">Dispositivo</string>
     <string name="info_system_abi">ABI del Sistema</string>
@@ -74,6 +72,7 @@
     <string name="sepolicy_incorrect">La política de SELinux es incorrecta</string>
     <string name="update_lsposed">Actualizar LSPosed</string>
     <string name="update_lsposed_msg">¿Confirmar para actualizar LSPose? Este dispositivo se reiniciará después de completar la actualización</string>
+    <string name="info_copied">Información copiada al portapapeles</string>
     <!-- WelcomeDialog -->
     <string name="parasitic_welcome">Bienvenido a LSPosed</string>
     <string name="parasitic_welcome_summary">Usted está utilizando el gestor de parásitos, que puede crear acceso directo o todavía abierta de notificación.</string>
@@ -86,6 +85,7 @@
     <string name="menuSaveToSd">Guardar</string>
     <string name="nav_item_logs_verbose">Registros detallados</string>
     <string name="nav_item_logs_module">Logs de los módulos</string>
+    <string name="logs_saving">Guardando registro, por favor espere</string>
     <string name="logs_saved">Registros guardados</string>
     <string name="logs_save_failed2">No se pudo guardar:\n%s</string>
     <string name="menuClearLog">Limpiar los registros</string>
@@ -93,7 +93,6 @@
     <string name="scroll_top">Desplazar hasta el inicio</string>
     <string name="loading">Cargando…</string>
     <string name="scroll_bottom">Desplazar hasta el final</string>
-    <string name="logs_cannot_read">No se pudo leer los registros: \n</string>
     <string name="menuReload">Recargar</string>
     <string name="logs_clear_failed_2">Fallo al limpiar los registros</string>
     <string name="menu_enable_word_wrap">Ajuste de palabras</string>
@@ -102,6 +101,7 @@
     <!-- ModulesActivity -->
     <string name="module_empty_description">(sin descripción)</string>
     <string name="warning_xposed_min_version">Este módulo requiere una versión más nueva de Xposed (%d), por lo que no puede ser activado</string>
+    <string name="warning_target_version_higher">Este módulo está diseñado para una versión más reciente Xposed (%d) y por lo tanto algunas funcionalidades pueden no funcionar</string>
     <string name="no_min_version_specified">Este módulo no especifica la versión de Xposed que necesita.</string>
     <string name="warning_min_version_too_low">Este módulo fue creado para la versión de Xposed %1$d, pero, debido a cambios incompatibles en la versión %2$d, ha sido desactivado</string>
     <string name="warning_installed_on_external_storage">Este módulo no puede ser cargado porque está instalado en la tarjeta SD. Por favor, muévelo al almacenamiento interno</string>
@@ -190,7 +190,8 @@
     <string name="settings_translation">Participar en la traducción</string>
     <string name="settings_translation_summary">Ayúdanos a traducir %s a tu idioma</string>
     <string name="settings_create_shortcut_summary">Crear un acceso directo que pueda abrir el gestor de parásitos</string>
-    <string name="settings_created_shortcut_summary">Se ha creado un acceso directo para abrir el gestor de parásitos</string>
+    <string name="settings_shortcut_pinned_hint">Acceso directo anclado</string>
+    <string name="settings_unsupported_pin_shortcut_summary">El actual lanzador por defecto no admite accesos directos a pines</string>
     <string name="settings_enable_status_notification">Notificación de estado</string>
     <string name="settings_enable_status_notification_summary">Mostrar una notificación que puede abrir el gestor de parásitos</string>
     <string name="disable_status_notification_error">No hay acceso directo, no se puede desactivar la notificación</string>
@@ -199,6 +200,7 @@
     <string name="update_channel_bate">Beta</string>
     <string name="update_channel_nightly">Construcción nocturna</string>
     <string name="settings_xposed_api_call_protection">Protección de llamadas a la API Xposed</string>
+    <string name="settings_xposed_api_call_protection_summary">Bloquear el código del módulo cargado dinámicamente para utilizar Xposed API, esto puede romper algunos módulos, pero beneficiar a la seguridad</string>
     <!-- Module Repo -->
     <string name="module_readme">Léeme</string>
     <string name="module_releases">Versiones</string>
@@ -208,17 +210,15 @@
     <string name="module_information_collaborators">Colaboradores</string>
     <string name="module_release_view_assets">Archivos</string>
     <string name="menu_open_in_browser">Abrir en el navegador</string>
-    <string name="refresh">Refrescar</string>
     <string name="module_release_load_more">Mostrar versiones anteriores</string>
     <string name="module_release_no_more">No hay más versiones</string>
     <string name="repo_load_failed">Fallo al cargar el módulo de repositorio: %s</string>
     <string name="sort_upgradable_first">Upgradable first</string>
-    <!-- CrashReportActivity -->
-    <string name="version_mismatch">La versión del framework LSPosed (%1$d) no coincide con el administrador (%2$d). Por favor, reinstale LSPosed.</string>
-    <string name="manager_crashed">El Manager se ha crasheado</string>
-    <string name="send_crash_info">Enviar información de error</string>
-    <string name="crash_info_copied">Información del error copiada al portapapeles</string>
-    <string name="info_copied">Información copiada al portapapeles</string>
+    <string name="installed">Instalado</string>
+    <plurals name="module_release_assets_download_count">
+        <item quantity="one">%d descargar</item>
+        <item quantity="other">%d descargas</item>
+    </plurals>
     <!-- Colors -->
     <string name="color_sakura">Sakura</string>
     <string name="color_red">Rojo</string>
@@ -239,8 +239,4 @@
     <string name="color_deep_orange">Naranja oscuro</string>
     <string name="color_brown">Marrón</string>
     <string name="color_blue_grey">Gris azul</string>
-    <plurals name="module_release_assets_download_count">
-        <item quantity="one">%d descargar</item>
-        <item quantity="other">%d descargas</item>
-    </plurals>
 </resources>

@@ -23,8 +23,6 @@ package org.lsposed.lspd.nativebridge;
 import android.content.res.Resources;
 import android.content.res.XResources;
 
-import java.lang.reflect.Constructor;
-
 import dalvik.annotation.optimization.FastNative;
 
 public class ResourcesHook {

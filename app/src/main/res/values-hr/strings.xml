@@ -19,7 +19,6 @@
   -->
 <resources xmlns:tools="http://schemas.android.com/tools" tools:keep="@string/xposed_module_updated_notification_*,@string/module_is_not_activated_*">
     <!-- MainActivity -->
-    <string name="info">Informacije</string>
     <string name="overview">Pregled</string>
     <string name="Modules">Moduli</string>
     <plurals name="modules_enabled_count">
@@ -33,7 +32,6 @@
     <string name="About">Informacije</string>
     <string name="report_issue">Prijavi problem</string>
     <string name="module_repo">Spremište modula</string>
-    <string name="module_repo_loading">Učitavanje…</string>
     <string name="module_repo_up_to_date">Svi moduli ažurirani</string>
     <string name="module_repo_published_time">Objavljeno u %s</string>
     <string name="module_repo_updated_time">Ažurirano u %s</string>
@@ -51,16 +49,16 @@
     <string name="activated">Aktiviran</string>
     <string name="partial_activated">Djelomično aktiviran</string>
     <string name="selinux_policy_not_loaded_summary">SEPolicy nije pravilno učitan</string>
+    <string name="selinux_policy_not_loaded"><![CDATA[Neke značajke neće raditi.<br/>Prijavite ovo <a href="https://github.com/topjohnwu/Magisk/issues"><b>Magisk</b></a> programeru.]]></string>
     <string name="system_inject_fail_summary">Injektiranje u System Framework nije uspjelo</string>
     <string name="system_inject_fail"><![CDATA[Ovo je rijetko i može biti uzrokovano aplikacijom <b>Magisk</b> ili nekim Magisk modulima niske kvalitete.<br/>Pokušajte onemogućiti Magisk module koji nisu Riru i LSPosed ili pošaljite cijeli zapis programerima.]]></string>
     <string name="system_prop_incorrect_summary">Svojstva sustava nisu ispravna</string>
     <string name="system_prop_incorrect"><![CDATA[Neka od potrebnih svojstva sustava su izbrisana ili izmijenjena.<br/>Moduli povremeno mogu biti nedostupni.]]></string>
     <string name="need_update">Treba ažurirati</string>
     <string name="please_update_summary">Molimo instalirajte najnoviju verziju LSPosed</string>
-    <string name="lsposed_not_active">LSPosed trenutno nije instaliran niti aktivan.</string>
     <string name="info_api_version">API verzija</string>
     <string name="info_framework_version">Framework verzija</string>
-    <string name="info_manager_version">Manager verzija</string>
+    <string name="info_manager_package_name">Naziv paketa upravitelja</string>
     <string name="info_system_version">System verzija</string>
     <string name="info_device">Uređaj</string>
     <string name="info_system_abi">System ABI</string>
@@ -76,6 +74,7 @@
     <string name="sepolicy_incorrect">Pravila SELinuxa je netočna</string>
     <string name="update_lsposed">Ažurirajte LSPosed</string>
     <string name="update_lsposed_msg">Potvrditi ažuriranje LSPosed? Ovaj će se uređaj ponovno pokrenuti nakon završetka ažuriranja</string>
+    <string name="info_copied">Kopirano u međuspremnik</string>
     <!-- WelcomeDialog -->
     <string name="parasitic_welcome">Dobrodošli u LSPosed</string>
     <string name="parasitic_welcome_summary">Koristite parazitski upravitelj, koji može stvoriti prečac ili još uvijek otvoriti iz obavijesti.</string>
@@ -88,6 +87,7 @@
     <string name="menuSaveToSd">Sačuvaj</string>
     <string name="nav_item_logs_verbose">Opširni zapisi</string>
     <string name="nav_item_logs_module">Zapisi Modula</string>
+    <string name="logs_saving">Spremanje dnevnika, pričekajte</string>
     <string name="logs_saved">Zapisi spremljeni</string>
     <string name="logs_save_failed2">Neuspješno spremanje:\n%s</string>
     <string name="menuClearLog">Očisti zapis sada</string>
@@ -95,7 +95,6 @@
     <string name="scroll_top">Pomaknite se na vrh</string>
     <string name="loading">Učitavanje…</string>
     <string name="scroll_bottom">Pomaknite se do dna</string>
-    <string name="logs_cannot_read">Ne mogu pročitati zapis: \n</string>
     <string name="menuReload">Ponovno učitaj</string>
     <string name="logs_clear_failed_2">Brisanje zapisa nije uspjelo</string>
     <string name="menu_enable_word_wrap">Prijelom riječi</string>
@@ -104,6 +103,7 @@
     <!-- ModulesActivity -->
     <string name="module_empty_description">(nema opisa)</string>
     <string name="warning_xposed_min_version">Ovaj modul zahtijeva noviju verziju Xposed (%d) i stoga se ne može aktivirati</string>
+    <string name="warning_target_version_higher">Ovaj modul je dizajniran za noviju verziju Xposed (%d) i stoga neke funkcije možda neće raditi</string>
     <string name="no_min_version_specified">Ovaj modul ne navodi verziju Xposed koja mu je potrebna.</string>
     <string name="warning_min_version_too_low">Ovaj modul je stvoren za Xposed verziju %1$d, zbog nekompatibilnih promjena u verziji %2$d, modul je onemogućen</string>
     <string name="warning_installed_on_external_storage">Ovaj modul nije moguće učitati jer je instaliran na SD kartici, molimo premjestite ga u internu memoriju</string>
@@ -192,7 +192,8 @@
     <string name="settings_translation">Sudjelujte u prevođenju</string>
     <string name="settings_translation_summary">Pomozite nam prevesti %s na vaš jezik</string>
     <string name="settings_create_shortcut_summary">Napravite prečac koji može otvoriti parazitski upravitelj</string>
-    <string name="settings_created_shortcut_summary">Stvoren je prečac za otvaranje parazitskog upravitelja</string>
+    <string name="settings_shortcut_pinned_hint">Prečac prikvačen</string>
+    <string name="settings_unsupported_pin_shortcut_summary">Trenutačni zadani pokretač ne podržava prečace pribadače</string>
     <string name="settings_enable_status_notification">Obavijest o statusu</string>
     <string name="settings_enable_status_notification_summary">Prikaži obavijest koja može otvoriti parazitski upravitelj</string>
     <string name="disable_status_notification_error">Nema prečaca, nije moguće onemogućiti obavijest</string>
@@ -201,6 +202,7 @@
     <string name="update_channel_bate">Beta</string>
     <string name="update_channel_nightly">Noćna izgradnja</string>
     <string name="settings_xposed_api_call_protection">Xposed API zaštita poziva</string>
+    <string name="settings_xposed_api_call_protection_summary">Blokirajte dinamički učitani kod modula za korištenje Xposed API-ja, to može pokvariti neke module, ali doprinosi sigurnosti</string>
     <!-- Module Repo -->
     <string name="module_readme">Pročitaj me</string>
     <string name="module_releases">Izdanja</string>
@@ -210,17 +212,16 @@
     <string name="module_information_collaborators">Suradnici</string>
     <string name="module_release_view_assets">Imovina</string>
     <string name="menu_open_in_browser">Otvori u pretraživaču</string>
-    <string name="refresh">Osvježiti</string>
     <string name="module_release_load_more">Prikaži starije verzije</string>
     <string name="module_release_no_more">Nema više puštanja</string>
     <string name="repo_load_failed">Neuspješno učitavanje spremišta modula: %s</string>
     <string name="sort_upgradable_first">Prvo nadogradivo</string>
-    <!-- CrashReportActivity -->
-    <string name="version_mismatch">Verzija okvira LSPosed (%1$d) ne odgovara upravitelju (%2$d). Molimo ponovno instalirajte LSPosed.</string>
-    <string name="manager_crashed">Upravitelj se srušio</string>
-    <string name="send_crash_info">Pošalji informacije o padu</string>
-    <string name="crash_info_copied">Informacije o padu kopirane su u međuspremnik</string>
-    <string name="info_copied">Kopirano u međuspremnik</string>
+    <string name="installed">instalirano</string>
+    <plurals name="module_release_assets_download_count">
+        <item quantity="one">%d preuzimanje</item>
+        <item quantity="few">%d preuzimanja</item>
+        <item quantity="other">%d preuzimanja</item>
+    </plurals>
     <!-- Colors -->
     <string name="color_sakura">Sakura</string>
     <string name="color_red">Crvena</string>
@@ -241,9 +242,4 @@
     <string name="color_deep_orange">Tamno narančasta</string>
     <string name="color_brown">Smeđa</string>
     <string name="color_blue_grey">Plavo siva</string>
-    <plurals name="module_release_assets_download_count">
-        <item quantity="one">%d preuzimanje</item>
-        <item quantity="few">%d preuzimanja</item>
-        <item quantity="other">%d preuzimanja</item>
-    </plurals>
 </resources>

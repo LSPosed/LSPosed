@@ -18,11 +18,10 @@
   ~ Copyright (C) 2021 LSPosed Contributors
   -->
 
-<menu xmlns:android="http://schemas.android.com/apk/res/android"
-    xmlns:app="http://schemas.android.com/apk/res-auto">
+<menu xmlns:android="http://schemas.android.com/apk/res/android">
     <item
         android:id="@+id/menu_open_in_browser"
         android:title="@string/menu_open_in_browser"
         android:icon="@drawable/ic_open_in_browser"
-        app:showAsAction="ifRoom" />
+        android:showAsAction="ifRoom" />
 </menu>

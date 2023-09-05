@@ -27,6 +27,7 @@ import android.content.pm.ApplicationInfo;
 import android.content.pm.PackageInfo;
 import android.content.pm.PackageManager;
 import android.content.pm.ResolveInfo;
+import android.os.Parcel;
 import android.view.MenuItem;
 
 import org.lsposed.manager.ConfigManager;
@@ -53,7 +54,7 @@ public class AppHelper {
 
         List<ResolveInfo> ris = ConfigManager.queryIntentActivitiesAsUser(intentToResolve, 0, userId);
 
-        if (ris.size() <= 0) {
+        if (ris.size() == 0) {
             return getLaunchIntentForPackage(packageName, userId);
         }
 
@@ -72,14 +73,14 @@ public class AppHelper {
         intentToResolve.setPackage(packageName);
         List<ResolveInfo> ris = ConfigManager.queryIntentActivitiesAsUser(intentToResolve, 0, userId);
 
-        if (ris.size() <= 0) {
+        if (ris.size() == 0) {
             intentToResolve.removeCategory(Intent.CATEGORY_INFO);
             intentToResolve.addCategory(Intent.CATEGORY_LAUNCHER);
             intentToResolve.setPackage(packageName);
             ris = ConfigManager.queryIntentActivitiesAsUser(intentToResolve, 0, userId);
         }
 
-        if (ris.size() <= 0) {
+        if (ris.size() == 0) {
             return null;
         }
 
@@ -116,30 +117,40 @@ public class AppHelper {
 
     public static Comparator<PackageInfo> getAppListComparator(int sort, PackageManager pm) {
         ApplicationInfo.DisplayNameComparator displayNameComparator = new ApplicationInfo.DisplayNameComparator(pm);
-        switch (sort) {
-            case 7:
-                return Collections.reverseOrder(Comparator.comparingLong((PackageInfo a) -> a.lastUpdateTime));
-            case 6:
-                return Comparator.comparingLong((PackageInfo a) -> a.lastUpdateTime);
-            case 5:
-                return Collections.reverseOrder(Comparator.comparingLong((PackageInfo a) -> a.firstInstallTime));
-            case 4:
-                return Comparator.comparingLong((PackageInfo a) -> a.firstInstallTime);
-            case 3:
-                return Collections.reverseOrder(Comparator.comparing(a -> a.packageName));
-            case 2:
-                return Comparator.comparing(a -> a.packageName);
-            case 1:
-                return Collections.reverseOrder((PackageInfo a, PackageInfo b) -> displayNameComparator.compare(a.applicationInfo, b.applicationInfo));
-            case 0:
-            default:
-                return (PackageInfo a, PackageInfo b) -> displayNameComparator.compare(a.applicationInfo, b.applicationInfo);
-        }
+        return switch (sort) {
+            case 7 ->
+                    Collections.reverseOrder(Comparator.comparingLong((PackageInfo a) -> a.lastUpdateTime));
+            case 6 -> Comparator.comparingLong((PackageInfo a) -> a.lastUpdateTime);
+            case 5 ->
+                    Collections.reverseOrder(Comparator.comparingLong((PackageInfo a) -> a.firstInstallTime));
+            case 4 -> Comparator.comparingLong((PackageInfo a) -> a.firstInstallTime);
+            case 3 -> Collections.reverseOrder(Comparator.comparing(a -> a.packageName));
+            case 2 -> Comparator.comparing(a -> a.packageName);
+            case 1 ->
+                    Collections.reverseOrder((PackageInfo a, PackageInfo b) -> displayNameComparator.compare(a.applicationInfo, b.applicationInfo));
+            default ->
+                    (PackageInfo a, PackageInfo b) -> displayNameComparator.compare(a.applicationInfo, b.applicationInfo);
+        };
     }
 
     synchronized public static List<PackageInfo> getAppList(boolean force) {
         if (appList == null || force) {
             appList = ConfigManager.getInstalledPackagesFromAllUsers(PackageManager.GET_META_DATA | PackageManager.MATCH_UNINSTALLED_PACKAGES, true);
+            PackageInfo system = null;
+            for (var app : appList) {
+                if ("android".equals(app.packageName)) {
+                    var p = Parcel.obtain();
+                    app.writeToParcel(p, 0);
+                    p.setDataPosition(0);
+                    system = PackageInfo.CREATOR.createFromParcel(p);
+                    system.packageName = "system";
+                    system.applicationInfo.packageName = system.packageName;
+                    break;
+                }
+            }
+            if (system != null) {
+                appList.add(system);
+            }
         }
         return appList;
     }

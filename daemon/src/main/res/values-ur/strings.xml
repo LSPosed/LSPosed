@@ -12,4 +12,10 @@
     <string name="status_channel_name">ایل ایس پیز کی حیثیت</string>
     <string name="lsposed_running_notification_title">ایل ایس پیز لوڈ شدہ</string>
     <string name="lsposed_running_notification_content">مینیجر کو کھولنے کے لیے نوٹیفکیشن کو تھپتھپائیں۔</string>
+    <string name="xposed_module_request_scope_title">دائرہ کار کی درخواست</string>
+    <string name="xposed_module_request_scope_content">صارف %2$s پر %1$s اپنے دائرہ کار میں %3$s شامل کرنے کی درخواست کرتا ہے۔</string>
+    <string name="scope_channel_name">دائرہ کار کی درخواست</string>
+    <string name="scope_approve">منظور کرو</string>
+    <string name="scope_deny">انکار کرنا</string>
+    <string name="nerver_ask_again">کبھی نہ پوچھیں۔</string>
 </resources>

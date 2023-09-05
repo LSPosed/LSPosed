@@ -2,26 +2,30 @@ package org.lsposed.lspd.hooker;
 
 import android.os.Build;
 
+import org.lsposed.lspd.impl.LSPosedBridge;
 import org.lsposed.lspd.nativebridge.HookBridge;
 
-import de.robv.android.xposed.XC_MethodHook;
-import de.robv.android.xposed.XposedHelpers;
+import io.github.libxposed.api.XposedInterface;
+import io.github.libxposed.api.annotations.AfterInvocation;
+import io.github.libxposed.api.annotations.XposedHooker;
 
-public class OpenDexFileHooker extends XC_MethodHook {
-    @Override
-    protected void afterHookedMethod(MethodHookParam<?> param) throws Throwable {
+@XposedHooker
+public class OpenDexFileHooker implements XposedInterface.Hooker {
+
+    @AfterInvocation
+    public static void afterHookedMethod(XposedInterface.AfterHookCallback callback) {
         ClassLoader classLoader = null;
-        for (var arg : param.args) {
+        for (var arg : callback.getArgs()) {
             if (arg instanceof ClassLoader) {
                 classLoader = (ClassLoader) arg;
             }
         }
         if (Build.VERSION.SDK_INT == Build.VERSION_CODES.P && classLoader == null) {
-            classLoader = XposedHelpers.class.getClassLoader();
+            classLoader = LSPosedBridge.class.getClassLoader();
         }
         while (classLoader != null) {
-            if (classLoader == XposedHelpers.class.getClassLoader()) {
-                HookBridge.setTrusted(param.getResult());
+            if (classLoader == LSPosedBridge.class.getClassLoader()) {
+                HookBridge.setTrusted(callback.getResult());
                 return;
             } else {
                 classLoader = classLoader.getParent();

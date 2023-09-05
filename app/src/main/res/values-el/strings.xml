@@ -19,7 +19,6 @@
   -->
 <resources xmlns:tools="http://schemas.android.com/tools" tools:keep="@string/xposed_module_updated_notification_*,@string/module_is_not_activated_*">
     <!-- MainActivity -->
-    <string name="info">Πληροφορίες</string>
     <string name="overview">Επισκόπηση</string>
     <string name="Modules">Πρόσθετα</string>
     <plurals name="modules_enabled_count">
@@ -32,7 +31,6 @@
     <string name="About">Πληροφορίες</string>
     <string name="report_issue">Αναφορά προβλήματος</string>
     <string name="module_repo">Αποθετήριο</string>
-    <string name="module_repo_loading">Φόρτωση…</string>
     <string name="module_repo_up_to_date">Όλα τα πρόσθετα είναι ενημερωμένα</string>
     <string name="module_repo_published_time">Δημοσιεύθηκε στο %s</string>
     <string name="module_repo_updated_time">Ενημερώθηκε στο %s</string>
@@ -49,16 +47,16 @@
     <string name="activated">Ενεργοποιημένο</string>
     <string name="partial_activated">Μερικώς ενεργοποιημένο</string>
     <string name="selinux_policy_not_loaded_summary">Το SEPolicy δεν φορτώθηκε σωστά</string>
+    <string name="selinux_policy_not_loaded"><![CDATA[Ορισμένες λειτουργίες δεν θα λειτουργούν.<br/>Παρακαλούμε αναφέρετε το γεγονός αυτό στον προγραμματιστή <a href="https://github.com/topjohnwu/Magisk/issues"><b>Magisk</b></a> .]]></string>
     <string name="system_inject_fail_summary">Η έγχυση στο πλαίσιο συστήματος απέτυχε</string>
     <string name="system_inject_fail"><![CDATA[Αυτό είναι σπάνιο και μπορεί να προκληθεί από το <b>Magisk</b> ή από κάποια χαμηλής ποιότητας πρόσθετα τουMagisk.<br/>Παρακαλώ προσπαθήστε να απενεργοποιήσετε όλα τα πρόσθετα του Magisk εκτός από το Riru και το LSPosed ή να υποβάλετε το πλήρες αρχείο καταγραφής στους προγραμματιστές.]]></string>
     <string name="system_prop_incorrect_summary">Λανθασμένο στήριγμα συστήματος</string>
     <string name="system_prop_incorrect"><![CDATA[Ορισμένες απαραίτητες ιδιότητες συστήματος διαγράφηκαν ή τροποποιήθηκαν.<br/>Τα πρόσθετα μπορεί να ακυρωθούν περιστασιακά.]]></string>
     <string name="need_update">Απαιτείται ενημέρωση</string>
     <string name="please_update_summary">Παρακαλώ εγκαταστήστε την τελευταία έκδοση του LSPosed</string>
-    <string name="lsposed_not_active">Το LSPosed δεν είναι εγκατεστημένο ή ενεργό.</string>
     <string name="info_api_version">Έκδοση API</string>
     <string name="info_framework_version">Έκδοση πλαισίου</string>
-    <string name="info_manager_version">Έκδοση διαχειριστή</string>
+    <string name="info_manager_package_name">Όνομα πακέτου διαχειριστή</string>
     <string name="info_system_version">Έκδοση συστήματος</string>
     <string name="info_device">Συσκευή</string>
     <string name="info_system_abi">Σύστημα ABI</string>
@@ -74,6 +72,7 @@
     <string name="sepolicy_incorrect">Η πολιτική SELinux είναι λανθασμένη</string>
     <string name="update_lsposed">Ενημέρωση LSPosed</string>
     <string name="update_lsposed_msg">Επιβεβαίωση ενημέρωσης του LSPosed? Αυτή η συσκευή θα επανεκκινηθεί μετά την ολοκλήρωση της ενημέρωσης</string>
+    <string name="info_copied">Αντιγραφή στο πρόχειρο</string>
     <!-- WelcomeDialog -->
     <string name="parasitic_welcome">Καλωσορίσατε στο LSPosed</string>
     <string name="parasitic_welcome_summary">Χρησιμοποιείτε τον παρασιτικό διαχειριστή, ο οποίος μπορεί να δημιουργήσει συντόμευση ή να παραμένει ανοικτός από την ειδοποίηση.</string>
@@ -86,6 +85,7 @@
     <string name="menuSaveToSd">Αποθήκευση</string>
     <string name="nav_item_logs_verbose">Λεπτομερείς Καταγραφές</string>
     <string name="nav_item_logs_module">Αρχείο Καταγραφής Πρόσθετων</string>
+    <string name="logs_saving">Αποθήκευση αρχείου καταγραφής, παρακαλώ περιμένετε</string>
     <string name="logs_saved">Αποθηκευμένα αρχεία καταγραφής</string>
     <string name="logs_save_failed2">Αποτυχία αποθήκευσης:\n%s</string>
     <string name="menuClearLog">Καθαρισμός αρχείου καταγραφής τώρα</string>
@@ -93,7 +93,6 @@
     <string name="scroll_top">Κύλιση στην κορυφή</string>
     <string name="loading">Φόρτωση…</string>
     <string name="scroll_bottom">Κύλιση προς τα κάτω</string>
-    <string name="logs_cannot_read">Αδυναμία ανάγνωσης αρχείου καταγραφής: \n</string>
     <string name="menuReload">Φόρτωση ξανά</string>
     <string name="logs_clear_failed_2">Αποτυχία εκκαθάρισης του αρχείου καταγραφής</string>
     <string name="menu_enable_word_wrap">Αναδίπλωση Λέξεων</string>
@@ -102,6 +101,7 @@
     <!-- ModulesActivity -->
     <string name="module_empty_description">(δεν παρέχεται περιγραφή)</string>
     <string name="warning_xposed_min_version">Αυτό το ένθεμα απαιτεί μια νεότερη έκδοση του Xposed (%d) και επομένως δεν μπορεί να ενεργοποιηθεί</string>
+    <string name="warning_target_version_higher">Αυτή η ενότητα έχει σχεδιαστεί για μια νεότερη έκδοση Xposed (%d) και ως εκ τούτου ορισμένες λειτουργίες ενδέχεται να μην λειτουργούν.</string>
     <string name="no_min_version_specified">Αυτό το ένθεμα δεν καθορίζει την έκδοση Xposed που χρειάζεται.</string>
     <string name="warning_min_version_too_low">Αυτό το ένθεμα δημιουργήθηκε για την έκδοση Xposed %1$d, αλλά λόγω μη συμβατών αλλαγών στην έκδοση %2$d, έχει απενεργοποιηθεί</string>
     <string name="warning_installed_on_external_storage">Αυτό το πρόσθετο δεν μπορεί να φορτωθεί επειδή είναι εγκατεστημένο στην κάρτα SD, παρακαλώ μετακινήστε το στον εσωτερικό αποθηκευτικό χώρο</string>
@@ -190,7 +190,8 @@
     <string name="settings_translation">Συμμετοχή στη μετάφραση</string>
     <string name="settings_translation_summary">Βοηθήστε μας να μεταφράσουμε το %s στη γλώσσα σας</string>
     <string name="settings_create_shortcut_summary">Δημιουργήστε μια συντόμευση που μπορεί να ανοίξει τον παρασιτικό διαχειριστή</string>
-    <string name="settings_created_shortcut_summary">Έχει δημιουργηθεί μια συντόμευση για το άνοιγμα του παρασιτικού διαχειριστή</string>
+    <string name="settings_shortcut_pinned_hint">Συντόμευση καρφιτσωμένη</string>
+    <string name="settings_unsupported_pin_shortcut_summary">Ο τρέχων προεπιλεγμένος εκτοξευτής δεν υποστηρίζει συντομεύσεις καρφίτσας</string>
     <string name="settings_enable_status_notification">Ειδοποίηση καταστάσεως</string>
     <string name="settings_enable_status_notification_summary">Εμφάνιση μιας ειδοποίησης που μπορεί να ανοίξει τον διαχειριστή παρασιτικής</string>
     <string name="disable_status_notification_error">Δεν υπάρχει συντόμευση, δεν είναι δυνατή η απενεργοποίηση της ειδοποίησης</string>
@@ -209,17 +210,15 @@
     <string name="module_information_collaborators">Συνεργάτες</string>
     <string name="module_release_view_assets">Ενεργητικό</string>
     <string name="menu_open_in_browser">Άνοιγμα σε πρόγραμμα περιήγησης</string>
-    <string name="refresh">Ανανέωση</string>
     <string name="module_release_load_more">Εμφάνιση παλαιότερων εκδόσεων</string>
     <string name="module_release_no_more">Δεν υπάρχει πλέον έκδοση</string>
     <string name="repo_load_failed">Αποτυχία φόρτωσης πρόσθετου repo: %s</string>
     <string name="sort_upgradable_first">Αναβαθμίσιμο πρώτα</string>
-    <!-- CrashReportActivity -->
-    <string name="version_mismatch">The version of the LSPosed framework (%1$d) does not match manager (%2$d). Please reinstall LSPosed.</string>
-    <string name="manager_crashed">Ο διαχειριστής συνετρίβη</string>
-    <string name="send_crash_info">Αποστολή πληροφοριών κατάρρευσης</string>
-    <string name="crash_info_copied">Οι πληροφορίες κατάρρευσης αντιγράφηκαν στο πρόχειρο</string>
-    <string name="info_copied">Αντιγραφή στο πρόχειρο</string>
+    <string name="installed">Εγκατεστημένο</string>
+    <plurals name="module_release_assets_download_count">
+        <item quantity="one">%d λήψη</item>
+        <item quantity="other">%d downloads</item>
+    </plurals>
     <!-- Colors -->
     <string name="color_sakura">Sakura</string>
     <string name="color_red">Κόκκινο</string>
@@ -240,8 +239,4 @@
     <string name="color_deep_orange">Βαθύ πορτοκαλί</string>
     <string name="color_brown">Καφέ</string>
     <string name="color_blue_grey">Μπλε γκρι</string>
-    <plurals name="module_release_assets_download_count">
-        <item quantity="one">%d λήψη</item>
-        <item quantity="other">%d downloads</item>
-    </plurals>
 </resources>

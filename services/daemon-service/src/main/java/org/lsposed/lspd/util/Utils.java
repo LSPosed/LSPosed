@@ -24,8 +24,6 @@ import android.os.SystemProperties;
 import android.text.TextUtils;
 import android.util.Log;
 
-import org.lsposed.lspd.daemonservice.BuildConfig;
-
 import java.time.ZoneId;
 import java.time.ZoneOffset;
 import java.time.zone.ZoneRulesException;
@@ -37,13 +35,11 @@ public class Utils {
     public static final boolean isLENOVO = !TextUtils.isEmpty(SystemProperties.get("ro.lenovo.region"));
 
     public static void logD(Object msg) {
-        if (BuildConfig.DEBUG)
-            Log.d(LOG_TAG, msg.toString());
+        Log.d(LOG_TAG, msg.toString());
     }
 
     public static void logD(String msg, Throwable throwable) {
-        if (BuildConfig.DEBUG)
-            Log.d(LOG_TAG, msg, throwable);
+        Log.d(LOG_TAG, msg, throwable);
     }
 
     public static void logW(String msg) {

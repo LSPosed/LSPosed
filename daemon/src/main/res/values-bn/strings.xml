@@ -12,4 +12,10 @@
     <string name="status_channel_name">LSPপোজড স্ট্যাটাস</string>
     <string name="lsposed_running_notification_title">LSPosed লোড</string>
     <string name="lsposed_running_notification_content">ম্যানেজার খুলতে বিজ্ঞপ্তিতে ট্যাপ করুন</string>
+    <string name="xposed_module_request_scope_title">সুযোগ অনুরোধ</string>
+    <string name="xposed_module_request_scope_content">ব্যবহারকারী %2$s এর সুযোগে %3$s যোগ করার অনুরোধে %1$s।</string>
+    <string name="scope_channel_name">সুযোগ অনুরোধ</string>
+    <string name="scope_approve">অনুমোদন করুন</string>
+    <string name="scope_deny">অস্বীকার করুন</string>
+    <string name="nerver_ask_again">কখনো জিজ্ঞাসা করবেন না</string>
 </resources>

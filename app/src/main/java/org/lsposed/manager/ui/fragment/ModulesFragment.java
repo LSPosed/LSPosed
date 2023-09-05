@@ -194,18 +194,20 @@ public class ModulesFragment extends BaseFragment implements ModuleUtil.ModuleLi
     @Override
     public void onPrepareMenu(Menu menu) {
         searchView = (SearchView) menu.findItem(R.id.menu_search).getActionView();
-        searchView.setOnQueryTextListener(searchListener);
-        searchView.addOnAttachStateChangeListener(new View.OnAttachStateChangeListener() {
-            @Override
-            public void onViewAttachedToWindow(View arg0) {
-                binding.appBar.setExpanded(false, true);
-            }
+        if (searchView != null) {
+            searchView.setOnQueryTextListener(searchListener);
+            searchView.addOnAttachStateChangeListener(new View.OnAttachStateChangeListener() {
+                @Override
+                public void onViewAttachedToWindow(@NonNull View arg0) {
+                    binding.appBar.setExpanded(false, true);
+                }
 
-            @Override
-            public void onViewDetachedFromWindow(View v) {
-            }
-        });
-        searchView.findViewById(androidx.appcompat.R.id.search_edit_frame).setLayoutDirection(View.LAYOUT_DIRECTION_INHERIT);
+                @Override
+                public void onViewDetachedFromWindow(@NonNull View v) {
+                }
+            });
+            searchView.findViewById(androidx.appcompat.R.id.search_edit_frame).setLayoutDirection(View.LAYOUT_DIRECTION_INHERIT);
+        }
     }
 
     @Override
@@ -367,12 +369,12 @@ public class ModulesFragment extends BaseFragment implements ModuleUtil.ModuleLi
 
         private final View.OnAttachStateChangeListener searchViewLocker = new View.OnAttachStateChangeListener() {
             @Override
-            public void onViewAttachedToWindow(View v) {
+            public void onViewAttachedToWindow(@NonNull View v) {
                 binding.recyclerView.setNestedScrollingEnabled(false);
             }
 
             @Override
-            public void onViewDetachedFromWindow(View v) {
+            public void onViewDetachedFromWindow(@NonNull View v) {
                 binding.recyclerView.setNestedScrollingEnabled(true);
             }
         };
@@ -399,8 +401,7 @@ public class ModulesFragment extends BaseFragment implements ModuleUtil.ModuleLi
 
         void attachListeners() {
             var parent = getParentFragment();
-            if (parent instanceof ModulesFragment) {
-                var moduleFragment = (ModulesFragment) parent;
+            if (parent instanceof ModulesFragment moduleFragment) {
                 binding.recyclerView.getBorderViewDelegate().setBorderVisibilityChangedListener((top, oldTop, bottom, oldBottom) -> moduleFragment.binding.appBar.setLifted(!top));
                 moduleFragment.binding.appBar.setLifted(!binding.recyclerView.getBorderViewDelegate().isShowingTopBorder());
                 moduleFragment.searchView.addOnAttachStateChangeListener(searchViewLocker);
@@ -419,8 +420,7 @@ public class ModulesFragment extends BaseFragment implements ModuleUtil.ModuleLi
         void detachListeners() {
             binding.recyclerView.getBorderViewDelegate().setBorderVisibilityChangedListener(null);
             var parent = getParentFragment();
-            if (parent instanceof ModulesFragment) {
-                var moduleFragment = (ModulesFragment) parent;
+            if (parent instanceof ModulesFragment moduleFragment) {
                 moduleFragment.searchView.removeOnAttachStateChangeListener(searchViewLocker);
                 binding.recyclerView.setNestedScrollingEnabled(true);
             }
@@ -517,7 +517,7 @@ public class ModulesFragment extends BaseFragment implements ModuleUtil.ModuleLi
         @NonNull
         @Override
         public ModuleAdapter.ViewHolder onCreateViewHolder(@NonNull ViewGroup parent, int viewType) {
-            return new ModuleAdapter.ViewHolder(ItemModuleBinding.inflate(getLayoutInflater(), parent, false));
+            return new ViewHolder(ItemModuleBinding.inflate(getLayoutInflater(), parent, false));
         }
 
         public boolean isPick() {
@@ -746,7 +746,7 @@ public class ModulesFragment extends BaseFragment implements ModuleUtil.ModuleLi
             return isLoaded && moduleUtil.isModulesLoaded();
         }
 
-        class ViewHolder extends RecyclerView.ViewHolder {
+        static class ViewHolder extends RecyclerView.ViewHolder {
             ConstraintLayout root;
             ImageView appIcon;
             TextView appName;

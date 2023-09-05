@@ -17,7 +17,6 @@
  * Copyright (C) 2022 LSPosed Contributors
  */
 
-@Suppress("DSL_SCOPE_VIOLATION")
 plugins {
     alias(libs.plugins.agp.lib)
 }
@@ -29,6 +28,7 @@ android {
         androidResources = false
         buildConfig = false
         prefab = true
+        prefabPublishing = true
     }
 
     defaultConfig {
@@ -39,5 +39,9 @@ android {
         cmake {
             path("src/main/cpp/CMakeLists.txt")
         }
+    }
+
+    prefab {
+        register("dex2oat")
     }
 }

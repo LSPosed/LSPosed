@@ -19,7 +19,6 @@
   -->
 <resources xmlns:tools="http://schemas.android.com/tools" tools:keep="@string/xposed_module_updated_notification_*,@string/module_is_not_activated_*">
     <!-- MainActivity -->
-    <string name="info">Informacje</string>
     <string name="overview">Przegląd</string>
     <string name="Modules">Moduły</string>
     <plurals name="modules_enabled_count">
@@ -34,7 +33,6 @@
     <string name="About">O aplikacji</string>
     <string name="report_issue">Zgłoś problem</string>
     <string name="module_repo">Repozytorium</string>
-    <string name="module_repo_loading">Ładowanie…</string>
     <string name="module_repo_up_to_date">Wszystkie moduły są aktualne</string>
     <string name="module_repo_published_time">Opublikowano na stronie %s</string>
     <string name="module_repo_updated_time">Zaktualizowany na stronie %s</string>
@@ -60,10 +58,9 @@
     <string name="system_prop_incorrect"><![CDATA[Niektóre niezbędne właściwości systemowe zostały usunięte lub zmienione.<br/>Moduły mogą czasami działać niepoprawnie.]]></string>
     <string name="need_update">Konieczna aktualizacja</string>
     <string name="please_update_summary">Proszę zainstalować najnowszą wersję LSPosed</string>
-    <string name="lsposed_not_active">LSPosed nie jest obecnie zainstalowany ani aktywny.</string>
     <string name="info_api_version">Wersja API</string>
     <string name="info_framework_version">Wersja frameworka</string>
-    <string name="info_manager_version">Wersja Menedżera</string>
+    <string name="info_manager_package_name">Nazwa pakietu menedżera</string>
     <string name="info_system_version">Wersja systemu</string>
     <string name="info_device">Urządzenie</string>
     <string name="info_system_abi">ABI systemu</string>
@@ -79,6 +76,7 @@
     <string name="sepolicy_incorrect">Zasady SELinuxa są nieprawidłowe</string>
     <string name="update_lsposed">Zaktualizuj LSPosed</string>
     <string name="update_lsposed_msg">Czy chcesz zatwierdzić aktualizację LSPosed? Urządzenie zostanie uruchomione ponownie po zakończeniu aktualizacji</string>
+    <string name="info_copied">Skopiowane do schowka</string>
     <!-- WelcomeDialog -->
     <string name="parasitic_welcome">Witamy w LSPosed</string>
     <string name="parasitic_welcome_summary">Używasz menedżera pasożytów, który może utworzyć skrót na ekranie głównym lub nadal być otwieranym z powiadomienia.</string>
@@ -91,6 +89,7 @@
     <string name="menuSaveToSd">Zapisz</string>
     <string name="nav_item_logs_verbose">Logi verbose</string>
     <string name="nav_item_logs_module">Logi modułów</string>
+    <string name="logs_saving">Zapisywanie dziennika, poczekaj</string>
     <string name="logs_saved">Zapisane logi</string>
     <string name="logs_save_failed2">Nie udało się zapisać:\n%s</string>
     <string name="menuClearLog">Wyczyść log teraz</string>
@@ -98,7 +97,6 @@
     <string name="scroll_top">Przewiń na górę</string>
     <string name="loading">Ładowanie…</string>
     <string name="scroll_bottom">Przewiń na dół</string>
-    <string name="logs_cannot_read">Nie można odczytać logu: \n</string>
     <string name="menuReload">Przeładuj</string>
     <string name="logs_clear_failed_2">Nie udało się wyczyścić logu</string>
     <string name="menu_enable_word_wrap">Zawijanie wierszy</string>
@@ -196,7 +194,7 @@
     <string name="settings_translation">Weź udział w tłumaczeniu</string>
     <string name="settings_translation_summary">Pomóż nam przetłumaczyć %s na Twój język</string>
     <string name="settings_create_shortcut_summary">Utwórz skrót, za pomocą którego otworzysz menadżera \"pasożytów\"</string>
-    <string name="settings_created_shortcut_summary">Skrót do otwierania menadżera pasożytów został utworzony</string>
+    <string name="settings_shortcut_pinned_hint">Skrót przypięty</string>
     <string name="settings_unsupported_pin_shortcut_summary">Bieżący domyślny launcher nie wspiera skrótów pinezkowych</string>
     <string name="settings_enable_status_notification">Status powiadomień</string>
     <string name="settings_enable_status_notification_summary">Pokazuj powiadomienie, za pomocą którego otworzysz menadżera pasożytów</string>
@@ -216,17 +214,17 @@
     <string name="module_information_collaborators">Współtwórcy</string>
     <string name="module_release_view_assets">Assety</string>
     <string name="menu_open_in_browser">Otwórz w przeglądarce</string>
-    <string name="refresh">Odśwież</string>
     <string name="module_release_load_more">Pokaż starsze wersje</string>
     <string name="module_release_no_more">Nie ma więcej wersji</string>
     <string name="repo_load_failed">Nie udało się załadować repozytorium modułu: %s</string>
     <string name="sort_upgradable_first">Możliwość uaktualnienia w pierwszej kolejności</string>
-    <!-- CrashReportActivity -->
-    <string name="version_mismatch">Wersja LSPosed framework (%1$d) nie jest taka sama jak wersja menadżera (%2$d). Zainstaluj ponownie LSPosed.</string>
-    <string name="manager_crashed">Menedżer uległ awarii</string>
-    <string name="send_crash_info">Wyślij informacje o awarii</string>
-    <string name="crash_info_copied">Informacje o awarii skopiowane do schowka</string>
-    <string name="info_copied">Skopiowane do schowka</string>
+    <string name="installed">Zainstalowane</string>
+    <plurals name="module_release_assets_download_count">
+        <item quantity="one">%d pobierz</item>
+        <item quantity="few">%d pobieranie</item>
+        <item quantity="many">%d pobieranie</item>
+        <item quantity="other">%d pobrania</item>
+    </plurals>
     <!-- Colors -->
     <string name="color_sakura">Sakura</string>
     <string name="color_red">Czerwony</string>
@@ -247,10 +245,4 @@
     <string name="color_deep_orange">Ciemny pomarańczowy</string>
     <string name="color_brown">Brązowy</string>
     <string name="color_blue_grey">Niebiesko szary</string>
-    <plurals name="module_release_assets_download_count">
-        <item quantity="one">%d pobierz</item>
-        <item quantity="few">%d pobieranie</item>
-        <item quantity="many">%d pobieranie</item>
-        <item quantity="other">%d pobrania</item>
-    </plurals>
 </resources>

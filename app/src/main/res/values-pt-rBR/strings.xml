@@ -19,7 +19,6 @@
   -->
 <resources xmlns:tools="http://schemas.android.com/tools" tools:keep="@string/xposed_module_updated_notification_*,@string/module_is_not_activated_*">
     <!-- MainActivity -->
-    <string name="info">Informações</string>
     <string name="overview">Resumo</string>
     <string name="Modules">Módulos</string>
     <plurals name="modules_enabled_count">
@@ -32,7 +31,6 @@
     <string name="About">Sobre</string>
     <string name="report_issue">Relatar problema</string>
     <string name="module_repo">Repositório</string>
-    <string name="module_repo_loading">Carregando…</string>
     <string name="module_repo_up_to_date">Todos os módulos estão atualizados</string>
     <string name="module_repo_published_time">Publicado em %s</string>
     <string name="module_repo_updated_time">Atualizado em %s</string>
@@ -56,10 +54,9 @@
     <string name="system_prop_incorrect"><![CDATA[Algumas propriedades necessárias do sistema foram excluídas ou modificadas.<br/>Alguns módulos podem falhar ocasionalmente.]]></string>
     <string name="need_update">Necessário atualizar</string>
     <string name="please_update_summary">Por favor, instale a versão mais recente do LSPosed</string>
-    <string name="lsposed_not_active">O LSPosed não está instalado ou está desativado.</string>
     <string name="info_api_version">Versão da API</string>
     <string name="info_framework_version">Versão do Framework</string>
-    <string name="info_manager_version">Versão do Gerenciador</string>
+    <string name="info_manager_package_name">Nome do pacote do gestor</string>
     <string name="info_system_version">Versão do Sistema</string>
     <string name="info_device">Aparelho</string>
     <string name="info_system_abi">Interfaces Binárias do Sistema</string>
@@ -75,6 +72,7 @@
     <string name="sepolicy_incorrect">A política do SELinux está incorreta</string>
     <string name="update_lsposed">Atualizar o LSPosed</string>
     <string name="update_lsposed_msg">Confirmar atualização do LSPosed? O aparelho irá reiniciar após completar a atualização</string>
+    <string name="info_copied">Copiado para a área de transferência</string>
     <!-- WelcomeDialog -->
     <string name="parasitic_welcome">Bem-vindo ao LSPosed</string>
     <string name="parasitic_welcome_summary">Você está usando o gerenciador parasita, você pode criar o atalho ou então abrir a partir da notificação.</string>
@@ -87,6 +85,7 @@
     <string name="menuSaveToSd">Salvar</string>
     <string name="nav_item_logs_verbose">Registros Detalhados</string>
     <string name="nav_item_logs_module">Registros dos Módulos</string>
+    <string name="logs_saving">Salvando registro, aguarde</string>
     <string name="logs_saved">Registros salvos</string>
     <string name="logs_save_failed2">Falha ao salvar:\n%s</string>
     <string name="menuClearLog">Limpar Registros</string>
@@ -94,7 +93,6 @@
     <string name="scroll_top">Rolar para o topo</string>
     <string name="loading">Carregando…</string>
     <string name="scroll_bottom">Rolar para baixo</string>
-    <string name="logs_cannot_read">Não foi possível ler o registro:\n</string>
     <string name="menuReload">Recarregar</string>
     <string name="logs_clear_failed_2">Falha ao limpar os registros</string>
     <string name="menu_enable_word_wrap">Quebra de Linha</string>
@@ -192,7 +190,7 @@
     <string name="settings_translation">Participe das Traduções</string>
     <string name="settings_translation_summary">Ajude a traduzir o %s para o Português 🇧🇷🇵🇹</string>
     <string name="settings_create_shortcut_summary">Criar um atalho para abrir gerenciador parasita</string>
-    <string name="settings_created_shortcut_summary">Um atalho para abrir o gerenciador parasita foi criado</string>
+    <string name="settings_shortcut_pinned_hint">Atalho fixado</string>
     <string name="settings_unsupported_pin_shortcut_summary">O lançador padrão atual não suporta atalhos de pinos</string>
     <string name="settings_enable_status_notification">Notificação de estado</string>
     <string name="settings_enable_status_notification_summary">Mostrar uma notificação que possa abrir o gerenciador parasita</string>
@@ -212,17 +210,15 @@
     <string name="module_information_collaborators">Colaboradores</string>
     <string name="module_release_view_assets">Conteúdos</string>
     <string name="menu_open_in_browser">Abrir no navegador</string>
-    <string name="refresh">Atualizar</string>
     <string name="module_release_load_more">Mostrar versões anteriores</string>
     <string name="module_release_no_more">Não há mais versões</string>
     <string name="repo_load_failed">Falha ao carregar o repositório de módulos: %s</string>
     <string name="sort_upgradable_first">Atualizável Primeiro</string>
-    <!-- CrashReportActivity -->
-    <string name="version_mismatch">A versão do LSPosed framework (%1$d) não corresponde ao gerenciador (%2$d). Por favor, reinstale o LSPosed.</string>
-    <string name="manager_crashed">O gerenciador travou</string>
-    <string name="send_crash_info">Enviar as informações do erro</string>
-    <string name="crash_info_copied">Informações do erro copiadas para a área de transferência</string>
-    <string name="info_copied">Copiado para a área de transferência</string>
+    <string name="installed">Instalado</string>
+    <plurals name="module_release_assets_download_count">
+        <item quantity="one">%d baixado</item>
+        <item quantity="other">%d baixados</item>
+    </plurals>
     <!-- Colors -->
     <string name="color_sakura">Sakura</string>
     <string name="color_red">Vermelho</string>
@@ -243,8 +239,4 @@
     <string name="color_deep_orange">Laranja Escuro</string>
     <string name="color_brown">Marrom</string>
     <string name="color_blue_grey">Azul-acinzentado</string>
-    <plurals name="module_release_assets_download_count">
-        <item quantity="one">%d baixado</item>
-        <item quantity="other">%d baixados</item>
-    </plurals>
 </resources>

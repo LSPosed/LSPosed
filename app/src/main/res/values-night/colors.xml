@@ -14,16 +14,13 @@
   ~ You should have received a copy of the GNU General Public License
   ~ along with LSPosed.  If not, see <https://www.gnu.org/licenses/>.
   ~
-  ~ Copyright (C) 2021 LSPosed Contributors
+  ~ Copyright (C) 2023 LSPosed Contributors
   -->
 
 <resources>
-    <color name="home_secondary_outline_ambient_shadow_color">@color/material_grey_700</color>
-    <color name="home_secondary_outline_spot_shadow_color">@color/material_grey_600</color>
-
     <color name="primary_text_material_inverse">@color/abc_primary_text_material_light</color>
-    <color name="secondary_text_material_inverse">@color/abc_secondary_text_material_light</color>
-
     <color name="primary_text_material">@color/abc_primary_text_material_dark</color>
-    <color name="secondary_text_material">@color/abc_secondary_text_material_dark</color>
+
+    <color name="ic_launcher_foreground">#F06292</color>
+    <color name="ic_launcher_background">#E1F5FE</color>
 </resources>

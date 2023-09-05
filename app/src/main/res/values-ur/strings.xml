@@ -19,7 +19,6 @@
   -->
 <resources xmlns:tools="http://schemas.android.com/tools" tools:keep="@string/xposed_module_updated_notification_*,@string/module_is_not_activated_*">
     <!-- MainActivity -->
-    <string name="info">معلومات</string>
     <string name="overview">جائزہ</string>
     <string name="Modules">ماڈیولز</string>
     <plurals name="modules_enabled_count">
@@ -32,7 +31,6 @@
     <string name="About">معلومات</string>
     <string name="report_issue">رپورٹ ایشو۔</string>
     <string name="module_repo">مخزن۔</string>
-    <string name="module_repo_loading">لوڈ ہو رہا ہے…</string>
     <string name="module_repo_up_to_date">تمام ماڈیولز اپ ٹو ڈیٹ</string>
     <string name="module_repo_published_time">%sپر شائع ہوا۔</string>
     <string name="module_repo_updated_time">%sپر اپ ڈیٹ کیا گیا۔</string>
@@ -56,10 +54,9 @@
     <string name="system_prop_incorrect"><![CDATA[سسٹم کی کچھ ضروری خصوصیات حذف یا ترمیم کی گئیں۔<br/>ماڈیول کبھی کبھار باطل ہو سکتے ہیں۔]]></string>
     <string name="need_update">اپ ڈیٹ درکار ہے۔</string>
     <string name="please_update_summary">براہ کرم LSPosed کا تازہ ترین ورژن انسٹال کریں۔</string>
-    <string name="lsposed_not_active">LSPosed فی الحال انسٹال یا فعال نہیں ہے.</string>
     <string name="info_api_version">API ورژن۔</string>
     <string name="info_framework_version">فریم ورک ورژن۔</string>
-    <string name="info_manager_version">مینجر ورژن۔</string>
+    <string name="info_manager_package_name">مینیجر پیکیج کا نام</string>
     <string name="info_system_version">سسٹم ورژن۔</string>
     <string name="info_device">ڈیوائس۔</string>
     <string name="info_system_abi">ABI سسٹم۔</string>
@@ -75,6 +72,7 @@
     <string name="sepolicy_incorrect">SELinux پالیسی غلط ہے۔</string>
     <string name="update_lsposed">LSPosed کو اپ ڈیٹ کریں۔</string>
     <string name="update_lsposed_msg">LSPosed کو اپ ڈیٹ کرنے کی تصدیق کریں؟ یہ آلہ اپ ڈیٹ مکمل ہونے کے بعد دوبارہ شروع ہو جائے گا۔</string>
+    <string name="info_copied">کلپ بورڈ پر کاپی ہو گیا۔</string>
     <!-- WelcomeDialog -->
     <string name="parasitic_welcome">LSPosed میں خوش آمدید</string>
     <string name="parasitic_welcome_summary">آپ پرجیوی مینیجر کا استعمال کر رہے ہیں، جو شارٹ کٹ بنا سکتا ہے یا پھر بھی اطلاع سے کھل سکتا ہے۔</string>
@@ -87,6 +85,7 @@
     <string name="menuSaveToSd">محفوظ کریں</string>
     <string name="nav_item_logs_verbose">وربوز لاگز</string>
     <string name="nav_item_logs_module">ماڈیولز نوشتہ جات</string>
+    <string name="logs_saving">لاگ محفوظ کر رہا ہے، براہ کرم انتظار کریں۔</string>
     <string name="logs_saved">لاگز محفوظ ہو گئے۔</string>
     <string name="logs_save_failed2">محفوظ کرنے میں ناکام:\n%s</string>
     <string name="menuClearLog">ابھی لاگ صاف کریں۔</string>
@@ -94,7 +93,6 @@
     <string name="scroll_top">اوپر سکرول کریں۔</string>
     <string name="loading">لوڈ ہو رہا ہے…</string>
     <string name="scroll_bottom">نیچے سکرول کریں۔</string>
-    <string name="logs_cannot_read">لاگ نہیں پڑھ سکتا: \n</string>
     <string name="menuReload">دوبارہ لوڈ کریں۔</string>
     <string name="logs_clear_failed_2">لاگ کو صاف کرنے میں ناکام</string>
     <string name="menu_enable_word_wrap">لفظ لفاف</string>
@@ -103,6 +101,7 @@
     <!-- ModulesActivity -->
     <string name="module_empty_description">(کوئی تفصیل فراہم نہیں کی گئی)</string>
     <string name="warning_xposed_min_version">اس ماڈیول کے لیے ایک نئے Xposed ورژن (%d) کی ضرورت ہے اور اس طرح اسے چالو نہیں کیا جا سکتا</string>
+    <string name="warning_target_version_higher">یہ ماڈیول ایک نئے Xposed ورژن (%d) کے لیے ڈیزائن کیا گیا ہے اور اس طرح کچھ افعال کام نہیں کر سکتے</string>
     <string name="no_min_version_specified">یہ ماڈیول اس Xposed ورژن کی وضاحت نہیں کرتا جس کی اسے ضرورت ہے۔</string>
     <string name="warning_min_version_too_low">یہ ماڈیول Xposed ورژن %1$dکے لیے بنایا گیا تھا، لیکن ورژن %2$dمیں غیر موافق تبدیلیوں کی وجہ سے، اسے غیر فعال کر دیا گیا ہے۔</string>
     <string name="warning_installed_on_external_storage">اس ماڈیول کو لوڈ نہیں کیا جا سکتا کیونکہ یہ SD کارڈ پر انسٹال ہے، براہ کرم اسے اندرونی اسٹوریج میں منتقل کریں۔</string>
@@ -191,7 +190,8 @@
     <string name="settings_translation">ترجمہ میں حصہ لیں۔</string>
     <string name="settings_translation_summary">%s کا اپنی زبان میں ترجمہ کرنے میں ہماری مدد کریں۔</string>
     <string name="settings_create_shortcut_summary">ایک شارٹ کٹ بنائیں جو پرجیوی مینیجر کو کھول سکے۔</string>
-    <string name="settings_created_shortcut_summary">پرجیوی مینیجر کو کھولنے کے لیے ایک شارٹ کٹ بنایا گیا ہے۔</string>
+    <string name="settings_shortcut_pinned_hint">شارٹ کٹ پن کر دیا گیا۔</string>
+    <string name="settings_unsupported_pin_shortcut_summary">موجودہ ڈیفالٹ لانچر پن شارٹ کٹس کو سپورٹ نہیں کرتا ہے۔</string>
     <string name="settings_enable_status_notification">اسٹیٹس کی اطلاع</string>
     <string name="settings_enable_status_notification_summary">ایک اطلاع دکھائیں جو پرجیوی مینیجر کو کھول سکے۔</string>
     <string name="disable_status_notification_error">کوئی شارٹ کٹ نہیں، اطلاع کو غیر فعال نہیں کر سکتا</string>
@@ -200,6 +200,7 @@
     <string name="update_channel_bate">بیٹا</string>
     <string name="update_channel_nightly">رات کی تعمیر</string>
     <string name="settings_xposed_api_call_protection">Xposed API کال تحفظ</string>
+    <string name="settings_xposed_api_call_protection_summary">ایکسپوزڈ API استعمال کرنے کے لیے متحرک طور پر بھرے ہوئے ماڈیول کوڈ کو بلاک کریں، اس سے کچھ ماڈیول ٹوٹ سکتے ہیں لیکن سیکیورٹی کو فائدہ پہنچ سکتا ہے</string>
     <!-- Module Repo -->
     <string name="module_readme">ریڈمی</string>
     <string name="module_releases">جاری کرتا ہے۔</string>
@@ -209,17 +210,15 @@
     <string name="module_information_collaborators">تعاون کرنے والے</string>
     <string name="module_release_view_assets">اثاثے</string>
     <string name="menu_open_in_browser">براؤزر میں کھولیں</string>
-    <string name="refresh">ریفریش کریں۔</string>
     <string name="module_release_load_more">پرانے ورژن دکھائیں۔</string>
     <string name="module_release_no_more">مزید رہائی نہیں ہے۔</string>
     <string name="repo_load_failed">ماڈیول ریپو لوڈ کرنے میں ناکام: %s</string>
     <string name="sort_upgradable_first">پہلے اپ گریڈ کیا جا سکتا ہے۔</string>
-    <!-- CrashReportActivity -->
-    <string name="version_mismatch">LSPosed فریم ورک (%1$d) کا ورژن مینیجر (%2$d) سے میل نہیں کھاتا۔ براہ کرم LSPosed کو دوبارہ انسٹال کریں۔</string>
-    <string name="manager_crashed">مینیجر کریش ہو گیا۔</string>
-    <string name="send_crash_info">حادثے کی معلومات بھیجیں۔</string>
-    <string name="crash_info_copied">کریش کی معلومات کلپ بورڈ پر کاپی ہو گئی۔</string>
-    <string name="info_copied">کلپ بورڈ پر کاپی ہو گیا۔</string>
+    <string name="installed">انسٹال</string>
+    <plurals name="module_release_assets_download_count">
+        <item quantity="one">%d ڈاؤن لوڈ</item>
+        <item quantity="other">%d ڈاؤن لوڈز</item>
+    </plurals>
     <!-- Colors -->
     <string name="color_sakura">ساکورا</string>
     <string name="color_red">سرخ</string>
@@ -240,8 +239,4 @@
     <string name="color_deep_orange">گہرا نارنجی</string>
     <string name="color_brown">براؤن</string>
     <string name="color_blue_grey">بلیو گرے</string>
-    <plurals name="module_release_assets_download_count">
-        <item quantity="one">%d ڈاؤن لوڈ</item>
-        <item quantity="other">%d ڈاؤن لوڈز</item>
-    </plurals>
 </resources>

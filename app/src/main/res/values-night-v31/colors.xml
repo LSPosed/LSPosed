@@ -1,3 +1,4 @@
+<?xml version="1.0" encoding="utf-8"?>
 <!--
   ~ This file is part of LSPosed.
   ~
@@ -14,17 +15,10 @@
   ~ You should have received a copy of the GNU General Public License
   ~ along with LSPosed.  If not, see <https://www.gnu.org/licenses/>.
   ~
-  ~ Copyright (C) 2022 LSPosed Contributors
+  ~ Copyright (C) 2023 LSPosed Contributors
   -->
 
-<vector xmlns:android="http://schemas.android.com/apk/res/android"
-    android:width="24dp"
-    android:height="24dp"
-    android:viewportWidth="24"
-    android:viewportHeight="24"
-    android:tint="?attr/colorControlNormal"
-    android:autoMirrored="true">
-  <path
-      android:fillColor="@android:color/white"
-      android:pathData="M18,1.01L8,1c-1.1,0 -2,0.9 -2,2v3h2V5h10v14H8v-1H6v3c0,1.1 0.9,2 2,2h10c1.1,0 2,-0.9 2,-2V3c0,-1.1 -0.9,-1.99 -2,-1.99zM10,15h2V8H5v2h3.59L3,15.59 4.41,17 10,11.41V15z"/>
-</vector>
+<resources>
+    <color name="ic_launcher_foreground">@android:color/system_accent1_800</color>
+    <color name="ic_launcher_background">@android:color/system_accent1_200</color>
+</resources>

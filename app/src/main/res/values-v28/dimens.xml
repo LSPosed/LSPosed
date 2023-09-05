@@ -19,5 +19,4 @@
 
 <resources>
     <dimen name="home_primary_elevation">12dp</dimen>
-    <dimen name="home_secondary_elevation">8dp</dimen>
 </resources>

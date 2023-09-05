@@ -25,6 +25,7 @@ import android.content.res.Resources;
 import android.graphics.Bitmap;
 import android.graphics.Canvas;
 import android.graphics.Color;
+import android.graphics.drawable.AdaptiveIconDrawable;
 import android.graphics.drawable.BitmapDrawable;
 import android.os.Bundle;
 import android.view.Window;
@@ -32,50 +33,26 @@ import android.view.Window;
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 
-import com.google.android.material.color.DynamicColors;
-
-import org.lsposed.manager.BuildConfig;
-import org.lsposed.manager.ConfigManager;
+import org.lsposed.manager.App;
 import org.lsposed.manager.R;
-import org.lsposed.manager.ui.dialog.BlurBehindDialogBuilder;
-import org.lsposed.manager.ui.dialog.FlashDialogBuilder;
-import org.lsposed.manager.util.NavUtil;
 import org.lsposed.manager.util.Telemetry;
 import org.lsposed.manager.util.ThemeUtil;
-import org.lsposed.manager.util.UpdateUtil;
 
 import rikka.material.app.MaterialActivity;
 
 public class BaseActivity extends MaterialActivity {
-
     private static Bitmap icon = null;
 
     @Override
     public void onCreate(@Nullable Bundle savedInstanceState) {
-        super.onCreate(savedInstanceState);
         setTheme(R.style.AppTheme);
-        // make sure the versions are consistent
-        if (BuildConfig.DEBUG) return;
-        if (!ConfigManager.isBinderAlive()) return;
-        var version = ConfigManager.getXposedVersionCode();
-        if (BuildConfig.VERSION_CODE == version) return;
-        new BlurBehindDialogBuilder(this)
-                .setMessage(getString(R.string.version_mismatch, version, BuildConfig.VERSION_CODE))
-                .setPositiveButton(android.R.string.ok, (dialog, id) -> {
-                    if (UpdateUtil.canInstall()) {
-                        new FlashDialogBuilder(this, (d, i) -> finish()).show();
-                    } else {
-                        NavUtil.startURL(this, getString(R.string.install_url));
-                        finish();
-                    }
-                })
-                .setCancelable(false)
-                .show();
+        super.onCreate(savedInstanceState);
     }
 
     @Override
     protected void onStart() {
         super.onStart();
+        if (!App.isParasitic) return;
         for (var task : getSystemService(ActivityManager.class).getAppTasks()) {
             task.setExcludeFromRecents(false);
         }
@@ -83,14 +60,14 @@ public class BaseActivity extends MaterialActivity {
             var drawable = getApplicationInfo().loadIcon(getPackageManager());
             if (drawable instanceof BitmapDrawable) {
                 icon = ((BitmapDrawable) drawable).getBitmap();
-            } else {
+            } else if (drawable instanceof AdaptiveIconDrawable) {
                 icon = Bitmap.createBitmap(drawable.getIntrinsicWidth(), drawable.getIntrinsicHeight(), Bitmap.Config.ARGB_8888);
                 final Canvas canvas = new Canvas(icon);
                 drawable.setBounds(0, 0, canvas.getWidth(), canvas.getHeight());
                 drawable.draw(canvas);
             }
         }
-        setTaskDescription(new ActivityManager.TaskDescription(getTitle().toString(), icon));
+        setTaskDescription(new ActivityManager.TaskDescription(getTitle().toString(), icon, getColor(R.color.ic_launcher_background)));
     }
 
     @Override

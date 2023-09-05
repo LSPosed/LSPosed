@@ -19,7 +19,6 @@
   -->
 <resources xmlns:tools="http://schemas.android.com/tools" tools:keep="@string/xposed_module_updated_notification_*,@string/module_is_not_activated_*">
     <!-- MainActivity -->
-    <string name="info">Informații</string>
     <string name="overview">Prezentare generală</string>
     <string name="Modules">Module</string>
     <plurals name="modules_enabled_count">
@@ -33,7 +32,6 @@
     <string name="About">Despre</string>
     <string name="report_issue">Raportează o problemă</string>
     <string name="module_repo">Depozit</string>
-    <string name="module_repo_loading">Se încarcă…</string>
     <string name="module_repo_up_to_date">Toate modulele sunt actualizate</string>
     <string name="module_repo_published_time">Publicat la %s</string>
     <string name="module_repo_updated_time">Actualizat la %s</string>
@@ -51,16 +49,16 @@
     <string name="activated">Activat</string>
     <string name="partial_activated">Parțial activat</string>
     <string name="selinux_policy_not_loaded_summary">SEPolicy nu este încărcată corect</string>
+    <string name="selinux_policy_not_loaded"><![CDATA[Unele funcții nu vor funcționa.<br/>Vă rugăm să raportați acest lucru la <a href="https://github.com/topjohnwu/Magisk/issues"><b>Magisk</b></a> dezvoltator.]]></string>
     <string name="system_inject_fail_summary">Injectarea System Framework a eșuat</string>
     <string name="system_inject_fail"><![CDATA[Acest lucru este rar și poate fi cauzat de <b>Magisk</b> sau de unele module Magisk de calitate scăzută.<br/>Vă rugăm să încercați să dezactivați modulele Magisk altele decât Riru și LSPosed sau să trimiteți jurnalul complet dezvoltatorilor.]]></string>
     <string name="system_prop_incorrect_summary">System prop incorect</string>
     <string name="system_prop_incorrect"><![CDATA[Unele proprietăți necesare de sistem au fost șterse sau modificate<br/>modulele pot invalida ocazional.]]></string>
     <string name="need_update">Trebuie actualizat</string>
     <string name="please_update_summary">Te rugăm să instalezi cea mai recentă versiune de LSPosed</string>
-    <string name="lsposed_not_active">LSPosed nu este instalat sau activ.</string>
     <string name="info_api_version">Versiune API</string>
     <string name="info_framework_version">Versiune Framework</string>
-    <string name="info_manager_version">Versiune manager</string>
+    <string name="info_manager_package_name">Numele pachetului managerului</string>
     <string name="info_system_version">Versiune sistem</string>
     <string name="info_device">Dispozitiv</string>
     <string name="info_system_abi">Sistem ABI</string>
@@ -76,6 +74,7 @@
     <string name="sepolicy_incorrect">Politica SELinux este incorectă</string>
     <string name="update_lsposed">Actualizează LSPosed</string>
     <string name="update_lsposed_msg">Confirmați actualizarea LSPosed? Acest dispozitiv va reporni după finalizarea actualizării</string>
+    <string name="info_copied">Copiat în clipboard</string>
     <!-- WelcomeDialog -->
     <string name="parasitic_welcome">Bine ați venit la LSPosed</string>
     <string name="parasitic_welcome_summary">Folosiți managerul de paraziți, care poate crea o comandă rapidă sau poate fi deschis încă din notificare.</string>
@@ -88,6 +87,7 @@
     <string name="menuSaveToSd">Salvează</string>
     <string name="nav_item_logs_verbose">Jurnalele Verbose</string>
     <string name="nav_item_logs_module">Jurnale module</string>
+    <string name="logs_saving">Salvarea jurnalului, vă rugăm să așteptați</string>
     <string name="logs_saved">Jurnale salvate</string>
     <string name="logs_save_failed2">Salvarea a eșuat:\n%s</string>
     <string name="menuClearLog">Curăță jurnalul acum</string>
@@ -95,7 +95,6 @@
     <string name="scroll_top">Derulează pana sus</string>
     <string name="loading">Se încarcă…</string>
     <string name="scroll_bottom">Derulează până jos</string>
-    <string name="logs_cannot_read">Nu se poate citi jurnalul: \n</string>
     <string name="menuReload">Reîncarcă</string>
     <string name="logs_clear_failed_2">Ștergerea jurnalului a eșuat</string>
     <string name="menu_enable_word_wrap">Încadrare cuvinte</string>
@@ -104,6 +103,7 @@
     <!-- ModulesActivity -->
     <string name="module_empty_description">(nici o descriere furnizată)</string>
     <string name="warning_xposed_min_version">Acest modul necesită o versiune Xposed mai nouă (%d) și astfel nu poate fi activată</string>
+    <string name="warning_target_version_higher">Acest modul este proiectat pentru o versiune mai nouă a Xposed (%d) și, prin urmare, este posibil ca unele funcționalități să nu funcționeze.</string>
     <string name="no_min_version_specified">Acest modul nu specifica versiunea Xposed de care are nevoie.</string>
     <string name="warning_min_version_too_low">Acest modul a fost creat pentru versiunea Xposed %1$d, dar datorită modificărilor incompatibile din versiunea %2$d, a fost dezactivat</string>
     <string name="warning_installed_on_external_storage">Acest modul nu poate fi încărcat deoarece este instalat pe cardul SD, te rugăm mută-l în memoria internă</string>
@@ -192,7 +192,8 @@
     <string name="settings_translation">Participă în traducere</string>
     <string name="settings_translation_summary">Ajută-ne să traducem %s în limba ta</string>
     <string name="settings_create_shortcut_summary">Creați o comandă rapidă care poate deschide managerul de paraziți</string>
-    <string name="settings_created_shortcut_summary">A fost creată o comandă rapidă pentru a deschide Parasitic Manager</string>
+    <string name="settings_shortcut_pinned_hint">Comenzi rapide fixate</string>
+    <string name="settings_unsupported_pin_shortcut_summary">Lansatorul implicit actual nu acceptă comenzi rapide de tip pin</string>
     <string name="settings_enable_status_notification">Notificare de stare</string>
     <string name="settings_enable_status_notification_summary">Afișați o notificare care poate deschide managerul de paraziți</string>
     <string name="disable_status_notification_error">Nu există scurtătură, nu se poate dezactiva notificarea</string>
@@ -201,6 +202,7 @@
     <string name="update_channel_bate">Beta</string>
     <string name="update_channel_nightly">Construire nocturnă</string>
     <string name="settings_xposed_api_call_protection">Protecția apelurilor API Xposed</string>
+    <string name="settings_xposed_api_call_protection_summary">Blocați codul modulului încărcat dinamic pentru a utiliza API-ul Xposed, acest lucru poate întrerupe unele module, dar aduce beneficii în materie de securitate</string>
     <!-- Module Repo -->
     <string name="module_readme">Citește-mă</string>
     <string name="module_releases">Lansări</string>
@@ -210,17 +212,16 @@
     <string name="module_information_collaborators">Colaboratori</string>
     <string name="module_release_view_assets">Bunuri</string>
     <string name="menu_open_in_browser">Deschide în browser</string>
-    <string name="refresh">Împrospătează</string>
     <string name="module_release_load_more">Arată versiunile mai vechi</string>
     <string name="module_release_no_more">Nu mai sunt lansări</string>
     <string name="repo_load_failed">Nu s-a putut încărca repo-ul modulului: %s</string>
     <string name="sort_upgradable_first">Upgradabil mai întâi</string>
-    <!-- CrashReportActivity -->
-    <string name="version_mismatch">Versiunea LSPosed Framework (%1$d) nu se potrivește cu managerul (%2$d). Vă rugăm să reinstalați LSPosed.</string>
-    <string name="manager_crashed">Manager prăbușit</string>
-    <string name="send_crash_info">Trimite informații despre prabusire</string>
-    <string name="crash_info_copied">Informații prabusire copiate în clipboard</string>
-    <string name="info_copied">Copiat în clipboard</string>
+    <string name="installed">Instalat</string>
+    <plurals name="module_release_assets_download_count">
+        <item quantity="one">%d descărcați</item>
+        <item quantity="few">%d descărcări</item>
+        <item quantity="other">%d descărcări</item>
+    </plurals>
     <!-- Colors -->
     <string name="color_sakura">Sakura</string>
     <string name="color_red">Roșu</string>
@@ -241,9 +242,4 @@
     <string name="color_deep_orange">Portocaliu închis</string>
     <string name="color_brown">Maro</string>
     <string name="color_blue_grey">Albastru gri</string>
-    <plurals name="module_release_assets_download_count">
-        <item quantity="one">%d descărcați</item>
-        <item quantity="few">%d descărcări</item>
-        <item quantity="other">%d descărcări</item>
-    </plurals>
 </resources>

@@ -38,7 +38,6 @@ import android.graphics.drawable.Drawable;
 import android.graphics.drawable.Icon;
 import android.graphics.drawable.LayerDrawable;
 import android.os.Build;
-import android.util.Log;
 
 import org.lsposed.manager.App;
 import org.lsposed.manager.R;
@@ -104,7 +103,6 @@ public class ShortcutUtil {
     @SuppressLint("InlinedApi")
     private static IntentSender registerReceiver(Context context, Runnable task) {
         if (task == null) return null;
-
         var uuid = UUID.randomUUID().toString();
         var filter = new IntentFilter(uuid);
         var permission = "android.permission.CREATE_USERS";
@@ -117,13 +115,7 @@ public class ShortcutUtil {
             }
         };
         context.registerReceiver(receiver, filter, permission,
-                null/* main thread */, Context.RECEIVER_NOT_EXPORTED);
-
-        App.getMainHandler().postDelayed(() -> {
-            if (isLaunchShortcutPinned()) {
-                task.run();
-            }
-        }, 1000);
+                null/* main thread */, Context.RECEIVER_EXPORTED);
 
         var intent = new Intent(uuid);
         int flags = PendingIntent.FLAG_UPDATE_CURRENT | PendingIntent.FLAG_IMMUTABLE;
@@ -144,7 +136,7 @@ public class ShortcutUtil {
         return builder;
     }
 
-    public static boolean isRequestPinShortcutSupported(Context context) {
+    public static boolean isRequestPinShortcutSupported(Context context) throws RuntimeException {
         var sm = context.getSystemService(ShortcutManager.class);
         return sm.isRequestPinShortcutSupported();
     }
@@ -160,7 +152,6 @@ public class ShortcutUtil {
 
     public static boolean updateShortcut() {
         if (!isLaunchShortcutPinned()) return false;
-        Log.d(App.TAG, "update shortcut");
         var context = App.getInstance();
         var sm = context.getSystemService(ShortcutManager.class);
         List<ShortcutInfo> shortcutInfoList = new ArrayList<>();
@@ -171,13 +162,12 @@ public class ShortcutUtil {
     public static boolean isLaunchShortcutPinned() {
         var context = App.getInstance();
         var sm = context.getSystemService(ShortcutManager.class);
-        boolean pinned = false;
         for (var info : sm.getPinnedShortcuts()) {
             if (SHORTCUT_ID.equals(info.getId())) {
-                pinned = true;
-                break;
+                return true;
             }
         }
-        return pinned;
+        return false;
     }
+
 }

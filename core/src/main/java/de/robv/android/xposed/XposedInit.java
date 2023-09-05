@@ -237,12 +237,14 @@ public final class XposedInit {
     }
 
     public static void loadModules(ActivityThread at) {
+        var packages = (ArrayMap<?, ?>) XposedHelpers.getObjectField(at, "mPackages");
         serviceClient.getModulesList().forEach(module -> {
             loadedModules.put(module.packageName, Optional.empty());
             if (!LSPosedContext.loadModule(at, module)) {
                 loadedModules.remove(module.packageName);
+            } else {
+                packages.remove(module.packageName);
             }
-            ((ArrayMap<?, ?>) XposedHelpers.getObjectField(ActivityThread.currentActivityThread(), "mPackages")).clear();
         });
     }
 

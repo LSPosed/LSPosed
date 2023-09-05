@@ -19,7 +19,6 @@
   -->
 <resources xmlns:tools="http://schemas.android.com/tools" tools:keep="@string/xposed_module_updated_notification_*,@string/module_is_not_activated_*">
     <!-- MainActivity -->
-    <string name="info">Tiedot</string>
     <string name="overview">Yleiskatsaus</string>
     <string name="Modules">Moduulit</string>
     <plurals name="modules_enabled_count">
@@ -32,7 +31,6 @@
     <string name="About">Tietoja</string>
     <string name="report_issue">Ilmoita ongelmasta</string>
     <string name="module_repo">Versiovarasto</string>
-    <string name="module_repo_loading">Ladataan…</string>
     <string name="module_repo_up_to_date">Kaikki moduulit ajan tasalla</string>
     <string name="module_repo_published_time">Julkaistu osoitteessa %s</string>
     <string name="module_repo_updated_time">Päivitetty osoitteessa %s</string>
@@ -49,16 +47,16 @@
     <string name="activated">Aktivoitu</string>
     <string name="partial_activated">Osittain aktivoitu</string>
     <string name="selinux_policy_not_loaded_summary">SEPolicy ei ole ladattu oikein</string>
+    <string name="selinux_policy_not_loaded"><![CDATA[Jotkin ominaisuudet eivät toimi.<br/>Ilmoita tästä <a href="https://github.com/topjohnwu/Magisk/issues"><b>Magisk</b></a> kehittäjälle.]]></string>
     <string name="system_inject_fail_summary">Järjestelmän kehysinjektointi epäonnistui</string>
     <string name="system_inject_fail"><![CDATA[Tämä on harvinaista ja voi johtua <b>Magisk</b> tai joitakin heikkolaatuisia Magisk moduuleja.<br/>Yritä poistaa käytöstä muut Magisk moduulit kuin Riru ja LSPosed tai lähettää täysi loki kehittäjille.]]></string>
     <string name="system_prop_incorrect_summary">Järjestelmän prop virheellinen</string>
     <string name="system_prop_incorrect"><![CDATA[Jotkut tarvittavat järjestelmän ominaisuudet poistettu tai muokattu.<br/>Moduulit voivat mitätöidä satunnaisesti.]]></string>
     <string name="need_update">Täytyy päivittää</string>
     <string name="please_update_summary">Asenna LSPosedin uusin versio</string>
-    <string name="lsposed_not_active">LSPosed ei ole tällä hetkellä asennettu tai aktiivinen.</string>
     <string name="info_api_version">API versio</string>
     <string name="info_framework_version">Kehyksen versio</string>
-    <string name="info_manager_version">Managerin versio</string>
+    <string name="info_manager_package_name">Manager-paketin nimi</string>
     <string name="info_system_version">Järjestelmän versio</string>
     <string name="info_device">Laite</string>
     <string name="info_system_abi">Järjestelmä ABI</string>
@@ -74,6 +72,7 @@
     <string name="sepolicy_incorrect">SELinux-käytäntö on virheellinen</string>
     <string name="update_lsposed">Päivitys LSPostettu</string>
     <string name="update_lsposed_msg">Vahvista LSPost-päivitys? Tämä laite käynnistyy uudelleen päivityksen jälkeen</string>
+    <string name="info_copied">Kopioitu leikepöydälle</string>
     <!-- WelcomeDialog -->
     <string name="parasitic_welcome">Tervetuloa LSPosed</string>
     <string name="parasitic_welcome_summary">Käytät loishallintaohjelmaa, joka voi luoda pikakuvakkeen tai silti avata ilmoituksen.</string>
@@ -86,6 +85,7 @@
     <string name="menuSaveToSd">Tallenna</string>
     <string name="nav_item_logs_verbose">Verbose Lokit</string>
     <string name="nav_item_logs_module">Moduulien Lokit</string>
+    <string name="logs_saving">Lokin tallentaminen, odota</string>
     <string name="logs_saved">Tallennetut lokit</string>
     <string name="logs_save_failed2">Tallennus epäonnistui:\n%s</string>
     <string name="menuClearLog">Tyhjennä loki nyt</string>
@@ -93,7 +93,6 @@
     <string name="scroll_top">Vieritä ylös</string>
     <string name="loading">Ladataan…</string>
     <string name="scroll_bottom">Siirry alareunaan</string>
-    <string name="logs_cannot_read">Lokia ei voi lukea: \n</string>
     <string name="menuReload">Reload</string>
     <string name="logs_clear_failed_2">Lokin tyhjentäminen epäonnistui</string>
     <string name="menu_enable_word_wrap">Sanan Rivitys</string>
@@ -102,6 +101,7 @@
     <!-- ModulesActivity -->
     <string name="module_empty_description">(ei kuvausta annettu)</string>
     <string name="warning_xposed_min_version">Tämä moduuli vaatii uudemman Xposed version (%d) eikä sitä näin ollen voi aktivoida</string>
+    <string name="warning_target_version_higher">Tämä moduuli on suunniteltu uudemmalle Xposed-versiolle (%d), joten jotkin toiminnot eivät välttämättä toimi.</string>
     <string name="no_min_version_specified">Tämä moduuli ei määrittele tarvitsemaansa Xposed versiota.</string>
     <string name="warning_min_version_too_low">Tämä moduuli on luotu Xposed versiolle %1$d, mutta koska versiossa %2$don tehty yhteensopimattomia muutoksia, se on poistettu käytöstä</string>
     <string name="warning_installed_on_external_storage">Tätä moduulia ei voi ladata, koska se on asennettu SD-kortille, siirrä se sisäiseen tallennustilaan</string>
@@ -190,7 +190,8 @@
     <string name="settings_translation">Osallistu käännökseen</string>
     <string name="settings_translation_summary">Auta meitä kääntämään %s kielellesi</string>
     <string name="settings_create_shortcut_summary">Luo pikakuvake, joka voi avata loishallintaohjelman.</string>
-    <string name="settings_created_shortcut_summary">On luotu pikakuvake, jolla voit avata loishallinnan</string>
+    <string name="settings_shortcut_pinned_hint">Pikakuvake kiinnitetty</string>
+    <string name="settings_unsupported_pin_shortcut_summary">Nykyinen oletuskäynnistin ei tue pin-pikakuvakkeita.</string>
     <string name="settings_enable_status_notification">Tilailmoitus</string>
     <string name="settings_enable_status_notification_summary">Näytä ilmoitus, joka voi avata loishallintaohjelman</string>
     <string name="disable_status_notification_error">Ei pikakuvaketta, ilmoitusta ei voi poistaa käytöstä</string>
@@ -199,6 +200,7 @@
     <string name="update_channel_bate">Beeta</string>
     <string name="update_channel_nightly">Yöllinen rakentaminen</string>
     <string name="settings_xposed_api_call_protection">Xposedin API-kutsujen suojaus</string>
+    <string name="settings_xposed_api_call_protection_summary">Estetään dynaamisesti ladatun moduulin koodin käyttö Xposed API:n avulla, mikä saattaa rikkoa joitakin moduuleja mutta hyödyttää turvallisuutta.</string>
     <!-- Module Repo -->
     <string name="module_readme">Luennot</string>
     <string name="module_releases">Julkaisut</string>
@@ -208,17 +210,15 @@
     <string name="module_information_collaborators">Yhteistyökumppanit</string>
     <string name="module_release_view_assets">Laitteet</string>
     <string name="menu_open_in_browser">Avaa selaimessa</string>
-    <string name="refresh">Päivitä</string>
     <string name="module_release_load_more">Näytä vanhemmat versiot</string>
     <string name="module_release_no_more">Ei enää versiota</string>
     <string name="repo_load_failed">Ei voitu ladata moduulia repo: %s</string>
     <string name="sort_upgradable_first">Päivitettävissä ensin</string>
-    <!-- CrashReportActivity -->
-    <string name="version_mismatch">LSPosed framework (%1$d) versio ei vastaa manageria (%2$d). Asenna LSPosed uudelleen.</string>
-    <string name="manager_crashed">Hallinta kaatui</string>
-    <string name="send_crash_info">Lähetä kaatumistiedot</string>
-    <string name="crash_info_copied">Kaatumistiedot kopioitu leikepöydälle</string>
-    <string name="info_copied">Kopioitu leikepöydälle</string>
+    <string name="installed">Asennettu</string>
+    <plurals name="module_release_assets_download_count">
+        <item quantity="one">%d lataa</item>
+        <item quantity="other">%d lataukset</item>
+    </plurals>
     <!-- Colors -->
     <string name="color_sakura">Sakura</string>
     <string name="color_red">Punainen</string>
@@ -239,8 +239,4 @@
     <string name="color_deep_orange">Syvä oranssi</string>
     <string name="color_brown">Ruskea</string>
     <string name="color_blue_grey">Sininen harmaa</string>
-    <plurals name="module_release_assets_download_count">
-        <item quantity="one">%d lataa</item>
-        <item quantity="other">%d lataukset</item>
-    </plurals>
 </resources>

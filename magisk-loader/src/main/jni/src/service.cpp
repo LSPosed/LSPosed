@@ -297,7 +297,7 @@ namespace lspd {
 
         JNI_CallVoidMethod(env, wrapper.data, write_int_method_, getuid());
         JNI_CallVoidMethod(env, wrapper.data, write_int_method_, getpid());
-        JNI_CallVoidMethod(env, wrapper.data, write_string_method_, JNI_NewStringUTF(env, "android"));
+        JNI_CallVoidMethod(env, wrapper.data, write_string_method_, JNI_NewStringUTF(env, "system"));
         JNI_CallVoidMethod(env, wrapper.data, write_strong_binder_method_, heart_beat_binder);
 
         auto res = wrapper.transact(system_server_binder, BRIDGE_TRANSACTION_CODE);

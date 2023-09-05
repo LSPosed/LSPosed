@@ -49,6 +49,7 @@ import org.lsposed.daemon.BuildConfig;
 import java.io.IOException;
 import java.util.Arrays;
 import java.util.List;
+import java.util.Objects;
 import java.util.function.Consumer;
 import java.util.zip.ZipFile;
 
@@ -62,6 +63,8 @@ public class LSPosedService extends ILSPosedService.Stub {
     public static final String ACTION_USER_REMOVED = "android.intent.action.USER_REMOVED";
     private static final String EXTRA_USER_HANDLE = "android.intent.extra.user_handle";
     private static final String EXTRA_REMOVED_FOR_ALL_USERS = "android.intent.extra.REMOVED_FOR_ALL_USERS";
+    private static boolean bootCompleted = false;
+    private IBinder appThread = null;
 
     private static boolean isModernModules(ApplicationInfo info) {
         String[] apks;
@@ -115,10 +118,12 @@ public class LSPosedService extends ILSPosedService.Stub {
         if (uid == AID_NOBODY || uid <= 0) return;
         int userId = intent.getIntExtra("android.intent.extra.user_handle", USER_NULL);
         var intentAction = intent.getAction();
+        if (intentAction == null) return;
         var allUsers = intent.getBooleanExtra(EXTRA_REMOVED_FOR_ALL_USERS, false);
         if (userId == USER_NULL) userId = uid % PER_USER_RANGE;
         Uri uri = intent.getData();
-        String moduleName = (uri != null) ? uri.getSchemeSpecificPart() : ConfigManager.getInstance().getModule(uid).packageName;
+        var module = ConfigManager.getInstance().getModule(uid);
+        String moduleName = (uri != null) ? uri.getSchemeSpecificPart() : (module != null) ? module.packageName : null;
 
         ApplicationInfo applicationInfo = null;
         if (moduleName != null) {
@@ -131,26 +136,23 @@ public class LSPosedService extends ILSPosedService.Stub {
         boolean isXposedModule = applicationInfo != null && ((applicationInfo.metaData != null && applicationInfo.metaData.containsKey("xposedminversion")) || isModernModules(applicationInfo));
 
         switch (intentAction) {
-            case Intent.ACTION_PACKAGE_FULLY_REMOVED: {
+            case Intent.ACTION_PACKAGE_FULLY_REMOVED -> {
                 // for module, remove module
                 // because we only care about when the apk is gone
-                if (moduleName != null && allUsers)
-                    if (ConfigManager.getInstance().removeModule(moduleName)) {
+                if (moduleName != null) {
+                    if (allUsers && ConfigManager.getInstance().removeModule(moduleName)) {
                         isXposedModule = true;
                         broadcastAndShowNotification(moduleName, userId, intent, true);
                     }
-                if (moduleName != null) {
                     LSPNotificationManager.cancelNotification(UPDATED_CHANNEL_ID, moduleName, userId);
                 }
-                break;
             }
-            case Intent.ACTION_PACKAGE_REMOVED:
+            case Intent.ACTION_PACKAGE_REMOVED -> {
                 if (moduleName != null) {
                     LSPNotificationManager.cancelNotification(UPDATED_CHANNEL_ID, moduleName, userId);
                 }
-                break;
-            case Intent.ACTION_PACKAGE_ADDED:
-            case Intent.ACTION_PACKAGE_CHANGED: {
+            }
+            case Intent.ACTION_PACKAGE_ADDED, Intent.ACTION_PACKAGE_CHANGED -> {
                 // make sure that the change is for the complete package, not only a
                 // component
                 String[] components = intent.getStringArrayExtra(Intent.EXTRA_CHANGED_COMPONENT_NAME_LIST);
@@ -164,24 +166,22 @@ public class LSPosedService extends ILSPosedService.Stub {
                     // If cache not updated, assume it's not xposed module
                     isXposedModule = ConfigManager.getInstance().updateModuleApkPath(moduleName, ConfigManager.getInstance().getModuleApkPath(applicationInfo), false);
                 } else if (ConfigManager.getInstance().isUidHooked(uid)) {
-                    // it will automatically remove obsolete app from database
+                    // it will auto update obsolete scope from database
                     ConfigManager.getInstance().updateAppCache();
                 }
                 broadcastAndShowNotification(moduleName, userId, intent, isXposedModule);
-                break;
             }
-            case Intent.ACTION_UID_REMOVED: {
+            case Intent.ACTION_UID_REMOVED -> {
                 // when a package is removed (rather than hide) for a single user
                 // (apk may still be there because of multi-user)
                 broadcastAndShowNotification(moduleName, userId, intent, isXposedModule);
                 if (isXposedModule) {
-                    // it will automatically remove obsolete scope from database
+                    // it will auto remove obsolete app and scope from database
                     ConfigManager.getInstance().updateCache();
                 } else if (ConfigManager.getInstance().isUidHooked(uid)) {
-                    // it will automatically remove obsolete app from database
+                    // it will auto remove obsolete scope from database
                     ConfigManager.getInstance().updateAppCache();
                 }
-                break;
             }
         }
         boolean removed = Intent.ACTION_PACKAGE_FULLY_REMOVED.equals(intentAction) || Intent.ACTION_UID_REMOVED.equals(intentAction);
@@ -205,7 +205,7 @@ public class LSPosedService extends ILSPosedService.Stub {
         if (isXposedModule) {
             var enabledModules = ConfigManager.getInstance().enabledModules();
             var scope = ConfigManager.getInstance().getModuleScope(packageName);
-            boolean systemModule = scope != null && scope.parallelStream().anyMatch(app -> app.packageName.equals("android"));
+            boolean systemModule = scope != null && scope.parallelStream().anyMatch(app -> app.packageName.equals("system"));
             boolean enabled = Arrays.asList(enabledModules).contains(packageName);
             if (!(Intent.ACTION_UID_REMOVED.equals(action) || Intent.ACTION_PACKAGE_FULLY_REMOVED.equals(action) || allUsers))
                 LSPNotificationManager.notifyModuleUpdated(packageName, userId, enabled, systemModule);
@@ -220,6 +220,7 @@ public class LSPosedService extends ILSPosedService.Stub {
     }
 
     private void dispatchBootCompleted(Intent intent) {
+        bootCompleted = true;
         try {
             var am = ActivityManagerService.getActivityManager();
             if (am != null) am.setActivityController(null, false);
@@ -229,14 +230,19 @@ public class LSPosedService extends ILSPosedService.Stub {
         var configManager = ConfigManager.getInstance();
         if (configManager.enableStatusNotification()) {
             LSPNotificationManager.notifyStatusNotification();
+        } else {
+            LSPNotificationManager.cancelStatusNotification();
         }
     }
 
     private void dispatchConfigurationChanged(Intent intent) {
+        if (!bootCompleted) return;
         ConfigFileManager.reloadConfiguration();
         var configManager = ConfigManager.getInstance();
         if (configManager.enableStatusNotification()) {
             LSPNotificationManager.notifyStatusNotification();
+        } else {
+            LSPNotificationManager.cancelStatusNotification();
         }
     }
 
@@ -254,7 +260,10 @@ public class LSPosedService extends ILSPosedService.Stub {
         var extras = intent.getExtras();
         if (extras == null || data == null) return;
         var callback = extras.getBinder("callback");
-        var s = data.getEncodedAuthority().split(":", 2);
+        if (callback == null || !callback.isBinderAlive()) return;
+        var authority = data.getEncodedAuthority();
+        if (authority == null) return;
+        var s = authority.split(":", 2);
         if (s.length != 2) return;
         var packageName = s[0];
         int userId;
@@ -271,37 +280,29 @@ public class LSPosedService extends ILSPosedService.Stub {
 
         var iCallback = IXposedScopeCallback.Stub.asInterface(callback);
         try {
-            ApplicationInfo applicationInfo = null;
-            try {
-                applicationInfo = PackageService.getApplicationInfo(scopePackageName, 0, userId);
-            } catch (Throwable ignored) {
-            }
+            var applicationInfo = PackageService.getApplicationInfo(scopePackageName, 0, userId);
             if (applicationInfo == null) {
                 iCallback.onScopeRequestFailed(scopePackageName, "Package not found");
                 return;
             }
 
             switch (action) {
-                case "approve":
+                case "approve" -> {
                     ConfigManager.getInstance().setModuleScope(packageName, scopePackageName, userId);
                     iCallback.onScopeRequestApproved(scopePackageName);
-                    break;
-                case "deny":
-                    iCallback.onScopeRequestDenied(scopePackageName);
-                    break;
-                case "delete":
-                    iCallback.onScopeRequestTimeout(scopePackageName);
-                    break;
-                case "block":
+                }
+                case "deny" -> iCallback.onScopeRequestDenied(scopePackageName);
+                case "delete" -> iCallback.onScopeRequestTimeout(scopePackageName);
+                case "block" -> {
                     ConfigManager.getInstance().blockScopeRequest(packageName);
                     iCallback.onScopeRequestDenied(scopePackageName);
-                    break;
+                }
             }
             Log.i(TAG, action + " scope " + scopePackageName + " for " + packageName + " in user " + userId);
-        } catch (Throwable e) {
+        } catch (RemoteException e) {
             try {
                 iCallback.onScopeRequestFailed(scopePackageName, e.getMessage());
-            } catch (Throwable ignored) {
+            } catch (RemoteException ignored) {
                 // callback died
             }
         }
@@ -319,9 +320,10 @@ public class LSPosedService extends ILSPosedService.Stub {
                         Log.e(TAG, "performReceive: ", t);
                     }
                 });
-                if (!ordered) return;
+                if (!ordered && !Objects.equals(intent.getAction(), Intent.ACTION_LOCKED_BOOT_COMPLETED))
+                    return;
                 try {
-                    ActivityManagerService.finishReceiver(this, resultCode, data, extras, false, intent.getFlags());
+                    ActivityManagerService.finishReceiver(this, appThread, resultCode, data, extras, false, intent.getFlags());
                 } catch (RemoteException e) {
                     Log.e(TAG, "finish receiver", e);
                 }
@@ -336,16 +338,9 @@ public class LSPosedService extends ILSPosedService.Stub {
         }
     }
 
-    private void registerReceiver(List<IntentFilter> filters, String requiredPermission, int userId, Consumer<Intent> task) {
-        registerReceiver(filters, requiredPermission, userId, task, Context.RECEIVER_NOT_EXPORTED);
-    }
-
     private void registerReceiver(List<IntentFilter> filters, int userId, Consumer<Intent> task) {
-        registerReceiver(filters, null, userId, task, Context.RECEIVER_NOT_EXPORTED);
-    }
-
-    private void registerReceiver(List<IntentFilter> filters, int userId, Consumer<Intent> task, int flag) {
-        registerReceiver(filters, null, userId, task, flag);
+        //noinspection InlinedApi
+        registerReceiver(filters, "android.permission.BRICK", userId, task, Context.RECEIVER_NOT_EXPORTED);
     }
 
     private void registerPackageReceiver() {
@@ -379,13 +374,15 @@ public class LSPosedService extends ILSPosedService.Stub {
         intentFilter.addDataAuthority("5776733", null);
         intentFilter.addDataScheme("android_secret_code");
 
-        registerReceiver(List.of(intentFilter), 0, this::dispatchSecretCodeReceive, Context.RECEIVER_EXPORTED);
+        //noinspection InlinedApi
+        registerReceiver(List.of(intentFilter), "android.permission.CONTROL_INCALL_EXPERIENCE",
+                0, this::dispatchSecretCodeReceive, Context.RECEIVER_EXPORTED);
         Log.d(TAG, "registered secret code receiver");
     }
 
     private void registerBootCompleteReceiver() {
         var intentFilter = new IntentFilter(Intent.ACTION_LOCKED_BOOT_COMPLETED);
-
+        intentFilter.setPriority(IntentFilter.SYSTEM_HIGH_PRIORITY);
         registerReceiver(List.of(intentFilter), 0, this::dispatchBootCompleted);
         Log.d(TAG, "registered boot receiver");
     }
@@ -404,7 +401,7 @@ public class LSPosedService extends ILSPosedService.Stub {
         var moduleFilter = new IntentFilter(intentFilter);
         moduleFilter.addDataScheme("module");
 
-        registerReceiver(List.of(intentFilter, moduleFilter), "android.permission.BRICK", 0, this::dispatchOpenManager);
+        registerReceiver(List.of(intentFilter, moduleFilter), 0, this::dispatchOpenManager);
         Log.d(TAG, "registered open manager receiver");
     }
 
@@ -412,7 +409,7 @@ public class LSPosedService extends ILSPosedService.Stub {
         var intentFilter = new IntentFilter(LSPNotificationManager.moduleScope);
         intentFilter.addDataScheme("module");
 
-        registerReceiver(List.of(intentFilter), "android.permission.BRICK", 0, this::dispatchModuleScope);
+        registerReceiver(List.of(intentFilter), 0, this::dispatchModuleScope);
         Log.d(TAG, "registered module scope receiver");
     }
 
@@ -450,14 +447,15 @@ public class LSPosedService extends ILSPosedService.Stub {
     }
 
     @Override
-    public void dispatchSystemServerContext(IBinder activityThread, IBinder activityToken, String api) {
+    public void dispatchSystemServerContext(IBinder appThread, IBinder activityToken, String api) {
         Log.d(TAG, "received system context");
+        this.appThread = appThread;
         ConfigManager.getInstance().setApi(api);
-        ActivityManagerService.onSystemServerContext(IApplicationThread.Stub.asInterface(activityThread), activityToken);
+        ActivityManagerService.onSystemServerContext(IApplicationThread.Stub.asInterface(appThread), activityToken);
+        registerBootCompleteReceiver();
         registerPackageReceiver();
         registerConfigurationReceiver();
         registerSecretCodeReceiver();
-        registerBootCompleteReceiver();
         registerUserChangeReceiver();
         registerOpenManagerReceiver();
         registerModuleScopeReceiver();
@@ -467,6 +465,6 @@ public class LSPosedService extends ILSPosedService.Stub {
     @Override
     public boolean preStartManager(String pkgName, Intent intent) {
         Log.d(TAG, "checking manager intent");
-        return ServiceManager.getManagerService().preStartManager(pkgName, intent);
+        return ServiceManager.getManagerService().preStartManager(pkgName, intent, false);
     }
 }

@@ -20,28 +20,29 @@
 
 package org.lsposed.lspd.hooker;
 
-import android.app.ActivityThread;
 import android.app.LoadedApk;
 import android.content.res.XResources;
 import android.util.Log;
 
 import org.lsposed.lspd.util.Hookers;
 
-import java.util.Optional;
-
-import de.robv.android.xposed.XC_MethodHook;
 import de.robv.android.xposed.XposedHelpers;
 import de.robv.android.xposed.XposedInit;
+import io.github.libxposed.api.XposedInterface;
+import io.github.libxposed.api.annotations.AfterInvocation;
+import io.github.libxposed.api.annotations.XposedHooker;
 
 // when a package is loaded for an existing process, trigger the callbacks as well
-public class LoadedApkCtorHooker extends XC_MethodHook {
+@XposedHooker
+public class LoadedApkCtorHooker implements XposedInterface.Hooker {
 
-    @Override
-    protected void afterHookedMethod(MethodHookParam<?> param) {
+    @AfterInvocation
+    public static void afterHookedMethod(XposedInterface.AfterHookCallback callback) {
         Hookers.logD("LoadedApk#<init> starts");
 
         try {
-            LoadedApk loadedApk = (LoadedApk) param.thisObject;
+            LoadedApk loadedApk = (LoadedApk) callback.getThisObject();
+            assert loadedApk != null;
             String packageName = loadedApk.getPackageName();
             Object mAppDir = XposedHelpers.getObjectField(loadedApk, "mAppDir");
             Hookers.logD("LoadedApk#<init> ends: " + mAppDir);
@@ -59,12 +60,6 @@ public class LoadedApkCtorHooker extends XC_MethodHook {
                 }
             }
 
-            // mIncludeCode checking should go ahead of loadedPackagesInProcess added checking
-            if (!XposedHelpers.getBooleanField(loadedApk, "mIncludeCode")) {
-                Hookers.logD("LoadedApk#<init> mIncludeCode == false: " + mAppDir);
-                return;
-            }
-
             if (!XposedInit.loadedPackagesInProcess.add(packageName)) {
                 Hookers.logD("LoadedApk#<init> has been loaded before, skip: " + mAppDir);
                 return;
@@ -77,7 +72,7 @@ public class LoadedApkCtorHooker extends XC_MethodHook {
                 return;
             }
 
-            new LoadedApkGetCLHooker(loadedApk);
+            LoadedApkGetCLHooker.addLoadedApk(loadedApk);
         } catch (Throwable t) {
             Hookers.logE("error when hooking LoadedApk.<init>", t);
         }

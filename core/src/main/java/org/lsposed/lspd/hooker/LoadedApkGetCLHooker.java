@@ -24,7 +24,6 @@ import static org.lsposed.lspd.core.ApplicationServiceClient.serviceClient;
 
 import android.annotation.SuppressLint;
 import android.app.ActivityThread;
-import android.app.AndroidAppHelper;
 import android.app.LoadedApk;
 import android.content.pm.ApplicationInfo;
 import android.os.Build;
@@ -41,6 +40,8 @@ import java.io.IOException;
 import java.lang.reflect.Field;
 import java.util.Map;
 import java.util.Optional;
+import java.util.Set;
+import java.util.concurrent.ConcurrentHashMap;
 
 import de.robv.android.xposed.XC_MethodHook;
 import de.robv.android.xposed.XC_MethodReplacement;
@@ -48,11 +49,17 @@ import de.robv.android.xposed.XposedBridge;
 import de.robv.android.xposed.XposedHelpers;
 import de.robv.android.xposed.XposedInit;
 import de.robv.android.xposed.callbacks.XC_LoadPackage;
+import io.github.libxposed.api.XposedInterface;
 import io.github.libxposed.api.XposedModuleInterface;
+import io.github.libxposed.api.annotations.AfterInvocation;
+import io.github.libxposed.api.annotations.XposedHooker;
 
 @SuppressLint("BlockedPrivateApi")
-public class LoadedApkGetCLHooker extends XC_MethodHook {
+@XposedHooker
+public class LoadedApkGetCLHooker implements XposedInterface.Hooker {
     private final static Field defaultClassLoaderField;
+
+    private final static Set<LoadedApk> loadedApks = ConcurrentHashMap.newKeySet();
 
     static {
         Field field = null;
@@ -66,19 +73,15 @@ public class LoadedApkGetCLHooker extends XC_MethodHook {
         defaultClassLoaderField = field;
     }
 
-    private final LoadedApk loadedApk;
-    private final Unhook unhook;
-
-    public LoadedApkGetCLHooker(LoadedApk loadedApk) {
-        this.loadedApk = loadedApk;
-        unhook = XposedHelpers.findAndHookMethod(LoadedApk.class, "getClassLoader", this);
+    static void addLoadedApk(LoadedApk loadedApk) {
+        loadedApks.add(loadedApk);
     }
 
-    @Override
-    protected void afterHookedMethod(MethodHookParam<?> param) {
-        LoadedApk loadedApk = (LoadedApk) param.thisObject;
+    @AfterInvocation
+    public static void afterHookedMethod(XposedInterface.AfterHookCallback callback) {
+        LoadedApk loadedApk = (LoadedApk) callback.getThisObject();
 
-        if (loadedApk != this.loadedApk) {
+        if (!loadedApks.contains(loadedApk)) {
             return;
         }
 
@@ -90,16 +93,21 @@ public class LoadedApkGetCLHooker extends XC_MethodHook {
             boolean isFirstPackage = packageName != null && processName != null && packageName.equals(loadedApk.getPackageName());
             if (!isFirstPackage) {
                 packageName = loadedApk.getPackageName();
-                processName = AndroidAppHelper.currentProcessName();
+                processName = ActivityThread.currentPackageName();
             } else if (packageName.equals("android")) {
                 packageName = "system";
             }
 
             Object mAppDir = XposedHelpers.getObjectField(loadedApk, "mAppDir");
-            ClassLoader classLoader = (ClassLoader) param.getResult();
+            ClassLoader classLoader = (ClassLoader) callback.getResult();
             Hookers.logD("LoadedApk#getClassLoader ends: " + mAppDir + " -> " + classLoader);
 
             if (classLoader == null) {
+                return;
+            }
+
+            if (!isFirstPackage && !XposedHelpers.getBooleanField(loadedApk, "mIncludeCode")) {
+                Hookers.logD("LoadedApk#<init> mIncludeCode == false: " + mAppDir);
                 return;
             }
 
@@ -131,7 +139,7 @@ public class LoadedApkGetCLHooker extends XC_MethodHook {
 
                 @NonNull
                 @Override
-                public ApplicationInfo getAppInfo() {
+                public ApplicationInfo getApplicationInfo() {
                     return loadedApk.getApplicationInfo();
                 }
 
@@ -159,11 +167,11 @@ public class LoadedApkGetCLHooker extends XC_MethodHook {
         } catch (Throwable t) {
             Hookers.logE("error when hooking LoadedApk#getClassLoader", t);
         } finally {
-            unhook.unhook();
+            loadedApks.remove(loadedApk);
         }
     }
 
-    private void hookNewXSP(XC_LoadPackage.LoadPackageParam lpparam) {
+    private static void hookNewXSP(XC_LoadPackage.LoadPackageParam lpparam) {
         int xposedminversion = -1;
         boolean xposedsharedprefs = false;
         try {

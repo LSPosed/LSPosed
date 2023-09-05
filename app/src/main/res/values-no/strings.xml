@@ -19,7 +19,6 @@
   -->
 <resources xmlns:tools="http://schemas.android.com/tools" tools:keep="@string/xposed_module_updated_notification_*,@string/module_is_not_activated_*">
     <!-- MainActivity -->
-    <string name="info">Informasjon</string>
     <string name="overview">Oversikt</string>
     <string name="Modules">Moduler</string>
     <plurals name="modules_enabled_count">
@@ -32,7 +31,6 @@
     <string name="About">Om</string>
     <string name="report_issue">Rapporter en feil</string>
     <string name="module_repo">Kodelager</string>
-    <string name="module_repo_loading">Laster…</string>
     <string name="module_repo_up_to_date">Alle moduler oppdatert</string>
     <string name="module_repo_published_time">Publisert på %s</string>
     <string name="module_repo_updated_time">Oppdatert kl %s</string>
@@ -49,16 +47,16 @@
     <string name="activated">Aktivert</string>
     <string name="partial_activated">Delvis aktivert</string>
     <string name="selinux_policy_not_loaded_summary">SEPolicy er ikke lastet riktig</string>
+    <string name="selinux_policy_not_loaded"><![CDATA[Noen funksjoner vil ikke fungere.<br/>Vennligst rapporter dette til <a href="https://github.com/topjohnwu/Magisk/issues"><b>Magisk</b></a> utvikler.]]></string>
     <string name="system_inject_fail_summary">Systemets ramme-injeksjon mislyktes</string>
     <string name="system_inject_fail"><![CDATA[Dette er sjeldent og kan forårsakes av <b>Magisk</b> eller noen lavkvalitets magnetiske moduler.<br/>Prøv å deaktivere andre Magiske moduler enn Riru og LSPosed eller sende full logg til utviklere.]]></string>
     <string name="system_prop_incorrect_summary">Feil i systemprop</string>
     <string name="system_prop_incorrect"><![CDATA[Noen nødvendige systemegenskaper kan slettes eller endres.<br/>Moduler kan godkjennes av og til.]]></string>
     <string name="need_update">Må oppdatere</string>
     <string name="please_update_summary">Vennligst installer den nyeste versjonen av LSPosed</string>
-    <string name="lsposed_not_active">LSPC er ikke installert eller aktivt.</string>
     <string name="info_api_version">API versjon</string>
     <string name="info_framework_version">Rammeverk versjon</string>
-    <string name="info_manager_version">Overordnet versjon</string>
+    <string name="info_manager_package_name">Lederpakkenavn (Automatic Translation)</string>
     <string name="info_system_version">System versjon</string>
     <string name="info_device">Enhet</string>
     <string name="info_system_abi">System ABI</string>
@@ -74,6 +72,7 @@
     <string name="sepolicy_incorrect">SELinux policy er feil</string>
     <string name="update_lsposed">Oppdateringen LSPosed</string>
     <string name="update_lsposed_msg">Bekreft oppdatering av LSPosed? Denne enheten vil starte på nytt etter fullført oppdatering</string>
+    <string name="info_copied">Kopiert til utklippstavlen</string>
     <!-- WelcomeDialog -->
     <string name="parasitic_welcome">Velkommen til LSPosed</string>
     <string name="parasitic_welcome_summary">Du bruker den parasittiske manageren, som kan opprette snarvei eller fortsatt åpne fra varsling.</string>
@@ -86,6 +85,7 @@
     <string name="menuSaveToSd">Lagre</string>
     <string name="nav_item_logs_verbose">Detaljert logg</string>
     <string name="nav_item_logs_module">Modullogger</string>
+    <string name="logs_saving">Lagrer loggen, vennligst vent</string>
     <string name="logs_saved">Logger lagret</string>
     <string name="logs_save_failed2">Kunne ikke lagre:\n%s</string>
     <string name="menuClearLog">Tøm logg nå</string>
@@ -93,7 +93,6 @@
     <string name="scroll_top">Rull til toppen</string>
     <string name="loading">Laster…</string>
     <string name="scroll_bottom">Rull til bunnen</string>
-    <string name="logs_cannot_read">Kan ikke lese loggen: \n</string>
     <string name="menuReload">Reload</string>
     <string name="logs_clear_failed_2">Kunne ikke tømme loggen</string>
     <string name="menu_enable_word_wrap">Ordfarget farget farget</string>
@@ -102,6 +101,7 @@
     <!-- ModulesActivity -->
     <string name="module_empty_description">(ingen beskrivelse er gitt)</string>
     <string name="warning_xposed_min_version">Denne modulen krever en nyere Xposed versjon (%d) og kan dermed ikke aktiveres</string>
+    <string name="warning_target_version_higher">Denne modulen er designet for en nyere Xposed-versjon (%d), og derfor kan det hende at enkelte funksjoner ikke fungerer</string>
     <string name="no_min_version_specified">Denne modulen spesifiserer ikke hvilken versjon av Xposed den trenger.</string>
     <string name="warning_min_version_too_low">Denne modulen var laget for Xposed versjon %1$d, men grunnet inkompatible endringer i versjon %2$der den blitt deaktivert</string>
     <string name="warning_installed_on_external_storage">Denne modulen kan ikke lastes fordi den er installert på SD-kortet, vennligst flytt den til intern lagring</string>
@@ -190,7 +190,8 @@
     <string name="settings_translation">Delta i oversettelse</string>
     <string name="settings_translation_summary">Hjelp oss med å oversette %s til ditt språk</string>
     <string name="settings_create_shortcut_summary">Lag en snarvei som kan åpne parasitic manager</string>
-    <string name="settings_created_shortcut_summary">En snarvei er opprettet for å åpne parasitic manager</string>
+    <string name="settings_shortcut_pinned_hint">Snarvei festet</string>
+    <string name="settings_unsupported_pin_shortcut_summary">Den gjeldende standardstarteren støtter ikke pin-snarveier</string>
     <string name="settings_enable_status_notification">Statusvarsel</string>
     <string name="settings_enable_status_notification_summary">Vis et varsel som kan åpne parasitic manager</string>
     <string name="disable_status_notification_error">Ingen snarvei, kan ikke deaktivere varsling</string>
@@ -199,6 +200,7 @@
     <string name="update_channel_bate">beta</string>
     <string name="update_channel_nightly">Nattlig bygg</string>
     <string name="settings_xposed_api_call_protection">Xposed API-anropsbeskyttelse</string>
+    <string name="settings_xposed_api_call_protection_summary">Blokker dynamisk lastet modulkode for å bruke Xposed API, dette kan ødelegge noen moduler, men gi fordeler for sikkerheten</string>
     <!-- Module Repo -->
     <string name="module_readme">Lesmeg</string>
     <string name="module_releases">Utgivelser</string>
@@ -208,17 +210,15 @@
     <string name="module_information_collaborators">Samarbeidspartnere</string>
     <string name="module_release_view_assets">Eiendeler</string>
     <string name="menu_open_in_browser">Åpne i nettleser</string>
-    <string name="refresh">Oppdater</string>
     <string name="module_release_load_more">Vis eldre versjoner</string>
     <string name="module_release_no_more">Ingen flere utgivelse</string>
     <string name="repo_load_failed">Kunne ikke laste modulrepo: %s</string>
     <string name="sort_upgradable_first">Oppgraderbar først</string>
-    <!-- CrashReportActivity -->
-    <string name="version_mismatch">Versjonen av det LSPed-rammeverket (%1$d) stemmer ikke overens med behandleren (%2$d). Installer LSPC på nytt.</string>
-    <string name="manager_crashed">Håndterer krasjet</string>
-    <string name="send_crash_info">Send krasjinformasjon</string>
-    <string name="crash_info_copied">Krasj info kopiert til utklippstavlen</string>
-    <string name="info_copied">Kopiert til utklippstavlen</string>
+    <string name="installed">Installert</string>
+    <plurals name="module_release_assets_download_count">
+        <item quantity="one">%d nedlasting</item>
+        <item quantity="other">%d nedlastinger</item>
+    </plurals>
     <!-- Colors -->
     <string name="color_sakura">Sakura</string>
     <string name="color_red">Rød</string>
@@ -239,8 +239,4 @@
     <string name="color_deep_orange">Dyp oransje</string>
     <string name="color_brown">Brun</string>
     <string name="color_blue_grey">Blå grå</string>
-    <plurals name="module_release_assets_download_count">
-        <item quantity="one">%d nedlasting</item>
-        <item quantity="other">%d nedlastinger</item>
-    </plurals>
 </resources>

@@ -19,7 +19,6 @@
   -->
 <resources xmlns:tools="http://schemas.android.com/tools" tools:keep="@string/xposed_module_updated_notification_*,@string/module_is_not_activated_*">
     <!-- MainActivity -->
-    <string name="info">معلومات</string>
     <string name="overview">نظرة عامة</string>
     <string name="Modules">الوحدات</string>
     <plurals name="modules_enabled_count">
@@ -36,7 +35,6 @@
     <string name="About">عنّ</string>
     <string name="report_issue">الإبلاغ عن مشكلة</string>
     <string name="module_repo">المُستودع</string>
-    <string name="module_repo_loading">جارٍ التحميل…</string>
     <string name="module_repo_up_to_date">جميع الوحدات محدثة</string>
     <string name="module_repo_published_time">تم نشرها في %s</string>
     <string name="module_repo_updated_time">تَم تحديثها في %s</string>
@@ -57,16 +55,16 @@
     <string name="activated">مُفعّل</string>
     <string name="partial_activated">مفعل جزئياً</string>
     <string name="selinux_policy_not_loaded_summary">لم يتم تحميل SEPolicy بشكل صحيح</string>
+    <string name="selinux_policy_not_loaded"><![CDATA[لن تعمل الوحدات النمطية التي تربط إطار عمل النظام.<br/>الرجاء الإبلاغ عن هذا إلى <a href="https://github.com/topjohnwu/Magisk/issues"><b>ماجيسك</b></a> مطور النظام.]]></string>
     <string name="system_inject_fail_summary">فشل حقن إطار عمل النظام</string>
     <string name="system_inject_fail"><![CDATA[هذا نادر وقد يكون بسبب <b>Magisk</b> أو بعض وحدات Magisk منخفضة الجودة.<br/>الرجاء محاولة تعطيل وحدات Magisk خلاف Riru وLSPosed أو إرسال سجل كامل للمطورين.]]></string>
     <string name="system_prop_incorrect_summary">نظام prop غير صحيح</string>
     <string name="system_prop_incorrect"><![CDATA[بعض خصائص النظام الضرورية تم حذفها أو تعديلها.<br/>قد تبطل الوحدات أحيانا.]]></string>
     <string name="need_update">تحتاج إلى التحديث</string>
     <string name="please_update_summary">يرجى تثبيت أحدث إصدار من LSPosed</string>
-    <string name="lsposed_not_active">LSPosed غير مثبت او نشط حاليا.</string>
     <string name="info_api_version">إصدار API</string>
     <string name="info_framework_version">إصدار إطار العمل</string>
-    <string name="info_manager_version">إصدار المدير</string>
+    <string name="info_manager_package_name">اسم حزمة المدير</string>
     <string name="info_system_version">إصدار النظام</string>
     <string name="info_device">الجهاز</string>
     <string name="info_system_abi">نظام ABI</string>
@@ -82,6 +80,7 @@
     <string name="sepolicy_incorrect">سياسة SELinux غير صحيحة</string>
     <string name="update_lsposed">تحديث LSPosed</string>
     <string name="update_lsposed_msg">تأكيد تحديث LSPosed؟ سيتم إعـادة تشغيل هذا الجهاز بعد اكتمال التحديث</string>
+    <string name="info_copied">تم النسخ إلى الحافظة</string>
     <!-- WelcomeDialog -->
     <string name="parasitic_welcome">مرحباً بك في LSPosed</string>
     <string name="parasitic_welcome_summary">أنت تستخدم مدير الطفيليات، الذي يمكنه إنشاء اختصار أو لا يزال مفتوحا من الإشعارات.</string>
@@ -94,6 +93,7 @@
     <string name="menuSaveToSd">احفظ</string>
     <string name="nav_item_logs_verbose">سجلات مفصّلة</string>
     <string name="nav_item_logs_module">سجلات الوحدات</string>
+    <string name="logs_saving">حفظ السجل ، يرجى الانتظار</string>
     <string name="logs_saved">تم حفظ السجلات</string>
     <string name="logs_save_failed2">فشل الحفظ:\n%s</string>
     <string name="menuClearLog">مسح السجل الآن</string>
@@ -101,7 +101,6 @@
     <string name="scroll_top">التمرير لأعلى</string>
     <string name="loading">جارٍ التحميل…</string>
     <string name="scroll_bottom">التمرير لأسفل</string>
-    <string name="logs_cannot_read">تعذر قراءة السجل: \n</string>
     <string name="menuReload">إعادة التحميل</string>
     <string name="logs_clear_failed_2">فشل مسح السجل</string>
     <string name="menu_enable_word_wrap">التفاف الكلمات</string>
@@ -110,6 +109,7 @@
     <!-- ModulesActivity -->
     <string name="module_empty_description">(لم يتم تقديم وصف)</string>
     <string name="warning_xposed_min_version">هذه الوحدة تتطلب إصدار Xposed الأحدث (%d) لذا لا يمكن تفعيلها</string>
+    <string name="warning_target_version_higher">تم تصميم هذه الوحدة لإصدار Xposed أحدث (%d) وبالتالي قد لا تعمل بعض الوظائف</string>
     <string name="no_min_version_specified">لا تحدد هذه الوحدة إصدار Xposed الذي تحتاجه.</string>
     <string name="warning_min_version_too_low">تم إنشاء هذه الوحدة لإصدار Xposed %1$d ، ولكن بسبب التغييرات غير المتوافقة في الإصدار %2$d، فقد تم تعطيلها</string>
     <string name="warning_installed_on_external_storage">لا يمكن تحميل هذه الوحدة لأنها مثبتة على بطاقة الذاكرة، يرجى نقلها إلى مساحة التخزين الداخلية</string>
@@ -198,7 +198,8 @@
     <string name="settings_translation">المشاركة في الترجمة</string>
     <string name="settings_translation_summary">ساعدنا في ترجمة %s إلى لغتك</string>
     <string name="settings_create_shortcut_summary">إنشاء اختصار يمكنه فتح مدير الطفيليات</string>
-    <string name="settings_created_shortcut_summary">تم إنشاء اختصار لفتح مدير الطفيليات</string>
+    <string name="settings_shortcut_pinned_hint">تم تثبيت الاختصار</string>
+    <string name="settings_unsupported_pin_shortcut_summary">المشغل الافتراضي الحالي لا يدعم اختصارات الدبوس</string>
     <string name="settings_enable_status_notification">إشعارات الحالة</string>
     <string name="settings_enable_status_notification_summary">إظهار إشعار يمكنه فتح مدير الطفيليات</string>
     <string name="disable_status_notification_error">لا يوجد اختصار، لا يمكن تعطيل الإشعار</string>
@@ -207,6 +208,7 @@
     <string name="update_channel_bate">تجريبي</string>
     <string name="update_channel_nightly">البناء الليلي</string>
     <string name="settings_xposed_api_call_protection">حماية استدعاء Xposed API</string>
+    <string name="settings_xposed_api_call_protection_summary">حظر رمز الوحدة الذي يتم تحميله ديناميكيًا لاستخدام Xposed API ، قد يؤدي ذلك إلى كسر بعض الوحدات ولكنه يفيد الأمان</string>
     <!-- Module Repo -->
     <string name="module_readme">اقرأني</string>
     <string name="module_releases">إصدارات</string>
@@ -216,17 +218,19 @@
     <string name="module_information_collaborators">المتعاونين</string>
     <string name="module_release_view_assets">الأصول</string>
     <string name="menu_open_in_browser">فتح في المتصفح</string>
-    <string name="refresh">تحديث</string>
     <string name="module_release_load_more">إظهار الإصدارات الأقدم</string>
     <string name="module_release_no_more">لا مزيد من الإصدار</string>
     <string name="repo_load_failed">فشل تحميل مستودع الوحدة: %s</string>
     <string name="sort_upgradable_first">قابل للترقية أولاً</string>
-    <!-- CrashReportActivity -->
-    <string name="version_mismatch">إصدار إطار LSPosed (%1$d) لا يتطابق مع المدير (%2$d). يرجى إعادة تثبيت LSPosed.</string>
-    <string name="manager_crashed">تعطل المدير</string>
-    <string name="send_crash_info">إرسال معلومات العطل</string>
-    <string name="crash_info_copied">تم نسخ معلومات العطل إلى الحافظة</string>
-    <string name="info_copied">تم النسخ إلى الحافظة</string>
+    <string name="installed">المثبتة</string>
+    <plurals name="module_release_assets_download_count">
+        <item quantity="zero">%d التنزيلات</item>
+        <item quantity="one">%d تنزيل</item>
+        <item quantity="two">%d التنزيلات</item>
+        <item quantity="few">%d التنزيلات</item>
+        <item quantity="many">%d التنزيلات</item>
+        <item quantity="other">%d التنزيلات</item>
+    </plurals>
     <!-- Colors -->
     <string name="color_sakura">لون ساكورا</string>
     <string name="color_red">أحمر</string>
@@ -247,12 +251,4 @@
     <string name="color_deep_orange">برتقالي عميق</string>
     <string name="color_brown">بني</string>
     <string name="color_blue_grey">أزرق رمادي</string>
-    <plurals name="module_release_assets_download_count">
-        <item quantity="zero">%d التنزيلات</item>
-        <item quantity="one">%d تنزيل</item>
-        <item quantity="two">%d التنزيلات</item>
-        <item quantity="few">%d التنزيلات</item>
-        <item quantity="many">%d التنزيلات</item>
-        <item quantity="other">%d التنزيلات</item>
-    </plurals>
 </resources>

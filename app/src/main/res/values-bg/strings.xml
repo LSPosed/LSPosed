@@ -19,7 +19,6 @@
   -->
 <resources xmlns:tools="http://schemas.android.com/tools" tools:keep="@string/xposed_module_updated_notification_*,@string/module_is_not_activated_*">
     <!-- MainActivity -->
-    <string name="info">معلومات</string>
     <string name="overview">نظرة عامة</string>
     <string name="Modules">الوحدات</string>
     <plurals name="modules_enabled_count">
@@ -32,7 +31,6 @@
     <string name="About">За нас</string>
     <string name="report_issue">Докладване на проблем</string>
     <string name="module_repo">Хранилище</string>
-    <string name="module_repo_loading">Зареждане…</string>
     <string name="module_repo_up_to_date">Всички модули са актуализирани</string>
     <string name="module_repo_published_time">Публикувано в %s</string>
     <string name="module_repo_updated_time">Акттуализиран на %s</string>
@@ -49,16 +47,16 @@
     <string name="activated">Активиран</string>
     <string name="partial_activated">Частично активиран</string>
     <string name="selinux_policy_not_loaded_summary">SEPolicy не е заредена правилно</string>
+    <string name="selinux_policy_not_loaded"><![CDATA[Някои функции няма да работят.<br/>Моля, докладвайте за това на <a href="https://github.com/topjohnwu/Magisk/issues"><b>Magisk</b></a> разработчик.]]></string>
     <string name="system_inject_fail_summary">Неуспешно инжектиране на системната рамка</string>
     <string name="system_inject_fail"><![CDATA[Това се случва рядко и може да е причинено от <b>Magisk</b> или някои нискокачествени модули на Magisk.<br/>Моля, опитайте се да деактивирате модулите на Magisk, различни от Riru и LSPosed, или изпратете пълен журнал на разработчиците.]]></string>
     <string name="system_prop_incorrect_summary">Неправилна стойност на системата</string>
     <string name="system_prop_incorrect"><![CDATA[Някои необходими системни свойства са изтрити или променени.<br/>Понякога модулите могат да се обезсилват.]]></string>
     <string name="need_update">Необходимо е да се актуализира</string>
     <string name="please_update_summary">Моля, инсталирайте най-новата версия на LSPosed</string>
-    <string name="lsposed_not_active">LSPosed в момента не е инсталиран или активен.</string>
     <string name="info_api_version">Версия на API</string>
     <string name="info_framework_version">Версия на рамката</string>
-    <string name="info_manager_version">Версия на мениджъра</string>
+    <string name="info_manager_package_name">Име на пакета на мениджъра</string>
     <string name="info_system_version">Версия на системата</string>
     <string name="info_device">Устройство</string>
     <string name="info_system_abi">ABI на системата</string>
@@ -74,6 +72,7 @@
     <string name="sepolicy_incorrect">Политиката на SELinux е неправилна</string>
     <string name="update_lsposed">Актуализиране на LSPosed</string>
     <string name="update_lsposed_msg">Потвърждаване на актуализацията на LSPosed? Това устройство ще се рестартира след завършване на актуализацията</string>
+    <string name="info_copied">Копиране в клипборда</string>
     <!-- WelcomeDialog -->
     <string name="parasitic_welcome">Добре дошли в LSPosed</string>
     <string name="parasitic_welcome_summary">Използвате паразитния мениджър, който може да създаде пряк път или все още да се отваря от известието.</string>
@@ -86,6 +85,7 @@
     <string name="menuSaveToSd">Запазете</string>
     <string name="nav_item_logs_verbose">Условни дневници</string>
     <string name="nav_item_logs_module">Дневници на модулите</string>
+    <string name="logs_saving">Запазване на дневника, моля изчакайте</string>
     <string name="logs_saved">Запазени дневници</string>
     <string name="logs_save_failed2">Не успяхте да запазите:\n%s</string>
     <string name="menuClearLog">Изчистване на дневника сега</string>
@@ -93,7 +93,6 @@
     <string name="scroll_top">Превъртете към началото</string>
     <string name="loading">Зареждане…</string>
     <string name="scroll_bottom">Превъртете към дъното</string>
-    <string name="logs_cannot_read">Не мога да прочета дневника: \n</string>
     <string name="menuReload">Презареждане</string>
     <string name="logs_clear_failed_2">Неуспешно изчистване на дневника</string>
     <string name="menu_enable_word_wrap">Обвиване на думата</string>
@@ -102,6 +101,7 @@
     <!-- ModulesActivity -->
     <string name="module_empty_description">(не е предоставено описание)</string>
     <string name="warning_xposed_min_version">Този модул изисква по-нова версия на Xposed (%d) и поради това не може да бъде активиран</string>
+    <string name="warning_target_version_higher">Този модул е предназначен за по-нова версия на Xposed (%d) и поради това някои функционалности може да не работят</string>
     <string name="no_min_version_specified">Този модул не посочва версията на Xposed, която му е необходима.</string>
     <string name="warning_min_version_too_low">Този модул е създаден за Xposed версия %1$d, но поради несъвместими промени във версия %2$d, той е деактивиран</string>
     <string name="warning_installed_on_external_storage">Този модул не може да бъде зареден, защото е инсталиран на SD картата, моля, преместете го във вътрешната памет</string>
@@ -190,7 +190,8 @@
     <string name="settings_translation">Участие в превод</string>
     <string name="settings_translation_summary">Помогнете ни да преведем %s на вашия език</string>
     <string name="settings_create_shortcut_summary">Създаване на пряк път, който може да отваря паразитен мениджър</string>
-    <string name="settings_created_shortcut_summary">Създаден е пряк път за отваряне на паразитен мениджър</string>
+    <string name="settings_shortcut_pinned_hint">Кратък път, закачен</string>
+    <string name="settings_unsupported_pin_shortcut_summary">Текущият стартер по подразбиране не поддържа преки пътища</string>
     <string name="settings_enable_status_notification">Известие за състоянието</string>
     <string name="settings_enable_status_notification_summary">Показване на известие, което може да отвори паразитен мениджър</string>
     <string name="disable_status_notification_error">Няма пряк път, не мога да деактивирам известието</string>
@@ -199,6 +200,7 @@
     <string name="update_channel_bate">Бета</string>
     <string name="update_channel_nightly">Нощно изграждане</string>
     <string name="settings_xposed_api_call_protection">Защита на повикванията на Xposed API</string>
+    <string name="settings_xposed_api_call_protection_summary">Блокиране на динамично зареждания код на модула, за да се използва Xposed API, това може да наруши някои модули, но е от полза за сигурността</string>
     <!-- Module Repo -->
     <string name="module_readme">Readme</string>
     <string name="module_releases">Освобождава</string>
@@ -208,17 +210,15 @@
     <string name="module_information_collaborators">Сътрудници</string>
     <string name="module_release_view_assets">Активи</string>
     <string name="menu_open_in_browser">Отваряне в браузъра</string>
-    <string name="refresh">Обновяване</string>
     <string name="module_release_load_more">Показване на по-стари версии</string>
     <string name="module_release_no_more">Няма повече освобождаване</string>
     <string name="repo_load_failed">Неуспешно зареждане на модул repo: %s</string>
     <string name="sort_upgradable_first">Може да се надгражда първо</string>
-    <!-- CrashReportActivity -->
-    <string name="version_mismatch">Версията на рамката LSPosed (%1$d) не съвпада с тази на мениджъра (%2$d). Моля, преинсталирайте LSPosed.</string>
-    <string name="manager_crashed">Мениджърът катастрофира</string>
-    <string name="send_crash_info">Изпращане на информация за катастрофата</string>
-    <string name="crash_info_copied">Информация за катастрофата, копирана в клипборда</string>
-    <string name="info_copied">Копиране в клипборда</string>
+    <string name="installed">Инсталиран</string>
+    <plurals name="module_release_assets_download_count">
+        <item quantity="one">%d изтегляне</item>
+        <item quantity="other">%d Изтегляния</item>
+    </plurals>
     <!-- Colors -->
     <string name="color_sakura">Сакура</string>
     <string name="color_red">Червено</string>
@@ -239,8 +239,4 @@
     <string name="color_deep_orange">Наситено оранжево</string>
     <string name="color_brown">Кафяв</string>
     <string name="color_blue_grey">Синьо сиво</string>
-    <plurals name="module_release_assets_download_count">
-        <item quantity="one">%d изтегляне</item>
-        <item quantity="other">%d Изтегляния</item>
-    </plurals>
 </resources>

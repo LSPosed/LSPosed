@@ -26,6 +26,7 @@ import android.net.Uri;
 import android.os.Build;
 import android.os.Bundle;
 import android.text.TextUtils;
+import android.util.Log;
 import android.view.KeyEvent;
 import android.view.MotionEvent;
 
@@ -49,6 +50,7 @@ import org.lsposed.manager.util.ShortcutUtil;
 import org.lsposed.manager.util.UpdateUtil;
 
 import java.util.HashSet;
+import java.util.Objects;
 
 import rikka.core.util.ResourceUtils;
 
@@ -121,27 +123,22 @@ public class MainActivity extends BaseActivity implements RepoLoader.RepoListene
         } else if (ConfigManager.isBinderAlive()) {
             if (!TextUtils.isEmpty(intent.getDataString())) {
                 switch (intent.getDataString()) {
-                    case "modules":
-                        nav.setSelectedItemId(R.id.modules_nav);
-                        break;
-                    case "logs":
-                        nav.setSelectedItemId(R.id.logs_fragment);
-                        break;
-                    case "repo":
+                    case "modules" -> nav.setSelectedItemId(R.id.modules_nav);
+                    case "logs" -> nav.setSelectedItemId(R.id.logs_fragment);
+                    case "repo" -> {
                         if (ConfigManager.isMagiskInstalled()) {
                             nav.setSelectedItemId(R.id.repo_nav);
                         }
-                        break;
-                    case "settings":
-                        nav.setSelectedItemId(R.id.settings_fragment);
-                        break;
-                    default:
+                    }
+                    case "settings" -> nav.setSelectedItemId(R.id.settings_fragment);
+                    default -> {
                         var data = intent.getData();
-                        if (data != null && data.getScheme().equals("module")) {
+                        if (data != null && Objects.equals(data.getScheme(), "module")) {
                             navController.navigate(
                                     new Uri.Builder().scheme("lsposed").authority("module").appendQueryParameter("modulePackageName", data.getHost()).appendQueryParameter("moduleUserId", String.valueOf(data.getPort())).build(),
                                     new NavOptions.Builder().setEnterAnim(R.anim.fragment_enter).setExitAnim(R.anim.fragment_exit).setPopEnterAnim(R.anim.fragment_enter_pop).setPopExitAnim(R.anim.fragment_exit_pop).setLaunchSingleTop(true).setPopUpTo(navController.getGraph().getStartDestinationId(), false, true).build());
                         }
+                    }
                 }
             }
         }
@@ -263,8 +260,9 @@ public class MainActivity extends BaseActivity implements RepoLoader.RepoListene
                 }
             }
         }
-        if(App.isParasitic){
-            ShortcutUtil.updateShortcut();
+        if (App.isParasitic) {
+            var updateShortcut = ShortcutUtil.updateShortcut();
+            Log.d(App.TAG, "update shortcut success = " + updateShortcut);
         }
     }
 

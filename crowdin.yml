@@ -1,33 +1,15 @@
-#
-# Your Crowdin credentials
-#
-"project_id_env": "CROWDIN_PROJECT_ID"
-"api_token_env": "CROWDIN_API_TOKEN"
-"base_path": "."
-"base_url": "https://lsposed.crowdin.com/api/v2"
-"pull_request_title": "[translation] Update translation from Crowdin"
-#
-# Choose file structure in Crowdin
-# e.g. true or false
-#
-"preserve_hierarchy": true
-
-#
-# Files configuration
-#
-files: [
-  {
-    "source": "/app/src/main/res/values/strings.xml",
-    "translation": "/app/src/main/res/values-%two_letters_code%/%original_file_name%",
-    "type": "android",
-    "dest": "/app/strings.xml",
-    "skip_untranslated_strings": true
-  },
-  {
-    "source": "/daemon/src/main/res/values/strings.xml",
-    "translation": "/daemon/src/main/res/values-%two_letters_code%/%original_file_name%",
-    "type": "android",
-    "dest": "/daemon/strings.xml",
-    "skip_untranslated_strings": true
-  }
-]
+project_id_env: CROWDIN_PROJECT_ID
+api_token_env: CROWDIN_API_TOKEN
+base_path: .
+base_url: 'https://lsposed.crowdin.com/api/v2'
+pull_request_title: '[translation] Update translation from Crowdin'
+preserve_hierarchy: 1
+files:
+  - source: /app/src/main/res/values/strings.xml
+    translation: /app/src/main/res/values-%two_letters_code%/%original_file_name%
+    type: android
+    dest: /app/strings.xml
+  - source: /daemon/src/main/res/values/strings.xml
+    translation: /daemon/src/main/res/values-%two_letters_code%/%original_file_name%
+    type: android
+    dest: /daemon/strings.xml

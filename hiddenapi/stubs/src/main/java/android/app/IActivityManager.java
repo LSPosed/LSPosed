@@ -89,8 +89,8 @@ public interface IActivityManager extends IInterface {
                             IIntentReceiver receiver, IntentFilter filter,
                             String requiredPermission, int userId, int flags) throws RemoteException;
 
-    void finishReceiver(IBinder who, int resultCode, String resultData, Bundle map,
-                        boolean abortBroadcast, int flags) throws RemoteException;
+    void finishReceiver(IBinder caller, int resultCode, String resultData,
+                        Bundle resultExtras, boolean resultAbort, int flags) throws RemoteException;
 
     @RequiresApi(30)
     Intent registerReceiverWithFeature(IApplicationThread caller, String callerPackage,
@@ -104,6 +104,11 @@ public interface IActivityManager extends IInterface {
 
     int bindService(IApplicationThread caller, IBinder token, Intent service,
                     String resolvedType, IServiceConnection connection, int flags,
+                    String callingPackage, int userId) throws RemoteException;
+
+    @RequiresApi(34)
+    int bindService(IApplicationThread caller, IBinder token, Intent service,
+                    String resolvedType, IServiceConnection connection, long flags,
                     String callingPackage, int userId) throws RemoteException;
 
     boolean unbindService(IServiceConnection connection) throws RemoteException;

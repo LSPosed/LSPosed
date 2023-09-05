@@ -19,7 +19,6 @@
 
 import java.time.Instant
 
-@Suppress("DSL_SCOPE_VIOLATION")
 plugins {
     alias(libs.plugins.agp.app)
     alias(libs.plugins.nav.safeargs)
@@ -49,7 +48,7 @@ android {
         buildConfigField("long", "BUILD_TIME", Instant.now().epochSecond.toString())
     }
 
-    packagingOptions {
+    packaging {
         resources {
             excludes += "META-INF/**"
             excludes += "okhttp3/**"
@@ -81,10 +80,10 @@ android {
 }
 
 autoResConfig {
-    generateClass.set(true)
-    generateRes.set(false)
-    generatedClassFullName.set("org.lsposed.manager.util.LangList")
-    generatedArrayFirstItem.set("SYSTEM")
+    generateClass = true
+    generateRes = false
+    generatedClassFullName = "org.lsposed.manager.util.LangList"
+    generatedArrayFirstItem = "SYSTEM"
 }
 
 materialThemeBuilder {

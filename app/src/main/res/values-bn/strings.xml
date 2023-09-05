@@ -19,24 +19,21 @@
   -->
 <resources xmlns:tools="http://schemas.android.com/tools" tools:keep="@string/xposed_module_updated_notification_*,@string/module_is_not_activated_*">
     <!-- MainActivity -->
-    <string name="info">তথ্য
-প্রধানকার্যকলাপ</string>
-    <string name="overview">ওভারভিউ</string>
+    <string name="overview">সার সংক্ষেপ </string>
     <string name="Modules">মডিউল</string>
     <plurals name="modules_enabled_count">
         <item quantity="one">%d মডিউল সক্ষম</item>
         <item quantity="other">%d মডিউল সক্রিয়</item>
     </plurals>
-    <string name="Logs">লগ</string>
-    <string name="Settings">সেটিংস</string>
+    <string name="Logs">তথ্য সার-সংক্ষেপ </string>
+    <string name="Settings">বিন্যাস</string>
     <string name="feedback_or_suggestion">প্রতিক্রিয়া বা পরামর্শ</string>
     <string name="About">সম্পর্কিত</string>
-    <string name="report_issue">রিপোর্ট সমস্যা</string>
+    <string name="report_issue">সমস্যা প্রতিবেদন </string>
     <string name="module_repo">ভান্ডার</string>
-    <string name="module_repo_loading">লোড হচ্ছে…</string>
     <string name="module_repo_up_to_date">সব মডিউল আপ টু ডেট</string>
     <string name="module_repo_published_time">%sএ প্রকাশিত</string>
-    <string name="module_repo_updated_time">মডিউল_রিপো_হালনাগাদের_সময়</string>
+    <string name="module_repo_updated_time">%sএ আপডেট করা হয়েছে</string>
     <plurals name="module_repo_upgradable">
         <item quantity="one">%d মডিউল আপগ্রেডযোগ্য</item>
         <item quantity="other">%d মডিউল আপগ্রেডযোগ্য</item>
@@ -50,16 +47,16 @@
     <string name="activated">সক্রিয়</string>
     <string name="partial_activated">আংশিক সক্রিয়</string>
     <string name="selinux_policy_not_loaded_summary">এসইপলিসি সঠিকভাবে লোড করা হয় না</string>
+    <string name="selinux_policy_not_loaded"><![CDATA[কিছু বৈশিষ্ট্য কাজ করবে না।<br/>অনুগ্রহ করে এটি <a href="https://github.com/topjohnwu/Magisk/issues"><b>Magisk</b></a> বিকাশকারীকে রিপোর্ট করুন।]]></string>
     <string name="system_inject_fail_summary">সিস্টেম ফ্রেমওয়ার্ক ইনজেকশন ব্যর্থ হয়েছে</string>
     <string name="system_inject_fail"><![CDATA[এটি বিরল এবং <b>Magisk</b> বা কিছু নিম্নমানের Magisk মডিউলের কারণে হতে পারে।<br/>অনুগ্রহ করে Riru এবং LSPosed ব্যতীত Magisk মডিউলগুলি নিষ্ক্রিয় করার চেষ্টা করুন বা বিকাশকারীদের কাছে সম্পূর্ণ লগ জমা দিন।]]></string>
     <string name="system_prop_incorrect_summary">সিস্টেম প্রপ ভুল</string>
     <string name="system_prop_incorrect"><![CDATA[কিছু প্রয়োজনীয় সিস্টেম বৈশিষ্ট্য মুছে ফেলা বা সংশোধন করা হয়েছে.<br/>মডিউল মাঝে মাঝে অবৈধ হতে পারে।]]></string>
     <string name="need_update">আপডেট করতে হবে</string>
     <string name="please_update_summary">অনুগ্রহ করে LSPosed এর সর্বশেষ সংস্করণটি ইনস্টল করুন</string>
-    <string name="lsposed_not_active">LSPosed বর্তমানে ইনস্টল বা সক্রিয় নেই.</string>
     <string name="info_api_version">API সংস্করণ</string>
     <string name="info_framework_version">ফ্রেমওয়ার্ক সংস্করণ</string>
-    <string name="info_manager_version">ম্যানেজার সংস্করণ</string>
+    <string name="info_manager_package_name">ম্যানেজার প্যাকেজের নাম</string>
     <string name="info_system_version">সিস্টেম সংস্করণ</string>
     <string name="info_device">যন্ত্র</string>
     <string name="info_system_abi">সিস্টেম ABI</string>
@@ -75,6 +72,7 @@
     <string name="sepolicy_incorrect">SELinux নীতি ভুল</string>
     <string name="update_lsposed">আপডেট LSPosed</string>
     <string name="update_lsposed_msg">LSPosed আপডেট করার জন্য নিশ্চিত? আপডেট সম্পূর্ণ হওয়ার পরে এই ডিভাইসটি রিবুট হবে</string>
+    <string name="info_copied">ক্লিপবোর্ডে কপি করা হয়েছে</string>
     <!-- WelcomeDialog -->
     <string name="parasitic_welcome">LSPosed স্বাগতম</string>
     <string name="parasitic_welcome_summary">আপনি পরজীবী ম্যানেজার ব্যবহার করছেন, যা শর্টকাট তৈরি করতে পারে বা এখনও বিজ্ঞপ্তি থেকে খুলতে পারে।</string>
@@ -87,6 +85,7 @@
     <string name="menuSaveToSd">সংরক্ষণ</string>
     <string name="nav_item_logs_verbose">ভার্বোস লগ</string>
     <string name="nav_item_logs_module">মডিউল লগ</string>
+    <string name="logs_saving">লগ সংরক্ষণ করা হচ্ছে, অনুগ্রহ করে অপেক্ষা করুন</string>
     <string name="logs_saved">লগ সংরক্ষিত</string>
     <string name="logs_save_failed2">সংরক্ষণ করতে ব্যর্থ হয়েছে:\n%s</string>
     <string name="menuClearLog">এখন লগ সাফ করুন</string>
@@ -94,7 +93,6 @@
     <string name="scroll_top">উপরে যান</string>
     <string name="loading">লোড হচ্ছে…</string>
     <string name="scroll_bottom">নীচে স্ক্রোল করুন</string>
-    <string name="logs_cannot_read">লগ পড়া যাবে না: \n</string>
     <string name="menuReload">পুনরায় লোড করুন</string>
     <string name="logs_clear_failed_2">লগ সাফ করতে ব্যর্থ হয়েছে</string>
     <string name="menu_enable_word_wrap">শব্দ মোড়ানো</string>
@@ -103,6 +101,7 @@
     <!-- ModulesActivity -->
     <string name="module_empty_description">(কোন বর্ণনা দেওয়া হয়নি)</string>
     <string name="warning_xposed_min_version">এই মডিউলটির একটি নতুন Xposed সংস্করণ প্রয়োজন (%d) এবং এইভাবে সক্রিয় করা যাবে না</string>
+    <string name="warning_target_version_higher">এই মডিউলটি একটি নতুন Xposed সংস্করণ (%d) এর জন্য ডিজাইন করা হয়েছে এবং এইভাবে কিছু কার্যকারিতা কাজ নাও করতে পারে</string>
     <string name="no_min_version_specified">এই মডিউলটি তার প্রয়োজনীয় Xposed সংস্করণটি নির্দিষ্ট করে না।</string>
     <string name="warning_min_version_too_low">এই মডিউলটি Xposed সংস্করণ %1$d-এর জন্য তৈরি করা হয়েছিল, কিন্তু সংস্করণ %2$d-এ অসামঞ্জস্যপূর্ণ পরিবর্তনের কারণে, এটি নিষ্ক্রিয় করা হয়েছে।</string>
     <string name="warning_installed_on_external_storage">এই মডিউলটি লোড করা যাবে না কারণ এটি SD কার্ডে ইনস্টল করা আছে, দয়া করে এটিকে অভ্যন্তরীণ সঞ্চয়স্থানে নিয়ে যান৷</string>
@@ -191,7 +190,8 @@
     <string name="settings_translation">অনুবাদে অংশগ্রহণ করুন</string>
     <string name="settings_translation_summary">আপনার ভাষায় %s অনুবাদ করতে আমাদের সাহায্য করুন</string>
     <string name="settings_create_shortcut_summary">একটি শর্টকাট তৈরি করুন যা পরজীবী ম্যানেজার খুলতে পারে</string>
-    <string name="settings_created_shortcut_summary">পরজীবী ম্যানেজার খোলার জন্য একটি শর্টকাট তৈরি করা হয়েছে</string>
+    <string name="settings_shortcut_pinned_hint">শর্টকাট পিন করা হয়েছে</string>
+    <string name="settings_unsupported_pin_shortcut_summary">বর্তমান ডিফল্ট লঞ্চার পিন শর্টকাট সমর্থন করে না</string>
     <string name="settings_enable_status_notification">স্থিতি বিজ্ঞপ্তি</string>
     <string name="settings_enable_status_notification_summary">পরজীবী ম্যানেজার খুলতে পারে এমন একটি বিজ্ঞপ্তি দেখান</string>
     <string name="disable_status_notification_error">কোন শর্টকাট, বিজ্ঞপ্তি নিষ্ক্রিয় করতে পারবেন না</string>
@@ -200,6 +200,7 @@
     <string name="update_channel_bate">বেটা</string>
     <string name="update_channel_nightly">রাতারাতি নির্মাণ</string>
     <string name="settings_xposed_api_call_protection">Xposed API কল সুরক্ষা</string>
+    <string name="settings_xposed_api_call_protection_summary">এক্সপোজড এপিআই ব্যবহার করতে গতিশীলভাবে লোড করা মডিউল কোড ব্লক করুন, এটি কিছু মডিউল ভেঙে ফেলতে পারে তবে নিরাপত্তার সুবিধা পাবে</string>
     <!-- Module Repo -->
     <string name="module_readme">রিডমি</string>
     <string name="module_releases">মুক্তি দেয়</string>
@@ -209,17 +210,15 @@
     <string name="module_information_collaborators">সহযোগীরা</string>
     <string name="module_release_view_assets">সম্পদ</string>
     <string name="menu_open_in_browser">ব্রাউজারে খোলা</string>
-    <string name="refresh">রিফ্রেশ</string>
     <string name="module_release_load_more">পুরোনো সংস্করণ দেখান</string>
     <string name="module_release_no_more">আর মুক্তি নেই</string>
     <string name="repo_load_failed">মডিউল রেপো লোড করতে ব্যর্থ হয়েছে: %s</string>
     <string name="sort_upgradable_first">প্রথমে আপগ্রেডযোগ্য</string>
-    <!-- CrashReportActivity -->
-    <string name="version_mismatch">LSPosed ফ্রেমওয়ার্কের সংস্করণ (%1$d) ম্যানেজার (%2$d) এর সাথে মেলে না। অনুগ্রহ করে LSPosed পুনরায় ইনস্টল করুন।</string>
-    <string name="manager_crashed">ম্যানেজার বিধ্বস্ত</string>
-    <string name="send_crash_info">ক্র্যাশ তথ্য পাঠান</string>
-    <string name="crash_info_copied">ক্র্যাশ তথ্য ক্লিপবোর্ডে অনুলিপি করা হয়েছে৷</string>
-    <string name="info_copied">ক্লিপবোর্ডে কপি করা হয়েছে</string>
+    <string name="installed">ইনস্টল করা হয়েছে</string>
+    <plurals name="module_release_assets_download_count">
+        <item quantity="one">%d ডাউনলোড</item>
+        <item quantity="other">%d ডাউনলোড</item>
+    </plurals>
     <!-- Colors -->
     <string name="color_sakura">সাকুরা</string>
     <string name="color_red">লাল</string>
@@ -240,8 +239,4 @@
     <string name="color_deep_orange">গভীর কমলা</string>
     <string name="color_brown">বাদামী</string>
     <string name="color_blue_grey">নীল ধূসর</string>
-    <plurals name="module_release_assets_download_count">
-        <item quantity="one">%d ডাউনলোড</item>
-        <item quantity="other">%d ডাউনলোড</item>
-    </plurals>
 </resources>

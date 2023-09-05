@@ -1,5 +1,3 @@
-import java.net.URI
-
 enableFeaturePreview("TYPESAFE_PROJECT_ACCESSORS")
 
 pluginManagement {
@@ -11,30 +9,18 @@ pluginManagement {
 }
 
 dependencyResolutionManagement {
-    repositoriesMode.set(RepositoriesMode.FAIL_ON_PROJECT_REPOS)
+    repositoriesMode = RepositoriesMode.FAIL_ON_PROJECT_REPOS
     repositories {
         google()
         mavenCentral()
-        mavenLocal()
-    }
-    versionCatalogs {
-        create("libs") {
-            library("libxposed-api", "io.github.libxposed", "api").version {
-                branch = "master"
-            }
-            library("libxposed-interface", "io.github.libxposed", "interface").version {
-                branch = "master"
+        mavenLocal {
+            content {
+                includeGroup("io.github.libxposed")
             }
         }
     }
-}
-
-sourceControl {
-    gitRepository(URI.create("https://github.com/libxposed/api.git")) {
-        producesModule("io.github.libxposed:api")
-    }
-    gitRepository(URI.create("https://github.com/libxposed/service.git")) {
-        producesModule("io.github.libxposed:interface")
+    versionCatalogs {
+        create("libs")
     }
 }
 

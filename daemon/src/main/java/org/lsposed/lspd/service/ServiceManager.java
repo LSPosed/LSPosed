@@ -22,13 +22,18 @@ package org.lsposed.lspd.service;
 import android.app.ActivityThread;
 import android.content.Context;
 import android.ddm.DdmHandleAppName;
+import android.os.Binder;
 import android.os.Build;
 import android.os.IBinder;
 import android.os.IServiceManager;
 import android.os.Looper;
+import android.os.Parcel;
 import android.os.Process;
+import android.os.RemoteException;
 import android.util.Log;
 
+import androidx.annotation.NonNull;
+import androidx.annotation.Nullable;
 import androidx.annotation.RequiresApi;
 
 import com.android.internal.os.BinderInternal;
@@ -36,6 +41,11 @@ import com.android.internal.os.BinderInternal;
 import org.lsposed.daemon.BuildConfig;
 
 import java.io.File;
+import java.lang.reflect.Field;
+import java.lang.reflect.InvocationTargetException;
+import java.lang.reflect.Method;
+import java.util.List;
+import java.util.Map;
 import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Executors;
 
@@ -104,6 +114,9 @@ public class ServiceManager {
 
         logcatService = new LogcatService();
         logcatService.start();
+
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.R)
+            permissionManagerWorkaround();
 
         Process.setThreadPriority(Process.THREAD_PRIORITY_FOREGROUND);
         Looper.prepareMainLooper();
@@ -207,5 +220,57 @@ public class ServiceManager {
 
     public static boolean existsInGlobalNamespace(String path) {
         return toGlobalNamespace(path).exists();
+    }
+
+    private static void permissionManagerWorkaround() {
+        try {
+            Field sCacheField = android.os.ServiceManager.class.getDeclaredField("sCache");
+            sCacheField.setAccessible(true);
+            var sCache = (Map) sCacheField.get(null);
+            sCache.put("permissionmgr", new BinderProxy("permissionmgr"));
+            sCache.put("legacy_permission", new BinderProxy("legacy_permission"));
+            sCache.put("appops", new BinderProxy("appops"));
+        } catch (Throwable e) {
+            Log.e(TAG, "failed to init permission manager", e);
+        }
+    }
+
+    private static class BinderProxy extends Binder {
+        private static final Method rawGetService;
+
+        static {
+            try {
+                rawGetService = android.os.ServiceManager.class.getDeclaredMethod("rawGetService", String.class);
+                rawGetService.setAccessible(true);
+            } catch (NoSuchMethodException e) {
+                throw new RuntimeException(e);
+            }
+        }
+        private IBinder mReal = null;
+        private final String mName;
+
+        BinderProxy(String name) {
+            mName = name;
+        }
+
+        @Override
+        protected boolean onTransact(int code, @NonNull Parcel data, @Nullable Parcel reply, int flags) throws RemoteException {
+            synchronized (this) {
+                if (mReal == null) {
+                    try {
+                        mReal = (IBinder) rawGetService.invoke(null, mName);
+                    } catch (IllegalAccessException | InvocationTargetException ignored){
+
+                    }
+                }
+                if (mReal != null) {
+                    return mReal.transact(code, data, reply, flags);
+                }
+            }
+            // getSplitPermissions
+            if (reply != null && mName.equals("permissionmgr"))
+                reply.writeTypedList(List.of());
+            return true;
+        }
     }
 }

@@ -20,9 +20,7 @@
 import com.android.build.api.dsl.ApplicationExtension
 import com.android.ide.common.signing.KeystoreHelper
 import java.io.PrintStream
-import java.util.*
 
-@Suppress("DSL_SCOPE_VIOLATION")
 plugins {
     alias(libs.plugins.agp.app)
     alias(libs.plugins.lsplugin.resopt)
@@ -40,6 +38,7 @@ val defaultManagerPackageName: String by rootProject.extra
 android {
     buildFeatures {
         prefab = true
+        buildConfig = true
     }
 
     defaultConfig {
@@ -75,24 +74,20 @@ android {
         }
     }
 
-    sourceSets {
-        named("main") {
-            res {
-                srcDir(project(":app").file("src/common/res"))
-            }
-        }
-    }
     namespace = "org.lsposed.daemon"
 }
 
 android.applicationVariants.all {
-    val variantCapped = name.capitalize(Locale.ROOT)
-    val variantLowered = name.toLowerCase(Locale.ROOT)
+    val variantCapped = name.replaceFirstChar { it.uppercase() }
+    val variantLowered = name.lowercase()
 
-    val outSrcDir = file("$buildDir/generated/source/signInfo/${variantLowered}")
+    val outSrcDir =
+        layout.buildDirectory.dir("generated/source/signInfo/${variantLowered}").get()
     val signInfoTask = tasks.register("generate${variantCapped}SignInfo") {
         dependsOn(":app:validateSigning${variantCapped}")
-        val sign = rootProject.project(":app").extensions.getByType(ApplicationExtension::class.java).buildTypes.named(variantLowered).get().signingConfig
+        val sign = rootProject.project(":app").extensions
+            .getByType(ApplicationExtension::class.java)
+            .buildTypes.named(variantLowered).get().signingConfig
         val outSrc = file("$outSrcDir/org/lsposed/lspd/util/SignInfo.java")
         outputs.file(outSrc)
         doLast {
@@ -115,7 +110,7 @@ android.applicationVariants.all {
             )
         }
     }
-    registerJavaGeneratingTask(signInfoTask, outSrcDir)
+    registerJavaGeneratingTask(signInfoTask, outSrcDir.asFile)
 }
 
 dependencies {

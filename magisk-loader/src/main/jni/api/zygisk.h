@@ -273,12 +273,13 @@ void zygisk_companion_entry(int client) { func(client); }
 
         template <class T>
         void entry_impl(api_table *table, JNIEnv *env) {
-            ModuleBase *module = new T();
-            if (!table->registerModule(table, new module_abi(module)))
-                return;
-            auto api = new Api();
-            api->impl = table;
-            module->onLoad(api, env);
+            static Api api;
+            api.impl = table;
+            static T module;
+            ModuleBase *m = &module;
+            static module_abi abi(m);
+            if (!table->registerModule(table, &abi)) return;
+            m->onLoad(&api, env);
         }
 
     } // namespace internal
@@ -310,8 +311,10 @@ void zygisk_companion_entry(int client) { func(client); }
 
 } // namespace zygisk
 
-[[gnu::visibility("default")]] [[gnu::used]]
-extern "C" void zygisk_module_entry(zygisk::internal::api_table *, JNIEnv *);
+extern "C" {
+[[gnu::visibility("default"), maybe_unused]]
+void zygisk_module_entry(zygisk::internal::api_table *, JNIEnv *);
 
-[[gnu::visibility("default")]] [[gnu::used]]
-extern "C" void zygisk_companion_entry(int);
+[[gnu::visibility("default"), maybe_unused]]
+void zygisk_companion_entry(int);
+}

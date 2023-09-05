@@ -7,6 +7,7 @@ import android.os.Binder;
 import android.os.Bundle;
 import android.os.ParcelFileDescriptor;
 import android.os.RemoteException;
+import android.util.Log;
 
 import org.lsposed.lspd.models.Module;
 
@@ -17,6 +18,9 @@ import java.util.concurrent.ConcurrentHashMap;
 import io.github.libxposed.service.IXposedService;
 
 public class LSPInjectedModuleService extends ILSPInjectedModuleService.Stub {
+
+    private static final String TAG = "LSPosedInjectedModuleService";
+
     private final Module loadedModule;
 
     Map<String, Set<IRemotePreferenceCallback>> callbacks = new ConcurrentHashMap<>();
@@ -33,12 +37,16 @@ public class LSPInjectedModuleService extends ILSPInjectedModuleService.Stub {
     @Override
     public Bundle requestRemotePreferences(String group, IRemotePreferenceCallback callback) {
         var bundle = new Bundle();
-        var userId = Binder.getCallingUid() % PER_USER_RANGE;
+        var userId = Binder.getCallingUid() / PER_USER_RANGE;
         bundle.putSerializable("map", ConfigManager.getInstance().getModulePrefs(loadedModule.packageName, userId, group));
         if (callback != null) {
             var groupCallbacks = callbacks.computeIfAbsent(group, k -> ConcurrentHashMap.newKeySet());
             groupCallbacks.add(callback);
-            callback.asBinder().unlinkToDeath(() -> groupCallbacks.remove(callback), 0);
+            try {
+                callback.asBinder().linkToDeath(() -> groupCallbacks.remove(callback), 0);
+            } catch (RemoteException e) {
+                Log.w(TAG, "requestRemotePreferences: ", e);
+            }
         }
         return bundle;
     }
