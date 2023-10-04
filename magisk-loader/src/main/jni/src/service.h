@@ -89,7 +89,7 @@ namespace lspd {
         std::map<std::string, std::string> RequestObfuscationMap(JNIEnv *env, const lsplant::ScopedLocalRef<jobject> &binder);
 
     private:
-        inline static std::unique_ptr<Service> instance_ = std::make_unique<Service>();
+        static std::unique_ptr<Service> instance_;
         bool initialized_ = false;
 
         Service() = default;
