@@ -19,12 +19,12 @@
 
 #pragma once
 #include <string>
-#include <absl/container/flat_hash_map.h>
+#include <parallel_hashmap/phmap.h>
 #include "utils/jni_helper.hpp"
 
 class WA: public dex::Writer::Allocator {
     // addr: {size, fd}
-    absl::flat_hash_map<void*, std::pair<size_t, int>> allocated_;
+    phmap::flat_hash_map<void*, std::pair<size_t, int>> allocated_;
 public:
     inline void* Allocate(size_t size) override {
         auto fd = ASharedMemory_create("", size);
