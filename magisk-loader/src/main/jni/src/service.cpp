@@ -33,7 +33,7 @@
 using namespace lsplant;
 
 namespace lspd {
-    std::unique_ptr<Service> Service::instance_;
+    std::unique_ptr<Service> Service::instance_ = std::make_unique<Service>();
 
     jboolean
     Service::exec_transact_replace(jboolean *res, JNIEnv *env, [[maybe_unused]] jobject obj,
