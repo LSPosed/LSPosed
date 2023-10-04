@@ -33,7 +33,7 @@ using namespace lsplant;
 
 
 namespace lspd {
-    std::unique_ptr<lspd::Context> lspd::Context::instance_;
+    std::unique_ptr<Context> Context::instance_;
     std::unique_ptr<ConfigBridge> ConfigBridge::instance_;
 
     Context::PreloadedDex::PreloadedDex(int fd, std::size_t size) {
