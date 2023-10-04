@@ -17,28 +17,24 @@
  * Copyright (C) 2022 LSPosed Contributors
  */
 
-//
-// Created by Kotori0 on 2022/4/14.
-//
-
-#ifndef LSPOSED_CONFIGIMPL_H
-#define LSPOSED_CONFIGIMPL_H
+#pragma once
 
 #include "config_bridge.h"
 #include "service.h"
 
-class ConfigImpl: public ConfigBridge {
-public:
-    inline static void Init() {
-        instance_ = std::make_unique<ConfigImpl>();
-    }
+namespace lspd {
+    class ConfigImpl : public ConfigBridge {
+    public:
+        inline static void Init() {
+            instance_ = std::make_unique<ConfigImpl>();
+        }
 
-    virtual obfuscation_map_t& obfuscation_map() override { return obfuscation_map_; }
-    virtual void obfuscation_map(obfuscation_map_t m) override { obfuscation_map_ = std::move(m); }
+        virtual obfuscation_map_t &obfuscation_map() override { return obfuscation_map_; }
 
-private:
-    inline static std::map<std::string, std::string> obfuscation_map_;
-};
+        virtual void
+        obfuscation_map(obfuscation_map_t m) override { obfuscation_map_ = std::move(m); }
 
-
-#endif //LSPOSED_CONFIGIMPL_H
+    private:
+        inline static std::map<std::string, std::string> obfuscation_map_;
+    };
+}

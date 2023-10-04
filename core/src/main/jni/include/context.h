@@ -52,7 +52,7 @@ namespace lspd {
         virtual ~Context() = default;
 
     protected:
-        inline static std::unique_ptr<Context> instance_;
+        static std::unique_ptr<Context> instance_;
         jobject inject_class_loader_ = nullptr;
         jclass entry_class_ = nullptr;
 

@@ -22,6 +22,7 @@
 #define _LOGGING_H
 
 #include <android/log.h>
+#include <errno.h>
 
 #ifndef LOG_TAG
 #define LOG_TAG    "LSPosed"

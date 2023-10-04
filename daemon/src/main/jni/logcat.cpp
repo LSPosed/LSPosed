@@ -8,6 +8,7 @@
 #include <cinttypes>
 #include <chrono>
 #include <thread>
+#include <functional>
 #include <sys/system_properties.h>
 
 using namespace std::string_view_literals;
