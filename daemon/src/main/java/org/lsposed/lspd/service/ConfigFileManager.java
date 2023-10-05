@@ -84,7 +84,7 @@ public class ConfigFileManager {
     static final Path managerApkPath = daemonApkPath.getParent().resolve("manager.apk");
     static final File magiskDbPath = new File("/data/adb/magisk.db");
     private static final Path lockPath = basePath.resolve("lock");
-    private static final Path configDirPath = basePath.resolve("config");
+    static final Path configDirPath = basePath.resolve("config");
     static final File dbPath = configDirPath.resolve("modules_config.db").toFile();
     private static final Path logDirPath = basePath.resolve("log");
     private static final Path oldLogDirPath = basePath.resolve("log.old");
