@@ -317,7 +317,7 @@ val reRunDaemon = task<Exec>("reRunDaemon") {
     )
     isIgnoreExitValue = true
 }
-val tmpApk = "/data/local/tmp/lsp.apk"
+val tmpApk = "/data/local/tmp/manager.apk"
 val pushApk = task<Exec>("pushApk") {
     group = "LSPosed"
     dependsOn(":app:assembleDebug")
@@ -332,11 +332,9 @@ val openApp = task<Exec>("openApp") {
         "com.android.shell/.BugreportWarningActivity"
     )
 }
-task<Exec>("reRunApp") {
+task("reRunApp") {
     group = "LSPosed"
     dependsOn(pushApk)
-    commandLine(adb, "shell", "su", "-c", "mv -f $tmpApk /data/adb/lspd/manager.apk")
-    isIgnoreExitValue = true
     finalizedBy(reRunDaemon)
 }
 
