@@ -35,13 +35,11 @@ namespace lspd {
     struct SymbolCache {
         std::atomic_flag initialized{};
         void *do_dlopen;
-        void *setTableOverride;
 
         SymbolCache() = default;
 
         SymbolCache(const SymbolCache &other) :
-                do_dlopen(other.do_dlopen),
-                setTableOverride(other.setTableOverride) {}
+                do_dlopen(other.do_dlopen) {}
 
         SymbolCache &operator=(const SymbolCache &other) {
             new(this)SymbolCache(other);

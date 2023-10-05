@@ -44,13 +44,6 @@ namespace lspd {
     }
 
 
-    bool FindLibArt() {
-        auto &art = GetArt();
-        if (!art->isValid()) return false;
-        return symbol_cache->setTableOverride = art->getSymbAddress(
-                "_ZN3art9JNIEnvExt16SetTableOverrideEPK18JNINativeInterface");
-    }
-
     void InitSymbolCache(SymbolCache *other) {
         LOGD("InitSymbolCache");
         if (other && other->initialized.test(std::memory_order_acquire)) {
@@ -59,18 +52,12 @@ namespace lspd {
             symbol_cache->initialized.test_and_set(std::memory_order_relaxed);
             return;
         }
-        auto ok = FindLibArt();
         symbol_cache->do_dlopen = SandHook::ElfImg("/linker").getSymbAddress(
                 "__dl__Z9do_dlopenPKciPK17android_dlextinfoPKv");
-        if (!ok) [[unlikely]] {
-            GetArt(true);
-            LOGE("Init symbol cache failed");
-        } else {
-            symbol_cache->initialized.test_and_set(std::memory_order_relaxed);
-            if (other) {
-                *other = *symbol_cache;
-                other->initialized.test_and_set(std::memory_order_acq_rel);
-            }
+        symbol_cache->initialized.test_and_set(std::memory_order_relaxed);
+        if (other) {
+            *other = *symbol_cache;
+            other->initialized.test_and_set(std::memory_order_acq_rel);
         }
     }
 }  // namespace lspd

@@ -29,6 +29,7 @@
 #include "utils/jni_helper.hpp"
 #include "symbol_cache.h"
 #include "config_bridge.h"
+#include "elf_util.h"
 
 using namespace lsplant;
 
@@ -197,7 +198,8 @@ namespace lspd {
         auto binder_class = JNI_FindClass(env, "android/os/Binder");
         exec_transact_backup_methodID_ = JNI_GetMethodID(env, binder_class, "execTransact",
                                                          "(IJJI)Z");
-        if (!symbol_cache->setTableOverride) {
+        auto *setTableOverride = SandHook::ElfImg("/libart.so").getSymbAddress<void (*)(JNINativeInterface *)>("_ZN3art9JNIEnvExt16SetTableOverrideEPK18JNINativeInterface");
+        if (!setTableOverride) {
             LOGE("set table override not found");
         }
         memcpy(&native_interface_replace_, env->functions, sizeof(JNINativeInterface));
@@ -205,9 +207,8 @@ namespace lspd {
         call_boolean_method_va_backup_ = env->functions->CallBooleanMethodV;
         native_interface_replace_.CallBooleanMethodV = &call_boolean_method_va_replace;
 
-        if (symbol_cache->setTableOverride != nullptr) {
-            reinterpret_cast<void (*)(JNINativeInterface *)>(symbol_cache->setTableOverride)(
-                    &native_interface_replace_);
+        if (setTableOverride != nullptr) {
+            setTableOverride(&native_interface_replace_);
         }
         if (auto activity_thread_class = JNI_FindClass(env, "android/app/IActivityManager$Stub")) {
             if (auto *set_activity_controller_field = JNI_GetStaticFieldID(env,
