@@ -180,6 +180,11 @@ public class ConfigManager {
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.P) {
             params.setSynchronousMode("NORMAL");
         }
+        try {
+            Files.createDirectories(ConfigFileManager.configDirPath);
+        } catch (IOException e) {
+            Log.e(TAG, "create config dir", e);
+        }
         return SQLiteDatabase.openDatabase(ConfigFileManager.dbPath.getAbsoluteFile(), params.build());
     }
 
@@ -191,7 +196,7 @@ public class ConfigManager {
             if (dbVersion > targetDBVersion) {
                 Log.w(TAG, "database version " + dbVersion + " greater than " + targetDBVersion + ", drop and recreate");
                 try {
-                    var lspdConfig = fetchModuleConfig(db, "lspd", 0).get("lspd");
+                    var lspdConfig = fetchModuleConfig(db, "lspd", 0).getOrDefault("config", null);
                     if (lspdConfig != null) {
                         ConfigFileManager.deleteFolderIfExists(Paths.get((String) lspdConfig.get("misc_path")));
                     }
