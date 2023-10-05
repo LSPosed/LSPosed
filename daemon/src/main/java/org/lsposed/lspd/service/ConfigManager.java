@@ -203,7 +203,8 @@ public class ConfigManager {
                 }
             }
         } catch (SQLiteDatabaseCorruptException e) {
-            Log.w(TAG, "openDB", e);
+            Log.w(TAG, "ensure db", e);
+            Log.w(TAG, "database corrupted, drop and recreate");
             try {
                 ConfigFileManager.deleteFolderIfExists(ConfigFileManager.configDirPath);
             } catch (Exception ignore) {
