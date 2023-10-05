@@ -94,7 +94,7 @@ public class ConfigManager {
     private static ConfigManager instance = null;
 
     private final SQLiteDatabase db = ensureDB();
-    private static final int targetDBVersion = 2;
+    private static final int targetDBVersion = 3;
 
     private boolean verboseLog = true;
     private boolean dexObfuscate = true;
