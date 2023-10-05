@@ -295,12 +295,6 @@ public class ConfigManager {
         bool = config.get("enable_dex_obfuscate");
         dexObfuscate = bool == null || (boolean) bool;
 
-        bool = config.get("enable_auto_add_shortcut");
-        if (bool != null) {
-            // TODO: remove
-            updateModulePrefs("lspd", 0, "config", "enable_auto_add_shortcut", null);
-        }
-
         bool = config.get("enable_status_notification");
         enableStatusNotification = bool == null || (boolean) bool;
 
@@ -443,6 +437,7 @@ public class ConfigManager {
                         db.setVersion(3);
                     });
                 default:
+                    db.setVersion(targetDBVersion);
                     break;
             }
         } catch (Throwable e) {
