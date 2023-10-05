@@ -1111,10 +1111,6 @@ public class ConfigManager {
         return uid == managerUid;
     }
 
-    public boolean isManagerInstalled() {
-        return managerUid != -1;
-    }
-
     public String getPrefsPath(String packageName, int uid) {
         int userId = uid / PER_USER_RANGE;
         var path = miscPath.resolve("prefs" + (userId == 0 ? "" : String.valueOf(userId))).resolve(packageName);
