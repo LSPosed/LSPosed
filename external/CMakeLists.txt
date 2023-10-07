@@ -24,9 +24,9 @@ set(LIBCXX_SOURCES
 #        filesystem/operations.cpp
         functional.cpp
         future.cpp
-# use absl instead
-#        hash.cpp
+        hash.cpp
 #        ios.cpp
+#        ios.instantiations.cpp
 #        iostream.cpp
 #        locale.cpp
         memory.cpp
@@ -61,6 +61,7 @@ set(LIBCXX_EXPORT_FLAGS
         -D_LIBCPP_BUILDING_LIBRARY
         -D_LIBCPP_DISABLE_VISIBILITY_ANNOTATIONS
         -D_LIBCXXABI_NO_EXCEPTIONS
+        -D_LIBCPP_HAS_NO_LOCALIZATION
         )
 set(LIBCXX_FLAGS
         -fvisibility-global-new-delete-hidden
