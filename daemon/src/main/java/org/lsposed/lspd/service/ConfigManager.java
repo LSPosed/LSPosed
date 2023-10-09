@@ -215,6 +215,11 @@ public class ConfigManager {
                 var module = new Module();
                 module.apkPath = cursor.getString(apkPathIdx);
                 module.packageName = cursor.getString(pkgNameIdx);
+                var cached = cachedModule.get(module.packageName);
+                if (cached != null) {
+                    modules.add(cached);
+                    continue;
+                }
                 var statPath = toGlobalNamespace("/data/user_de/0/" + module.packageName).getAbsolutePath();
                 try {
                     module.appId = Os.stat(statPath).st_uid;
@@ -229,7 +234,7 @@ public class ConfigManager {
                 } catch (PackageParser.PackageParserException e) {
                     Log.w(TAG, "failed to parse " + module.apkPath, e);
                 }
-                module.service = new LSPInjectedModuleService(module);
+                module.service = new LSPInjectedModuleService(module.packageName);
                 modules.add(module);
             }
         }
@@ -548,7 +553,6 @@ public class ConfigManager {
                 var module = new Module();
                 module.packageName = packageName;
                 module.apkPath = apkPath;
-                module.service = new LSPInjectedModuleService(module);
                 modules.add(module);
             }
 
@@ -590,6 +594,7 @@ public class ConfigManager {
                 }
                 m.appId = pkgInfo.applicationInfo.uid;
                 m.applicationInfo = pkgInfo.applicationInfo;
+                m.service = oldModule != null ? oldModule.service : new LSPInjectedModuleService(m.packageName);
                 return true;
             }).forEach(m -> {
                 var file = ConfigFileManager.loadModule(m.apkPath, dexObfuscate);
