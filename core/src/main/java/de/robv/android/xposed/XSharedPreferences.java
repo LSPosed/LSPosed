@@ -179,7 +179,7 @@ public final class XSharedPreferences implements SharedPreferences {
                     xposedsharedprefs = metaData.containsKey("xposedsharedprefs");
                 }
             } catch (NumberFormatException | IOException e) {
-                Log.w(TAG, "Apk parser fails: " + e);
+                Log.w(TAG, "Apk parser fails: ", e);
             }
             newModule = isModule && (xposedminversion > 92 || xposedsharedprefs);
         }
