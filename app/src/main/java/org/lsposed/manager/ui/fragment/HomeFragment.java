@@ -23,6 +23,9 @@ import android.app.Activity;
 import android.app.Dialog;
 import android.os.Build;
 import android.os.Bundle;
+import android.system.ErrnoException;
+import android.system.Os;
+import android.system.OsConstants;
 import android.text.method.LinkMovementMethod;
 import android.view.LayoutInflater;
 import android.view.Menu;
@@ -51,8 +54,12 @@ import org.lsposed.manager.util.Telemetry;
 import org.lsposed.manager.util.UpdateUtil;
 import org.lsposed.manager.util.chrome.LinkTransformationMethod;
 
+import java.io.IOException;
+import java.nio.file.Files;
+import java.nio.file.Paths;
 import java.util.Arrays;
 import java.util.HashMap;
+import java.util.concurrent.atomic.AtomicBoolean;
 
 import rikka.core.util.ClipboardUtils;
 import rikka.material.app.LocaleDelegate;
@@ -146,6 +153,7 @@ public class HomeFragment extends BaseFragment implements MenuProvider {
             }
             binding.statusSummary.setText(String.format(LocaleDelegate.getDefaultLocale(), "%s (%d) - %s",
                     ConfigManager.getXposedVersionName(), ConfigManager.getXposedVersionCode(), ConfigManager.getApi()));
+            binding.developerWarningCard.setVisibility(isDeveloper() ? View.VISIBLE : View.GONE);
         } else {
             boolean isMagiskInstalled = ConfigManager.isMagiskInstalled();
             if (isMagiskInstalled) {
@@ -252,6 +260,27 @@ public class HomeFragment extends BaseFragment implements MenuProvider {
         }
         manufacturer += " " + Build.MODEL + " ";
         return manufacturer;
+    }
+
+    private boolean isDeveloper() {
+        var developer = new AtomicBoolean(false);
+        var pids = Paths.get("/data/local/tmp/.studio/ipids");
+        try (var dir = Files.list(pids)) {
+            dir.findFirst().ifPresent(name -> {
+                var pid = Integer.parseInt(name.getFileName().toString());
+                try {
+                    Os.kill(pid, 0);
+                    developer.set(true);
+                } catch (ErrnoException e) {
+                    if (e.errno != OsConstants.ESRCH) {
+                        developer.set(true);
+                    }
+                }
+            });
+        } catch (IOException e) {
+            return false;
+        }
+        return developer.get();
     }
 
     public static class AboutDialog extends DialogFragment {
