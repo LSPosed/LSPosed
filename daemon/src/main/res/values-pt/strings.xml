@@ -12,8 +12,8 @@
     <string name="status_channel_name">Estado do LSPosed</string>
     <string name="lsposed_running_notification_title">LSPosed carregado</string>
     <string name="lsposed_running_notification_content">Toque na notificação para abrir o gerenciador</string>
-    <string name="xposed_module_request_scope_title">Scope Request</string>
-    <string name="xposed_module_request_scope_content">%1$s no usuário dos pedidos %2$s para adicionar %3$s ao seu escopo.</string>
+    <string name="xposed_module_request_scope_title">Pedido de âmbito de aplicação</string>
+    <string name="xposed_module_request_scope_content">%1$s sobre o utilizador %2$s pede para acrescentar %3$s ao seu âmbito de aplicação.</string>
     <string name="scope_channel_name">Pedido de âmbito de aplicação</string>
     <string name="scope_approve">Aprovar</string>
     <string name="scope_deny">Negar</string>
