@@ -8,6 +8,7 @@
 #include <cinttypes>
 #include <chrono>
 #include <thread>
+#include <functional>
 #include <sys/system_properties.h>
 
 using namespace std::string_view_literals;
@@ -219,7 +220,7 @@ void Logcat::ProcessBuffer(struct log_msg *buf) {
 
     std::string_view tag(entry.tag, entry.tagLen);
     bool shortcut = false;
-    if (tag == "LSPosed-Bridge"sv || tag == "XSharedPreferences"sv) [[unlikely]] {
+    if (tag == "LSPosed-Bridge"sv || tag == "XSharedPreferences"sv || tag == "LSPosedContext") [[unlikely]] {
         modules_print_count_ += PrintLogLine(entry, modules_file_.get());
         shortcut = true;
     }

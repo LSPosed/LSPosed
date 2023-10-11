@@ -56,7 +56,7 @@ import io.github.libxposed.api.annotations.XposedHooker;
 
 @SuppressLint("BlockedPrivateApi")
 @XposedHooker
-public class LoadedApkGetCLHooker implements XposedInterface.Hooker {
+public class LoadedApkCreateCLHooker implements XposedInterface.Hooker {
     private final static Field defaultClassLoaderField;
 
     private final static Set<LoadedApk> loadedApks = ConcurrentHashMap.newKeySet();
@@ -81,12 +81,12 @@ public class LoadedApkGetCLHooker implements XposedInterface.Hooker {
     public static void afterHookedMethod(XposedInterface.AfterHookCallback callback) {
         LoadedApk loadedApk = (LoadedApk) callback.getThisObject();
 
-        if (!loadedApks.contains(loadedApk)) {
+        if (callback.getArgs()[0] != null || !loadedApks.contains(loadedApk)) {
             return;
         }
 
         try {
-            Hookers.logD("LoadedApk#getClassLoader starts");
+            Hookers.logD("LoadedApk#createClassLoader starts");
 
             String packageName = ActivityThread.currentPackageName();
             String processName = ActivityThread.currentProcessName();
@@ -99,8 +99,8 @@ public class LoadedApkGetCLHooker implements XposedInterface.Hooker {
             }
 
             Object mAppDir = XposedHelpers.getObjectField(loadedApk, "mAppDir");
-            ClassLoader classLoader = (ClassLoader) callback.getResult();
-            Hookers.logD("LoadedApk#getClassLoader ends: " + mAppDir + " -> " + classLoader);
+            ClassLoader classLoader = (ClassLoader) XposedHelpers.getObjectField(loadedApk, "mClassLoader");
+            Hookers.logD("LoadedApk#createClassLoader ends: " + mAppDir + " -> " + classLoader);
 
             if (classLoader == null) {
                 return;
@@ -165,7 +165,7 @@ public class LoadedApkGetCLHooker implements XposedInterface.Hooker {
                 }
             });
         } catch (Throwable t) {
-            Hookers.logE("error when hooking LoadedApk#getClassLoader", t);
+            Hookers.logE("error when hooking LoadedApk#createClassLoader", t);
         } finally {
             loadedApks.remove(loadedApk);
         }
@@ -188,7 +188,7 @@ public class LoadedApkGetCLHooker implements XposedInterface.Hooker {
         }
 
         if (xposedminversion > 92 || xposedsharedprefs) {
-            Utils.logW("New modules detected, hook preferences");
+            Utils.logI("New modules detected, hook preferences");
             XposedHelpers.findAndHookMethod("android.app.ContextImpl", lpparam.classLoader, "checkMode", int.class, new XC_MethodHook() {
                 @Override
                 protected void afterHookedMethod(MethodHookParam param) {

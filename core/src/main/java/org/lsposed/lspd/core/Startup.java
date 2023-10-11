@@ -32,12 +32,14 @@ import org.lsposed.lspd.hooker.AttachHooker;
 import org.lsposed.lspd.hooker.CrashDumpHooker;
 import org.lsposed.lspd.hooker.HandleSystemServerProcessHooker;
 import org.lsposed.lspd.hooker.LoadedApkCtorHooker;
-import org.lsposed.lspd.hooker.LoadedApkGetCLHooker;
+import org.lsposed.lspd.hooker.LoadedApkCreateCLHooker;
 import org.lsposed.lspd.hooker.OpenDexFileHooker;
 import org.lsposed.lspd.impl.LSPosedContext;
 import org.lsposed.lspd.impl.LSPosedHelper;
 import org.lsposed.lspd.service.ILSPApplicationService;
 import org.lsposed.lspd.util.Utils;
+
+import java.util.List;
 
 import dalvik.system.DexFile;
 import de.robv.android.xposed.XposedBridge;
@@ -57,7 +59,7 @@ public class Startup {
         LSPosedHelper.hookConstructor(LoadedApkCtorHooker.class, LoadedApk.class,
                 ActivityThread.class, ApplicationInfo.class, CompatibilityInfo.class,
                 ClassLoader.class, boolean.class, boolean.class, boolean.class);
-        LSPosedHelper.hookMethod(LoadedApkGetCLHooker.class, LoadedApk.class, "getClassLoader");
+        LSPosedHelper.hookMethod(LoadedApkCreateCLHooker.class, LoadedApk.class, "createOrUpdateClassLoaderLocked", List.class);
         LSPosedHelper.hookAllMethods(AttachHooker.class, ActivityThread.class, "attach");
     }
 

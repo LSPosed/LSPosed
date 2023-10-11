@@ -49,7 +49,9 @@ cmaker {
     }
     buildTypes {
         if (it.name == "release") {
-            arguments += "-DDEBUG_SYMBOLS_PATH=${buildDir.absolutePath}/symbols"
+            arguments += "-DDEBUG_SYMBOLS_PATH=${
+                layout.buildDirectory.dir("symbols").get().asFile.absolutePath
+            }"
         }
     }
 }
@@ -68,12 +70,12 @@ val androidTargetSdkVersion by extra(34)
 val androidMinSdkVersion by extra(27)
 val androidBuildToolsVersion by extra("34.0.0")
 val androidCompileSdkVersion by extra(34)
-val androidCompileNdkVersion by extra("25.2.9519653")
+val androidCompileNdkVersion by extra("26.0.10792818")
 val androidSourceCompatibility by extra(JavaVersion.VERSION_17)
 val androidTargetCompatibility by extra(JavaVersion.VERSION_17)
 
 tasks.register("Delete", Delete::class) {
-    delete(rootProject.buildDir)
+    delete(rootProject.layout.buildDirectory)
 }
 
 subprojects {

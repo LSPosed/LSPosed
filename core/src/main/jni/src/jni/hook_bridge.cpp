@@ -20,7 +20,7 @@
 #include "hook_bridge.h"
 #include "native_util.h"
 #include "lsplant.hpp"
-#include <absl/container/flat_hash_map.h>
+#include <parallel_hashmap/phmap.h>
 #include <memory>
 #include <shared_mutex>
 #include <mutex>
@@ -58,8 +58,12 @@ public:
     }
 };
 
-std::shared_mutex hooked_lock;
-absl::flat_hash_map<jmethodID, std::unique_ptr<HookItem>> hooked_methods;
+template <class K, class V, class Hash = phmap::priv::hash_default_hash<K>,
+        class Eq = phmap::priv::hash_default_eq<K>,
+        class Alloc = phmap::priv::Allocator<phmap::priv::Pair<const K, V>>, size_t N = 4>
+using SharedHashMap = phmap::parallel_flat_hash_map<K, V, Hash, Eq, Alloc, N, std::shared_mutex>;
+
+SharedHashMap<jmethodID, std::unique_ptr<HookItem>> hooked_methods;
 
 jmethodID invoke = nullptr;
 jmethodID callback_ctor = nullptr;
@@ -88,22 +92,14 @@ LSP_DEF_NATIVE_METHOD(jboolean, HookBridge, hookMethod, jboolean useModernApi, j
 #endif
     auto target = env->FromReflectedMethod(hookMethod);
     HookItem * hook_item = nullptr;
-    {
-        std::shared_lock lk(hooked_lock);
-        if (auto found = hooked_methods.find(target); found != hooked_methods.end()) {
-            hook_item = found->second.get();
-        }
-    }
-    if (!hook_item) {
-        std::unique_lock lk(hooked_lock);
-        if (auto &ptr = hooked_methods[target]; !ptr) {
-            ptr = std::make_unique<HookItem>();
-            hook_item = ptr.get();
-            newHook = true;
-        } else {
-            hook_item = ptr.get();
-        }
-    }
+    hooked_methods.lazy_emplace_l(target, [&hook_item](auto &it) {
+        hook_item = it.second.get();
+    }, [&hook_item, &target, &newHook](const auto &ctor) {
+        auto ptr = std::make_unique<HookItem>();
+        hook_item = ptr.get();
+        ctor(target, std::move(ptr));
+        newHook = true;
+    });
     if (newHook) {
         auto init = env->GetMethodID(hooker, "<init>", "(Ljava/lang/reflect/Executable;)V");
         auto callback_method = env->ToReflectedMethod(hooker, env->GetMethodID(hooker, "callback",
@@ -139,12 +135,9 @@ LSP_DEF_NATIVE_METHOD(jboolean, HookBridge, hookMethod, jboolean useModernApi, j
 LSP_DEF_NATIVE_METHOD(jboolean, HookBridge, unhookMethod, jboolean useModernApi, jobject hookMethod, jobject callback) {
     auto target = env->FromReflectedMethod(hookMethod);
     HookItem * hook_item = nullptr;
-    {
-        std::shared_lock lk(hooked_lock);
-        if (auto found = hooked_methods.find(target); found != hooked_methods.end()) {
-            hook_item = found->second.get();
-        }
-    }
+    hooked_methods.if_contains(target, [&hook_item](const auto &it) {
+        hook_item = it.second.get();
+    });
     if (!hook_item) return JNI_FALSE;
     jobject backup = hook_item->GetBackup();
     if (!backup) return JNI_FALSE;
@@ -178,12 +171,9 @@ LSP_DEF_NATIVE_METHOD(jobject, HookBridge, invokeOriginalMethod, jobject hookMet
                       jobject thiz, jobjectArray args) {
     auto target = env->FromReflectedMethod(hookMethod);
     HookItem * hook_item = nullptr;
-    {
-        std::shared_lock lk(hooked_lock);
-        if (auto found = hooked_methods.find(target); found != hooked_methods.end()) {
-            hook_item = found->second.get();
-        }
-    }
+    hooked_methods.if_contains(target, [&hook_item](const auto &it) {
+        hook_item = it.second.get();
+    });
     return env->CallObjectMethod(hook_item ? hook_item->GetBackup() : hookMethod, invoke, thiz, args);
 }
 
@@ -307,12 +297,9 @@ LSP_DEF_NATIVE_METHOD(jboolean, HookBridge, setTrusted, jobject cookie) {
 LSP_DEF_NATIVE_METHOD(jobjectArray, HookBridge, callbackSnapshot, jclass callback_class, jobject method) {
     auto target = env->FromReflectedMethod(method);
     HookItem *hook_item = nullptr;
-    {
-        std::shared_lock lk(hooked_lock);
-        if (auto found = hooked_methods.find(target); found != hooked_methods.end()) {
-            hook_item = found->second.get();
-        }
-    }
+    hooked_methods.if_contains(target, [&hook_item](const auto &it) {
+        hook_item = it.second.get();
+    });
     if (!hook_item) return nullptr;
     jobject backup = hook_item->GetBackup();
     if (!backup) return nullptr;

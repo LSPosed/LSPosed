@@ -1,55 +1,28 @@
 -keep class de.robv.android.xposed.** {*;}
 -keep class io.github.libxposed.** {*;}
+-keepattributes RuntimeVisibleAnnotations
 -keep class android.** { *; }
 -keepclasseswithmembers,includedescriptorclasses class * {
     native <methods>;
 }
 -keepclassmembers class org.lsposed.lspd.impl.LSPosedContext {
-    getAssets(...);
-    getResources(...);
-    getPackageManager(...);
-    getMainLooper(...);
-    setTheme(...);
-    getTheme(...);
-    getClassLoader(...);
-    getPackageName(...);
-    getApplicationInfo(...);
-    getPackageResourcePath(...);
-    getPackageCodePath(...);
-    getSharedPreferences(...);
-    moveSharedPreferencesFrom(...);
-    deleteSharedPreferences(...);
-    openFileInput(...);
-    deleteFile(...);
-    getFileStreamPath(...);
-    getDataDir(...);
-    getFilesDir(...);
-    getNoBackupFilesDir(...);
-    getCacheDir(...);
-    getCodeCacheDir(...);
-    fileList(...);
-    getDir(...);
-    openOrCreateDatabase(...);
-    moveDatabaseFrom(...);
-    deleteDatabase(...);
-    getDatabasePath(...);
-    databaseList(...);
-    getSystemService(...);
-    getSystemServiceName(...);
-    createPackageContext(...);
-    createConfigurationContext(...);
-    getFrameworkName(...);
-    getFrameworkVersion(...);
-    getFrameworkVersionCode(...);
-    getFrameworkPrivilege(...);
-    hook(...);
-    deoptimize(...);
-    invokeOrigin(...);
-    invokeSpecial(...);
-    newInstanceOrigin(...);
-    newInstanceSpecial(...);
-    log(...);
-    parseDex(...);
+    public <methods>;
+}
+-keepclassmembers class org.lsposed.lspd.impl.LSPosedHookCallback {
+    public <methods>;
+}
+-keep,allowoptimization,allowobfuscation @io.github.libxposed.api.annotations.* class * {
+    @io.github.libxposed.api.annotations.BeforeInvocation <methods>;
+    @io.github.libxposed.api.annotations.AfterInvocation <methods>;
+}
+-keepclassmembers class org.lsposed.lspd.impl.LSPosedBridge$NativeHooker {
+    <init>(java.lang.reflect.Executable);
+    callback(...);
+}
+-keepclassmembers class org.lsposed.lspd.impl.LSPosedBridge$HookerCallback {
+    final *** beforeInvocation;
+    final *** afterInvocation;
+    HookerCallback(...);
 }
 -assumenosideeffects class android.util.Log {
     public static *** v(...);

@@ -9,37 +9,40 @@ SET_OPTION(Plugin.SymbolResolver OFF)
 
 set(LIBCXX_SOURCES
         algorithm.cpp
-        any.cpp
+#        any.cpp
         atomic.cpp
         barrier.cpp
-        bind.cpp
+#        bind.cpp
         charconv.cpp
         chrono.cpp
         condition_variable.cpp
         condition_variable_destructor.cpp
-        debug.cpp
+#        debug.cpp
         exception.cpp
-        filesystem/directory_iterator.cpp
-        filesystem/int128_builtins.cpp
-        filesystem/operations.cpp
+#        filesystem/directory_iterator.cpp
+#        filesystem/int128_builtins.cpp
+#        filesystem/operations.cpp
         functional.cpp
         future.cpp
-# use absl instead
-#        hash.cpp
-        ios.cpp
-        iostream.cpp
-        locale.cpp
+        hash.cpp
+#        ios.cpp
+#        ios.instantiations.cpp
+#        iostream.cpp
+#        locale.cpp
         memory.cpp
         mutex.cpp
         mutex_destructor.cpp
         new.cpp
         optional.cpp
         random.cpp
-        regex.cpp
+#        regex.cpp
+#        ryu/d2fixed.cpp
+#        ryu/d2s.cpp
+#        ryu/f2s.cpp
         shared_mutex.cpp
         stdexcept.cpp
         string.cpp
-        strstream.cpp
+#        strstream.cpp
         system_error.cpp
         thread.cpp
 #        typeinfo.cpp
@@ -51,17 +54,19 @@ set(LIBCXX_SOURCES
 
 list(TRANSFORM LIBCXX_SOURCES PREPEND cxx/src/)
 
-set(LIBCXX_EXPORT_FLAGS)
-set(LIBCXX_FLAGS
-        -fvisibility-global-new-delete-hidden
-        -fvisibility=hidden
-        -fvisibility-inlines-hidden
+set(LIBCXX_EXPORT_FLAGS
         -DLIBCXX_BUILDING_LIBCXXABI
         -D_LIBCPP_NO_EXCEPTIONS
         -D_LIBCPP_NO_RTTI
         -D_LIBCPP_BUILDING_LIBRARY
         -D_LIBCPP_DISABLE_VISIBILITY_ANNOTATIONS
-        -D__STDC_FORMAT_MACROS
+        -D_LIBCXXABI_NO_EXCEPTIONS
+        -D_LIBCPP_HAS_NO_LOCALIZATION
+        )
+set(LIBCXX_FLAGS
+        -fvisibility-global-new-delete-hidden
+        -fvisibility=hidden
+        -fvisibility-inlines-hidden
         )
 set(LIBCXX_EXPORT_INCLUDES cxx/include)
 set(LIBCXX_INCLUDES cxx/src)
@@ -84,7 +89,6 @@ set(LIBCXXABI_SOURCES
         )
 list(TRANSFORM LIBCXXABI_SOURCES PREPEND cxx/src/abi/)
 set(LIBCXXABI_FLAGS
-        -D_LIBCXXABI_NO_EXCEPTIONS
         -Wno-macro-redefined
         -Wno-unknown-attributes
         -DHAS_THREAD_LOCAL)

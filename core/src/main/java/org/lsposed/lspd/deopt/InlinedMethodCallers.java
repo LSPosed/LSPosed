@@ -57,6 +57,7 @@ public class InlinedMethodCallers {
             // callers of Application#attach(Context)
             {"android.app.Instrumentation", "newApplication", ClassLoader.class, String.class, Context.class},
             {"android.app.Instrumentation", "newApplication", ClassLoader.class, Context.class},
+            {"android.app.ContextImpl", "getSharedPreferencesPath", String.class}
     };
 
     // TODO deprecate this

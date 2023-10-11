@@ -136,7 +136,7 @@ public class ScopeAdapter extends EmptyStateRecyclerView.EmptyStateAdapter<Scope
                 enabled = !isChecked;
             }
             var tmpChkList = new HashSet<>(checkedList);
-            if (isChecked && !tmpChkList.isEmpty() && !ConfigManager.setModuleScope(module.packageName, tmpChkList)) {
+            if (isChecked && !tmpChkList.isEmpty() && !ConfigManager.setModuleScope(module.packageName, module.legacy, tmpChkList)) {
                 view.setChecked(false);
                 enabled = false;
             }
@@ -144,7 +144,7 @@ public class ScopeAdapter extends EmptyStateRecyclerView.EmptyStateAdapter<Scope
         }
     };
 
-    private ApplicationInfo selectedInfo;
+    private ApplicationInfo selectedApplicationInfo;
     private boolean isLoaded = false;
     private boolean enabled = true;
 
@@ -234,7 +234,7 @@ public class ScopeAdapter extends EmptyStateRecyclerView.EmptyStateAdapter<Scope
             var tmpChkList = new HashSet<>(checkedList);
             tmpChkList.removeIf(i -> i.userId == module.userId);
             tmpChkList.addAll(recommendedList);
-            ConfigManager.setModuleScope(module.packageName, tmpChkList);
+            ConfigManager.setModuleScope(module.packageName, module.legacy, tmpChkList);
             checkedList = tmpChkList;
             fragment.runOnUiThread(this::notifyDataSetChanged);
         });
@@ -300,7 +300,7 @@ public class ScopeAdapter extends EmptyStateRecyclerView.EmptyStateAdapter<Scope
     }
 
     public boolean onContextItemSelected(@NonNull MenuItem item) {
-        ApplicationInfo info = selectedInfo;
+        var info = selectedApplicationInfo;
         if (info == null) {
             return false;
         }
@@ -321,7 +321,11 @@ public class ScopeAdapter extends EmptyStateRecyclerView.EmptyStateAdapter<Scope
             ConfigManager.startActivityAsUserWithFeature(new Intent(ACTION_APPLICATION_DETAILS_SETTINGS, Uri.fromParts("package", info.packageName, null)), module.userId);
         } else if (itemId == R.id.menu_force_stop) {
             if (info.packageName.equals("system")) {
-                ConfigManager.reboot();
+                new BlurBehindDialogBuilder(activity, R.style.ThemeOverlay_MaterialAlertDialog_Centered_FullWidthButtons)
+                        .setTitle(R.string.reboot)
+                        .setPositiveButton(android.R.string.ok, (dialog, which) -> ConfigManager.reboot())
+                        .setNegativeButton(android.R.string.cancel, null)
+                        .show();
             } else {
                 new BlurBehindDialogBuilder(activity, R.style.ThemeOverlay_MaterialAlertDialog_Centered_FullWidthButtons)
                         .setTitle(R.string.force_stop_dlg_title)
@@ -346,34 +350,26 @@ public class ScopeAdapter extends EmptyStateRecyclerView.EmptyStateAdapter<Scope
         menu.findItem(R.id.item_filter_modules).setChecked(preferences.getBoolean("filter_modules", true));
         menu.findItem(R.id.item_filter_denylist).setChecked(preferences.getBoolean("filter_denylist", false));
         switch (preferences.getInt("list_sort", 0)) {
-            case 7:
+            case 7 -> {
                 menu.findItem(R.id.item_sort_by_update_time).setChecked(true);
                 menu.findItem(R.id.reverse).setChecked(true);
-                break;
-            case 6:
-                menu.findItem(R.id.item_sort_by_update_time).setChecked(true);
-                break;
-            case 5:
+            }
+            case 6 -> menu.findItem(R.id.item_sort_by_update_time).setChecked(true);
+            case 5 -> {
                 menu.findItem(R.id.item_sort_by_install_time).setChecked(true);
                 menu.findItem(R.id.reverse).setChecked(true);
-                break;
-            case 4:
-                menu.findItem(R.id.item_sort_by_install_time).setChecked(true);
-                break;
-            case 3:
+            }
+            case 4 -> menu.findItem(R.id.item_sort_by_install_time).setChecked(true);
+            case 3 -> {
                 menu.findItem(R.id.item_sort_by_package_name).setChecked(true);
                 menu.findItem(R.id.reverse).setChecked(true);
-                break;
-            case 2:
-                menu.findItem(R.id.item_sort_by_package_name).setChecked(true);
-                break;
-            case 1:
+            }
+            case 2 -> menu.findItem(R.id.item_sort_by_package_name).setChecked(true);
+            case 1 -> {
                 menu.findItem(R.id.item_sort_by_name).setChecked(true);
                 menu.findItem(R.id.reverse).setChecked(true);
-                break;
-            case 0:
-                menu.findItem(R.id.item_sort_by_name).setChecked(true);
-                break;
+            }
+            case 0 -> menu.findItem(R.id.item_sort_by_name).setChecked(true);
         }
     }
 
@@ -418,7 +414,6 @@ public class ScopeAdapter extends EmptyStateRecyclerView.EmptyStateAdapter<Scope
         } else {
             holder.appVersionName.setVisibility(View.VISIBLE);
             holder.appPackageName.setText(appInfo.packageName);
-
         }
         holder.appPackageName.setVisibility(View.VISIBLE);
         holder.appVersionName.setText(activity.getString(R.string.app_version, appInfo.packageInfo.versionName));
@@ -481,7 +476,7 @@ public class ScopeAdapter extends EmptyStateRecyclerView.EmptyStateAdapter<Scope
         });
         holder.itemView.setOnLongClickListener(v -> {
             fragment.searchView.clearFocus();
-            selectedInfo = appInfo.applicationInfo;
+            selectedApplicationInfo = appInfo.applicationInfo;
             return false;
         });
     }
@@ -578,7 +573,7 @@ public class ScopeAdapter extends EmptyStateRecyclerView.EmptyStateAdapter<Scope
         } else {
             tmpChkList.remove(appInfo.application);
         }
-        if (!ConfigManager.setModuleScope(module.packageName, tmpChkList)) {
+        if (!ConfigManager.setModuleScope(module.packageName, module.legacy, tmpChkList)) {
             fragment.showHint(R.string.failed_to_save_scope_list, true);
             if (!isChecked) {
                 tmpChkList.add(appInfo.application);
@@ -599,7 +594,7 @@ public class ScopeAdapter extends EmptyStateRecyclerView.EmptyStateAdapter<Scope
         return isLoaded;
     }
 
-    static class ViewHolder extends RecyclerView.ViewHolder {
+    public static class ViewHolder extends RecyclerView.ViewHolder {
         ConstraintLayout root;
         ImageView appIcon;
         TextView appName;
@@ -679,11 +674,11 @@ public class ScopeAdapter extends EmptyStateRecyclerView.EmptyStateAdapter<Scope
             builder.setNegativeButton(!recommendedList.isEmpty() ? android.R.string.cancel : android.R.string.ok, (dialog, which) -> {
                 moduleUtil.setModuleEnabled(module.packageName, false);
                 Toast.makeText(activity, activity.getString(R.string.module_disabled_no_selection, module.getAppName()), Toast.LENGTH_LONG).show();
-                fragment.getNavController().navigateUp();
+                fragment.navigateUp();
             });
             builder.show();
         } else {
-            fragment.getNavController().navigateUp();
+            fragment.navigateUp();
         }
     }
 

@@ -22,7 +22,8 @@
 #include "slicer/reader.h"
 
 #include <list>
-#include <absl/container/flat_hash_map.h>
+#include <set>
+#include <parallel_hashmap/phmap.h>
 
 namespace {
     using Value = std::tuple<jint /*type*/, std::vector<jbyte> /*data*/>;
@@ -62,11 +63,11 @@ namespace {
         };
 
         std::vector<ClassData> class_data;
-        absl::flat_hash_map<jint, std::vector<jint>> field_annotations;
-        absl::flat_hash_map<jint, std::vector<jint>> method_annotations;
-        absl::flat_hash_map<jint, std::vector<jint>> parameter_annotations;
+        phmap::flat_hash_map<jint, std::vector<jint>> field_annotations;
+        phmap::flat_hash_map<jint, std::vector<jint>> method_annotations;
+        phmap::flat_hash_map<jint, std::vector<jint>> parameter_annotations;
 
-        absl::flat_hash_map<jint, MethodBody> method_bodies;
+        phmap::flat_hash_map<jint, MethodBody> method_bodies;
     };
 
     template<class T>

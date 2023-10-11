@@ -31,7 +31,11 @@
 
 using namespace lsplant;
 
+
 namespace lspd {
+    std::unique_ptr<Context> Context::instance_;
+    std::unique_ptr<ConfigBridge> ConfigBridge::instance_;
+
     Context::PreloadedDex::PreloadedDex(int fd, std::size_t size) {
         LOGD("Context::PreloadedDex::PreloadedDex: fd={}, size={}", fd, size);
         auto *addr = mmap(nullptr, size, PROT_READ, MAP_SHARED, fd, 0);

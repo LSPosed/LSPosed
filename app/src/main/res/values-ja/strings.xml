@@ -19,7 +19,6 @@
   -->
 <resources xmlns:tools="http://schemas.android.com/tools" tools:keep="@string/xposed_module_updated_notification_*,@string/module_is_not_activated_*">
     <!-- MainActivity -->
-    <string name="info">情報</string>
     <string name="overview">概要</string>
     <string name="Modules">モジュール</string>
     <plurals name="modules_enabled_count">
@@ -31,7 +30,6 @@
     <string name="About">本アプリについて</string>
     <string name="report_issue">問題を報告</string>
     <string name="module_repo">リポジトリ</string>
-    <string name="module_repo_loading">読み込み中…</string>
     <string name="module_repo_up_to_date">全てのモジュールが最新です</string>
     <string name="module_repo_published_time">公開日時: %s</string>
     <string name="module_repo_updated_time">更新日時: %s</string>
@@ -54,10 +52,9 @@
     <string name="system_prop_incorrect"><![CDATA[必須のシステム設定が変更もしくは削除されています。<br/>モジュールが無効化される場合があります。]]></string>
     <string name="need_update">更新が必要です</string>
     <string name="please_update_summary">最新バージョンの LSPosedをインストールして下さい</string>
-    <string name="lsposed_not_active">LSPosedが未インストールか、有効化されていません。</string>
     <string name="info_api_version">APIバージョン</string>
     <string name="info_framework_version">フレームワークバージョン</string>
-    <string name="info_manager_version">マネージャーバージョン</string>
+    <string name="info_manager_package_name">マネージャーパッケージ名</string>
     <string name="info_system_version">システムバージョン</string>
     <string name="info_device">デバイス</string>
     <string name="info_system_abi">システムABI</string>
@@ -73,6 +70,7 @@
     <string name="sepolicy_incorrect">SELinuxのポリシーが正しくありません</string>
     <string name="update_lsposed">LSPossedをアップデート</string>
     <string name="update_lsposed_msg">LSPosedをアップデートしてもよろしいですか？アップデート完了後、このデバイスは再起動します</string>
+    <string name="info_copied">クリップボードへコピーされました</string>
     <!-- WelcomeDialog -->
     <string name="parasitic_welcome">LSPosedへようこそ</string>
     <string name="parasitic_welcome_summary">パラサイトマネージャーを使用しています。これにより、ショートカットを作成したり、通知から開いたりできます。</string>
@@ -85,6 +83,7 @@
     <string name="menuSaveToSd">保存</string>
     <string name="nav_item_logs_verbose">詳細ログ</string>
     <string name="nav_item_logs_module">モジュールログ</string>
+    <string name="logs_saving">ログを保存しています。</string>
     <string name="logs_saved">ログを保存しました</string>
     <string name="logs_save_failed2">保存に失敗しました:\n%s</string>
     <string name="menuClearLog">ログを消去</string>
@@ -92,7 +91,6 @@
     <string name="scroll_top">ログの先頭行にスクロール</string>
     <string name="loading">読み込み中…</string>
     <string name="scroll_bottom">最下行にスクロール</string>
-    <string name="logs_cannot_read">ログの読み込みに失敗: \n</string>
     <string name="menuReload">再読込</string>
     <string name="logs_clear_failed_2">ログの消去に失敗</string>
     <string name="menu_enable_word_wrap">単語を折り返す</string>
@@ -191,7 +189,6 @@
     <string name="settings_translation_summary">%s をあなたの言語に翻訳するのを手伝ってください</string>
     <string name="settings_create_shortcut_summary">パラサイトマネージャーを開くことができるショートカットを作成する</string>
     <string name="settings_shortcut_pinned_hint">ショートカットのピン留め</string>
-    <string name="settings_created_shortcut_summary">パラサイトマネージャーを開くためのショートカットが作成されました</string>
     <string name="settings_unsupported_pin_shortcut_summary">現在のデフォルトのランチャーは、ピンショートカットに対応していません</string>
     <string name="settings_enable_status_notification">ステータス通知</string>
     <string name="settings_enable_status_notification_summary">パラサイトマネージャーを開くことができる通知を表示する</string>
@@ -211,17 +208,14 @@
     <string name="module_information_collaborators">協力</string>
     <string name="module_release_view_assets">アセット</string>
     <string name="menu_open_in_browser">ブラウザで表示</string>
-    <string name="refresh">更新</string>
     <string name="module_release_load_more">以前のバージョンを表示</string>
     <string name="module_release_no_more">これ以上のリリースはありません</string>
     <string name="repo_load_failed">モジュールリポジトリの読み込みに失敗: %s</string>
     <string name="sort_upgradable_first">更新があるモジュールを先頭に表示</string>
-    <!-- CrashReportActivity -->
-    <string name="version_mismatch">LSPosedフレームワークのバージョン(%1$d)とマネージャー(%2$d)が合っていません。LSPosedを再インストールしてください。</string>
-    <string name="manager_crashed">マネージャーがクラッシュしました</string>
-    <string name="send_crash_info">クラッシュ情報を送信する</string>
-    <string name="crash_info_copied">クラッシュ情報がクリップボードにコピーされました</string>
-    <string name="info_copied">クリップボードへコピーされました</string>
+    <string name="installed">インストール済み</string>
+    <plurals name="module_release_assets_download_count">
+        <item quantity="other">%d ダウンロード</item>
+    </plurals>
     <!-- Colors -->
     <string name="color_sakura">桜色</string>
     <string name="color_red">赤色</string>
@@ -242,8 +236,4 @@
     <string name="color_deep_orange">ディープオレンジ</string>
     <string name="color_brown">茶色</string>
     <string name="color_blue_grey">ブルーグレー</string>
-    <string name="installed">インストール済み</string>
-    <plurals name="module_release_assets_download_count">
-        <item quantity="other">%d ダウンロード</item>
-    </plurals>
 </resources>

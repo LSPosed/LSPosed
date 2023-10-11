@@ -21,12 +21,12 @@ public class LSPInjectedModuleService extends ILSPInjectedModuleService.Stub {
 
     private static final String TAG = "LSPosedInjectedModuleService";
 
-    private final Module loadedModule;
+    private final String mPackageName;
 
     Map<String, Set<IRemotePreferenceCallback>> callbacks = new ConcurrentHashMap<>();
 
-    LSPInjectedModuleService(Module module) {
-        loadedModule = module;
+    LSPInjectedModuleService(String packageName) {
+        mPackageName = packageName;
     }
 
     @Override
@@ -37,8 +37,8 @@ public class LSPInjectedModuleService extends ILSPInjectedModuleService.Stub {
     @Override
     public Bundle requestRemotePreferences(String group, IRemotePreferenceCallback callback) {
         var bundle = new Bundle();
-        var userId = Binder.getCallingUid() % PER_USER_RANGE;
-        bundle.putSerializable("map", ConfigManager.getInstance().getModulePrefs(loadedModule.packageName, userId, group));
+        var userId = Binder.getCallingUid() / PER_USER_RANGE;
+        bundle.putSerializable("map", ConfigManager.getInstance().getModulePrefs(mPackageName, userId, group));
         if (callback != null) {
             var groupCallbacks = callbacks.computeIfAbsent(group, k -> ConcurrentHashMap.newKeySet());
             groupCallbacks.add(callback);
@@ -56,7 +56,7 @@ public class LSPInjectedModuleService extends ILSPInjectedModuleService.Stub {
         ConfigFileManager.ensureModuleFilePath(path);
         var userId = Binder.getCallingUid() / PER_USER_RANGE;
         try {
-            var dir = ConfigFileManager.resolveModuleDir(loadedModule.packageName, FILES_DIR, userId, -1);
+            var dir = ConfigFileManager.resolveModuleDir(mPackageName, FILES_DIR, userId, -1);
             return ParcelFileDescriptor.open(dir.resolve(path).toFile(), ParcelFileDescriptor.MODE_READ_ONLY);
         } catch (Throwable e) {
             throw new RemoteException(e.getMessage());
@@ -67,7 +67,7 @@ public class LSPInjectedModuleService extends ILSPInjectedModuleService.Stub {
     public String[] getRemoteFileList() throws RemoteException {
         var userId = Binder.getCallingUid() / PER_USER_RANGE;
         try {
-            var dir = ConfigFileManager.resolveModuleDir(loadedModule.packageName, FILES_DIR, userId, -1);
+            var dir = ConfigFileManager.resolveModuleDir(mPackageName, FILES_DIR, userId, -1);
             var files = dir.toFile().list();
             return files == null ? new String[0] : files;
 

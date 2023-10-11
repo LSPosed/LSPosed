@@ -1,7 +1,6 @@
 name: Bug report/反馈 Bug
 description: Report errors or unexpected behavior./反馈错误或异常行为。
 labels: [bug]
-title: "[Bug] "
 body:
   - type: markdown
     attributes:

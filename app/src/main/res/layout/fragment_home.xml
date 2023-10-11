@@ -315,10 +315,10 @@
                             style="@style/DeviceInfoDialogLabel"
                             android:layout_width="match_parent"
                             android:layout_height="wrap_content"
-                            android:text="@string/info_manager_version" />
+                            android:text="@string/info_manager_package_name" />
 
                         <com.google.android.material.textview.MaterialTextView
-                            android:id="@+id/manager_version"
+                            android:id="@+id/manager_package_name"
                             style="@style/DeviceInfoDialogValue"
                             android:layout_width="match_parent"
                             android:layout_height="wrap_content"

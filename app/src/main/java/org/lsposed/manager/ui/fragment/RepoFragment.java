@@ -177,20 +177,22 @@ public class RepoFragment extends BaseFragment implements RepoLoader.RepoListene
     @Override
     public void onPrepareMenu(Menu menu) {
         searchView = (SearchView) menu.findItem(R.id.menu_search).getActionView();
-        searchView.setOnQueryTextListener(mSearchListener);
-        searchView.addOnAttachStateChangeListener(new View.OnAttachStateChangeListener() {
-            @Override
-            public void onViewAttachedToWindow(View arg0) {
-                binding.appBar.setExpanded(false, true);
-                binding.recyclerView.setNestedScrollingEnabled(false);
-            }
+        if (searchView != null) {
+            searchView.setOnQueryTextListener(mSearchListener);
+            searchView.addOnAttachStateChangeListener(new View.OnAttachStateChangeListener() {
+                @Override
+                public void onViewAttachedToWindow(@NonNull View arg0) {
+                    binding.appBar.setExpanded(false, true);
+                    binding.recyclerView.setNestedScrollingEnabled(false);
+                }
 
-            @Override
-            public void onViewDetachedFromWindow(View v) {
-                binding.recyclerView.setNestedScrollingEnabled(true);
-            }
-        });
-        searchView.findViewById(androidx.appcompat.R.id.search_edit_frame).setLayoutDirection(View.LAYOUT_DIRECTION_INHERIT);
+                @Override
+                public void onViewDetachedFromWindow(@NonNull View v) {
+                    binding.recyclerView.setNestedScrollingEnabled(true);
+                }
+            });
+            searchView.findViewById(androidx.appcompat.R.id.search_edit_frame).setLayoutDirection(View.LAYOUT_DIRECTION_INHERIT);
+        }
         int sort = App.getPreferences().getInt("repo_sort", 0);
         if (sort == 0) {
             menu.findItem(R.id.item_sort_by_name).setChecked(true);
@@ -281,7 +283,7 @@ public class RepoFragment extends BaseFragment implements RepoLoader.RepoListene
         @NonNull
         @Override
         public RepoAdapter.ViewHolder onCreateViewHolder(@NonNull ViewGroup parent, int viewType) {
-            return new RepoAdapter.ViewHolder(ItemOnlinemoduleBinding.inflate(getLayoutInflater(), parent, false));
+            return new ViewHolder(ItemOnlinemoduleBinding.inflate(getLayoutInflater(), parent, false));
         }
 
         RepoLoader.ModuleVersion getUpgradableVer(OnlineModule module) {
@@ -416,7 +418,7 @@ public class RepoFragment extends BaseFragment implements RepoLoader.RepoListene
             return isLoaded && repoLoader.isRepoLoaded();
         }
 
-        class ViewHolder extends RecyclerView.ViewHolder {
+        static class ViewHolder extends RecyclerView.ViewHolder {
             ConstraintLayout root;
             TextView appName;
             TextView appPackageName;

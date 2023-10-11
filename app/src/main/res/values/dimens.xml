@@ -23,5 +23,4 @@
     <dimen name="tab_layout_height">48dp</dimen>
 
     <dimen name="home_primary_elevation">6dp</dimen>
-    <dimen name="home_secondary_elevation">2dp</dimen>
 </resources>

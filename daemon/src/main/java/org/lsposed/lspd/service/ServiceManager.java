@@ -133,14 +133,14 @@ public class ServiceManager {
 
         systemServerService.putBinderForSystemServer();
 
-        DdmHandleAppName.setAppName("lspd", 0);
-
         // get config before package service is started
         // otherwise getInstance will trigger module/scope cache
         var configManager = ConfigManager.getInstance();
         // --- DO NOT call ConfigManager.getInstance later!!! ---
 
         ActivityThread.systemMain();
+
+        DdmHandleAppName.setAppName("lspd", 0);
 
         waitSystemService("package");
         waitSystemService("activity");
