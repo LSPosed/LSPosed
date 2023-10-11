@@ -54,6 +54,7 @@
     <string name="system_prop_incorrect"><![CDATA[Alcune proprietà di sistema necessarie sono state eliminate o modificate.<br/>In alcuni casi i moduli potrebbero non funzionare.]]></string>
     <string name="need_update">Aggiornamento richiesto</string>
     <string name="please_update_summary">Installa la versione più recente di LSPosed</string>
+    <string name="developer_warning_title">Suggerimenti per lo sviluppatore del modulo</string>
     <string name="info_api_version">Versione API</string>
     <string name="info_framework_version">Versione del framework</string>
     <string name="info_manager_package_name">Nome pacchetto del manager</string>
