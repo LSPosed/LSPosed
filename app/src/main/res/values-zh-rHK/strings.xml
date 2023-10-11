@@ -54,29 +54,6 @@
     <string name="please_update_summary">請安裝最新版本的 LSPosed</string>
     <string name="info_api_version">API版本</string>
     <string name="info_framework_version">架構版本</string>
-    <string name="info_manager_package_name">API version
-Not installed
-
-Xposed API call protection
-Not installed
-
-Dex Optimizer Wrapper
-Not installed
-
-Framework version
-Not installed
-
-Manager package name
-org. lsposed. manager
-
-System version
-11 (API 30)
-
-Device
-TECNO MOBILE LIMITED TECNO TECNO LE7 
-
-System ABI
-arm64-v8a</string>
     <string name="info_system_version">系統版本</string>
     <string name="info_device">裝置版本</string>
     <string name="info_system_abi">系統架構</string>
