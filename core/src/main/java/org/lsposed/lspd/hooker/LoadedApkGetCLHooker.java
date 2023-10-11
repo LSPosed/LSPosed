@@ -188,7 +188,7 @@ public class LoadedApkGetCLHooker implements XposedInterface.Hooker {
         }
 
         if (xposedminversion > 92 || xposedsharedprefs) {
-            Utils.logW("New modules detected, hook preferences");
+            Utils.logI("New modules detected, hook preferences");
             XposedHelpers.findAndHookMethod("android.app.ContextImpl", lpparam.classLoader, "checkMode", int.class, new XC_MethodHook() {
                 @Override
                 protected void afterHookedMethod(MethodHookParam param) {
