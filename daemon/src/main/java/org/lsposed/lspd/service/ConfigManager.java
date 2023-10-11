@@ -87,6 +87,8 @@ import java.util.zip.ZipEntry;
 import java.util.zip.ZipFile;
 import java.util.zip.ZipOutputStream;
 
+import hidden.HiddenApiBridge;
+
 public class ConfigManager {
     private static ConfigManager instance = null;
 
@@ -231,6 +233,11 @@ public class ConfigManager {
                     var apkFile = new File(module.apkPath);
                     var pkg = new PackageParser().parsePackage(apkFile, 0, false);
                     module.applicationInfo = pkg.applicationInfo;
+                    module.applicationInfo.sourceDir = module.apkPath;
+                    module.applicationInfo.dataDir = statPath;
+                    module.applicationInfo.deviceProtectedDataDir = statPath;
+                    HiddenApiBridge.ApplicationInfo_credentialProtectedDataDir(module.applicationInfo, statPath);
+                    module.applicationInfo.processName = module.packageName;
                 } catch (PackageParser.PackageParserException e) {
                     Log.w(TAG, "failed to parse " + module.apkPath, e);
                 }
@@ -579,8 +586,8 @@ public class ConfigManager {
                     if (oldModule.appId != -1) {
                         Log.d(TAG, m.packageName + " did not change, skip caching it");
                     } else {
-                        // cache from system server, keep it and set only the appId
-                        oldModule.appId = pkgInfo.applicationInfo.uid;
+                        // cache from system server, update application info
+                        oldModule.applicationInfo = pkgInfo.applicationInfo;
                     }
                     return false;
                 }
