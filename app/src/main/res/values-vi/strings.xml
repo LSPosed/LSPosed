@@ -54,29 +54,7 @@
     <string name="please_update_summary">Vui lòng cài đặt phiên bản mới nhất của LSPosed</string>
     <string name="info_api_version">Phiên bản API</string>
     <string name="info_framework_version">Phiên bản Framework</string>
-    <string name="info_manager_package_name">Api version
-Not installed
-
-Xposed Api call protection
-Not installed
-
-Dex Optimizer Wrapper
-Not installed
-
-Framework version
-Not installed
-
-Manager package name
-org. lsposed. manager
-
-System version
-11 (Api 30)
-
-Device
-Tecno Mobile Limited Tecno Tecno Le7 
-
-System Abi
-arm64-v8a</string>
+    <string name="info_manager_package_name">Tên gói quản lý</string>
     <string name="info_system_version">Phiên bản hệ thống</string>
     <string name="info_device">Thiết bị</string>
     <string name="info_system_abi">Hệ thống ABI</string>
