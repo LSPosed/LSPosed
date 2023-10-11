@@ -52,6 +52,8 @@
     <string name="system_prop_incorrect"><![CDATA[일부 필수 시스템 속성이 삭제 또는 수정되었습니다.<br/>모듈은 가끔 무효화될 수 있습니다.]]></string>
     <string name="need_update">업데이트가 필요합니다</string>
     <string name="please_update_summary">최신 버전으로 LSPosed를 설치해 주세요</string>
+    <string name="developer_warning_title">모듈 개발자를 위한 팁</string>
+    <string name="developer_warning_summary">Android Studio 에서 배포 최적화를 비활성화 하거나, 설치할때 \'gradlew installDebug\' 명령어를 사용해주세요. 그렇지 않으면 모듈 APK 가 업데이트되지 않을 것입니다.</string>
     <string name="info_api_version">API 버전</string>
     <string name="info_framework_version">Framework 버전</string>
     <string name="info_manager_package_name">관리자 패키지 이름</string>
