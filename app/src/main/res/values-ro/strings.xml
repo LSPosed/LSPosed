@@ -36,12 +36,12 @@
     <string name="module_repo_published_time">Publicat la %s</string>
     <string name="module_repo_updated_time">Actualizat la %s</string>
     <plurals name="module_repo_upgradable">
-        <item quantity="one">%d module actualizabile.</item>
+        <item quantity="one">%d modul actualizabil</item>
         <item quantity="few">%d module actualizabile</item>
         <item quantity="other">%d module actualizabile.</item>
     </plurals>
     <string name="about_view_source_code"><![CDATA[Vezi codul sursă la%1$s<br/>Alătură-te canalului nostru %2$s]]></string>
-    <string name="translators" comment="Dear translators, please add your home page here following the format. There can be more than one translator. So feel free to append yourself.">Chele Ion, Igor Sorocean, br l12</string>
+    <string name="translators" comment="Dear translators, please add your home page here following the format. There can be more than one translator. So feel free to append yourself.">nul</string>
     <string name="install">Instalare</string>
     <string name="install_summary">Atingeți pentru a instala LSPosed</string>
     <string name="not_installed">Nu este instalat</string>
