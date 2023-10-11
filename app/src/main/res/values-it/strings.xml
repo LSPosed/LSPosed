@@ -55,6 +55,7 @@
     <string name="need_update">Aggiornamento richiesto</string>
     <string name="please_update_summary">Installa la versione più recente di LSPosed</string>
     <string name="developer_warning_title">Suggerimenti per lo sviluppatore del modulo</string>
+    <string name="developer_warning_summary">Disattivare le ottimizzazioni di distribuzione su Android Studio, o utilizzare il comando `gradlew installDebug` per eseguire l\'installazione. Altrimenti l\'apk del modulo non verrà aggiornato.</string>
     <string name="info_api_version">Versione API</string>
     <string name="info_framework_version">Versione del framework</string>
     <string name="info_manager_package_name">Nome pacchetto del manager</string>
