@@ -93,7 +93,7 @@
     <string name="menuSaveToSd">احفظ</string>
     <string name="nav_item_logs_verbose">سجلات مفصّلة</string>
     <string name="nav_item_logs_module">سجلات الوحدات</string>
-    <string name="logs_saving">Saving log, please wait</string>
+    <string name="logs_saving">حفظ السجل ، يرجى الانتظار</string>
     <string name="logs_saved">تم حفظ السجلات</string>
     <string name="logs_save_failed2">فشل الحفظ:\n%s</string>
     <string name="menuClearLog">مسح السجل الآن</string>
