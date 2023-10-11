@@ -52,7 +52,7 @@
     <string name="system_prop_incorrect"><![CDATA[一些必须的系统属性被删除或被修改。<br/>模块可能会随机失效。]]></string>
     <string name="need_update">需要更新</string>
     <string name="please_update_summary">请安装新版 LSPosed</string>
-    <string name="developer_warning_title">开发人员建议</string>
+    <string name="developer_warning_title">给模块开发者的提示</string>
     <string name="developer_warning_summary">请在 Android Studio 上禁用部署优化，或使用 `gradlew installDebug` 命令进行安装，否则无法更新模块。</string>
     <string name="info_api_version">API 版本</string>
     <string name="info_framework_version">框架版本</string>
