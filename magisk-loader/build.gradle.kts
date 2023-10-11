@@ -321,6 +321,11 @@ val tmpApk = "/data/local/tmp/manager.apk"
 val pushApk = task<Exec>("pushApk") {
     group = "LSPosed"
     dependsOn(":app:assembleDebug")
+    doFirst {
+        exec {
+            commandLine(adb, "shell", "su", "-c", "rm", "-f", tmpApk)
+        }
+    }
     workingDir(project(":app").layout.buildDirectory.dir("outputs/apk/debug"))
     commandLine(adb, "push", "app-debug.apk", tmpApk)
 }
