@@ -19,7 +19,7 @@
   -->
 <resources xmlns:tools="http://schemas.android.com/tools" tools:keep="@string/xposed_module_updated_notification_*,@string/module_is_not_activated_*">
     <!-- MainActivity -->
-    <string name="overview">ภาพรวม</string>
+    <string name="overview">Overview</string>
     <string name="Modules">โมดูล</string>
     <plurals name="modules_enabled_count">
         <item quantity="other">%d โมดูลที่เปิดใช้งาน</item>
