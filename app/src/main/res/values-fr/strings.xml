@@ -20,7 +20,7 @@
 <resources xmlns:tools="http://schemas.android.com/tools" tools:keep="@string/xposed_module_updated_notification_*,@string/module_is_not_activated_*">
     <!-- MainActivity -->
     <string name="overview">Aperçu</string>
-    <string name="Modules">Module</string>
+    <string name="Modules">Modules</string>
     <plurals name="modules_enabled_count">
         <item quantity="one">%d module actif</item>
         <item quantity="other">%d modules actifs</item>
