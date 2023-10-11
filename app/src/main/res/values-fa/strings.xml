@@ -25,7 +25,7 @@
         <item quantity="one">%d ماژول فعال شده</item>
         <item quantity="other">%d ماژول فعال شده</item>
     </plurals>
-    <string name="Logs">سیاهه</string>
+    <string name="Logs">گزارش ها</string>
     <string name="Settings">تنظیمات</string>
     <string name="feedback_or_suggestion">بازخورد یا پیشنهاد</string>
     <string name="About">درباره</string>

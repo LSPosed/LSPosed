@@ -36,7 +36,7 @@
     <string name="module_repo_published_time">Publicat la %s</string>
     <string name="module_repo_updated_time">Actualizat la %s</string>
     <plurals name="module_repo_upgradable">
-        <item quantity="one">%d module actualizabile.</item>
+        <item quantity="one">%d module actualizabil</item>
         <item quantity="few">%d module actualizabile</item>
         <item quantity="other">%d module actualizabile.</item>
     </plurals>

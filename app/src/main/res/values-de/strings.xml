@@ -55,6 +55,8 @@ JJ108</string>
     <string name="system_prop_incorrect"><![CDATA[Einige notwendige Systemeigenschaften wurden gelöscht oder geändert.<br/>Module können gelegentlich außer Kraft gesetzt werden.]]></string>
     <string name="need_update">Aktualisierung erforderlich</string>
     <string name="please_update_summary">Bitte installieren Sie die neueste Version von LSPosed</string>
+    <string name="developer_warning_title">Tipps für Modulentwickler</string>
+    <string name="developer_warning_summary">Bitte deaktiviere Deploy-Optimierungen in Android Studio oder benutze den `gradlew installDebug` Befehl zum Installieren. Andernfalls wird die Modul-Apk nicht aktualisiert.</string>
     <string name="info_api_version">API Version</string>
     <string name="info_framework_version">Framework Version</string>
     <string name="info_manager_package_name">Name des Managerpakets</string>

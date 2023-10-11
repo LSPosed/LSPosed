@@ -64,7 +64,7 @@
     <string name="supported">Didukung</string>
     <string name="unsupported">Tidak didukung</string>
     <string name="android_version_unsatisfied">Versi Android tidak tersedia</string>
-    <string name="crashed">Crash</string>
+    <string name="crashed">Rusak</string>
     <string name="mount_failed">Mount gagal</string>
     <string name="selinux_permissive">SELinux permisif</string>
     <string name="sepolicy_incorrect">SELinux policy salah</string>
@@ -75,7 +75,7 @@
     <string name="parasitic_welcome">Selamat datang di LSPosed</string>
     <string name="parasitic_welcome_summary">Anda menggunakan manajer parasit, yang dapat membuat pintasan atau dapat terbuka dari notifikasi.</string>
     <string name="parasitic_welcome_summary_no_shortcut_support">Anda menggunakan manajer parasit, yang dapat dibuka dari notifikasi.</string>
-    <string name="create_shortcut">Buat shortcut</string>
+    <string name="create_shortcut">Buat pintasan</string>
     <string name="never_show">Jangan pernah tampilkan</string>
     <string name="app_welcome">Manajer Parasit Direkomendasikan</string>
     <string name="app_welcome_summary">LSPosed sekarang mendukung parasitisasi sistem untuk menghindari deteksi, Anda dapat membuka manajer parasit dari pemberitahuan. Disarankan untuk menghapus aplikasi saat ini.</string>
@@ -83,7 +83,7 @@
     <string name="menuSaveToSd">Simpan</string>
     <string name="nav_item_logs_verbose">Log Verbose</string>
     <string name="nav_item_logs_module">Log Modul</string>
-    <string name="logs_saving">Saving log, please wait</string>
+    <string name="logs_saving">Menyimpan log, harap tunggu</string>
     <string name="logs_saved">Log disimpan</string>
     <string name="logs_save_failed2">Gagal menyimpan:\n%s</string>
     <string name="menuClearLog">Hapus log sekarang</string>
@@ -134,7 +134,7 @@
     <string name="no_scope_selected">Anda tidak memilih aplikasi apa pun. Lanjutkan?</string>
     <string name="menu_show_games">Permainan</string>
     <string name="menu_show_modules">Modul</string>
-    <string name="menu_show_denylist">Denylist</string>
+    <string name="menu_show_denylist">Daftar penolakan</string>
     <string name="failed_to_save_scope_list">Gagal menyimpan ke daftar cakupan</string>
     <string name="app_version">Versi: %1$s</string>
     <string name="use_recommended">Direkomendasikan</string>
@@ -154,8 +154,8 @@
     <string name="reboot_required">Mulai ulang diperlukan agar perubahan ini dapat diterapkan</string>
     <string name="reboot">Mulai ulang</string>
     <string name="menu_hide">Sembunyikan</string>
-    <string name="deny_list">%s berada di denylist. Ini mungkin tidak akan berpengaruh.</string>
-    <string name="deny_list_info">Berada di denylist</string>
+    <string name="deny_list">%s ada dalam daftar penolakan. Ini mungkin tidak berpengaruh.</string>
+    <string name="deny_list_info">Berada di daftar tolak</string>
     <!-- ModulesActivity and AppListActivity -->
     <string name="modules_other_app">Lihat di aplikasi lain</string>
     <string name="module_app_info">Informasi aplikasi</string>
@@ -200,7 +200,7 @@
     <string name="settings_xposed_api_call_protection">Proteksi panggilan API Xposed</string>
     <string name="settings_xposed_api_call_protection_summary">Blokir kode modul yang dimuat secara dinamis untuk menggunakan Xposed API, ini mungkin mengganggu beberapa modul namun lebih aman</string>
     <!-- Module Repo -->
-    <string name="module_readme">Readme</string>
+    <string name="module_readme">Baca aku</string>
     <string name="module_releases">Rilis</string>
     <string name="module_information">Informasi</string>
     <string name="module_information_homepage">Beranda</string>

@@ -26,7 +26,7 @@
         <item quantity="other">%d مۆدیول چالاک کراوە</item>
     </plurals>
     <string name="Logs">لۆگەکان</string>
-    <string name="Settings">رێکخستن</string>
+    <string name="Settings">ڕێکخستنەکان</string>
     <string name="feedback_or_suggestion">فیدباک یان پێشنیار</string>
     <string name="About">دەربارە</string>
     <string name="report_issue">پرسی ڕاپۆرت</string>

@@ -54,9 +54,11 @@
     <string name="system_prop_incorrect"><![CDATA[Alcune proprietà di sistema necessarie sono state eliminate o modificate.<br/>In alcuni casi i moduli potrebbero non funzionare.]]></string>
     <string name="need_update">Aggiornamento richiesto</string>
     <string name="please_update_summary">Installa la versione più recente di LSPosed</string>
+    <string name="developer_warning_title">Suggerimenti per lo sviluppatore del modulo</string>
+    <string name="developer_warning_summary">Disattivare le ottimizzazioni di distribuzione su Android Studio, o utilizzare il comando `gradlew installDebug` per eseguire l\'installazione. Altrimenti l\'apk del modulo non verrà aggiornato.</string>
     <string name="info_api_version">Versione API</string>
     <string name="info_framework_version">Versione del framework</string>
-    <string name="info_manager_package_name">Nome del pacchetto manager</string>
+    <string name="info_manager_package_name">Nome pacchetto del manager</string>
     <string name="info_system_version">Versione del sistema</string>
     <string name="info_device">Dispositivo</string>
     <string name="info_system_abi">ABI del sistema</string>

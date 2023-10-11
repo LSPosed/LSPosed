@@ -58,6 +58,8 @@
     <string name="system_prop_incorrect"><![CDATA[Неправильные системные настройки.<br/>Некоторые системные настройки нужные для работы удалены или изменены.<br/>Модули могут не работать должным образом]]></string>
     <string name="need_update">Требуется обновление</string>
     <string name="please_update_summary">Установите последнюю версию LSPosed!</string>
+    <string name="developer_warning_title">Советы разработчику модулей</string>
+    <string name="developer_warning_summary">Пожалуйста, отключите оптимизацию развертывания в Android Studio или используйте для установки команду `gradlew installDebug`. Иначе модуль не обновится</string>
     <string name="info_api_version">Версия API</string>
     <string name="info_framework_version">Версия фреймворк</string>
     <string name="info_manager_package_name">Имя пакета менеджера</string>
