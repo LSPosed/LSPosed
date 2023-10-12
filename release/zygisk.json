@@ -1,6 +1,6 @@
 {
-	"version": "v1.9.1",
-	"versionCode": 6990,
-	"zipUrl": "https://github.com/LSPosed/LSPosed/releases/download/v1.9.1/LSPosed-v1.9.1-6990-zygisk-release.zip",
+	"version": "v1.9.2",
+	"versionCode": 7024,
+	"zipUrl": "https://github.com/LSPosed/LSPosed/releases/download/v1.9.2/LSPosed-v1.9.2-7024-zygisk-release.zip",
 	"changelog": "https://lsposed.github.io/LSPosed/release/changelog.md"
 }
