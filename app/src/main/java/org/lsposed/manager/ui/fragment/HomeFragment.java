@@ -272,7 +272,12 @@ public class HomeFragment extends BaseFragment implements MenuProvider {
                     Os.kill(pid, 0);
                     developer.set(true);
                 } catch (ErrnoException e) {
-                    if (e.errno != OsConstants.ESRCH) {
+                    if (e.errno == OsConstants.ESRCH) {
+                        try {
+                            Files.delete(name);
+                        } catch (IOException ignored) {
+                        }
+                    } else {
                         developer.set(true);
                     }
                 }
