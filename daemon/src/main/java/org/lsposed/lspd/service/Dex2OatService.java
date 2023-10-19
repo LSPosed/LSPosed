@@ -28,6 +28,7 @@ import static org.lsposed.lspd.ILSPManagerService.DEX2OAT_SEPOLICY_INCORRECT;
 import android.net.LocalServerSocket;
 import android.os.Build;
 import android.os.FileObserver;
+import android.os.Process;
 import android.os.SELinux;
 import android.system.ErrnoException;
 import android.system.Os;
@@ -66,8 +67,8 @@ public class Dex2OatService implements Runnable {
 
     public Dex2OatService() {
         if (Build.VERSION.SDK_INT == Build.VERSION_CODES.Q) {
-            openDex2oat(0, "/apex/com.android.runtime/bin/dex2oat");
-            openDex2oat(1, "/apex/com.android.runtime/bin/dex2oatd");
+            openDex2oat(Process.is64Bit() ? 2 : 0, "/apex/com.android.runtime/bin/dex2oat");
+            openDex2oat(Process.is64Bit() ? 3 : 1, "/apex/com.android.runtime/bin/dex2oatd");
         } else {
             openDex2oat(0, "/apex/com.android.art/bin/dex2oat32");
             openDex2oat(1, "/apex/com.android.art/bin/dex2oatd32");
