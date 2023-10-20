@@ -1,5 +1,6 @@
 #include "logcat.h"
 
+#include <fcntl.h>
 #include <jni.h>
 #include <unistd.h>
 #include <string>
@@ -10,6 +11,7 @@
 #include <thread>
 #include <functional>
 #include <sys/system_properties.h>
+#include <sys/wait.h>
 
 using namespace std::string_view_literals;
 using namespace std::chrono_literals;
@@ -65,12 +67,6 @@ namespace {
         std::array<char, PROP_VALUE_MAX> buf{};
         if (__system_property_get(prop.data(), buf.data()) < 0) return def;
         return ParseUint(buf.data());
-    }
-
-    inline std::string GetStrProp(std::string_view prop, std::string def = {}) {
-        std::array<char, PROP_VALUE_MAX> buf{};
-        if (__system_property_get(prop.data(), buf.data()) < 0) return def;
-        return {buf.data()};
     }
 
     inline bool SetIntProp(std::string_view prop, int val) {
@@ -254,10 +250,10 @@ void Logcat::EnsureLogWatchDog() {
     std::thread watch_dog([this] {
         while (true) {
             auto logd_size = GetByteProp(kLogdSizeProp);
-            auto logd_tag = GetStrProp(kLogdTagProp);
+            const auto *tag_pi = __system_property_find(kLogdTagProp.data());
             auto logd_main_size = GetByteProp(kLogdMainSizeProp);
             auto logd_crash_size = GetByteProp(kLogdCrashSizeProp);
-            if (!logd_tag.empty() ||
+            if (tag_pi != nullptr ||
                 !((logd_main_size == kErr && logd_crash_size == kErr && logd_size != kErr &&
                    logd_size >= kLogBufferSize) ||
                   (logd_main_size != kErr && logd_main_size >= kLogBufferSize &&
@@ -266,20 +262,27 @@ void Logcat::EnsureLogWatchDog() {
                 SetIntProp(kLogdSizeProp, std::max(kLogBufferSize, logd_size));
                 SetIntProp(kLogdMainSizeProp, std::max(kLogBufferSize, logd_main_size));
                 SetIntProp(kLogdCrashSizeProp, std::max(kLogBufferSize, logd_crash_size));
-                SetStrProp(kLogdTagProp, "");
+                if (pid_t pid = fork(); pid > 0) { // parent
+                    waitpid(pid, nullptr, 0);
+                } else { // child
+                    int ns = open("/proc/1/ns/mnt", O_RDONLY);
+                    setns(ns, CLONE_NEWNS);
+                    close(ns);
+                    execlp("resetprop", "resetprop", "--delete", kLogdTagProp.data(), nullptr);
+                }
                 SetStrProp("ctl.start", "logd-reinit");
             }
-            const auto *pi = __system_property_find(kLogdTagProp.data());
+            const auto *size_pi = __system_property_find(kLogdSizeProp.data());
             uint32_t serial = 0;
-            if (pi != nullptr) {
-                __system_property_read_callback(pi, [](auto *c, auto, auto, auto s) {
+            if (size_pi != nullptr) {
+                __system_property_read_callback(size_pi, [](auto *c, auto, auto, auto s) {
                     *reinterpret_cast<uint32_t *>(c) = s;
                 }, &serial);
             }
-            if (!__system_property_wait(pi, serial, &serial, nullptr)) break;
-            if (pi != nullptr) Log("\nResetting log settings\n");
+            if (!__system_property_wait(size_pi, serial, &serial, nullptr)) break;
+            if (size_pi != nullptr) Log("\nResetting log settings\n");
             else std::this_thread::sleep_for(1s);
-            // log tag prop was not found; to avoid frequently trigger wait, sleep for a while
+            // log size prop was not found; to avoid frequently trigger wait, sleep for a while
         }
     });
     pthread_setname_np(watch_dog.native_handle(), "watchdog");
