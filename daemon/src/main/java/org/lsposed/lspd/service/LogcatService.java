@@ -182,6 +182,14 @@ public class LogcatService implements Runnable {
         Log.i(TAG, "!!stop_verbose!!");
     }
 
+    public void enableWatchdog() {
+        Log.i(TAG, "!!start_watchdog!!");
+    }
+
+    public void disableWatchdog() {
+        Log.i(TAG, "!!stop_watchdog!!");
+    }
+
     public void refresh(boolean isVerboseLog) {
         if (isVerboseLog) {
             Log.i(TAG, "!!refresh_verbose!!");
