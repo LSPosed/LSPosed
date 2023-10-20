@@ -17,7 +17,8 @@ using namespace std::string_view_literals;
 using namespace std::chrono_literals;
 
 constexpr size_t kMaxLogSize = 4 * 1024 * 1024;
-constexpr size_t kLogBufferSize = 64 * 1024;
+constexpr size_t kLogDefaultBufferSize = 256 * 1024;
+constexpr size_t kLogSvelteBufferSize = 64 * 1024;
 
 namespace {
     constexpr std::array<char, ANDROID_LOG_SILENT + 1> kLogChar = {
@@ -61,6 +62,12 @@ namespace {
             return -1;
         }
         return static_cast<size_t>(result);
+    }
+
+    inline std::string GetStrProp(std::string_view prop, std::string def = {}) {
+        std::array<char, PROP_VALUE_MAX> buf{};
+        if (__system_property_get(prop.data(), buf.data()) < 0) return def;
+        return {buf.data()};
     }
 
     inline size_t GetByteProp(std::string_view prop, size_t def = -1) {
@@ -241,6 +248,16 @@ void Logcat::ProcessBuffer(struct log_msg *buf) {
     }
 }
 
+size_t defaultLogdSizeValue() {
+    size_t defaultValue = kLogSvelteBufferSize;
+    if(GetStrProp("ro.config.low_ram"sv).compare("true"sv) == 0) {
+        defaultValue = kLogSvelteBufferSize;
+    } else {
+        defaultValue = kLogDefaultBufferSize;
+    }
+    return defaultValue;
+}
+
 void Logcat::EnsureLogWatchDog() {
     constexpr static auto kLogdSizeProp = "persist.logd.size"sv;
     constexpr static auto kLogdTagProp = "persist.log.tag"sv;
@@ -255,13 +272,13 @@ void Logcat::EnsureLogWatchDog() {
             auto logd_crash_size = GetByteProp(kLogdCrashSizeProp);
             if (tag_pi != nullptr ||
                 !((logd_main_size == kErr && logd_crash_size == kErr && logd_size != kErr &&
-                   logd_size >= kLogBufferSize) ||
-                  (logd_main_size != kErr && logd_main_size >= kLogBufferSize &&
+                   logd_size >= defaultLogdSizeValue()) ||
+                  (logd_main_size != kErr && logd_main_size >= defaultLogdSizeValue() &&
                    logd_crash_size != kErr &&
-                   logd_crash_size >= kLogBufferSize))) {
-                SetIntProp(kLogdSizeProp, std::max(kLogBufferSize, logd_size));
-                SetIntProp(kLogdMainSizeProp, std::max(kLogBufferSize, logd_main_size));
-                SetIntProp(kLogdCrashSizeProp, std::max(kLogBufferSize, logd_crash_size));
+                   logd_crash_size >= defaultLogdSizeValue()))) {
+                SetIntProp(kLogdSizeProp, std::max(defaultLogdSizeValue(), logd_size));
+                SetIntProp(kLogdMainSizeProp, std::max(defaultLogdSizeValue(), logd_main_size));
+                SetIntProp(kLogdCrashSizeProp, std::max(defaultLogdSizeValue(), logd_crash_size));
                 if (pid_t pid = fork(); pid > 0) { // parent
                     waitpid(pid, nullptr, 0);
                 } else { // child
@@ -306,8 +323,8 @@ void Logcat::Run() {
             auto *logger = android_logger_open(logger_list.get(), id);
             if (logger == nullptr) continue;
             if (auto size = android_logger_get_log_size(logger);
-                    size >= 0 && static_cast<size_t>(size) < kLogBufferSize) {
-                android_logger_set_log_size(logger, kLogBufferSize);
+                    size >= 0 && static_cast<size_t>(size) < defaultLogdSizeValue()) {
+                android_logger_set_log_size(logger, defaultLogdSizeValue());
             }
         }
 
