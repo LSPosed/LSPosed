@@ -277,12 +277,12 @@ public class LSPosedContext implements XposedInterface {
     }
 
     @Override
-    public synchronized void log(@NonNull String message) {
+    public void log(@NonNull String message) {
         Log.i(TAG, mPackageName + ": " + message);
     }
 
     @Override
-    public synchronized void log(@NonNull String message, @NonNull Throwable throwable) {
+    public void log(@NonNull String message, @NonNull Throwable throwable) {
         Log.e(TAG, mPackageName + ": " + message, throwable);
     }
 
