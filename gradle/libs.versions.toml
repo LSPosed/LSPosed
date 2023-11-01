@@ -40,7 +40,7 @@ androidx-annotation = { module = "androidx.annotation:annotation", version = "1.
 androidx-browser = { module = "androidx.browser:browser", version = "1.6.0" }
 androidx-constraintlayout = { module = "androidx.constraintlayout:constraintlayout", version = "2.1.4" }
 androidx-core = { module = "androidx.core:core", version = "1.12.0" }
-androidx-fragment = { module = "androidx.fragment:fragment", version = "1.6.1" }
+androidx-fragment = { module = "androidx.fragment:fragment", version = "1.6.2" }
 androidx-navigation-fragment = { group = "androidx.navigation", name = "navigation-fragment", version.ref = "nav" }
 androidx-navigation-ui = { group = "androidx.navigation", name = "navigation-ui", version.ref = "nav" }
 androidx-preference = { module = "androidx.preference:preference", version = "1.2.1" }
