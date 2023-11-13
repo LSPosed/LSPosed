@@ -28,3 +28,4 @@ else
 fi
 
 rm -rf /data/adb/riru/modules/lspd
+[ "$(getprop dalvik.vm.dex2oat-flags)" = "--inline-max-code-units=0" ] && resetprop --delete dalvik.vm.dex2oat-flags
