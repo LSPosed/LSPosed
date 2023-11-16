@@ -35,7 +35,7 @@ rikkax-recyclerview = { module = "dev.rikka.rikkax.recyclerview:recyclerview-ktx
 rikkax-widget-borderview = { module = "dev.rikka.rikkax.widget:borderview", version = "1.1.0" }
 rikkax-widget-mainswitchbar = { module = "dev.rikka.rikkax.widget:mainswitchbar", version = "1.0.2" }
 
-androidx-activity = { module = "androidx.activity:activity", version = "1.8.0" }
+androidx-activity = { module = "androidx.activity:activity", version = "1.8.1" }
 androidx-annotation = { module = "androidx.annotation:annotation", version = "1.7.0" }
 androidx-browser = { module = "androidx.browser:browser", version = "1.6.0" }
 androidx-constraintlayout = { module = "androidx.constraintlayout:constraintlayout", version = "2.1.4" }
