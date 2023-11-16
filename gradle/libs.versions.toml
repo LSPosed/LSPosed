@@ -37,7 +37,7 @@ rikkax-widget-mainswitchbar = { module = "dev.rikka.rikkax.widget:mainswitchbar"
 
 androidx-activity = { module = "androidx.activity:activity", version = "1.8.1" }
 androidx-annotation = { module = "androidx.annotation:annotation", version = "1.7.0" }
-androidx-browser = { module = "androidx.browser:browser", version = "1.6.0" }
+androidx-browser = { module = "androidx.browser:browser", version = "1.7.0" }
 androidx-constraintlayout = { module = "androidx.constraintlayout:constraintlayout", version = "2.1.4" }
 androidx-core = { module = "androidx.core:core", version = "1.12.0" }
 androidx-fragment = { module = "androidx.fragment:fragment", version = "1.6.2" }
