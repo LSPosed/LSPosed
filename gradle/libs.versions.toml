@@ -2,7 +2,7 @@
 agp = "8.1.4"
 kotlin = "1.9.20"
 nav = "2.7.5"
-appcenter = "5.0.2"
+appcenter = "5.0.3"
 libxposed = "100"
 glide = "4.16.0"
 okhttp = "4.12.0"
