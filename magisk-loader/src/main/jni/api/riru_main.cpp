@@ -42,7 +42,6 @@ namespace lspd {
         void onModuleLoaded() {
             LOGI("onModuleLoaded: welcome to LSPosed!");
             LOGI("onModuleLoaded: version v{} ({})", versionName, versionCode);
-            InitSymbolCache(nullptr);
             MagiskLoader::Init();
             ConfigImpl::Init();
         }
