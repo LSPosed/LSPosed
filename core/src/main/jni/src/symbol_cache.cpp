@@ -31,8 +31,6 @@
 #include <logging.h>
 
 namespace lspd {
-    std::unique_ptr<SymbolCache> symbol_cache = std::make_unique<SymbolCache>();
-
     std::unique_ptr<const SandHook::ElfImg> &GetArt(bool release) {
         static std::unique_ptr<const SandHook::ElfImg> kArtImg = nullptr;
         if (release) {
@@ -41,23 +39,5 @@ namespace lspd {
             kArtImg = std::make_unique<SandHook::ElfImg>(kLibArtName);
         }
         return kArtImg;
-    }
-
-
-    void InitSymbolCache(SymbolCache *other) {
-        LOGD("InitSymbolCache");
-        if (other && other->initialized.test(std::memory_order_acquire)) {
-            LOGD("Already initialized");
-            *symbol_cache = *other;
-            symbol_cache->initialized.test_and_set(std::memory_order_relaxed);
-            return;
-        }
-        symbol_cache->do_dlopen = SandHook::ElfImg("/linker").getSymbAddress(
-                "__dl__Z9do_dlopenPKciPK17android_dlextinfoPKv");
-        symbol_cache->initialized.test_and_set(std::memory_order_relaxed);
-        if (other) {
-            *other = *symbol_cache;
-            other->initialized.test_and_set(std::memory_order_acq_rel);
-        }
     }
 }  // namespace lspd

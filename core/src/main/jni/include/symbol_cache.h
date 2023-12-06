@@ -32,25 +32,6 @@ namespace SandHook {
 }
 
 namespace lspd {
-    struct SymbolCache {
-        std::atomic_flag initialized{};
-        void *do_dlopen;
-
-        SymbolCache() = default;
-
-        SymbolCache(const SymbolCache &other) :
-                do_dlopen(other.do_dlopen) {}
-
-        SymbolCache &operator=(const SymbolCache &other) {
-            new(this)SymbolCache(other);
-            return *this;
-        }
-    };
-
-    extern std::unique_ptr<SymbolCache> symbol_cache;
-
-    void InitSymbolCache(SymbolCache *other);
-
     std::unique_ptr<const SandHook::ElfImg> &GetArt(bool release=false);
 }
 

@@ -24,13 +24,13 @@
 
 #include "native_api.h"
 #include "logging.h"
-#include "symbol_cache.h"
 #include "utils/hook_helper.hpp"
 #include <sys/mman.h>
 #include <dobby.h>
 #include <list>
 #include <dlfcn.h>
 #include "native_util.h"
+#include "elf_util.h"
 
 
 /*
@@ -133,9 +133,11 @@ namespace lspd {
             });
 
     bool InstallNativeAPI(const lsplant::HookHandler & handler) {
-        LOGD("InstallNativeAPI: {}", symbol_cache->do_dlopen);
-        if (symbol_cache->do_dlopen) [[likely]] {
-            HookSymNoHandle(handler, symbol_cache->do_dlopen, do_dlopen);
+        auto *do_dlopen_sym = SandHook::ElfImg("/linker").getSymbAddress(
+                "__dl__Z9do_dlopenPKciPK17android_dlextinfoPKv");
+        LOGD("InstallNativeAPI: {}", do_dlopen_sym);
+        if (do_dlopen_sym) [[likely]] {
+            HookSymNoHandle(handler, do_dlopen_sym, do_dlopen);
             return true;
         }
         return false;

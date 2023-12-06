@@ -89,10 +89,6 @@ namespace lspd {
     void
     MagiskLoader::OnNativeForkSystemServerPre(JNIEnv *env) {
         Service::instance()->InitService(env);
-        skip_ = !symbol_cache->initialized.test(std::memory_order_acquire);
-        if (skip_) [[unlikely]] {
-            LOGW("skip system server due to symbol cache");
-        }
         setAllowUnload(skip_);
     }
 
@@ -167,7 +163,7 @@ namespace lspd {
         Service::instance()->InitService(env);
         const auto app_id = uid % PER_USER_RANGE;
         JUTFString process_name(env, nice_name);
-        skip_ = !symbol_cache->initialized.test(std::memory_order_acquire);
+        skip_ = false;
         if (!skip_ && !app_data_dir) {
             LOGD("skip injecting into {} because it has no data dir", process_name.get());
             skip_ = true;
