@@ -5,11 +5,14 @@ updates:
     schedule:
       interval: daily
       time: "21:00"
-    open-pull-requests-limit: 10
     target-branch: master
     registries:
       - maven-google
       - gradle-plugin
+    groups:
+      maven-dependencies:
+        patterns:
+          - "*"
 
 registries:
   maven-google:
