@@ -55,18 +55,21 @@ public class BlurBehindDialogBuilder extends MaterialAlertDialogBuilder {
     @Override
     public AlertDialog create() {
         AlertDialog dialog = super.create();
-        dialog.setOnShowListener(d -> setBackgroundBlurRadius(dialog));
+        var window = dialog.getWindow();
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.S) {
+            setBackgroundBlurRadius(dialog.getWindow());
+        } else
+            dialog.setOnShowListener(d -> setBackgroundBlurRadius(window));
         return dialog;
     }
 
-    private void setBackgroundBlurRadius(AlertDialog dialog) {
-        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.R) {
-            Window window = dialog.getWindow();
-            if (Build.VERSION.SDK_INT >= 31) {
-                window.addFlags(WindowManager.LayoutParams.FLAG_BLUR_BEHIND);
-                window.getAttributes().setBlurBehindRadius(53); //android.R.styleable.Window_windowBlurBehindRadius
-                window.addFlags(WindowManager.LayoutParams.FLAG_DIM_BEHIND);
-            } else if (supportBlur) {
+    private void setBackgroundBlurRadius(Window window) {
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.S) {
+            window.addFlags(WindowManager.LayoutParams.FLAG_BLUR_BEHIND);
+            window.addFlags(WindowManager.LayoutParams.FLAG_DIM_BEHIND);
+            window.getAttributes().setBlurBehindRadius(53); //android.R.styleable.Window_windowBlurBehindRadius
+        } else if (Build.VERSION.SDK_INT == Build.VERSION_CODES.R) {
+            if (supportBlur) {
                 View view = window.getDecorView();
                 ValueAnimator animator = ValueAnimator.ofInt(1, 153);
                 animator.setInterpolator(new DecelerateInterpolator());
@@ -81,7 +84,10 @@ public class BlurBehindDialogBuilder extends MaterialAlertDialogBuilder {
                     animator.addUpdateListener(animation -> {
                         try {
                             SurfaceControl.Transaction transaction = new SurfaceControl.Transaction();
-                            setBackgroundBlurRadius.invoke(transaction, surfaceControl, animation.getAnimatedValue());
+                            var animatedValue = animation.getAnimatedValue();
+                            if (animatedValue != null) {
+                                setBackgroundBlurRadius.invoke(transaction, surfaceControl, (int) animatedValue);
+                            }
                             transaction.apply();
                         } catch (Throwable t) {
                             Log.e(App.TAG, "Blur behind dialog builder", t);
@@ -92,11 +98,11 @@ public class BlurBehindDialogBuilder extends MaterialAlertDialogBuilder {
                 }
                 view.addOnAttachStateChangeListener(new View.OnAttachStateChangeListener() {
                     @Override
-                    public void onViewAttachedToWindow(View v) {
+                    public void onViewAttachedToWindow(@NonNull View v) {
                     }
 
                     @Override
-                    public void onViewDetachedFromWindow(View v) {
+                    public void onViewDetachedFromWindow(@NonNull View v) {
                         animator.cancel();
                     }
                 });
