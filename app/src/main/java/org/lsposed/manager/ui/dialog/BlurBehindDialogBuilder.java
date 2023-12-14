@@ -22,29 +22,34 @@ package org.lsposed.manager.ui.dialog;
 import android.animation.ValueAnimator;
 import android.annotation.SuppressLint;
 import android.content.Context;
+import android.graphics.drawable.Drawable;
 import android.os.Build;
 import android.util.Log;
 import android.view.SurfaceControl;
 import android.view.View;
 import android.view.Window;
-import android.view.WindowManager;
 import android.view.animation.DecelerateInterpolator;
 
 import androidx.annotation.NonNull;
+import androidx.annotation.RequiresApi;
 import androidx.appcompat.app.AlertDialog;
 
 import com.google.android.material.dialog.MaterialAlertDialogBuilder;
 
 import org.lsposed.manager.App;
+import org.lsposed.manager.R;
 
 import java.lang.reflect.Method;
+import java.util.function.Consumer;
 
 @SuppressWarnings({"JavaReflectionMemberAccess", "ConstantConditions"})
 public class BlurBehindDialogBuilder extends MaterialAlertDialogBuilder {
+    private final int mWindowBackgroundAlphaWithBlur = 170;
+    private Drawable mWindowBackgroundDrawable;
     private static final boolean supportBlur = getSystemProperty("ro.surface_flinger.supports_background_blur", false) && !getSystemProperty("persist.sys.sf.disable_blurs", false);
 
     public BlurBehindDialogBuilder(@NonNull Context context) {
-        super(context);
+        this(context, R.style.ThemeOverlay_MaterialAlertDialog_Blur);
     }
 
     public BlurBehindDialogBuilder(@NonNull Context context, int overrideThemeResId) {
@@ -56,19 +61,19 @@ public class BlurBehindDialogBuilder extends MaterialAlertDialogBuilder {
     public AlertDialog create() {
         AlertDialog dialog = super.create();
         var window = dialog.getWindow();
-        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.S) {
-            setBackgroundBlurRadius(dialog.getWindow());
-        } else
+        mWindowBackgroundDrawable = this.getBackground();
+        mWindowBackgroundDrawable.setAlpha(mWindowBackgroundAlphaWithBlur);
+        Log.d(App.TAG, "AlertDialog: mWindowBackgroundDrawable Alpha=" + mWindowBackgroundDrawable.getAlpha());
+        window.setBackgroundDrawable(mWindowBackgroundDrawable);
+        if (buildIsAtLeastS()) {
+            setupWindowBlurListener(window);
+        } else if (Build.VERSION.SDK_INT == Build.VERSION_CODES.R)
             dialog.setOnShowListener(d -> setBackgroundBlurRadius(window));
         return dialog;
     }
 
     private void setBackgroundBlurRadius(Window window) {
-        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.S) {
-            window.addFlags(WindowManager.LayoutParams.FLAG_BLUR_BEHIND);
-            window.addFlags(WindowManager.LayoutParams.FLAG_DIM_BEHIND);
-            window.getAttributes().setBlurBehindRadius(53); //android.R.styleable.Window_windowBlurBehindRadius
-        } else if (Build.VERSION.SDK_INT == Build.VERSION_CODES.R) {
+        if (Build.VERSION.SDK_INT == Build.VERSION_CODES.R) {
             if (supportBlur) {
                 View view = window.getDecorView();
                 ValueAnimator animator = ValueAnimator.ofInt(1, 153);
@@ -109,6 +114,43 @@ public class BlurBehindDialogBuilder extends MaterialAlertDialogBuilder {
                 animator.start();
             }
         }
+    }
+
+    @RequiresApi(api = Build.VERSION_CODES.S)
+    private void setupWindowBlurListener(Window window) {
+        Consumer<Boolean> windowBlurEnabledListener = enabled -> updateWindowForBlurs(window, enabled);
+        window.getDecorView().addOnAttachStateChangeListener(
+                new View.OnAttachStateChangeListener() {
+                    @Override
+                    public void onViewAttachedToWindow(@NonNull View v) {
+                        window.getWindowManager().addCrossWindowBlurEnabledListener(
+                                windowBlurEnabledListener);
+                    }
+
+                    @Override
+                    public void onViewDetachedFromWindow(@NonNull View v) {
+                        window.getWindowManager().removeCrossWindowBlurEnabledListener(
+                                windowBlurEnabledListener);
+                    }
+                });
+    }
+
+    private void updateWindowForBlurs(Window window, boolean blursEnabled) {
+        Log.d(App.TAG, "updateWindowForBlurs: blursEnabled=" + blursEnabled);
+        float mDimAmountWithBlur = 0.1f;
+        float mDimAmountNoBlur = 0.32f;
+        int mWindowBackgroundAlphaNoBlur = 255;
+        mWindowBackgroundDrawable.setAlpha(blursEnabled ?
+                mWindowBackgroundAlphaWithBlur : mWindowBackgroundAlphaNoBlur);
+        window.setDimAmount(blursEnabled ?
+                mDimAmountWithBlur : mDimAmountNoBlur);
+        if (buildIsAtLeastS()) {
+            window.setAttributes(window.getAttributes());
+        }
+    }
+
+    private static boolean buildIsAtLeastS() {
+        return Build.VERSION.SDK_INT >= Build.VERSION_CODES.S;
     }
 
     public static boolean getSystemProperty(String key, boolean defaultValue) {
