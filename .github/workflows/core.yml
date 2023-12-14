@@ -24,7 +24,7 @@ jobs:
 
     steps:
       - name: Checkout
-        uses: actions/checkout@v3
+        uses: actions/checkout@v4
         with:
           submodules: "recursive"
           fetch-depth: 0
@@ -41,19 +41,19 @@ jobs:
           fi
 
       - name: Checkout libxposed/api
-        uses: actions/checkout@v3
+        uses: actions/checkout@v4
         with:
           repository: libxposed/api
           path: libxposed/api
 
       - name: Checkout libxposed/service
-        uses: actions/checkout@v3
+        uses: actions/checkout@v4
         with:
           repository: libxposed/service
           path: libxposed/service
 
       - name: Setup Java
-        uses: actions/setup-java@v3
+        uses: actions/setup-java@v4
         with:
           distribution: "temurin"
           java-version: "17"
@@ -101,31 +101,31 @@ jobs:
           unzip magisk-loader/release/LSPosed-v*-zygisk-debug.zip -d LSPosed-zygisk-debug
 
       - name: Upload riru release
-        uses: actions/upload-artifact@v3
+        uses: actions/upload-artifact@v4
         with:
           name: ${{ steps.prepareArtifact.outputs.riruReleaseName }}
           path: "./LSPosed-riru-release/*"
 
       - name: Upload riru debug
-        uses: actions/upload-artifact@v3
+        uses: actions/upload-artifact@v4
         with:
           name: ${{ steps.prepareArtifact.outputs.riruDebugName }}
           path: "./LSPosed-riru-debug/*"
 
       - name: Upload zygisk release
-        uses: actions/upload-artifact@v3
+        uses: actions/upload-artifact@v4
         with:
           name: ${{ steps.prepareArtifact.outputs.zygiskReleaseName }}
           path: "./LSPosed-zygisk-release/*"
 
       - name: Upload zygisk debug
-        uses: actions/upload-artifact@v3
+        uses: actions/upload-artifact@v4
         with:
           name: ${{ steps.prepareArtifact.outputs.zygiskDebugName }}
           path: "./LSPosed-zygisk-debug/*"
 
       - name: Upload mappings
-        uses: actions/upload-artifact@v3
+        uses: actions/upload-artifact@v4
         with:
           name: mappings
           path: |
@@ -133,7 +133,7 @@ jobs:
             app/build/outputs/mapping
 
       - name: Upload symbols
-        uses: actions/upload-artifact@v3
+        uses: actions/upload-artifact@v4
         with:
           name: symbols
           path: build/symbols
