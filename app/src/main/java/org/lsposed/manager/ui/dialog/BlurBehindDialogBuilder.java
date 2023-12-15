@@ -31,7 +31,6 @@ import android.view.WindowManager;
 import android.view.animation.DecelerateInterpolator;
 
 import androidx.annotation.NonNull;
-import androidx.annotation.RequiresApi;
 import androidx.appcompat.app.AlertDialog;
 
 import com.google.android.material.dialog.MaterialAlertDialogBuilder;
@@ -43,8 +42,6 @@ import java.util.function.Consumer;
 
 @SuppressWarnings({"JavaReflectionMemberAccess", "ConstantConditions"})
 public class BlurBehindDialogBuilder extends MaterialAlertDialogBuilder {
-    private final float mDimAmountWithBlur = 0.1f;
-    private final float mDimAmountNoBlur = 0.32f;
     private static final boolean supportBlur = getSystemProperty("ro.surface_flinger.supports_background_blur", false) && !getSystemProperty("persist.sys.sf.disable_blurs", false);
 
     public BlurBehindDialogBuilder(@NonNull Context context) {
@@ -59,22 +56,44 @@ public class BlurBehindDialogBuilder extends MaterialAlertDialogBuilder {
     @Override
     public AlertDialog create() {
         AlertDialog dialog = super.create();
-        var window = dialog.getWindow();
-        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.S) {
-            window.addFlags(WindowManager.LayoutParams.FLAG_BLUR_BEHIND);
-            setupWindowBlurListener(window);
-        } else {
-            updateWindowForBlurs(window, false);
-        }
-        dialog.setOnShowListener(d -> setBackgroundBlurRadius(window));
+        setupWindowBlurListener(dialog);
         return dialog;
     }
 
-    private void setBackgroundBlurRadius(Window window) {
-        window.setDimAmount(supportBlur ?
+    private void setupWindowBlurListener(AlertDialog dialog) {
+        var window = dialog.getWindow();
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.S) {
+            window.addFlags(WindowManager.LayoutParams.FLAG_BLUR_BEHIND);
+            Consumer<Boolean> windowBlurEnabledListener = enabled -> updateWindowForBlurs(window, enabled);
+            window.getDecorView().addOnAttachStateChangeListener(
+                    new View.OnAttachStateChangeListener() {
+                        @Override
+                        public void onViewAttachedToWindow(@NonNull View v) {
+                            window.getWindowManager().addCrossWindowBlurEnabledListener(
+                                    windowBlurEnabledListener);
+                        }
+
+                        @Override
+                        public void onViewDetachedFromWindow(@NonNull View v) {
+                            window.getWindowManager().removeCrossWindowBlurEnabledListener(
+                                    windowBlurEnabledListener);
+                        }
+                    });
+        } else if (Build.VERSION.SDK_INT == Build.VERSION_CODES.R) {
+            dialog.setOnShowListener(d -> updateWindowForBlurs(window, supportBlur));
+        }
+    }
+
+    private void updateWindowForBlurs(Window window, boolean blursEnabled) {
+        float mDimAmountWithBlur = 0.1f;
+        float mDimAmountNoBlur = 0.32f;
+        window.setDimAmount(blursEnabled ?
                 mDimAmountWithBlur : mDimAmountNoBlur);
-        if (Build.VERSION.SDK_INT == Build.VERSION_CODES.R)
-            if (supportBlur) {
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.S) {
+            window.getAttributes().setBlurBehindRadius(20);
+            window.setAttributes(window.getAttributes());
+        } else if (Build.VERSION.SDK_INT == Build.VERSION_CODES.R) {
+            if (blursEnabled) {
                 View view = window.getDecorView();
                 ValueAnimator animator = ValueAnimator.ofInt(1, 153);
                 animator.setInterpolator(new DecelerateInterpolator());
@@ -113,33 +132,6 @@ public class BlurBehindDialogBuilder extends MaterialAlertDialogBuilder {
                 });
                 animator.start();
             }
-    }
-
-    @RequiresApi(api = Build.VERSION_CODES.S)
-    private void setupWindowBlurListener(Window window) {
-        Consumer<Boolean> windowBlurEnabledListener = enabled -> updateWindowForBlurs(window, enabled);
-        window.getDecorView().addOnAttachStateChangeListener(
-                new View.OnAttachStateChangeListener() {
-                    @Override
-                    public void onViewAttachedToWindow(@NonNull View v) {
-                        window.getWindowManager().addCrossWindowBlurEnabledListener(
-                                windowBlurEnabledListener);
-                    }
-
-                    @Override
-                    public void onViewDetachedFromWindow(@NonNull View v) {
-                        window.getWindowManager().removeCrossWindowBlurEnabledListener(
-                                windowBlurEnabledListener);
-                    }
-                });
-    }
-
-    private void updateWindowForBlurs(Window window, boolean blursEnabled) {
-        window.setDimAmount(blursEnabled ?
-                mDimAmountWithBlur : mDimAmountNoBlur);
-        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.S) {
-            window.getAttributes().setBlurBehindRadius(20);
-            window.setAttributes(window.getAttributes());
         }
     }
 
