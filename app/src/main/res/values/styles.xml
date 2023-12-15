@@ -45,24 +45,12 @@
         <item name="buttonBarPositiveButtonStyle">@style/Widget.Button.TextButton.Dialog.FullWidth</item>
         <item name="buttonBarNegativeButtonStyle">@style/Widget.Button.TextButton.Dialog.FullWidth</item>
         <item name="buttonBarNeutralButtonStyle">@style/Widget.Button.TextButton.Dialog.FullWidth</item>
-        <item name="android:backgroundDimAmount">0.1</item>
-        <item name="android:windowBlurBehindEnabled">true</item>
-        <item name="android:windowBlurBehindRadius">20px</item>
-        <item name="android:windowBackgroundBlurRadius">80px</item>
-        <item name="android:windowIsTranslucent">true</item>
     </style>
-    <style name="ThemeOverlay.MaterialAlertDialog.FullWidthButtons" parent="ThemeOverlay.MaterialAlertDialog.Blur">
+    <style name="ThemeOverlay.MaterialAlertDialog.FullWidthButtons" parent="ThemeOverlay.Material3.MaterialAlertDialog">
         <!-- Mark spacer as gone when showing full width buttons -->
         <item name="materialAlertDialogButtonSpacerVisibility">2</item>
         <item name="buttonBarPositiveButtonStyle">@style/Widget.Button.TextButton.Dialog.FullWidth</item>
         <item name="buttonBarNegativeButtonStyle">@style/Widget.Button.TextButton.Dialog.FullWidth</item>
         <item name="buttonBarNeutralButtonStyle">@style/Widget.Button.TextButton.Dialog.FullWidth</item>
-    </style>
-    <style name="ThemeOverlay.MaterialAlertDialog.Blur" parent="ThemeOverlay.Material3.MaterialAlertDialog">
-        <item name="android:backgroundDimAmount">0.1</item>
-        <item name="android:windowBlurBehindEnabled">true</item>
-        <item name="android:windowBlurBehindRadius">20px</item>
-        <item name="android:windowBackgroundBlurRadius">80px</item>
-        <item name="android:windowIsTranslucent">true</item>
     </style>
 </resources>
