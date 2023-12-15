@@ -44,7 +44,8 @@ import java.util.function.Consumer;
 
 @SuppressWarnings({"JavaReflectionMemberAccess", "ConstantConditions"})
 public class BlurBehindDialogBuilder extends MaterialAlertDialogBuilder {
-    private final int mWindowBackgroundAlphaWithBlur = 170;
+    private final float mDimAmountWithBlur = 0.1f;
+    private final float mDimAmountNoBlur = 0.32f;
     private Drawable mWindowBackgroundDrawable;
     private static final boolean supportBlur = getSystemProperty("ro.surface_flinger.supports_background_blur", false) && !getSystemProperty("persist.sys.sf.disable_blurs", false);
 
@@ -62,57 +63,59 @@ public class BlurBehindDialogBuilder extends MaterialAlertDialogBuilder {
         AlertDialog dialog = super.create();
         var window = dialog.getWindow();
         mWindowBackgroundDrawable = this.getBackground();
-        mWindowBackgroundDrawable.setAlpha(mWindowBackgroundAlphaWithBlur);
-        Log.d(App.TAG, "AlertDialog: mWindowBackgroundDrawable Alpha=" + mWindowBackgroundDrawable.getAlpha());
-        window.setBackgroundDrawable(mWindowBackgroundDrawable);
         if (buildIsAtLeastS()) {
             setupWindowBlurListener(window);
-        } else if (Build.VERSION.SDK_INT == Build.VERSION_CODES.R)
+            window.setBackgroundDrawable(mWindowBackgroundDrawable);
+        } else {
+            updateWindowForBlurs(window, false);
+        }
+        if (Build.VERSION.SDK_INT == Build.VERSION_CODES.R)
             dialog.setOnShowListener(d -> setBackgroundBlurRadius(window));
         return dialog;
     }
 
+    @RequiresApi(api = Build.VERSION_CODES.R)
     private void setBackgroundBlurRadius(Window window) {
-        if (Build.VERSION.SDK_INT == Build.VERSION_CODES.R) {
-            if (supportBlur) {
-                View view = window.getDecorView();
-                ValueAnimator animator = ValueAnimator.ofInt(1, 153);
-                animator.setInterpolator(new DecelerateInterpolator());
-                try {
-                    Object viewRootImpl = view.getClass().getMethod("getViewRootImpl").invoke(view);
-                    if (viewRootImpl == null) {
-                        return;
-                    }
-                    SurfaceControl surfaceControl = (SurfaceControl) viewRootImpl.getClass().getMethod("getSurfaceControl").invoke(viewRootImpl);
-
-                    @SuppressLint("BlockedPrivateApi") Method setBackgroundBlurRadius = SurfaceControl.Transaction.class.getDeclaredMethod("setBackgroundBlurRadius", SurfaceControl.class, int.class);
-                    animator.addUpdateListener(animation -> {
-                        try {
-                            SurfaceControl.Transaction transaction = new SurfaceControl.Transaction();
-                            var animatedValue = animation.getAnimatedValue();
-                            if (animatedValue != null) {
-                                setBackgroundBlurRadius.invoke(transaction, surfaceControl, (int) animatedValue);
-                            }
-                            transaction.apply();
-                        } catch (Throwable t) {
-                            Log.e(App.TAG, "Blur behind dialog builder", t);
-                        }
-                    });
-                } catch (Throwable t) {
-                    Log.e(App.TAG, "Blur behind dialog builder", t);
+        window.setDimAmount(supportBlur ?
+                mDimAmountWithBlur : mDimAmountNoBlur);
+        if (supportBlur) {
+            View view = window.getDecorView();
+            ValueAnimator animator = ValueAnimator.ofInt(1, 153);
+            animator.setInterpolator(new DecelerateInterpolator());
+            try {
+                Object viewRootImpl = view.getClass().getMethod("getViewRootImpl").invoke(view);
+                if (viewRootImpl == null) {
+                    return;
                 }
-                view.addOnAttachStateChangeListener(new View.OnAttachStateChangeListener() {
-                    @Override
-                    public void onViewAttachedToWindow(@NonNull View v) {
-                    }
+                SurfaceControl surfaceControl = (SurfaceControl) viewRootImpl.getClass().getMethod("getSurfaceControl").invoke(viewRootImpl);
 
-                    @Override
-                    public void onViewDetachedFromWindow(@NonNull View v) {
-                        animator.cancel();
+                @SuppressLint("BlockedPrivateApi") Method setBackgroundBlurRadius = SurfaceControl.Transaction.class.getDeclaredMethod("setBackgroundBlurRadius", SurfaceControl.class, int.class);
+                animator.addUpdateListener(animation -> {
+                    try {
+                        SurfaceControl.Transaction transaction = new SurfaceControl.Transaction();
+                        var animatedValue = animation.getAnimatedValue();
+                        if (animatedValue != null) {
+                            setBackgroundBlurRadius.invoke(transaction, surfaceControl, (int) animatedValue);
+                        }
+                        transaction.apply();
+                    } catch (Throwable t) {
+                        Log.e(App.TAG, "Blur behind dialog builder", t);
                     }
                 });
-                animator.start();
+            } catch (Throwable t) {
+                Log.e(App.TAG, "Blur behind dialog builder", t);
             }
+            view.addOnAttachStateChangeListener(new View.OnAttachStateChangeListener() {
+                @Override
+                public void onViewAttachedToWindow(@NonNull View v) {
+                }
+
+                @Override
+                public void onViewDetachedFromWindow(@NonNull View v) {
+                    animator.cancel();
+                }
+            });
+            animator.start();
         }
     }
 
@@ -137,16 +140,12 @@ public class BlurBehindDialogBuilder extends MaterialAlertDialogBuilder {
 
     private void updateWindowForBlurs(Window window, boolean blursEnabled) {
         Log.d(App.TAG, "updateWindowForBlurs: blursEnabled=" + blursEnabled);
-        float mDimAmountWithBlur = 0.1f;
-        float mDimAmountNoBlur = 0.32f;
+        int mWindowBackgroundAlphaWithBlur = 170;
         int mWindowBackgroundAlphaNoBlur = 255;
         mWindowBackgroundDrawable.setAlpha(blursEnabled ?
                 mWindowBackgroundAlphaWithBlur : mWindowBackgroundAlphaNoBlur);
         window.setDimAmount(blursEnabled ?
                 mDimAmountWithBlur : mDimAmountNoBlur);
-        if (buildIsAtLeastS()) {
-            window.setAttributes(window.getAttributes());
-        }
     }
 
     private static boolean buildIsAtLeastS() {
