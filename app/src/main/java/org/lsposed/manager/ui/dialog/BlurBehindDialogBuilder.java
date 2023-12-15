@@ -95,7 +95,7 @@ public class BlurBehindDialogBuilder extends MaterialAlertDialogBuilder {
         } else if (Build.VERSION.SDK_INT == Build.VERSION_CODES.R) {
             if (blursEnabled) {
                 View view = window.getDecorView();
-                ValueAnimator animator = ValueAnimator.ofInt(1, 153);
+                ValueAnimator animator = ValueAnimator.ofInt(1, 53);
                 animator.setInterpolator(new DecelerateInterpolator());
                 try {
                     Object viewRootImpl = view.getClass().getMethod("getViewRootImpl").invoke(view);
