@@ -83,6 +83,26 @@ public class LSPosedService extends ILSPosedService.Stub {
         return false;
     }
 
+    private static boolean isLegacyModule(ApplicationInfo info) {
+        if (info.metaData == null || !info.metaData.containsKey("xposedminversion")) {
+            return false;
+        }
+        String[] apks;
+        if (info.splitSourceDirs != null) {
+            apks = Arrays.copyOf(info.splitSourceDirs, info.splitSourceDirs.length + 1);
+            apks[info.splitSourceDirs.length] = info.sourceDir;
+        } else apks = new String[]{info.sourceDir};
+        for (var apk : apks) {
+            try (var zip = new ZipFile(apk)) {
+                if (zip.getEntry("assets/xposed_init") != null) {
+                    return true;
+                }
+            } catch (IOException ignored) {
+            }
+        }
+        return false;
+    }
+
     @Override
     public ILSPApplicationService requestApplicationService(int uid, int pid, String processName, IBinder heartBeat) {
         if (Binder.getCallingUid() != 1000) {
@@ -133,7 +153,7 @@ public class LSPosedService extends ILSPosedService.Stub {
             }
         }
 
-        boolean isXposedModule = applicationInfo != null && ((applicationInfo.metaData != null && applicationInfo.metaData.containsKey("xposedminversion")) || isModernModules(applicationInfo));
+        boolean isXposedModule = applicationInfo != null && (isLegacyModule(applicationInfo) || isModernModules(applicationInfo));
 
         switch (intentAction) {
             case Intent.ACTION_PACKAGE_FULLY_REMOVED -> {

@@ -118,8 +118,25 @@ public final class ModuleUtil {
         return zip;
     }
 
+    // same as org.lsposed.lspd.service.ModuleUtil#isLegacyModule
     public static boolean isLegacyModule(ApplicationInfo info) {
-        return info.metaData != null && info.metaData.containsKey("xposedminversion");
+        if (info.metaData == null || !info.metaData.containsKey("xposedminversion")) {
+            return false;
+        }
+        String[] apks;
+        if (info.splitSourceDirs != null) {
+            apks = Arrays.copyOf(info.splitSourceDirs, info.splitSourceDirs.length + 1);
+            apks[info.splitSourceDirs.length] = info.sourceDir;
+        } else apks = new String[]{info.sourceDir};
+        for (var apk : apks) {
+            try (var zip = new ZipFile(apk)) {
+                if (zip.getEntry("assets/xposed_init") != null) {
+                    return true;
+                }
+            } catch (IOException ignored) {
+            }
+        }
+        return false;
     }
 
     synchronized public void reloadInstalledModules() {
