@@ -1,6 +1,6 @@
 [versions]
 agp = "8.2.0"
-kotlin = "1.9.21"
+kotlin = "1.9.22"
 nav = "2.7.6"
 appcenter = "5.0.4"
 libxposed = "100"
