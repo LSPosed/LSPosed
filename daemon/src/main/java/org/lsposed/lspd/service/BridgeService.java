@@ -2,6 +2,7 @@ package org.lsposed.lspd.service;
 
 import static org.lsposed.lspd.service.ServiceManager.TAG;
 
+import android.app.ActivityManager;
 import android.os.Handler;
 import android.os.IBinder;
 import android.os.Looper;
@@ -61,6 +62,20 @@ public class BridgeService {
                     ((Map) sCache).clear();
                 }
                 Log.i(TAG, "clear ServiceManager");
+
+                //noinspection JavaReflectionMemberAccess DiscouragedPrivateApi
+                field = ActivityManager.class.getDeclaredField("IActivityManagerSingleton");
+                field.setAccessible(true);
+                Object singleton = field.get(null);
+                if (singleton != null) {
+                    //noinspection PrivateApi DiscouragedPrivateApi
+                    field = Class.forName("android.util.Singleton").getDeclaredField("mInstance");
+                    field.setAccessible(true);
+                    synchronized (singleton) {
+                        field.set(singleton, null);
+                    }
+                }
+                Log.i(TAG, "clear ActivityManager");
             } catch (Throwable e) {
                 Log.w(TAG, "clear ServiceManager: " + Log.getStackTraceString(e));
             }
