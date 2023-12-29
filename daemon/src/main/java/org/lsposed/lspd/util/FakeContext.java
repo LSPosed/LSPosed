@@ -54,7 +54,8 @@ public class FakeContext extends ContextWrapper {
 
     @Override
     public ContentResolver getContentResolver() {
-        return null;
+        return new ContentResolver(this) {
+        };
     }
 
     public int getUserId() {
