@@ -170,12 +170,6 @@ if [ "$API" -ge 29 ]; then
       mv "$MODPATH/bin/dex2oat" "$MODPATH/bin/dex2oat64"
     fi
   fi
-
-  ui_print "- Patching binaries"
-  DEV_PATH=$(tr -dc 'a-z0-9' < /dev/urandom | head -c 32)
-  sed -i "s/5291374ceda0aef7c5d86cd2a4f6a3ac/$DEV_PATH/g" "$MODPATH/daemon.apk"
-  sed -i "s/5291374ceda0aef7c5d86cd2a4f6a3ac/$DEV_PATH/" "$MODPATH/bin/dex2oat32"
-  sed -i "s/5291374ceda0aef7c5d86cd2a4f6a3ac/$DEV_PATH/" "$MODPATH/bin/dex2oat64"
 else
   extract "$ZIPFILE" 'system.prop' "$MODPATH"
 fi

@@ -21,6 +21,7 @@ MODDIR=${0%/*}
 
 rm -f "/data/local/tmp/daemon.apk"
 rm -f "/data/local/tmp/manager.apk"
+mkdir /debug_ramdisk/lspd
 cd "$MODDIR"
 
 unshare -m sh -c "$MODDIR/daemon $@&"

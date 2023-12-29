@@ -22,6 +22,8 @@
 #include <string>
 #include <sys/mount.h>
 #include <sys/wait.h>
+#include <sys/socket.h>
+#include <sys/un.h>
 #include <unistd.h>
 #include <sched.h>
 
@@ -113,7 +115,25 @@ Java_org_lsposed_lspd_service_Dex2OatService_setSockCreateContext(JNIEnv *env, j
 }
 
 extern "C"
-JNIEXPORT jstring JNICALL
-Java_org_lsposed_lspd_service_Dex2OatService_getSockPath(JNIEnv *env, jobject) {
-    return env->NewStringUTF("5291374ceda0aef7c5d86cd2a4f6a3ac\0");
+JNIEXPORT jobject JNICALL
+Java_org_lsposed_lspd_service_Dex2OatService_createServerSocketFd(JNIEnv *env, jclass clazz, jstring path) {
+    int fd = socket(AF_UNIX, SOCK_STREAM, 0);
+    auto cpath = env->GetStringUTFChars(path, nullptr);
+    unlink(cpath);
+    struct sockaddr_un sock {};
+    sock.sun_family = AF_UNIX;
+    strcpy(sock.sun_path, cpath);
+    env->ReleaseStringUTFChars(path, cpath);
+    if (bind(fd, (struct sockaddr *) &sock, sizeof(sock)) < 0) {
+        close(fd);
+        auto class_io_exception = env->FindClass("java/io/IOException");
+        env->ThrowNew(class_io_exception, "Failed to bind socket");
+        return nullptr;
+    }
+    auto class_fd = env->FindClass("java/io/FileDescriptor");
+    auto method_init = env->GetMethodID(class_fd, "<init>", "()V");
+    auto method_set_int = env->GetMethodID(class_fd, "setInt$", "(I)V");
+    auto jfd = env->NewObject(class_fd, method_init);
+    env->CallVoidMethod(jfd, method_set_int, fd);
+    return jfd;
 }

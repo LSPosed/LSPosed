@@ -38,7 +38,7 @@
 
 #define ID_VEC(is64, is_debug) (((is64) << 1) | (is_debug))
 
-const char kSockName[] = "5291374ceda0aef7c5d86cd2a4f6a3ac\0";
+const char kSockPath[] = "/debug_ramdisk/lspd/dex2oat.sock";
 
 static ssize_t xrecvmsg(int sockfd, struct msghdr *msg, int flags) {
     int rec = recvmsg(sockfd, msg, flags);
@@ -102,10 +102,9 @@ int main(int argc, char **argv) {
     LOGD("dex2oat wrapper ppid=%d", getppid());
     struct sockaddr_un sock = {};
     sock.sun_family = AF_UNIX;
-    strlcpy(sock.sun_path + 1, kSockName, sizeof(sock.sun_path) - 1);
+    strcpy(sock.sun_path, kSockPath);
     int sock_fd = socket(AF_UNIX, SOCK_STREAM, 0);
-    size_t len = sizeof(sa_family_t) + strlen(sock.sun_path + 1) + 1;
-    if (connect(sock_fd, (struct sockaddr *) &sock, len)) {
+    if (connect(sock_fd, (struct sockaddr *) &sock, sizeof(sock))) {
         PLOGE("failed to connect to %s", sock.sun_path + 1);
         return 1;
     }

@@ -48,6 +48,7 @@ import java.util.ArrayList;
 @RequiresApi(Build.VERSION_CODES.Q)
 public class Dex2OatService implements Runnable {
     private static final String TAG = "LSPosedDex2Oat";
+    private static final String SOCK_PATH = "/debug_ramdisk/lspd/dex2oat.sock";
     private static final String WRAPPER32 = "bin/dex2oat32";
     private static final String WRAPPER64 = "bin/dex2oat64";
 
@@ -169,8 +170,7 @@ public class Dex2OatService implements Runnable {
     @Override
     public void run() {
         Log.i(TAG, "Dex2oat wrapper daemon start");
-        var sockPath = getSockPath();
-        Log.d(TAG, "wrapper path: " + sockPath);
+        Log.d(TAG, "wrapper path: " + SOCK_PATH);
         var magisk_file = "u:object_r:magisk_file:s0";
         var dex2oat_exec = "u:object_r:dex2oat_exec:s0";
         if (SELinux.checkSELinuxAccess("u:r:dex2oat:s0", dex2oat_exec,
@@ -183,7 +183,8 @@ public class Dex2OatService implements Runnable {
             SELinux.setFileContext(WRAPPER64, magisk_file);
             setSockCreateContext("u:r:installd:s0");
         }
-        try (var server = new LocalServerSocket(sockPath)) {
+        try (var server = new LocalServerSocket(createServerSocketFd(SOCK_PATH))) {
+            SELinux.setFileContext(SOCK_PATH, magisk_file);
             setSockCreateContext(null);
             while (true) {
                 try (var client = server.accept();
@@ -215,5 +216,5 @@ public class Dex2OatService implements Runnable {
 
     private static native boolean setSockCreateContext(String context);
 
-    private native String getSockPath();
+    private static native FileDescriptor createServerSocketFd(String path);
 }
