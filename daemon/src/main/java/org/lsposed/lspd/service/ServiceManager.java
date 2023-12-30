@@ -140,7 +140,7 @@ public class ServiceManager {
 
         ActivityThread.systemMain();
 
-        DdmHandleAppName.setAppName("lspd", 0);
+        DdmHandleAppName.setAppName("org.lsposed.daemon", 0);
 
         waitSystemService("package");
         waitSystemService("activity");
