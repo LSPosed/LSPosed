@@ -32,6 +32,7 @@ import android.content.pm.PackageInfo;
 import android.content.pm.PackageParser;
 import android.database.Cursor;
 import android.database.sqlite.SQLiteDatabase;
+import android.database.sqlite.SQLiteDatabaseCorruptException;
 import android.database.sqlite.SQLiteStatement;
 import android.os.Build;
 import android.os.Bundle;
@@ -92,7 +93,8 @@ import hidden.HiddenApiBridge;
 public class ConfigManager {
     private static ConfigManager instance = null;
 
-    private final SQLiteDatabase db = openDb();
+    private final SQLiteDatabase db = ensureDB();
+    private static final int targetDBVersion = 3;
 
     private boolean verboseLog = true;
     private boolean dexObfuscate = true;
@@ -111,10 +113,7 @@ public class ConfigManager {
 
     private String api = "(???)";
 
-    static class ProcessScope {
-        final String processName;
-        final int uid;
-
+    record ProcessScope(String processName, int uid) {
         ProcessScope(@NonNull String processName, int uid) {
             this.processName = processName;
             this.uid = uid;
@@ -122,8 +121,7 @@ public class ConfigManager {
 
         @Override
         public boolean equals(@Nullable Object o) {
-            if (o instanceof ProcessScope) {
-                ProcessScope p = (ProcessScope) o;
+            if (o instanceof ProcessScope p) {
                 return p.processName.equals(processName) && p.uid == uid;
             }
             return false;
@@ -182,7 +180,43 @@ public class ConfigManager {
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.P) {
             params.setSynchronousMode("NORMAL");
         }
+        try {
+            Files.createDirectories(ConfigFileManager.configDirPath);
+        } catch (IOException e) {
+            Log.e(TAG, "create config dir", e);
+        }
         return SQLiteDatabase.openDatabase(ConfigFileManager.dbPath.getAbsoluteFile(), params.build());
+    }
+
+    private SQLiteDatabase ensureDB() {
+        SQLiteDatabase db;
+        try {
+            db = openDb();
+            var dbVersion = db.getVersion();
+            if (dbVersion > targetDBVersion) {
+                Log.w(TAG, "database version " + dbVersion + " greater than " + targetDBVersion + ", drop and recreate");
+                try {
+                    var lspdConfig = fetchModuleConfig(db, "lspd", 0).getOrDefault("config", null);
+                    if (lspdConfig != null) {
+                        ConfigFileManager.deleteFolderIfExists(Paths.get((String) lspdConfig.get("misc_path")));
+                    }
+                    db.close();
+                    ConfigFileManager.deleteFolderIfExists(ConfigFileManager.configDirPath);
+                } catch (Exception ignore) {
+                } finally {
+                    db = openDb();
+                }
+            }
+        } catch (SQLiteDatabaseCorruptException e) {
+            Log.w(TAG, "ensure db", e);
+            Log.w(TAG, "database corrupted, drop and recreate");
+            try {
+                ConfigFileManager.deleteFolderIfExists(ConfigFileManager.configDirPath);
+            } catch (Exception ignore) {
+            }
+            return openDb();
+        }
+        return db;
     }
 
     private void updateCaches(boolean sync) {
@@ -266,12 +300,6 @@ public class ConfigManager {
 
         bool = config.get("enable_dex_obfuscate");
         dexObfuscate = bool == null || (boolean) bool;
-
-        bool = config.get("enable_auto_add_shortcut");
-        if (bool != null) {
-            // TODO: remove
-            updateModulePrefs("lspd", 0, "config", "enable_auto_add_shortcut", null);
-        }
 
         bool = config.get("enable_status_notification");
         enableStatusNotification = bool == null || (boolean) bool;
@@ -415,6 +443,7 @@ public class ConfigManager {
                         db.setVersion(3);
                     });
                 default:
+                    db.setVersion(targetDBVersion);
                     break;
             }
         } catch (Throwable e) {
@@ -442,7 +471,7 @@ public class ConfigManager {
     }
 
     private @NonNull
-    Map<String, HashMap<String, Object>> fetchModuleConfig(String name, int user_id) {
+    Map<String, HashMap<String, Object>> fetchModuleConfig(SQLiteDatabase db, String name, int user_id) {
         var config = new ConcurrentHashMap<String, HashMap<String, Object>>();
 
         try (Cursor cursor = db.query("configs", new String[]{"`group`", "`key`", "data"},
@@ -473,7 +502,7 @@ public class ConfigManager {
     }
 
     public void updateModulePrefs(String moduleName, int userId, String group, Map<String, Object> values) {
-        var config = cachedConfig.computeIfAbsent(new Pair<>(moduleName, userId), module -> fetchModuleConfig(module.first, module.second));
+        var config = cachedConfig.computeIfAbsent(new Pair<>(moduleName, userId), module -> fetchModuleConfig(db, module.first, module.second));
         config.compute(group, (g, prefs) -> {
             HashMap<String, Object> newPrefs = prefs == null ? new HashMap<>() : new HashMap<>(prefs);
             executeInTransaction(() -> {
@@ -513,7 +542,7 @@ public class ConfigManager {
     }
 
     public HashMap<String, Object> getModulePrefs(String moduleName, int userId, String group) {
-        var config = cachedConfig.computeIfAbsent(new Pair<>(moduleName, userId), module -> fetchModuleConfig(module.first, module.second));
+        var config = cachedConfig.computeIfAbsent(new Pair<>(moduleName, userId), module -> fetchModuleConfig(db, module.first, module.second));
         return config.getOrDefault(group, new HashMap<>());
     }
 
@@ -1086,10 +1115,6 @@ public class ConfigManager {
 
     public boolean isManager(int uid) {
         return uid == managerUid;
-    }
-
-    public boolean isManagerInstalled() {
-        return managerUid != -1;
     }
 
     public String getPrefsPath(String packageName, int uid) {
