@@ -42,6 +42,11 @@ public class FakeContext extends ContextWrapper {
     }
 
     @Override
+    public String getOpPackageName() {
+        return "android";
+    }
+
+    @Override
     public ApplicationInfo getApplicationInfo() {
         try {
             if (systemApplicationInfo == null)
@@ -54,7 +59,8 @@ public class FakeContext extends ContextWrapper {
 
     @Override
     public ContentResolver getContentResolver() {
-        return null;
+        return new ContentResolver(this) {
+        };
     }
 
     public int getUserId() {

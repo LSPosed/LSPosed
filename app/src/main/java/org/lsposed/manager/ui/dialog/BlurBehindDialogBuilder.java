@@ -38,6 +38,7 @@ import com.google.android.material.dialog.MaterialAlertDialogBuilder;
 import org.lsposed.manager.App;
 
 import java.lang.reflect.Method;
+import java.util.function.Consumer;
 
 @SuppressWarnings({"JavaReflectionMemberAccess", "ConstantConditions"})
 public class BlurBehindDialogBuilder extends MaterialAlertDialogBuilder {
@@ -55,20 +56,46 @@ public class BlurBehindDialogBuilder extends MaterialAlertDialogBuilder {
     @Override
     public AlertDialog create() {
         AlertDialog dialog = super.create();
-        dialog.setOnShowListener(d -> setBackgroundBlurRadius(dialog));
+        setupWindowBlurListener(dialog);
         return dialog;
     }
 
-    private void setBackgroundBlurRadius(AlertDialog dialog) {
-        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.R) {
-            Window window = dialog.getWindow();
-            if (Build.VERSION.SDK_INT >= 31) {
-                window.addFlags(WindowManager.LayoutParams.FLAG_BLUR_BEHIND);
-                window.getAttributes().setBlurBehindRadius(53); //android.R.styleable.Window_windowBlurBehindRadius
-                window.addFlags(WindowManager.LayoutParams.FLAG_DIM_BEHIND);
-            } else if (supportBlur) {
+    private void setupWindowBlurListener(AlertDialog dialog) {
+        var window = dialog.getWindow();
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.S) {
+            window.addFlags(WindowManager.LayoutParams.FLAG_BLUR_BEHIND);
+            Consumer<Boolean> windowBlurEnabledListener = enabled -> updateWindowForBlurs(window, enabled);
+            window.getDecorView().addOnAttachStateChangeListener(
+                    new View.OnAttachStateChangeListener() {
+                        @Override
+                        public void onViewAttachedToWindow(@NonNull View v) {
+                            window.getWindowManager().addCrossWindowBlurEnabledListener(
+                                    windowBlurEnabledListener);
+                        }
+
+                        @Override
+                        public void onViewDetachedFromWindow(@NonNull View v) {
+                            window.getWindowManager().removeCrossWindowBlurEnabledListener(
+                                    windowBlurEnabledListener);
+                        }
+                    });
+        } else if (Build.VERSION.SDK_INT == Build.VERSION_CODES.R) {
+            dialog.setOnShowListener(d -> updateWindowForBlurs(window, supportBlur));
+        }
+    }
+
+    private void updateWindowForBlurs(Window window, boolean blursEnabled) {
+        float mDimAmountWithBlur = 0.1f;
+        float mDimAmountNoBlur = 0.32f;
+        window.setDimAmount(blursEnabled ?
+                mDimAmountWithBlur : mDimAmountNoBlur);
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.S) {
+            window.getAttributes().setBlurBehindRadius(20);
+            window.setAttributes(window.getAttributes());
+        } else if (Build.VERSION.SDK_INT == Build.VERSION_CODES.R) {
+            if (blursEnabled) {
                 View view = window.getDecorView();
-                ValueAnimator animator = ValueAnimator.ofInt(1, 153);
+                ValueAnimator animator = ValueAnimator.ofInt(1, 53);
                 animator.setInterpolator(new DecelerateInterpolator());
                 try {
                     Object viewRootImpl = view.getClass().getMethod("getViewRootImpl").invoke(view);
@@ -81,7 +108,10 @@ public class BlurBehindDialogBuilder extends MaterialAlertDialogBuilder {
                     animator.addUpdateListener(animation -> {
                         try {
                             SurfaceControl.Transaction transaction = new SurfaceControl.Transaction();
-                            setBackgroundBlurRadius.invoke(transaction, surfaceControl, animation.getAnimatedValue());
+                            var animatedValue = animation.getAnimatedValue();
+                            if (animatedValue != null) {
+                                setBackgroundBlurRadius.invoke(transaction, surfaceControl, (int) animatedValue);
+                            }
                             transaction.apply();
                         } catch (Throwable t) {
                             Log.e(App.TAG, "Blur behind dialog builder", t);
@@ -92,11 +122,11 @@ public class BlurBehindDialogBuilder extends MaterialAlertDialogBuilder {
                 }
                 view.addOnAttachStateChangeListener(new View.OnAttachStateChangeListener() {
                     @Override
-                    public void onViewAttachedToWindow(View v) {
+                    public void onViewAttachedToWindow(@NonNull View v) {
                     }
 
                     @Override
-                    public void onViewDetachedFromWindow(View v) {
+                    public void onViewDetachedFromWindow(@NonNull View v) {
                         animator.cancel();
                     }
                 });
