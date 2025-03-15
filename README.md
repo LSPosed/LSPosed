@@ -1,71 +1,41 @@
-# LSPosed Framework
+# Call to Action: Boycott LSPosed, Oppose the Arbitrary Violation of Open Source Licenses!
 
-[![Build](https://img.shields.io/github/actions/workflow/status/LSPosed/LSPosed/core.yml?branch=master&event=push&logo=github&label=Build)](https://github.com/LSPosed/LSPosed/actions/workflows/core.yml?query=event%3Apush+branch%3Amaster+is%3Acompleted) [![Crowdin](https://img.shields.io/badge/Localization-Crowdin-blueviolet?logo=Crowdin)](https://lsposed.crowdin.com/lsposed) [![Channel](https://img.shields.io/badge/Follow-Telegram-blue.svg?logo=telegram)](https://t.me/LSPosed) [![Chat](https://img.shields.io/badge/Join-QQ%E9%A2%91%E9%81%93-red?logo=tencent-qq&logoColor=red)](https://qun.qq.com/qqweb/qunpro/share?_wv=3&_wwv=128&inviteCode=Xz9dJ&from=246610&biz=ka) [![Download](https://img.shields.io/github/v/release/LSPosed/LSPosed?color=orange&logoColor=orange&label=Download&logo=DocuSign)](https://github.com/LSPosed/LSPosed/releases/latest) [![Total](https://shields.io/github/downloads/LSPosed/LSPosed/total?logo=Bookmeter&label=Counts&logoColor=yellow&color=yellow)](https://github.com/LSPosed/LSPosed/releases)
 
-## Introduction 
+## Important Announcement: LSPosed Team Allegedly Infringing Open Source Licenses!
 
-A Riru / Zygisk module trying to provide an ART hooking framework which delivers consistent APIs with the OG Xposed, leveraging LSPlant hooking framework.
+We are here to solemnly call on all users, developers, and members of the open-source community to collectively boycott the infringing actions of the LSPosed team.
 
-> Xposed is a framework for modules that can change the behavior of the system and apps without touching any APKs. That's great because it means that modules can work for different versions and even ROMs without any changes (as long as the original code was not changed too much). It's also easy to undo. As all changes are done in the memory, you just need to deactivate the module and reboot to get your original system back. There are many other advantages, but here is just one more: multiple modules can do changes to the same part of the system or app. With modified APKs, you have to choose one. No way to combine them, unless the author builds multiple APKs with different combinations.
+## Public Statement: LSPosed's Infringement
 
-## Supported Versions
+The LSPosed team blatantly claims their copyright is paramount while disregarding the copyrights of others, a double standard that is outrageous. What is even more infuriating is that the projects they are using, such as EDXposed and Xposed, are based on GPLv3 licensed open-source projects.
 
-Android 8.1 ~ 14
+Their project incorporates not only code from EDXposed and Xposed, but also numerous other libraries licensed under the GPL. This further complicates their violation of the GPLv3 license agreement.
 
-## Install
+They are openly violating the GPLv3 license agreement by using code from these GPL-licensed projects while refusing to fulfill their open-source obligations: not publishing their source code and not providing proper attribution. This behavior is a blatant trampling of the open-source spirit! Furthermore, they are now distributing their closed-source builds through internal testing on Telegram, exacerbating their disregard for open-source principles.
+https://github.com/da64ec7/LSPosedInternalBeta
 
-1. Install Magisk v24+
-2. (For Riru flavor) Install [Riru](https://github.com/RikkaApps/Riru/releases/latest) v26.1.7+
-3. [Download](#download) and install LSPosed in Magisk app
-4. Reboot
-5. Open LSPosed manager from notification
-6. Have fun :)
+## GPLv3: The Cornerstone of Open Source
 
-## Download
+The GPLv3 license is designed to protect the freedom of open-source software. It requires that any developer using code under the GPLv3 license must publish their modified source code and retain the original authors' attribution. The LSPosed team's actions are not only a contempt for the GPLv3 license but also a disrespect for all open-source contributors!
 
-- For stable releases, please go to [Github Releases page](https://github.com/LSPosed/LSPosed/releases)
-- For canary build, please check [Github Actions](https://github.com/LSPosed/LSPosed/actions/workflows/core.yml?query=branch%3Amaster)
+They have brazenly stated, "Our code is garbage, any cat or dog can fork it and turn it into something spectacular," a familiar narrative they also used when Magisk removed MagiskHide. It's clear that they haven't learned from past mistakes and that old habits die hard. Source
 
-Note: debug builds are only available in Github Actions.
+Ironically, LSPosed's own code is a fork of the EdXposed project. This makes their arrogance and disrespect for open-source principles even more hypocritical.
+The Voice of Us Users: Refuse to Be Deceived
 
-## Get Help
-**Only bug reports from **THE LATEST DEBUG BUILD** will be accepted.**
-- GitHub issues: [Issues](https://github.com/LSPosed/LSPosed/issues/)
-- (For Chinese speakers) 本项目只接受英语**标题**的issue。如果您不懂英语，请使用[翻译工具](https://www.deepl.com/zh/translator)
+They are attempting to mask their release of infringing closed-source versions under the guise of maintenance. We users are not fools; we will not be deceived by such tactics!
 
-## For Developers
+If they believe that open source has no value, then they can choose to stop maintaining the project, rather than claiming stolen code as their own and releasing closed-source products.
+Take Action Now: Boycott LSPosed!
 
-Developers are welcome to write Xposed modules with hooks based on LSPosed Framework. A module based on LSPosed framework is fully compatible with the original Xposed Framework, and vice versa, a Xposed Framework-based module will work well with LSPosed framework too.
+We strongly demand that the LSPosed team:
 
-- [Xposed Framework API](https://api.xposed.info/)
+    Immediately release all modified source code that uses EDXposed, Xposed, and other GPL-licensed libraries after January 8, 2024.
+    Strictly adhere to all terms of the GPLv3 license agreement.
+    Stop distributing infringing closed-source versions, including those distributed through Telegram.
 
-We use our own module repository. We welcome developers to submit modules to our repository, and then modules can be downloaded in LSPosed.
+Note: Before January 8, 2024, LSPosed's code was open-source. However, since that date, they have violated the GPLv3 license by releasing closed-source builds without providing the corresponding source code.
 
-- [LSPosed Module Repository](https://github.com/Xposed-Modules-Repo)
+We call on all users to stop using LSPosed products, so that the infringers will pay the price for their behavior!
 
-## Community Discussion
-
-- Telegram: [@LSPosed](https://t.me/s/LSPosed)
-
-Notice: These community groups don't accept any bug report, please use [Get help](#get-help) to report.
-
-## Translation Contributing
-
-You can contribute translation [here](https://lsposed.crowdin.com/lsposed).
-
-## Credits 
-
-- [Magisk](https://github.com/topjohnwu/Magisk/): makes all these possible
-- [Riru](https://github.com/RikkaApps/Riru): provides a way to inject code into zygote process
-- [XposedBridge](https://github.com/rovo89/XposedBridge): the OG Xposed framework APIs
-- [Dobby](https://github.com/jmpews/Dobby): used for inline hooking
-- [LSPlant](https://github.com/LSPosed/LSPlant): the core ART hooking framework
-- [EdXposed](https://github.com/ElderDrivers/EdXposed): fork source
-- ~[SandHook](https://github.com/ganyao114/SandHook/): ART hooking framework for SandHook variant~
-- ~[YAHFA](https://github.com/rk700/YAHFA): previous ART hooking framework~
-- ~[dexmaker](https://github.com/linkedin/dexmaker) and [dalvikdx](https://github.com/JakeWharton/dalvik-dx): to dynamically generate YAHFA hooker classes~
-- ~[DexBuilder](https://github.com/LSPosed/DexBuilder): to dynamically generate YAHFA hooker classes~
-
-## License
-
-LSPosed is licensed under the **GNU General Public License v3 (GPL-3)** (http://www.gnu.org/copyleft/gpl.html).
+The future of open source requires our collective effort. Let us act together to boycott this shameless infringement! 
