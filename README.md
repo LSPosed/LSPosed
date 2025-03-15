@@ -12,6 +12,8 @@ The LSPosed team blatantly claims their copyright is paramount while disregardin
 Their project incorporates not only code from EDXposed and Xposed, but also numerous other libraries licensed under the GPL. This further complicates their violation of the GPLv3 license agreement.
 
 They are openly violating the GPLv3 license agreement by using code from these GPL-licensed projects while refusing to fulfill their open-source obligations: not publishing their source code and not providing proper attribution. This behavior is a blatant trampling of the open-source spirit! Furthermore, they are now distributing their closed-source builds through internal testing on Telegram, exacerbating their disregard for open-source principles.
+https://github.com/da64ec7/LSPosedInternalBeta
+
 ## GPLv3: The Cornerstone of Open Source
 
 The GPLv3 license is designed to protect the freedom of open-source software. It requires that any developer using code under the GPLv3 license must publish their modified source code and retain the original authors' attribution. The LSPosed team's actions are not only a contempt for the GPLv3 license but also a disrespect for all open-source contributors!
