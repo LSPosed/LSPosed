@@ -1,11 +1,11 @@
 [versions]
-agp = "8.2.1"
-kotlin = "1.9.22"
-nav = "2.7.6"
-appcenter = "5.0.4"
-libxposed = "100"
-glide = "4.16.0"
-okhttp = "4.12.0"
+agp = "9.4.1"
+kotlin = "2.4.20"
+nav = "2.10.2"
+appcenter = "5.0.6"
+libxposed = "102.0.0"
+glide = "5.0.9"
+okhttp = "5.5.0"
 
 [plugins]
 agp-lib = { id = "com.android.library", version.ref = "agp" }
@@ -13,10 +13,10 @@ agp-app = { id = "com.android.application", version.ref = "agp" }
 kotlin = { id = "org.jetbrains.kotlin.android", version.ref = "kotlin" }
 nav-safeargs = { id = "androidx.navigation.safeargs", version.ref = "nav" }
 autoresconfig = { id = "dev.rikka.tools.autoresconfig", version = "1.2.2" }
-materialthemebuilder = { id = "dev.rikka.tools.materialthemebuilder", version = "1.4.1" }
-lsplugin-resopt = { id = "org.lsposed.lsplugin.resopt", version = "1.5" }
-lsplugin-apksign = { id = "org.lsposed.lsplugin.apksign", version = "1.4" }
-lsplugin-cmaker = { id = "org.lsposed.lsplugin.cmaker", version = "1.2" }
+materialthemebuilder = { id = "dev.rikka.tools.materialthemebuilder", version = "1.5.1" }
+lsplugin-resopt = { id = "org.lsposed.lsplugin.resopt", version = "1.6" }
+lsplugin-apksign = { id = "org.lsposed.lsplugin.apksign", version = "1.5" }
+lsplugin-cmaker = { id = "org.lsposed.lsplugin.cmaker", version = "1.5" }
 lsplugin-jgit = { id = "org.lsposed.lsplugin.jgit", version = "1.1" }
 
 [libraries]
@@ -31,21 +31,21 @@ rikkax-material = { module = "dev.rikka.rikkax.material:material", version = "2.
 rikkax-material-preference = { module = "dev.rikka.rikkax.material:material-preference", version = "2.0.0" }
 rikkax-parcelablelist = { module = "dev.rikka.rikkax.parcelablelist:parcelablelist", version = "2.0.1" }
 rikkax-preference = { module = "dev.rikka.rikkax.material:material-preference", version = "2.0.0" }
-rikkax-recyclerview = { module = "dev.rikka.rikkax.recyclerview:recyclerview-ktx", version = "1.3.2" }
+rikkax-recyclerview = { module = "dev.rikka.rikkax.recyclerview:recyclerview-ktx", version = "1.4.0" }
 rikkax-widget-borderview = { module = "dev.rikka.rikkax.widget:borderview", version = "1.1.0" }
 rikkax-widget-mainswitchbar = { module = "dev.rikka.rikkax.widget:mainswitchbar", version = "1.0.2" }
 
 androidx-activity = { module = "androidx.activity:activity", version = "1.8.2" }
-androidx-annotation = { module = "androidx.annotation:annotation", version = "1.7.1" }
-androidx-browser = { module = "androidx.browser:browser", version = "1.7.0" }
-androidx-constraintlayout = { module = "androidx.constraintlayout:constraintlayout", version = "2.1.4" }
-androidx-core = { module = "androidx.core:core", version = "1.12.0" }
-androidx-fragment = { module = "androidx.fragment:fragment", version = "1.6.2" }
+androidx-annotation = { module = "androidx.annotation:annotation", version = "1.11.0" }
+androidx-browser = { module = "androidx.browser:browser", version = "1.10.0" }
+androidx-constraintlayout = { module = "androidx.constraintlayout:constraintlayout", version = "2.2.2" }
+androidx-core = { module = "androidx.core:core", version = "1.19.1" }
+androidx-fragment = { module = "androidx.fragment:fragment", version = "1.9.1" }
 androidx-navigation-fragment = { group = "androidx.navigation", name = "navigation-fragment", version.ref = "nav" }
 androidx-navigation-ui = { group = "androidx.navigation", name = "navigation-ui", version.ref = "nav" }
 androidx-preference = { module = "androidx.preference:preference", version = "1.2.1" }
-androidx-recyclerview = { module = "androidx.recyclerview:recyclerview", version = "1.3.2" }
-androidx-swiperefreshlayout = { module = "androidx.swiperefreshlayout:swiperefreshlayout", version = "1.2.0-alpha01" }
+androidx-recyclerview = { module = "androidx.recyclerview:recyclerview", version = "1.4.0" }
+androidx-swiperefreshlayout = { module = "androidx.swiperefreshlayout:swiperefreshlayout", version = "1.2.0" }
 
 glide = { group = "com.github.bumptech.glide", name = "glide", version.ref = "glide" }
 glide-compiler = { group = "com.github.bumptech.glide", name = "compiler", version.ref = "glide" }
@@ -57,12 +57,12 @@ okhttp-logging-interceptor = { group = "com.squareup.okhttp3", name = "logging-i
 agp-apksig = { group = "com.android.tools.build", name = "apksig", version.ref = "agp" }
 appiconloader = { module = "me.zhanghai.android.appiconloader:appiconloader", version = "1.5.0" }
 axml = { module = "de.upb.cs.swt:axml", version = "2.1.3" }
-commons-lang3 = { module = "org.apache.commons:commons-lang3", version = "3.14.0" }
-material = { module = "com.google.android.material:material", version = "1.11.0" }
-gson = { module = "com.google.code.gson:gson", version = "2.10.1" }
-hiddenapibypass = { module = "org.lsposed.hiddenapibypass:hiddenapibypass", version = "4.3" }
+commons-lang3 = { module = "org.apache.commons:commons-lang3", version = "3.21.0" }
+material = { module = "com.google.android.material:material", version = "1.14.0" }
+gson = { module = "com.google.code.gson:gson", version = "2.14.0" }
+hiddenapibypass = { module = "org.lsposed.hiddenapibypass:hiddenapibypass", version = "6.1" }
 kotlin-stdlib = { module = "org.jetbrains.kotlin:kotlin-stdlib", version.ref = "kotlin" }
-kotlinx-coroutines-core = { module = "org.jetbrains.kotlinx:kotlinx-coroutines-core", version = "1.7.3" }
+kotlinx-coroutines-core = { module = "org.jetbrains.kotlinx:kotlinx-coroutines-core", version = "1.11.0" }
 
 libxposed-api = { group = "io.github.libxposed", name = "api", version.ref = "libxposed" }
 libxposed-interface = { group = "io.github.libxposed", name = "interface", version.ref = "libxposed" }
